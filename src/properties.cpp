@@ -41,3 +41,5 @@ Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(pa
 }
 Properties::~Properties(){
 }
+
+#include "properties.moc"

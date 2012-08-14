@@ -1976,3 +1976,5 @@ void ChannelPalette::trashChannels(int destinationGroup){
  isInSelectItems = false; 
 }
 
+
+#include "channelpalette.moc"

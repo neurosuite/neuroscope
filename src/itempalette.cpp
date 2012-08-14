@@ -948,3 +948,5 @@ void ItemPalette::orderTheGroups(){
 }
 
 
+
+#include "itempalette.moc"

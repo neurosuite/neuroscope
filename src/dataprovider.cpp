@@ -28,3 +28,5 @@ DataProvider::~DataProvider(){
  //Remove the temp files if any
  KIO::NetAccess::removeTempFile(fileName);
 }
+
+#include "dataprovider.moc"

@@ -40,3 +40,5 @@ PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLay
 }
 PrefDefaults::~PrefDefaults(){
 }
+
+#include "prefdefaults.moc"

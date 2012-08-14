@@ -27,3 +27,5 @@ PrefGeneral::PrefGeneral(QWidget *parent, const char *name ) : PrefGeneralLayout
 }
 PrefGeneral::~PrefGeneral(){
 }
+
+#include "prefgeneral.moc"

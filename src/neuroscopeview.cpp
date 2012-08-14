@@ -503,3 +503,5 @@ void NeuroscopeView::setEventsInPositionView(bool shown){
  emit eventsShownInPositionView(shown);
 }
 
+
+#include "neuroscopeview.moc"

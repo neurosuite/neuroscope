@@ -3104,3 +3104,5 @@ void NeuroscopeApp::slotShowEventsInPositionView(){
  NeuroscopeView* view = activeView();
  view->setEventsInPositionView(showEventsInPositionView->isChecked());
 }
+
+#include "neuroscope.moc"

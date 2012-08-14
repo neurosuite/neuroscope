@@ -374,3 +374,5 @@ void BaseFrame::drawRubber(){
     painter.end();
 }
 
+
+#include "baseframe.moc"

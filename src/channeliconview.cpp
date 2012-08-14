@@ -264,3 +264,5 @@ void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
 
 
 
+
+#include "channeliconview.moc"

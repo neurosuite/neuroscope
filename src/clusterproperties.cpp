@@ -27,3 +27,5 @@ ClusterProperties::ClusterProperties(QWidget *parent, const char *name ) : Clust
 
 ClusterProperties::~ClusterProperties(){
 }
+
+#include "clusterproperties.moc"

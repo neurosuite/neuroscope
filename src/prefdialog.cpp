@@ -210,3 +210,5 @@ void PrefDialog::enableApply() {
     applyEnable = true;
 }
 
+
+#include "prefdialog.moc"

@@ -589,3 +589,5 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
 }
 
 
+
+#include "tracewidget.moc"

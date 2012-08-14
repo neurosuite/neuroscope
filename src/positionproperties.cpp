@@ -82,3 +82,5 @@ void PositionProperties::updateDisplayedImage(){
  }
 }
 
+
+#include "positionproperties.moc"

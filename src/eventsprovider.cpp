@@ -1352,3 +1352,5 @@ void EventsProvider::renameEvent(int selectedEventId,QString newEventDescription
  }
 
 
+
+#include "eventsprovider.moc"

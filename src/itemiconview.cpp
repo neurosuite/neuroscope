@@ -93,3 +93,5 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
 }
 
 
+
+#include "itemiconview.moc"

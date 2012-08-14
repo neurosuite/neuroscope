@@ -442,3 +442,4 @@ void PositionView::setEventsInPositionView(bool shown){
   update();  
  }
 }
+#include "positionview.moc"

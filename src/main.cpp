@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 // include files for KDE
+#include "config-neuroscope.h"
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -27,6 +28,7 @@
 
 //Application specific include files
 #include "neuroscope.h"
+
 
 static const char *description =
   I18N_NOOP("NeuroScope - Viewer for Local Field Potentials, spikes, events and positional data");

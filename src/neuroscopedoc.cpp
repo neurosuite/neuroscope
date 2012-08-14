@@ -2606,3 +2606,5 @@ void NeuroscopeDoc::resetDefaultOffsets(){
 }
 
 
+
+#include "neuroscopedoc.moc"

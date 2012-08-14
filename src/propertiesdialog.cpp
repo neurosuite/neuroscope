@@ -130,3 +130,5 @@ void PropertiesDialog::slotVerify(){
 
 
 
+
+#include "propertiesdialog.moc"

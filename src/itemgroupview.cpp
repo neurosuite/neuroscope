@@ -17,3 +17,4 @@
 
 #include "itemgroupview.h"
 
+#include "itemgroupview.moc"

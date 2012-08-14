@@ -4351,3 +4351,5 @@ void TraceView::scaleBackgroundImage(){
 
 
 
+
+#include "traceview.moc"

@@ -901,3 +901,5 @@ void ClustersProvider::requestPreviousClusterData(long startTime,long timeFrame,
 
 
 
+
+#include "clustersprovider.moc"

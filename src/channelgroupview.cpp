@@ -17,3 +17,5 @@
 
 #include "channelgroupview.h"
 
+
+#include "channelgroupview.moc"
