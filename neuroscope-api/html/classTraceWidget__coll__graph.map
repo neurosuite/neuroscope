@@ -1,0 +1,9 @@
+base referer
+rect $classTraceView.html 213,290 288,314
+rect $classBaseFrame.html 12,200 89,223
+rect $classZoomWindow.html 7,109 95,133
+rect $classArray.html 113,200 236,223
+rect $classArray.html 137,109 212,133
+rect $classChannelColors.html 260,200 353,223
+rect $classTracesProvider.html 381,200 482,223
+rect $classDataProvider.html 388,109 476,133

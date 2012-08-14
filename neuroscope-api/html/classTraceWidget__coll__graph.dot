@@ -1,0 +1,16 @@
+digraph G
+{
+  edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+  node [fontname="Helvetica",fontsize=10,shape=record];
+  Node1 [label="TraceWidget",height=0.2,width=0.4,color="white", fillcolor="black", style="filled" fontcolor="white"];
+  Node2 -> Node1 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="view",fontname="Helvetica"];
+  Node2 [label="TraceView",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classTraceView.html"];
+  Node3 -> Node2 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node3 [label="BaseFrame",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$classBaseFrame.html"];
+  Node4 -> Node2 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="data",fontname="Helvetica"];
+  Node4 [label="Array\< dataType \>",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$classArray.html"];
+  Node5 -> Node2 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="channelColors",fontname="Helvetica"];
+  Node5 [label="ChannelColors",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classChannelColors.html"];
+  Node6 -> Node2 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="tracesProvider",fontname="Helvetica"];
+  Node6 [label="TracesProvider",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$classTracesProvider.html"];
+}

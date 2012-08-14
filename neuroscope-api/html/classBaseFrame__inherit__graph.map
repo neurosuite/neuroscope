@@ -1,0 +1,3 @@
+base referer
+rect $classPositionView.html 7,93 92,117
+rect $classTraceView.html 116,93 190,117

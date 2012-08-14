@@ -1,0 +1,4 @@
+base referer
+rect $classArray.html 7,200 87,224
+rect $classArray.html 61,109 136,133
+rect $classArray.html 111,200 233,224

@@ -1,0 +1,253 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml;charset=iso-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Language" content="en" />
+    <link rel="stylesheet" href="doxygen.css">
+    <title>TreeView</title>
+    <style type="text/css">
+    <!--
+    .directory { font-size: 10pt; font-weight: bold; }
+    .directory h3 { margin: 0px; margin-top: 1em; font-size: 11pt; }
+    .directory p { margin: 0px; white-space: nowrap; }
+    .directory div { display: none; margin: 0px; }
+    .directory img { vertical-align: middle; }
+    -->
+    </style>
+    <script type="text/javascript">
+    <!-- // Hide script from old browsers
+    
+    function toggleFolder(id, imageNode) 
+    {
+      var folder = document.getElementById(id);
+      var l = imageNode.src.length;
+      if (imageNode.src.substring(l-20,l)=="ftv2folderclosed.png" || 
+          imageNode.src.substring(l-18,l)=="ftv2folderopen.png")
+      {
+        imageNode = imageNode.previousSibling;
+        l = imageNode.src.length;
+      }
+      if (folder == null) 
+      {
+      } 
+      else if (folder.style.display == "block") 
+      {
+        if (imageNode != null) 
+        {
+          imageNode.nextSibling.src = "ftv2folderclosed.png";
+          if (imageNode.src.substring(l-13,l) == "ftv2mnode.png")
+          {
+            imageNode.src = "ftv2pnode.png";
+          }
+          else if (imageNode.src.substring(l-17,l) == "ftv2mlastnode.png")
+          {
+            imageNode.src = "ftv2plastnode.png";
+          }
+        }
+        folder.style.display = "none";
+      } 
+      else 
+      {
+        if (imageNode != null) 
+        {
+          imageNode.nextSibling.src = "ftv2folderopen.png";
+          if (imageNode.src.substring(l-13,l) == "ftv2pnode.png")
+          {
+            imageNode.src = "ftv2mnode.png";
+          }
+          else if (imageNode.src.substring(l-17,l) == "ftv2plastnode.png")
+          {
+            imageNode.src = "ftv2mlastnode.png";
+          }
+        }
+        folder.style.display = "block";
+      }
+    }
+
+    // End script hiding -->        
+    </script>
+  </head>
+
+  <body>
+    <div class="directory">
+      <h3>NeuroScope</h3>
+      <div style="display: block;">
+        <p><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder1', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder1', this)"/><a class="el" href="files.html" target="basefrm">File List</a></p>
+        <div id="folder1">
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>array.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>baseframe.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>channelcolors.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>channelgroupview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>channeliconview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>channelpalette.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>clustercolors.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>clusterproperties.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/src/clusterpropertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>src/clusterpropertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>clustersprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>config.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/config.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>configuration.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>dataprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>eventdata.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>eventsprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>globaleventsprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>imagecreator.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>itemcolors.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>itemgroupview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>itemiconview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>itempalette.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>neuroscope.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>neuroscopedoc.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>neuroscopeview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>neuroscopexmlreader.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>parameterxmlcreator.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>parameterxmlmodifier.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>positionproperties.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/src/positionpropertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>src/positionpropertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>positionsprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>positionview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>prefdefaults.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/src/prefdefaultslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>src/prefdefaultslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>prefdialog.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>prefgeneral.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/src/prefgenerallayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>src/prefgenerallayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>properties.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>propertiesdialog.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>debug/src/propertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>src/propertieslayout.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>sessionInformation.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>sessionxmlwriter.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>tags.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>timer.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>tracesprovider.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>traceview.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>tracewidget.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>types.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>utilities.h</b></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><b>zoomwindow.h</b></p>
+        </div>
+        <p><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder2', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder2', this)"/><a class="el" href="annotated.html" target="basefrm">Class List</a></p>
+        <div id="folder2">
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classArray.html" target="basefrm">Array< T ></a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classBaseFrame.html" target="basefrm">BaseFrame</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelColors.html" target="basefrm">ChannelColors</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelDescription.html" target="basefrm">ChannelDescription</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelGroupView.html" target="basefrm">ChannelGroupView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelIconView.html" target="basefrm">ChannelIconView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelPalette.html" target="basefrm">ChannelPalette</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelPalette_1_1ChannelIconItem.html" target="basefrm">ChannelPalette::ChannelIconItem</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClusterColors.html" target="basefrm">ClusterColors</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClusterProperties.html" target="basefrm">ClusterProperties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClustersProvider.html" target="basefrm">ClustersProvider</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classConfiguration.html" target="basefrm">Configuration</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classDataProvider.html" target="basefrm">DataProvider</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classDisplayInformation.html" target="basefrm">DisplayInformation</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classEventData.html" target="basefrm">EventData</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classEventDescription.html" target="basefrm">EventDescription</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGlobalEventsProvider.html" target="basefrm">GlobalEventsProvider</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGroupLabel.html" target="basefrm">GroupLabel</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGroupNameLabel.html" target="basefrm">GroupNameLabel</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classImageCreator.html" target="basefrm">ImageCreator</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemColors.html" target="basefrm">ItemColors</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemGroupView.html" target="basefrm">ItemGroupView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemIconView.html" target="basefrm">ItemIconView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemPalette.html" target="basefrm">ItemPalette</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeApp.html" target="basefrm">NeuroscopeApp</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeDoc.html" target="basefrm">NeuroscopeDoc</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeDoc_1_1CloseDocumentEvent.html" target="basefrm">NeuroscopeDoc::CloseDocumentEvent</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeView.html" target="basefrm">NeuroscopeView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeXmlReader.html" target="basefrm">NeuroscopeXmlReader</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classParameterXmlCreator.html" target="basefrm">ParameterXmlCreator</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classParameterXmlModifier.html" target="basefrm">ParameterXmlModifier</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classpArray.html" target="basefrm">pArray< T ></a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionProperties.html" target="basefrm">PositionProperties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionsProvider.html" target="basefrm">PositionsProvider</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionView.html" target="basefrm">PositionView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefDefaults.html" target="basefrm">PrefDefaults</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefDialog.html" target="basefrm">PrefDialog</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefGeneral.html" target="basefrm">PrefGeneral</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classProperties.html" target="basefrm">Properties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSessionFile.html" target="basefrm">SessionFile</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSessionXmlWriter.html" target="basefrm">SessionXmlWriter</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSpaceWidget.html" target="basefrm">SpaceWidget</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTracePosition.html" target="basefrm">TracePosition</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTracesProvider.html" target="basefrm">TracesProvider</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTraceView.html" target="basefrm">TraceView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTraceWidget.html" target="basefrm">TraceWidget</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classUtilities.html" target="basefrm">Utilities</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classZoomWindow.html" target="basefrm">ZoomWindow</a></p>
+        </div>
+        <p><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder3', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder3', this)"/><a class="el" href="hierarchy.html" target="basefrm">Class Hierarchy</a></p>
+        <div id="folder3">
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder4', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder4', this)"/><a class="el" href="classArray.html" target="basefrm">Array< T ></a></p>
+          <div id="folder4">
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classpArray.html" target="basefrm">pArray< T ></a></p>
+          </div>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder5', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder5', this)"/><a class="el" href="classBaseFrame.html" target="basefrm">BaseFrame</a></p>
+          <div id="folder5">
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionView.html" target="basefrm">PositionView</a></p>
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTraceView.html" target="basefrm">TraceView</a></p>
+          </div>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelColors.html" target="basefrm">ChannelColors</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelDescription.html" target="basefrm">ChannelDescription</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelGroupView.html" target="basefrm">ChannelGroupView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelIconView.html" target="basefrm">ChannelIconView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelPalette.html" target="basefrm">ChannelPalette</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classChannelPalette_1_1ChannelIconItem.html" target="basefrm">ChannelPalette::ChannelIconItem</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClusterProperties.html" target="basefrm">ClusterProperties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classConfiguration.html" target="basefrm">Configuration</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder6', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder6', this)"/><a class="el" href="classDataProvider.html" target="basefrm">DataProvider</a></p>
+          <div id="folder6">
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClustersProvider.html" target="basefrm">ClustersProvider</a></p>
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGlobalEventsProvider.html" target="basefrm">GlobalEventsProvider</a></p>
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionsProvider.html" target="basefrm">PositionsProvider</a></p>
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTracesProvider.html" target="basefrm">TracesProvider</a></p>
+          </div>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classDisplayInformation.html" target="basefrm">DisplayInformation</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classEventData.html" target="basefrm">EventData</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classEventDescription.html" target="basefrm">EventDescription</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGroupLabel.html" target="basefrm">GroupLabel</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classGroupNameLabel.html" target="basefrm">GroupNameLabel</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classImageCreator.html" target="basefrm">ImageCreator</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder7', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder7', this)"/><a class="el" href="classItemColors.html" target="basefrm">ItemColors</a></p>
+          <div id="folder7">
+            <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classClusterColors.html" target="basefrm">ClusterColors</a></p>
+          </div>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemGroupView.html" target="basefrm">ItemGroupView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemIconView.html" target="basefrm">ItemIconView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classItemPalette.html" target="basefrm">ItemPalette</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeApp.html" target="basefrm">NeuroscopeApp</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeDoc.html" target="basefrm">NeuroscopeDoc</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeDoc_1_1CloseDocumentEvent.html" target="basefrm">NeuroscopeDoc::CloseDocumentEvent</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeView.html" target="basefrm">NeuroscopeView</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classNeuroscopeXmlReader.html" target="basefrm">NeuroscopeXmlReader</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classParameterXmlCreator.html" target="basefrm">ParameterXmlCreator</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classParameterXmlModifier.html" target="basefrm">ParameterXmlModifier</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPositionProperties.html" target="basefrm">PositionProperties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefDefaults.html" target="basefrm">PrefDefaults</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefDialog.html" target="basefrm">PrefDialog</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classPrefGeneral.html" target="basefrm">PrefGeneral</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classProperties.html" target="basefrm">Properties</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSessionFile.html" target="basefrm">SessionFile</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSessionXmlWriter.html" target="basefrm">SessionXmlWriter</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classSpaceWidget.html" target="basefrm">SpaceWidget</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTracePosition.html" target="basefrm">TracePosition</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classTraceWidget.html" target="basefrm">TraceWidget</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classUtilities.html" target="basefrm">Utilities</a></p>
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="classZoomWindow.html" target="basefrm">ZoomWindow</a></p>
+        </div>
+        <p><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="functions.html" target="basefrm">Class Members</a></p>
+        <p><img src="ftv2pnode.png" alt="o" width=16 height=22 onclick="toggleFolder('folder8', this)"/><img src="ftv2folderclosed.png" alt="+" width=24 height=22 onclick="toggleFolder('folder8', this)"/><a class="el" href="namespaces.html" target="basefrm">Namespace List</a></p>
+        <div id="folder8">
+          <p><img src="ftv2vertline.png" alt="|" width=16 height=22 /><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="namespaceneuroscope.html" target="basefrm">neuroscope</a></p>
+        </div>
+        <p><img src="ftv2node.png" alt="o" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="namespacemembers.html" target="basefrm">Namespace Members</a></p>
+        <p><img src="ftv2lastnode.png" alt="\" width=16 height=22 /><img src="ftv2doc.png" alt="*" width=24 height=22 /><a class="el" href="inherits.html" target="basefrm">Graphical Class Hierarchy</a></p>
+      </div>
+    </div>
+  </body>
+</html>

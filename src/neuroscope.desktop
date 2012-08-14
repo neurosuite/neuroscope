@@ -1,0 +1,13 @@
+# KDE Config File  
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=Application;application/data-file;application/eeg-file;application/filter-file;application/neuroscope-session
+Type=Application
+Exec=neuroscope -caption "%c" %i %m  
+Icon=neuroscope.png
+DocPath=neuroscope/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=Neuroscope
+Name[de]=Neuroscope

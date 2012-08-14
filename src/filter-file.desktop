@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=Filter File
+Hidden=false
+Icon=
+MimeType=application/filter-file
+Patterns=*.fil
+Type=MimeType

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+name=neuroscope
+version=1.3.5
+release=ubuntu0
+source=http://neuroscope.sourceforge.net

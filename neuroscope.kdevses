@@ -1,0 +1,30 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE KDevPrjSession>
+<KDevPrjSession>
+ <DocsAndViews NumberOfDocuments="2" >
+  <Doc0 NumberOfViews="1" URL="file:///home/lynn/CMBN/NeuroScope/neuroscope/src/traceview.cpp" >
+   <View0 line="4181" Type="Source" />
+  </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/lynn/CMBN/NeuroScope/neuroscope/src/clustersprovider.cpp" >
+   <View0 line="243" Type="Source" />
+  </Doc1>
+ </DocsAndViews>
+ <pluginList>
+  <kdevdebugger>
+   <breakpointList/>
+  </kdevdebugger>
+  <kdevbookmarks>
+   <bookmarks>
+    <bookmark url="/home/lynn/CMBN/NeuroScope/neuroscope/src/tracewidget.cpp" >
+     <mark line="311" />
+    </bookmark>
+   </bookmarks>
+  </kdevbookmarks>
+  <kdevvalgrind>
+   <executable path="" params="" />
+   <valgrind path="/usr/bin/valgrind" params="--logfile=neuro.log -v  --num-callers=30 --leak-check=yes --trace-children=yes" />
+   <calltree path="" params="" />
+   <kcachegrind path="" />
+  </kdevvalgrind>
+ </pluginList>
+</KDevPrjSession>

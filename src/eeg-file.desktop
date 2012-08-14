@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=EEG File
+Hidden=false
+Icon=
+MimeType=application/eeg-file
+Patterns=*.eeg
+Type=MimeType

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://ratgers.rutgers.edu/klusters"
+	xmlns="http://ratgers.rutgers.edu/klusters"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+<xsd:element name="parameters">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element ref="generalInfo" />
+      <xsd:element ref="acquisitionSystem" />
+      <xsd:element ref="video" minOccurs="0" maxOccurs="1"/>
+      <xsd:element ref="fieldPotentials" />
+      <xsd:element ref="files" minOccurs="0" maxOccurs="1"/>
+      <xsd:element ref="anatomicalDescription" />
+      <xsd:element ref="spikeDetection" />
+      <xsd:element ref="neuroscope" />
+      <xsd:element ref="programs" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="version" type="xsd:string" use="required"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="generalInfo">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="date" type="xsd:date"/>
+      <xsd:element name="experimenters" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+      <xsd:element name="notes" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="General Information"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="acquisitionSystem">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="nBits" type="xsd:int"/>
+      <xsd:element name="nChannels" type="xsd:int"/>
+		<xsd:element name="samplingRate" type="xsd:double"/>
+      <xsd:element name="voltageRange" type="xsd:int"/>
+      <xsd:element name="amplification" type="xsd:int"/>
+      <xsd:element name="offset" type="xsd:int"/>   
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Acquisition System"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="video">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="samplingRate" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="width" type="xsd:int"/>
+      <xsd:element name="height" type="xsd:int"/>
+    </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Video"/>     
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="fieldPotentials">
+  <xsd:complexType>
+   <xsd:sequence>
+		<xsd:element name="lfpSamplingRate" type="xsd:double"/>
+   </xsd:sequence> 
+   <xsd:attribute name="displayName" type="xsd:string" fixed="Local Field Potentials"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="files">
+  <xsd:complexType>
+    <xsd:sequence>
+     <xsd:element name="file" type="fileDescription" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Additional Files"/>     
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="anatomicalDescription">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="channelGroups" type="anatomicalGroups" minOccurs="0" maxOccurs="1" />
+   </xsd:sequence> 
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Anatomical Description"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="spikeDetection">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="channelGroups" type="spikeGroups" minOccurs="0" maxOccurs="1" />
+   </xsd:sequence>  
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Spike Detection"/>
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="neuroscope">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element ref="miscellaneous"/>
+      <xsd:element ref="video"/>
+      <xsd:element ref="spikes"/>
+      <xsd:element ref="channels" />
+    </xsd:sequence>
+    <xsd:attribute name="version" type="xsd:string" use="required"/>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="NeuroScope"/>
+  </xsd:complexType>
+  <xsd:key name='channel'>
+          <xsd:selector xpath="//channels/channelColors"/>
+          <xsd:field xpath="channel"/>
+  </xsd:key>
+
+  <xsd:keyref name="channelKeyRef1" refer='channel'>
+            <xsd:selector xpath="//group/channels"/>
+          <xsd:field xpath="channel"/>
+  </xsd:keyref>    
+ <xsd:keyref name="channelKeyRef2" refer='channel'>
+            <xsd:selector xpath="//channels/channelOffset"/>
+          <xsd:field xpath="channel"/>
+  </xsd:keyref>             
+</xsd:element>        
+
+
+<xsd:complexType name="anatomicalGroups">
+  <xsd:sequence>
+  <xsd:element name="group" type="anatomicalChannelGroup" minOccurs="1" maxOccurs="unbounded" />
+  </xsd:sequence> 
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Anatomical Channel Groups"/>
+</xsd:complexType>
+
+
+
+<xsd:complexType name="spikeGroups">
+  <xsd:sequence>
+  <xsd:element name="group" type="spikeChannelGroup" minOccurs="1" maxOccurs="unbounded" />
+  </xsd:sequence> 
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Spike Channel Groups"/>
+</xsd:complexType>
+
+
+<xsd:complexType name="anatomicalChannelGroup">
+  <xsd:sequence>
+   <xsd:element name="channel" type="xsd:int" minOccurs="1" maxOccurs="unbounded">
+    <xsd:complexType>
+      <xsd:attribute name="skip" type="xsd:int" default="0"/>
+      <xsd:attribute name="displayName" type="xsd:string" fixed="Channel"/>
+    </xsd:complexType>
+   </xsd:element>                              
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Group"/>
+</xsd:complexType>
+
+
+<xsd:complexType name="spikeChannelGroup">
+  <xsd:sequence>
+    <xsd:element name="channels" type="channelList"/>
+    <xsd:element name="nSamples" type="xsd:int"/>
+    <xsd:element name="peakSampleIndex" type="xsd:int"/>
+    <xsd:element name="nFeatures" type="xsd:int"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Group"/>
+</xsd:complexType>
+
+
+<xsd:element name="miscellaneous">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="screenGain" type="xsd:float"/>
+      <xsd:element name="traceBackgroundImage" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Miscellaneous"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="video">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="rotate" type="xsd:int"/>
+      <xsd:element name="flip" type="xsd:int"/>
+      <xsd:element name="videoImage" type="xsd:string"/>
+      <xsd:element name="positionsBackground" type="xsd:boolean"/> 
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Video"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="spikes">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="nSamples" type="xsd:int"/>
+      <xsd:element name="peakSampleIndex" type="xsd:int"/>
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Clusters"/> 
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:complexType name="channelList">
+  <xsd:sequence>
+    <xsd:element name="channel" type="xsd:int" minOccurs="1" maxOccurs="unbounded"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Channel List"/>
+</xsd:complexType>
+
+
+<xsd:element name="channels">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="channelColors" type="channelDescription" minOccurs="1" maxOccurs="unbounded" />
+    <xsd:element name="channelOffset" type="channelOffsetDescription" minOccurs="1" maxOccurs="unbounded" />
+   </xsd:sequence> 
+   <xsd:attribute name="displayName" type="xsd:string" fixed="Channels"/>
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:complexType name="channelDescription">
+  <xsd:sequence>
+    <xsd:element name="channel" type="xsd:int"/>
+    <xsd:element name="color" type="xsd:string"/>
+    <xsd:element name="anatomyColor" type="xsd:string"/>
+    <xsd:element name="spikeColor" type="xsd:string"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Channel Color Description"/>  
+</xsd:complexType>
+
+<xsd:complexType name="channelOffsetDescription">
+  <xsd:sequence>
+    <xsd:element name="channel" type="xsd:int"/>
+    <xsd:element name="defaultOffset" type="xsd:int"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Channel default offset"/>  
+</xsd:complexType>
+
+
+<xsd:complexType name="fileDescription">
+  <xsd:sequence>
+    <xsd:element name="extension" type="xsd:string"/>
+	 <xsd:element name="samplingRate" type="xsd:double"/>
+    <xsd:element name="channelMapping" type="mapping"  minOccurs="0" maxOccurs="1"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="File Description"/> 
+</xsd:complexType>
+
+
+<xsd:complexType name="mapping">
+  <xsd:sequence>
+    <xsd:element name="originalChannels" type="channelList" minOccurs="1" maxOccurs="unbounded"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Channels"/>
+</xsd:complexType>
+
+
+<xsd:element name="programs">
+  <xsd:complexType>
+    <xsd:sequence>
+     <xsd:element name="program" type="programDescription" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="displayName" type="xsd:string" fixed="Programs"/>     
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:complexType name="programDescription">
+  <xsd:sequence>
+    <xsd:element name="name" type="xsd:string"/>
+    <xsd:element name="parameter" type="parameterDescription" minOccurs="0" maxOccurs="unbounded"/>
+    <xsd:element name="help" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Program"/>
+</xsd:complexType>
+
+
+<xsd:complexType name="parameterDescription">
+  <xsd:sequence>
+    <xsd:element name="name" type="xsd:string"/>
+    <xsd:element name="status" type="statusType"/>
+    <xsd:element name="value" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+  </xsd:sequence>
+  <xsd:attribute name="displayName" type="xsd:string" fixed="Parameter"/>
+</xsd:complexType>
+
+
+
+<xs:complexType name="statusType">
+ <xs:choice minOccurs="0" maxOccurs="1">
+  <xs:element name="optional" type="xsd:string"/>
+  <xs:element name="mandatory" type="xsd:string"/>
+  <xs:element name="dynamic" type="xsd:string"/>
+ </xs:choice>
+</xs:complexType>
+
+</xsd:schema>

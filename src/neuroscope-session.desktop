@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=Neuroscope Session File
+Hidden=false
+Icon=
+MimeType=application/neuroscope-session
+Patterns=*.nrs
+Type=MimeType

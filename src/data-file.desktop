@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=Data File
+Hidden=false
+Icon=
+MimeType=application/data-file
+Patterns=*.dat
+Type=MimeType

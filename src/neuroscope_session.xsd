@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://ratgers.rutgers.edu/neuroscope"
+	xmlns="http://ratgers.rutgers.edu/neuroscope"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+<xsd:element name="neuroscope">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="files"/>
+			<xsd:element ref="displays"/>
+		</xsd:sequence>
+                <xsd:attribute name="version" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:key name='fileUrlKey'>
+   		<xsd:selector xpath="files/file"/>
+   		<xsd:field xpath="url"/>
+  	</xsd:key>
+
+  	<xsd:keyref name="clusterfileNameKeyRef" refer='fileUrlKey'>
+  		 <xsd:selector xpath="displays/display/clustersSelected"/>
+   		<xsd:field xpath="fileUrl"/>
+  	</xsd:keyref>
+
+  	<xsd:keyref name="eventfileNameKeyRef" refer='fileUrlKey'>
+  		 <xsd:selector xpath="displays/display/eventsSelected"/>
+   		<xsd:field xpath="fileUrl"/>
+  	</xsd:keyref>
+  	
+        <xsd:keyref name="spikefileNameKeyRef" refer='fileUrlKey'>
+  		 <xsd:selector xpath="displays/display/spikesSelected"/>
+   		<xsd:field xpath="fileUrl"/>
+  	</xsd:keyref>
+
+  	<xsd:keyref name="clusterSkippedfileNameKeyRef" refer='fileUrlKey'>
+  		 <xsd:selector xpath="displays/display/clustersSkipped"/>
+   		<xsd:field xpath="fileUrl"/>
+  	</xsd:keyref>
+
+  	<xsd:keyref name="eventSkippedfileNameKeyRef" refer='fileUrlKey'>
+  		 <xsd:selector xpath="displays/display/eventsSkipped"/>
+   		<xsd:field xpath="fileUrl"/>
+  	</xsd:keyref>
+        
+</xsd:element>
+
+
+<xsd:element name="files">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="file" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="displays">
+	<xsd:complexType>
+	 	<xsd:element ref="display" minOccurs="0" maxOccurs="unbounded"/>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="file">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="type" type="fileType" />
+			<xsd:element name="url" type="xsd:string" />
+			<xsd:element name="modificationDate" type="xsd:date" />
+                        <xsd:element name="items" type="itemDescriptions"  minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="display">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="tabLabel" type="xsd:string" />
+			<xsd:element name="showLabels" type="xsd:boolean" />      
+			<xsd:element name="startTime" type="xsd:int" />
+			<xsd:element name="duration" type="xsd:int" />
+			<xsd:element name="multipleColumns" type="displayMode" />
+			<xsd:element name="greyScale" type="xsd:boolean" />
+			<xsd:element name="positionView" type="xsd:boolean" />
+                        <xsd:element name="showEvents" type="xsd:boolean" />
+			<xsd:element name="spikePresentation" type="spikeDisplayMode" minOccurs="0" maxOccurs="3"/>
+                        <xsd:element name="rasterHeight" type="xsd:int" />
+			<xsd:element name="clustersSelected" type="clusters" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="spikesSelected" type="spikes" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="eventsSelected" type="events" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="clustersSkipped" type="clusters" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="eventsSkipped" type="events" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="channelPositions" type="positions"/>
+			<xsd:element name="channelsSelected" type="fieldTrace"/>
+			<xsd:element name="channelsShown" type="fieldTrace"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="fileType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="spike"/>
+		<xsd:enumeration value="cluster"/>
+		<xsd:enumeration value="event"/>
+	</xsd:restriction >
+</xsd:simpleType>
+
+<xsd:simpleType name="displayMode">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="single"/>
+		<xsd:enumeration value="multiple"/>
+	</xsd:restriction >
+</xsd:simpleType>
+
+<xsd:simpleType name="spikeDisplayMode">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="raster"/>
+		<xsd:enumeration value="waveforms"/>
+		<xsd:enumeration value="lines"/>
+	</xsd:restriction >
+</xsd:simpleType>
+
+
+<xsd:element name="itemDescriptions">
+	<xsd:complexType>
+    		<xsd:element ref="itemDescription" minOccurs="1" maxOccurs="unbounded"/>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="itemDescription">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="item" type="xsd:string" />
+			<xsd:element name="color" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="positions">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="channelPosition" type="position" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="position">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="channel" type="xsd:int" />
+			<xsd:element name="gain" type="xsd:int" />
+			<xsd:element name="offset" type="xsd:int" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="fieldTrace">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="channel" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="clusters">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="fileUrl" type="xsd:string" />
+			<xsd:element name="cluster" type="xsd:int" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="spikes">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="fileUrl" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="events">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="fileUrl" type="xsd:string" />
+			<xsd:element name="event" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+
+</xsd:schema>

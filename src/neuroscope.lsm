@@ -1,0 +1,16 @@
+Begin3
+Title:          neuroscope -- Some description
+Version:        1.2
+Entered-date:   
+Description:    
+Keywords:       KDE Qt
+Author:         Lynn Hazan <lynn@myrealbox.com>
+Maintained-by:  Lynn Hazan <lynn@myrealbox.com>
+Home-page:      
+Alternate-site: 
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
+                xxxxxx  neuroscope-1.2.tar.gz
+                xxx     neuroscope-1.2.lsm
+Platform:       Linux. Needs KDE
+Copying-policy: GPL
+End

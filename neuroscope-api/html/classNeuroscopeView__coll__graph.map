@@ -1,0 +1,5 @@
+base referer
+rect $classNeuroscopeApp.html 6,109 110,133
+rect $classGlobalEventsProvider.html 164,18 302,42
+rect $classPositionView.html 316,109 401,133
+rect $classTraceWidget.html 425,109 510,133

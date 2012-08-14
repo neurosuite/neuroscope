@@ -1,0 +1,4 @@
+base referer
+rect $classBaseFrame.html 18,31 96,54
+rect $classPositionView.html 145,7 230,31
+rect $classTraceView.html 150,54 225,78
