@@ -19,7 +19,7 @@
 
 // include files for KDE
 
-#include <kmessagebox.h>
+
 
 // include files for Qt
 #include <qcursor.h>

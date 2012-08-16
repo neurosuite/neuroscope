@@ -38,7 +38,7 @@
 
 // include files for kde
 #include <kiconloader.h>
-#include <kmessagebox.h>
+
 
 
 //Unix include file

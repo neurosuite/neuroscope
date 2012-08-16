@@ -23,7 +23,7 @@
 #include <QPixmap>
 
 // include files for KDE
-#include <kmessagebox.h>
+
 #include <kstatusbar.h>
 
 #include <kglobal.h>

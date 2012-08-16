@@ -26,7 +26,7 @@
 #include <kiconloader.h>    // for KIconLoader
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
-#include <kmessagebox.h>    // for KMessageBox
+    // for KMessageBox
 
 //include files for the application
 #include "prefdialog.h"     // class PrefDialog
