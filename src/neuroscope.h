@@ -31,7 +31,6 @@
 #include <kaction.h>
 #include <kurl.h>
 #include <kcolorbutton.h>
-#include <kdeprint/kprintdialogpage.h>
 #include <kpopupmenu.h>
 
 //QT include files

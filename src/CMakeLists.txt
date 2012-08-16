@@ -14,7 +14,7 @@ KDE3_ADD_UI_FILES(neuroscope_SRCS ${neuroscope_UI})
 
 add_executable(neuroscope ${neuroscope_SRCS} )
 
-target_link_libraries(neuroscope ${QT_LIBRARIES} kdeui kdecore kio kdefx kdeprint ${LIBXML2_LIBRARIES})
+target_link_libraries(neuroscope ${QT_LIBRARIES} kdeui kdecore kio kdefx ${LIBXML2_LIBRARIES})
 
 install(PROGRAMS neuroscope DESTINATION bin)
 
