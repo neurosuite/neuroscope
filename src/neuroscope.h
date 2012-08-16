@@ -28,7 +28,6 @@
 
 #include <kdockwidget.h>
 #include <kaccel.h>
-#include <kaction.h>
 
 #include <kpopupmenu.h>
 
