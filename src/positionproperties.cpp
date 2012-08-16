@@ -18,7 +18,7 @@
 #include "positionproperties.h"
 
 //QT includes
-#include <qicon.h>
+#include <QIcon>
 //Added by qt3to4:
 #include <QPixmap>
 

@@ -19,7 +19,7 @@
 #define DATAPROVIDER_H
 
 // include files for QT
-#include <qobject.h> 
+#include <QObject> 
 
 // include files for KDE
 

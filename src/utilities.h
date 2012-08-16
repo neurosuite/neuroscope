@@ -21,10 +21,10 @@
 #define UTILITIES_H
 
 // include files for Qt
-#include <qstring.h>
-#include <qstringlist.h> 
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QString>
+#include <QStringList> 
+#include <QFile>
+#include <QFileInfo>
  
 //General C++ include files
 #include <iostream>

@@ -20,9 +20,9 @@
 
 //include files for QT
 #include <q3valuelist.h>
-#include <qdatetime.h>
-#include <qcolor.h>
-#include <qstring.h>
+#include <QDateTime>
+#include <QColor>
+#include <QString>
 #include <qmap.h>
 
 // include files for KDE

@@ -20,7 +20,7 @@
 
 // include files for Qt
 #include <q3ptrlist.h>
-#include <qcolor.h>
+#include <QColor>
 #include <q3valuelist.h>
 
 // application specific includes

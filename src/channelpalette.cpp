@@ -23,18 +23,18 @@
 
 
 // include files for Qt
-#include <qvariant.h>
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QVariant>
+#include <QPainter>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
+#include <QPixmap>
+#include <QBitmap>
 #include <q3scrollview.h>
-#include <qlayout.h> 
+#include <QLayout> 
 #include <q3hbox.h>
-#include <qstyle.h>
-#include <qcolordialog.h>
+#include <QStyle>
+#include <QColorDialog>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QLabel>

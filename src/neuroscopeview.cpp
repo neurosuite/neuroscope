@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 // include files for Qt
-#include <qpainter.h>
+#include <QPainter>
 #include <q3paintdevicemetrics.h> 
 //Added by qt3to4:
 #include <Q3ValueList>

@@ -16,11 +16,11 @@
  ***************************************************************************/
 
 // include files for Qt
-#include <qdir.h>
+#include <QDir>
 #include <qwidget.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qregexp.h>
+#include <QPixmap>
+#include <QImage>
+#include <QRegExp>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>

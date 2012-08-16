@@ -20,10 +20,10 @@
 
 // include files for Qt
 #include <qwidget.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qprinter.h>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
+#include <QPrinter>
 #include <q3dict.h> 
 //Added by qt3to4:
 #include <QResizeEvent>

@@ -23,8 +23,8 @@
 
 
 // include files for QT
-#include <qdir.h>
-#include <qstring.h>
+#include <QDir>
+#include <QString>
 
 //Application specific include files
 #include "neuroscope.h"

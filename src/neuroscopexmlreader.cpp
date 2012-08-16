@@ -29,8 +29,8 @@
 using namespace std;
 
 //include files for QT
-#include <qfileinfo.h> 
-#include <qstring.h> 
+#include <QFileInfo> 
+#include <QString> 
 
 using namespace neuroscope;
 

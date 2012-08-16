@@ -16,9 +16,9 @@
  ***************************************************************************/
 
 // include files for QT
-#include <qdir.h>
-#include <qpainter.h>
-#include <qcursor.h>
+#include <QDir>
+#include <QPainter>
+#include <QCursor>
 #include <qinputdialog.h>
 //Added by qt3to4:
 #include <QPixmap>

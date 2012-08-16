@@ -25,7 +25,7 @@
 
 // include files for QT
 #include <q3ptrlist.h>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3ValueList>
 

@@ -18,7 +18,7 @@
 #ifndef FLOATRECT_H
 #define FLOATRECT_H
 
-#include <qrect.h>
+#include <QRect>
 #include <qpoint.h>
 #include <math.h>
 

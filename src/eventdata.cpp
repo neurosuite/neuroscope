@@ -18,7 +18,7 @@
 #include "eventdata.h"
 
 //QT include files
-#include <qobject.h>
+#include <QObject>
 
 //include files for c/c++ libraries
 #include <math.h>

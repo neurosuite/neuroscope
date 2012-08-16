@@ -18,7 +18,7 @@
 #define ITEMPALETTE_H
 
 //QT include files
-#include <qvariant.h>
+#include <QVariant>
 #include <qwidget.h>
 #include <q3vbox.h> 
 #include <q3iconview.h>
@@ -26,9 +26,9 @@
 #include <q3ptrlist.h>
 #include <qmap.h>
 #include <q3dragobject.h>
-#include <qlabel.h>
-#include <qcursor.h>
-#include <qpainter.h>
+#include <QLabel>
+#include <QCursor>
+#include <QPainter>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3ValueList>

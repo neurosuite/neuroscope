@@ -23,10 +23,10 @@
 #endif 
 
 // include files for QT
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <q3ptrlist.h>
-#include <qpair.h>
+#include <QPair>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QCustomEvent>

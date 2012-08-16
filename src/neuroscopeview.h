@@ -27,8 +27,8 @@
 // include files for Qt
 #include <qwidget.h>
 #include <q3dict.h>
-#include <qimage.h>
-#include <qprinter.h>
+#include <QImage>
+#include <QPrinter>
 //Added by qt3to4:
 #include <Q3ValueList>
 

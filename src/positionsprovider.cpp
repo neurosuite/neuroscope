@@ -20,8 +20,8 @@
 #include "utilities.h"
 
 // include files for QT
-#include <qstringlist.h>
-#include <qfileinfo.h>
+#include <QStringList>
+#include <QFileInfo>
 
 // include files for KDE
 

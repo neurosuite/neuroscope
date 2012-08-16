@@ -20,7 +20,7 @@
 
 //QT include files
 #include <qwidget.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3iconview.h>
 #include <q3dragobject.h>
 #include <qwidget.h>

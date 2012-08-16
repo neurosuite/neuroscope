@@ -21,7 +21,7 @@
 #include <qwidget.h>
 #include <q3hbox.h>
 #include <q3iconview.h>
-#include <qobject.h> 
+#include <QObject> 
 
 //General C++ include files
 #include <iostream>

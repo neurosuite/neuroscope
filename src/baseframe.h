@@ -21,7 +21,7 @@
 // include files for QT
 #include <qwidget.h>
 #include <q3frame.h>
-#include <qcursor.h>
+#include <QCursor>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QMouseEvent>

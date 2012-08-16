@@ -28,8 +28,8 @@
 // include files for QT
 #include <qmap.h>
 #include <q3valuelist.h>
-#include <qpainter.h>
-#include <qprinter.h>
+#include <QPainter>
+#include <QPrinter>
 #include <q3paintdevicemetrics.h>
 //Added by qt3to4:
 #include <QMouseEvent>

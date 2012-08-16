@@ -18,7 +18,7 @@
 #include "prefgeneral.h"
 
 //QT includes
-#include <qicon.h>
+#include <QIcon>
 
 // include files for KDE
 #include <kiconloader.h>

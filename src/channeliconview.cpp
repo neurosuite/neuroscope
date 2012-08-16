@@ -22,8 +22,8 @@
 
 
 // include files for Qt
-#include <qcursor.h>
-#include <qtextcodec.h>
+#include <QCursor>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <QDropEvent>
 #include <Q3Frame>

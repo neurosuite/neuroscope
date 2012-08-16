@@ -20,9 +20,9 @@
 
 // include files for QT
 #include <qwidget.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qlabel.h>
+#include <QLineEdit>
+#include <QValidator>
+#include <QLabel>
 #include <q3groupbox.h>
 
 //include files for the application

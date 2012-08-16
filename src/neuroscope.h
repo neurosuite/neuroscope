@@ -33,7 +33,7 @@
 #include <kpopupmenu.h>
 
 //QT include files
-#include <qcheckbox.h>
+#include <QCheckBox>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QCustomEvent>

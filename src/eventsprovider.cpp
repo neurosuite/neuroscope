@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 //QT include files
-#include <qstringlist.h>
-#include <qfileinfo.h> 
-#include <qregexp.h>
+#include <QStringList>
+#include <QFileInfo> 
+#include <QRegExp>
 //Added by qt3to4:
 #include <Q3TextStream>
 #include <Q3ValueList>
@@ -1349,8 +1349,8 @@ void EventsProvider::renameEvent(int selectedEventId,QString newEventDescription
 
 //Operator < on EventDescription to sort them in an case-insensitive maner.
  bool operator<(const EventDescription& s1,const EventDescription& s2){
-  if(s1.lower() == s2.lower()) return (static_cast<QString>(s1) < static_cast<QString>(s2));
-  else return (static_cast<QString>(s1.lower()) < static_cast<QString>(s2.lower()));
+  if(s1.toLower() == s2.toLower()) return (static_cast<QString>(s1) < static_cast<QString>(s2));
+  else return (static_cast<QString>(s1.toLower()) < static_cast<QString>(s2.toLower()));
  }
 
 

@@ -15,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 //QT include files
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qfileinfo.h>
+#include <QFile>
+#include <QStringList>
+#include <QFileInfo>
 //Added by qt3to4:
 #include <Q3ValueList>
  

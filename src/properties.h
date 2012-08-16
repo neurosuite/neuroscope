@@ -20,11 +20,11 @@
 
 // include files for QT
 #include <qwidget.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qspinbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QValidator>
 
 //includes files for KDE
 #include <kfiledialog.h>

@@ -15,10 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 // include files for QT
-#include <qlayout.h>        // for QVBoxLayout
-#include <qlabel.h>         // for QLabel
+#include <QLayout>        // for QVBoxLayout
+#include <QLabel>         // for QLabel
 #include <q3frame.h>         // for QFrame
-#include <qtabwidget.h>
+#include <QTabWidget>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 

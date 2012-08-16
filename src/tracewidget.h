@@ -22,13 +22,13 @@
 #include <qwidget.h>
 #include <q3vbox.h>
 #include <qspinbox.h>
-#include <qvalidator.h>
-#include <qlineedit.h>
-#include <qlabel.h>
+#include <QValidator>
+#include <QLineEdit>
+#include <QLabel>
 #include <qscrollbar.h>
 #include <q3hbox.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <QPainter>
+#include <QStyle>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <Q3ValueList>

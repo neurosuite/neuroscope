@@ -28,8 +28,8 @@ using namespace std;
 //include files for the application
 #include "tracesprovider.h"
 
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 
 TracesProvider::TracesProvider(QString fileUrl,int nbChannels,int resolution,double samplingRate,int offset):
   DataProvider(fileUrl),nbChannels(nbChannels),resolution(resolution),samplingRate(samplingRate),offset(offset){

@@ -22,9 +22,9 @@
 
 // include files for Qt
 #include <qwidget.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
 
 // application specific includes
 #include "positionsprovider.h"

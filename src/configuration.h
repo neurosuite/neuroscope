@@ -19,9 +19,9 @@
 #define CONFIGURATION_H
 
 // include files for QT
-#include <qstring.h>
+#include <QString>
 #include <qfont.h>
-#include <qcolor.h>
+#include <QColor>
 
 //General C++ include files
 #include <iostream>

@@ -19,7 +19,7 @@
 #define TAGS_H
 
 // include files for QT
-#include <qstring.h>
+#include <QString>
 
  /**
   * This class contains the XML tags used in the session files.

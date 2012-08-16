@@ -18,7 +18,7 @@
 #include "tracewidget.h"
 
 // include files for QT
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3Frame>
 #include <Q3ValueList>
@@ -32,7 +32,7 @@
 using namespace std;
 
 /// Added by M.Zugaro to enable automatic forward paging
-#include <qtimer.h>
+#include <QTimer>
 
 TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                   bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int gain,int acquisitionGain,
@@ -89,7 +89,7 @@ void TraceWidget::accelerate()
 	pageTime -= 125;
 	if ( pageTime < 0 ) pageTime = 0;
 	cout << "page time: " << pageTime << endl;
-	timer->changeInterval(pageTime);
+	timer->start(pageTime);
 }
 
 void TraceWidget::decelerate()
@@ -98,7 +98,7 @@ void TraceWidget::decelerate()
 	pageTime += 125;
 	if ( pageTime > 1000 ) pageTime = 1000;
 	cout << "page time: " << pageTime << endl;
-	timer->changeInterval(pageTime);
+	timer->start(pageTime);
 }
 
 /// Added by M.Zugaro to enable automatic forward paging
