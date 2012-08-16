@@ -50,7 +50,7 @@ public:
   * @param url url of the file to write to.
   * @return true if the session could be write to disk, falsse otherwise.
   */
-  bool writeTofile(const KURL& url);
+  bool writeTofile(const QString& url);
 
  /**
   * Creates the elements related to the list of files which where loaded during the session,

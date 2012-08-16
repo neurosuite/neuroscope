@@ -42,7 +42,7 @@ class GlobalEventsProvider : public DataProvider
 {
   Q_OBJECT
 public:
-    inline GlobalEventsProvider():DataProvider(KURL()){};
+    inline GlobalEventsProvider():DataProvider(QString()){};
     inline ~GlobalEventsProvider(){};
 
  /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.

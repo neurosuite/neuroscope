@@ -41,7 +41,7 @@ NeuroscopeXmlReader::NeuroscopeXmlReader():readVersion(""){
 NeuroscopeXmlReader::~NeuroscopeXmlReader(){
 }
 
-bool NeuroscopeXmlReader::parseFile(const KURL& url,fileType type){
+bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
  this->type = type;
   
  // Init libxml
@@ -796,7 +796,7 @@ Q3ValueList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
       xmlChar* sUrl = xmlNodeListGetString(doc,child->children, 1);
       QString url = QString((char*)sUrl);
       xmlFree(sUrl);      
-      sessionFile.setUrl(KURL(url));
+      sessionFile.setUrl(QString(url));
      }
      if(QString((char*)child->name) == DATE){
       xmlChar* sDate = xmlNodeListGetString(doc,child->children, 1);

@@ -152,12 +152,12 @@ void NeuroscopeDoc::removeView(NeuroscopeView* view)
 {
   viewList->remove(view);
 }
-void NeuroscopeDoc::setURL(const KURL &url)
+void NeuroscopeDoc::setURL(const QString &url)
 {
   docUrl = url;
 }
 
-const KURL& NeuroscopeDoc::url() const
+const QString& NeuroscopeDoc::url() const
 {
   return docUrl;
 }
@@ -169,8 +169,8 @@ QString NeuroscopeDoc::sessionPath() const{
 void NeuroscopeDoc::closeDocument(){  
  //If a document has been open reset the members
  viewList->clear();
- docUrl = KURL();
- sessionUrl = KURL();
+ docUrl = QString();
+ sessionUrl = QString();
  baseName = "";
  //Use the default values
  channelNb = channelNbDefault;
@@ -229,7 +229,7 @@ bool NeuroscopeDoc::isADocumentToClose(){
 }
 
 
-int NeuroscopeDoc::openDocument(const KURL& url)
+int NeuroscopeDoc::openDocument(const QString& url)
 {
 
   channelColorList = new ChannelColors();
@@ -273,12 +273,12 @@ int NeuroscopeDoc::openDocument(const KURL& url)
     for(uint i = 1;i < fileParts.count() - 1; ++i) baseName += "." + fileParts[i];
 
     //As all the files with the same base name share the same session and par files, ask the user to selected the desire one.
-    KURL startUrl(url);
+    QString startUrl(url);
     startUrl.setFileName(baseName);
     QString filter = baseName + ".dat " +  " " + baseName + ".eeg" +  " " +  baseName + ".fil";
     filter.append(tr("|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n"));
     filter.append(baseName + ".*");
-    KURL openUrl = KFileDialog::getOpenURL(startUrl.path(),filter,parent, tr("Open Data File..."));
+    QString openUrl = KFileDialog::getOpenURL(startUrl.path(),filter,parent, tr("Open Data File..."));
     if(!openUrl.isEmpty()) docUrl = openUrl;
     else{
      QString docFile = baseName + ".dat";
@@ -299,7 +299,7 @@ int NeuroscopeDoc::openDocument(const KURL& url)
   extension = fileParts[fileParts.count() - 1];
   
   //Look up in the parameter file
-  KURL parFileUrl(docUrl);
+  QString parFileUrl(docUrl);
   parFileUrl.setFileName(baseName +".xml");
   parameterUrl = parFileUrl;
     
@@ -479,7 +479,7 @@ int NeuroscopeDoc::openDocument(const KURL& url)
 }
 
 int NeuroscopeDoc::saveEventFiles(){
- QMap<QString,KURL>::Iterator iterator;
+ QMap<QString,QString>::Iterator iterator;
  for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
   DataProvider* provider = providers[iterator.key()];
   if(provider->isA("EventsProvider")){
@@ -556,7 +556,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
    
  //Create the list of loaded files
  Q3ValueList<SessionFile> fileList;
- QMap<QString,KURL>::Iterator iterator;
+ QMap<QString,QString>::Iterator iterator;
  for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
   SessionFile sessionFile;
   sessionFile.setUrl(iterator.data());
@@ -619,16 +619,16 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
    QString name = it.currentKey();   
    if(it.current()->isA("ClustersProvider")){
     Q3ValueList<int> clusterIds = *(view->getSelectedClusters(name));
-    displayInformation.setSelectedClusters(static_cast<KURL>(providerUrls[name]).url(),clusterIds);
+    displayInformation.setSelectedClusters(static_cast<QString>(providerUrls[name]).url(),clusterIds);
     Q3ValueList<int> skippedClusterIds = *(view->getClustersNotUsedForBrowsing(name));
-    displayInformation.setSkippedClusters(static_cast<KURL>(providerUrls[name]).url(),skippedClusterIds);    
+    displayInformation.setSkippedClusters(static_cast<QString>(providerUrls[name]).url(),skippedClusterIds);
    }
    if(it.current()->isA("EventsProvider")){
     //An id has been assigned to each event, this id is used internally in NeuroScope and in the session file. 
     Q3ValueList<int> eventIds = *(view->getSelectedEvents(name));
-    displayInformation.setSelectedEvents(static_cast<KURL>(providerUrls[name]).url(),eventIds);
+    displayInformation.setSelectedEvents(static_cast<QString>(providerUrls[name]).url(),eventIds);
     Q3ValueList<int> skippedEventIds = *(view->getEventsNotUsedForBrowsing(name));
-    displayInformation.setSkippedEvents(static_cast<KURL>(providerUrls[name]).url(),skippedEventIds);    
+    displayInformation.setSkippedEvents(static_cast<QString>(providerUrls[name]).url(),skippedEventIds);
    }
   }
   
@@ -992,7 +992,7 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
    if(backgroundImage != ""){
     QFileInfo fileInfo = QFileInfo(backgroundImage);
     if(!fileInfo.exists()){
-     KURL imageUrl;
+     QString imageUrl;
      imageUrl.setPath(backgroundImage);
      QString fileName = imageUrl.fileName();     
      imageUrl = docUrl;
@@ -1010,7 +1010,7 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
    if(traceBackgroundImage != ""){
     QFileInfo fileInfo = QFileInfo(traceBackgroundImage);
     if(!fileInfo.exists()){
-     KURL imageUrl;
+     QString imageUrl;
      imageUrl.setPath(traceBackgroundImage);
      QString fileName = imageUrl.fileName();     
      imageUrl = docUrl;
@@ -1258,7 +1258,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
    Q3ValueList<SessionFile>::iterator sessionIterator;
    for(sessionIterator = filesToLoad.begin(); sessionIterator != filesToLoad.end(); ++sessionIterator){
     SessionFile sessionFile = static_cast<SessionFile>(*sessionIterator);
-    KURL fileUrl = sessionFile.getUrl();
+    QString fileUrl = sessionFile.getUrl();
     SessionFile::type fileType = sessionFile.getType();
     QDateTime lastModified = sessionFile.getModification();
     QMap<EventDescription,QColor> itemColors = sessionFile.getItemColors();
@@ -1329,7 +1329,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
       if(backgroundImage != ""){
        fileInfo = QFileInfo(backgroundImage);
        if(!fileInfo.exists()){
-        KURL imageUrl;
+        QString imageUrl;
         imageUrl.setPath(backgroundImage);
         QString fileName = imageUrl.fileName();
         imageUrl = sessionUrl;
@@ -1364,7 +1364,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
   //Cluster files
   for(providerIterator = loadedClusterFiles.begin(); providerIterator != loadedClusterFiles.end(); ++providerIterator){
    QString name = *providerIterator;
-   QString fileURL = static_cast<KURL>(providerUrls[name]).url();
+   QString fileURL = static_cast<QString>(providerUrls[name]).url();
    Q3ValueList<int> clustersIds;
    Q3ValueList<int> clustersIdsToSkip;
    Q3ValueList<int> ids = selectedClusters[fileURL];
@@ -1389,7 +1389,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
   //Event files
   for(providerIterator = loadedEventFiles.begin(); providerIterator != loadedEventFiles.end(); ++providerIterator){
    QString name = *providerIterator;
-   QString fileURL = static_cast<KURL>(providerUrls[name]).url();
+   QString fileURL = static_cast<QString>(providerUrls[name]).url();
    Q3ValueList<int> eventsIds;
    Q3ValueList<int> eventsIdsToSkip;
    Q3ValueList<int> ids = selectedEvents[fileURL];
@@ -1709,7 +1709,7 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 }
 
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(KURL clusterUrl,NeuroscopeView* activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,NeuroscopeView* activeView){
  //Check that the selected file is a cluster file
  QString fileName = clusterUrl.fileName();
  if(fileName.find(".clu") == -1) return INCORRECT_FILE;
@@ -1782,7 +1782,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(KURL c
  return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(KURL clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
  //Check that the selected file is a cluster file (should always be the case as the file has
  //already be loaded once).
  QString fileName = clusterUrl.fileName();
@@ -1920,14 +1920,14 @@ void NeuroscopeDoc::clusterColorUpdate(QString providerName,int clusterId,Neuros
 
 void NeuroscopeDoc::setClusterPosition(int position){
  clusterPosition = position;
- QMap<QString,KURL>::Iterator iterator;
+ QMap<QString,QString>::Iterator iterator;
  for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
   DataProvider* provider = providers[iterator.key()];
   if(provider->isA("ClustersProvider")) static_cast<ClustersProvider*>(provider)->setClusterPosition(position);
  }
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(KURL eventUrl,NeuroscopeView*activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,NeuroscopeView*activeView){
  //Check that the selected file is a event file
  QString fileName = eventUrl.fileName();
  if(fileName.find(".evt") == -1) return INCORRECT_FILE;
@@ -1995,7 +1995,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(KURL eve
  return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(KURL eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
  //Check that the selected file is a event file (should always be the case as the file has
  //already be loaded once).
  QString fileName = eventUrl.fileName();
@@ -2127,7 +2127,7 @@ void NeuroscopeDoc::eventColorUpdate(QString providerName,int eventId,Neuroscope
 
 void NeuroscopeDoc::setEventPosition(int position){
  eventPosition = position; 
- QMap<QString,KURL>::Iterator iterator;
+ QMap<QString,QString>::Iterator iterator;
  for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
   DataProvider* provider = providers[iterator.key()];
   if(provider->isA("EventsProvider")) static_cast<EventsProvider*>(provider)->setEventPosition(position);
@@ -2383,7 +2383,7 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,in
  eventPalette->selectItems(providerName,*selectedEvents,*skippedEvents);
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(KURL eventUrl,NeuroscopeView*activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QString eventUrl,NeuroscopeView*activeView){
  //Check that the selected file is a event file name
  QString fileName = eventUrl.fileName();
  if(fileName.find(".evt") == -1) return INCORRECT_FILE; 
@@ -2428,7 +2428,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(KURL e
   
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(KURL url,NeuroscopeView* activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString url,NeuroscopeView* activeView){
  //get the sampling rate for the given position file extension, if there is none already set, use the default
  QString positionFileName = url.fileName();
  QStringList fileParts = QStringList::split(".", positionFileName);
@@ -2473,7 +2473,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(KURL 
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString fileUrl){
  //get the sampling rate for the given position file extension, if there is none already set, use the default
- KURL positionUrl = KURL();
+ QString positionUrl = QString();
  positionUrl.setPath(fileUrl);
  QString positionFileName = positionUrl.fileName();
  QStringList fileParts = QStringList::split(".", positionFileName);

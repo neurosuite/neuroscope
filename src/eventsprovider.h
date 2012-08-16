@@ -61,7 +61,7 @@ public:
   * @param currentSamplingRate sampling rate of the current file.
   * @param position represents the percentage from the begining of the window where the events are display when browsing.
   */
-  EventsProvider(KURL fileUrl,double currentSamplingRate,int position = 25);
+  EventsProvider(QString fileUrl,double currentSamplingRate,int position = 25);
 	~EventsProvider();
 
  /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.

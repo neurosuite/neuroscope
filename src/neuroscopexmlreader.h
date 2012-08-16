@@ -54,7 +54,7 @@ public:
   * @param type type of the xml file to open.
   * @return true if the file was correctly parse, false othewise.
   */
-  bool parseFile(const KURL& url,fileType type);
+  bool parseFile(const QString& url,fileType type);
 
   /**Closes the currently open file.*/
   void closeFile();

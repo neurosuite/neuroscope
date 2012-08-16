@@ -49,7 +49,7 @@ SessionXmlWriter::SessionXmlWriter():doc(){
 
 SessionXmlWriter::~SessionXmlWriter(){}
 
-bool SessionXmlWriter::writeTofile(const KURL& url){ 
+bool SessionXmlWriter::writeTofile(const QString& url){ 
  QFile sessionFile(url.path());
  bool status = sessionFile.open(QIODevice::WriteOnly);
  if(!status) return status;
@@ -75,7 +75,7 @@ void SessionXmlWriter::setLoadedFilesInformation(Q3ValueList<SessionFile> fileLi
  Q3ValueList<SessionFile>::iterator iterator;
  for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
   //Get the file information
-  KURL fileUrl = static_cast<SessionFile>(*iterator).getUrl();
+  QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
   int fileType = static_cast<SessionFile>(*iterator).getType();
   QDateTime dateTime = static_cast<SessionFile>(*iterator).getModification();
   QMap<EventDescription,QColor> colors = static_cast<SessionFile>(*iterator).getItemColors();

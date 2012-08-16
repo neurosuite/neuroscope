@@ -44,7 +44,7 @@ public:
   * @param rotation video image rotation angle.
   * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.   
   */
-  PositionsProvider(KURL fileUrl,double samplingRate,int width,int height,int rotation,int flip);
+  PositionsProvider(QString fileUrl,double samplingRate,int width,int height,int rotation,int flip);
   
   ~PositionsProvider();
 

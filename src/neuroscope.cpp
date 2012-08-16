@@ -105,7 +105,7 @@ NeuroscopeApp::~NeuroscopeApp()
 void NeuroscopeApp::initActions()
 {
   KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
-  fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
+  fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const QString&)), actionCollection());
   new KAction(tr("&Close"), "fileclose",0,this, SLOT(slotFileClose()),actionCollection(), "file_close");
   KStdAction::save(this, SLOT(saveSession()), actionCollection());
   KStdAction::saveAs(this, SLOT(slotSessionSaveAs()), actionCollection());
@@ -606,7 +606,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
   else slotStateChanged("noClusterRasterState");  
 }
 
-void NeuroscopeApp::openDocumentFile(const KURL& url)
+void NeuroscopeApp::openDocumentFile(const QString& url)
 {
   slotStatusMsg(tr("Opening file..."));
 
@@ -810,7 +810,7 @@ void NeuroscopeApp::readProperties(KConfig* config)
   // initialize the recent file list
   fileOpenRecent->loadEntries(config);
   filePath = config->readPathEntry("openFile");
-  KURL url;
+  QString url;
   url.setPath(filePath);
   openDocumentFile(url);
 }
@@ -956,7 +956,7 @@ void NeuroscopeApp::slotFileOpen()
 {
   slotStatusMsg(tr("Opening file..."));
 
-  KURL url=KFileDialog::getOpenURL(QString::null,
+  QString url=KFileDialog::getOpenURL(QString::null,
       tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files"), this, tr("Open File..."));
   if(!url.isEmpty())
   {
@@ -969,7 +969,7 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
   slotStatusMsg(tr("Loading cluster file(s)..."));
 
-  KURL::List urls=KFileDialog::getOpenURLs(QString::null,
+  QString::List urls=KFileDialog::getOpenURLs(QString::null,
       tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, tr("Open Cluster Files..."));
   if(urls.size() != 0)
   {
@@ -983,7 +983,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
   slotStatusMsg(tr("Loading event file(s)..."));
 
-  KURL::List urls=KFileDialog::getOpenURLs(QString::null,
+  QString::List urls=KFileDialog::getOpenURLs(QString::null,
       tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, tr("Open Event Files..."));
   if(urls.size() != 0)
   {
@@ -996,7 +996,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
 void NeuroscopeApp::slotLoadPositionFile(){
  slotStatusMsg(tr("Loading position file..."));
 
- KURL url=KFileDialog::getOpenURL(QString::null,
+ QString url=KFileDialog::getOpenURL(QString::null,
      tr("*|All Files"), this, tr("Open position File..."));
  if(!url.isEmpty())
  {
@@ -1010,8 +1010,8 @@ void NeuroscopeApp::slotLoadPositionFile(){
 void NeuroscopeApp::slotCreateEventFile(){
  slotStatusMsg(tr("Creating an event file..."));
 
- const KURL& docUrl = doc->url();
- KURL eventUrl(docUrl);
+ const QString& docUrl = doc->url();
+ QString eventUrl(docUrl);
  QString baseName = doc->documentBaseName();
  eventUrl.setFileName(baseName);
  
@@ -1021,7 +1021,7 @@ void NeuroscopeApp::slotCreateEventFile(){
  ok->setText(tr("Create"));
  dialog.setCaption(tr("Create Event File as..."));
  dialog.exec();
- KURL url = dialog.selectedURL();
+ QString url = dialog.selectedURL();
  
  if(!url.isEmpty()){
   //Check if the file already exist
@@ -1055,7 +1055,7 @@ void NeuroscopeApp::slotCreateEventFile(){
  slotStatusMsg(tr("Ready."));
 }
 
-void NeuroscopeApp::slotFileOpenRecent(const KURL& url){
+void NeuroscopeApp::slotFileOpenRecent(const QString& url){
   slotStatusMsg(tr("Opening file..."));
 
   openDocumentFile(url);
@@ -2459,7 +2459,7 @@ void NeuroscopeApp::slotSessionSaveAs(){
   else eventsModified = false;
  } 
  //Save the session 
- KURL url=KFileDialog::getSaveURL(doc->sessionPath(),
+ QString url=KFileDialog::getSaveURL(doc->sessionPath(),
        tr("*|All files"), this, tr("Save as..."));
  if(!url.isEmpty()){
   int saveStatus = doc->saveSession(url);
@@ -2503,50 +2503,50 @@ void NeuroscopeApp::customEvent (QCustomEvent* event){
   }
 }
 
-void NeuroscopeApp::loadClusterFiles(KURL::List urls){
+void NeuroscopeApp::loadClusterFiles(QString::List urls){
 
  NeuroscopeView* view = activeView();
  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   
  //Loop on the files
  int counter = 0;
- Q3ValueList<KURL>::iterator iterator;
+ Q3ValueList<QString>::iterator iterator;
  for(iterator = urls.begin();iterator != urls.end();++iterator){
   //Create the provider 
   int returnStatus = doc->loadClusterFile(*iterator,view);
   if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("Could not load the file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
+    KMessageBox::error (this,tr("Could not load the file " + static_cast<QString>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){ 
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."), tr("Error!"));
+    KMessageBox::error (this,tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::MISSING_FILE){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("There is no time file (.res) corresponding to the requested file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
+    KMessageBox::error (this,tr("There is no time file (.res) corresponding to the requested file " + static_cast<QString>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The number of spikes read in the requested file (" + static_cast<KURL>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."), tr("Error!"));
+    KMessageBox::error (this,tr("The number of spikes read in the requested file (" + static_cast<QString>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;    
   }
   else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The number of spikes of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), tr("Error!"));
+    KMessageBox::error (this,tr("The number of spikes of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), tr("Error!"));
+    KMessageBox::error (this,tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
@@ -2695,7 +2695,7 @@ void NeuroscopeApp::slotShowPreviousCluster(){
 }
 
 
-void NeuroscopeApp::loadPositionFile(KURL url){
+void NeuroscopeApp::loadPositionFile(QString url){
  NeuroscopeView* view = activeView();
  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
  
@@ -2723,44 +2723,44 @@ void NeuroscopeApp::loadPositionFile(KURL url){
  QApplication::restoreOverrideCursor();    
 }
 
-void NeuroscopeApp::loadEventFiles(KURL::List urls){
+void NeuroscopeApp::loadEventFiles(QString::List urls){
 
  NeuroscopeView* view = activeView();
  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
  //Loop on the files
  int counter = 0;
- Q3ValueList<KURL>::iterator iterator;
+ Q3ValueList<QString>::iterator iterator;
  for(iterator = urls.begin();iterator != urls.end();++iterator){
   //Create the provider
   int returnStatus = doc->loadEventFile(*iterator,view);
   if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("Could not load the file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
+    KMessageBox::error (this,tr("Could not load the file " + static_cast<QString>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (0,tr("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), tr("Error!"));
+    KMessageBox::error (0,tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The number of events of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), tr("Error!"));
+    KMessageBox::error (this,tr("The number of events of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The content of the requested file (" + static_cast<KURL>(*iterator).path() + ") is incorrect (see file format information)."), tr("Error!"));
+    KMessageBox::error (this,tr("The content of the requested file (" + static_cast<QString>(*iterator).path() + ") is incorrect (see file format information)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }  
   else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,tr("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), tr("Error!"));
+    KMessageBox::error (this,tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }

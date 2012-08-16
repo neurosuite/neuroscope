@@ -66,13 +66,13 @@ class NeuroscopeDoc : public QObject
   
  private: 
     /**The url of the document .*/
-    KURL docUrl;
+    QString docUrl;
 
     /**The url of the session file.*/
-    KURL sessionUrl;
+    QString sessionUrl;
     
     /**The url of the parameter file.*/
-    KURL parameterUrl;
+    QString parameterUrl;
     
     /**Reference on the channelPalette used to specify the traces display.*/
     ChannelPalette& displayChannelPalette;
@@ -207,7 +207,7 @@ class NeuroscopeDoc : public QObject
     Q3Dict<DataProvider> providers;
 
     /**Map between the provider's name display at the top of the palette and the paths to the provider's file.*/
-    QMap<QString,KURL> providerUrls;
+    QMap<QString,QString> providerUrls;
 
     /**Name of the last loaded provider. This name is displayed at the top of provider's palette*/
     QString lastLoadedProvider;
@@ -387,7 +387,7 @@ class NeuroscopeDoc : public QObject
     * @param url url of the file to open (dat file or eeg file).
     * @return an OpenSaveCreateReturnMessage enum giving the open status.
     */
-    int openDocument(const KURL& url);
+    int openDocument(const QString& url);
 
     /**Saves the current session: displays, spike, cluster, event files opened and selected clusters and events.
     * It also saves the relevant changes in the parameter files (creating one if there is none).
@@ -404,7 +404,7 @@ class NeuroscopeDoc : public QObject
     * @param newSessionUrl new url where to write the session information to.
     @return an OpenSaveCreateReturnMessage enum giving the saving status.
     */
-    inline OpenSaveCreateReturnMessage saveSession(KURL newSessionUrl){
+    inline OpenSaveCreateReturnMessage saveSession(QString newSessionUrl){
      sessionUrl = newSessionUrl;
      return saveSession();  
     };
@@ -414,13 +414,13 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.
     @return an OpenSaveCreateReturnMessage enum giving the creation status.
     */
-    OpenSaveCreateReturnMessage createEventFile(KURL eventUrl,NeuroscopeView*activeView);
+    OpenSaveCreateReturnMessage createEventFile(QString eventUrl,NeuroscopeView*activeView);
     
-    /**Returns the KURL of the document. */
-    const KURL& url() const;
+    /**Returns the QString of the document. */
+    const QString& url() const;
     
     /**Sets the URL of the document.*/
-    void setURL(const KURL& url);
+    void setURL(const QString& url);
 
     /**Changes the color of a channel.
     * @param channelId id of the channel to redraw.
@@ -795,7 +795,7 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.     
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(KURL clusterUrl,NeuroscopeView* activeView);
+    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,NeuroscopeView* activeView);
 
     /**Loads the cluster file store in the session file and identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.
@@ -804,7 +804,7 @@ class NeuroscopeDoc : public QObject
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(KURL clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
 
 
     /**Loads the position file and creates the position view in the current display.
@@ -812,7 +812,7 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.    
     */
-    OpenSaveCreateReturnMessage loadPositionFile(KURL url,NeuroscopeView*activeView);
+    OpenSaveCreateReturnMessage loadPositionFile(QString url,NeuroscopeView*activeView);
 
     /**Loads the position file.
     * @param filePath path of the file to be opened.
@@ -832,7 +832,7 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(KURL eventUrl,NeuroscopeView* activeView);
+    OpenSaveCreateReturnMessage loadEventFile(QString eventUrl,NeuroscopeView* activeView);
 
     /**Loads the event file store in the session file and identified by @p eventUrl.
     * @param eventUrl url of the event file to load.
@@ -841,7 +841,7 @@ class NeuroscopeDoc : public QObject
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(KURL eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadEventFile(QString eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
     
     /**Removes the event provider corresponding to the identifier @p providerName
     * from the list of providers.

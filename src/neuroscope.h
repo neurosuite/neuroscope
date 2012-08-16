@@ -69,7 +69,7 @@ class NeuroscopeApp : public KDockMainWindow
     /**Opens a file, only one document at the time is allowed.
     * Asking for a new one will open a new instance of the application with it.
     */
-    void openDocumentFile(const KURL& url=0);
+    void openDocumentFile(const QString& url=0);
     
     /** Returns a pointer to the current document connected to the NeuroscopeApp instance and is used by
      * the View class to access the document object's methods
@@ -329,7 +329,7 @@ class NeuroscopeApp : public KDockMainWindow
     void slotClosePositionFile();
     
     /**Opens a file from the recent files menu. */
-    void slotFileOpenRecent(const KURL& url);
+    void slotFileOpenRecent(const QString& url);
 
     /**Opens a dialog to display and edit the file properties:
     * (number of channels, sampling rate of the dat file and eeg file).
@@ -873,17 +873,17 @@ class NeuroscopeApp : public KDockMainWindow
    /**Loads the cluster files and creates the corresponding groups in the cluster palette.
    * @param urls file list to be opened.
    */
-   void loadClusterFiles(KURL::List urls);
+   void loadClusterFiles(QString::List urls);
 
    /**Loads the event files and creates the corresponding groups in the cluseventer palette.
    * @param urls file list to be opened.
    */
-   void loadEventFiles(KURL::List urls);   
+   void loadEventFiles(QString::List urls);
 
    /**Loads the position file and creates the position view in the current display.
    * @param url file to be opened.
    */
-   void loadPositionFile(KURL url);
+   void loadPositionFile(QString url);
    
  class printDialogPage : public KPrintDialogPage{
   public:

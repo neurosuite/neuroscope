@@ -42,7 +42,7 @@ using namespace std;
 #include "utilities.h"
 
 
-EventsProvider::EventsProvider(KURL fileUrl,double currentSamplingRate,int position): DataProvider(fileUrl),nbEvents(0),
+EventsProvider::EventsProvider(QString fileUrl,double currentSamplingRate,int position): DataProvider(fileUrl),nbEvents(0),
 eventPosition(static_cast<float>(position) / 100.0),modified(false){
 
  this->currentSamplingRate = static_cast<double>(currentSamplingRate / 1000.0);

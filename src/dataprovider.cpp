@@ -20,7 +20,7 @@
 // include files for KDE
 #include <kio/netaccess.h>
 
-DataProvider::DataProvider(KURL fileUrl):QObject(){
+DataProvider::DataProvider(QString fileUrl):QObject(){
  //Download the file if need it
  if(!KIO::NetAccess::download(fileUrl,fileName)) fileName = ""; 
 }

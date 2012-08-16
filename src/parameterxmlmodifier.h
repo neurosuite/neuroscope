@@ -50,13 +50,13 @@ public:
   * @param url url of the file to open.
   * @return true if the file was correctly parse, false othewise.
   */
-  bool parseFile(const KURL& url);
+  bool parseFile(const QString& url);
   
   /**Writes the modified xml tree to a parameter file given by @p url.
   * @param url url of the file to write to.
   * @return true if the parameter file could be write to disk, false otherwise.
   */
-   bool writeTofile(const KURL& url);
+   bool writeTofile(const QString& url);
  
   /**
   * Finds the first child node with the tag name @p childName direct child of the root node.
