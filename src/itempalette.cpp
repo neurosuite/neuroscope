@@ -34,10 +34,10 @@
 #include <qlayout.h> 
 #include <qhbox.h>
 #include <qstyle.h>
+#include <qcolordialog.h>
 
 //KDE includes
 #include <kiconloader.h>
-#include <kcolordialog.h>
 #include <kpopupmenu.h>
 
 //General C++ include files
@@ -683,17 +683,16 @@ void ItemPalette::changeColor(QIconViewItem* item,QString groupName){
   ItemColors* itemColors = itemColorsDict[groupName];
   QColor color = itemColors->color(index,ItemColors::BY_INDEX);
   
-  int result = KColorDialog::getColor(color,0);
-  if(result == KColorDialog::Accepted){
+  const QColor result = QColorDialog::getColor(color,0);
+  if(result.isValid()){
    //Update the itemColor
-   itemColors->setColor(index,color,ItemColors::BY_INDEX);
+   itemColors->setColor(index,result,ItemColors::BY_INDEX);
 
    //Update the icon
-   QMap<int,bool> browsingMap = browsingStatus[groupName];
    QPixmap* pixmap = item->pixmap();
    QPainter painter;
    painter.begin(pixmap);
-   painter.fillRect(0,0,12,12,color);
+   painter.fillRect(0,0,12,12,result);
    painter.end();   
 
    //As soon a color changes a signal is emitted.

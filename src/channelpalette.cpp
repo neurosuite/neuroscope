@@ -34,10 +34,10 @@
 #include <qlayout.h> 
 #include <qhbox.h>
 #include <qstyle.h>
+#include <qcolordialog.h>
 
 //KDE includes
 #include <kiconloader.h>
-#include <kcolordialog.h>
 #include <kpopupmenu.h>
 
 //General C++ include files
@@ -191,8 +191,8 @@ void ChannelPalette::slotRightPressed(QIconViewItem* item){
     //Get the channelColor associated with the item
     QColor color = channelColors->color(item->text().toInt());
 
-    int result = KColorDialog::getColor(color,0);
-    if(result == KColorDialog::Accepted){
+    int result = QColorDialog::getColor(color,0);
+    if(result == QColorDialog::Accepted){
      QValueList<int> selected;
      //Change the color of the selected channels of all the groups.
      QDictIterator<ChannelIconView> iconviewIterator(iconviewDict);
@@ -730,18 +730,18 @@ void ChannelPalette::changeColor(QIconViewItem* item,bool single){
   int id = item->text().toInt();
 
   //Get the channelColor associated with the item
-  QColor color = channelColors->color(id);
+  const QColor oldColor = channelColors->color(id);
   
-  int result = KColorDialog::getColor(color,0);
-  if(result == KColorDialog::Accepted){
+  QColor color = QColorDialog::getColor(oldColor,0);
+  if(color.isValid()){
    if(single){
     //Update the channelColor only if the channel is not skipped
-    if(!channelsSkipStatus[id]) channelColors->setColor(id,color);
+    if(!channelsSkipStatus[id]) channelColors->setColor(id,result);
 
     //Update the icon
     QPixmap* pixmap = item->pixmap();
     QPainter painter;
-    drawItem(painter,pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
+    drawItem(painter,pixmap,result,channelsShowHideStatus[id],channelsSkipStatus[id]);
 
    //As soon a color changes a signal is emitted.
    emit singleChangeColor(id);

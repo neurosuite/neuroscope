@@ -20,8 +20,6 @@
 // include files for QT
 #include <qstring.h>
 
-//includes files for KDE
-#include <kdebug.h>
 
 //General C++ include files
 #include <iostream>
