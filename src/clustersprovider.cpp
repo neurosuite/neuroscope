@@ -29,7 +29,6 @@ using namespace std;
 #include <kurl.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
 
 //Unix include file
 #include <unistd.h>

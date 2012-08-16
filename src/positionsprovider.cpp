@@ -27,7 +27,6 @@
 #include <kurl.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
 
 //General C++ include files
 #include <iostream>

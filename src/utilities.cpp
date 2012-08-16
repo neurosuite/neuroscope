@@ -24,7 +24,7 @@
 #include <kurl.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
+#include <QTemporaryFile>
 
 
 int Utilities::getNbLines(QString path){
@@ -38,15 +38,15 @@ int Utilities::getNbLines(QString path){
  if(shellToUse != NULL) childproc.setUseShell(true,shellToUse);
  else childproc.setUseShell(true);
 
- KTempFile counterFile = KTempFile();//make a unique file
+ QTemporaryFile counterFile = QTemporaryFile();//make a unique file
  childproc << "wc -l "<<path<<" > "<<counterFile.name();
  childproc.start(KProcess::DontCare);
  sleep(1);
- QFileInfo fi(counterFile.name());
+ QFileInfo fi(counterFile.fineName());
  while(!fi.exists()){
   sleep(1);
  } 
- QFile tmpFile(counterFile.name());
+ QFile tmpFile(counterFile.fineName());
  bool status = tmpFile.open(IO_ReadOnly);
  
  //If the number of lines could not be determined, stop here
