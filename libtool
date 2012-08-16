@@ -85,7 +85,7 @@ CC="gcc"
 with_gcc=yes
 
 # An ERE matcher.
-EGREP="grep -E"
+EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
 LD="/usr/x86_64-suse-linux/bin/ld -m elf_x86_64"
@@ -6721,10 +6721,10 @@ LTCC="gcc"
 CC="g++"
 
 # Is the compiler the GNU C compiler?
-with_gcc=yes
+with_gcc=no
 
 # An ERE matcher.
-EGREP="grep -E"
+EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
 LD="/usr/x86_64-suse-linux/bin/ld -m elf_x86_64"
@@ -6758,7 +6758,7 @@ reload_flag=" -r"
 reload_cmds="\$LD\$reload_flag -o \$output\$reload_objs"
 
 # How to pass a linker flag through the compiler.
-wl="-Wl,"
+wl=""
 
 # Object file suffix (normally "o").
 objext="o"
@@ -6773,7 +6773,7 @@ shrext='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -fPIC -DPIC"
+pic_flag=" -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
@@ -6801,16 +6801,16 @@ dlopen_self=yes
 dlopen_self_static=yes
 
 # Compiler flag to prevent dynamic linking.
-link_static_flag="-static"
+link_static_flag=""
 
 # Compiler flag to turn off builtin functions.
-no_builtin_flag=" -fno-builtin"
+no_builtin_flag=""
 
 # Compiler flag to allow reflexive dlopens.
-export_dynamic_flag_spec="\${wl}--export-dynamic"
+export_dynamic_flag_spec=""
 
 # Compiler flag to generate shared objects directly from archives.
-whole_archive_flag_spec="\${wl}--whole-archive\$convenience \${wl}--no-whole-archive"
+whole_archive_flag_spec=""
 
 # Compiler flag to generate thread-safe objects.
 thread_safe_flag_spec=""
@@ -6841,8 +6841,8 @@ old_archive_from_new_cmds=""
 old_archive_from_expsyms_cmds=""
 
 # Commands used to build and install a shared archive.
-archive_cmds="\$CC -shared -nostdlib \$predep_objects \$libobjs \$deplibs \$postdep_objects \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
-archive_expsym_cmds="\$CC -shared -nostdlib \$predep_objects \$libobjs \$deplibs \$postdep_objects \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-retain-symbols-file \$wl\$export_symbols -o \$lib"
+archive_cmds=""
+archive_expsym_cmds=""
 postinstall_cmds=""
 postuninstall_cmds=""
 
@@ -6856,11 +6856,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/usr/lib64/gcc/x86_64-suse-linux/4.6/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-suse-linux/4.6/crtbeginS.o"
+predep_objects=""
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/usr/lib64/gcc/x86_64-suse-linux/4.6/crtendS.o /usr/lib64/gcc/x86_64-suse-linux/4.6/../../../../lib64/crtn.o"
+postdep_objects=""
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -6868,11 +6868,11 @@ predeps=""
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
+postdeps=""
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib64/gcc/x86_64-suse-linux/4.6 -L/usr/lib64/gcc/x86_64-suse-linux/4.6/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-suse-linux/4.6/../../../../x86_64-suse-linux/lib -L/usr/lib64/gcc/x86_64-suse-linux/4.6/../../.."
+compiler_lib_search_path=""
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -6918,7 +6918,7 @@ hardcode_into_libs=yes
 
 # Flag to hardcode $libdir into a binary during linking.
 # This must work even if $libdir does not exist.
-hardcode_libdir_flag_spec="\${wl}--rpath \${wl}\$libdir"
+hardcode_libdir_flag_spec=""
 
 # If ld is used when linking, flag to hardcode $libdir into
 # a binary during linking. This must work even if $libdir does
@@ -6946,7 +6946,7 @@ hardcode_automatic=no
 
 # Variables whose values should be saved in libtool wrapper scripts and
 # restored at relink time.
-variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
+variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
 link_all_deplibs=unknown
