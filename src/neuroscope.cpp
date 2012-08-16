@@ -24,7 +24,6 @@
 // include files for KDE
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <kstdaction.h>
