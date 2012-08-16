@@ -20,8 +20,7 @@
 #include <qframe.h>         // for QFrame
 
 // include files for KDE
-#include <kpushbutton.h>    // for KPushButton
-        // for tr()
+
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
 #include <kmessagebox.h>    // for KMessageBox
