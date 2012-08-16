@@ -158,13 +158,6 @@
                     <height>0</height>
                 </size>
             </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>233</red>
-                    <green>233</green>
-                    <blue>233</blue>
-                </color>
-            </property>
             <property name="title">
                 <string>Video setup</string>
             </property>
@@ -192,6 +185,46 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
+  <property name="autoFillBackground" >
+   <bool>true</bool>
+  </property>
+  <property name="palette" >
+   <palette>
+    <active>
+     <colorrole role="Base" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>233</red>
+        <green>233</green>
+        <blue>233</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Base" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>233</red>
+        <green>233</green>
+        <blue>233</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Base" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>233</red>
+        <green>233</green>
+        <blue>233</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
                         </widget>
                         <widget class="QComboBox" row="6" column="2" rowspan="1" colspan="2">
                             <item>
@@ -383,19 +416,52 @@
                                     <height>100</height>
                                 </size>
                             </property>
-                            <property name="paletteBackgroundColor">
-                                <color>
-                                    <red>0</red>
-                                    <green>0</green>
-                                    <blue>0</blue>
-                                </color>
-                            </property>
                             <property name="text">
                                 <string></string>
                             </property>
                             <property name="scaledContents">
                                 <bool>true</bool>
                             </property>
+  <property name="autoFillBackground" >
+   <bool>true</bool>
+  </property>
+  <property name="palette" >
+   <palette>
+    <active>
+     <colorrole role="Window" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Window" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Window" >
+      <brush brushstyle="SolidPattern" >
+       <color alpha="255" >
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
                         </widget>
                         <spacer row="8" column="3">
                             <property name="name">
