@@ -32,7 +32,6 @@
 #include <kio/netaccess.h>
 #include <kprocess.h>
 #include <kguiitem.h>
-#include <kstdguiitem.h>
 #include <klineeditdlg.h>
 
 // application specific includes
