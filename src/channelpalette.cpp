@@ -176,10 +176,10 @@ void ChannelPalette::slotRightPressed(QIconViewItem* item){
   else{       
    //Create a popmenu for the traces group related items.
    KPopupMenu menu(this);
-   menu.insertTitle(i18n("Manage channels colors"));
+   menu.insertTitle(tr("Manage channels colors"));
 
-   int changeSelectedColor = menu.insertItem(i18n("Change color"));
-   int changeGroupColor = menu.insertItem(i18n("Change group color"));
+   int changeSelectedColor = menu.insertItem(tr("Change color"));
+   int changeGroupColor = menu.insertItem(tr("Change group color"));
 
    menu.setMouseTracking(TRUE);
    int id = menu.exec(QCursor::pos());
@@ -773,7 +773,7 @@ void ChannelPalette::changeColor(QIconViewItem* item,bool single){
  */
 void ChannelPalette::languageChange()
 {
-    setCaption( i18n( "Channel palette" ) );
+    setCaption( tr( "Channel palette" ) );
 }
 
 void ChannelPalette::selectChannels(const QValueList<int>& selectedChannels){

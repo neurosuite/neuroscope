@@ -23,7 +23,7 @@
 // include files for KDE
 #include <kcolorbutton.h>   // for KColorButton
 #include <kpushbutton.h>    // for KPushButton
-#include <klocale.h>        // for i18n()
+#include <klocale.h>        // for tr()
 #include <kiconloader.h>    // for KIconLoader
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
@@ -48,19 +48,19 @@ using namespace std;
 */
 
 PrefDialog::PrefDialog(QWidget *parent, const char *name, WFlags f)
- : KDialogBase(IconList, i18n("Preferences"), Help|Default|Ok|Apply|Cancel, Ok, parent, name, f)
+ : KDialogBase(IconList, tr("Preferences"), Help|Default|Ok|Apply|Cancel, Ok, parent, name, f)
 {
     setHelp("settings","neuroscope");
     
     //adding page "General options"
-    QFrame* frame = addPage(i18n("General"), i18n("NeuroScope Configuration"),
+    QFrame* frame = addPage(tr("General"), tr("NeuroScope Configuration"),
         KGlobal::iconLoader()->loadIcon("kfm",KIcon::Panel,0,false) );
     QVBoxLayout* frameLayout = new QVBoxLayout(frame,0,0);
     prefGeneral = new PrefGeneral(frame);
     frameLayout->addWidget(prefGeneral);
 
     //adding page "Default configuration"
-    frame = addPage(i18n("Defaults"), i18n("NeuroScope Defaults"),
+    frame = addPage(tr("Defaults"), tr("NeuroScope Defaults"),
         KGlobal::iconLoader()->loadIcon("defaults",KIcon::User));
     frameLayout = new QVBoxLayout(frame,0,0);
    /* prefDefaults = new PrefDefaults(frame);
@@ -70,14 +70,14 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, WFlags f)
     frameLayout->addWidget(tabWidget);
     //adding "Channels" tab
     prefDefaults = new PrefDefaults();
-    tabWidget->addTab(prefDefaults,i18n("Channels"));
+    tabWidget->addTab(prefDefaults,tr("Channels"));
     //connect(prefDefaults,SIGNAL(changed( bool )),this, SIGNAL(changed( bool )) );
     //adding "Units" tab
     clusterProperties = new ClusterProperties();
-    tabWidget->addTab(clusterProperties,i18n("Units"));
+    tabWidget->addTab(clusterProperties,tr("Units"));
     //adding "Positions" tab
     positionProperties = new PositionProperties();
-    tabWidget->addTab(positionProperties,i18n("Positions"));
+    tabWidget->addTab(positionProperties,tr("Positions"));
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(prefGeneral->headerCheckBox,SIGNAL(clicked()),this,SLOT(enableApply()));
@@ -166,9 +166,9 @@ void PrefDialog::updateConfiguration(){
 
 
 void PrefDialog::slotDefault() {
-  if(KMessageBox::warningContinueCancel(this, i18n("This will set the default options "
-      "in ALL pages of the preferences dialog! Do you wish to continue?"), i18n("Set default options?"),
-      i18n("Set defaults"))==KMessageBox::Continue){
+  if(KMessageBox::warningContinueCancel(this, tr("This will set the default options "
+      "in ALL pages of the preferences dialog! Do you wish to continue?"), tr("Set default options?"),
+      tr("Set defaults"))==KMessageBox::Continue){
         
   prefGeneral->setBackgroundColor(configuration().getBackgroundColorDefault());
   prefGeneral->setPaletteHeaders(configuration().isPaletteHeadersDisplayedDefault());

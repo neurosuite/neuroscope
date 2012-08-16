@@ -69,7 +69,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
   for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.data()) skippedChannels.append(iterator.key());
    
   //Create the mainDock
-  mainDock = createDockWidget("Main", QPixmap(), 0L, i18n("field potentials"), i18n("field potentials"));
+  mainDock = createDockWidget("Main", QPixmap(), 0L, tr("field potentials"), tr("field potentials"));
 
   traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,

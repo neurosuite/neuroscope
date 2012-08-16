@@ -712,7 +712,7 @@ void ItemPalette::slotMidButtonPressed(QString groupName){
  */
 void ItemPalette::languageChange()
 {
-    setCaption( i18n( "Item palette" ) );
+    setCaption( tr( "Item palette" ) );
 }
 
 void ItemPalette::selectItems(QString groupName,QValueList<int> itemsToSelect,QValueList<int> itemsToSkip){

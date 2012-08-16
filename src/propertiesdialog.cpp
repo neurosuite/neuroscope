@@ -21,7 +21,7 @@
 
 // include files for KDE
 #include <kpushbutton.h>    // for KPushButton
-#include <klocale.h>        // for i18n()
+#include <klocale.h>        // for tr()
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
 #include <kmessagebox.h>    // for KMessageBox
@@ -34,25 +34,25 @@
 using namespace std;
 
 PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, WFlags f):
- KDialogBase(Tabbed, i18n("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
+ KDialogBase(Tabbed, tr("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
  modified(false),nbChannelsModified(false),oops(false),atStartUp(false){
 
  setHelp("properties","neuroscope");
 
  //page "Channels"
- QFrame* channelFrame = addPage(i18n("Channels"));
+ QFrame* channelFrame = addPage(tr("Channels"));
  QVBoxLayout* frameLayout = new QVBoxLayout(channelFrame,0,0);
  properties = new Properties(channelFrame);
  frameLayout->addWidget(properties);
 
  //adding "Units" page
- QFrame* clusterFrame = addPage(i18n("Units"));
+ QFrame* clusterFrame = addPage(tr("Units"));
  frameLayout = new QVBoxLayout(clusterFrame,0,0);
  clusterProperties = new ClusterProperties(clusterFrame);
  frameLayout->addWidget(clusterProperties);
 
  //adding "Positions" page
- QFrame* positionFrame = addPage(i18n("Positions"));
+ QFrame* positionFrame = addPage(tr("Positions"));
  frameLayout = new QVBoxLayout(positionFrame,0,0);
  positionProperties = new PositionProperties(positionFrame);
  //hard coded as there is a problem with the pageIndex() method
@@ -113,9 +113,9 @@ void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int 
 
 void PropertiesDialog::slotVerify(){  
  if(nbChannels != properties->getNbChannels() && !atStartUp){
-  if(KMessageBox::warningContinueCancel(this, i18n("Changing the number of channels "
-      "will rest all the groups. Do you wish to continue?"), i18n("Change the number of channels?"),
-      i18n("Continue"))==KMessageBox::Cancel){
+  if(KMessageBox::warningContinueCancel(this, tr("Changing the number of channels "
+      "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
+      tr("Continue"))==KMessageBox::Cancel){
    properties->setNbChannels(nbChannels);
    nbChannelsModified = false;
    oops = true;

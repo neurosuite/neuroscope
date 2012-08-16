@@ -106,7 +106,7 @@ void NeuroscopeApp::initActions()
 {
   KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
-  new KAction(i18n("&Close"), "fileclose",0,this, SLOT(slotFileClose()),actionCollection(), "file_close");
+  new KAction(tr("&Close"), "fileclose",0,this, SLOT(slotFileClose()),actionCollection(), "file_close");
   KStdAction::save(this, SLOT(saveSession()), actionCollection());
   KStdAction::saveAs(this, SLOT(slotSessionSaveAs()), actionCollection());
 
@@ -122,114 +122,114 @@ void NeuroscopeApp::initActions()
   //Custom actions and menus
 
   //File Menu
-  new KAction(i18n("&Properties"),0,this,SLOT(slotFileProperties()),actionCollection(),"file_properties");
-  new KAction(i18n("Load Cl&uster File(s)..."),0,this,SLOT(slotLoadClusterFiles()),actionCollection(),"load_cluster_files");
-  new KAction(i18n("Load &Event File(s)..."),0,this,SLOT(slotLoadEventFiles()),actionCollection(),"load_event_files");
-  new KAction(i18n("Load Posi&tion File..."),0,this,SLOT(slotLoadPositionFile()),actionCollection(),"load_position_file");
-  new KAction(i18n("Create Event &File..."),0,this,SLOT(slotCreateEventFile()),actionCollection(),"create_event_file");
-  new KAction(i18n("Close C&luster File"),0, this, SLOT(slotCloseClusterFile()),actionCollection(),"close_cluster_file");
-  new KAction(i18n("Close E&vent File"),0, this, SLOT(slotCloseEventFile()),actionCollection(),"close_event_file");
-  new KAction(i18n("Close Position File"),0, this, SLOT(slotClosePositionFile()),actionCollection(),"close_position_file");
+  new KAction(tr("&Properties"),0,this,SLOT(slotFileProperties()),actionCollection(),"file_properties");
+  new KAction(tr("Load Cl&uster File(s)..."),0,this,SLOT(slotLoadClusterFiles()),actionCollection(),"load_cluster_files");
+  new KAction(tr("Load &Event File(s)..."),0,this,SLOT(slotLoadEventFiles()),actionCollection(),"load_event_files");
+  new KAction(tr("Load Posi&tion File..."),0,this,SLOT(slotLoadPositionFile()),actionCollection(),"load_position_file");
+  new KAction(tr("Create Event &File..."),0,this,SLOT(slotCreateEventFile()),actionCollection(),"create_event_file");
+  new KAction(tr("Close C&luster File"),0, this, SLOT(slotCloseClusterFile()),actionCollection(),"close_cluster_file");
+  new KAction(tr("Close E&vent File"),0, this, SLOT(slotCloseEventFile()),actionCollection(),"close_event_file");
+  new KAction(tr("Close Position File"),0, this, SLOT(slotClosePositionFile()),actionCollection(),"close_position_file");
 
   KIconLoader* loader = KGlobal::iconLoader();
   
   //Edit menu
-  new KAction(i18n("Select &All"), CTRL + Key_A, this, SLOT(slotSelectAll()),actionCollection(),"edit_select_all");
-  new KAction(i18n("Select All e&xcept 0 and 1"), CTRL + SHIFT + Key_A, this,
+  new KAction(tr("Select &All"), CTRL + Key_A, this, SLOT(slotSelectAll()),actionCollection(),"edit_select_all");
+  new KAction(tr("Select All e&xcept 0 and 1"), CTRL + SHIFT + Key_A, this,
     SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
-  new KAction(i18n("Deselect All"), CTRL + Key_U, this,SLOT(slotDeselectAll()),actionCollection(),"edit_deselect_all");
-  editMode = new KToggleAction(i18n("&Edit Mode"),QIconSet(loader->loadIcon("edit", KIcon::User)),CTRL + Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
+  new KAction(tr("Deselect All"), CTRL + Key_U, this,SLOT(slotDeselectAll()),actionCollection(),"edit_deselect_all");
+  editMode = new KToggleAction(tr("&Edit Mode"),QIconSet(loader->loadIcon("edit", KIcon::User)),CTRL + Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
   editMode->setChecked(true);
      
   //Tools menu
-  new KAction(i18n("Zoom"),QIconSet(loader->loadIcon("zoom_tool", KIcon::User)), Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
-  new KAction(i18n("Select Channels"),QIconSet(loader->loadIcon("select_tool", KIcon::User)), Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
-  new KAction(i18n("Measure"),QIconSet(loader->loadIcon("measure_tool", KIcon::User)), Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
-  new KAction(i18n("Select Time"),QIconSet(loader->loadIcon("time_tool", KIcon::User)), Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
-  new KAction(i18n("Select Event"),QIconSet(loader->loadIcon("event_tool", KIcon::User)), Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
-  addEventMenu = new KSelectAction(i18n("Add Event"),QIconSet(loader->loadIcon("add_event_tool", KIcon::User)),Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
+  new KAction(tr("Zoom"),QIconSet(loader->loadIcon("zoom_tool", KIcon::User)), Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
+  new KAction(tr("Select Channels"),QIconSet(loader->loadIcon("select_tool", KIcon::User)), Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
+  new KAction(tr("Measure"),QIconSet(loader->loadIcon("measure_tool", KIcon::User)), Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
+  new KAction(tr("Select Time"),QIconSet(loader->loadIcon("time_tool", KIcon::User)), Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
+  new KAction(tr("Select Event"),QIconSet(loader->loadIcon("event_tool", KIcon::User)), Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
+  addEventMenu = new KSelectAction(tr("Add Event"),QIconSet(loader->loadIcon("add_event_tool", KIcon::User)),Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
   connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
 
-  addEventToolBarAction = new KToolBarPopupAction(i18n("Add Event"),"add_event_tool",0,this, SLOT(addEvent()),actionCollection(), "add_event_toolbarAction"); 
+  addEventToolBarAction = new KToolBarPopupAction(tr("Add Event"),"add_event_tool",0,this, SLOT(addEvent()),actionCollection(), "add_event_toolbarAction"); 
   addEventPopup = addEventToolBarAction->popupMenu();
   addEventPopup->setCheckable(true);
   connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventPopup, SIGNAL(activated(int)), this, SLOT(slotAddEventButtonActivated(int)));
       
-  new KAction(i18n("Draw Time Line"),QIconSet(loader->loadIcon("time_line_tool", KIcon::User)), Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
+  new KAction(tr("Draw Time Line"),QIconSet(loader->loadIcon("time_line_tool", KIcon::User)), Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
    
   //Traces menu
-  displayMode = new KToggleAction(i18n("&Multiple Columns"), 0, this, SLOT(slotDisplayMode()), actionCollection(),"display_mode");
+  displayMode = new KToggleAction(tr("&Multiple Columns"), 0, this, SLOT(slotDisplayMode()), actionCollection(),"display_mode");
   displayMode->setChecked(false);
-  greyScale = new KToggleAction(i18n("&Grey-Scale"), 0, this, SLOT(slotSetGreyScale()), actionCollection(),"grey_scale");
+  greyScale = new KToggleAction(tr("&Grey-Scale"), 0, this, SLOT(slotSetGreyScale()), actionCollection(),"grey_scale");
   greyScale->setChecked(false);
-  new KAction(i18n("&Increase All Channel Amplitudes"),CTRL + Key_I,this, SLOT(slotIncreaseAllChannelsAmplitude()),actionCollection(), "increase_all_channels");
-  new KAction(i18n("&Decrease All Channel Amplitudes"),CTRL + Key_D,this, SLOT(slotDecreaseAllChannelsAmplitude()),actionCollection(), "decrease_all_channels");
-  new KAction(i18n("I&ncrease Selected Channel Amplitudes"),CTRL + SHIFT + Key_I,this, SLOT(slotIncreaseSelectedChannelsAmplitude()),actionCollection(), "increase_selected_channels");
-  new KAction(i18n("D&ecrease Selected Channel Amplitudes"),CTRL + SHIFT + Key_D,this, SLOT(slotDecreaseSelectedChannelsAmplitude()),actionCollection(), "decrease_selected_channels");
-  new KAction(i18n("Reset Selected Channel &Offsets"),0, this, SLOT(slotResetOffsets()), actionCollection(),"reset_offsets");
-  new KAction(i18n("Reset Selected Channel &Amplitudes"),0, this, SLOT(slotResetGains()), actionCollection(),"reset_gains");
-  new KAction(i18n("&Set Current Offsets as Defaults"),0, this, SLOT(slotSetDefaultOffsets()), actionCollection(),"set_default_offsets");
-  new KAction(i18n("Set Default Offsets to &Zero"),0, this, SLOT(slotResetDefaultOffsets()), actionCollection(),"set_default_offsets_0");
+  new KAction(tr("&Increase All Channel Amplitudes"),CTRL + Key_I,this, SLOT(slotIncreaseAllChannelsAmplitude()),actionCollection(), "increase_all_channels");
+  new KAction(tr("&Decrease All Channel Amplitudes"),CTRL + Key_D,this, SLOT(slotDecreaseAllChannelsAmplitude()),actionCollection(), "decrease_all_channels");
+  new KAction(tr("I&ncrease Selected Channel Amplitudes"),CTRL + SHIFT + Key_I,this, SLOT(slotIncreaseSelectedChannelsAmplitude()),actionCollection(), "increase_selected_channels");
+  new KAction(tr("D&ecrease Selected Channel Amplitudes"),CTRL + SHIFT + Key_D,this, SLOT(slotDecreaseSelectedChannelsAmplitude()),actionCollection(), "decrease_selected_channels");
+  new KAction(tr("Reset Selected Channel &Offsets"),0, this, SLOT(slotResetOffsets()), actionCollection(),"reset_offsets");
+  new KAction(tr("Reset Selected Channel &Amplitudes"),0, this, SLOT(slotResetGains()), actionCollection(),"reset_gains");
+  new KAction(tr("&Set Current Offsets as Defaults"),0, this, SLOT(slotSetDefaultOffsets()), actionCollection(),"set_default_offsets");
+  new KAction(tr("Set Default Offsets to &Zero"),0, this, SLOT(slotResetDefaultOffsets()), actionCollection(),"set_default_offsets_0");
 
   /// Added by M.Zugaro to enable automatic forward paging
-  new KAction(i18n("Page"),CTRL + SHIFT + Key_Space,this, SLOT(page()),actionCollection(), "page");
-  new KAction(i18n("Accelerate"),CTRL + Key_Up,this, SLOT(accelerate()),actionCollection(), "accelerate");
-  new KAction(i18n("Decelerate"),CTRL + Key_Down,this, SLOT(decelerate()),actionCollection(), "decelerate");
+  new KAction(tr("Page"),CTRL + SHIFT + Key_Space,this, SLOT(page()),actionCollection(), "page");
+  new KAction(tr("Accelerate"),CTRL + Key_Up,this, SLOT(accelerate()),actionCollection(), "accelerate");
+  new KAction(tr("Decelerate"),CTRL + Key_Down,this, SLOT(decelerate()),actionCollection(), "decelerate");
 
   //Displays Menu
-  new KAction(i18n("&New Display"),CTRL + Key_N,this,SLOT(slotNewDisplay()),actionCollection(),"new_display");
-  new KAction(i18n("&Rename Active Display"), CTRL + Key_R, this, SLOT(slotRenameActiveDisplay()),actionCollection(),"rename_display");
-  new KAction(i18n("&Close Active Display"), CTRL + Key_W, this, SLOT(slotDisplayClose()),actionCollection(),"close_display");
+  new KAction(tr("&New Display"),CTRL + Key_N,this,SLOT(slotNewDisplay()),actionCollection(),"new_display");
+  new KAction(tr("&Rename Active Display"), CTRL + Key_R, this, SLOT(slotRenameActiveDisplay()),actionCollection(),"rename_display");
+  new KAction(tr("&Close Active Display"), CTRL + Key_W, this, SLOT(slotDisplayClose()),actionCollection(),"close_display");
 
   //Channels Menu
-  new KAction(i18n("Show &Channels"),QIconSet(loader->loadIcon("eye", KIcon::User)),CTRL + Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
-  new KAction(i18n("&Hide Channels"),QIconSet(loader->loadIcon("eye_close", KIcon::User)),CTRL + Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
+  new KAction(tr("Show &Channels"),QIconSet(loader->loadIcon("eye", KIcon::User)),CTRL + Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
+  new KAction(tr("&Hide Channels"),QIconSet(loader->loadIcon("eye_close", KIcon::User)),CTRL + Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
   
-  new KAction(i18n("&Move Channels to New Group"),QIconSet(loader->loadIcon("new_group", KIcon::User)), CTRL + Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
-  new KAction(i18n("&Remove Channels from Group"),QIconSet(loader->loadIcon("remove", KIcon::User)),SHIFT + Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
-  new KAction(i18n("&Discard Channels"),QIconSet(loader->loadIcon("discard", KIcon::User)),Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
-  new KAction(i18n("&Keep Channels"),QIconSet(loader->loadIcon("keep", KIcon::User)),CTRL + SHIFT + Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
-  new KAction(i18n("&Skip Channels"),QIconSet(loader->loadIcon("skip", KIcon::User)),CTRL + SHIFT + Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
+  new KAction(tr("&Move Channels to New Group"),QIconSet(loader->loadIcon("new_group", KIcon::User)), CTRL + Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
+  new KAction(tr("&Remove Channels from Group"),QIconSet(loader->loadIcon("remove", KIcon::User)),SHIFT + Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
+  new KAction(tr("&Discard Channels"),QIconSet(loader->loadIcon("discard", KIcon::User)),Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
+  new KAction(tr("&Keep Channels"),QIconSet(loader->loadIcon("keep", KIcon::User)),CTRL + SHIFT + Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
+  new KAction(tr("&Skip Channels"),QIconSet(loader->loadIcon("skip", KIcon::User)),CTRL + SHIFT + Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
 
-  new KAction(i18n("&Synchronize Groups"), 0, this, SLOT(slotSynchronize()), actionCollection(),"synchronize");
-  showHideLabels = new KToggleAction(i18n("Show &Labels"),0,CTRL + Key_L, this, SLOT(slotShowLabels()), actionCollection(),"show_labels");
+  new KAction(tr("&Synchronize Groups"), 0, this, SLOT(slotSynchronize()), actionCollection(),"synchronize");
+  showHideLabels = new KToggleAction(tr("Show &Labels"),0,CTRL + Key_L, this, SLOT(slotShowLabels()), actionCollection(),"show_labels");
   showHideLabels->setChecked(false);
   
   //Color section
-   new KAction(i18n("Color by &Anatomical Groups"),0, this, SLOT(slotApplyDisplayColor()), actionCollection(),"apply_display_color");
-  new KAction(i18n("Color by S&pike Groups"),0, this, SLOT(slotApplySpikeColor()), actionCollection(),"apply_spike_color");
+   new KAction(tr("Color by &Anatomical Groups"),0, this, SLOT(slotApplyDisplayColor()), actionCollection(),"apply_display_color");
+  new KAction(tr("Color by S&pike Groups"),0, this, SLOT(slotApplySpikeColor()), actionCollection(),"apply_spike_color");
       
   //Units Menu
-  clusterVerticalLines = new KToggleAction(i18n("&Vertical Lines"), 0, this, SLOT(slotClustersVerticalLines()), actionCollection(),"vertical_lines");
+  clusterVerticalLines = new KToggleAction(tr("&Vertical Lines"), 0, this, SLOT(slotClustersVerticalLines()), actionCollection(),"vertical_lines");
   clusterVerticalLines->setChecked(false);
-  clusterRaster = new KToggleAction(i18n("&Raster"), 0, this, SLOT(slotClustersRaster()), actionCollection(),"raster");
+  clusterRaster = new KToggleAction(tr("&Raster"), 0, this, SLOT(slotClustersRaster()), actionCollection(),"raster");
   clusterRaster->setChecked(true);
-  clusterWaveforms = new KToggleAction(i18n("&Waveforms"), 0, this, SLOT(slotClustersWaveforms()), actionCollection(),"waveforms");
+  clusterWaveforms = new KToggleAction(tr("&Waveforms"), 0, this, SLOT(slotClustersWaveforms()), actionCollection(),"waveforms");
   clusterWaveforms->setChecked(false);
-  new KAction(i18n("&Increase Height"),CTRL + Key_Plus,this, SLOT(slotIncreaseRasterHeight()),actionCollection(), "increase_raster_height");
-  new KAction(i18n("&Decrease Height"),CTRL + Key_Minus,this, SLOT(slotDecreaseRasterHeight()),actionCollection(), "decrease_raster_height");  
-  new KAction(i18n("&Next Spike"),QIconSet(loader->loadIcon("forwardCluster", KIcon::User)),CTRL + SHIFT + Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
-  new KAction(i18n("&Previous Spike"),QIconSet(loader->loadIcon("backCluster", KIcon::User)),CTRL + SHIFT + Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
+  new KAction(tr("&Increase Height"),CTRL + Key_Plus,this, SLOT(slotIncreaseRasterHeight()),actionCollection(), "increase_raster_height");
+  new KAction(tr("&Decrease Height"),CTRL + Key_Minus,this, SLOT(slotDecreaseRasterHeight()),actionCollection(), "decrease_raster_height");  
+  new KAction(tr("&Next Spike"),QIconSet(loader->loadIcon("forwardCluster", KIcon::User)),CTRL + SHIFT + Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
+  new KAction(tr("&Previous Spike"),QIconSet(loader->loadIcon("backCluster", KIcon::User)),CTRL + SHIFT + Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
 
   //Events Menu
-  new KAction(i18n("&Next Event"),QIconSet(loader->loadIcon("forwardEvent", KIcon::User)),CTRL + Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
-  new KAction(i18n("&Previous Event"),QIconSet(loader->loadIcon("backEvent", KIcon::User)),CTRL + Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
-  new KAction(i18n("&Remove Event"),0,CTRL + Key_K,this, SLOT(removeEvent()),actionCollection(), "remove_event");
+  new KAction(tr("&Next Event"),QIconSet(loader->loadIcon("forwardEvent", KIcon::User)),CTRL + Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
+  new KAction(tr("&Previous Event"),QIconSet(loader->loadIcon("backEvent", KIcon::User)),CTRL + Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
+  new KAction(tr("&Remove Event"),0,CTRL + Key_K,this, SLOT(removeEvent()),actionCollection(), "remove_event");
 
   //Positions Menu
-  positionViewToggle = new KToggleAction(i18n("&Show Position View"), 0, this, SLOT(slotShowPositionView()), actionCollection(),"position_view");
+  positionViewToggle = new KToggleAction(tr("&Show Position View"), 0, this, SLOT(slotShowPositionView()), actionCollection(),"position_view");
   positionViewToggle->setChecked(false);
-  showEventsInPositionView = new KToggleAction(i18n("Show &Events"),0, this, SLOT(slotShowEventsInPositionView()), actionCollection(),"show_events");
+  showEventsInPositionView = new KToggleAction(tr("Show &Events"),0, this, SLOT(slotShowEventsInPositionView()), actionCollection(),"show_events");
   showEventsInPositionView->setChecked(false);  
   
   //Settings menu
-  viewToolBar = new KToggleAction(i18n("Show T&ools"),0,this, SLOT(slotViewToolBar()),actionCollection(), "show_toolBar");
+  viewToolBar = new KToggleAction(tr("Show T&ools"),0,this, SLOT(slotViewToolBar()),actionCollection(), "show_toolBar");
   viewToolBar->setChecked(true);
-  viewParameterBar = new KToggleAction(i18n("Show &Parameters"),0,this, SLOT(slotViewParameterBar()),actionCollection(), "show_parameterBar");
+  viewParameterBar = new KToggleAction(tr("Show &Parameters"),0,this, SLOT(slotViewParameterBar()),actionCollection(), "show_parameterBar");
   viewParameterBar->setChecked(true);
-  calibrationBar = new KToggleAction(i18n("&Display Calibration"),0,this, SLOT(slotShowCalibration()),actionCollection(), "show_calibration");
+  calibrationBar = new KToggleAction(tr("&Display Calibration"),0,this, SLOT(slotShowCalibration()),actionCollection(), "show_calibration");
   calibrationBar->setChecked(false);
   
   //Custom connections
@@ -285,7 +285,7 @@ void NeuroscopeApp::initStatusBar()
   ///////////////////////////////////////////////////////////////////
   // STATUSBAR
   // TODO: add your own items you need for displaying current application status.
-  statusBar()->insertItem(i18n("Ready."),1);
+  statusBar()->insertItem(tr("Ready."),1);
 }
 
 void NeuroscopeApp::initItemPanel(){
@@ -293,8 +293,8 @@ void NeuroscopeApp::initItemPanel(){
  
  //Creation of the left panel containing the channels.
  if(displayPaletteHeaders){
-  displayPanel = createDockWidget("displayPanel",loader->loadIcon("anatomy", KIcon::User), 0L, i18n("Anatomy"), i18n("Anatomy"));
-  spikePanel = createDockWidget("spikePanel",loader->loadIcon("spikes", KIcon::User), 0L, i18n("Spikes"), i18n("Spikes"));   
+  displayPanel = createDockWidget("displayPanel",loader->loadIcon("anatomy", KIcon::User), 0L, tr("Anatomy"), tr("Anatomy"));
+  spikePanel = createDockWidget("spikePanel",loader->loadIcon("spikes", KIcon::User), 0L, tr("Spikes"), tr("Spikes"));   
  }
  else{
   displayPanel = createDockWidget("displayPanel",loader->loadIcon("anatomy", KIcon::User), 0L,"");
@@ -312,7 +312,7 @@ void NeuroscopeApp::initItemPanel(){
  paletteArea->setMainDockWidget(displayPanel);
 
  //Create the KDockWidget which will contain the paletteArea and be dock to the mainDock.
- palettePanel = createDockWidget("Palettes", QPixmap(), 0L, i18n("Palettes"), i18n("Palettes"));
+ palettePanel = createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
  palettePanel->setWidget(paletteArea); 
 }
 
@@ -512,7 +512,7 @@ void NeuroscopeApp::initDisplay(QValueList<int>* channelsToDisplay,QValueList<in
 
   //Create the mainDock (first view)
   if(tabLabel == "") tabLabel = "Field Potentials Display";
-   mainDock = createDockWidget( "1", QPixmap(), 0L, i18n(doc->url().path()),tabLabel);
+   mainDock = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
    mainDock->setDockWindowTransient(this,true);  
    
    isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
@@ -609,7 +609,7 @@ void NeuroscopeApp::initDisplay(QValueList<int>* channelsToDisplay,QValueList<in
 
 void NeuroscopeApp::openDocumentFile(const KURL& url)
 {
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(tr("Opening file..."));
 
   filePath = url.path();
   QFileInfo file(filePath);
@@ -618,7 +618,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
    if((fileOpenRecent->items().contains(url.prettyURL())) && !file.exists()){
     QString title = "File not found: ";
     title.append(filePath);
-    int answer = KMessageBox::questionYesNo(this,i18n("The selected file no longer exists. Do you want to remove it from the list?"), i18n(title));
+    int answer = KMessageBox::questionYesNo(this,tr("The selected file no longer exists. Do you want to remove it from the list?"), tr(title));
     if(answer == KMessageBox::Yes) fileOpenRecent->removeURL(url);
     else  fileOpenRecent->addURL(url); //hack, unselect the item
     filePath = "";
@@ -627,14 +627,14 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
   }
   //Do not handle remote files
   else{
-   KMessageBox::sorry(this,i18n("Sorry, NeuroScope does not handle remote files."),i18n("Remote file handling"));
+   KMessageBox::sorry(this,tr("Sorry, NeuroScope does not handle remote files."),tr("Remote file handling"));
    fileOpenRecent->removeURL(url);
    return; 
   }  
    
   //Check if the file exists  
   if(!file.exists()){
-   KMessageBox::error (this,i18n("The selected file does not exist."), i18n("Error!"));
+   KMessageBox::error (this,tr("The selected file does not exist."), tr("Error!"));
    fileOpenRecent->removeURL(url);
    return;
   } 
@@ -650,7 +650,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
     int returnStatus = doc->openDocument(url);
     if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
       QApplication::restoreOverrideCursor();
-      KMessageBox::error (this,i18n("The selected file is invalid, it has to be of the form baseName.nrs, baseName.xml or baseName.*"), i18n("Error!"));
+      KMessageBox::error (this,tr("The selected file is invalid, it has to be of the form baseName.nrs, baseName.xml or baseName.*"), tr("Error!"));
       //close the document
       doc->closeDocument();
       resetState();
@@ -658,7 +658,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
     }
     if(returnStatus == NeuroscopeDoc::DOWNLOAD_ERROR){
       QApplication::restoreOverrideCursor();
-      KMessageBox::error (this,i18n("Could not get the data file."), i18n("Error!"));
+      KMessageBox::error (this,tr("Could not get the data file."), tr("Error!"));
       //close the document
       doc->closeDocument();
       resetState();
@@ -666,7 +666,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
     }
     if(returnStatus == NeuroscopeDoc::OPEN_ERROR){      
       QApplication::restoreOverrideCursor();
-      KMessageBox::error (this,i18n("Could not open the files."), i18n("Error!"));
+      KMessageBox::error (this,tr("Could not open the files."), tr("Error!"));
       //close the document
       doc->closeDocument();
       resetState();
@@ -674,7 +674,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
     }
     if(returnStatus == NeuroscopeDoc::PARSE_ERROR){
      QApplication::restoreOverrideCursor();      
-     KMessageBox::error(this,i18n("Either the parameter file or the session file could not be parsed correctly."), i18n("IO Error!"));
+     KMessageBox::error(this,tr("Either the parameter file or the session file could not be parsed correctly."), tr("IO Error!"));
       //close the document
       doc->closeDocument();
       resetState();
@@ -682,7 +682,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
     }
     if(returnStatus == NeuroscopeDoc::MISSING_FILE){
      QApplication::restoreOverrideCursor();      
-     KMessageBox::error(this,i18n("The parameter file is missing."), i18n("IO Error!"));
+     KMessageBox::error(this,tr("The parameter file is missing."), tr("IO Error!"));
       //close the document
       doc->closeDocument();
       resetState();
@@ -733,7 +733,7 @@ void NeuroscopeApp::openDocumentFile(const KURL& url)
    }
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 
@@ -856,15 +856,15 @@ bool NeuroscopeApp::queryClose()
      message = "Your configuration and some events have changed, do you want to save the configuration and the event file(s)?";
      title = "Modification";
     }
-    switch(KMessageBox::warningYesNoCancel(0,i18n(message),i18n(title),KGuiItem("Save"),KGuiItem("Discard"))){
+    switch(KMessageBox::warningYesNoCancel(0,tr(message),tr(title),KGuiItem("Save"),KGuiItem("Discard"))){
   	 case KMessageBox::Yes://<=> Save
       QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
       if(eventsModified){
        eventSaveStatus = doc->saveEventFiles();
        QApplication::restoreOverrideCursor();
        if(eventSaveStatus != IO_Ok){
-        switch(KMessageBox::warningYesNo(0,i18n("The event file(s) could not be saved possibly because of insufficient file access permissions."
-       																	"Close anyway ?"), i18n("I/O Error !"),
+        switch(KMessageBox::warningYesNo(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
+       																	"Close anyway ?"), tr("I/O Error !"),
                                                                                 KGuiItem("Close"),KGuiItem("Discard"))){
       		case KMessageBox::Yes:
               break;
@@ -891,7 +891,7 @@ bool NeuroscopeApp::queryClose()
         message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
         title = "Writing error !";
        } 
-       switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+       switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
      	case KMessageBox::Yes:
              break;
        	case KMessageBox::No:
@@ -926,7 +926,7 @@ bool NeuroscopeApp::queryClose()
        message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
        title = "Writing error !";
       } 
-      switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+      switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
     	case KMessageBox::Yes:
          break;
       	case KMessageBox::No:
@@ -955,71 +955,71 @@ bool NeuroscopeApp::queryExit()
 
 void NeuroscopeApp::slotFileOpen()
 {
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(tr("Opening file..."));
 
   KURL url=KFileDialog::getOpenURL(QString::null,
-      i18n("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files"), this, i18n("Open File..."));
+      tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files"), this, tr("Open File..."));
   if(!url.isEmpty())
   {
     openDocumentFile(url);
   }
   
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotLoadClusterFiles(){
-  slotStatusMsg(i18n("Loading cluster file(s)..."));
+  slotStatusMsg(tr("Loading cluster file(s)..."));
 
   KURL::List urls=KFileDialog::getOpenURLs(QString::null,
-      i18n("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, i18n("Open Cluster Files..."));
+      tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, tr("Open Cluster Files..."));
   if(urls.size() != 0)
   {
     loadClusterFiles(urls);
   }
  
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 
 void NeuroscopeApp::slotLoadEventFiles(){
-  slotStatusMsg(i18n("Loading event file(s)..."));
+  slotStatusMsg(tr("Loading event file(s)..."));
 
   KURL::List urls=KFileDialog::getOpenURLs(QString::null,
-      i18n("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, i18n("Open Event Files..."));
+      tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, tr("Open Event Files..."));
   if(urls.size() != 0)
   {
     loadEventFiles(urls);
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotLoadPositionFile(){
- slotStatusMsg(i18n("Loading position file..."));
+ slotStatusMsg(tr("Loading position file..."));
 
  KURL url=KFileDialog::getOpenURL(QString::null,
-     i18n("*|All Files"), this, i18n("Open position File..."));
+     tr("*|All Files"), this, tr("Open position File..."));
  if(!url.isEmpty())
  {
    loadPositionFile(url);
  }
 
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
  
 }
 
 void NeuroscopeApp::slotCreateEventFile(){
- slotStatusMsg(i18n("Creating an event file..."));
+ slotStatusMsg(tr("Creating an event file..."));
 
  const KURL& docUrl = doc->url();
  KURL eventUrl(docUrl);
  QString baseName = doc->documentBaseName();
  eventUrl.setFileName(baseName);
  
- KFileDialog dialog(eventUrl.path(),i18n("*.evt *.evt.*|Event file (*.evt, *.evt.*)"), this,i18n("CreateEvent"),true);
+ KFileDialog dialog(eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"), this,tr("CreateEvent"),true);
  KPushButton* ok = dialog.okButton();
- ok->setText(i18n("Create"));
- dialog.setCaption(i18n("Create Event File as..."));
+ ok->setText(tr("Create"));
+ dialog.setCaption(tr("Create Event File as..."));
  dialog.exec();
  KURL url = dialog.selectedURL();
  
@@ -1027,7 +1027,7 @@ void NeuroscopeApp::slotCreateEventFile(){
   //Check if the file already exist
   QFileInfo fileInfo = QFileInfo(url.path());
   if(fileInfo.exists()){
-   KMessageBox::error(this,i18n("The selected file already exist."), i18n("Error!"));
+   KMessageBox::error(this,tr("The selected file already exist."), tr("Error!"));
    return;
   } 
  
@@ -1037,11 +1037,11 @@ void NeuroscopeApp::slotCreateEventFile(){
 
   if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
    QApplication::restoreOverrideCursor(); 
-   KMessageBox::error (this,i18n("The selected file name is invalid, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), i18n("Error!"));
+   KMessageBox::error (this,tr("The selected file name is invalid, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), tr("Error!"));
   }
   else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
    QApplication::restoreOverrideCursor();
-   KMessageBox::error (this,i18n("The selected file name is already opened."), i18n("Error!"));    
+   KMessageBox::error (this,tr("The selected file name is already opened."), tr("Error!"));    
   } 
   else{
    QString eventFileId = doc->lastLoadedProviderName();
@@ -1052,15 +1052,15 @@ void NeuroscopeApp::slotCreateEventFile(){
   }
  }
  
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotFileOpenRecent(const KURL& url){
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(tr("Opening file..."));
 
   openDocumentFile(url);
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotFileClose(){ 
@@ -1088,15 +1088,15 @@ void NeuroscopeApp::slotFileClose(){
      message = "Your configuration and some events have changed, do you want to save the configuration and the event file(s)?";
      title = "Modification";
     }
-    switch(KMessageBox::warningYesNoCancel(0,i18n(message),i18n(title),KGuiItem("Save"),KGuiItem("Discard"))){
+    switch(KMessageBox::warningYesNoCancel(0,tr(message),tr(title),KGuiItem("Save"),KGuiItem("Discard"))){
   	 case KMessageBox::Yes://<=> Save
       QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
       if(eventsModified){
        eventSaveStatus = doc->saveEventFiles();
        QApplication::restoreOverrideCursor();
        if(eventSaveStatus != IO_Ok){
-        switch(KMessageBox::warningYesNo(0,i18n("The event file(s) could not be saved possibly because of insufficient file access permissions."
-       																	"Close anyway ?"), i18n("I/O Error !"),
+        switch(KMessageBox::warningYesNo(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
+       																	"Close anyway ?"), tr("I/O Error !"),
                                                                                 KGuiItem("Close"),KGuiItem("Discard"))){
       		case KMessageBox::Yes:
               break;
@@ -1123,7 +1123,7 @@ void NeuroscopeApp::slotFileClose(){
         message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
         title = "Writing error !";
        }        
-       switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+       switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
      	case KMessageBox::Yes:
           break;
        	case KMessageBox::No:
@@ -1158,7 +1158,7 @@ void NeuroscopeApp::slotFileClose(){
       message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
       title = "Writing error !";
      }      
-     switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+     switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
        case KMessageBox::Yes:
           break;
        case KMessageBox::No:
@@ -1213,7 +1213,7 @@ void NeuroscopeApp::slotFileClose(){
 
 void NeuroscopeApp::slotFilePrint()
 {
-  slotStatusMsg(i18n("Printing..."));
+  slotStatusMsg(tr("Printing..."));
 
   printer->setOrientation(KPrinter::Landscape);
   printer->setColorMode(KPrinter::Color);
@@ -1234,20 +1234,20 @@ void NeuroscopeApp::slotFilePrint()
    else view->print(printer,filePath,false);
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotFileQuit()
 {
-  slotStatusMsg(i18n("Exiting..."));
+  slotStatusMsg(tr("Exiting..."));
   close();
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotViewMainToolBar()
 {
-  slotStatusMsg(i18n("Toggle the main toolbar..."));
+  slotStatusMsg(tr("Toggle the main toolbar..."));
 
   // turn Toolbar on or off
   if(!viewMainToolBar->isChecked())
@@ -1259,12 +1259,12 @@ void NeuroscopeApp::slotViewMainToolBar()
     toolBar("mainToolBar")->show();
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotViewToolBar()
 {
-  slotStatusMsg(i18n("Toggle the tools..."));
+  slotStatusMsg(tr("Toggle the tools..."));
 
   // turn Toolbar on or off
   if(!viewToolBar->isChecked())
@@ -1276,12 +1276,12 @@ void NeuroscopeApp::slotViewToolBar()
     toolBar("toolBar")->show();
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotViewStatusBar()
 {
-  slotStatusMsg(i18n("Toggle the statusbar..."));
+  slotStatusMsg(tr("Toggle the statusbar..."));
   ///////////////////////////////////////////////////////////////////
   //turn Statusbar on or off
   if(!viewStatusBar->isChecked())
@@ -1293,11 +1293,11 @@ void NeuroscopeApp::slotViewStatusBar()
     statusBar()->show();
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotViewParameterBar(){
-  slotStatusMsg(i18n("Toggle the parameters..."));
+  slotStatusMsg(tr("Toggle the parameters..."));
 
   // turn Toolbar on or off
   if(!viewParameterBar->isChecked())
@@ -1308,7 +1308,7 @@ void NeuroscopeApp::slotViewParameterBar(){
   {
     toolBar("parameterBar")->show();
   }
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotShowCalibration(){
@@ -1339,24 +1339,24 @@ void NeuroscopeApp::slotStatusMsg(const QString &text)
 }
 
 void NeuroscopeApp::slotKeyBindings(){
-  slotStatusMsg(i18n("Changing the key bindings..."));
+  slotStatusMsg(tr("Changing the key bindings..."));
   KKeyDialog::configure(actionCollection());
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotZoom(){
- slotStatusMsg(i18n("Zooming..."));
+ slotStatusMsg(tr("Zooming..."));
  
  NeuroscopeView* view = activeView();
  view->setMode(BaseFrame::ZOOM,true);
 
  select = false;
    
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotSelect(){
- slotStatusMsg(i18n("Selecting..."));
+ slotStatusMsg(tr("Selecting..."));
 
  select = true;
  NeuroscopeView* view = activeView();
@@ -1369,50 +1369,50 @@ void NeuroscopeApp::slotSelect(){
   displayChannelPalette->selectionTool();
  } 
 
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotMeasure(){
- slotStatusMsg(i18n("Measuring..."));
+ slotStatusMsg(tr("Measuring..."));
 
  NeuroscopeView* view = activeView();
  view->setMode(TraceView::MEASURE,true);
 
  select = false;
 
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotSelectTime(){
- slotStatusMsg(i18n("Selecting time..."));
+ slotStatusMsg(tr("Selecting time..."));
 
  NeuroscopeView* view = activeView();
  view->setMode(TraceView::SELECT_TIME,true);
 
  select = false;
 
- slotStatusMsg(i18n("Ready."));  
+ slotStatusMsg(tr("Ready."));  
 }
 
 void NeuroscopeApp::slotSelectEvent(){
- slotStatusMsg(i18n("Selecting event..."));
+ slotStatusMsg(tr("Selecting event..."));
 
  NeuroscopeView* view = activeView();
  view->setMode(TraceView::SELECT_EVENT,true);
 
  select = false;
 
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotDrawTimeLine(){
- slotStatusMsg(i18n("Drawing a line..."));
+ slotStatusMsg(tr("Drawing a line..."));
  NeuroscopeView* view = activeView();
  view->setMode(TraceView::DRAW_LINE,true);
 
  select = false;
    
- slotStatusMsg(i18n("Ready."));  
+ slotStatusMsg(tr("Ready."));  
 }
 
 NeuroscopeView* NeuroscopeApp::activeView(){
@@ -2059,7 +2059,7 @@ void NeuroscopeApp::slotApplySpikeColor(){
 void NeuroscopeApp::slotDisplayClose(){   
  KDockWidget* current;
 
- slotStatusMsg(i18n("Closing display..."));
+ slotStatusMsg(tr("Closing display..."));
 
  //Get the active tab
  if(tabsParent){
@@ -2116,14 +2116,14 @@ void NeuroscopeApp::slotDisplayClose(){
      message = "Your configuration and some events have changed, do you want to save the configuration and the event file(s)?";
      title = "Modification";      
     }
-    switch(KMessageBox::warningYesNoCancel(0,i18n(message),i18n(title),KGuiItem("Save"),KGuiItem("Discard"))){
+    switch(KMessageBox::warningYesNoCancel(0,tr(message),tr(title),KGuiItem("Save"),KGuiItem("Discard"))){
      case KMessageBox::Yes://<=> Save
       QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
       if(eventsModified){
        eventSaveStatus = doc->saveEventFiles();
        QApplication::restoreOverrideCursor();
        if(eventSaveStatus != IO_Ok){
-        switch(KMessageBox::warningYesNo(0,i18n("The event file(s) could not be saved possibly because of insufficient file access permissions."	"Close anyway ?"), i18n("I/O Error !")
+        switch(KMessageBox::warningYesNo(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."	"Close anyway ?"), tr("I/O Error !")
         ,KGuiItem("Close"),KGuiItem("Discard"))){
       	 case KMessageBox::Yes:
             break;
@@ -2150,7 +2150,7 @@ void NeuroscopeApp::slotDisplayClose(){
         message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
         title = "Writing error !";
        }        
-       switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+       switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
      	case KMessageBox::Yes:
           break;
        	case KMessageBox::No:
@@ -2185,7 +2185,7 @@ void NeuroscopeApp::slotDisplayClose(){
       message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
       title = "Writing error !";
      }      
-     switch(KMessageBox::warningYesNo(0,i18n(message), i18n(title),KGuiItem("Close"),KGuiItem("Discard"))){
+     switch(KMessageBox::warningYesNo(0,tr(message), tr(title),KGuiItem("Close"),KGuiItem("Discard"))){
       case KMessageBox::Yes:
        break;
       case KMessageBox::No:
@@ -2221,7 +2221,7 @@ void NeuroscopeApp::slotDisplayClose(){
    QApplication::restoreOverrideCursor();
   }
  }
- slotStatusMsg(i18n("Ready."));
+ slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotRenameActiveDisplay(){
@@ -2231,7 +2231,7 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
   //Get the active tab
   current = static_cast<KDockWidget*>(tabsParent->currentPage());
 
-  QString newLabel = KLineEditDlg::getText(i18n("New Display label"),i18n("Type in the new display label"),current->tabPageLabel());
+  QString newLabel = KLineEditDlg::getText(tr("New Display label"),tr("Type in the new display label"),current->tabPageLabel());
   if(!newLabel.isEmpty()){
    tabsParent->setTabLabel(current,newLabel);
    current->setTabPageLabel(newLabel);
@@ -2268,7 +2268,7 @@ void NeuroscopeApp::createDisplay(QValueList<int>* channelsToDisplay,bool vertic
                     QValueList<int> offsets,QValueList<int> channelGains,QValueList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
  if(mainDock){
    if(tabLabel == "") tabLabel = "Field Potentials Display";
-   KDockWidget* display = createDockWidget( "1", QPixmap(), 0L, i18n(doc->url().path()),tabLabel);
+   KDockWidget* display = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
    
    NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,WDestructiveClose,statusBar(),channelsToDisplay,
                             greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
@@ -2352,8 +2352,8 @@ void NeuroscopeApp::slotEditMode(){
 }
 
 void NeuroscopeApp::slotSynchronize(){
-  if(KMessageBox::warningContinueCancel(this,i18n("This will overwrite all your spike groups by your anatomical groups. Do you wish to continue?"),
-    i18n("Synchronize anatomic and spike groups")) == KMessageBox::Cancel)
+  if(KMessageBox::warningContinueCancel(this,tr("This will overwrite all your spike groups by your anatomical groups. Do you wish to continue?"),
+    tr("Synchronize anatomic and spike groups")) == KMessageBox::Cancel)
     return;
 
   groupsModified = true; 
@@ -2429,21 +2429,21 @@ void NeuroscopeApp::saveSession(){
  if(eventsModified){
   int eventSaveStatus = doc->saveEventFiles();
   if(eventSaveStatus != IO_Ok)
-   KMessageBox::error(0,i18n("The event file(s) could not be saved possibly because of insufficient file access permissions."),
-                     i18n("I/O Error !"));
+   KMessageBox::error(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."),
+                     tr("I/O Error !"));
   else eventsModified = false;
  }
  //Save the session
  int saveStatus = doc->saveSession(); 
  if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
-  KMessageBox::error(0,i18n("The current session could not be saved possibly because of insufficient file access permissions."
-  " You may consider saving your session file to another location using the Save As entry in the File menu."), i18n("I/O Error !"));
+  KMessageBox::error(0,tr("The current session could not be saved possibly because of insufficient file access permissions."
+  " You may consider saving your session file to another location using the Save As entry in the File menu."), tr("I/O Error !"));
  }
  else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
-  KMessageBox::error(0,i18n("The current session could not be saved because the parameter file is incorrect."), i18n("Parsing error !"));
+  KMessageBox::error(0,tr("The current session could not be saved because the parameter file is incorrect."), tr("Parsing error !"));
  }
  else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
-  KMessageBox::error(0,i18n("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), i18n("Writing error !"));
+  KMessageBox::error(0,tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), tr("Writing error !"));
  } 
  else{
   groupsModified = false;
@@ -2456,23 +2456,23 @@ void NeuroscopeApp::slotSessionSaveAs(){
  if(eventsModified){
   int eventSaveStatus = doc->saveEventFiles();
   if(eventSaveStatus != IO_Ok)
-   KMessageBox::error(0,i18n("The event file(s) could not be saved possibly because of insufficient file access permissions."),
-                     i18n("I/O Error !"));
+   KMessageBox::error(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."),
+                     tr("I/O Error !"));
   else eventsModified = false;
  } 
  //Save the session 
  KURL url=KFileDialog::getSaveURL(doc->sessionPath(),
-       i18n("*|All files"), this, i18n("Save as..."));
+       tr("*|All files"), this, tr("Save as..."));
  if(!url.isEmpty()){
   int saveStatus = doc->saveSession(url);
   if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
-   KMessageBox::error(0,i18n("The current session could not be saved possibly because of insufficient file access permissions."), i18n("I/O Error !"));
+   KMessageBox::error(0,tr("The current session could not be saved possibly because of insufficient file access permissions."), tr("I/O Error !"));
   }
   else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
-   KMessageBox::error(0,i18n("The current session could not be saved because the parameter file is incorrect."), i18n("Parsing error !"));
+   KMessageBox::error(0,tr("The current session could not be saved because the parameter file is incorrect."), tr("Parsing error !"));
   }
   else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
-   KMessageBox::error(0,i18n("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), i18n("Writing error !"));
+   KMessageBox::error(0,tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), tr("Writing error !"));
   }   
   else{
    groupsModified = false;
@@ -2499,7 +2499,7 @@ void NeuroscopeApp::customEvent (QCustomEvent* event){
     else if(origin == "fileClose" || origin == "displayClose"){
      slotFileClose();
      QApplication::restoreOverrideCursor();
-     slotStatusMsg(i18n("Ready."));
+     slotStatusMsg(tr("Ready."));
     }
    }
   }
@@ -2518,37 +2518,37 @@ void NeuroscopeApp::loadClusterFiles(KURL::List urls){
   int returnStatus = doc->loadClusterFile(*iterator,view);
   if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("Could not load the file " + static_cast<KURL>(*iterator).path()), i18n("Error!"));
+    KMessageBox::error (this,tr("Could not load the file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){ 
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."), i18n("Error!"));
+    KMessageBox::error (this,tr("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::MISSING_FILE){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("There is no time file (.res) corresponding to the requested file " + static_cast<KURL>(*iterator).path()), i18n("Error!"));
+    KMessageBox::error (this,tr("There is no time file (.res) corresponding to the requested file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The number of spikes read in the requested file (" + static_cast<KURL>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."), i18n("Error!"));
+    KMessageBox::error (this,tr("The number of spikes read in the requested file (" + static_cast<KURL>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;    
   }
   else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The number of spikes of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), i18n("Error!"));
+    KMessageBox::error (this,tr("The number of spikes of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), i18n("Error!"));
+    KMessageBox::error (this,tr("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
@@ -2565,7 +2565,7 @@ void NeuroscopeApp::loadClusterFiles(KURL::List urls){
 void NeuroscopeApp::createClusterPalette(QString clusterFileId){  
   KIconLoader* loader = KGlobal::iconLoader();
   KDockWidget* clusterDock;
-  if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",loader->loadIcon("clusters", KIcon::User), 0L,i18n("Units"), i18n("Units"));
+  if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",loader->loadIcon("clusters", KIcon::User), 0L,tr("Units"), tr("Units"));
   else clusterDock = createDockWidget("clusterPanel",loader->loadIcon("clusters", KIcon::User), 0L,"");
   ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
   clusterDock->setWidget(clusterPalette);
@@ -2705,12 +2705,12 @@ void NeuroscopeApp::loadPositionFile(KURL url){
   int returnStatus = doc->loadPositionFile(url,view);
   if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("Could not load the file " + url.path()), i18n("Error !"));
+    KMessageBox::error (this,tr("Could not load the file " + url.path()), tr("Error !"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   }
   if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (0,i18n("Incorrect file name (" + url.path() + "): extension missing."), i18n("Error!"));
+    KMessageBox::error (0,tr("Incorrect file name (" + url.path() + "): extension missing."), tr("Error!"));
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   }
@@ -2738,31 +2738,31 @@ void NeuroscopeApp::loadEventFiles(KURL::List urls){
   int returnStatus = doc->loadEventFile(*iterator,view);
   if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("Could not load the file " + static_cast<KURL>(*iterator).path()), i18n("Error!"));
+    KMessageBox::error (this,tr("Could not load the file " + static_cast<KURL>(*iterator).path()), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (0,i18n("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), i18n("Error!"));
+    KMessageBox::error (0,tr("Incorrect file name (" + static_cast<KURL>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The number of events of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), i18n("Error!"));
+    KMessageBox::error (this,tr("The number of events of the requested file (" + static_cast<KURL>(*iterator).path() + ") could not be determined."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
   else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The content of the requested file (" + static_cast<KURL>(*iterator).path() + ") is incorrect (see file format information)."), i18n("Error!"));
+    KMessageBox::error (this,tr("The content of the requested file (" + static_cast<KURL>(*iterator).path() + ") is incorrect (see file format information)."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }  
   else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
     QApplication::restoreOverrideCursor();
-    KMessageBox::error (this,i18n("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), i18n("Error!"));
+    KMessageBox::error (this,tr("The requested file (" + static_cast<KURL>(*iterator).path() + ") is already loaded."), tr("Error!"));
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     continue;
   }
@@ -2780,7 +2780,7 @@ void NeuroscopeApp::loadEventFiles(KURL::List urls){
 void NeuroscopeApp::createEventPalette(QString eventFileId){
   KIconLoader* loader = KGlobal::iconLoader();
   KDockWidget* eventDock;
-  if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",loader->loadIcon("events", KIcon::User), 0L,i18n("Events"), i18n("Events"));
+  if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",loader->loadIcon("events", KIcon::User), 0L,tr("Events"), tr("Events"));
   else eventDock = createDockWidget("eventPanel",loader->loadIcon("events", KIcon::User), 0L,"");
   ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
   eventDock->setWidget(eventPalette);
@@ -2922,7 +2922,7 @@ void NeuroscopeApp::slotEventModified(QString providerName,int selectedEventId,d
 
 void NeuroscopeApp::slotUndo()
 {
-  slotStatusMsg(i18n("Reverting last action..."));
+  slotStatusMsg(tr("Reverting last action..."));
 
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   currentNbUndo = 0;
@@ -2934,12 +2934,12 @@ void NeuroscopeApp::slotUndo()
   undoRedoInprocess = false; 
   QApplication::restoreOverrideCursor();
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotRedo()
 {
-  slotStatusMsg(i18n("Reverting last undo action..."));
+  slotStatusMsg(tr("Reverting last undo action..."));
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   currentNbUndo = 1;
   currentNbRedo = 0;
@@ -2951,7 +2951,7 @@ void NeuroscopeApp::slotRedo()
   undoRedoInprocess = false; 
   QApplication::restoreOverrideCursor();
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::removeEvent(){
@@ -3014,7 +3014,7 @@ void NeuroscopeApp::slotAddEventButtonActivated(int index){
 
   QString description = addEventPopup->text(index);
   if(index == (addEventPopup->idAt(addEventPopup->count() - 1)))
-   eventLabelToCreate = KLineEditDlg::getText(i18n("New Event Description"),i18n("Type in the new event description"),"");
+   eventLabelToCreate = KLineEditDlg::getText(tr("New Event Description"),tr("Type in the new event description"),"");
   else eventLabelToCreate = description;
 
   addEvent();
@@ -3027,7 +3027,7 @@ void NeuroscopeApp::slotAddEventActivated(int index){
 
   QString description = menu->text(index);
   if(index == static_cast<int>(menu->count() - 1))
-   eventLabelToCreate = KLineEditDlg::getText(i18n("New Event Description"),i18n("Type in the new event description"),"");
+   eventLabelToCreate = KLineEditDlg::getText(tr("New Event Description"),tr("Type in the new event description"),"");
   else eventLabelToCreate = description;
 
   addEvent();

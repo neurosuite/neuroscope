@@ -187,7 +187,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
  if(data.nbOfRows() == 0){
    QApplication::restoreOverrideCursor();
 
-  KMessageBox::error(this,i18n("An error has occured, the data file could not be opened or the file size is incorrect."), i18n("IO Error"));
+  KMessageBox::error(this,tr("An error has occured, the data file could not be opened or the file size is incorrect."), tr("IO Error"));
   if(mode == SELECT) setCursor(selectCursor);
   if(mode == ZOOM) setCursor(zoomCursor);
   if(mode == MEASURE) setCursor(measureCursor);
@@ -2804,7 +2804,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
  }
  if(mode == ADD_EVENT && (event->button() & QMouseEvent::LeftButton)){
   if(eventDescriptionToCreate == ""){
-   KMessageBox::error (this,i18n("In order to add an event you have to choose an event description first!"), i18n("Unselected description type!"));
+   KMessageBox::error (this,tr("In order to add an event you have to choose an event description first!"), tr("Unselected description type!"));
    return;
   }
 

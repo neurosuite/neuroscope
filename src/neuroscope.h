@@ -889,7 +889,7 @@ class NeuroscopeApp : public KDockMainWindow
  class printDialogPage : public KPrintDialogPage{
   public:
    inline printDialogPage(QWidget* parent = 0,const char* name = 0): KPrintDialogPage(parent,name){
-    setTitle(i18n("Background Color"));
+    setTitle(QObject::tr("Background Color"));
     backgroundColor = new QCheckBox("Use white background",this);
     backgroundColor->adjustSize();
    };
