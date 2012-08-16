@@ -369,8 +369,6 @@ class NeuroscopeApp : public KDockMainWindow
      */
     void slotStatusMsg(const QString &text);
 
-    /**Display the configure key bindings dialog.*/
-    void slotKeyBindings();
 
     /*Slots for the tools menu.*/
     /**Chooses the tool to select channels, enabling the user to select traces in order to move them.*/

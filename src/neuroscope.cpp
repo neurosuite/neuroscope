@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <kglobal.h>
-#include <kkeydialog.h>
 #include <kio/netaccess.h>
 #include <kprocess.h>
 #include <kguiitem.h>
@@ -109,7 +108,6 @@ void NeuroscopeApp::initActions()
   KStdAction::quit(this, SLOT(close()), actionCollection());
   viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-  KStdAction::keyBindings(this, SLOT(slotKeyBindings()), actionCollection());
   KStdAction::undo(this, SLOT(slotUndo()), actionCollection());
   KStdAction::redo(this, SLOT(slotRedo()), actionCollection());  
   KStdAction::preferences(this,SLOT(executePreferencesDlg()), actionCollection());
@@ -1335,11 +1333,6 @@ void NeuroscopeApp::slotStatusMsg(const QString &text)
   statusBar()->changeItem(text,1);
 }
 
-void NeuroscopeApp::slotKeyBindings(){
-  slotStatusMsg(tr("Changing the key bindings..."));
-  KKeyDialog::configure(actionCollection());
-  slotStatusMsg(tr("Ready."));
-}
 
 void NeuroscopeApp::slotZoom(){
  slotStatusMsg(tr("Zooming..."));
