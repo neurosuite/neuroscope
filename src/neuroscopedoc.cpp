@@ -29,7 +29,6 @@
 #include <kio/netaccess.h>
 #include <klineeditdlg.h>
 #include <kfiledialog.h>
-#include <kfileitem.h>
 #include <kimageeffect.h>
 
 // application specific includes

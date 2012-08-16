@@ -33,7 +33,6 @@
 #include <kprocess.h>
 #include <kguiitem.h>
 #include <kstdguiitem.h>
-#include <kpushbutton.h> 
 #include <klineeditdlg.h>
 
 // application specific includes
@@ -1014,7 +1013,8 @@ void NeuroscopeApp::slotCreateEventFile(){
  eventUrl.setFileName(baseName);
  
  KFileDialog dialog(eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"), this,tr("CreateEvent"),true);
- KPushButton* ok = dialog.okButton();
+ //KDAB: can't change button label in qfiledialog
+ //KPushButton* ok = dialog.okButton();
  ok->setText(tr("Create"));
  dialog.setCaption(tr("Create Event File as..."));
  dialog.exec();
