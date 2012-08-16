@@ -67,7 +67,7 @@ public:
     * @param name internal name of the palette.
     * @param fl widget flags.
     */
-    ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
    /*
    *  Destroys the object and frees any allocated resources.
    */
@@ -126,7 +126,7 @@ public:
     
 public slots:
     void slotMousePressWoModificators(QString sourceGroup);
-    void slotMousePressWAltButton(QString sourceGroup,int index);
+    void slotMousePressWQt::AltModifier(QString sourceGroup,int index);
     
 protected slots:
     void slotRightPressed(Q3IconViewItem* item);
@@ -243,7 +243,7 @@ private:
 class GroupNameLabel : public QLabel{
  Q_OBJECT
   public:
-   inline GroupNameLabel(const QString& text,QWidget* parent,const char* name = 0,WFlags f = 0):
+   inline GroupNameLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
     QLabel(text,parent,name,f){};
 
   signals:
@@ -252,16 +252,16 @@ class GroupNameLabel : public QLabel{
      
   protected:
    virtual inline void mousePressEvent(QMouseEvent* e){
-    if(e->button() == QMouseEvent::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+    if(e->button() == Qt::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),false,false); 
     }
-    if(e->button() == QMouseEvent::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+    if(e->button() == Qt::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),true,false); 
     }
-    if(e->button() == QMouseEvent::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){
+    if(e->button() == Qt::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),false,true); 
     }
-    if(e->button() == QMouseEvent::MidButton){
+    if(e->button() == Qt::MidButton){
      emit middleClickOnLabel(parent()->name());
     }
    };

@@ -76,7 +76,7 @@ RestartTimer();
  QString firstLine;
  positionFile.readLine(firstLine,255);
  //Set the size of the Arrays containing the positions using the first line.
- firstLine = firstLine.simplifyWhiteSpace();
+ firstLine = firstLine.simplified();
  QStringList lineParts = QStringList::split(" ", firstLine);
  nbCoordinates = lineParts.count();
  dataType k = nbCoordinates;

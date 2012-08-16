@@ -38,7 +38,7 @@ using namespace std;
 class ItemIconView : public Q3IconView  {
    Q_OBJECT
   public:
-   ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, WFlags f = 0);
+   ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
    inline ~ItemIconView(){};
   
   private slots:
@@ -58,7 +58,7 @@ class ItemIconView : public Q3IconView  {
   signals:
    void mousePressWoModificators(QString sourceGroup);
    void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
-   void mousePressWAltButton(QString sourceGroup,int index);
+   void mousePressWQt::AltModifier(QString sourceGroup,int index);
    void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
    void mouseReleased(QString sourceGroup);
 

@@ -232,7 +232,7 @@ void PositionView::drawPositions(QPainter& painter){
     }
     index = index + 2;
    }
-   painter.setBrush(QBrush::NoBrush);
+   painter.setBrush(QBrush::Qt::NoBrush);
    painter.setPen(lineColor);
    painter.drawPolygon(polygon,false,0,nbPointsInPolygon); 
    painter.setPen(red);//first point red
@@ -256,7 +256,7 @@ void PositionView::drawPositions(QPainter& painter){
    index = index + 2;
   }
   painter.setPen(white);
-  painter.setBrush(QBrush::NoBrush);
+  painter.setBrush(QBrush::Qt::NoBrush);
   painter.drawPolygon(polygon,false,0,nbPointsInPolygon);  
   painter.setBrush(red);
   painter.setPen(black);

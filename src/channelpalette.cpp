@@ -48,7 +48,7 @@
 #include <iostream>
 using namespace std;
 
-ChannelPalette::ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent,const char* name,WFlags fl)
+ChannelPalette::ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent,const char* name,Qt::WFlags fl)
     : Q3ScrollView(parent,name,fl),channelColors(0L),backgroundColor(backgroundColor),isInSelectItems(false),
     spaceWidget(0L),channelsGroups(0L),groupsChannels(0L),greyScale(false),isGroupToRemove(false),
     type(type),edit(edition),selected("")

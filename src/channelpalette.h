@@ -73,7 +73,7 @@ public:
     * @param name internal name of the palette.
     * @param fl widget flags.
     */
-    ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
    /*
    *  Destroys the object and frees any allocated resources.
    */
@@ -353,7 +353,7 @@ class SpaceWidget : public QWidget{
 class GroupLabel : public QLabel{
  Q_OBJECT
   public:
-   inline GroupLabel(const QString& text,QWidget* parent,const char* name = 0,WFlags f = 0):
+   inline GroupLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
     QLabel(text,parent,name,f){};
 
   signals:
@@ -362,7 +362,7 @@ class GroupLabel : public QLabel{
      
   protected:
    virtual inline void mousePressEvent(QMouseEvent* e){
-    if(e->button() == QMouseEvent::LeftButton){
+    if(e->button() == Qt::LeftButton){
 
      QPoint firstClick = QWidget::mapToGlobal(e->pos());
      QString information = parent()->name();
@@ -372,7 +372,7 @@ class GroupLabel : public QLabel{
      
      emit leftClickOnLabel(parent()->name());
     }
-    if(e->button() == QMouseEvent::MidButton){
+    if(e->button() == Qt::MidButton){
      emit middleClickOnLabel(parent()->name()); 
     }
    };

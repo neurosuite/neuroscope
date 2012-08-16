@@ -570,7 +570,7 @@ cout<<"newStartIndex " <<newStartIndex<<" time " <<time<<" nbSpikes " <<nbSpikes
   
  //compute the final starting time
  float position = static_cast<float>(timeFrameInRecordingUnits) * clusterPosition;
- dataType startingInRecordingUnits = QMAX(time - static_cast<long>(position),0);
+ dataType startingInRecordingUnits = qMax(time - static_cast<long>(position),0);
  
  //compute the final index corresponding to the final starting time
  long newStartIndex = startIndex;
@@ -821,7 +821,7 @@ void ClustersProvider::requestPreviousClusterData(long startTime,long timeFrame,
  dataType timeFrameInRecordingUnits = static_cast<dataType>(timeFrame * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
  //compute the final starting time and the corresponding index
  float position = static_cast<float>(timeFrameInRecordingUnits) * clusterPosition;
- dataType startingInRecordingUnits = QMAX(time - static_cast<long>(position),0);
+ dataType startingInRecordingUnits = qMax(time - static_cast<long>(position),0);
  
  //compute the final index corresponding to the final starting time
  long newStartIndex = startIndex;

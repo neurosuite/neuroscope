@@ -39,7 +39,7 @@ class PrefDialog : public KDialogBase {
     Q_OBJECT
   public:
     /**Constructor*/
-    PrefDialog(QWidget *parent,const char *name=0, WFlags f=0);
+    PrefDialog(QWidget *parent,const char *name=0, Qt::WFlags f=0);
 
     /** Transfers the settings from the configuration object to the dialog.*/
     void updateDialog();

@@ -34,7 +34,7 @@
 #include <iostream>
 using namespace std;
 
-PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, WFlags f):
+PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, Qt::WFlags f):
  KDialogBase(Tabbed, tr("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
  modified(false),nbChannelsModified(false),oops(false),atStartUp(false){
 

@@ -43,7 +43,7 @@
     //Positions start at 1.
     dataType position = static_cast<dataType>(floor(static_cast<float>(0.5 + (static_cast<double>(time - difference) / positionSamplingInterval)))) + 1;
     
-    positions(1,i) = QMAX(position,1);
+    positions(1,i) = qMax(position,1);
    }        
  }
   

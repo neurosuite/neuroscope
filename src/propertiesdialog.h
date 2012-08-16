@@ -40,7 +40,7 @@ class PropertiesDialog : public KDialogBase  {
    Q_OBJECT
 public:
   //Constructor
-	PropertiesDialog(QWidget *parent,const char *name=0, WFlags f=0);
+	PropertiesDialog(QWidget *parent,const char *name=0, Qt::WFlags f=0);
 	~PropertiesDialog();
 
   /** Updates the dialog.

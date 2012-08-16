@@ -90,10 +90,10 @@ bool ZoomWindow::zoom(int firstClickX,int firstClickY, int secondClickX,int seco
   float previousTop    = top;
   float previousBottom = bottom;
  
-  left   = static_cast<float>(QMIN(firstClickX,secondClickX));
-  right  = static_cast<float>(QMAX(firstClickX,secondClickX));
-  top    = static_cast<float>(QMIN(firstClickY,secondClickY));
-  bottom = static_cast<float>(QMAX(firstClickY,secondClickY));
+  left   = static_cast<float>(qMin(firstClickX,secondClickX));
+  right  = static_cast<float>(qMax(firstClickX,secondClickX));
+  top    = static_cast<float>(qMin(firstClickY,secondClickY));
+  bottom = static_cast<float>(qMax(firstClickY,secondClickY));
   
   //Make sure that the new window remains inside the intial boundaries.
   correctWindow();
