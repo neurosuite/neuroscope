@@ -60,7 +60,7 @@ eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false){
   
   //Gets the configuration object of the application throught the static reference to the application kapp
   config = kapp->config();
-  printer = new KPrinter();
+  printer = new QPrinter();
   
   //Apply the user settings.
   initializePreferences();
@@ -1212,9 +1212,10 @@ void NeuroscopeApp::slotFilePrint()
 {
   slotStatusMsg(tr("Printing..."));
 
-  printer->setOrientation(KPrinter::Landscape);
-  printer->setColorMode(KPrinter::Color);
-  printer->addDialogPage(new printDialogPage(this));
+  printer->setOrientation(QPrinter::Landscape);
+  printer->setColorMode(QPrinter::Color);
+  //KDAB remove it
+  //printer->addDialogPage(new printDialogPage(this));
           
   if (printer->setup(this))
   {

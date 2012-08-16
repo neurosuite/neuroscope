@@ -796,7 +796,7 @@ class NeuroscopeApp : public KDockMainWindow
     long initialTimeWindow;
 
     /**The printer instance */
-    KPrinter* printer;
+    QPrinter* printer;
 
     /**List storing the identifiers of the opened cluster files.*/
     QValueList<QString> clusterFileList;

@@ -18,19 +18,17 @@
 #ifndef NEUROSCOPEVIEW_H
 #define NEUROSCOPEVIEW_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 //Include files for KDE
 #include <kdockwidget.h>
 #include <kstatusbar.h>
-#include <kprinter.h>
+
 
 // include files for Qt
 #include <qwidget.h>
 #include <qdict.h>
 #include <qimage.h>
+#include <qprinter.h>
 
 // application specific includes
 #include "baseframe.h"
@@ -112,7 +110,7 @@ class NeuroscopeView : public KDockArea
     * @param filePath path of the opened document.
     * @param whiteBackground true if the printed background has to be white, false otherwise.
     */
-    void print(KPrinter* pPrinter,QString filePath,bool whiteBackground);
+    void print(QPrinter* pPrinter,QString filePath,bool whiteBackground);
 
     /**Sets the unit gain and the acquisition system gain.
     * @param gain initial gain use to draw the traces in the TraceView.
