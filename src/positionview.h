@@ -24,7 +24,10 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qprinter.h>
-#include <qdict.h> 
+#include <q3dict.h> 
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3ValueList>
 
 // application specific includes
 #include <baseframe.h>
@@ -94,7 +97,7 @@ public slots:
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   * @param backgroundForPrinting special background to be used for printing.
   */
-  void print(QPainter& printPainter,QPaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting = QImage());
+  void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting = QImage());
 
   /***Changes the color of the background.*/
   void changeBackgroundColor(QColor color);
@@ -106,7 +109,7 @@ public slots:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file in Hz.   
   */  
-  void dataAvailable(QDict<EventData>& eventsData,QMap<QString, QValueList<int> >& selectedEvents,QDict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+  void dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
   
   /**Updates the event display if any event are available.*/
   void updateEventDisplay();
@@ -198,13 +201,13 @@ private:
   int nbSpots;
   
   /**Dictionary between the event provider names and the event data and status.*/
-  QDict<EventData> eventsData;
+  Q3Dict<EventData> eventsData;
 
   /**Map between the event provider names and the list of selected events.*/
-  QMap<QString, QValueList<int> > selectedEvents;
+  QMap<QString, Q3ValueList<int> > selectedEvents;
     
   /**Dictionary between the provider names and the item color lists.*/
-  QDict<ItemColors> providerItemColors;
+  Q3Dict<ItemColors> providerItemColors;
   
   /**Provider for whole set of event files.*/
   GlobalEventsProvider& globalEventProvider;

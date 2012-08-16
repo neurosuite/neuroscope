@@ -20,6 +20,12 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qinputdialog.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <QEvent>
+#include <QCustomEvent>
+#include <Q3PopupMenu>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -131,16 +137,16 @@ void NeuroscopeApp::initActions()
   new KAction(tr("Select All e&xcept 0 and 1"), CTRL + SHIFT + Key_A, this,
     SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
   new KAction(tr("Deselect All"), CTRL + Key_U, this,SLOT(slotDeselectAll()),actionCollection(),"edit_deselect_all");
-  editMode = new KToggleAction(tr("&Edit Mode"),QIconSet(loader->loadIcon("edit", KIcon::User)),CTRL + Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
+  editMode = new KToggleAction(tr("&Edit Mode"),QIcon(loader->loadIcon("edit", KIcon::User)),CTRL + Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
   editMode->setChecked(true);
      
   //Tools menu
-  new KAction(tr("Zoom"),QIconSet(loader->loadIcon("zoom_tool", KIcon::User)), Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
-  new KAction(tr("Select Channels"),QIconSet(loader->loadIcon("select_tool", KIcon::User)), Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
-  new KAction(tr("Measure"),QIconSet(loader->loadIcon("measure_tool", KIcon::User)), Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
-  new KAction(tr("Select Time"),QIconSet(loader->loadIcon("time_tool", KIcon::User)), Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
-  new KAction(tr("Select Event"),QIconSet(loader->loadIcon("event_tool", KIcon::User)), Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
-  addEventMenu = new KSelectAction(tr("Add Event"),QIconSet(loader->loadIcon("add_event_tool", KIcon::User)),Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
+  new KAction(tr("Zoom"),QIcon(loader->loadIcon("zoom_tool", KIcon::User)), Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
+  new KAction(tr("Select Channels"),QIcon(loader->loadIcon("select_tool", KIcon::User)), Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
+  new KAction(tr("Measure"),QIcon(loader->loadIcon("measure_tool", KIcon::User)), Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
+  new KAction(tr("Select Time"),QIcon(loader->loadIcon("time_tool", KIcon::User)), Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
+  new KAction(tr("Select Event"),QIcon(loader->loadIcon("event_tool", KIcon::User)), Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
+  addEventMenu = new KSelectAction(tr("Add Event"),QIcon(loader->loadIcon("add_event_tool", KIcon::User)),Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
   connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
 
@@ -150,7 +156,7 @@ void NeuroscopeApp::initActions()
   connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventPopup, SIGNAL(activated(int)), this, SLOT(slotAddEventButtonActivated(int)));
       
-  new KAction(tr("Draw Time Line"),QIconSet(loader->loadIcon("time_line_tool", KIcon::User)), Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
+  new KAction(tr("Draw Time Line"),QIcon(loader->loadIcon("time_line_tool", KIcon::User)), Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
    
   //Traces menu
   displayMode = new KToggleAction(tr("&Multiple Columns"), 0, this, SLOT(slotDisplayMode()), actionCollection(),"display_mode");
@@ -177,14 +183,14 @@ void NeuroscopeApp::initActions()
   new KAction(tr("&Close Active Display"), CTRL + Key_W, this, SLOT(slotDisplayClose()),actionCollection(),"close_display");
 
   //Channels Menu
-  new KAction(tr("Show &Channels"),QIconSet(loader->loadIcon("eye", KIcon::User)),CTRL + Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
-  new KAction(tr("&Hide Channels"),QIconSet(loader->loadIcon("eye_close", KIcon::User)),CTRL + Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
+  new KAction(tr("Show &Channels"),QIcon(loader->loadIcon("eye", KIcon::User)),CTRL + Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
+  new KAction(tr("&Hide Channels"),QIcon(loader->loadIcon("eye_close", KIcon::User)),CTRL + Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
   
-  new KAction(tr("&Move Channels to New Group"),QIconSet(loader->loadIcon("new_group", KIcon::User)), CTRL + Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
-  new KAction(tr("&Remove Channels from Group"),QIconSet(loader->loadIcon("remove", KIcon::User)),SHIFT + Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
-  new KAction(tr("&Discard Channels"),QIconSet(loader->loadIcon("discard", KIcon::User)),Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
-  new KAction(tr("&Keep Channels"),QIconSet(loader->loadIcon("keep", KIcon::User)),CTRL + SHIFT + Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
-  new KAction(tr("&Skip Channels"),QIconSet(loader->loadIcon("skip", KIcon::User)),CTRL + SHIFT + Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
+  new KAction(tr("&Move Channels to New Group"),QIcon(loader->loadIcon("new_group", KIcon::User)), CTRL + Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
+  new KAction(tr("&Remove Channels from Group"),QIcon(loader->loadIcon("remove", KIcon::User)),SHIFT + Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
+  new KAction(tr("&Discard Channels"),QIcon(loader->loadIcon("discard", KIcon::User)),Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
+  new KAction(tr("&Keep Channels"),QIcon(loader->loadIcon("keep", KIcon::User)),CTRL + SHIFT + Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
+  new KAction(tr("&Skip Channels"),QIcon(loader->loadIcon("skip", KIcon::User)),CTRL + SHIFT + Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
 
   new KAction(tr("&Synchronize Groups"), 0, this, SLOT(slotSynchronize()), actionCollection(),"synchronize");
   showHideLabels = new KToggleAction(tr("Show &Labels"),0,CTRL + Key_L, this, SLOT(slotShowLabels()), actionCollection(),"show_labels");
@@ -203,12 +209,12 @@ void NeuroscopeApp::initActions()
   clusterWaveforms->setChecked(false);
   new KAction(tr("&Increase Height"),CTRL + Key_Plus,this, SLOT(slotIncreaseRasterHeight()),actionCollection(), "increase_raster_height");
   new KAction(tr("&Decrease Height"),CTRL + Key_Minus,this, SLOT(slotDecreaseRasterHeight()),actionCollection(), "decrease_raster_height");  
-  new KAction(tr("&Next Spike"),QIconSet(loader->loadIcon("forwardCluster", KIcon::User)),CTRL + SHIFT + Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
-  new KAction(tr("&Previous Spike"),QIconSet(loader->loadIcon("backCluster", KIcon::User)),CTRL + SHIFT + Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
+  new KAction(tr("&Next Spike"),QIcon(loader->loadIcon("forwardCluster", KIcon::User)),CTRL + SHIFT + Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
+  new KAction(tr("&Previous Spike"),QIcon(loader->loadIcon("backCluster", KIcon::User)),CTRL + SHIFT + Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
 
   //Events Menu
-  new KAction(tr("&Next Event"),QIconSet(loader->loadIcon("forwardEvent", KIcon::User)),CTRL + Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
-  new KAction(tr("&Previous Event"),QIconSet(loader->loadIcon("backEvent", KIcon::User)),CTRL + Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
+  new KAction(tr("&Next Event"),QIcon(loader->loadIcon("forwardEvent", KIcon::User)),CTRL + Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
+  new KAction(tr("&Previous Event"),QIcon(loader->loadIcon("backEvent", KIcon::User)),CTRL + Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
   new KAction(tr("&Remove Event"),0,CTRL + Key_K,this, SLOT(removeEvent()),actionCollection(), "remove_event");
 
   //Positions Menu
@@ -227,8 +233,8 @@ void NeuroscopeApp::initActions()
   
   //Custom connections
   connect(doc, SIGNAL(noSession(QMap<int,int>&,QMap<int,bool>&)),this, SLOT(slotDefaultSetUp(QMap<int,int>&,QMap<int,bool>&)));
-  connect(doc, SIGNAL(loadFirstDisplay(QValueList<int>*,bool,bool,bool,bool,bool,bool,QValueList<int>,QValueList<int>,QValueList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
-               SLOT(slotSetUp(QValueList<int>*,bool,bool,bool,bool,bool,bool,QValueList<int>,QValueList<int>,QValueList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
+  connect(doc, SIGNAL(loadFirstDisplay(Q3ValueList<int>*,bool,bool,bool,bool,bool,bool,Q3ValueList<int>,Q3ValueList<int>,Q3ValueList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
+               SLOT(slotSetUp(Q3ValueList<int>*,bool,bool,bool,bool,bool,bool,Q3ValueList<int>,Q3ValueList<int>,Q3ValueList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
 
   connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
   connect(spikeChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
@@ -245,28 +251,28 @@ void NeuroscopeApp::initActions()
   connect(displayChannelPalette, SIGNAL(channelsChangeColor(QValueList<int>)),spikeChannelPalette, SLOT(updateColor(QValueList<int>)));
   connect(spikeChannelPalette, SIGNAL(channelsChangeColor(QValueList<int>)),displayChannelPalette, SLOT(updateColor(QValueList<int>)));
   */
-  connect(displayChannelPalette, SIGNAL(updateShownChannels(const QValueList<int>&)),this, SLOT(slotUpdateShownChannels(const QValueList<int>&)));
-  connect(spikeChannelPalette, SIGNAL(updateShownChannels(const QValueList<int>&)),this, SLOT(slotUpdateShownChannels(const QValueList<int>&)));
+  connect(displayChannelPalette, SIGNAL(updateShownChannels(const Q3ValueList<int>&)),this, SLOT(slotUpdateShownChannels(const Q3ValueList<int>&)));
+  connect(spikeChannelPalette, SIGNAL(updateShownChannels(const Q3ValueList<int>&)),this, SLOT(slotUpdateShownChannels(const Q3ValueList<int>&)));
 
-  connect(displayChannelPalette, SIGNAL(updateHideChannels(const QValueList<int>&)),this, SLOT(slotUpdateHiddenChannels(const QValueList<int>&)));
-  connect(spikeChannelPalette, SIGNAL(updateHideChannels(const QValueList<int>&)),this, SLOT(slotUpdateHiddenChannels(const QValueList<int>&)));
+  connect(displayChannelPalette, SIGNAL(updateHideChannels(const Q3ValueList<int>&)),this, SLOT(slotUpdateHiddenChannels(const Q3ValueList<int>&)));
+  connect(spikeChannelPalette, SIGNAL(updateHideChannels(const Q3ValueList<int>&)),this, SLOT(slotUpdateHiddenChannels(const Q3ValueList<int>&)));
   
-  connect(displayChannelPalette, SIGNAL(channelsDiscarded(const QValueList<int>&)),this, SLOT(slotChannelsDiscarded(const QValueList<int>&)));
-  connect(spikeChannelPalette, SIGNAL(channelsDiscarded(const QValueList<int>&)),this, SLOT(slotChannelsDiscarded(const QValueList<int>&)));
-  connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(const QValueList<int>&,QString,bool)),spikeChannelPalette, SLOT(discardChannels(const QValueList<int>&,QString,bool)));
-  connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(const QValueList<int>&,QString,bool)),displayChannelPalette, SLOT(discardChannels(const QValueList<int>&,QString,bool)));
-  connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(const QValueList<int>&,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(const QValueList<int>&,QString,bool)));
-  connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(const QValueList<int>&,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(const QValueList<int>&,QString,bool)));
+  connect(displayChannelPalette, SIGNAL(channelsDiscarded(const Q3ValueList<int>&)),this, SLOT(slotChannelsDiscarded(const Q3ValueList<int>&)));
+  connect(spikeChannelPalette, SIGNAL(channelsDiscarded(const Q3ValueList<int>&)),this, SLOT(slotChannelsDiscarded(const Q3ValueList<int>&)));
+  connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(const Q3ValueList<int>&,QString,bool)),spikeChannelPalette, SLOT(discardChannels(const Q3ValueList<int>&,QString,bool)));
+  connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(const Q3ValueList<int>&,QString,bool)),displayChannelPalette, SLOT(discardChannels(const Q3ValueList<int>&,QString,bool)));
+  connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(const Q3ValueList<int>&,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(const Q3ValueList<int>&,QString,bool)));
+  connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(const Q3ValueList<int>&,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(const Q3ValueList<int>&,QString,bool)));
 
-  connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(const QValueList<int>&)),spikeChannelPalette, SLOT(removeChannelsFromTrash(const QValueList<int>&)));
-  connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(const QValueList<int>&)),displayChannelPalette, SLOT(removeChannelsFromTrash(const QValueList<int>&)));
+  connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(const Q3ValueList<int>&)),spikeChannelPalette, SLOT(removeChannelsFromTrash(const Q3ValueList<int>&)));
+  connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(const Q3ValueList<int>&)),displayChannelPalette, SLOT(removeChannelsFromTrash(const Q3ValueList<int>&)));
           
   connect(displayChannelPalette, SIGNAL(groupModified()),this, SLOT(slotGroupsModified()));
   connect(spikeChannelPalette, SIGNAL(groupModified()),this, SLOT(slotGroupsModified()));
 
 
-  connect(displayChannelPalette, SIGNAL(channelsSelected(const QValueList<int>&)),this, SLOT(slotChannelsSelected(const QValueList<int>&)));
-  connect(spikeChannelPalette, SIGNAL(channelsSelected(const QValueList<int>&)),this, SLOT(slotChannelsSelected(const QValueList<int>&)));  
+  connect(displayChannelPalette, SIGNAL(channelsSelected(const Q3ValueList<int>&)),this, SLOT(slotChannelsSelected(const Q3ValueList<int>&)));
+  connect(spikeChannelPalette, SIGNAL(channelsSelected(const Q3ValueList<int>&)),this, SLOT(slotChannelsSelected(const Q3ValueList<int>&)));  
  
   //Actually create the menus and toolbars
   createGUI();
@@ -497,8 +503,8 @@ void NeuroscopeApp::initializePreferences(){
   drawPositionsOnBackgroundDefault = configuration().getPositionsBackground(); 
 }
 
-void NeuroscopeApp::initDisplay(QValueList<int>* channelsToDisplay,QValueList<int> offsets,QValueList<int> channelGains,
-                                QValueList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
+void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
+                                Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
 { 
   isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
   //Initialize the spinboxe and scrollbar 
@@ -518,7 +524,7 @@ void NeuroscopeApp::initDisplay(QValueList<int>* channelsToDisplay,QValueList<in
           
    view->installEventFilter(this);
 
-   connect(view,SIGNAL(channelsSelected(const QValueList<int>&)),this, SLOT(slotSelectChannelsInPalette(const QValueList<int>&)));
+   connect(view,SIGNAL(channelsSelected(const Q3ValueList<int>&)),this, SLOT(slotSelectChannelsInPalette(const Q3ValueList<int>&)));
    connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
    connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
    connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
@@ -748,10 +754,10 @@ void NeuroscopeApp::updateBrowsingStatus(){
   }     
   
   NeuroscopeView* view = activeView();
-  QValueList<QString>::iterator iterator;
+  Q3ValueList<QString>::iterator iterator;
   for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
-   const QValueList<int>* selectedClusters = view->getSelectedClusters(*iterator);
-   const QValueList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
+   const Q3ValueList<int>* selectedClusters = view->getSelectedClusters(*iterator);
+   const Q3ValueList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
    palette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
   }
      
@@ -770,10 +776,10 @@ void NeuroscopeApp::updateBrowsingStatus(){
   }     
 
   NeuroscopeView* view = activeView();
-  QValueList<QString>::iterator iterator;
+  Q3ValueList<QString>::iterator iterator;
   for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
-   const QValueList<int>* selectedEvents = view->getSelectedEvents(*iterator);
-   const QValueList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
+   const Q3ValueList<int>* selectedEvents = view->getSelectedEvents(*iterator);
+   const Q3ValueList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
    palette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
   }
 
@@ -1428,7 +1434,7 @@ void NeuroscopeApp::slotChannelGroupColorUpdate(int groupId){
  doc->channelGroupColorUpdate(groupId,view); 
 }
 
-void NeuroscopeApp::slotUpdateShownChannels(const QValueList<int>& shownChannels){  
+void NeuroscopeApp::slotUpdateShownChannels(const Q3ValueList<int>& shownChannels){  
  KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
  ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
  
@@ -1444,7 +1450,7 @@ void NeuroscopeApp::slotUpdateShownChannels(const QValueList<int>& shownChannels
  else displayChannelPalette->updateShowHideStatus(shownChannels,true);
 }
 
-void NeuroscopeApp::slotUpdateHiddenChannels(const QValueList<int>& hiddenChannels){
+void NeuroscopeApp::slotUpdateHiddenChannels(const Q3ValueList<int>& hiddenChannels){
  //Update the show/hide status of the inactive palette
  KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
  ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
@@ -1662,22 +1668,22 @@ void NeuroscopeApp::resetState(){
 
 void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<int,bool>& skipStatus){
  //All the channels will be selected and none skipped
- QValueList<int>* channelsToDisplay = new QValueList<int>();
+ Q3ValueList<int>* channelsToDisplay = new Q3ValueList<int>();
  int channelNb = doc->getChannelNb();
  for(int i = 0 ; i < channelNb; ++i){
   channelsToDisplay->append(i);
  }
  
- QValueList<int> offsets = channelDefaultOffsets.values();
- QValueList<int> channelGains;
- QValueList<int> selectedChannels;
+ Q3ValueList<int> offsets = channelDefaultOffsets.values();
+ Q3ValueList<int> channelGains;
+ Q3ValueList<int> selectedChannels;
  if(initialTimeWindow != 0) initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus,initialTimeWindow);
  else initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus);
 
 }
 
-void NeuroscopeApp::slotSetUp(QValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
-                    bool greyMode,QValueList<int> offsets,QValueList<int> channelGains,QValueList<int> selectedChannels,
+void NeuroscopeApp::slotSetUp(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
+                    bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selectedChannels,
                     QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,bool showEventsInPositionView){
 
  isInit = true; //prevent the KToggleAction to trigger during initialisation
@@ -1743,7 +1749,7 @@ void NeuroscopeApp::slotSelectAll(){
    if(name.contains("clusterPanel")){
     ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
     NeuroscopeView* view = activeView();
-    QValueList<int> clustersToHide;
+    Q3ValueList<int> clustersToHide;
     doc->showAllClustersExcept(clusterPalette,view,clustersToHide);    
    }
    //update the event palette
@@ -1803,7 +1809,7 @@ void NeuroscopeApp::slotSelectAllWO01(){
   if(name.contains("clusterPanel")){
    ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
    NeuroscopeView* view = activeView();
-   QValueList<int> clustersToHide;
+   Q3ValueList<int> clustersToHide;
    clustersToHide.append(0);
    clustersToHide.append(1);
    doc->showAllClustersExcept(clusterPalette,view,clustersToHide);
@@ -1851,7 +1857,7 @@ void NeuroscopeApp::slotDiscardSpikeChannels(){
 
 void NeuroscopeApp::slotKeepChannels(){
  colorModified = true;
- const QValueList<int> selectedChannels = displayChannelPalette->selectedChannels();
+ const Q3ValueList<int> selectedChannels = displayChannelPalette->selectedChannels();
   
  //The order in which the palettes are updated matters. The first one will give the new color for the
  //channels which change status
@@ -1880,7 +1886,7 @@ void NeuroscopeApp::slotKeepChannels(){
 
 void NeuroscopeApp::slotSkipChannels(){
  colorModified = true;
- const QValueList<int> selectedChannels = displayChannelPalette->selectedChannels();
+ const Q3ValueList<int> selectedChannels = displayChannelPalette->selectedChannels();
  displayChannelPalette->updateSkipStatus(selectedChannels,true);
  spikeChannelPalette->updateSkipStatus(selectedChannels,true); 
  
@@ -1892,7 +1898,7 @@ void NeuroscopeApp::slotSkipChannels(){
 }
 
 
-void NeuroscopeApp::slotChannelsDiscarded(const QValueList<int>& discarded){
+void NeuroscopeApp::slotChannelsDiscarded(const Q3ValueList<int>& discarded){
  groupsModified = true;
 
  //Update the inactive palette
@@ -1942,7 +1948,7 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
  
  displayMode->setChecked(activeView->getMultiColumns());
  select = activeView->isSelectionTool();
- const QValueList<int> selectedChannels = activeView->getSelectedChannels();
+ const Q3ValueList<int> selectedChannels = activeView->getSelectedChannels();
 
  KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
 
@@ -1981,7 +1987,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
   
   //update the channel palettes
   NeuroscopeView* view = activeView();
-  const QValueList<int> selectedChannels = view->getSelectedChannels();
+  const Q3ValueList<int> selectedChannels = view->getSelectedChannels();
   displayChannelPalette->hideUnselectAllChannels();
   spikeChannelPalette->hideUnselectAllChannels();
   displayChannelPalette->updateShowHideStatus(view->channels(),true);
@@ -1997,10 +2003,10 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
    if(name.contains("clusterPanel")){
     ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
     NeuroscopeView* view = activeView();
-    QValueList<QString>::iterator iterator;
+    Q3ValueList<QString>::iterator iterator;
     for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
-     const QValueList<int>* selectedClusters = view->getSelectedClusters(*iterator);
-     const QValueList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);     
+     const Q3ValueList<int>* selectedClusters = view->getSelectedClusters(*iterator);
+     const Q3ValueList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);     
      clusterPalette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
     }
     slotStateChanged("clusterTabState");   
@@ -2012,10 +2018,10 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
    if(name.contains("eventPanel")){     
     ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
     NeuroscopeView* view = activeView();
-    QValueList<QString>::iterator iterator;
+    Q3ValueList<QString>::iterator iterator;
     for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
-     const QValueList<int>* selectedEvents = view->getSelectedEvents(*iterator);
-     const QValueList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
+     const Q3ValueList<int>* selectedEvents = view->getSelectedEvents(*iterator);
+     const Q3ValueList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
      eventPalette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
     }     
     slotStateChanged("eventTabState");
@@ -2234,15 +2240,15 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
 
 void NeuroscopeApp::slotNewDisplay(){
  //Present the channels of the current display in the new display.
- QValueList<int>* channelList = new QValueList<int>();
- const QValueList<int>& currentChannels = activeView()->channels();
- QValueList<int>::const_iterator iterator;
+ Q3ValueList<int>* channelList = new Q3ValueList<int>();
+ const Q3ValueList<int>& currentChannels = activeView()->channels();
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = currentChannels.begin(); iterator != currentChannels.end(); ++iterator)
   channelList->append(*iterator);
 
- QValueList<int> offsets = activeView()->getChannelOffset();
- QValueList<int> channelGains = activeView()->getGains();
- QValueList<int> selectedChannels = activeView()->getSelectedChannels();
+ Q3ValueList<int> offsets = activeView()->getChannelOffset();
+ Q3ValueList<int> channelGains = activeView()->getGains();
+ Q3ValueList<int> selectedChannels = activeView()->getSelectedChannels();
  long startTime = activeView()->getStartTime();
  long duration = activeView()->getTimeWindow();
  int rasterHeight = activeView()->getRasterHeight();
@@ -2256,8 +2262,8 @@ void NeuroscopeApp::slotNewDisplay(){
  doc->setProviders(view);
 }
 
-void NeuroscopeApp::createDisplay(QValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,bool greyMode,
-                    QValueList<int> offsets,QValueList<int> channelGains,QValueList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
+void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,bool greyMode,
+                    Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
  if(mainDock){
    if(tabLabel == "") tabLabel = "Field Potentials Display";
    KDockWidget* display = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
@@ -2269,7 +2275,7 @@ void NeuroscopeApp::createDisplay(QValueList<int>* channelsToDisplay,bool vertic
 
    view->installEventFilter(this);
 
-   connect(view,SIGNAL(channelsSelected(const QValueList<int>&)),this, SLOT(slotSelectChannelsInPalette(const QValueList<int>&)));
+   connect(view,SIGNAL(channelsSelected(const Q3ValueList<int>&)),this, SLOT(slotSelectChannelsInPalette(const Q3ValueList<int>&)));
    connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
    connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
    connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
@@ -2372,13 +2378,13 @@ void NeuroscopeApp::resizePalettePanel(){
   displayChannelPalette->update();
 }
 
-void NeuroscopeApp::slotSelectChannelsInPalette(const QValueList<int>& selectedIds){
+void NeuroscopeApp::slotSelectChannelsInPalette(const Q3ValueList<int>& selectedIds){
   spikeChannelPalette->selectChannels(selectedIds);
   displayChannelPalette->selectChannels(selectedIds);  
 }
 
 
-void NeuroscopeApp::slotChannelsSelected(const QValueList<int>& selectedIds){
+void NeuroscopeApp::slotChannelsSelected(const Q3ValueList<int>& selectedIds){
  //if the selection tool is selected  warn the active display
  if(select) activeView()->selectChannels(selectedIds);
  else activeView()->setSelectedChannels(selectedIds);
@@ -2504,7 +2510,7 @@ void NeuroscopeApp::loadClusterFiles(KURL::List urls){
   
  //Loop on the files
  int counter = 0;
- QValueList<KURL>::iterator iterator;
+ Q3ValueList<KURL>::iterator iterator;
  for(iterator = urls.begin();iterator != urls.end();++iterator){
   //Create the provider 
   int returnStatus = doc->loadClusterFile(*iterator,view);
@@ -2599,8 +2605,8 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
 
   //Palette connections
   connect(clusterPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotClusterColorUpdate(int,QString)));
-  connect(clusterPalette, SIGNAL(updateShownItems(const QMap<QString,QValueList<int> >&)), this, SLOT(slotUpdateShownClusters(const QMap<QString,QValueList<int> >&)));
-  connect(clusterPalette, SIGNAL(updateItemsToSkip(QString,const QValueList<int>&)), this, SLOT(slotUpdateClustersToSkip(QString,const QValueList<int>&)));
+  connect(clusterPalette, SIGNAL(updateShownItems(const QMap<QString,Q3ValueList<int> >&)), this, SLOT(slotUpdateShownClusters(const QMap<QString,Q3ValueList<int> >&)));
+  connect(clusterPalette, SIGNAL(updateItemsToSkip(QString,const Q3ValueList<int>&)), this, SLOT(slotUpdateClustersToSkip(QString,const Q3ValueList<int>&)));
   connect(clusterPalette,SIGNAL(noClustersToBrowse()),this, SLOT(slotNoClustersToBrowse()));
   connect(clusterPalette,SIGNAL(clustersToBrowse()),this, SLOT(slotClustersToBrowse()));
 
@@ -2636,14 +2642,14 @@ void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
   
 }
 
-void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QValueList<int> >& selection){ 
+void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,Q3ValueList<int> >& selection){ 
  KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
  QString name = current->name(); 
  if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
-  QMap<QString,QValueList<int> >::ConstIterator groupIterator;
+  QMap<QString,Q3ValueList<int> >::ConstIterator groupIterator;
   for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
    QString providerName = groupIterator.key();
-   QValueList<int> clusterIds = groupIterator.data(); 
+   Q3ValueList<int> clusterIds = groupIterator.data(); 
    NeuroscopeView* view = activeView();
    view->shownClustersUpdate(providerName,clusterIds);  
   } 
@@ -2724,7 +2730,7 @@ void NeuroscopeApp::loadEventFiles(KURL::List urls){
 
  //Loop on the files
  int counter = 0;
- QValueList<KURL>::iterator iterator;
+ Q3ValueList<KURL>::iterator iterator;
  for(iterator = urls.begin();iterator != urls.end();++iterator){
   //Create the provider
   int returnStatus = doc->loadEventFile(*iterator,view);
@@ -2780,9 +2786,9 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
 
   //Palette connections
   connect(eventPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotEventColorUpdate(int,QString)));
-  connect(eventPalette, SIGNAL(updateShownItems(const QMap<QString,QValueList<int> >&)), this, SLOT(slotUpdateShownEvents(const QMap<QString,QValueList<int> >&)));
+  connect(eventPalette, SIGNAL(updateShownItems(const QMap<QString,Q3ValueList<int> >&)), this, SLOT(slotUpdateShownEvents(const QMap<QString,Q3ValueList<int> >&)));
   connect(eventPalette, SIGNAL(selectedGroupChanged(QString)), this, SLOT(slotEventGroupSelected(QString)));
-  connect(eventPalette, SIGNAL(updateItemsToSkip(QString,const QValueList<int>&)), this, SLOT(slotUpdateEventsToSkip(QString,const QValueList<int>&)));
+  connect(eventPalette, SIGNAL(updateItemsToSkip(QString,const Q3ValueList<int>&)), this, SLOT(slotUpdateEventsToSkip(QString,const Q3ValueList<int>&)));
   connect(eventPalette,SIGNAL(noEventsToBrowse()),this, SLOT(slotNoEventsToBrowse()));
   connect(eventPalette,SIGNAL(eventsToBrowse()),this, SLOT(slotEventsToBrowse()));
 
@@ -2848,14 +2854,14 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId,QString providerName){
  }
 }
 
-void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QValueList<int> >& selection){  
+void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,Q3ValueList<int> >& selection){  
  KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
  QString name = current->name();
  if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
-  QMap<QString,QValueList<int> >::ConstIterator groupIterator;
+  QMap<QString,Q3ValueList<int> >::ConstIterator groupIterator;
   for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
    QString providerName = groupIterator.key();
-   QValueList<int> eventIds = groupIterator.data();
+   Q3ValueList<int> eventIds = groupIterator.data();
    NeuroscopeView* view = activeView();
    view->shownEventsUpdate(providerName,eventIds);
   }
@@ -2975,9 +2981,9 @@ void NeuroscopeApp::slotAddEventAboutToShow(){
 
   eventIndex = -1;
   QStringList list;
-  QValueList<EventDescription> eventList = doc->eventIds(eventProvider);
+  Q3ValueList<EventDescription> eventList = doc->eventIds(eventProvider);
   
-  QValueList<EventDescription>::iterator it;
+  Q3ValueList<EventDescription>::iterator it;
   for(it = eventList.begin(); it != eventList.end(); ++it){
    QString label = static_cast<QString>(*it);
    int index = addEventPopup->insertItem(label);
@@ -3014,7 +3020,7 @@ void NeuroscopeApp::slotAddEventButtonActivated(int index){
 
 void NeuroscopeApp::slotAddEventActivated(int index){
   if(eventProvider == "") return;
-  QPopupMenu* menu = addEventMenu->popupMenu();
+  Q3PopupMenu* menu = addEventMenu->popupMenu();
   eventIndex = index;
 
   QString description = menu->text(index);
@@ -3068,11 +3074,11 @@ void NeuroscopeApp::slotClosePositionFile(){
  slotStateChanged("noPositionState");
 }
 
-void NeuroscopeApp::slotUpdateEventsToSkip(QString groupName,const QValueList<int>& eventsToSkip){
+void NeuroscopeApp::slotUpdateEventsToSkip(QString groupName,const Q3ValueList<int>& eventsToSkip){
  activeView()->updateNoneBrowsingEventList(groupName,eventsToSkip); 
 }
 
-void NeuroscopeApp::slotUpdateClustersToSkip(QString groupName,const QValueList<int>& clustersToSkip){
+void NeuroscopeApp::slotUpdateClustersToSkip(QString groupName,const Q3ValueList<int>& clustersToSkip){
  activeView()->updateNoneBrowsingClusterList(groupName,clustersToSkip);
 }
 

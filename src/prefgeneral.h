@@ -28,7 +28,6 @@
 #include <qvalidator.h>
 
 //includes files for KDE
-#include <kcolorbutton.h>
 #include <kfiledialog.h>
 
 #include <kmessagebox.h>

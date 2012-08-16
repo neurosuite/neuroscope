@@ -21,6 +21,10 @@
 #include <qpaintdevice.h>
 #include <qpainter.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
+#include <QMouseEvent>
 
 // include files for kde
 #include <kiconloader.h>
@@ -32,7 +36,7 @@ using namespace std;
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
            int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
-           QFrame(parent,name,WRepaintNoErase|WResizeNoErase),
+           Q3Frame(parent,name,WRepaintNoErase|WResizeNoErase),
            MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
            viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
            firstClick(0,0),isDoubleClick(false),rubber(0),
@@ -42,14 +46,14 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
   //Setting of the frame
   setLineWidth (BORDER);
   setPaletteBackgroundColor(backgroundColor);
-  setFrameStyle(QFrame::Box|QFrame::Plain);
+  setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
 
   int h;
   int s;
   int v;
   backgroundColor.hsv(&h,&s,&v);
-  if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = black;
-  else colorLegend = white;
+  if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = Qt::black;
+  else colorLegend = Qt::white;
   
 
   //Set the minimum size to ensure that the frame rectangle may never be null or invalid.
@@ -70,8 +74,8 @@ void BaseFrame::changeBackgroundColor(QColor color){
   int s;
   int v;
   color.hsv(&h,&s,&v);
-  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = black;
-  else colorLegend = white;
+  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = Qt::black;
+  else colorLegend = Qt::white;
   drawContentsMode = REDRAW;
 }
 
@@ -148,7 +152,7 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
      float factor;
 
      //Shrink asked
-     if(e->state() & Qt::ShiftButton) factor = static_cast<float>(0.5);
+     if(e->state() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
      //Enlarge asked
      else factor = static_cast<float>(2);
      
@@ -187,7 +191,7 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e){
 
 void BaseFrame::mouseDoubleClickEvent(QMouseEvent* e){
   if(mode == ZOOM){
-    if ((e->button() == QMouseEvent::LeftButton) && !(e->state() & Qt::ShiftButton)){
+    if ((e->button() == QMouseEvent::LeftButton) && !(e->state() & Qt::ShiftModifier)){
      //Reset to the initial window
      window.reset();
      drawContentsMode = REDRAW;
@@ -362,14 +366,14 @@ void BaseFrame::drawRubber(){
     painter.setViewport(viewport);
     
     painter.setRasterOp(NotROP);
-    painter.setPen(QPen(color0,1));
-    painter.setBrush(NoBrush);
+    painter.setPen(QPen(Qt::color0,1));
+    painter.setBrush(Qt::NoBrush);
 
     QRect normalizeRubber = rubber->normalize(); //not mandatory as it seems that drawPrimitive does the job (but more secure)
 
     style().drawPrimitive(QStyle::PE_FocusRect, &painter,
                            QRect(normalizeRubber.x(), normalizeRubber.y(), normalizeRubber.width(),normalizeRubber.height()),
-                           colorGroup(), QStyle::Style_Default, colorGroup().background() );
+                           colorGroup(), QStyle::State_None, colorGroup().background() );
 
     painter.end();
 }

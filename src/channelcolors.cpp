@@ -19,6 +19,8 @@
 
 //C, C++ include files
 #include <iostream>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 using namespace std;
 
@@ -35,7 +37,7 @@ ChannelColors::~ChannelColors(){
 ChannelColors::ChannelColors(const ChannelColors& origin){
   //Insert into channelList a deep copy of all the elements of origin.channelList
   ChannelColor* channelColor;
-  QPtrList<ChannelColor> originChannelList =  origin.channelList;
+  Q3PtrList<ChannelColor> originChannelList =  origin.channelList;
 
   for(channelColor = originChannelList.first(); channelColor; channelColor = originChannelList.next()){
     channelList.append(new ChannelColor(*channelColor));
@@ -120,7 +122,7 @@ bool ChannelColors::remove(int identifier){
 ChannelColors::ChannelColor* ChannelColors::channelColor(int channelId) const{
 
   //Iterate on the list until the channel is find
-  QPtrListIterator<ChannelColors::ChannelColor> iterator(channelList);
+  Q3PtrListIterator<ChannelColors::ChannelColor> iterator(channelList);
   ChannelColors::ChannelColor* channelColor = 0L;
   while((channelColor = iterator.current()) != 0) {
    ++iterator;
@@ -131,7 +133,7 @@ ChannelColors::ChannelColor* ChannelColors::channelColor(int channelId) const{
 
 int ChannelColors::channelColorIndex(int channelId) const{
   //Iterate on the list until the channel is find
-  QPtrListIterator<ChannelColors::ChannelColor> iterator(channelList);
+  Q3PtrListIterator<ChannelColors::ChannelColor> iterator(channelList);
   ChannelColors::ChannelColor* channelColor;
   int index = 0;
   while((channelColor = iterator.current()) != 0) {

@@ -25,6 +25,8 @@
 #include <kprocess.h>
 #include <kio/netaccess.h>
 #include <QTemporaryFile>
+//Added by qt3to4:
+#include <Q3TextStream>
 
 
 int Utilities::getNbLines(QString path){
@@ -47,13 +49,13 @@ int Utilities::getNbLines(QString path){
   sleep(1);
  } 
  QFile tmpFile(counterFile.fineName());
- bool status = tmpFile.open(IO_ReadOnly);
+ bool status = tmpFile.open(QIODevice::ReadOnly);
  
  //If the number of lines could not be determined, stop here
  if(!status) return nbLines;
  
  //Create a reader on the temp file
- QTextStream fileStream(&tmpFile);
+ Q3TextStream fileStream(&tmpFile);
  QString infoLine = fileStream.readLine();
  QString info;
  if(infoLine != NULL){
@@ -92,8 +94,8 @@ int Utilities::getNbLines(QString path){
 void Utilities::createBackup(QString path){
  QFile original(path);
  QFile backup(path+"~");
- original.open(IO_ReadOnly);
- backup.open(IO_WriteOnly);
+ original.open(QIODevice::ReadOnly);
+ backup.open(QIODevice::WriteOnly);
  backup.writeBlock(original.readAll());
  original.close();
  backup.close();

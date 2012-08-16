@@ -17,7 +17,9 @@
 // include files for QT
 #include <qlayout.h>        // for QVBoxLayout
 #include <qlabel.h>         // for QLabel
-#include <qframe.h>         // for QFrame
+#include <q3frame.h>         // for QFrame
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 // include files for KDE
 
@@ -39,20 +41,20 @@ PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, WFlags f):
  setHelp("properties","neuroscope");
 
  //page "Channels"
- QFrame* channelFrame = addPage(tr("Channels"));
- QVBoxLayout* frameLayout = new QVBoxLayout(channelFrame,0,0);
+ Q3Frame* channelFrame = addPage(tr("Channels"));
+ Q3VBoxLayout* frameLayout = new Q3VBoxLayout(channelFrame,0,0);
  properties = new Properties(channelFrame);
  frameLayout->addWidget(properties);
 
  //adding "Units" page
- QFrame* clusterFrame = addPage(tr("Units"));
- frameLayout = new QVBoxLayout(clusterFrame,0,0);
+ Q3Frame* clusterFrame = addPage(tr("Units"));
+ frameLayout = new Q3VBoxLayout(clusterFrame,0,0);
  clusterProperties = new ClusterProperties(clusterFrame);
  frameLayout->addWidget(clusterProperties);
 
  //adding "Positions" page
- QFrame* positionFrame = addPage(tr("Positions"));
- frameLayout = new QVBoxLayout(positionFrame,0,0);
+ Q3Frame* positionFrame = addPage(tr("Positions"));
+ frameLayout = new Q3VBoxLayout(positionFrame,0,0);
  positionProperties = new PositionProperties(positionFrame);
  //hard coded as there is a problem with the pageIndex() method
  positionPageIndex = 2;

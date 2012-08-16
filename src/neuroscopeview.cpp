@@ -17,7 +17,10 @@
 
 // include files for Qt
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h> 
+#include <q3paintdevicemetrics.h> 
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QPixmap>
 
 // include files for KDE
 #include <kmessagebox.h>
@@ -34,11 +37,11 @@
 
 class EventData;
 
-NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,KStatusBar* statusBar,QValueList<int>* channelsToDisplay,
+NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,KStatusBar* statusBar,Q3ValueList<int>* channelsToDisplay,
                 bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                 bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
-                QMap<int,QValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                QValueList<int> offsets,QValueList<int> channelGains,QValueList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,QWidget* parent, const char* name):
+                QMap<int,Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
+                Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,QWidget* parent, const char* name):
                 KDockArea(parent, name),shownChannels(channelsToDisplay),mainWindow(mainWindow),greyScaleMode(greyScale),
                 multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),
                 channelOffsets(),gains(),selectedChannels(),tabLabel(label),startTime(startTime),timeWindow(duration),
@@ -51,20 +54,20 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
   selectedEvents.setAutoDelete(false);
 
  //Duplicate the offset,gain and channelSelected lists
-  QValueList<int>::iterator offsetIterator;
+  Q3ValueList<int>::iterator offsetIterator;
   for(offsetIterator = offsets.begin(); offsetIterator != offsets.end(); ++offsetIterator)
    channelOffsets.append(*offsetIterator);
 
-  QValueList<int>::iterator gainIterator;
+  Q3ValueList<int>::iterator gainIterator;
   for(gainIterator = channelGains.begin(); gainIterator != channelGains.end(); ++gainIterator)
    gains.append(*gainIterator);
 
-  QValueList<int>::iterator selectedIterator;
+  Q3ValueList<int>::iterator selectedIterator;
   for(selectedIterator = selected.begin(); selectedIterator != selected.end(); ++selectedIterator)
    selectedChannels.append(*selectedIterator);
 
       
-  QValueList<int> skippedChannels;
+  Q3ValueList<int> skippedChannels;
   QMap<int,bool>::Iterator iterator;
   for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.data()) skippedChannels.append(iterator.key());
    
@@ -84,41 +87,41 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
   connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
   connect(this,SIGNAL(changeBackgroundColor(QColor)),traceWidget, SLOT(changeBackgroundColor(QColor)));
   connect(this,SIGNAL(greyScale(bool)),traceWidget, SLOT(setGreyScale(bool)));
-  connect(traceWidget,SIGNAL(channelsSelected(const QValueList<int>&)),this, SLOT(slotChannelsSelected(const QValueList<int>&)));
+  connect(traceWidget,SIGNAL(channelsSelected(const Q3ValueList<int>&)),this, SLOT(slotChannelsSelected(const Q3ValueList<int>&)));
   connect(this,SIGNAL(modeToSet(BaseFrame::Mode,bool)),traceWidget,SLOT(setMode(BaseFrame::Mode,bool)));
   connect(this,SIGNAL(multiColumnsDisplay(bool)),traceWidget,SLOT(setMultiColumns(bool)));
   connect(this,SIGNAL(clusterVerticalLinesDisplay(bool)),traceWidget,SLOT(setClusterVerticalLines(bool)));
   connect(this,SIGNAL(clusterRasterDisplay(bool)),traceWidget,SLOT(setClusterRaster(bool)));
   connect(this,SIGNAL(clusterWaveformsDisplay(bool)),traceWidget,SLOT(setClusterWaveforms(bool)));
-  connect(this,SIGNAL(showChannels(const QValueList<int>&)),traceWidget,SLOT(showChannels(const QValueList<int>&)));
+  connect(this,SIGNAL(showChannels(const Q3ValueList<int>&)),traceWidget,SLOT(showChannels(const Q3ValueList<int>&)));
   connect(this,SIGNAL(channelColorUpdate(int,bool)),traceWidget,SLOT(channelColorUpdate(int,bool)));
   connect(this,SIGNAL(groupColorUpdate(int,bool)),traceWidget,SLOT(groupColorUpdate(int,bool)));
   connect(this,SIGNAL(increaseAllAmplitude()),traceWidget,SLOT(increaseAllChannelsAmplitude()));
   connect(this,SIGNAL(decreaseAllAmplitude()),traceWidget,SLOT(decreaseAllChannelsAmplitude()));
-  connect(this,SIGNAL(increaseAmplitude(const QValueList<int>&)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(const QValueList<int>&)));
-  connect(this,SIGNAL(decreaseAmplitude(const QValueList<int>&)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(const QValueList<int>&)));
+  connect(this,SIGNAL(increaseAmplitude(const Q3ValueList<int>&)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(const Q3ValueList<int>&)));
+  connect(this,SIGNAL(decreaseAmplitude(const Q3ValueList<int>&)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(const Q3ValueList<int>&)));
   connect(this,SIGNAL(updateGains(int,int)),traceWidget,SLOT(setGains(int,int)));
   connect(this,SIGNAL(updateDrawing()),traceWidget, SLOT(updateDrawing()));
   connect(this,SIGNAL(groupsHaveBeenModified(bool)),traceWidget, SLOT(groupsModified(bool)));
-  connect(this,SIGNAL(channelsToBeSelected(const QValueList<int>&)),traceWidget,SLOT(selectChannels(const QValueList<int>&)));
+  connect(this,SIGNAL(channelsToBeSelected(const Q3ValueList<int>&)),traceWidget,SLOT(selectChannels(const Q3ValueList<int>&)));
   connect(this,SIGNAL(resetChannelOffsets(const QMap<int,int>&)),traceWidget,SLOT(resetOffsets(const QMap<int,int>&)));
-  connect(this,SIGNAL(resetChannelGains(const QValueList<int>&)),traceWidget,SLOT(resetGains(const QValueList<int>&))); 
+  connect(this,SIGNAL(resetChannelGains(const Q3ValueList<int>&)),traceWidget,SLOT(resetGains(const Q3ValueList<int>&))); 
   connect(this,SIGNAL(drawTraces()),traceWidget,SLOT(drawTraces()));
   connect(this,SIGNAL(reset()),traceWidget,SLOT(reset()));
   connect(traceWidget,SIGNAL(updateStartAndDuration(long,long)),this, SLOT(setStartAndDuration(long,long)));
   connect(this,SIGNAL(showLabels(bool)),traceWidget, SLOT(showLabels(bool)));
   connect(this,SIGNAL(displayCalibration(bool,bool)),traceWidget, SLOT(showCalibration(bool,bool)));
   connect(this,SIGNAL(newSamplingRate(long long)),traceWidget,SLOT(samplingRateModified(long long)));
-  connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QValueList<int>&,QMap<int, QValueList<int> >*,QMap<int,int>*,int,int,const QValueList<int>&)),traceWidget,
-          SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QValueList<int>&,QMap<int, QValueList<int> >*,QMap<int,int>*,int,int,const QValueList<int>&)));
+  connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,Q3ValueList<int>&,QMap<int, Q3ValueList<int> >*,QMap<int,int>*,int,int,const Q3ValueList<int>&)),traceWidget,
+          SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,Q3ValueList<int>&,QMap<int, Q3ValueList<int> >*,QMap<int,int>*,int,int,const Q3ValueList<int>&)));
   connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
-  connect(this,SIGNAL(showClusters(QString,QValueList<int>&)),traceWidget,SLOT(showClusters(QString,QValueList<int>&)));
+  connect(this,SIGNAL(showClusters(QString,Q3ValueList<int>&)),traceWidget,SLOT(showClusters(QString,Q3ValueList<int>&)));
   connect(this,SIGNAL(clusterColorUpdated(QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QString,int,bool)));
-  connect(this,SIGNAL(print(QPainter&,QPaintDeviceMetrics&,QString,bool)),traceWidget,SLOT(print(QPainter&,QPaintDeviceMetrics&,QString,bool)));
-  connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QValueList<int>&,const QValueList<int>&)),traceWidget,
-          SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QValueList<int>&,const QValueList<int>&)));
+  connect(this,SIGNAL(print(QPainter&,Q3PaintDeviceMetrics&,QString,bool)),traceWidget,SLOT(print(QPainter&,Q3PaintDeviceMetrics&,QString,bool)));
+  connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,Q3ValueList<int>&,const Q3ValueList<int>&)),traceWidget,
+          SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,Q3ValueList<int>&,const Q3ValueList<int>&)));
   connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
-  connect(this,SIGNAL(showEvents(QString,QValueList<int>&)),traceWidget,SLOT(showEvents(QString,QValueList<int>&)));
+  connect(this,SIGNAL(showEvents(QString,Q3ValueList<int>&)),traceWidget,SLOT(showEvents(QString,Q3ValueList<int>&)));
   connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QString,int,bool)));
   connect(this,SIGNAL(nextEvent()),traceWidget,SLOT(showNextEvent()));
   connect(this,SIGNAL(previousEvent()),traceWidget,SLOT(showPreviousEvent()));
@@ -129,14 +132,14 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
   connect(this,SIGNAL(updateEvents(bool,QString,double)),traceWidget,SLOT(updateEvents(bool,QString,double)));
   connect(this,SIGNAL(newEventProperties(QString,QString)),traceWidget,SLOT(eventToAddProperties(QString,QString)));
   connect(traceWidget,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
-  connect(this,SIGNAL(updateEvents(QString,QValueList<int>&,bool)),traceWidget,SLOT(updateEvents(QString,QValueList<int>&,bool)));
+  connect(this,SIGNAL(updateEvents(QString,Q3ValueList<int>&,bool)),traceWidget,SLOT(updateEvents(QString,Q3ValueList<int>&,bool)));
   connect(this,SIGNAL(nextCluster()),traceWidget,SLOT(showNextCluster()));
   connect(this,SIGNAL(previousCluster()),traceWidget,SLOT(showPreviousCluster()));
   connect(this,SIGNAL(waveformInformationUpdated(int,int,bool)),traceWidget,SLOT(updateWaveformInformation(int,int,bool)));
   connect(this,SIGNAL(clusterProviderUpdated(bool)),traceWidget,SLOT(updateClusterData(bool)));
-  connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,const QValueList<int>&)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,const QValueList<int>&)));
-  connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,const QValueList<int>&)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,const QValueList<int>&)));   
-  connect(this,SIGNAL(skipStatusChanged(const QValueList<int>&)),traceWidget,SLOT(updateSkipStatus(const QValueList<int>&)));
+  connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,const Q3ValueList<int>&)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,const Q3ValueList<int>&)));
+  connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,const Q3ValueList<int>&)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,const Q3ValueList<int>&)));   
+  connect(this,SIGNAL(skipStatusChanged(const Q3ValueList<int>&)),traceWidget,SLOT(updateSkipStatus(const Q3ValueList<int>&)));
   connect(this,SIGNAL(decreaseTheRasterHeight()),traceWidget,SLOT(decreaseRasterHeight()));
   connect(this,SIGNAL(increaseTheRasterHeight()),traceWidget,SLOT(increaseRasterHeight()));
   connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));  
@@ -157,7 +160,7 @@ NeuroscopeView::~NeuroscopeView()
 void NeuroscopeView::print(QPrinter* printer,QString filePath,bool whiteBackground)
 {
   QPainter printPainter;
-  QPaintDeviceMetrics metrics(printer);
+  Q3PaintDeviceMetrics metrics(printer);
   printPainter.begin(printer);
   
   //For the moment there is no list of contained views, therefore the signal is the only way to trigger the print of 
@@ -182,12 +185,12 @@ void NeuroscopeView::setChannelNb(int nb){
  emit reset();   
 }
 
-void NeuroscopeView::shownChannelsUpdate(const QValueList<int>& channelsToShow){
+void NeuroscopeView::shownChannelsUpdate(const Q3ValueList<int>& channelsToShow){
  shownChannels->clear();
  selectedChannels.clear();
 
  //update the list of shown channels and the list of selected channels
- QValueList<int>::const_iterator shownChannelsIterator;
+ Q3ValueList<int>::const_iterator shownChannelsIterator;
  for(shownChannelsIterator = channelsToShow.begin(); shownChannelsIterator != channelsToShow.end(); ++shownChannelsIterator){
   shownChannels->append(*shownChannelsIterator);
   selectedChannels.append(*shownChannelsIterator);
@@ -220,18 +223,18 @@ void NeuroscopeView::setClusterWaveforms(bool waveforms){
 }
 
 void NeuroscopeView::setClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
-                                        QValueList<int>& clustersToShow,QMap<int,QValueList<int> >* displayGroupsClusterFile,
-                                        QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QValueList<int>& clustersToSkip){
-  QValueList<int>* currentSelectedClusters = new QValueList<int>();
-  QValueList<int>::iterator shownClustersIterator;
+                                        Q3ValueList<int>& clustersToShow,QMap<int,Q3ValueList<int> >* displayGroupsClusterFile,
+                                        QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip){
+  Q3ValueList<int>* currentSelectedClusters = new Q3ValueList<int>();
+  Q3ValueList<int>::iterator shownClustersIterator;
   for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator)
    currentSelectedClusters->append(*shownClustersIterator);    
    
   selectedClusters.insert(name,currentSelectedClusters);
 
   
-  QValueList<int>* currentSkippedClusters = new QValueList<int>();
-  QValueList<int>::const_iterator skippedClustersIterator;
+  Q3ValueList<int>* currentSkippedClusters = new Q3ValueList<int>();
+  Q3ValueList<int>::const_iterator skippedClustersIterator;
   for(skippedClustersIterator = clustersToSkip.begin(); skippedClustersIterator != clustersToSkip.end(); ++skippedClustersIterator)
    currentSkippedClusters->append(*skippedClustersIterator);
    
@@ -247,12 +250,12 @@ void NeuroscopeView::removeClusterProvider(QString name,bool active){
   emit clusterProviderRemoved(name,active);
 }
 
-void NeuroscopeView::shownClustersUpdate(QString name,QValueList<int>& clustersToShow){
- QValueList<int>* currentSelectedClusters = selectedClusters[name];
+void NeuroscopeView::shownClustersUpdate(QString name,Q3ValueList<int>& clustersToShow){
+ Q3ValueList<int>* currentSelectedClusters = selectedClusters[name];
  currentSelectedClusters->clear();
  
  //update the list of shown clusters
- QValueList<int>::iterator iterator;
+ Q3ValueList<int>::iterator iterator;
  for(iterator = clustersToShow.begin(); iterator != clustersToShow.end(); ++iterator){
   currentSelectedClusters->append(*iterator);
  }
@@ -263,12 +266,12 @@ void NeuroscopeView::shownClustersUpdate(QString name,QValueList<int>& clustersT
  showAllWidgets(); 
 }
 
-void NeuroscopeView::updateNoneBrowsingClusterList(QString providerName,const QValueList<int>& clustersToNotBrowse){
- QValueList<int>* currentSkippedClusters = clustersNotUsedForBrowsing[providerName];
+void NeuroscopeView::updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse){
+ Q3ValueList<int>* currentSkippedClusters = clustersNotUsedForBrowsing[providerName];
  currentSkippedClusters->clear();
 
  //update the list of skipped events
- QValueList<int>::const_iterator skippedClustersIterator;
+ Q3ValueList<int>::const_iterator skippedClustersIterator;
  for(skippedClustersIterator = clustersToNotBrowse.begin(); skippedClustersIterator != clustersToNotBrowse.end(); ++skippedClustersIterator){
   currentSkippedClusters->append(*skippedClustersIterator);
  }
@@ -278,17 +281,17 @@ void NeuroscopeView::updateNoneBrowsingClusterList(QString providerName,const QV
 
 
 void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
-                                      QValueList<int>& eventsToShow,const QValueList<int>& eventsToSkip){
-  QValueList<int>* currentSelectedEvents = new QValueList<int>();
-  QValueList<int>::iterator shownEventsIterator;
+                                      Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToSkip){
+  Q3ValueList<int>* currentSelectedEvents = new Q3ValueList<int>();
+  Q3ValueList<int>::iterator shownEventsIterator;
   for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator)
    currentSelectedEvents->append(*shownEventsIterator);
 
   selectedEvents.insert(name,currentSelectedEvents);
 
 
-  QValueList<int>* currentSkippedEvents = new QValueList<int>();
-  QValueList<int>::const_iterator skippedEventsIterator;
+  Q3ValueList<int>* currentSkippedEvents = new Q3ValueList<int>();
+  Q3ValueList<int>::const_iterator skippedEventsIterator;
   for(skippedEventsIterator = eventsToSkip.begin(); skippedEventsIterator != eventsToSkip.end(); ++skippedEventsIterator)
    currentSkippedEvents->append(*skippedEventsIterator);
 
@@ -307,12 +310,12 @@ void NeuroscopeView::removeEventProvider(QString name,bool active,bool lastFile)
   emit eventProviderRemoved(name,active,lastFile);
 }
 
-void NeuroscopeView::shownEventsUpdate(QString name,QValueList<int>& eventsToShow){
- QValueList<int>* currentSelectedEvents = selectedEvents[name];
+void NeuroscopeView::shownEventsUpdate(QString name,Q3ValueList<int>& eventsToShow){
+ Q3ValueList<int>* currentSelectedEvents = selectedEvents[name];
  currentSelectedEvents->clear();
 
  //update the list of shown clusters
- QValueList<int>::iterator iterator;
+ Q3ValueList<int>::iterator iterator;
  for(iterator = eventsToShow.begin(); iterator != eventsToShow.end(); ++iterator){
   currentSelectedEvents->append(*iterator);
  }
@@ -325,12 +328,12 @@ void NeuroscopeView::shownEventsUpdate(QString name,QValueList<int>& eventsToSho
 }
 
 
-void NeuroscopeView::updateNoneBrowsingEventList(QString providerName,const QValueList<int>& eventsToNotBrowse){
- QValueList<int>* currentSkippedEvents = eventsNotUsedForBrowsing[providerName];
+void NeuroscopeView::updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse){
+ Q3ValueList<int>* currentSkippedEvents = eventsNotUsedForBrowsing[providerName];
  currentSkippedEvents->clear();
  
  //update the list of skipped events
- QValueList<int>::const_iterator skippedEventsIterator;
+ Q3ValueList<int>::const_iterator skippedEventsIterator;
  for(skippedEventsIterator = eventsToNotBrowse.begin(); skippedEventsIterator != eventsToNotBrowse.end(); ++skippedEventsIterator)
   currentSkippedEvents->append(*skippedEventsIterator);
   
@@ -348,7 +351,7 @@ void NeuroscopeView::updateEventsAfterRemoval(QString providerName,int eventId,f
 }
 
 void NeuroscopeView::updateEventsAfterAddition(QString providerName,int eventId,float time,bool active){
- QValueList<int>* currentSelectedEvents = selectedEvents[providerName];
+ Q3ValueList<int>* currentSelectedEvents = selectedEvents[providerName];
  
  if(active && !currentSelectedEvents->contains(eventId)){
    currentSelectedEvents->append(eventId);
@@ -362,9 +365,9 @@ void NeuroscopeView::updateEventsAfterAddition(QString providerName,int eventId,
 void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>& oldNewEventIds,int modifiedEventId,bool active,bool added){
 
   if(eventsNotUsedForBrowsing.find(providerName) != 0){ 
-   QValueList<int>* currentSkippedEvents = eventsNotUsedForBrowsing.take(providerName);
-   QValueList<int>* newSkippedEventsIds = new QValueList<int>();
-   QValueList<int>::iterator iterator;
+   Q3ValueList<int>* currentSkippedEvents = eventsNotUsedForBrowsing.take(providerName);
+   Q3ValueList<int>* newSkippedEventsIds = new Q3ValueList<int>();
+   Q3ValueList<int>::iterator iterator;
 
    //An event description has been added
    if(added){
@@ -387,9 +390,9 @@ void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>&
   }
   
   if(selectedEvents.find(providerName) != 0){ 
-  QValueList<int>* currentSelectedEvents = selectedEvents.take(providerName);
-  QValueList<int>* newSelectedEventsIds = new QValueList<int>();
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int>* currentSelectedEvents = selectedEvents.take(providerName);
+  Q3ValueList<int>* newSelectedEventsIds = new Q3ValueList<int>();
+  Q3ValueList<int>::iterator iterator;
   
   //An event description has been added
   if(added){
@@ -447,12 +450,12 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
  connect(this,SIGNAL(positionInformationUpdated(int,int,QImage,bool,bool)),positionView,SLOT(updatePositionInformation(int,int,QImage,bool,bool)));
  connect(this,SIGNAL(timeChanged(long,long)),positionView,SLOT(displayTimeFrame(long,long)));
  connect(this,SIGNAL(changeBackgroundColor(QColor)),positionView, SLOT(changeBackgroundColor(QColor)));
- connect(traceWidget,SIGNAL(eventsAvailable(QDict<EventData>&,QMap<QString, QValueList<int> >&,
-         QDict<ItemColors>&,QObject*,double)),positionView,SLOT(dataAvailable(QDict<EventData>&,QMap<QString, QValueList<int> >&,QDict<ItemColors>&,QObject*,double)));
+ connect(traceWidget,SIGNAL(eventsAvailable(Q3Dict<EventData>&,QMap<QString, Q3ValueList<int> >&,
+         Q3Dict<ItemColors>&,QObject*,double)),positionView,SLOT(dataAvailable(Q3Dict<EventData>&,QMap<QString, Q3ValueList<int> >&,Q3Dict<ItemColors>&,QObject*,double)));
  connect(this,SIGNAL(updateEventDisplay()),positionView,SLOT(updateEventDisplay()));        
  connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),positionView,SLOT(eventColorUpdate(QString,int,bool)));
  connect(this,SIGNAL(updateDrawing()),positionView, SLOT(updateDrawing()));
- connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QValueList<int>&,const QValueList<int>&)),positionView,SLOT(addEventProvider()));
+ connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,Q3ValueList<int>&,const Q3ValueList<int>&)),positionView,SLOT(addEventProvider()));
  connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),positionView,SLOT(removeEventProvider(QString,bool,bool)));
  connect(this,SIGNAL(eventsShownInPositionView(bool)),positionView,SLOT(setEventsInPositionView(bool))); 
        
@@ -477,7 +480,7 @@ void NeuroscopeView::removePositionView(){
  isPositionFileShown = false;  
 }
  
-void NeuroscopeView::resetOffsets(const QValueList<int>& selectedIds){
+void NeuroscopeView::resetOffsets(const Q3ValueList<int>& selectedIds){
  NeuroscopeDoc* doc = mainWindow.getDocument(); 
  
  const QMap<int,int>& channelDefaultOffsets = doc->getChannelDefaultOffsets();
@@ -485,7 +488,7 @@ void NeuroscopeView::resetOffsets(const QValueList<int>& selectedIds){
  
  //update the list of selected channels
  selectedChannels.clear();
- QValueList<int>::const_iterator selectedIterator;
+ Q3ValueList<int>::const_iterator selectedIterator;
  for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
   selectedChannels.append(*selectedIterator);
   selectedChannelDefaultOffsets.insert(*selectedIterator,channelDefaultOffsets[*selectedIterator]);

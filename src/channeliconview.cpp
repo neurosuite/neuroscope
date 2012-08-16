@@ -24,18 +24,23 @@
 // include files for Qt
 #include <qcursor.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 
 
 ChannelIconView::ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool edit,QWidget* parent,const char* name,WFlags f):
-QIconView(parent,name,f){
+Q3IconView(parent,name,f){
   QFont font( "Helvetica",8);
   setFont(font);
   setSpacing(4);
-  setFrameStyle(QFrame::Box | QFrame::Plain);
+  setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
   setLineWidth(1);  
-  setArrangement(QIconView::LeftToRight);
-  setResizeMode(QIconView::Adjust);
+  setArrangement(Q3IconView::LeftToRight);
+  setResizeMode(Q3IconView::Adjust);
   setGridX(gridX);
   setGridY(gridY);
   arrangeItemsInGrid();
@@ -48,11 +53,11 @@ QIconView(parent,name,f){
   int v;
   backgroundColor.hsv(&h,&s,&v);
   QColor legendColor;
-  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = black;
-  else legendColor = white;
+  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+  else legendColor = Qt::white;
   setPaletteForegroundColor(legendColor);
   
-  setSelectionMode(QIconView::Extended);
+  setSelectionMode(Q3IconView::Extended);
   if(edit){
    drag = true;
    setItemsMovable(true);
@@ -65,25 +70,25 @@ QIconView(parent,name,f){
   setAutoArrange(true);
   setSorting(false);
   
-  setHScrollBarMode(QScrollView::AlwaysOff);
-  setVScrollBarMode(QScrollView::AlwaysOff);
+  setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-  connect(this,SIGNAL(dropped(QDropEvent *,const QValueList<QIconDragItem> &)),
-   this,SLOT(slotDropped(QDropEvent *,const QValueList<QIconDragItem> &)));
+  connect(this,SIGNAL(dropped(QDropEvent *,const Q3ValueList<Q3IconDragItem> &)),
+   this,SLOT(slotDropped(QDropEvent *,const Q3ValueList<Q3IconDragItem> &)));
 }
 
-QDragObject* ChannelIconView::dragObject(){
+Q3DragObject* ChannelIconView::dragObject(){
  if(!currentItem() || !drag) return 0;
 
- QIconDrag* drag = new QIconDrag(viewport());
+ Q3IconDrag* drag = new Q3IconDrag(viewport());
  drag->setPixmap(*currentItem()->pixmap(),
       QPoint(currentItem()->pixmapRect().width() / 2, currentItem()->pixmapRect().height() / 2));
 
  QPoint orig = viewportToContents( viewport()->mapFromGlobal(QCursor::pos()));
  //Insert only one item to have a pixmap to draw.
- for(QIconViewItem* item = firstItem();item; item = item->nextItem()){
+ for(Q3IconViewItem* item = firstItem();item; item = item->nextItem()){
   if(item->isSelected()){
-     QIconDragItem id;
+     Q3IconDragItem id;
      id.setData(item->text().local8Bit());
      drag->append(id,
  		  QRect(item->pixmapRect(FALSE).x() - orig.x(),
@@ -99,7 +104,7 @@ QDragObject* ChannelIconView::dragObject(){
   return drag;
 }
 
-void ChannelIconView::slotDropped(QDropEvent* event,const QValueList<QIconDragItem>& draggedList){
+void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
  //The source of the drag is not a widget of the application
  if(event->source() == 0 || !drag){
 	event->ignore();
@@ -109,7 +114,7 @@ void ChannelIconView::slotDropped(QDropEvent* event,const QValueList<QIconDragIt
  //Drop of a label to move the whole block
  if(QString(event->format()).contains("text/plain")){
   QString information;
-  if(QTextDrag::decode(event,information)){
+  if(Q3TextDrag::decode(event,information)){
    int groupSource = information.section("-",0,0).toInt();
    int start = information.section("-",1,1).toInt();
    QString groupTarget = this->name();
@@ -124,8 +129,8 @@ void ChannelIconView::slotDropped(QDropEvent* event,const QValueList<QIconDragIt
 
   QString groupSource = (event->source())->parent()->name();
 
-  QValueList<int> channelIds;
-  QValueList<QIconDragItem>::const_iterator iterator;
+  Q3ValueList<int> channelIds;
+  Q3ValueList<Q3IconDragItem>::const_iterator iterator;
   for(iterator = draggedList.begin(); iterator != draggedList.end(); ++iterator){
    QTextCodec* codec = QTextCodec::codecForLocale();
    QByteArray data =  (*iterator).data();
@@ -133,8 +138,8 @@ void ChannelIconView::slotDropped(QDropEvent* event,const QValueList<QIconDragIt
    channelIds.append(channelId);
   }
 
-  QValueList<int> selectedChannels;
-  for(QIconViewItem* item = firstItem(); item; item = item->nextItem())
+  Q3ValueList<int> selectedChannels;
+  for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
    if(item->isSelected()) selectedChannels.append(item->text().toInt());
 
   //If all the channels are selected insert after the first one. 
@@ -143,7 +148,7 @@ void ChannelIconView::slotDropped(QDropEvent* event,const QValueList<QIconDragIt
    return; 
   }
     
-  QIconViewItem* after = findItemToInsertAfter(event->pos());
+  Q3IconViewItem* after = findItemToInsertAfter(event->pos());
   emit channelsMoved(this->name(),after);
  }
 }
@@ -154,51 +159,51 @@ void ChannelIconView::contentsDropEvent(QDropEvent* event){
  	return;
   }
  if((event->source())->parent()->name() != name()){
-  QIconView::contentsDropEvent(event);
+  Q3IconView::contentsDropEvent(event);
   return;
  }
 
  //Move items around in the iconview 
- QIconViewItem* item = findItem(event->pos());
+ Q3IconViewItem* item = findItem(event->pos());
  if(item == 0){
-  QValueList<int> selectedChannels;
-  for(QIconViewItem* item = firstItem(); item; item = item->nextItem())
+  Q3ValueList<int> selectedChannels;
+  for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
    if(item->isSelected()) selectedChannels.append(item->text().toInt());
 
   //If all the items have been selected, do not do anything 
   if(selectedChannels.size() == count()){
-   QIconView::contentsDropEvent(event);
+   Q3IconView::contentsDropEvent(event);
    arrangeItemsInGrid();
    return;
   }
 
-  QIconViewItem* after = findItemToInsertAfter(event->pos());
+  Q3IconViewItem* after = findItemToInsertAfter(event->pos());
  
-  QIconView::contentsDropEvent(event);
+  Q3IconView::contentsDropEvent(event);
   emit channelsMoved(selectedChannels,this->name(),after); 
  }  
  else{
-  QIconView::contentsDropEvent(event);
+  Q3IconView::contentsDropEvent(event);
   return;
  }
 }
 
-QIconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
+Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
   int posX = position.x();
   int posY = position.y();
     
   int firstY = firstItem()->pos().y();  
   //test if the position is above all the other items, if so find the item to insert after.
   if(posY < firstY){
-   QIconViewItem* after = 0L; 
-   for(QIconViewItem* item = firstItem(); item; item = item->nextItem()){
+   Q3IconViewItem* after = 0L; 
+   for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem()){
     if(!item->isSelected()){
       after = item;
      if(((item->pos().y() == firstY) && (item->pos().x() >= posX)) || (item->pos().y() > firstY)){
       if(item->index() == 0) return 0; 
       else{
        //take the first item before the current one which is not selected (<=> not to be moved)
-       QIconViewItem* after = item->prevItem(); 
+       Q3IconViewItem* after = item->prevItem(); 
        while(after->isSelected()){
         if(after->index() == 0) return 0;
         else after = after->prevItem(); 
@@ -215,7 +220,7 @@ QIconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
   int lastY = lastItem()->pos().y(); 
   //else test if the position is below all the other items, if so find item to insert after.
   if(posY > lastY){
-   for(QIconViewItem* item = lastItem(); item; item = item->prevItem()){
+   for(Q3IconViewItem* item = lastItem(); item; item = item->prevItem()){
     if(!item->isSelected()){
      if(((item->pos().y() == lastY) && (item->pos().x() <= posX)) || (item->pos().y() < lastY)){
       if(item->index() == 0 && posX < item->pos().x()) return 0;
@@ -225,7 +230,7 @@ QIconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
    }  
   }
   //else the other cases
-  QIconViewItem* item;
+  Q3IconViewItem* item;
   for(item = lastItem(); item;item = item->prevItem())
    if(!item->isSelected() && (item->pos().y() <= posY)) break;
 
@@ -245,7 +250,7 @@ QIconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
 
 void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
  //If the user did not clicked on an item, ignore the click
- QIconViewItem* item = findItem(event->pos()); 
+ Q3IconViewItem* item = findItem(event->pos()); 
  if(item == 0L) return;
 
 //  if(event->button() == LeftButton && !(event->state() & ShiftButton) &&
@@ -253,7 +258,7 @@ void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
 //    emit moussePressWoModificators(this->name());
 //  }
 
- QIconView::contentsMousePressEvent(event);
+ Q3IconView::contentsMousePressEvent(event);
 }
 
 

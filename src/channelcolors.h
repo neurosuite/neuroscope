@@ -19,9 +19,9 @@
 #define CHANNELCOLORS_H
 
 // include files for Qt
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qcolor.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 /**
   * This class represents the list of the channels with their associated id, colors
@@ -59,7 +59,7 @@ private:
   };
 
   /**list of the ChannelColor contained in the class.*/
-  QPtrList<ChannelColor> channelList;
+  Q3PtrList<ChannelColor> channelList;
 
   /**
   * Looks up for the channel id @p channelId.

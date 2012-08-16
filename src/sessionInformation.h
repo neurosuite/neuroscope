@@ -19,7 +19,7 @@
 #define SESSIONINFORMATION_H
 
 //include files for QT
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdatetime.h>
 #include <qcolor.h>
 #include <qstring.h>
@@ -186,7 +186,7 @@ public:
   * @param clusterFile cluster file url.  
   * @param clusterIds list of selected cluster ids.
   */
-  inline void setSelectedClusters(QString clusterFile,QValueList<int> clusterIds){
+  inline void setSelectedClusters(QString clusterFile,Q3ValueList<int> clusterIds){
     selectedClusters.insert(clusterFile,clusterIds);
   };
   
@@ -194,7 +194,7 @@ public:
   * @param eventFile event file url.
   * @param eventIds list of selected eventIds.
   */
-  inline void setSelectedEvents(QString eventFile,QValueList<int> eventIds){
+  inline void setSelectedEvents(QString eventFile,Q3ValueList<int> eventIds){
     selectedEvents.insert(eventFile,eventIds);
   };
 
@@ -203,7 +203,7 @@ public:
   * @param clusterFile cluster file url.
   * @param clusterIds list of cluster ids to skip while browsing.
   */
-  inline void setSkippedClusters(QString clusterFile,QValueList<int> clusterIds){
+  inline void setSkippedClusters(QString clusterFile,Q3ValueList<int> clusterIds){
     skippedClusters.insert(clusterFile,clusterIds);
   };
 
@@ -211,29 +211,29 @@ public:
   * @param eventFile event file url.
   * @param eventIds list of eventIds to skip while browsing.
   */
-  inline void setSkippedEvents(QString eventFile,QValueList<int> eventIds){
+  inline void setSkippedEvents(QString eventFile,Q3ValueList<int> eventIds){
     skippedEvents.insert(eventFile,eventIds);
   };
 
   /**Sets the list of the spike files shown in the display (without cluster file associated).
   * @param files list of the spike files.
   */
-  inline void setSelectedSpikeFiles(QValueList<QString> files){shownSpikeFiles = files;};
+  inline void setSelectedSpikeFiles(Q3ValueList<QString> files){shownSpikeFiles = files;};
 
    /**Sets the list of TracePosition.
   * @param positions list of TracePosition.
   */
-  inline void setPositions(QValueList<TracePosition> positions){this->positions = positions;};
+  inline void setPositions(Q3ValueList<TracePosition> positions){this->positions = positions;};
     
   /**Sets the list of channel ids shown in the display.
   * @param ids list of channel ids.
   */
-  inline void setChannelIds(QValueList<int> ids) {channelIds = ids;};
+  inline void setChannelIds(Q3ValueList<int> ids) {channelIds = ids;};
 
   /**Sets the list channel ids selected in the display.
   * @param ids list of channel ids.
   */
-  inline void setSelectedChannelIds(QValueList<int> ids){selectedChannelIds = ids;};
+  inline void setSelectedChannelIds(Q3ValueList<int> ids){selectedChannelIds = ids;};
 
   /**Sets the starting time in miliseconds.
   * @param start starting time.
@@ -268,7 +268,7 @@ public:
   /**Gets the list of type of spike display used (see DisplayInformation#displayType).
   * @return list of types of spike display.
   */
-  inline QValueList<spikeDisplayType> getSpikeDisplayTypes() const{return spikeDisplayTypes;};
+  inline Q3ValueList<spikeDisplayType> getSpikeDisplayTypes() const{return spikeDisplayTypes;};
 
   /**Gets the mode of presentation (see DisplayInformation#mode).
   * @return mode of presentation.
@@ -288,42 +288,42 @@ public:
   /**Gets the selected clusters by cluster file.
   * @return map of the cluster file url with the list of selected clusterIds.
   */
-  inline QMap<QString, QValueList<int> > getSelectedClusters() const{return selectedClusters;};
+  inline QMap<QString, Q3ValueList<int> > getSelectedClusters() const{return selectedClusters;};
 
   /**Gets the selected events by event file.
   * @return map of the event file url with the list of selected eventIds.
   */
-  inline QMap<QString, QValueList<int> > getSelectedEvents() const{return selectedEvents;};
+  inline QMap<QString, Q3ValueList<int> > getSelectedEvents() const{return selectedEvents;};
 
   /**Gets the skipped clusters by cluster file.
   * @return map of the cluster file url with the list of clusterIds to skip while browsing.
   */
-  inline QMap<QString, QValueList<int> > getSkippedClusters() const{return skippedClusters;};
+  inline QMap<QString, Q3ValueList<int> > getSkippedClusters() const{return skippedClusters;};
 
   /**Gets the skipped events by event file.
   * @return map of the event file url with the list of eventIds to skip while browsing.
   */
-  inline QMap<QString, QValueList<int> > getSkippedEvents() const{return skippedEvents;};
+  inline QMap<QString, Q3ValueList<int> > getSkippedEvents() const{return skippedEvents;};
 
   /**Gets the list of the spike files shown in the display (without cluster file associated).
   * @return list of the spike files.
   */
-  inline QValueList<QString> getSelectedSpikeFiles() const{return shownSpikeFiles;};
+  inline Q3ValueList<QString> getSelectedSpikeFiles() const{return shownSpikeFiles;};
 
   /**Gets the list of TracePosition.
   * @return list of TracePosition.
   */
-  inline QValueList<TracePosition> getPositions() const{return positions;};
+  inline Q3ValueList<TracePosition> getPositions() const{return positions;};
 
   /**Gets the list of channel ids shown in the display.
   * @return list of channel ids.
   */
-  inline QValueList<int> getChannelIds() const{return channelIds;};
+  inline Q3ValueList<int> getChannelIds() const{return channelIds;};
 
   /**Gets the list channel ids selected in the display.
   * @return list of channel ids.
   */
-  inline QValueList<int> getSelectedChannelIds() const{return selectedChannelIds;};
+  inline Q3ValueList<int> getSelectedChannelIds() const{return selectedChannelIds;};
 
   /** Gets the label for the display when in tab page mode.
   * @return the new label for the display.
@@ -359,7 +359,7 @@ public:
   
 private:
   /**List of the display types.*/
-  QValueList<spikeDisplayType> spikeDisplayTypes;
+  Q3ValueList<spikeDisplayType> spikeDisplayTypes;
 
   /**Mode of presentation.*/
   mode presentationMode;
@@ -371,28 +371,28 @@ private:
   int greyScale;
 
   /**Map of the cluster file paths with the list of selected clusterIds.*/
-  QMap<QString, QValueList<int> > selectedClusters;
+  QMap<QString, Q3ValueList<int> > selectedClusters;
 
   /**Map of the event file paths with the list of selected eventIds.*/
-  QMap<QString, QValueList<int> > selectedEvents;
+  QMap<QString, Q3ValueList<int> > selectedEvents;
 
   /**Map of the cluster file paths with the list of clusterIds to skip while browsing.*/
-  QMap<QString, QValueList<int> > skippedClusters;
+  QMap<QString, Q3ValueList<int> > skippedClusters;
 
   /**Map of the event file paths with the list of selected eventIds to skip while browsing.*/
-  QMap<QString, QValueList<int> > skippedEvents;
+  QMap<QString, Q3ValueList<int> > skippedEvents;
   
   /**List of the spike files shown in the display (without cluster file associated).*/
-  QValueList<QString> shownSpikeFiles;
+  Q3ValueList<QString> shownSpikeFiles;
 
   /**List of TracePosition.*/
-  QValueList<TracePosition> positions;
+  Q3ValueList<TracePosition> positions;
 
   /**List of channels shown in the display.*/
-  QValueList<int> channelIds;
+  Q3ValueList<int> channelIds;
 
   /**List of channels selected in the display.*/
-  QValueList<int> selectedChannelIds;
+  Q3ValueList<int> selectedChannelIds;
 
   /**Label for the display when in tab page mode.*/
   QString tabLabel;

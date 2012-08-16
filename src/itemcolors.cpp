@@ -19,6 +19,9 @@
 
 //C, C++ include files
 #include <iostream>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 using namespace std;
 
@@ -34,7 +37,7 @@ ItemColors::~ItemColors(){
 ItemColors::ItemColors(const ItemColors& origin):colorChanged(origin.colorChanged){
   //Insert into itemList a deep copy of all the elements of origin.itemList
   ItemColor* itemColor;
-  QPtrList<ItemColor> originItemList =  origin.itemList;
+  Q3PtrList<ItemColor> originItemList =  origin.itemList;
 
   for(itemColor = originItemList.first(); itemColor; itemColor = originItemList.next()){
     itemList.append(new ItemColor(*itemColor));
@@ -131,7 +134,7 @@ bool ItemColors::remove(int identifier, SelectionMode mode){
 ItemColors::ItemColor* ItemColors::itemColor(int itemId) const{
 
   //Iterate on the list until the item is find
-  QPtrListIterator<ItemColors::ItemColor> iterator(itemList);
+  Q3PtrListIterator<ItemColors::ItemColor> iterator(itemList);
   ItemColors::ItemColor* itemColor = 0L;
   while((itemColor = iterator.current()) != 0) {
    ++iterator;
@@ -142,7 +145,7 @@ ItemColors::ItemColor* ItemColors::itemColor(int itemId) const{
 
 int ItemColors::itemColorIndex(int itemId) const{
   //Iterate on the list until the item is find
-  QPtrListIterator<ItemColors::ItemColor> iterator(itemList);
+  Q3PtrListIterator<ItemColors::ItemColor> iterator(itemList);
   ItemColors::ItemColor* itemColor;
   int index = 0;
   while((itemColor = iterator.current()) != 0) {
@@ -153,8 +156,8 @@ int ItemColors::itemColorIndex(int itemId) const{
   return -1;//Normally never reach
 }
 
-QValueList<int> ItemColors::colorChangedItemList(){
-  QValueList<int> changedList;
+Q3ValueList<int> ItemColors::colorChangedItemList(){
+  Q3ValueList<int> changedList;
   ItemColor* itemColor;
   for (itemColor = itemList.first(); itemColor; itemColor = itemList.next()){
    if(itemColor->isChanged) changedList.append(itemColor->itemId);
@@ -165,7 +168,7 @@ QValueList<int> ItemColors::colorChangedItemList(){
 void ItemColors::resetAllColorStatus(){
   setColorChanged(false);
 
-  QValueList<int> changedList;
+  Q3ValueList<int> changedList;
   ItemColor* itemColor;
   for (itemColor = itemList.first(); itemColor; itemColor = itemList.next()){
    if(itemColor->isChanged) itemColor->isChanged = false;

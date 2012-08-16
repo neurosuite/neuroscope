@@ -20,15 +20,18 @@
 
 // include files for QT
 #include <qwidget.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qspinbox.h>
 #include <qvalidator.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qscrollbar.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpainter.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <Q3ValueList>
 
 //Inclused files for KDE
 #include <kstatusbar.h>
@@ -47,7 +50,7 @@ class ChannelColors;
   * Class containing the TraceView and all the widgets used to select the position in the file.
   * @author Lynn Hazan
   */
-class TraceWidget : public QVBox  {
+class TraceWidget : public Q3VBox  {
    Q_OBJECT
 
 public:
@@ -85,9 +88,9 @@ public:
   * @param border size of the border between the frame and the contents.
   */
    TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
-             bool raster,bool waveforms,bool labelsDisplay,QValueList<int>& channelsToDisplay,int gain,int acquisitionGain,ChannelColors* channelColors,
-             QMap<int, QValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,QValueList<int>& channelOffsets,
-             QValueList<int>& gains,const QValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage, QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,
+             bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int gain,int acquisitionGain,ChannelColors* channelColors,
+             QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,Q3ValueList<int>& channelOffsets,
+             Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage, QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,
              KStatusBar* statusBar = 0L,int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
              int windowBottomRight = 1001, int border = 0);
 
@@ -161,7 +164,7 @@ public slots:
   /** Informs listener that the channels @p selectedIds have been selected.
   * @param selectedIds the list of channels selected by the user in a view.
   */
-  inline void slotChannelsSelected(const QValueList<int>& selectedIds) {emit channelsSelected(selectedIds);};
+  inline void slotChannelsSelected(const Q3ValueList<int>& selectedIds) {emit channelsSelected(selectedIds);};
 
   /**Change the current mode, call by a selection of a tool.
   * @param selectedMode new mode of drawing.
@@ -173,7 +176,7 @@ public slots:
   * Updates the list of channels shown with @p channelsToShow.
   * @param channelsToShow new list of channels to be shown.
   */
-  inline void showChannels(const QValueList<int>& channelsToShow){
+  inline void showChannels(const Q3ValueList<int>& channelsToShow){
    view.showChannels(channelsToShow);
   };
 
@@ -183,7 +186,7 @@ public slots:
   * @param name name use to identified the cluster provider containing the clusters to show.
   * @param clustersToShow new list of clusters to be shown.
   */
-  inline void showClusters(QString name,QValueList<int>& clustersToShow){
+  inline void showClusters(QString name,Q3ValueList<int>& clustersToShow){
    view.showClusters(name,clustersToShow);
   };
 
@@ -193,7 +196,7 @@ public slots:
   * @param name name use to identified the event provider containing the events to show.
   * @param eventsToShow new list of events to be shown.
   */
-  inline void showEvents(QString name,QValueList<int>& eventsToShow){
+  inline void showEvents(QString name,Q3ValueList<int>& eventsToShow){
    view.showEvents(name,eventsToShow);
   };
 
@@ -234,12 +237,12 @@ public slots:
   /**Triggers the increase of the amplitude of the selected channels.
   * @param channelIds ids of the channels for which the amplitude has to be increased.
   */
-  inline void increaseSelectedChannelsAmplitude(const QValueList<int>& channelIds){view.increaseSelectedChannelsAmplitude(channelIds);};
+  inline void increaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds){view.increaseSelectedChannelsAmplitude(channelIds);};
 
   /**Triggers the decrease of the amplitude of the selected channels.
   * @param channelIds ids of the channels for which the amplitude has to be decreased.
   */
-  inline void decreaseSelectedChannelsAmplitude(const QValueList<int>& channelIds){view.decreaseSelectedChannelsAmplitude(channelIds);};
+  inline void decreaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds){view.decreaseSelectedChannelsAmplitude(channelIds);};
 
   /**Sets the unit gain and the acquisition system gain.
   * @param gain initial gain use to draw the traces in the TraceView.
@@ -261,7 +264,7 @@ public slots:
   /**Selects the channels in the TraceView.
   *@param selectedIds ids of the selected channels.
   */
-  inline void selectChannels(const QValueList<int>& selectedIds){view.selectChannels(selectedIds);};
+  inline void selectChannels(const Q3ValueList<int>& selectedIds){view.selectChannels(selectedIds);};
 
   /**Resets the offset of the selected channels to the default values.
   * @param selectedChannelDefaultOffsets map given the default offsets for the selected channels.
@@ -271,7 +274,7 @@ public slots:
   /**Resets the gain of the selected channels.
   *@param selectedChannels ids of the selected channels.
   */
-  void resetGains(const QValueList<int>& selectedChannels){view.resetGains(selectedChannels);};
+  void resetGains(const Q3ValueList<int>& selectedChannels){view.resetGains(selectedChannels);};
 
   /**Informs the view to update the traces for the current time frame.*/
   inline void drawTraces(){view.displayTimeFrame(startTime,timeWindow);};
@@ -318,8 +321,8 @@ public slots:
   * @param clustersToSkip list of clusters to not use while browsing.
   */
   inline void addClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
-                                 QValueList<int>& clustersToShow,QMap<int, QValueList<int> >* displayGroupsClusterFile,
-                                 QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QValueList<int>& clustersToSkip){
+                                 Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,
+                                 QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip){
    view.addClusterProvider(clustersProvider,name,clusterColors,active,clustersToShow,displayGroupsClusterFile,
                           channelsSpikeGroups,nbSamplesBefore,nbSamplesAfter,clustersToSkip);
   };
@@ -341,7 +344,7 @@ public slots:
   * @param eventsToNotBrowse list of events to not use while browsing.
   */
   inline void addEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
-                                 QValueList<int>& eventsToShow,const QValueList<int>& eventsToNotBrowse){
+                                 Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToNotBrowse){
    view.addEventProvider(eventsProvider,name,eventColors,active,eventsToShow,eventsToNotBrowse);
   };
 
@@ -360,13 +363,13 @@ public slots:
   * @param filePath path of the opened document.
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   */
-  inline void print(QPainter& printPainter,QPaintDeviceMetrics& metrics,QString filePath,bool whiteBackground){
+  inline void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,QString filePath,bool whiteBackground){
 
    QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
    QFont f("Helvetica",8);
    printPainter.setFont(f);
-   printPainter.setPen(black);
-   printPainter.drawText(textRec,Qt::AlignAuto | Qt::AlignVCenter,
+   printPainter.setPen(Qt::black);
+   printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
     QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(filePath).arg(startMinute->value()).arg(startSecond->value()).arg(startMilisecond->value()).arg(duration->displayText()));
 
    //Modify the viewport so the view will not draw on the legend
@@ -457,7 +460,7 @@ public slots:
   * @param eventsToShow new list of events to be shown.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void updateEvents(QString providerName,QValueList<int>& eventsToShow,bool active){
+  inline void updateEvents(QString providerName,Q3ValueList<int>& eventsToShow,bool active){
     view.updateEvents(providerName,eventsToShow,active);
   };
 
@@ -479,7 +482,7 @@ public slots:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-  inline void updateNoneBrowsingEventList(QString providerName,const QValueList<int>& eventsToNotBrowse){
+  inline void updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse){
    view.updateNoneBrowsingEventList(providerName,eventsToNotBrowse);
   };
 
@@ -487,7 +490,7 @@ public slots:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param clustersToNotBrowse new list of clusters to not use while browsing.
   */
-  inline void updateNoneBrowsingClusterList(QString providerName,const QValueList<int>& clustersToNotBrowse){
+  inline void updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse){
    view.updateNoneBrowsingClusterList(providerName,clustersToNotBrowse);
   };
 
@@ -504,14 +507,14 @@ public slots:
   * @param clusterColors list of colors for the clusters.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void updateClusters(QString name,QValueList<int>& clustersToShow,ItemColors* clusterColors,bool active){
+  inline void updateClusters(QString name,Q3ValueList<int>& clustersToShow,ItemColors* clusterColors,bool active){
    view.updateClusters(name,clustersToShow,clusterColors,active);
   };
 
   /**Updates the list of skipped channels.
   * @param skippedChannels list of skipped channels.
   **/
-  inline void updateSkipStatus(const QValueList<int>& skippedChannels){view.skipStatusChanged(skippedChannels);};
+  inline void updateSkipStatus(const Q3ValueList<int>& skippedChannels){view.skipStatusChanged(skippedChannels);};
 
   /**Increases the height of the rasters.*/
   inline void increaseRasterHeight(){view.increaseRatio();};
@@ -531,7 +534,7 @@ public slots:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file in Hz.
   */
-  inline void slotEventsAvailable(QDict<EventData>& eventsData,QMap<QString, QValueList<int> >& selectedEvents,QDict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate) {
+  inline void slotEventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate) {
    emit eventsAvailable(eventsData,selectedEvents,providerItemColors,initiator,samplingRate);
   };
 
@@ -551,7 +554,7 @@ public slots:
   };
 
 signals:
-  void channelsSelected(const QValueList<int>& selectedIds);
+  void channelsSelected(const Q3ValueList<int>& selectedIds);
 
   /**Informs that the starting time and/or the timeWindow have changed.
   * @param startTime starting time.
@@ -593,7 +596,7 @@ signals:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file  in Hz.
   */
-  void eventsAvailable(QDict<EventData>& eventsData,QMap<QString, QValueList<int> >& selectedEvents,QDict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+  void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
 
 protected:
 
@@ -680,7 +683,7 @@ private:
   long pageStep;
 
   /**Container for the selection widget.*/
-  QHBox* selectionWidgets;
+  Q3HBox* selectionWidgets;
 
   /**When converting the recording length in minutes, seconds and miliseconds this represents the number of minutes.*/
   int minutePart;

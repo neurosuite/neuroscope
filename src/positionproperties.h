@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qimage.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h> 
 
 //includes files for KDE

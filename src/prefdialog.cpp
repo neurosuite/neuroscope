@@ -17,11 +17,11 @@
 // include files for QT
 #include <qlayout.h>        // for QVBoxLayout
 #include <qlabel.h>         // for QLabel
-#include <qframe.h>         // for QFrame
+#include <q3frame.h>         // for QFrame
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
-// include files for KDE
-#include <kcolorbutton.h>   // for KColorButton
 
 #include <kiconloader.h>    // for KIconLoader
 #include <kglobal.h>        // for KGlobal
@@ -52,16 +52,16 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, WFlags f)
     setHelp("settings","neuroscope");
     
     //adding page "General options"
-    QFrame* frame = addPage(tr("General"), tr("NeuroScope Configuration"),
+    Q3Frame* frame = addPage(tr("General"), tr("NeuroScope Configuration"),
         KGlobal::iconLoader()->loadIcon("kfm",KIcon::Panel,0,false) );
-    QVBoxLayout* frameLayout = new QVBoxLayout(frame,0,0);
+    Q3VBoxLayout* frameLayout = new Q3VBoxLayout(frame,0,0);
     prefGeneral = new PrefGeneral(frame);
     frameLayout->addWidget(prefGeneral);
 
     //adding page "Default configuration"
     frame = addPage(tr("Defaults"), tr("NeuroScope Defaults"),
         KGlobal::iconLoader()->loadIcon("defaults",KIcon::User));
-    frameLayout = new QVBoxLayout(frame,0,0);
+    frameLayout = new Q3VBoxLayout(frame,0,0);
    /* prefDefaults = new PrefDefaults(frame);
     frameLayout->addWidget(prefDefaults);*/
 

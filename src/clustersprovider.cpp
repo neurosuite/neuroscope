@@ -18,6 +18,8 @@
 #include <qfile.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
  
 //General C++ include files
 #include <iostream>
@@ -104,7 +106,7 @@ RestartTimer();
 
  //Create a reader on the clusterFile
  QFile clusterFile(fileName);
- bool status = clusterFile.open(IO_ReadOnly);
+ bool status = clusterFile.open(QIODevice::ReadOnly);
  if(!status){
   clusters.setSize(0,0);
   //Remove the temp files if any
@@ -157,7 +159,7 @@ RestartTimer();
  
  //Create a reader on the spikeFile
  QFile spikeFile(timeFilePath);
- status = spikeFile.open(IO_ReadOnly);
+ status = spikeFile.open(QIODevice::ReadOnly);
  if(!status){
   clusters.setSize(0,0);
   //Remove the temp files if any
@@ -399,7 +401,7 @@ cout<<" in retrieveData, count " <<count<<" startInRecordingUnits " <<startInRec
  emit dataReady(finalData,initiator,name);
 }
 
-void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits){
+void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits){
  long initialStartTime = startTime;
  //Compute the start time for the spike look up
  startTime = initialStartTime + static_cast<long>(timeFrame * clusterPosition);
@@ -658,7 +660,7 @@ cout<<" count " <<count <<endl;
 }
 
 
-void ClustersProvider::requestPreviousClusterData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits){
+void ClustersProvider::requestPreviousClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits){
 
  long initialStartTime = startTime;
  //Compute the start time for the spike look up

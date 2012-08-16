@@ -65,7 +65,7 @@ if(nbPositions == 0){
  
  //Create a reader on the eventFile
  QFile positionFile(fileName);
- bool status = positionFile.open(IO_ReadOnly);
+ bool status = positionFile.open(QIODevice::ReadOnly);
  if(!status){
   positions.setSize(0,0);
   return OPEN_ERROR;

@@ -27,10 +27,13 @@
 
 // include files for QT
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpainter.h>
 #include <qprinter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PointArray>
 #include <kapp.h>
 
 // include files for kde
@@ -51,9 +54,9 @@ const int TraceView::XMARGIN = 50;
 const int TraceView::YMARGIN = 0;
 
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
-                  bool raster,bool waveforms,bool labelsDisplay,QValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
-                  ChannelColors* channelColors,QMap<int, QValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                  QValueList<int>& channelOffsets,QValueList<int>& gains,const QValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,KStatusBar* statusBar,
+                  bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
+                  ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
+                  Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,KStatusBar* statusBar,
            int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
           BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
           greyScaleMode(greyScale),statusBar(statusBar),tracesProvider(tracesProvider),
@@ -66,7 +69,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
           startTimeInRecordingUnits(0),previousStartTimeInRecordingUnits(0),spikeBrowsing(false),newEventPosition(-1),eventBeingModified(false),retrieveClusterData(false){
 
 
-  QValueList<int>::iterator channelsToShowIterator;
+  Q3ValueList<int>::iterator channelsToShowIterator;
   for(channelsToShowIterator = channelsToDisplay.begin(); channelsToShowIterator != channelsToDisplay.end(); ++channelsToShowIterator)
     shownChannels.append(*channelsToShowIterator);
 
@@ -220,12 +223,12 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
  //Check if the cluster and event data are available
  else{
   bool ready = false;
-  QDictIterator<ClusterData> iterator(clustersData);
+  Q3DictIterator<ClusterData> iterator(clustersData);
   for(;iterator.current();++iterator){
    ready = iterator.current()->status();
    if(!ready) break;
   }
-  QDictIterator<EventData> iterator2(eventsData);
+  Q3DictIterator<EventData> iterator2(eventsData);
   for(;iterator2.current();++iterator2){
    ready = iterator2.current()->status();
    if(!ready) break;
@@ -259,12 +262,12 @@ cout<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <
 
  //The following code was done in case of threads, without thread the trace data arrive always last
  bool ready = false;
- QDictIterator<ClusterData> iterator(clustersData);
+ Q3DictIterator<ClusterData> iterator(clustersData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
  }
- QDictIterator<EventData> iterator2(eventsData);
+ Q3DictIterator<EventData> iterator2(eventsData);
  for(;iterator2.current();++iterator2){
   ready = iterator2.current()->status();
   if(!ready) break;
@@ -294,7 +297,7 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
 
  //The following code was done in case of threads, without thread the trace data arrive always last
  bool ready = false;
- QDictIterator<EventData> iterator(eventsData);
+ Q3DictIterator<EventData> iterator(eventsData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
@@ -302,7 +305,7 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
  //If all the data for the events are available, send an signal for the listeners interested in it.
 // if(ready) emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 
- QDictIterator<ClusterData> iterator2(clustersData);
+ Q3DictIterator<ClusterData> iterator2(clustersData);
  for(;iterator2.current();++iterator2){
   ready = iterator2.current()->status();
   if(!ready) break;
@@ -335,21 +338,21 @@ void TraceView::updateClusterData(bool active){
 
  //Retrieve the data for the clusters, only request data from the provider for which clusters have been selected
  if(verticalLines || raster || waveforms){
-  QValueList<int> toRemove;
-  QMap<int, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<int> toRemove;
+  QMap<int, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty())
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty())
     toRemove.append(providersIterator.key());
   }
 
-  QValueList<int>::iterator toRemoveIterator;
+  Q3ValueList<int>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedClusters.remove(*toRemoveIterator);
    clustersData.remove(QString("%1").arg(*toRemoveIterator));
   }
 
   if(clustersData.count() != 0) setCursor(Qt::WaitCursor);
-  QDictIterator<ClusterData> iterator(clustersData);
+  Q3DictIterator<ClusterData> iterator(clustersData);
   for(;iterator.current();++iterator){
    if(iterator.currentKey() != clusterProviderToSkip) iterator.current()->setStatus(false);
   }
@@ -380,20 +383,20 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
 
  //Retreive the data for the clusters, only request data from the provider for which clusters have been selected
  if(verticalLines || raster || waveforms){
-  QValueList<int> toRemove;
-  QMap<int, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<int> toRemove;
+  QMap<int, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty())
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty())
     toRemove.append(providersIterator.key());
   }
 
-  QValueList<int>::iterator toRemoveIterator;
+  Q3ValueList<int>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedClusters.remove(*toRemoveIterator);
    clustersData.remove(QString("%1").arg(*toRemoveIterator));
   }
 
-  QDictIterator<ClusterData> iterator(clustersData);
+  Q3DictIterator<ClusterData> iterator(clustersData);
   for(;iterator.current();++iterator){
    if(iterator.currentKey() != clusterProviderToSkip) iterator.current()->setStatus(false);
   }
@@ -408,14 +411,14 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
 
  //Retreive the data for the events, only request data from the provider for which events have been selected
  if(!selectedEvents.isEmpty()){
-  QValueList<QString> toRemove;
-  QMap<QString, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<QString> toRemove;
+  QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty())
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty())
     toRemove.append(providersIterator.key());
   }
 
-  QValueList<QString>::iterator toRemoveIterator;
+  Q3ValueList<QString>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedEvents.remove(*toRemoveIterator);
    eventsData.remove(*toRemoveIterator);
@@ -425,7 +428,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
   //listeners of the event data will receive the nformation
 //  if(selectedEvents.count() == 1 && eventProviderToSkip != "") emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 
-  QDictIterator<EventData> iterator(eventsData);
+  Q3DictIterator<EventData> iterator(eventsData);
   for(;iterator.current();++iterator){
    if(iterator.currentKey() != eventProviderToSkip) iterator.current()->setStatus(false);
   }
@@ -492,7 +495,7 @@ void TraceView::drawContents(QPainter* p){
   isInit = false;
  }
  else if(!eventProvidersToUpdate.isEmpty()){
-  QValueList<QString>::iterator providerIterator;
+  Q3ValueList<QString>::iterator providerIterator;
   EventData* eventData;
   for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
    eventData = eventsData[*providerIterator];
@@ -503,7 +506,7 @@ void TraceView::drawContents(QPainter* p){
    else eventsData[*providerIterator]->setStatus(false);
   }
 
-  QDictIterator<EventData> iterator(eventsData);
+  Q3DictIterator<EventData> iterator(eventsData);
   for(;iterator.current();++iterator){
    if(eventProvidersToUpdate.contains(iterator.currentKey())){
     static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestData(startTime,endTime,this);
@@ -634,10 +637,10 @@ void TraceView::resetOffsets(const QMap<int,int>& selectedChannelDefaultOffsets)
 }
 
 
-void TraceView::resetGains(const QValueList<int>& selectedChannels){
+void TraceView::resetGains(const Q3ValueList<int>& selectedChannels){
  //factor = alpha * (4/3)^gain, gain equals 0 at the begining
 
- QValueList<int>::const_iterator iterator;
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator){
   gains[*iterator] = 0;
   channelFactors[*iterator] = alpha;
@@ -650,17 +653,17 @@ void TraceView::resetGains(const QValueList<int>& selectedChannels){
  update();
 }
 
-void TraceView::showChannels(const QValueList<int>& channelsToShow){
+void TraceView::showChannels(const Q3ValueList<int>& channelsToShow){
  shownChannels.clear();
 
- QValueList<int>::const_iterator channelsToShowIterator;
+ Q3ValueList<int>::const_iterator channelsToShowIterator;
  for(channelsToShowIterator = channelsToShow.begin(); channelsToShowIterator != channelsToShow.end(); ++channelsToShowIterator){
   shownChannels.append(*channelsToShowIterator);
  }
 
  //remove the channels in selectedChannels which are no more shown
- QValueList<int>::iterator iterator;
- QValueList<int> toRemoved;
+ Q3ValueList<int>::iterator iterator;
+ Q3ValueList<int> toRemoved;
  for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator)
   if(!shownChannels.contains(*iterator))toRemoved.append(*iterator);
 
@@ -674,12 +677,12 @@ void TraceView::showChannels(const QValueList<int>& channelsToShow){
  tracesProvider.requestData(startTime,endTime,this,startTimeInRecordingUnits);
 }
 
-void TraceView::updateShownGroupsChannels(const QValueList<int>& channelsToShow){
+void TraceView::updateShownGroupsChannels(const Q3ValueList<int>& channelsToShow){
  uint nbGpsShown = shownGroupsChannels.count();
  shownGroupsChannels.clear();
 
  int nbGps = groupsChannels->count();
- QMap<int, QValueList<int> >::Iterator iterator;
+ QMap<int, Q3ValueList<int> >::Iterator iterator;
  for(iterator = groupsChannels->begin(); iterator != groupsChannels->end(); ++iterator){
   shownGroupsChannels.insert(iterator.key(),iterator.data());
  }
@@ -687,7 +690,7 @@ void TraceView::updateShownGroupsChannels(const QValueList<int>& channelsToShow)
  for(int i = 0; i < nbChannels; ++i){
   if(!channelsToShow.contains(i)){
    int groupId = (*channelsGroups)[i];
-   QValueList<int> channelIds = shownGroupsChannels[groupId];
+   Q3ValueList<int> channelIds = shownGroupsChannels[groupId];
    channelIds.remove(i);
    if(channelIds.size() == 0) shownGroupsChannels.remove(groupId);
    else shownGroupsChannels.replace(groupId,channelIds);
@@ -696,7 +699,7 @@ void TraceView::updateShownGroupsChannels(const QValueList<int>& channelsToShow)
 
  //The trash group (index 0) is always at the bottom in the display, so reindex it with the highest index.
  if(shownGroupsChannels.contains(0)){
-  QValueList<int> channelIds = shownGroupsChannels[0];
+  Q3ValueList<int> channelIds = shownGroupsChannels[0];
   shownGroupsChannels.remove(0);
   shownGroupsChannels.insert(nbGps,channelIds);
  }
@@ -753,7 +756,7 @@ void TraceView::computeChannelDisplayGain(){
 
 }
 
-void TraceView::computeChannelDisplayGain(const QValueList<int>& channelIds){
+void TraceView::computeChannelDisplayGain(const Q3ValueList<int>& channelIds){
 // Those gains are computed as (unitGain.alpha / screenResolution) .(world-viewport height ratio) .0.75^gain[i]).
  QRect r((QRect)window);
  float heightRatio = static_cast<float>(static_cast<float>(viewport.height()) / static_cast<float>(r.height()));
@@ -798,7 +801,7 @@ void TraceView::decreaseAllAmplitude(){
  update();
 }
 
-void TraceView::increaseSelectedChannelsAmplitude(const QValueList<int>& channelIds){
+void TraceView::increaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds){
  //Increases the ordinate scale resulting in
  //an reduction of the traces in the ordinate direction.
  for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
@@ -814,7 +817,7 @@ void TraceView::increaseSelectedChannelsAmplitude(const QValueList<int>& channel
  update();
 }
 
-void TraceView::decreaseSelectedChannelsAmplitude(const QValueList<int>& channelIds){
+void TraceView::decreaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds){
  //Decreases the ordinate scale resulting in
  //an enlargement of the traces in the ordinate direction.
  for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
@@ -856,16 +859,16 @@ void TraceView::updateWindow(){
   abscissaMax = 2 * borderX + (nbSamplesToDraw -1) * Xstep;
 
   int nbYspaces = 0;
-  QMap<int, QValueList<int> >::Iterator iterator;
+  QMap<int, Q3ValueList<int> >::Iterator iterator;
   for(iterator = shownGroupsChannels.begin(); iterator != shownGroupsChannels.end(); ++iterator){
-   int currentNbChannels = static_cast<QValueList<int> >(iterator.data()).size();
+   int currentNbChannels = static_cast<Q3ValueList<int> >(iterator.data()).size();
    nbYspaces += (currentNbChannels - 1);
   }
 
   nbClusters = 0;
-  QMap<int, QValueList<int> >::Iterator clustersIterator;
+  QMap<int, Q3ValueList<int> >::Iterator clustersIterator;
   for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
-   int currentNbClusters = static_cast<QValueList<int> >(clustersIterator.data()).size();
+   int currentNbClusters = static_cast<Q3ValueList<int> >(clustersIterator.data()).size();
    nbClusters += currentNbClusters;
   }
 
@@ -912,16 +915,16 @@ void TraceView::updateWindow(){
   Xshift = (nbSamplesToDraw - 1) * Xstep + XGroupSpace;
 
   int maxNbChannels = 0;
-  QMap<int, QValueList<int> >::Iterator iterator;
+  QMap<int, Q3ValueList<int> >::Iterator iterator;
   for(iterator = shownGroupsChannels.begin(); iterator != shownGroupsChannels.end(); ++iterator){
-   int currentNbChannels = static_cast<QValueList<int> >(iterator.data()).size();
+   int currentNbChannels = static_cast<Q3ValueList<int> >(iterator.data()).size();
    if(currentNbChannels > maxNbChannels) maxNbChannels = currentNbChannels;
   }
 
   nbClusters = 0;
-  QMap<int, QValueList<int> >::Iterator clustersIterator;
+  QMap<int, Q3ValueList<int> >::Iterator clustersIterator;
   for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
-   int currentNbClusters = static_cast<QValueList<int> >(clustersIterator.data()).size();
+   int currentNbClusters = static_cast<Q3ValueList<int> >(clustersIterator.data()).size();
    nbClusters += currentNbClusters;
   }
 
@@ -930,15 +933,15 @@ void TraceView::updateWindow(){
    int maxNbClusters = 0;
 
    //Compute the maximum number of clusters which will be drawn beneath a group
-   QValueList<int> groupIds = shownGroupsChannels.keys();
-   QValueList<int>::iterator iterator;
+   Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+   Q3ValueList<int>::iterator iterator;
    for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
     int currentNbClusters = 0;
-    QValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
-    QValueList<int>::iterator spikeGroupIterator;
+    Q3ValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
+    Q3ValueList<int>::iterator spikeGroupIterator;
     for(spikeGroupIterator = clusterFileList.begin(); spikeGroupIterator != clusterFileList.end(); ++spikeGroupIterator){
      if(selectedClusters.contains(*spikeGroupIterator)){
-      QValueList<int> selection = static_cast<QValueList<int> >(selectedClusters[*spikeGroupIterator]);
+      Q3ValueList<int> selection = static_cast<Q3ValueList<int> >(selectedClusters[*spikeGroupIterator]);
       currentNbClusters += selection.size();
      }
     }
@@ -1117,7 +1120,7 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
    ItemColors* colors = providerItemColors[providerName];
    Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
    int nbSpikes = currentData.nbOfColumns();
-   QValueList<int> clusterList = selectedClusters[clusterFileId];
+   Q3ValueList<int> clusterList = selectedClusters[clusterFileId];
    int currentIndex = 1;
 
    for(int i = 1; i < nbSpikes + 1;++i){
@@ -1151,7 +1154,7 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
 
 }
 
-void TraceView::drawTraces(QValueList<int> channels,bool highlight){
+void TraceView::drawTraces(Q3ValueList<int> channels,bool highlight){
   QRect r((QRect)window);
 
   //Create a painter to paint on the double buffer
@@ -1171,7 +1174,7 @@ void TraceView::drawTraces(QValueList<int> channels,bool highlight){
   int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
   int limit = viewportToWorldHeight(1);
 
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int>::iterator iterator;
   for(iterator = channels.begin();iterator != channels.end();++iterator){
    //if the channel is skipped, do no draw it
    if(skippedChannels.contains(*iterator)) continue;
@@ -1224,7 +1227,7 @@ void TraceView::drawTraces(QValueList<int> channels,bool highlight){
     }
 
     if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-     QPointArray trace(nbSamples);
+     Q3PointArray trace(nbSamples);
      for(int i = 0; i < nbSamples;++i){
       int y = basePosition - static_cast<long>(data(i + 1,*iterator + 1) * channelFactors[*iterator]);
       trace.setPoint(i,X,y);
@@ -1248,7 +1251,7 @@ void TraceView::drawTraces(QValueList<int> channels,bool highlight){
     else{
      //Array containing 3 lines: sample index, abscissa and ordinate
      Array<dataType> traceInfo(3,nbSamples);
-     QPointArray trace(nbSamples);
+     Q3PointArray trace(nbSamples);
      for(int i = 1; i <= nbSamples;++i){
       int y = basePosition - static_cast<long>(data(i,*iterator + 1) * channelFactors[*iterator]);
       trace.setPoint(i - 1,X,y);
@@ -1276,7 +1279,7 @@ void TraceView::drawTraces(QValueList<int> channels,bool highlight){
      ItemColors* colors = providerItemColors[providerName];
      Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
      int nbSpikes = currentData.nbOfColumns();
-     QValueList<int> clusterList = selectedClusters[clusterFileId];
+     Q3ValueList<int> clusterList = selectedClusters[clusterFileId];
      int currentIndex = 1;
 
      for(int i = 1; i < nbSpikes + 1;++i){
@@ -1291,7 +1294,7 @@ void TraceView::drawTraces(QValueList<int> channels,bool highlight){
        for(int j = currentIndex; j <= nbSamples;++j){
         if(firstIndex > traceInfo(1,j)) continue;//case 1
         else if(firstIndex == traceInfo(1,j)){//case 2
-         QPointArray trace(nbWaveformSamples);
+         Q3PointArray trace(nbWaveformSamples);
          int pos = 0;
          for(int k = firstIndex;k<= lastIndex;++k){
           trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1383,8 +1386,8 @@ void TraceView::drawTraces(QPainter& painter){
   clustersOrder.clear();
   rasterOrdinates.clear();
   rasterAbscisses.clear();
-  QValueList<int> groupIds = shownGroupsChannels.keys();
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+  Q3ValueList<int>::iterator iterator;
   for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
 
    //Draw events
@@ -1394,9 +1397,9 @@ void TraceView::drawTraces(QPainter& painter){
     int bottom = windowRectangle.bottom();
     QPen pen(Qt::DotLine);
 
-    QMap<QString, QValueList<int> >::Iterator iterator;
+    QMap<QString, Q3ValueList<int> >::Iterator iterator;
     for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-     QValueList<int> eventList = iterator.data();
+     Q3ValueList<int> eventList = iterator.data();
      QString providerName = iterator.key();
      if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
      ItemColors* colors = providerItemColors[providerName];
@@ -1420,9 +1423,9 @@ void TraceView::drawTraces(QPainter& painter){
     QRect windowRectangle((QRect)window);
     int top = windowRectangle.top();
     int bottom = windowRectangle.bottom();
-    QValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
+    Q3ValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
 
-    QMap<int,QValueList<int> >::Iterator selectedIterator;
+    QMap<int,Q3ValueList<int> >::Iterator selectedIterator;
     for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
      //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
      if(!clusterFileList.contains(selectedIterator.key())) continue;
@@ -1432,8 +1435,8 @@ void TraceView::drawTraces(QPainter& painter){
      ItemColors* colors = providerItemColors[providerName];
      Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
      int nbSpikes = currentData.nbOfColumns();
-     QValueList<int> clusterList = selectedIterator.data();
-     QValueList<int>::iterator clusterIterator;
+     Q3ValueList<int> clusterList = selectedIterator.data();
+     Q3ValueList<int>::iterator clusterIterator;
      for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
       QColor color = colors->color(*clusterIterator);
       painter.setPen(color);
@@ -1449,10 +1452,10 @@ void TraceView::drawTraces(QPainter& painter){
     }
    }//verticalLines
 
-   QValueList<int> channelIds = shownGroupsChannels[*iterator];
+   Q3ValueList<int> channelIds = shownGroupsChannels[*iterator];
    int currentNbChannels = channelIds.size();
 
-   QValueList<int> positions;
+   Q3ValueList<int> positions;
    int y = Y;
    for(int j = 0; j < currentNbChannels; ++j){
     int channelId = channelIds[j];
@@ -1496,7 +1499,7 @@ void TraceView::drawTraces(QPainter& painter){
      }
 
     if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-      QPointArray trace(nbSamples);
+      Q3PointArray trace(nbSamples);
       for(int i = 0; i < nbSamples;++i){
        int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
        trace.setPoint(i,X + x,y);
@@ -1507,7 +1510,7 @@ void TraceView::drawTraces(QPainter& painter){
      else{
       //Array containing 3 lines: sample index, abscissa and ordinate
       Array<dataType> traceInfo(3,nbSamples);
-      QPointArray trace(nbSamples);
+      Q3PointArray trace(nbSamples);
       for(int i = 1; i <= nbSamples;++i){
        int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
        trace.setPoint(i - 1,X + x,y);
@@ -1522,7 +1525,7 @@ void TraceView::drawTraces(QPainter& painter){
       ItemColors* colors = providerItemColors[providerName];
       Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
       int nbSpikes = currentData.nbOfColumns();
-      QValueList<int> clusterList = selectedClusters[clusterFileId];
+      Q3ValueList<int> clusterList = selectedClusters[clusterFileId];
       int currentIndex = 1;
 
       for(int i = 1; i < nbSpikes + 1;++i){
@@ -1541,7 +1544,7 @@ void TraceView::drawTraces(QPainter& painter){
         for(int j = currentIndex; j <= nbSamples;++j){
          if(firstIndex > traceInfo(1,j)) continue;//case 1
          else if(firstIndex == traceInfo(1,j)){//case 2
-          QPointArray trace(nbWaveformSamples);
+          Q3PointArray trace(nbWaveformSamples);
           int pos = 0;
           for(int k = firstIndex;k<= lastIndex;++k){
            trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1562,19 +1565,19 @@ void TraceView::drawTraces(QPainter& painter){
    if(raster && nbClusters != 0){
     int y = Y0Raster;
 
-    QValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
+    Q3ValueList<int> clusterFileList = (*groupClusterFiles)[*iterator];
 
-    QMap<int,QValueList<int> >::Iterator selectedIterator;
+    QMap<int,Q3ValueList<int> >::Iterator selectedIterator;
     for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
      //Only draw rasters for clusters contained in a cluster file containing data for channels of the current group
      if(!clusterFileList.contains(selectedIterator.key())) continue;
-     QValueList<int> clusterList = selectedIterator.data();
+     Q3ValueList<int> clusterList = selectedIterator.data();
      if(clusterList.size() == 0) continue;
      QString providerName = QString("%1").arg(selectedIterator.key());
      ItemColors* colors = providerItemColors[providerName];
      Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
      int nbSpikes = currentData.nbOfColumns();
-     QValueList<int>::iterator clusterIterator;
+     Q3ValueList<int>::iterator clusterIterator;
      for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
       QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
@@ -1610,9 +1613,9 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
    int top = windowRectangle.top();
    int bottom = windowRectangle.bottom();
    QPen pen(Qt::DotLine);
-   QMap<QString, QValueList<int> >::Iterator iterator;
+   QMap<QString, Q3ValueList<int> >::Iterator iterator;
    for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-    QValueList<int> eventList = iterator.data();
+    Q3ValueList<int> eventList = iterator.data();
     QString providerName = iterator.key();
 
     if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
@@ -1639,10 +1642,10 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
    QRect windowRectangle((QRect)window);
    int top = windowRectangle.top();
    int bottom = windowRectangle.bottom();
-   QDictIterator<ClusterData> iterator(clustersData);
+   Q3DictIterator<ClusterData> iterator(clustersData);
    for(;iterator.current();++iterator){
     ItemColors* colors = providerItemColors[iterator.currentKey()];
-    QValueList<int> clusterList = selectedClusters[iterator.currentKey().toInt()];
+    Q3ValueList<int> clusterList = selectedClusters[iterator.currentKey().toInt()];
     Array<dataType>& currentData = iterator.current()->getData();
     int nbSpikes = currentData.nbOfColumns();
 
@@ -1665,13 +1668,13 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
   //Start at the top of the view.
 
   //Loop on all the groups
-  QValueList<int> groupIds = shownGroupsChannels.keys();
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+  Q3ValueList<int>::iterator iterator;
   for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-   QValueList<int> channelIds = shownGroupsChannels[*iterator];
+   Q3ValueList<int> channelIds = shownGroupsChannels[*iterator];
    int currentNbChannels = channelIds.size();
 
-   QValueList<int> positions;
+   Q3ValueList<int> positions;
    int y = Y;
    for(int j = 0; j < currentNbChannels; ++j){
     int channelId = channelIds[j];
@@ -1718,7 +1721,7 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
      }
 
      if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-      QPointArray trace(nbSamples);
+      Q3PointArray trace(nbSamples);
       for(int i = 0; i < nbSamples;++i){
        int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
        trace.setPoint(i,X,y);
@@ -1729,7 +1732,7 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
      else{
       //Array containing 3 lines: sample index, abscissa and ordinate
       Array<dataType> traceInfo(3,nbSamples);
-      QPointArray trace(nbSamples);
+      Q3PointArray trace(nbSamples);
       for(int i = 1; i <= nbSamples;++i){
        int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
        trace.setPoint(i - 1,X,y);
@@ -1745,7 +1748,7 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
 
       Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
       int nbSpikes = currentData.nbOfColumns();
-      QValueList<int> clusterList = selectedClusters[clusterFileId];
+      Q3ValueList<int> clusterList = selectedClusters[clusterFileId];
       int currentIndex = 1;
 
       for(int i = 1; i < nbSpikes + 1;++i){
@@ -1764,7 +1767,7 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
         for(int j = currentIndex; j <= nbSamples;++j){
          if(firstIndex > traceInfo(1,j)) continue;//case 1
          else if(firstIndex == traceInfo(1,j)){//case 2
-          QPointArray trace(nbWaveformSamples);
+          Q3PointArray trace(nbWaveformSamples);
           int pos = 0;
           for(int k = firstIndex;k<= lastIndex;++k){
            trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1794,15 +1797,15 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
   if(raster && nbClusters != 0){
    Y = Y0Raster;
 
-   QMap<int,QValueList<int> >::Iterator iterator;
+   QMap<int,Q3ValueList<int> >::Iterator iterator;
    for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
-    QValueList<int> clusterList = iterator.data();
+    Q3ValueList<int> clusterList = iterator.data();
     if(clusterList.size() == 0) continue;
     QString providerName = QString("%1").arg(iterator.key());
     ItemColors* colors = providerItemColors[providerName];
     Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
     int nbSpikes = currentData.nbOfColumns();
-    QValueList<int>::iterator clusterIterator;
+    Q3ValueList<int>::iterator clusterIterator;
     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
      QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
@@ -1839,11 +1842,11 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
  if(!multiColumns && (windowRectangle.left() >= xMargin)){
  }
  else{
-  QValueList<int> groupIds = shownGroupsChannels.keys();
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+  Q3ValueList<int>::iterator iterator;
   for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-   QValueList<int> channelIds = shownGroupsChannels[*iterator];
-   QValueList<int>::iterator channelIterator;
+   Q3ValueList<int> channelIds = shownGroupsChannels[*iterator];
+   Q3ValueList<int>::iterator channelIterator;
    for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
      //if the channel is skipped, do no draw it
    // if(skippedChannels.contains(*channelIterator )) continue;
@@ -1904,19 +1907,19 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
    painter.setViewport(viewport);
 
    painter.setRasterOp(NotROP);
-   painter.setPen(QPen(color0,1));
-   painter.setBrush(NoBrush);
+   painter.setPen(QPen(Qt::color0,1));
+   painter.setBrush(Qt::NoBrush);
    int top = r.top();
    int bottom = r.bottom();
    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
    int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
    int delta = x - lastClickAbscissa;
-   QValueList<int> currentAbscissae;
+   Q3ValueList<int> currentAbscissae;
 
    int nbColumns;
    int groupIndex = 0;
-   QValueList<int> max;
-   QValueList<int> min;
+   Q3ValueList<int> max;
+   Q3ValueList<int> min;
 
    if(multiColumns){
     nbColumns = shownGroupsChannels.count();
@@ -1953,7 +1956,7 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
    if(currentAbscissae[groupIndex] < min[groupIndex]){
     if(!initialLine){
      int previousDelta = previousDragAbscissa - lastClickAbscissa;
-     QValueList<int> previousAbscissae;
+     Q3ValueList<int> previousAbscissae;
      for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
      if(previousAbscissae[groupIndex] >= min[groupIndex]){
       for(int i = 0; i<nbColumns;++i){
@@ -1975,7 +1978,7 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
    else if(currentAbscissae[groupIndex] > max[groupIndex]){
     if(!initialLine){
      int previousDelta = previousDragAbscissa - lastClickAbscissa;
-     QValueList<int> previousAbscissae;
+     Q3ValueList<int> previousAbscissae;
      for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
      if(previousAbscissae[groupIndex] < max[groupIndex]){
       for(int i = 0; i<nbColumns;++i){
@@ -2001,7 +2004,7 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
     //erase the previous line
     if(!initialLine){
      int previousDelta = previousDragAbscissa - lastClickAbscissa;
-     QValueList<int> previousAbscissae;
+     Q3ValueList<int> previousAbscissae;
      for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
      for(int i = 0; i<nbColumns;++i){
       if(previousAbscissae[i] >= min[i]) painter.drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
@@ -2132,14 +2135,14 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
    painter.setViewport(viewport);
 
    painter.setRasterOp(NotROP);
-   painter.setPen(QPen(color0,1));
-   painter.setBrush(NoBrush);
+   painter.setPen(QPen(Qt::color0,1));
+   painter.setBrush(Qt::NoBrush);
 
    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
    int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
    int limit = viewportToWorldHeight(1);
 
-   QValueList<int>::iterator channelIterator;
+   Q3ValueList<int>::iterator channelIterator;
    for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
     //if the channel is skipped, do no draw it
     if(skippedChannels.contains(*channelIterator )) continue;
@@ -2156,7 +2159,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
       drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
      }
      else{
-      QPointArray trace(nbSamples);
+      Q3PointArray trace(nbSamples);
       for(int i = 0; i < nbSamples;++i){
        int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
        trace.setPoint(i,X,y);
@@ -2175,7 +2178,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
      drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
     }
     else{
-     QPointArray trace(nbSamples);
+     Q3PointArray trace(nbSamples);
      for(int i = 0; i < nbSamples;++i){
       int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
       trace.setPoint(i,X,y);
@@ -2200,8 +2203,8 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
    painter.setViewport(viewport);
 
    painter.setRasterOp(NotROP);
-   painter.setPen(QPen(color0,1));
-   painter.setBrush(NoBrush);
+   painter.setPen(QPen(Qt::color0,1));
+   painter.setBrush(Qt::NoBrush);
    int top = r.top();
    int bottom = r.bottom();
    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
@@ -2307,8 +2310,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
    //The parent implementation takes care of the zoom.
    BaseFrame::mousePressEvent(event);
   }
-  QValueList<int> currentlySelectedChannels;
-  QValueList<int> deselectedChannels;
+  Q3ValueList<int> currentlySelectedChannels;
+  Q3ValueList<int> deselectedChannels;
 
   QPair<QString,int> deselectedEvent(selectedEvent.first,selectedEvent.second);
   int deselectedEventIndex = 0;
@@ -2396,9 +2399,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
     else if(mode == SELECT_EVENT && x >= (X0 + groupIndex * Xshift)){
      lastClickAbscissa = x;
      int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
-     QMap<QString, QValueList<int> >::Iterator iterator;
+     QMap<QString, Q3ValueList<int> >::Iterator iterator;
      for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-      QValueList<int> eventList = iterator.data();
+      Q3ValueList<int> eventList = iterator.data();
       QString providerName = iterator.key();
 
       if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
@@ -2423,9 +2426,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
      startEventDragging = true;
     }//end mode == SELECT_EVENT && x >= (X0 + groupIndex * Xshift)
     else{
-     QValueList<int> groupIds = shownGroupsChannels.keys();
+     Q3ValueList<int> groupIds = shownGroupsChannels.keys();
      int groupId = groupIds[static_cast<int>(groupIndex)];
-     QValueList<int> channelIds = shownGroupsChannels[groupId];
+     Q3ValueList<int> channelIds = shownGroupsChannels[groupId];
      int currentNbChannels = channelIds.size();
      int y = Y0;
      int channelId = channelIds[0];
@@ -2462,11 +2465,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
       //If there is not modificator key and selectedChannels does not already contain the selectedChannel
       //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
       //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
-      if(!(event->state() & ShiftButton) && !(event->state() & ControlButton)){
+      if(!(event->state() & Qt::ShiftModifier) && !(event->state() & Qt::ControlModifier)){
        //if the channel is skipped, deselect all the channels (clear selectedChannels)
        if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
         alreadySelected = false;
-        QValueList<int>::iterator it;
+        Q3ValueList<int>::iterator it;
         for(it = selectedChannels.begin();it != selectedChannels.end();++it) deselectedChannels.append(*it);
         selectedChannels.clear();
        }
@@ -2477,7 +2480,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
       }
 
       //Check the modificator keys
-      if(event->state() & ControlButton){
+      if(event->state() & Qt::ControlModifier){
        //if the channel is skipped, do not do anything
        if(!skippedChannels.contains(selectedChannel)){
         if(selectedChannels.contains(selectedChannel)){
@@ -2490,7 +2493,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
         }
        }
       }
-      else if((event->state() & ShiftButton) && selectedChannels.size() != 0){
+      else if((event->state() & Qt::ShiftModifier) && selectedChannels.size() != 0){
        //take all the channels, not skipped of groupId with a label ordinate in the range defined by the label ordinate of the last
        //selected channel and the one of the currently selected channel.
        if(labelSelected){
@@ -2566,9 +2569,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
     else if(mode == SELECT_EVENT && x >= 0){
      lastClickAbscissa = x;
      int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
-     QMap<QString, QValueList<int> >::Iterator iterator;
+     QMap<QString, Q3ValueList<int> >::Iterator iterator;
      for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-      QValueList<int> eventList = iterator.data();
+      Q3ValueList<int> eventList = iterator.data();
       QString providerName = iterator.key();
 
       if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
@@ -2592,9 +2595,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
      startEventDragging = true;
     }
     else{
-     QValueList<int> groupIds = shownGroupsChannels.keys();
+     Q3ValueList<int> groupIds = shownGroupsChannels.keys();
 
-     QValueList<int> firstGroup = shownGroupsChannels[groupIds[0]];
+     Q3ValueList<int> firstGroup = shownGroupsChannels[groupIds[0]];
      int y = Y0;
      int channelId = firstGroup[0];
      int channelIndex = 1;
@@ -2602,7 +2605,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
      //look up for the first channel which is not skipped.
      if(skippedChannels.contains(channelId)){
       for(uint j = 0; j<groupIds.size();++j){
-       QValueList<int> channelIds = shownGroupsChannels[groupIds[j]];
+       Q3ValueList<int> channelIds = shownGroupsChannels[groupIds[j]];
        int currentNbChannels = channelIds.size();
        for(int i = 0; i < currentNbChannels; ++i){
         if(!skippedChannels.contains(channelIds[i])){
@@ -2623,7 +2626,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
      y -= Yshift;
 
      for(int j = startingGroupIndex; j<groupIds.size();++j){
-      QValueList<int> channelIds = shownGroupsChannels[groupIds[j]];
+      Q3ValueList<int> channelIds = shownGroupsChannels[groupIds[j]];
       int currentNbChannels = channelIds.size();
       int i = 0;
       if(j == startingGroupIndex) i = channelIndex;
@@ -2644,11 +2647,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
       //If there is not modificator key and selectedChannels does not already contain the selectedChannel
       //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
       //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
-      if(!(event->state() & ShiftButton) && !(event->state() & ControlButton)){
+      if(!(event->state() & Qt::ShiftModifier) && !(event->state() & Qt::ControlModifier)){
        //if the channel is skipped, deselect all the channels (clear selectedChannels)
        if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
         alreadySelected = false;
-        QValueList<int>::iterator it;
+        Q3ValueList<int>::iterator it;
         for(it = selectedChannels.begin();it != selectedChannels.end();++it) deselectedChannels.append(*it);
         selectedChannels.clear();
        }
@@ -2658,7 +2661,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
        }
       }
 
-      if(event->state() & ControlButton){
+      if(event->state() & Qt::ControlModifier){
        //if the channel is skipped, do not do anything
        if(!skippedChannels.contains(selectedChannel)){
         if(selectedChannels.contains(selectedChannel)){
@@ -2671,7 +2674,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
         }
        }
       }
-      else if((event->state() & ShiftButton) && selectedChannels.size() != 0){
+      else if((event->state() & Qt::ShiftModifier) && selectedChannels.size() != 0){
        //take all the channels of groupId with a label ordinate in the range defined by the label ordinate of the last
        //selected channel and the one of the currently selected channel.
        if(x < 0){
@@ -2736,11 +2739,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
 
 void TraceView::mouseReleaseEvent(QMouseEvent* event){
  if(mode == SELECT){
-  if(event->button() & QMouseEvent::LeftButton && !(event->state() & ShiftButton) && !(event->state() & ControlButton)){
+  if(event->button() & QMouseEvent::LeftButton && !(event->state() & Qt::ShiftModifier) && !(event->state() & Qt::ControlModifier)){
    //There was a drag of channels
    if(previousDragOrdinate != 0){
     int delta = previousDragOrdinate - lastClickOrdinate;
-    QValueList<int>::iterator channelIterator;
+    Q3ValueList<int>::iterator channelIterator;
     for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator)
       channelOffsets[*channelIterator] += delta;
 
@@ -2755,8 +2758,8 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
      int channelId = selectedChannels[selectedChannels.size() - 1];
      selectedChannels.remove(channelId);
 
-     QValueList<int> deselectedChannels;
-     QValueList<int>::iterator it;
+     Q3ValueList<int> deselectedChannels;
+     Q3ValueList<int>::iterator it;
      for(it = selectedChannels.begin();it != selectedChannels.end();++it) deselectedChannels.append(*it);
 
      selectedChannels.clear();
@@ -2825,7 +2828,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 
  if(mode == ZOOM && (event->button() & QMouseEvent::LeftButton)){
   //Zoom out
-  if(event->state() & Qt::ShiftButton){
+  if(event->state() & Qt::ShiftModifier){
     previousWindow = (QRect)window;
    zoomOut = true;
    zoomed = true;
@@ -2988,20 +2991,20 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
  }
 }
 
-void TraceView::selectChannels(const QValueList<int>& selectedIds){
+void TraceView::selectChannels(const Q3ValueList<int>& selectedIds){
  if((selectedChannels.size() == 0 && selectedIds.size() == 0)) return;
 
  //Unhighlight the currently selected traces which are not selected any more
- QValueList<int> deselectedChannels;
- QValueList<int>::iterator it;
+ Q3ValueList<int> deselectedChannels;
+ Q3ValueList<int>::iterator it;
  for(it = selectedChannels.begin();it != selectedChannels.end();++it)
   if(!selectedIds.contains(*it) && shownChannels.contains(*it)) deselectedChannels.append(*it);
 
  drawTraces(deselectedChannels,false);
 
  //Highlight the newly selected traces
- QValueList<int> newlySelectedChannels;
- QValueList<int>::const_iterator iterator;
+ Q3ValueList<int> newlySelectedChannels;
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
   if(!selectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
    //if the channel is skipped, do no draw it
@@ -3388,8 +3391,8 @@ cout<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<r.le
 }
 
 void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
-                                   QValueList<int>& clustersToShow,QMap<int, QValueList<int> >* displayGroupsClusterFile,QMap<int,int>* channelsSpikeGroups,
-                                   int nbSamplesBefore,int nbSamplesAfter,const QValueList<int>& clustersToSkip){
+                                   Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,QMap<int,int>* channelsSpikeGroups,
+                                   int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip){
 
  //Set Connection
  connect(clustersProvider,SIGNAL(dataReady(Array<dataType>&,QObject*,QString)),this,SLOT(dataAvailable(Array<dataType>&,QObject*,QString)));
@@ -3399,8 +3402,8 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
  updateNoneBrowsingClusterList(name,clustersToSkip);
 
  if(clustersToShow.size() != 0){
-  QValueList<int> clusters;
-  QValueList<int>::iterator shownClustersIterator;
+  Q3ValueList<int> clusters;
+  Q3ValueList<int>::iterator shownClustersIterator;
   for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
    clusters.append(*shownClustersIterator);
   }
@@ -3438,13 +3441,13 @@ void TraceView::removeClusterProvider(QString name,bool active){
 }
 
 
-void TraceView::showClusters(QString name,QValueList<int>& clustersToShow){
+void TraceView::showClusters(QString name,Q3ValueList<int>& clustersToShow){
  ClusterData* clusterData;
  clusterData = clustersData[name];
 
- QValueList<int> clusters;
+ Q3ValueList<int> clusters;
  if(clustersToShow.size() != 0){
-  QValueList<int>::iterator shownClustersIterator;
+  Q3ValueList<int>::iterator shownClustersIterator;
   for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
    clusters.append(*shownClustersIterator);
   }
@@ -3470,18 +3473,18 @@ void TraceView::showClusters(QString name,QValueList<int>& clustersToShow){
  }
 }
 
-void TraceView::updateNoneBrowsingClusterList(QString providerName,const QValueList<int>& clustersToNotBrowse){
- QValueList<int> clusters;
- QValueList<int>::const_iterator iterator;
+void TraceView::updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse){
+ Q3ValueList<int> clusters;
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = clustersToNotBrowse.begin(); iterator != clustersToNotBrowse.end(); ++iterator){
   clusters.append(*iterator);
  }
  clustersNotUsedForBrowsing.insert(providerName,clusters);
 }
 
-void TraceView::skipStatusChanged(const QValueList<int>& skippedChannels){
+void TraceView::skipStatusChanged(const Q3ValueList<int>& skippedChannels){
  this->skippedChannels.clear();
- QValueList<int>::const_iterator iterator;
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = skippedChannels.begin(); iterator != skippedChannels.end(); ++iterator){
   this->skippedChannels.append(*iterator);
  }
@@ -3505,7 +3508,7 @@ void TraceView::updateWaveformInformation(int nbSamplesBefore, int nbSamplesAfte
  }
 }
 
-void TraceView::print(QPainter& printPainter,QPaintDeviceMetrics& metrics,bool whiteBackground){
+void TraceView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground){
  //Draw the double buffer (pixmap) by copying it into the printer device throught the painter.
   QRect viewportOld = QRect(viewport.left(),viewport.top(),viewport.width(),viewport.height());
 
@@ -3537,8 +3540,8 @@ void TraceView::print(QPainter& printPainter,QPaintDeviceMetrics& metrics,bool w
   QColor colorLegendTmp = colorLegend;
   QColor background= backgroundColor();
   if(whiteBackground){
-   colorLegend = black;
-   setPaletteBackgroundColor(white);
+   colorLegend = Qt::black;
+   setPaletteBackgroundColor(Qt::white);
   }
 
   printPainter.fillRect(back,backgroundColor());
@@ -3573,7 +3576,7 @@ void TraceView::print(QPainter& printPainter,QPaintDeviceMetrics& metrics,bool w
 
 
 void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,
-                          bool active,QValueList<int>& eventsToShow,const QValueList<int>& eventsToSkip){
+                          bool active,Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToSkip){
 
  //Set Connections
  connect(eventsProvider,SIGNAL(dataReady(Array<dataType>&,Array<int>&,QObject*,QString)),this,SLOT(dataAvailable(Array<dataType>&,Array<int>&,QObject*,QString)));
@@ -3583,8 +3586,8 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,Ite
  updateNoneBrowsingEventList(name,eventsToSkip);
 
  if(eventsToShow.size() != 0){
-  QValueList<int> events;
-  QValueList<int>::iterator shownEventsIterator;
+  Q3ValueList<int> events;
+  Q3ValueList<int>::iterator shownEventsIterator;
   for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
    events.append(*shownEventsIterator);
   }
@@ -3615,13 +3618,13 @@ void TraceView::removeEventProvider(QString name,bool active){
  if(active) update();
 }
 
-void TraceView::showEvents(QString name,QValueList<int>& eventsToShow){
+void TraceView::showEvents(QString name,Q3ValueList<int>& eventsToShow){
  EventData* eventData;
  eventData = eventsData[name];
 
- QValueList<int> events;
+ Q3ValueList<int> events;
  if(eventsToShow.size() != 0){
-  QValueList<int>::iterator shownEventsIterator;
+  Q3ValueList<int>::iterator shownEventsIterator;
   for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
    events.append(*shownEventsIterator);
   }
@@ -3646,12 +3649,12 @@ void TraceView::showEvents(QString name,QValueList<int>& eventsToShow){
  }
 }
 
-void  TraceView::updateEvents(QString providerName,QValueList<int>& eventsToShow,bool active){
+void  TraceView::updateEvents(QString providerName,Q3ValueList<int>& eventsToShow,bool active){
  EventData* eventData;
  eventData = eventsData[providerName];
 
- QValueList<int> events;
- QValueList<int>::iterator shownEventsIterator;
+ Q3ValueList<int> events;
+ Q3ValueList<int>::iterator shownEventsIterator;
  for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
   events.append(*shownEventsIterator);
  }
@@ -3665,9 +3668,9 @@ void  TraceView::updateEvents(QString providerName,QValueList<int>& eventsToShow
  if(active) update();
 }
 
-void TraceView::updateNoneBrowsingEventList(QString providerName,const QValueList<int>& eventsToNotBrowse){
- QValueList<int> events;
- QValueList<int>::const_iterator iterator;
+void TraceView::updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse){
+ Q3ValueList<int> events;
+ Q3ValueList<int>::const_iterator iterator;
  for(iterator = eventsToNotBrowse.begin(); iterator != eventsToNotBrowse.end(); ++iterator){
   events.append(*iterator);
  }
@@ -3687,17 +3690,17 @@ void TraceView::showNextEvent(){
  //Only request data from the provider for which events have been selected
  if(!selectedEvents.isEmpty()){
 
-  QValueList<QString> toRemove;
-  QMap<QString, QValueList<int> > idsToBrowse;
-  QMap<QString, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<QString> toRemove;
+  QMap<QString, Q3ValueList<int> > idsToBrowse;
+  QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
    //check if there are events to browse through taking the skip list into account
    else{
-    QValueList<int> selectedIds = selectedEvents[providersIterator.key()];
-    QValueList<int> idsToNotUse = eventsNotUsedForBrowsing[providersIterator.key()];
-    QValueList<int> ids;
-    QValueList<int>::iterator shownEventsIterator;
+    Q3ValueList<int> selectedIds = selectedEvents[providersIterator.key()];
+    Q3ValueList<int> idsToNotUse = eventsNotUsedForBrowsing[providersIterator.key()];
+    Q3ValueList<int> ids;
+    Q3ValueList<int>::iterator shownEventsIterator;
     for(shownEventsIterator = selectedIds.begin(); shownEventsIterator != selectedIds.end(); ++shownEventsIterator)
      if(!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
     if(ids.size() != 0){
@@ -3707,7 +3710,7 @@ void TraceView::showNextEvent(){
    }
   }
 
-  QValueList<QString>::iterator toRemoveIterator;
+  Q3ValueList<QString>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedEvents.remove(*toRemoveIterator);
    eventsData.remove(*toRemoveIterator);
@@ -3718,9 +3721,9 @@ void TraceView::showNextEvent(){
    long timeFrameWidth = endTime - startTime;
    nextEventProvider.first = "";
    nextEventProvider.second = 0;
-   QDictIterator<EventData> iterator(eventsData);
+   Q3DictIterator<EventData> iterator(eventsData);
    for(;iterator.current();++iterator){
-    QValueList<int> ids = idsToBrowse[iterator.currentKey()];
+    Q3ValueList<int> ids = idsToBrowse[iterator.currentKey()];
     if(!static_cast<EventData*>(iterator.current())->status() && ids.size() != 0) static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestNextEventData(startTime,timeFrameWidth,ids,this);
    }
   }
@@ -3733,17 +3736,17 @@ void TraceView::showPreviousEvent(){
  //Only request data from the provider for which events have been selected
  if(!selectedEvents.isEmpty()){
 
-  QValueList<QString> toRemove;
-  QMap<QString, QValueList<int> > idsToBrowse;
-  QMap<QString, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<QString> toRemove;
+  QMap<QString, Q3ValueList<int> > idsToBrowse;
+  QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
    //check if there are events to browse through taking the skip list into account
    else{
-    QValueList<int> selectedIds = selectedEvents[providersIterator.key()];
-    QValueList<int> idsToNotUse = eventsNotUsedForBrowsing[providersIterator.key()];
-    QValueList<int> ids;
-    QValueList<int>::iterator shownEventsIterator;
+    Q3ValueList<int> selectedIds = selectedEvents[providersIterator.key()];
+    Q3ValueList<int> idsToNotUse = eventsNotUsedForBrowsing[providersIterator.key()];
+    Q3ValueList<int> ids;
+    Q3ValueList<int>::iterator shownEventsIterator;
     for(shownEventsIterator = selectedIds.begin(); shownEventsIterator != selectedIds.end(); ++shownEventsIterator)
      if(!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
     if(ids.size() != 0){
@@ -3753,7 +3756,7 @@ void TraceView::showPreviousEvent(){
    }
   }
 
-  QValueList<QString>::iterator toRemoveIterator;
+  Q3ValueList<QString>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedEvents.remove(*toRemoveIterator);
    eventsData.remove(*toRemoveIterator);
@@ -3764,9 +3767,9 @@ void TraceView::showPreviousEvent(){
    long timeFrameWidth = endTime - startTime;
    previousEventProvider.first = "";
    previousEventProvider.second = 0;
-   QDictIterator<EventData> iterator(eventsData);
+   Q3DictIterator<EventData> iterator(eventsData);
    for(;iterator.current();++iterator){
-    QValueList<int> ids = idsToBrowse[iterator.currentKey()];
+    Q3ValueList<int> ids = idsToBrowse[iterator.currentKey()];
     if(!static_cast<EventData*>(iterator.current())->status() && ids.size() != 0) static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestPreviousEventData(startTime,timeFrameWidth,ids,this);
    }
   }
@@ -3791,7 +3794,7 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
  }
 
  bool ready = false;
- QDictIterator<EventData> iterator(eventsData);
+ Q3DictIterator<EventData> iterator(eventsData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
@@ -3847,7 +3850,7 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
  }
 
  bool ready = false;
- QDictIterator<EventData> iterator(eventsData);
+ Q3DictIterator<EventData> iterator(eventsData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
@@ -3879,9 +3882,9 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
   long timeFrameWidth = endTime - startTime;
   previousEventProvider.first = "";
   previousEventProvider.second = 0;
-  QDictIterator<EventData> iterator(eventsData);
+  Q3DictIterator<EventData> iterator(eventsData);
   for(;iterator.current();++iterator){
-   QValueList<int> selectedIds = selectedEvents[iterator.currentKey()];
+   Q3ValueList<int> selectedIds = selectedEvents[iterator.currentKey()];
    static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestPreviousEventData(startTime,timeFrameWidth,selectedIds,this);
   }
  }
@@ -3913,8 +3916,8 @@ void TraceView::drawEvent(QString providerName,int selectedEventId,dataType sele
     if(multiColumns){
      int X = X0;
      //Loop on all the groups (one by column)
-     QValueList<int> groupIds = shownGroupsChannels.keys();
-     QValueList<int>::iterator iterator;
+     Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+     Q3ValueList<int>::iterator iterator;
      for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
       int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
       if(highlight){
@@ -3988,13 +3991,13 @@ void TraceView::drawEvent(QString providerName,int selectedEventId,dataType sele
 
 void TraceView::channelColorUpdate(int channelId,bool active){
   //Loop on all the shown groups to find if channelId is currently displayed
-  QValueList<int> groupIds = shownGroupsChannels.keys();
-  QValueList<int>::iterator iterator;
+  Q3ValueList<int> groupIds = shownGroupsChannels.keys();
+  Q3ValueList<int>::iterator iterator;
   for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-   QValueList<int> channelIds = shownGroupsChannels[*iterator];
+   Q3ValueList<int> channelIds = shownGroupsChannels[*iterator];
    if(channelIds.contains(channelId)){
     if(active){
-     QValueList<int> channels;
+     Q3ValueList<int> channels;
      channels.append(channelId);
      if(mode == SELECT) drawTraces(channels,true);
      else drawTraces(channels,false);
@@ -4047,17 +4050,17 @@ void TraceView::showNextCluster(){
 
  //Only request data from the provider for which clusters have been selected
  if(!selectedClusters.isEmpty()){
-  QValueList<int> toRemove;
-  QMap<int, QValueList<int> > idsToBrowse;
-  QMap<int, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<int> toRemove;
+  QMap<int, Q3ValueList<int> > idsToBrowse;
+  QMap<int, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
    //check if there are clusters to browse through taking the skip list
    else{
-    QValueList<int> selectedIds = selectedClusters[providersIterator.key()];
-    QValueList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
-    QValueList<int> ids;
-    QValueList<int>::iterator shownClustersIterator;
+    Q3ValueList<int> selectedIds = selectedClusters[providersIterator.key()];
+    Q3ValueList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
+    Q3ValueList<int> ids;
+    Q3ValueList<int>::iterator shownClustersIterator;
     for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator)
      if(!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
     if(ids.size() != 0){
@@ -4067,7 +4070,7 @@ void TraceView::showNextCluster(){
    }
   }
 
-  QValueList<int>::iterator toRemoveIterator;
+  Q3ValueList<int>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedClusters.remove(*toRemoveIterator);
    clustersData.remove(QString("%1").arg(*toRemoveIterator));
@@ -4079,9 +4082,9 @@ void TraceView::showNextCluster(){
    nextClusterProvider.first = "";
    nextClusterProvider.second = 0;
    previousStartTimeInRecordingUnits = startTimeInRecordingUnits;
-   QDictIterator<ClusterData> iterator(clustersData);
+   Q3DictIterator<ClusterData> iterator(clustersData);
    for(;iterator.current();++iterator){
-    QValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
+    Q3ValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
 
 cout<<"key " <<iterator.currentKey().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
 
@@ -4096,17 +4099,17 @@ void TraceView::showPreviousCluster(){
 
  //Only request data from the provider for which clusters have been selected
  if(!selectedClusters.isEmpty()){
-  QValueList<int> toRemove;
-  QMap<int, QValueList<int> > idsToBrowse;
-  QMap<int, QValueList<int> >::Iterator providersIterator;
+  Q3ValueList<int> toRemove;
+  QMap<int, Q3ValueList<int> > idsToBrowse;
+  QMap<int, Q3ValueList<int> >::Iterator providersIterator;
   for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-   if(static_cast< QValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
+   if(static_cast< Q3ValueList<int> >(providersIterator.data()).isEmpty()) toRemove.append(providersIterator.key());
    //check if there are clusters to browse through taking the skip list
    else{
-    QValueList<int> selectedIds = selectedClusters[providersIterator.key()];
-    QValueList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
-    QValueList<int> ids;
-    QValueList<int>::iterator shownClustersIterator;
+    Q3ValueList<int> selectedIds = selectedClusters[providersIterator.key()];
+    Q3ValueList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
+    Q3ValueList<int> ids;
+    Q3ValueList<int>::iterator shownClustersIterator;
     for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator){
      if(!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
     }
@@ -4117,7 +4120,7 @@ void TraceView::showPreviousCluster(){
    }
   }
 
-  QValueList<int>::iterator toRemoveIterator;
+  Q3ValueList<int>::iterator toRemoveIterator;
   for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
    selectedClusters.remove(*toRemoveIterator);
    clustersData.remove(QString("%1").arg(*toRemoveIterator));
@@ -4129,9 +4132,9 @@ void TraceView::showPreviousCluster(){
    previousClusterProvider.first = "";
    previousClusterProvider.second = 0;
    previousStartTimeInRecordingUnits = startTimeInRecordingUnits;
-   QDictIterator<ClusterData> iterator(clustersData);
+   Q3DictIterator<ClusterData> iterator(clustersData);
    for(;iterator.current();++iterator){
-    QValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
+    Q3ValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
     if(!static_cast<ClusterData*>(iterator.current())->status() && ids.size() != 0) static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestPreviousClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
    }
   }
@@ -4164,7 +4167,7 @@ cout<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeI
  }
 
  bool ready = false;
- QDictIterator<ClusterData> iterator(clustersData);
+ Q3DictIterator<ClusterData> iterator(clustersData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
@@ -4227,7 +4230,7 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
  }
 
  bool ready = false;
- QDictIterator<ClusterData> iterator(clustersData);
+ Q3DictIterator<ClusterData> iterator(clustersData);
  for(;iterator.current();++iterator){
   ready = iterator.current()->status();
   if(!ready) break;
@@ -4262,15 +4265,15 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
   long timeFrameWidth = endTime - startTime;
   previousClusterProvider.first = "";
   previousClusterProvider.second = 0;
-  QDictIterator<ClusterData> iterator(clustersData);
+  Q3DictIterator<ClusterData> iterator(clustersData);
   for(;iterator.current();++iterator){
-   QValueList<int> selectedIds = selectedClusters[iterator.currentKey().toInt()];
+   Q3ValueList<int> selectedIds = selectedClusters[iterator.currentKey().toInt()];
    static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestPreviousClusterData(startTime,timeFrameWidth,selectedIds,this,previousStartTimeInRecordingUnits);
   }
  }
 }
 
-void TraceView::updateClusters(QString name,QValueList<int>& clustersToShow,ItemColors* clusterColors,bool active){
+void TraceView::updateClusters(QString name,Q3ValueList<int>& clustersToShow,ItemColors* clusterColors,bool active){
  providerItemColors.remove(name);
  providerItemColors.insert(name,clusterColors);
  showClusters(name,clustersToShow);
@@ -4310,7 +4313,7 @@ void TraceView::decreaseRatio(){
 void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* initiator){
  //If an event has been added or removed, make sure the information is up to date before emitting a signal with it.
  if(!eventProvidersToUpdate.isEmpty()){
-  QValueList<QString>::iterator providerIterator;
+  Q3ValueList<QString>::iterator providerIterator;
   EventData* eventData;
   for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
    eventData = eventsData[*providerIterator];
@@ -4321,7 +4324,7 @@ void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* 
    else eventsData[*providerIterator]->setStatus(false);
   }
 
-  QDictIterator<EventData> iterator(eventsData);
+  Q3DictIterator<EventData> iterator(eventsData);
   for(;iterator.current();++iterator){
    if(eventProvidersToUpdate.contains(iterator.currentKey())){
     static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestData(startTime,endTime,this);
@@ -4345,7 +4348,7 @@ void TraceView::traceBackgroundImageUpdate(QImage traceBackgroundImage,bool acti
 void TraceView::scaleBackgroundImage(){
   if(!background.isNull()){
    QRect contentsRec = contentsRect();
-   scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),PreferDither);
+   scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
   }
 }
 

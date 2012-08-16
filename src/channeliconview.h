@@ -21,9 +21,14 @@
 //QT include files
 #include <qwidget.h>
 #include <qpainter.h>
-#include <qiconview.h>
-#include <qdragobject.h>
+#include <q3iconview.h>
+#include <q3dragobject.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QWheelEvent>
+#include <QDropEvent>
 
 //General C++ include files
 #include <iostream>
@@ -33,21 +38,21 @@ using namespace std;
   *@author Lynn Hazan
   */
 
-class ChannelIconView : public QIconView  {
+class ChannelIconView : public Q3IconView  {
    Q_OBJECT
 public:
    ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0, WFlags f = 0);
    inline ~ChannelIconView(){};
    
   protected:
-   virtual QDragObject* dragObject();
+   virtual Q3DragObject* dragObject();
    virtual void contentsDropEvent(QDropEvent* event);
    virtual void contentsMousePressEvent(QMouseEvent* event);
    inline void contentsWheelEvent(QWheelEvent* event){event->accept();};
 
   signals:
-   void channelsMoved(QString targetGroup,QIconViewItem* after);
-   void channelsMoved(const QValueList<int>& channelIds,QString sourceGroup,QIconViewItem* after);
+   void channelsMoved(QString targetGroup,Q3IconViewItem* after);
+   void channelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
    void dropLabel(int sourceId,int targetId,int start,int destination);
    void moussePressWoModificators(QString sourceGroup);
 
@@ -55,11 +60,11 @@ public:
     inline void setDragAndDrop(bool dragDrop){drag = dragDrop;};
       
   protected slots:
-   void slotDropped(QDropEvent* event,const QValueList<QIconDragItem>& draggedList);
+   void slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList);
 
   private:
   /**Return 0 if it has to be before the first one.*/
-   QIconViewItem* findItemToInsertAfter(QPoint position);
+   Q3IconViewItem* findItemToInsertAfter(QPoint position);
 
    /**True the drag and drop is allow, false otherwise.*/
    bool drag;

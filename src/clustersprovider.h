@@ -24,8 +24,10 @@
 #include <types.h>
 
 // include files for QT
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //include files for c/c++ libraries
 #include <math.h>
@@ -69,7 +71,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-  void requestNextClusterData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+  void requestNextClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
 
 
  /**Looks up for the first of the clusters included in the list @p selectedIds existing before the time @p endTime.
@@ -81,7 +83,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-  void requestPreviousClusterData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+  void requestPreviousClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
     
   /**Loads the cluster ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status
@@ -90,7 +92,7 @@ public:
 
   /**Returns list of cluster Ids.
   * @return */
-  inline QValueList<int> clusterIdList() const{return clusterIds;};
+  inline Q3ValueList<int> clusterIdList() const{return clusterIds;};
   
   /**Returns the name of the provider which is the cluster file number.
   * @return provider'name.
@@ -199,7 +201,7 @@ private:
   float dataCurrentRatio;
 
   /**List of the cluster ids.*/
-  QValueList<int> clusterIds;
+  Q3ValueList<int> clusterIds;
 
   /**The maximum time, in miliseconds, contained in the file.*/
   long fileMaxTime;

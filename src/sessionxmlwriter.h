@@ -25,7 +25,7 @@
 #include "sessionInformation.h"
 
 //include files for QT
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <qdom.h> 
 
@@ -57,13 +57,13 @@ public:
   * cluster, spike or event files.
   * @param fileList list of files loaded during the session.
   */
-  void setLoadedFilesInformation(QValueList<SessionFile> fileList);
+  void setLoadedFilesInformation(Q3ValueList<SessionFile> fileList);
 
  /**
   * Creates the elements related to the displays.
   * @param displayList list of DisplayInformation given the information on each display.
   */
-  void setDisplayInformation(QValueList<DisplayInformation> displayList);
+  void setDisplayInformation(Q3ValueList<DisplayInformation> displayList);
   
   private:
 

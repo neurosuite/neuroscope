@@ -19,10 +19,13 @@
 #define CHANNELGROUPVIEW_H
 
 #include <qwidget.h>
-#include <qhbox.h>
-#include <qiconview.h>
-#include <qobjectlist.h> 
+#include <q3hbox.h>
+#include <q3iconview.h>
+#include <qobject.h> 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 //General C++ include files
 #include <iostream>
@@ -32,10 +35,10 @@ using namespace std;
   *@author Lynn Hazan
   */
 
-class ChannelGroupView : public QHBox  {
+class ChannelGroupView : public Q3HBox  {
    Q_OBJECT
 public: 
-	inline ChannelGroupView(bool drag,QColor backgroundColor,QWidget* parent=0, const char* name=0):QHBox(parent,name),iconView(0L),drag(drag),init(true){
+	inline ChannelGroupView(bool drag,QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),drag(drag),init(true){
 
     //Set the groupview color, the foreground color depends on the background color
     setPaletteBackgroundColor(backgroundColor);
@@ -44,8 +47,8 @@ public:
     int v;
     backgroundColor.hsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = black;
-    else legendColor = white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+    else legendColor = Qt::white;
     setPaletteForegroundColor(legendColor);
     setMargin(0);
     setSpacing(0);
@@ -56,7 +59,7 @@ public:
 
   inline ~ChannelGroupView(){};
 
-  inline void setIconView(QIconView* view){
+  inline void setIconView(Q3IconView* view){
    iconView = view;
   };
   
@@ -93,7 +96,7 @@ protected:
    }
 
    QString information;
-   if(QTextDrag::decode(event,information)){
+   if(Q3TextDrag::decode(event,information)){
     int groupSource = information.section("-",0,0).toInt();
     int start = information.section("-",1,1).toInt();
     QString groupTarget = this->name();
@@ -106,13 +109,13 @@ protected:
  	  event->ignore();
  	  return;
    }   
-   event->accept(QTextDrag::canDecode(event));
+   event->accept(Q3TextDrag::canDecode(event));
    //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
    emit dragObjectMoved(QWidget::mapToParent(event->pos()));
   };
                     
  private:
-  QIconView* iconView;
+  Q3IconView* iconView;
 
   /**True the drag and drop is allow, false otherwise.*/
   bool drag;

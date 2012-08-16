@@ -19,9 +19,9 @@
 #define CLUSTERCOLORS_H
 
 // include files for Qt
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qcolor.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 // application specific includes
 #include "itemcolors.h"
@@ -149,7 +149,7 @@ public:
   * the last reset of their status.
   * @return cluster ids list.
   */
-  virtual inline QValueList<int> colorChangedClusterList(){
+  virtual inline Q3ValueList<int> colorChangedClusterList(){
    return ItemColors::colorChangedItemList(); 
   };
 

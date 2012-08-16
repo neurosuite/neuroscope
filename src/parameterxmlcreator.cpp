@@ -22,6 +22,9 @@
 //General C++ include files
 #include <iostream>
 #include <fstream>
+//Added by qt3to4:
+#include <Q3TextStream>
+#include <Q3ValueList>
 using namespace std;
 
 //include files for QT
@@ -50,7 +53,7 @@ ParameterXmlCreator::~ParameterXmlCreator(){}
 
 bool ParameterXmlCreator::writeTofile(const KURL& url){ 
  QFile parameterFile(url.path());
- bool status = parameterFile.open(IO_WriteOnly);
+ bool status = parameterFile.open(QIODevice::WriteOnly);
  if(!status) return status;
 
  QDomElement neuroscope = doc.createElement(NEUROSCOPE);
@@ -70,7 +73,7 @@ bool ParameterXmlCreator::writeTofile(const KURL& url){
 
  QString xmlDocument = doc.toString();
  
- QTextStream stream(&parameterFile);
+ Q3TextStream stream(&parameterFile);
  stream<< xmlDocument;
  parameterFile.close();
  
@@ -190,18 +193,18 @@ void ParameterXmlCreator::setChannelDisplayInformation(ChannelColors* channelCol
  }
 }
 
-void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
+void ParameterXmlCreator::setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
  anatomicalDescription = doc.createElement(ANATOMY);
  QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
  //Create the anatomical groups
- QMap<int,QValueList<int> >::Iterator iterator;
+ QMap<int,Q3ValueList<int> >::Iterator iterator;
  //The iterator gives the keys sorted.
  for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
   //the trash group is not stored
   if(iterator.key() == 0) continue;
-  QValueList<int> channelIds = iterator.data();
-  QValueList<int>::iterator channelIterator;
+  Q3ValueList<int> channelIds = iterator.data();
+  Q3ValueList<int>::iterator channelIterator;
 
   QDomElement groupElement = doc.createElement(GROUP);
   
@@ -219,7 +222,7 @@ void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QValueList<int> >& 
  if(channelGroupsElement.hasChildNodes()) anatomicalDescription.appendChild(channelGroupsElement); 
 }
 
-void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, QValueList<int> >& spikeGroups){
+void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups){
  //The spikes element is a neuroscope specific element. The tag contains nbSamples and peakSampleIndex information used for all the spike groups 
  //in Neuroscope.
  spikes = doc.createElement(SPIKES);
@@ -240,13 +243,13 @@ void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSam
  QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
  //Create the spike groups  
- QMap<int,QValueList<int> >::Iterator iterator;
+ QMap<int,Q3ValueList<int> >::Iterator iterator;
  //The iterator gives the keys sorted.
  for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
   //the trashs groups are not stored
   if(iterator.key() == -1 || iterator.key() == 0) continue;
-  QValueList<int> channelIds = iterator.data();
-  QValueList<int>::iterator channelIterator;
+  Q3ValueList<int> channelIds = iterator.data();
+  Q3ValueList<int>::iterator channelIterator;
 
   QDomElement groupElement = doc.createElement(GROUP);
   QDomElement channelListElement = doc.createElement(CHANNELS);
@@ -267,19 +270,19 @@ void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSam
 }
 
 
-void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, QValueList<int> >& spikeGroups){
+void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups){
  spikeDetection = doc.createElement(SPIKE);
 
  QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
  //Create the spike groups
- QMap<int,QValueList<int> >::Iterator iterator;
+ QMap<int,Q3ValueList<int> >::Iterator iterator;
  //The iterator gives the keys sorted.
  for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
   //the trashs groups are not stored
   if(iterator.key() == -1 || iterator.key() == 0) continue;
-  QValueList<int> channelIds = iterator.data();
-  QValueList<int>::iterator channelIterator;
+  Q3ValueList<int> channelIds = iterator.data();
+  Q3ValueList<int>::iterator channelIterator;
 
   QDomElement groupElement = doc.createElement(GROUP);
   QDomElement channelListElement = doc.createElement(CHANNELS);

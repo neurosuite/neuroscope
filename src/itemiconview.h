@@ -20,9 +20,12 @@
 
 //QT include files
 #include <qwidget.h>
-#include <qiconview.h>
-#include <qdragobject.h>
+#include <q3iconview.h>
+#include <q3dragobject.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QWheelEvent>
 
 //General C++ include files
 #include <iostream>
@@ -32,18 +35,18 @@ using namespace std;
   *@author Lynn Hazan
   */
 
-class ItemIconView : public QIconView  {
+class ItemIconView : public Q3IconView  {
    Q_OBJECT
   public:
-   ItemIconView(QColor backgroundColor,QIconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, WFlags f = 0);
+   ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, WFlags f = 0);
    inline ~ItemIconView(){};
   
   private slots:
-   inline void slotMousePressed(int button,QIconViewItem* item){
+   inline void slotMousePressed(int button,Q3IconViewItem* item){
     emit mouseButtonPressed(button,item,this->name());
    };
   inline void contentsMouseReleaseEvent(QMouseEvent* event){
-    QIconView::contentsMouseReleaseEvent(event);
+    Q3IconView::contentsMouseReleaseEvent(event);
     emit mouseReleased(this->name());
    };
    
@@ -54,9 +57,9 @@ class ItemIconView : public QIconView  {
    
   signals:
    void mousePressWoModificators(QString sourceGroup);
-   void mouseButtonPressed(int,QIconViewItem*,QString sourceGroup);
+   void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
    void mousePressWAltButton(QString sourceGroup,int index);
-   void mouseButtonClicked(int,QIconViewItem*,QString sourceGroup);
+   void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
    void mouseReleased(QString sourceGroup);
 
 };

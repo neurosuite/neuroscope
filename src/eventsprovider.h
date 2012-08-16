@@ -24,9 +24,11 @@
 #include <types.h>
 
 // include files for QT
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //include files for c/c++ libraries
 #include <math.h>
@@ -78,7 +80,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-  void requestNextEventData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator);
+  void requestNextEventData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator);
 
 
  /**Looks up for the first of the events included in the list @p selectedIds existing before the time @p endTime.
@@ -89,7 +91,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-  void requestPreviousEventData(long endTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator);
+  void requestPreviousEventData(long endTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator);
   
   /**Loads the event ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status

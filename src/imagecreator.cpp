@@ -22,6 +22,8 @@
 
 //General C++ include files
 #include <iostream>
+//Added by qt3to4:
+#include <QPixmap>
 using namespace std;
 
 
@@ -56,7 +58,7 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
  if(backgroundImage != ""){
   QImage image(backgroundImage);
   QPixmap scaledBackground;
-  scaledBackground.convertFromImage(image.smoothScale(width,height),PreferDither);     
+  scaledBackground.convertFromImage(image.smoothScale(width,height),Qt::PreferDither);     
   painter.drawPixmap(0,0,scaledBackground); 
  }
   

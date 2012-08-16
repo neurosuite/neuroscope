@@ -20,15 +20,19 @@
 //QT include files
 #include <qvariant.h>
 #include <qwidget.h>
-#include <qvbox.h> 
-#include <qiconview.h>
-#include <qdict.h>
-#include <qptrlist.h>
+#include <q3vbox.h> 
+#include <q3iconview.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qlabel.h>
 #include <qcursor.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 // application specific includes
 #include "itemgroupview.h"
@@ -39,8 +43,8 @@
 using namespace std;
 
 // forward declaration
-class QIconView;
-class QIconViewItem;
+class Q3IconView;
+class Q3IconViewItem;
 class ItemColors;
 
  /**
@@ -48,7 +52,7 @@ class ItemColors;
   * It receives the user selections and triggers the actions which have to be done.
   *@author Lynn Hazan
   */
-class ItemPalette : public QScrollView
+class ItemPalette : public Q3ScrollView
 {
     Q_OBJECT
     
@@ -82,14 +86,14 @@ public:
     * @param itemsToSelect list of items to be selected.
     * @param itemsToSkip list of items to be marked as skiped while browsing.
     */
-    void selectItems(QString groupName,QValueList<int> itemsToSelect,QValueList<int> itemsToSkip);
+    void selectItems(QString groupName,Q3ValueList<int> itemsToSelect,Q3ValueList<int> itemsToSkip);
 
     /**Resets the internal variables.*/
     void reset();
     
     /**Returns the list of selected items by group
     * @return map given the list of selected items for a given group.*/
-    const QMap<QString,QValueList<int> > selectedItems();
+    const QMap<QString,Q3ValueList<int> > selectedItems();
 
     /**Updates the background color of the palette.*/
     void changeBackgroundColor(QColor color);
@@ -125,8 +129,8 @@ public slots:
     void slotMousePressWAltButton(QString sourceGroup,int index);
     
 protected slots:
-    void slotRightPressed(QIconViewItem* item);
-    void slotMousePressed(int button,QIconViewItem* item,QString sourceGroupName);
+    void slotRightPressed(Q3IconViewItem* item);
+    void slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
     void slotMidButtonPressed(QString sourceGroupName);  
     void slotClickRedraw();
@@ -137,10 +141,10 @@ protected slots:
 
 signals:
     void colorChanged(int item,QString groupName);
-    void updateShownItems(const QMap<QString,QValueList<int> >& selectedItems);    
+    void updateShownItems(const QMap<QString,Q3ValueList<int> >& selectedItems);    
     void paletteResized(int parentWidth,int labelSize);
     void selectedGroupChanged(QString eventGroupName);
-    void updateItemsToSkip(QString groupName,const QValueList<int>& itemsToSkip);
+    void updateItemsToSkip(QString groupName,const Q3ValueList<int>& itemsToSkip);
     void noClustersToBrowse();
     void noEventsToBrowse();
     void clustersToBrowse();
@@ -148,7 +152,7 @@ signals:
     
 private:    
     /**Dictionnary of the itemColors storing the color information for the items.*/
-    QDict<ItemColors> itemColorsDict;
+    Q3Dict<ItemColors> itemColorsDict;
 
     /**Background color.*/
     QColor backgroundColor;
@@ -156,13 +160,13 @@ private:
     /**Prevent from emitting signal while globaly selecting items*/
     bool isInSelectItems;
 
-    QVBox* verticalContainer;
+    Q3VBox* verticalContainer;
 
     /**Dictionnary of the iconviews representing the group of items.*/
-    QDict<ItemIconView> iconviewDict;
+    Q3Dict<ItemIconView> iconviewDict;
 
     /**Dictionnary of layout containing the iconviews.*/
-    QDict<ItemGroupView> itemGroupViewDict;
+    Q3Dict<ItemGroupView> itemGroupViewDict;
 
     /**Dummy widget used to keep the iconviews nicely display in the pannel.*/
     QWidget* spaceWidget;
@@ -177,10 +181,10 @@ private:
     QString selected;
 
     /**List used to order the electrode groups.*/
-    QValueList<int> clusterGroupList;
+    Q3ValueList<int> clusterGroupList;
     
     /**List used to order the event groups.*/
-    QValueList<QString> itemGroupList;
+    Q3ValueList<QString> itemGroupList;
 
     /**The width for the columns of the event iconviews.*/
     int gridX;
@@ -189,7 +193,7 @@ private:
     QMap<QString, QMap<int,bool> > browsingStatus;
 
     /**Stores the items that have to be redrawn.*/
-    QMap<QString, QValueList<int> > needRedrawing;
+    QMap<QString, Q3ValueList<int> > needRedrawing;
 
     /**True if icon pixmaps have to be updated, false otherwise.*/
     bool updateIconPixmap;
@@ -203,7 +207,7 @@ private:
     * @param item item for which the color has to be changed.
     * @param groupName name of the group containing the item.
     */
-    void changeColor(QIconViewItem* item,QString groupName);
+    void changeColor(Q3IconViewItem* item,QString groupName);
 
     /**Creates a new group for the name @p id
     * @param id name of the group to be created.
@@ -248,13 +252,13 @@ class GroupNameLabel : public QLabel{
      
   protected:
    virtual inline void mousePressEvent(QMouseEvent* e){
-    if(e->button() == QMouseEvent::LeftButton && !(e->state() & ShiftButton) && !(e->state() & ControlButton) && !(e->state() & AltButton)){
+    if(e->button() == QMouseEvent::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),false,false); 
     }
-    if(e->button() == QMouseEvent::LeftButton && (e->state() & ShiftButton) && !(e->state() & ControlButton) && !(e->state() & AltButton)){
+    if(e->button() == QMouseEvent::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),true,false); 
     }
-    if(e->button() == QMouseEvent::LeftButton && (e->state() & ControlButton) && (e->state() & AltButton)){
+    if(e->button() == QMouseEvent::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){
      emit leftClickOnLabel(parent()->name(),false,true); 
     }
     if(e->button() == QMouseEvent::MidButton){

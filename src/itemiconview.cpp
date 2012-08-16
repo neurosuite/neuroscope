@@ -24,16 +24,19 @@
 // include files for Qt
 #include <qcursor.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
 
 
-ItemIconView::ItemIconView(QColor backgroundColor,QIconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name,WFlags f):
-QIconView(parent,name,f){
+ItemIconView::ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name,WFlags f):
+Q3IconView(parent,name,f){
   QFont font( "Helvetica",8);
   setFont(font);
   setSpacing(4);
-  setFrameStyle(QFrame::NoFrame);
+  setFrameStyle(Q3Frame::NoFrame);
   setArrangement(LeftToRight);
-  setResizeMode(QIconView::Adjust); 
+  setResizeMode(Q3IconView::Adjust); 
   setItemTextPos(position);
   setGridX(gridX);
   setGridY(gridY);  
@@ -48,29 +51,29 @@ QIconView(parent,name,f){
   int v;
   backgroundColor.hsv(&h,&s,&v);
   QColor legendColor;
-  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = black;
-  else legendColor = white;
+  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+  else legendColor = Qt::white;
   setPaletteForegroundColor(legendColor);
-  setSelectionMode(QIconView::Extended);
+  setSelectionMode(Q3IconView::Extended);
   setItemsMovable(false);
 
   setSpacing(4);
   setAutoArrange(true);
   setSorting(false);
 
-  setHScrollBarMode(QScrollView::AlwaysOff);
-  setVScrollBarMode(QScrollView::AlwaysOff);
+  setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-  setFrameStyle(QFrame::Box | QFrame::Plain);
+  setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
   setLineWidth(1);
 
-  connect(this,SIGNAL(mouseButtonPressed(int,QIconViewItem*,const QPoint&)),this, SLOT(slotMousePressed(int,QIconViewItem*)));
+  connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,const QPoint&)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
 }
 
 void ItemIconView::contentsMousePressEvent(QMouseEvent* event){  
 
  //If the user did not clicked on an item, ignore the click
- QIconViewItem* item = findItem(event->pos()); 
+ Q3IconViewItem* item = findItem(event->pos()); 
  if(item == 0L) return;
 
  /*if(event->button() == LeftButton && !(event->state() & ShiftButton) &&
@@ -79,9 +82,9 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
  }*/
 
  //ask for mark an item skip
- if(event->button() == LeftButton && (event->state() & AltButton) && (event->state() & ControlButton)){
+ if(event->button() == Qt::LeftButton && (event->state() & Qt::AltModifier) && (event->state() & Qt::ControlModifier)){
  
-  QIconViewItem* item = findItem(event->pos()); 
+  Q3IconViewItem* item = findItem(event->pos()); 
   if(item != 0L){
    emit mousePressWAltButton(this->name(),item->index());
   }  
@@ -89,7 +92,7 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
  }
 
  //Lets the parent take care of the usual iconview managment
- QIconView::contentsMousePressEvent(event);
+ Q3IconView::contentsMousePressEvent(event);
 }
 
 

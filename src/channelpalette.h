@@ -20,14 +20,21 @@
 //QT include files
 #include <qvariant.h>
 #include <qwidget.h>
-#include <qvbox.h> 
-#include <qiconview.h>
-#include <qdict.h>
-#include <qptrlist.h>
+#include <q3vbox.h> 
+#include <q3iconview.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qlabel.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
 
 // application specific includes
 #include "channelgroupview.h"
@@ -38,8 +45,8 @@
 using namespace std;
 
 // forward declaration
-class QIconView;
-class QIconViewItem;
+class Q3IconView;
+class Q3IconViewItem;
 class ChannelColors;
 class SpaceWidget;
 
@@ -50,7 +57,7 @@ class SpaceWidget;
   */
 
 
-class ChannelPalette : public QScrollView
+class ChannelPalette : public Q3ScrollView
 {
     Q_OBJECT
     
@@ -77,18 +84,18 @@ public:
     * @param groupsChannels map given the list of channels for each group.
     * @param channelsGroups map given to which group each channel belongs. 
     */
-    void createChannelLists(ChannelColors* channelColors,QMap<int, QValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
+    void createChannelLists(ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
 
     /**Selects the channels contain in @p selectedChannels.
     * @param selectedChannels list of channels to select.
     */
-    void selectChannels(const QValueList<int>& selectedChannels);
+    void selectChannels(const Q3ValueList<int>& selectedChannels);
 
     /**Resets the internal information of the palette.*/
     void reset();
     
     /**Returns the list of selected channels*/
-    const QValueList<int> selectedChannels();
+    const Q3ValueList<int> selectedChannels();
 
     /**updates the background color of the palette.*/
     void changeBackgroundColor(QColor color);
@@ -97,7 +104,7 @@ public:
     * Gets the channels with the @p showStatus show/hide status.
     * @return list of channels having a show/hide status equals to showStatus.
     */
-    const QValueList<int> getShowHideChannels(bool showStatus);
+    const Q3ValueList<int> getShowHideChannels(bool showStatus);
 
     /**
     * Gets the skip status for each channel.
@@ -108,16 +115,16 @@ public:
 /**Interal class to represent an item in the palette. Contains a overloaded compare function to have
 * the items order by alphabetic order.
 */    
-class ChannelIconItem : public QIconViewItem{
+class ChannelIconItem : public Q3IconViewItem{
 
  public:
-   inline ChannelIconItem(QIconView* parent,const QString& text,const QPixmap& icon):
-     QIconViewItem(parent,text,icon){};
+   inline ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
+     Q3IconViewItem(parent,text,icon){};
 
-   inline ChannelIconItem(QIconView* parent,QIconViewItem* after,const QString& text,const QPixmap& icon):
-     QIconViewItem(parent,after,text,icon){};
+   inline ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
+     Q3IconViewItem(parent,after,text,icon){};
 
-   virtual inline int compare(QIconViewItem* item) const{
+   virtual inline int compare(Q3IconViewItem* item) const{
     if(key().toInt() < item->key().toInt()) return -1;
     else if(key().toInt() == item->key().toInt()) return 0;
     else return 1;
@@ -126,7 +133,7 @@ class ChannelIconItem : public QIconViewItem{
 
     
 public slots:
-    virtual void changeColor(QIconViewItem* item,bool single = true);
+    virtual void changeColor(Q3IconViewItem* item,bool single = true);
     /**Creates a new group and fill it with the selected channels.
     */
     void createGroup();
@@ -136,21 +143,21 @@ public slots:
     void selectAllChannels();
     void deselectAllChannels();
     /**Channels moved to an existing group in a specific location.*/
-    void slotChannelsMoved(QString targetGroup,QIconViewItem* after);
+    void slotChannelsMoved(QString targetGroup,Q3IconViewItem* after);
     /**Channels moved around in a group.*/
-    void slotChannelsMoved(const QValueList<int>& channelIds,QString sourceGroup,QIconViewItem* after);
-    void trashChannelsMovedAround(const QValueList<int>& channelIds,QString afterId,bool beforeFirst);
+    void slotChannelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void trashChannelsMovedAround(const Q3ValueList<int>& channelIds,QString afterId,bool beforeFirst);
     void discardChannels();
-    void discardChannels(const QValueList<int>& channelsToDiscard);
-    void discardChannels(const QValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);    
+    void discardChannels(const Q3ValueList<int>& channelsToDiscard);
+    void discardChannels(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);    
     void discardSpikeChannels();
     void showChannels();
     void hideChannels();
     void hideUnselectAllChannels();
-    void updateShowHideStatus(const QValueList<int>&channelIds,bool showStatus);
+    void updateShowHideStatus(const Q3ValueList<int>&channelIds,bool showStatus);
     void updateSkipStatus(const QMap<int,bool>& skipStatus);
-    void updateSkipStatus(const QValueList<int>&channelIds,bool skipStatus);
-    void updateColor(const QValueList<int>& channelIds);
+    void updateSkipStatus(const Q3ValueList<int>&channelIds,bool skipStatus);
+    void updateColor(const Q3ValueList<int>& channelIds);
     void updateColor(int channelId);
     /**Sets the channel color to the group color for all the channels in the same group has channelId.
     * The group to used is determine with the palette type.
@@ -161,15 +168,15 @@ public slots:
     void applyCustomColor();
     void setEditMode(bool edition);
     void groupToMove(int sourceId,int targetId,int start, int destination);
-    void removeChannelsFromTrash(const QValueList<int>& channelIds);
+    void removeChannelsFromTrash(const Q3ValueList<int>& channelIds);
     void slotMousePressWoModificators(QString sourceGroup);
     inline void selectionTool(){
      emit channelsSelected(selectedChannels());
     };
     
 protected slots:
-    virtual void slotRightPressed(QIconViewItem* item);
-    virtual void slotMousePressed(int button,QIconViewItem* item);
+    virtual void slotRightPressed(Q3IconViewItem* item);
+    virtual void slotMousePressed(int button,Q3IconViewItem* item);
     void slotMousePressed(QString sourceGroupName);
     virtual void slotMidButtonPressed(QString sourceGroupId);   
     virtual void slotClickRedraw();
@@ -184,16 +191,16 @@ signals:
     void singleChangeColor(int selectedChannel);
     void groupChangeColor(int groupId);
     //void channelsChangeColor(QValueList<int> selectedChannels);
-    void updateShownChannels(const QValueList<int>& shownChannels);
-    void updateHideChannels(const QValueList<int>& hiddenChannels);
+    void updateShownChannels(const Q3ValueList<int>& shownChannels);
+    void updateHideChannels(const Q3ValueList<int>& hiddenChannels);
     void paletteResized(int parentWidth,int labelSize);
-    void channelsDiscarded(const QValueList<int>& discarded);
+    void channelsDiscarded(const Q3ValueList<int>& discarded);
     void setDragAndDrop(bool dragAndDrop);
     void groupModified();
-    void channelsMovedToTrash(const QValueList<int>&channelIds,QString afterId,bool beforeFirst);
-    void channelsMovedAroundInTrash(const QValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
-    void channelsRemovedFromTrash(const QValueList<int>& channelIds);
-    void channelsSelected(const QValueList<int>& selectedChannels);
+    void channelsMovedToTrash(const Q3ValueList<int>&channelIds,QString afterId,bool beforeFirst);
+    void channelsMovedAroundInTrash(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
+    void channelsRemovedFromTrash(const Q3ValueList<int>& channelIds);
+    void channelsSelected(const Q3ValueList<int>& selectedChannels);
     
 private:    
     /**Pointer on the ChannelColors storing the color information for the channels.*/
@@ -205,13 +212,13 @@ private:
     /**Prevent from emitting signal while globaly selecting items*/
     bool isInSelectItems;
 
-    QVBox* verticalContainer;
+    Q3VBox* verticalContainer;
 
     /**Dictionnary of the iconviews representing the group of channels.*/
-    QDict<ChannelIconView> iconviewDict;
+    Q3Dict<ChannelIconView> iconviewDict;
 
     /**Dictionnary of layout containing the iconviews.*/
-    QDict<ChannelGroupView> channelGroupViewDict;
+    Q3Dict<ChannelGroupView> channelGroupViewDict;
 
     /**Dummy widget used to keep the iconviews nicely display in the pannel.*/
     SpaceWidget* spaceWidget;
@@ -223,7 +230,7 @@ private:
     /**Map the correspondence between the channel group ids and the channel ids.
     *Pointer to the variable belonging to NeuroscopeDoc.
     */
-    QMap<int, QValueList<int> >* groupsChannels;
+    QMap<int, Q3ValueList<int> >* groupsChannels;
  
     int labelSize;
     
@@ -274,10 +281,10 @@ private:
     void moveTrashesToBottom();
 
     /**Moves channels around in a group.*/
-    void moveChannels(const QValueList<int>& channelIds,QString sourceGroup,QIconViewItem* after);
+    void moveChannels(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
 
     /**Channels moved to an empty group.*/
-    void moveChannels(const QValueList<int>& channelIds,QString sourceGroup,QString targetGroup);
+    void moveChannels(const Q3ValueList<int>& channelIds,QString sourceGroup,QString targetGroup);
 
     /**Moves channels to either the trash group or the unspecified group in the spike palette.
     * @param destinationGroup the id of the group of destination.
@@ -311,7 +318,7 @@ class SpaceWidget : public QWidget{
     }
 
     QString information;
-    if(QTextDrag::decode(event,information)){
+    if(Q3TextDrag::decode(event,information)){
      int groupSource = information.section("-",0,0).toInt();
      int start = information.section("-",1,1).toInt();
      //to inform that the target is the SpaceWidget, put -2 as the target group.
@@ -324,7 +331,7 @@ class SpaceWidget : public QWidget{
   	  event->ignore();
   	  return;
     }
-    event->accept(QTextDrag::canDecode(event));
+    event->accept(Q3TextDrag::canDecode(event));
    };
 
   public slots:
@@ -360,7 +367,7 @@ class GroupLabel : public QLabel{
      QPoint firstClick = QWidget::mapToGlobal(e->pos());
      QString information = parent()->name();
      information.append(QString("-%1").arg(firstClick.y()));
-     QDragObject* drag = new QTextDrag(information,this);
+     Q3DragObject* drag = new Q3TextDrag(information,this);
      drag->dragMove();       
      
      emit leftClickOnLabel(parent()->name());

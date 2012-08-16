@@ -17,6 +17,10 @@
 
 // include files for QT
 #include "qapplication.h"
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3ValueList>
+#include <QPixmap>
 
 //include files for the application
 #include "positionview.h"
@@ -218,7 +222,7 @@ void PositionView::drawPositions(QPainter& painter){
   QColor lineColor = QColor(60,60,60);
   int nbCoordinates = nbSpots*2;
   for(int i = 1;i<nbPoints;++i){
-   QPointArray polygon(nbSpots);
+   Q3PointArray polygon(nbSpots);
    int index = 1;
    int nbPointsInPolygon = 0;
    for(int j = 0;j<nbSpots;++j){
@@ -241,7 +245,7 @@ void PositionView::drawPositions(QPainter& painter){
    }    
   }
   //The last position is emphasized, white line and bigger points with white in the center.
-  QPointArray polygon(nbSpots);
+  Q3PointArray polygon(nbSpots);
   int index = 1;
   int nbPointsInPolygon = 0;
   for(int j = 0;j<nbSpots;++j){
@@ -265,7 +269,7 @@ void PositionView::drawPositions(QPainter& painter){
  }
 }
 
-void PositionView::print(QPainter& printPainter,QPaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting){
+void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting){
  //first  print the information on the file: name and position in the file.
  int nbMinutes = static_cast<int>(startTime / 60000.0);
  float remainingSeconds = static_cast<float>(fmod(static_cast<double>(startTime),60000));
@@ -280,7 +284,7 @@ void PositionView::print(QPainter& printPainter,QPaintDeviceMetrics& metrics,boo
  QFont f("Helvetica",8);
  printPainter.setFont(f);
  printPainter.setPen(black);
- printPainter.drawText(textRec,Qt::AlignAuto | Qt::AlignVCenter,
+ printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
   QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(positionsProvider.getFilePath()).arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(timeFrameWidth));
 
  //Modify the viewport so the positions will not be drawn on the legend
@@ -336,14 +340,14 @@ void PositionView::changeBackgroundColor(QColor color){
  BaseFrame::changeBackgroundColor(color);
 }
 
-void PositionView::dataAvailable(QDict<EventData>& eventsData,QMap<QString, QValueList<int> >& selectedEvents,QDict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
+void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
  //Update the list of selected events.
  this->selectedEvents.clear();
- QMap<QString, QValueList<int> >::Iterator providersIterator;
+ QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
  for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-  QValueList<int> eventsToShow = static_cast< QValueList<int> >(providersIterator.data()); 
-  QValueList<int> events;
-  QValueList<int>::iterator shownEventsIterator;
+  Q3ValueList<int> eventsToShow = static_cast< Q3ValueList<int> >(providersIterator.data()); 
+  Q3ValueList<int> events;
+  Q3ValueList<int>::iterator shownEventsIterator;
   for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
    events.append(*shownEventsIterator);
   }
@@ -352,7 +356,7 @@ void PositionView::dataAvailable(QDict<EventData>& eventsData,QMap<QString, QVal
   
  //Update the event data 
  this->eventsData.clear();
- QDictIterator<EventData> iterator(eventsData);
+ Q3DictIterator<EventData> iterator(eventsData);
  for(;iterator.current();++iterator){
   EventData* eventData = static_cast<EventData*>(iterator.current());
   EventData* eventDataCopy = new EventData();
@@ -362,7 +366,7 @@ void PositionView::dataAvailable(QDict<EventData>& eventsData,QMap<QString, QVal
  
  //Update the color list
  this->providerItemColors.clear();
- QDictIterator<ItemColors> colorIterator(providerItemColors);
+ Q3DictIterator<ItemColors> colorIterator(providerItemColors);
  for(;colorIterator.current();++colorIterator){
   this->providerItemColors.insert(colorIterator.currentKey(),colorIterator.current());       
  }
@@ -377,7 +381,7 @@ void PositionView::dataAvailable(QDict<EventData>& eventsData,QMap<QString, QVal
 void PositionView::computeEventPositions(double samplingRate){
  float samplingRateInMs = static_cast<float>(static_cast<float>(samplingRate) / 1000.0);
  double positionSamplingInterval = 1000.0 / positionsProvider.getSamplingRate();
- QDictIterator<EventData> iterator(eventsData);
+ Q3DictIterator<EventData> iterator(eventsData);
  for(;iterator.current();++iterator){
   EventData* eventData = static_cast<EventData*>(iterator.current());
   int nbEvents = eventData->getTimes().nbOfColumns();
@@ -394,9 +398,9 @@ void PositionView::updateEventDisplay(){;
 void PositionView::drawEvents(QPainter& painter){  
  QPen pen; 
  pen.setWidth(3);
- QMap<QString, QValueList<int> >::Iterator iterator;
+ QMap<QString, Q3ValueList<int> >::Iterator iterator;
  for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-  QValueList<int> eventList = iterator.data();
+  Q3ValueList<int> eventList = iterator.data();
   QString providerName = iterator.key();
   if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
   ItemColors* colors = providerItemColors[providerName];

@@ -25,8 +25,12 @@
 // include files for QT
 #include <qobject.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpair.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QCustomEvent>
+#include <QEvent>
 
 // include files for KDE
 #include <kurl.h>
@@ -140,13 +144,13 @@ class NeuroscopeDoc : public QObject
     QMap<int,int> displayChannelsGroups;
 
     /**Map given the correspondance between the display group ids and the channel ids.*/
-    QMap<int, QValueList<int> > displayGroupsChannels;
+    QMap<int, Q3ValueList<int> > displayGroupsChannels;
 
     /**Map given the correspondance between the channel ids and the spike group ids.*/
     QMap<int,int> channelsSpikeGroups;
 
     /**Map given the correspondance between the spike group ids and the channel ids.*/
-    QMap<int, QValueList<int> > spikeGroupsChannels;
+    QMap<int, Q3ValueList<int> > spikeGroupsChannels;
 
     /**True if some properties for the current file were provided by the command line, false otherwise.*/
     bool isCommandLineProperties;
@@ -200,7 +204,7 @@ class NeuroscopeDoc : public QObject
     float indexLengthDefault;
         
     /** Dictionary between the provider names and the provider except the TracesProvider.*/
-    QDict<DataProvider> providers;
+    Q3Dict<DataProvider> providers;
 
     /**Map between the provider's name display at the top of the palette and the paths to the provider's file.*/
     QMap<QString,KURL> providerUrls;
@@ -209,7 +213,7 @@ class NeuroscopeDoc : public QObject
     QString lastLoadedProvider;
         
     /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
-    QDict<ItemColors> providerItemColors;
+    Q3Dict<ItemColors> providerItemColors;
 
    /**A base file name can be used for different kind of files corresponding to the same data and having
     * different sampling rates. Each file is identified by its extension. This map contains the correspondance
@@ -223,7 +227,7 @@ class NeuroscopeDoc : public QObject
     * the spike group used to create them (myFile.clu.1 correspond to the
     * spike group 1).
     */    
-    QMap<int, QValueList<int> > displayGroupsClusterFile;
+    QMap<int, Q3ValueList<int> > displayGroupsClusterFile;
 
     /**Extension of the open file.*/
     QString extension;
@@ -657,7 +661,7 @@ class NeuroscopeDoc : public QObject
 
   /**Returns a reference on the map given th correspondance between the display group ids and the channel ids.
    */
-   inline QMap<int, QValueList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;};   
+   inline QMap<int, Q3ValueList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;};   
 
   /**Returns a reference on the Map given the correspondance between the channel ids and the spike group ids.
    */
@@ -665,7 +669,7 @@ class NeuroscopeDoc : public QObject
 
   /**Returns a reference on the map given th correspondance between the spike group ids and the channel ids.
    */
-   inline QMap<int, QValueList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;};
+   inline QMap<int, Q3ValueList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;};
 
    /**Selects all the channels and shows them if the edit mode is not selected.
    * @param activeView the view in which the change has to be immediate.
@@ -858,7 +862,7 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.    
     * @param clustersToHide list of clusters to not show.
     */
-    void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,QValueList<int> clustersToHide);
+    void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,Q3ValueList<int> clustersToHide);
 
     /**Updates the selection of clusters to be shown by hiding all the clusters.
     * @param clusterPalette the palette containing the clusters to be shown.
@@ -928,7 +932,7 @@ class NeuroscopeDoc : public QObject
     * @param providerName identifier of the event file.
     * @return list of the event descriptions.
     */
-    QValueList<EventDescription> eventIds(QString providerName);
+    Q3ValueList<EventDescription> eventIds(QString providerName);
 
 
     /**Sets the information used to display spike waveforms.
@@ -1136,14 +1140,14 @@ class NeuroscopeDoc : public QObject
    * @param rasterHeight height of the rasters in the world coordinate system.   
    * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwise.      
    */
-    void loadFirstDisplay(QValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
-                          bool multipleColumns,bool greyMode,QValueList<int> offsets,QValueList<int> channelGains,
-                          QValueList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
+    void loadFirstDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
+                          bool multipleColumns,bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
+                          Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
                           bool showEventsInPositionView);
 
   public:	
     /** The list of the views currently connected to the document */
-    QPtrList<NeuroscopeView>* viewList;
+    Q3PtrList<NeuroscopeView>* viewList;
 
     
 };

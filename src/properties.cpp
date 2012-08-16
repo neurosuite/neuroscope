@@ -36,7 +36,7 @@ Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(pa
   
  //Set an icon on the backgroundButton button
  KIconLoader* loader = KGlobal::iconLoader();
- traceBackgroundButton->setIconSet(QIconSet(loader->loadIcon("fileopen", KIcon::Small)));
+ traceBackgroundButton->setIconSet(QIcon(loader->loadIcon("fileopen", KIcon::Small)));
 
 }
 Properties::~Properties(){

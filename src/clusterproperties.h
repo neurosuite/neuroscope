@@ -23,7 +23,7 @@
 #include <qlineedit.h>
 #include <qvalidator.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
 //include files for the application
 #include <clusterpropertieslayout.h>

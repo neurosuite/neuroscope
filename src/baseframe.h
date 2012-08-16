@@ -20,8 +20,11 @@
 
 // include files for QT
 #include <qwidget.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 //include files for the application
 #include "zoomwindow.h"
@@ -45,7 +48,7 @@ using namespace std;
   *@author Lynn Hazan
   */
 
-class BaseFrame : public QFrame  {
+class BaseFrame : public Q3Frame  {
    Q_OBJECT
    
 public:

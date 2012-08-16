@@ -19,9 +19,9 @@
 #define ITEMCOLORS_H
 
 // include files for Qt
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qcolor.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 
 /**
@@ -63,7 +63,7 @@ private:
   };
 
   /**list of the ItemColor contained in the class.*/
-  QPtrList<ItemColor> itemList;
+  Q3PtrList<ItemColor> itemList;
 
   /**True if at least one color has changed, false otherwise.*/
   bool colorChanged;
@@ -225,7 +225,7 @@ public:
   * the last reset of their status.
   * @return item ids list.
   */
-  virtual QValueList<int> colorChangedItemList();
+  virtual Q3ValueList<int> colorChangedItemList();
 
   /**
   * Resets the status color of the object to false.

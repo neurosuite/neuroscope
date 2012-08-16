@@ -19,9 +19,9 @@
 #define ITEMGROUPVIEW_H
 
 #include <qwidget.h>
-#include <qhbox.h>
-#include <qiconview.h>
-#include <qobjectlist.h> 
+#include <q3hbox.h>
+#include <q3iconview.h>
+#include <qobject.h> 
 
 //General C++ include files
 #include <iostream>
@@ -31,10 +31,10 @@ using namespace std;
   *@author Lynn Hazan
   */
 
-class ItemGroupView : public QHBox  {
+class ItemGroupView : public Q3HBox  {
    Q_OBJECT
 public: 
-	inline ItemGroupView(QColor backgroundColor,QWidget* parent=0, const char* name=0):QHBox(parent,name),iconView(0L),init(true){
+	inline ItemGroupView(QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),init(true){
 
   //Set the groupview color, the foreground color depends on the background color
     setPaletteBackgroundColor(backgroundColor);
@@ -43,8 +43,8 @@ public:
     int v;
     backgroundColor.hsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = black;
-    else legendColor = white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+    else legendColor = Qt::white;
     setPaletteForegroundColor(legendColor);
 
     setMargin(0);
@@ -56,7 +56,7 @@ public:
 
   inline ~ItemGroupView(){cout<<"in ~ItemGroupView()"<<endl;};
 
-  inline void setIconView(QIconView* view){
+  inline void setIconView(Q3IconView* view){
    iconView = view;
   };
 
@@ -80,7 +80,7 @@ public slots:
 
 
  private:
-  QIconView* iconView;
+  Q3IconView* iconView;
 
   bool init;
 

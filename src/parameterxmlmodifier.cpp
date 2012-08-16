@@ -22,6 +22,9 @@
 //General C++ include files
 #include <iostream>
 #include <fstream>
+//Added by qt3to4:
+#include <Q3TextStream>
+#include <Q3ValueList>
 using namespace std;
 
 //include files for QT
@@ -38,7 +41,7 @@ ParameterXmlModifier::~ParameterXmlModifier(){}
 bool ParameterXmlModifier::parseFile(const KURL& url){
 
  QFile file(url.path());
- if(!file.open(IO_ReadWrite)) return false;
+ if(!file.open(QIODevice::ReadWrite)) return false;
  //actually load the file in a tree in  memory
  if(!doc.setContent(&file)){
   file.close();
@@ -68,7 +71,7 @@ bool ParameterXmlModifier::parseFile(const KURL& url){
 
 bool ParameterXmlModifier::writeTofile(const KURL& url){ 
  QFile sessionFile(url.path());
- bool status = sessionFile.open(IO_WriteOnly);
+ bool status = sessionFile.open(QIODevice::WriteOnly);
  if(!status) return status;
  
  //insert a video node if one has been created
@@ -76,7 +79,7 @@ bool ParameterXmlModifier::writeTofile(const KURL& url){
  if(newVideoNode){
   newChild = root.insertAfter(video,acquisitionSystem);
   if(newChild.isNull()){
-   QTextStream stream(&sessionFile);
+   Q3TextStream stream(&sessionFile);
    stream<< initialXmlDocument;
    sessionFile.close();
    return false;  
@@ -87,7 +90,7 @@ bool ParameterXmlModifier::writeTofile(const KURL& url){
  if(newFilesNode){
   newChild = root.insertAfter(files,lfp);
   if(newChild.isNull()){
-   QTextStream stream(&sessionFile);
+   Q3TextStream stream(&sessionFile);
    stream<< initialXmlDocument;
    sessionFile.close();
    return false;  
@@ -106,7 +109,7 @@ bool ParameterXmlModifier::writeTofile(const KURL& url){
  if(!neuroscope.isNull()) newChild = root.replaceChild(neuroscopeElement,neuroscope); 
  else newChild = root.insertAfter(neuroscopeElement,spikeDetection);
  if (newChild.isNull()){
-  QTextStream stream(&sessionFile);
+  Q3TextStream stream(&sessionFile);
   stream<< initialXmlDocument;
   sessionFile.close();
   return false;  
@@ -114,7 +117,7 @@ bool ParameterXmlModifier::writeTofile(const KURL& url){
  
  QString xmlDocument = doc.toString();
  
- QTextStream stream(&sessionFile);
+ Q3TextStream stream(&sessionFile);
  stream<< xmlDocument;
  sessionFile.close();
  
@@ -380,7 +383,7 @@ bool ParameterXmlModifier::setChannelDisplayInformation(ChannelColors* channelCo
 
 }
 
-bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
+bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
  anatomicalDescription = findDirectChild(ANATOMY);
  if(anatomicalDescription.isNull()) return false;
  QDomNode channelGroupsNode = findDirectChild(CHANNEL_GROUPS,anatomicalDescription);
@@ -388,13 +391,13 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QValueList<int> >&
  QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
  
  //Create the anatomical groups
- QMap<int,QValueList<int> >::Iterator iterator;
+ QMap<int,Q3ValueList<int> >::Iterator iterator;
  //The iterator gives the keys sorted.
  for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
   //the trash groups are not stored
   if(iterator.key() == 0) continue;
-  QValueList<int> channelIds = iterator.data();
-  QValueList<int>::iterator channelIterator;
+  Q3ValueList<int> channelIds = iterator.data();
+  Q3ValueList<int>::iterator channelIterator;
 
   QDomElement groupElement = doc.createElement(GROUP);
   
@@ -425,7 +428,7 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QValueList<int> >&
  }  
 }
 
-bool ParameterXmlModifier::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, QValueList<int> >& spikeGroups){
+bool ParameterXmlModifier::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups){
  //AS part of the NEUROSCOPE tag, this tag is overwritten: the current SPIKES tag will be replace by this new one
  //The spikes element is a neuroscope specific element. The tag contains nbSamples and peakSampleIndex information used for all the spike groups
  //in Neuroscope.
@@ -447,7 +450,7 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(int nbSamples,int peakSa
 }
 
 
-bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QValueList<int> >& spikeGroups){
+bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups){
  spikeDetection = findDirectChild(SPIKE);
  if(spikeDetection.isNull()) return false;
 
@@ -467,12 +470,12 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QValueList<int
  if(!channelGroupsNode.isNull() && channelGroupsNode.childNodes().count() == nbSpikegroups){
   bool identical = true;
   groupNode = findDirectChild(GROUP,channelGroupsNode);
-  QMap<int,QValueList<int> >::Iterator iterator;
+  QMap<int,Q3ValueList<int> >::Iterator iterator;
   //The iterator gives the keys sorted.
   for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){      
    //the trashs groups are not stored
    if(iterator.key() == -1 || iterator.key() == 0) continue;
-   QValueList<int> channelIds = iterator.data();
+   Q3ValueList<int> channelIds = iterator.data();
    int nbChannels = channelIds.size();
    QDomNode channelList = findDirectChild(CHANNELS,groupNode);
         
@@ -503,13 +506,13 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QValueList<int
  
  
  //Create the spike groups  
- QMap<int,QValueList<int> >::Iterator iterator;
+ QMap<int,Q3ValueList<int> >::Iterator iterator;
  //The iterator gives the keys sorted.
  for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
   //the trashs groups are not stored
   if(iterator.key() == -1 || iterator.key() == 0) continue;
-  QValueList<int> channelIds = iterator.data();
-  QValueList<int>::iterator channelIterator;
+  Q3ValueList<int> channelIds = iterator.data();
+  Q3ValueList<int>::iterator channelIterator;
 
   QDomElement groupElement = doc.createElement(GROUP);
   QDomElement channelListElement = doc.createElement(CHANNELS);

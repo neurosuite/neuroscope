@@ -18,6 +18,9 @@
 #include <qstringlist.h>
 #include <qfileinfo.h> 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3TextStream>
+#include <Q3ValueList>
  
 //General C++ include files
 #include <iostream>
@@ -83,7 +86,7 @@ RestartTimer();
  
  //Create a reader on the eventFile
  QFile eventFile(fileName);
- bool status = eventFile.open(IO_ReadOnly);
+ bool status = eventFile.open(QIODevice::ReadOnly);
  if(!status){
   events.setSize(0,0);
   timeStamps.setSize(0,0);
@@ -94,7 +97,7 @@ RestartTimer();
  events.setSize(1,nbEvents);
  timeStamps.setSize(1,nbEvents);
 
- QTextStream fileStream(&eventFile); 
+ Q3TextStream fileStream(&eventFile); 
  QString line;
  int lineCounter = 0;
  QStringList list;
@@ -341,7 +344,7 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
  emit dataReady(finalTimes,finalIds,initiator,name);
 }
 
-void EventsProvider::requestNextEventData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator){  
+void EventsProvider::requestNextEventData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator){  
  long initialStartTime = startTime;
  //Compute the start time for the event look up
  startTime = initialStartTime + static_cast<long>(timeFrame * eventPosition);
@@ -553,7 +556,7 @@ void EventsProvider::requestNextEventData(long startTime,long timeFrame,QValueLi
  emit nextEventDataReady(finalTimes,finalIds,initiator,name,startingTime); 
 }
 
-void EventsProvider::requestPreviousEventData(long startTime,long timeFrame,QValueList<int> selectedIds,QObject* initiator){
+void EventsProvider::requestPreviousEventData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator){
  long initialStartTime = startTime;
  //Compute the start time for the event look up
  startTime = initialStartTime + static_cast<long>(timeFrame * eventPosition);
@@ -1066,7 +1069,7 @@ void EventsProvider::clearUndoRedoData(){
 }
 
 int EventsProvider::save(QFile* eventFile){
- QTextStream fileStream(eventFile);
+ Q3TextStream fileStream(eventFile);
  fileStream.precision(12);
  
  for(int i = 1;i<=nbEvents;++i) fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n"; 
@@ -1202,11 +1205,11 @@ void EventsProvider::addEventDescription(QString eventDescriptionToAdd){
 
  //Add the new description to the list of existing ones and compute the new descriptionLength
  idsDescriptions.clear();
- QValueList<EventDescription> descriptions = eventIds.keys();
+ Q3ValueList<EventDescription> descriptions = eventIds.keys();
 
  descriptions.append(EventDescription(eventDescriptionToAdd));
 
- qHeapSort(descriptions);
+ qSort(descriptions);
  long maxSize = 0;
  long sum = 0;
  long sumOfSquares = 0;
@@ -1256,12 +1259,12 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
 
  //Remove the description of the list of existing ones and compute the new descriptionLength
  idsDescriptions.clear();
- QValueList<EventDescription> descriptions = eventIds.keys();
+ Q3ValueList<EventDescription> descriptions = eventIds.keys();
 
- QValueList<EventDescription> newDescriptions = eventIds.keys();
+ Q3ValueList<EventDescription> newDescriptions = eventIds.keys();
  newDescriptions.remove(EventDescription(eventDescriptionToRemove));
  
- qHeapSort(newDescriptions);
+ qSort(newDescriptions);
  long maxSize = 0;
  long sum = 0;
  long sumOfSquares = 0;
