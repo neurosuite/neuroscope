@@ -19,7 +19,7 @@
 #define PARAMETERXMLCREATOR_H
 
 // include files for KDE
-#include <kurl.h>
+
 
 //Application specific includes
 #include "sessionInformation.h"

@@ -29,7 +29,7 @@
 #include <kdockwidget.h>
 #include <kaccel.h>
 #include <kaction.h>
-#include <kurl.h>
+
 #include <kpopupmenu.h>
 
 //QT include files

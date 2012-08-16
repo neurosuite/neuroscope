@@ -19,7 +19,7 @@
 #define NEUROSCOPEXMLREADER_H
 
 // include files for KDE
-#include <kurl.h>
+
 
 //Libxml2 include files.
 #include <stdlib.h>

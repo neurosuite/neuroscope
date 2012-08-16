@@ -33,7 +33,7 @@
 #include <QEvent>
 
 // include files for KDE
-#include <kurl.h>
+
 
 //include files for the application
 #include "channelpalette.h"

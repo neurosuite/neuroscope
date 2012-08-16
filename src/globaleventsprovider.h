@@ -31,7 +31,7 @@
 #include "eventdata.h"
 
 // include files for KDE
-#include <kurl.h>
+
 
 class ItemColors;
 

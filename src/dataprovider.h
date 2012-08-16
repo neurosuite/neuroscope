@@ -22,7 +22,7 @@
 #include <qobject.h> 
 
 // include files for KDE
-#include <kurl.h>
+
 
 /**
   * Base class for all the types of provider of data: TracesProvider,ClustersProvider, EventsProvider,

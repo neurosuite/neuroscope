@@ -19,7 +19,7 @@
 #include "tags.h"
 
 // include files for KDE
-#include <kurl.h>
+
 #include <kio/netaccess.h>
 
 //General C++ include files
