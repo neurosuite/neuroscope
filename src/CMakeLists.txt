@@ -16,3 +16,7 @@ add_executable(neuroscope ${neuroscope_SRCS} )
 
 target_link_libraries(neuroscope ${QT_LIBRARIES} kdeui kdecore kio kdefx kdeprint ${LIBXML2_LIBRARIES})
 
+add_subdirectory(icons)
+add_subdirectory(cursors)
+
+
