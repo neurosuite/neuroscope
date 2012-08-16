@@ -19,25 +19,23 @@
 #include <qdir.h>
 #include <qpainter.h>
 #include <qcursor.h>
+#include <qinputdialog.h>
 
 // include files for KDE
-#include <kprinter.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <kglobal.h>
-#include <ktoolbar.h>
 #include <kkeydialog.h>
 #include <kio/netaccess.h>
 #include <kprocess.h>
-#include <klineeditdlg.h>
 #include <kguiitem.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h> 
+#include <klineeditdlg.h>
 
 // application specific includes
 #include "neuroscope.h"
@@ -2231,8 +2229,10 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
   //Get the active tab
   current = static_cast<KDockWidget*>(tabsParent->currentPage());
 
-  QString newLabel = KLineEditDlg::getText(tr("New Display label"),tr("Type in the new display label"),current->tabPageLabel());
-  if(!newLabel.isEmpty()){
+  bool ok;
+  QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
+		              current->tabPageLabel(),&ok,this);
+  if(ok&& !newLabel.isEmpty()){
    tabsParent->setTabLabel(current,newLabel);
    current->setTabPageLabel(newLabel);
    activeView()->setTabName(newLabel);
