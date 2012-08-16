@@ -21,7 +21,7 @@
 
 // include files for KDE
 #include <kpushbutton.h>    // for KPushButton
-#include <klocale.h>        // for tr()
+        // for tr()
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
 #include <kmessagebox.h>    // for KMessageBox

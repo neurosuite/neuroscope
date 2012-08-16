@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <klocale.h>
+
 
 // application specific includes
 #include "itempalette.h"

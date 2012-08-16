@@ -23,7 +23,7 @@
 // include files for KDE
 #include <kcolorbutton.h>   // for KColorButton
 #include <kpushbutton.h>    // for KPushButton
-#include <klocale.h>        // for tr()
+        // for tr()
 #include <kiconloader.h>    // for KIconLoader
 #include <kglobal.h>        // for KGlobal
 #include <klineedit.h>      // for KLineEdit

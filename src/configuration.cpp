@@ -17,7 +17,7 @@
 // include files for KDE
 #include <kapplication.h>       // for 'kapp'
 #include <kconfig.h>            // for KConfig
-#include <klocale.h>            // for tr()
+            // for tr()
 
 //include files for the application
 #include "configuration.h"

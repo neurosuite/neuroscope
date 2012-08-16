@@ -25,7 +25,7 @@
 
 // include files for KDE 
 #include <kapp.h>
-#include <klocale.h>
+
 #include <kdockwidget.h>
 #include <kaccel.h>
 #include <kaction.h>

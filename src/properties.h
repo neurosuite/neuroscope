@@ -28,7 +28,7 @@
 
 //includes files for KDE
 #include <kfiledialog.h>
-#include <klocale.h>
+
 
 //include files for the application
 #include <propertieslayout.h>

@@ -20,7 +20,7 @@
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+
 
 // include files for QT
 #include <qdir.h>

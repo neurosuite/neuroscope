@@ -22,7 +22,7 @@
 // include files for KDE
 #include <kmessagebox.h>
 #include <kstatusbar.h>
-#include <klocale.h>
+
 #include <kglobal.h>
 
 // application specific includes

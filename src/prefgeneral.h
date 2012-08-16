@@ -30,7 +30,7 @@
 //includes files for KDE
 #include <kcolorbutton.h>
 #include <kfiledialog.h>
-#include <klocale.h>
+
 #include <kmessagebox.h>
 
 //include files for the application
