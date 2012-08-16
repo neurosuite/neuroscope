@@ -29,7 +29,7 @@
 
 
 #include <kio/job.h>
-#include <kio/netaccess.h>
+
 #include <klineeditdlg.h>
 #include <kfiledialog.h>
 #include <kimageeffect.h>

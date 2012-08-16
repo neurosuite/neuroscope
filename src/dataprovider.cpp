@@ -18,7 +18,7 @@
 #include "dataprovider.h"
 
 // include files for KDE
-#include <kio/netaccess.h>
+
 
 DataProvider::DataProvider(QString fileUrl):QObject(){
  //Download the file if need it

@@ -34,7 +34,7 @@
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <kglobal.h>
-#include <kio/netaccess.h>
+
 #include <kprocess.h>
 #include <kguiitem.h>
 #include <klineeditdlg.h>

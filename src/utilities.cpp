@@ -22,7 +22,7 @@
 
 // include files for KDE
 #include <kprocess.h>
-#include <kio/netaccess.h>
+
 #include <QTemporaryFile>
 //Added by qt3to4:
 #include <Q3TextStream>

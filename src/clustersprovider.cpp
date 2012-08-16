@@ -30,7 +30,7 @@ using namespace std;
 // include files for KDE
 
 #include <kprocess.h>
-#include <kio/netaccess.h>
+
 
 //Unix include file
 #include <unistd.h>

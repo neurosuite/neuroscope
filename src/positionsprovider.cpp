@@ -26,7 +26,7 @@
 // include files for KDE
 
 #include <kprocess.h>
-#include <kio/netaccess.h>
+
 
 //General C++ include files
 #include <iostream>

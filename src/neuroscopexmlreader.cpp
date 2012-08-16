@@ -20,7 +20,7 @@
 
 // include files for KDE
 
-#include <kio/netaccess.h>
+
 
 //General C++ include files
 #include <iostream>
