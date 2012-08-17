@@ -872,12 +872,12 @@ class NeuroscopeApp : public KDockMainWindow
    /**Loads the cluster files and creates the corresponding groups in the cluster palette.
    * @param urls file list to be opened.
    */
-   void loadClusterFiles(QString::List urls);
+   void loadClusterFiles(QStringList urls);
 
    /**Loads the event files and creates the corresponding groups in the cluseventer palette.
    * @param urls file list to be opened.
    */
-   void loadEventFiles(QString::List urls);
+   void loadEventFiles(QStringList urls);
 
    /**Loads the position file and creates the position view in the current display.
    * @param url file to be opened.

@@ -30,7 +30,7 @@
 
 #include <kio/job.h>
 
-#include <kfiledialog.h>
+
 #include <kimageeffect.h>
 
 // application specific includes

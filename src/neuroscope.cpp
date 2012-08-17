@@ -969,7 +969,7 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
   slotStatusMsg(tr("Loading cluster file(s)..."));
 
-  QString::List urls=KFileDialog::getOpenURLs(QString(),
+  QStringList urls=KFileDialog::getOpenURLs(QString(),
       tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, tr("Open Cluster Files..."));
   if(urls.size() != 0)
   {
@@ -983,7 +983,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
   slotStatusMsg(tr("Loading event file(s)..."));
 
-  QString::List urls=KFileDialog::getOpenURLs(QString(),
+  QStringList urls=KFileDialog::getOpenURLs(QString(),
       tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, tr("Open Event Files..."));
   if(urls.size() != 0)
   {
@@ -2503,7 +2503,7 @@ void NeuroscopeApp::customEvent (QCustomEvent* event){
   }
 }
 
-void NeuroscopeApp::loadClusterFiles(QString::List urls){
+void NeuroscopeApp::loadClusterFiles(QStringList urls){
 
  NeuroscopeView* view = activeView();
  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -2723,7 +2723,7 @@ void NeuroscopeApp::loadPositionFile(QString url){
  QApplication::restoreOverrideCursor();    
 }
 
-void NeuroscopeApp::loadEventFiles(QString::List urls){
+void NeuroscopeApp::loadEventFiles(QStringList urls){
 
  NeuroscopeView* view = activeView();
  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));

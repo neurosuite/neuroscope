@@ -28,7 +28,7 @@
 #include <QValidator>
 
 //includes files for KDE
-#include <kfiledialog.h>
+
 
 
 
