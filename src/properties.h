@@ -162,9 +162,7 @@ public:
   
 private slots:
   inline void updateTraceBackgroundImage(){
-      QString image = KFileDialog::getOpenFileName(QString(),
-                                                   QString(), this, tr("Select the background image..."));
-            
+      QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
       if(!image.isEmpty()) setTraceBackgroundImage(image);
   }
     
