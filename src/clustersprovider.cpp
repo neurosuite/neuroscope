@@ -29,7 +29,7 @@ using namespace std;
 
 // include files for KDE
 
-#include <kprocess.h>
+#include <QProcess>
 
 
 //Unix include file

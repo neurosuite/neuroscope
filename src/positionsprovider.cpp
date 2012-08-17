@@ -25,7 +25,7 @@
 
 // include files for KDE
 
-#include <kprocess.h>
+#include <QProcess>
 
 
 //General C++ include files

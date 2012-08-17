@@ -37,7 +37,7 @@
 #include <kstdaction.h>
 #include <kglobal.h>
 
-#include <kprocess.h>
+#include <QProcess>
 #include <kguiitem.h>
 
 // application specific includes
