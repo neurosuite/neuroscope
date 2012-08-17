@@ -4,10 +4,10 @@ set(neuroscope_SRCS main.cpp neuroscope.cpp neuroscopeview.cpp baseframe.cpp cha
 	positionproperties.cpp positionsprovider.cpp positionview.cpp prefdefaults.cpp prefdialog.cpp prefgeneral.cpp  
 	properties.cpp propertiesdialog.cpp tags.cpp tracesprovider.cpp traceview.cpp tracewidget.cpp zoomwindow.cpp 
 	sessionxmlwriter.cpp parameterxmlcreator.cpp parameterxmlmodifier.cpp imagecreator.cpp utilities.cpp globaleventsprovider.cpp
-	eventdata.cpp )
+	eventdata.cpp clusterpropertieslayout.cpp positionpropertieslayout.cpp  prefdefaultslayout.cpp  prefgenerallayout.cpp propertieslayout.cpp)
 
 
-set(neuroscope_UI  propertieslayout.ui prefdefaultslayout.ui positionpropertieslayout.ui prefgenerallayout.ui clusterpropertieslayout.ui)
+set(neuroscope_UI  propertieslayout.ui4 prefdefaultslayout.ui4 positionpropertieslayout.ui4 prefgenerallayout.ui4 clusterpropertieslayout.ui4)
 
 qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
