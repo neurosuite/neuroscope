@@ -30,6 +30,7 @@
 #include <QFileDialog>
 #include <q3groupbox.h>
 #include <QCheckBox> 
+#include <QFileDialog>
 
 //includes files for KDE
 

@@ -25,6 +25,7 @@
 #include <Q3ValueList>
 #include <Q3PtrList>
 #include <QInputDialog>
+#include <QFileDialog>
 // include files for KDE
 
 
@@ -277,7 +278,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     QString filter = baseName + ".dat " +  " " + baseName + ".eeg" +  " " +  baseName + ".fil";
     filter.append(tr("|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n"));
     filter.append(baseName + ".*");
-    QString openUrl = KFileDialog::getOpenURL(startUrl.path(),filter,parent, tr("Open Data File..."));
+    QString openUrl = QFileDialog::getOpenFileName(parent, tr("Open Data File..."),startUrl.path(),filter);
     if(!openUrl.isEmpty()) docUrl = openUrl;
     else{
      QString docFile = baseName + ".dat";

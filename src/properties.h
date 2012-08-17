@@ -25,6 +25,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QValidator>
+#include <QFileDialog>
 
 //includes files for KDE
 

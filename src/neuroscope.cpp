@@ -27,6 +27,7 @@
 #include <QCustomEvent>
 #include <Q3PopupMenu>
 #include <QInputDialog>
+#include <QFileDialog>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -956,8 +957,8 @@ void NeuroscopeApp::slotFileOpen()
 {
   slotStatusMsg(tr("Opening file..."));
 
-  QString url=KFileDialog::getOpenURL(QString(),
-      tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files"), this, tr("Open File..."));
+  QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
+      tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files") );
   if(!url.isEmpty())
   {
     openDocumentFile(url);
@@ -996,8 +997,8 @@ void NeuroscopeApp::slotLoadEventFiles(){
 void NeuroscopeApp::slotLoadPositionFile(){
  slotStatusMsg(tr("Loading position file..."));
 
- QString url=KFileDialog::getOpenURL(QString(),
-     tr("*|All Files"), this, tr("Open position File..."));
+ QString url=QFileDialog::getOpenFileName(this, tr("Open position File..."),QString(),
+     tr("*|All Files") );
  if(!url.isEmpty())
  {
    loadPositionFile(url);
