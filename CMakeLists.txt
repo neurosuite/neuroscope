@@ -6,6 +6,7 @@ include(${QT_USE_FILE})
 
 find_package(LibXml2 REQUIRED)
 add_definitions(${QT_DEFINITIONS} )
+SET( QT_USE_QT3SUPPORT TRUE )
 
 # tell cmake where to search for Qt/KDE headers:
 include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
