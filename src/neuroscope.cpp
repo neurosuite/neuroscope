@@ -1016,13 +1016,14 @@ void NeuroscopeApp::slotCreateEventFile(){
  QString baseName = doc->documentBaseName();
  eventUrl.setFileName(baseName);
  
- KFileDialog dialog(eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"), this,tr("CreateEvent"),true);
+ QFileDialog dialog(this,tr("CreateEvent"),eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
  //KDAB: can't change button label in qfiledialog
  //KPushButton* ok = dialog.okButton();
  ok->setText(tr("Create"));
  dialog.setCaption(tr("Create Event File as..."));
- dialog.exec();
- QString url = dialog.selectedURL();
+ if(!dialog.exec())
+     return;
+ QString url = dialog.selectedFiles().first();
  
  if(!url.isEmpty()){
   //Check if the file already exist
@@ -2460,8 +2461,8 @@ void NeuroscopeApp::slotSessionSaveAs(){
   else eventsModified = false;
  } 
  //Save the session 
- QString url=KFileDialog::getSaveURL(doc->sessionPath(),
-       tr("*|All files"), this, tr("Save as..."));
+ QString url=QFileDialog::getSaveFileName(this, tr("Save as..."),doc->sessionPath(),
+       tr("*|All files") );
  if(!url.isEmpty()){
   int saveStatus = doc->saveSession(url);
   if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
