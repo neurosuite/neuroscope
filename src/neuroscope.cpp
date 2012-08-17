@@ -35,7 +35,7 @@
 #include <kstatusbar.h>
 
 #include <kstdaction.h>
-#include <kglobal.h>
+
 
 #include <QProcess>
 #include <kguiitem.h>

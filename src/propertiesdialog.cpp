@@ -23,7 +23,7 @@
 
 // include files for KDE
 
-#include <kglobal.h>        // for KGlobal
+        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
     // for KMessageBox
 

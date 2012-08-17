@@ -24,7 +24,7 @@
 
 
 #include <kiconloader.h>    // for KIconLoader
-#include <kglobal.h>        // for KGlobal
+        // for KGlobal
 #include <klineedit.h>      // for KLineEdit
     // for KMessageBox
 

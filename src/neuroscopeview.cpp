@@ -26,7 +26,7 @@
 
 #include <kstatusbar.h>
 
-#include <kglobal.h>
+
 
 // application specific includes
 #include "neuroscopeview.h"
