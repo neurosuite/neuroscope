@@ -9,7 +9,7 @@ add_definitions(${QT_DEFINITIONS} )
 SET( QT_USE_QT3SUPPORT TRUE )
 
 # tell cmake where to search for Qt/KDE headers:
-include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QT3SUPPORT_INCLUDE_DIR})
 
 #FIXME
 add_definitions(-fexceptions)
