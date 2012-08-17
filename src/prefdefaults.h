@@ -26,9 +26,7 @@
 #include <QPushButton>
 #include <QLineEdit> 
 #include <QValidator>
-
-//includes files for KDE
-
+#include <QFileDialog>
 
 
 //include files for the application
@@ -65,19 +63,19 @@ public:
   };
 
   /**Sets the number of channels.*/
-  inline void setNbChannels(int nb){nbChannelsLineEdit->setText(QString("%1").arg(nb));};
+  inline void setNbChannels(int nb){nbChannelsLineEdit->setText(QString("%1").arg(nb));}
 
   /**Sets the sampling rate for the dat file.*/
-  inline void setDatSamplingRate(double rate){datSamplingRateLineEdit->setText(QString("%1").arg(rate,0,'g',14));};
+  inline void setDatSamplingRate(double rate){datSamplingRateLineEdit->setText(QString("%1").arg(rate,0,'g',14));}
 
   /**Sets the sampling rate for the eeg file.*/
-  inline void setEegSamplingRate(double rate){eegSamplingRateLineEdit->setText(QString("%1").arg(rate,0,'g',14));};
+  inline void setEegSamplingRate(double rate){eegSamplingRateLineEdit->setText(QString("%1").arg(rate,0,'g',14));}
 
   /**Sets the initial offset for all the field potentials.*/
-  inline void setOffset(int offset){offsetLineEdit->setText(QString("%1").arg(offset));};
+  inline void setOffset(int offset){offsetLineEdit->setText(QString("%1").arg(offset));}
 
   /**Sets the resolution of the acquisition system.*/  
-  inline void setResolutionIndex(int index){resolutionComboBox->setCurrentItem(index);};
+  inline void setResolutionIndex(int index){resolutionComboBox->setCurrentItem(index);}
   
   /**Sets the background image.*/
   inline void setTraceBackgroundImage(QString image){  

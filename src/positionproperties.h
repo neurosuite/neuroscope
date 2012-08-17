@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QImage>
+#include <QFileDialog>
 #include <q3groupbox.h>
 #include <QCheckBox> 
 
@@ -200,9 +201,7 @@ public:
 
 private slots:
   inline void updateBackgroundImage(){
-      QString image = KFileDialog::getOpenFileName(QString(),
-                                                   QString(), this, tr("Select the background image..."));
-
+      QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
    if(image != "") setBackgroundImage(image);
   }
 
