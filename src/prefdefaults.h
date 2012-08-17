@@ -103,30 +103,30 @@ public:
   };
 
   /**Returns the number of channels.*/
-  inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();};
+  inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();}
 
   /**Returns the sampling rate for the dat file.*/
-  inline double getDatSamplingRate() const{return datSamplingRateLineEdit->text().toDouble();};
+  inline double getDatSamplingRate() const{return datSamplingRateLineEdit->text().toDouble();}
 
   /**Returns the sampling rate for the eeg file.*/
-  inline double getEegSamplingRate() const{return eegSamplingRateLineEdit->text().toDouble();};
+  inline double getEegSamplingRate() const{return eegSamplingRateLineEdit->text().toDouble();}
 
   /**Returns the initial offset for all the field potentials.*/
-  inline int getOffset() const{return offsetLineEdit->text().toInt();};
+  inline int getOffset() const{return offsetLineEdit->text().toInt();}
 
   /**Returns the resolution of the acquisition system.*/
-  inline int getResolutionIndex()const{return resolutionComboBox->currentItem();};
+  inline int getResolutionIndex()const{return resolutionComboBox->currentItem();}
   
   /**Returns the background image.*/
-  inline QString getTraceBackgroundImage()const{return traceBackgroundLineEdit->text();};
+  inline QString getTraceBackgroundImage()const{return traceBackgroundLineEdit->text();}
     
 private slots:
   inline void updateTraceBackgroundImage(){
-   QString image = KFileDialog::getOpenFileName(QString::null,
-            QString::null, this, tr("Select the background image..."));
+      QString image = KFileDialog::getOpenFileName(QString(),
+                                                   QString(), this, tr("Select the background image..."));
             
-	if(image != "") setTraceBackgroundImage(image);            
-  };
+      if(!image.isEmpty()) setTraceBackgroundImage(image);
+  }
     
  private:
 

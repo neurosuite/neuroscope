@@ -126,13 +126,13 @@ public:
   inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();};
 
   /**Returns the sampling rate  for the current file.*/
-  inline double getSamplingRate() const{return samplingRateLineEdit->text().toDouble();};
+  inline double getSamplingRate() const{return samplingRateLineEdit->text().toDouble();}
 
   /**Returns the sampling rate of the acquisition system.*/
-  inline double getAcquisitionSystemSamplingRate(){return asSamplingRateLineEdit->text().toDouble();};
+  inline double getAcquisitionSystemSamplingRate(){return asSamplingRateLineEdit->text().toDouble();}
   
   /**Returns the initial offset for all the field potentials.*/
-  inline int getOffset() const{return offsetLineEdit->text().toInt();};
+  inline int getOffset() const{return offsetLineEdit->text().toInt();}
 
   /**Returns the resolution of the acquisition system.*/
   inline int getResolution()const{
@@ -148,24 +148,25 @@ public:
       default:
         return 16;
    }    
-  };
+  }
 
   /**Returns the background image.*/
   inline QString getTraceBackgroundImage()const{  
-  return traceBackgroundLineEdit->text();};
+  return traceBackgroundLineEdit->text();}
 
   /**Sets whether the sampling rate for the current file is enabled.
   * @param state true enable, false otherwise.
   */
-  inline void setCurrentSamplingRateEnabled(bool state){samplingRateLineEdit->setEnabled(state);};
+  inline void setCurrentSamplingRateEnabled(bool state){samplingRateLineEdit->setEnabled(state);}
+
   
 private slots:
   inline void updateTraceBackgroundImage(){
-   QString image = KFileDialog::getOpenFileName(QString::null,
-            QString::null, this, tr("Select the background image..."));
+      QString image = KFileDialog::getOpenFileName(QString(),
+                                                   QString(), this, tr("Select the background image..."));
             
-	if(image != "") setTraceBackgroundImage(image);            
-  };
+      if(!image.isEmpty()) setTraceBackgroundImage(image);
+  }
     
  private:
   QIntValidator intValidator;

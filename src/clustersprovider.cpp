@@ -70,8 +70,8 @@ ClustersProvider::~ClustersProvider(){
 int ClustersProvider::loadData(){
   
  //Fist check if the time file (.res) exists
- QString timeFilePath;
- if(!KIO::NetAccess::download(timeFileUrl, timeFilePath)){
+ QString timeFilePath = timeFileUrl;
+ if(!QFile(timeFileUrl).exists()){
   clusters.setSize(0,0);
   return MISSING_FILE;
  }
@@ -83,8 +83,6 @@ int ClustersProvider::loadData(){
   
  if(nbSpikes == -1){
   clusters.setSize(0,0);
-  //Remove the temp files if any
-  KIO::NetAccess::removeTempFile(timeFilePath);
   return COUNT_ERROR;
  } 
  
@@ -109,8 +107,6 @@ RestartTimer();
  bool status = clusterFile.open(QIODevice::ReadOnly);
  if(!status){
   clusters.setSize(0,0);
-  //Remove the temp files if any
-  KIO::NetAccess::removeTempFile(timeFilePath);  
   return OPEN_ERROR;
  }
 
@@ -150,8 +146,6 @@ RestartTimer();
  //The number of spikes read has to be coherent with the number of spikes computed by wc -l (via Utilities::getNbLines).
  if(k != nbSpikes){
   clusters.setSize(0,0);
-  //Remove the temp files if any
-  KIO::NetAccess::removeTempFile(timeFilePath);  
   return INCORRECT_CONTENT;
  }
 
@@ -162,8 +156,6 @@ RestartTimer();
  status = spikeFile.open(QIODevice::ReadOnly);
  if(!status){
   clusters.setSize(0,0);
-  //Remove the temp files if any
-  KIO::NetAccess::removeTempFile(timeFilePath);  
   return OPEN_ERROR;
  }
 
@@ -191,13 +183,9 @@ RestartTimer();
  //The number of spikes read has to be coherent with the number of spikes computed by wc -l (via Utilities::getNbLines).
  if(k != (2 * nbSpikes)){
   clusters.setSize(0,0);
-  //Remove the temp files if any
-  KIO::NetAccess::removeTempFile(timeFilePath);  
   return INCORRECT_CONTENT;
  }
 
- //Remove the temp files if any
- KIO::NetAccess::removeTempFile(timeFilePath);
 cout << "Loading clu file into memory: "<<Timer() << endl;
 
  //Initialize the variables

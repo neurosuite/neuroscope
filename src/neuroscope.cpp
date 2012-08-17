@@ -956,7 +956,7 @@ void NeuroscopeApp::slotFileOpen()
 {
   slotStatusMsg(tr("Opening file..."));
 
-  QString url=KFileDialog::getOpenURL(QString::null,
+  QString url=KFileDialog::getOpenURL(QString(),
       tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files"), this, tr("Open File..."));
   if(!url.isEmpty())
   {
@@ -969,7 +969,7 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
   slotStatusMsg(tr("Loading cluster file(s)..."));
 
-  QString::List urls=KFileDialog::getOpenURLs(QString::null,
+  QString::List urls=KFileDialog::getOpenURLs(QString(),
       tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, tr("Open Cluster Files..."));
   if(urls.size() != 0)
   {
@@ -983,7 +983,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
   slotStatusMsg(tr("Loading event file(s)..."));
 
-  QString::List urls=KFileDialog::getOpenURLs(QString::null,
+  QString::List urls=KFileDialog::getOpenURLs(QString(),
       tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, tr("Open Event Files..."));
   if(urls.size() != 0)
   {
@@ -996,7 +996,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
 void NeuroscopeApp::slotLoadPositionFile(){
  slotStatusMsg(tr("Loading position file..."));
 
- QString url=KFileDialog::getOpenURL(QString::null,
+ QString url=KFileDialog::getOpenURL(QString(),
      tr("*|All Files"), this, tr("Open position File..."));
  if(!url.isEmpty())
  {

@@ -200,14 +200,14 @@ public:
 
 private slots:
   inline void updateBackgroundImage(){
-   QString image = KFileDialog::getOpenFileName(QString::null,
-            QString::null, this, tr("Select the background image..."));
+      QString image = KFileDialog::getOpenFileName(QString(),
+                                                   QString(), this, tr("Select the background image..."));
 
    if(image != "") setBackgroundImage(image);
-  };
+  }
 
   inline void updateBackgroundImage(const QString& image){
-   if(image != "")  setBackgroundImage(image);
+      if(!image.isEmpty())  setBackgroundImage(image);
    else{
     QPixmap pixmap;
     pixmap.resize(getWidth(),getHeight());
