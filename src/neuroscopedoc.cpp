@@ -24,13 +24,12 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>
-
+#include <QInputDialog>
 // include files for KDE
 
 
 #include <kio/job.h>
 
-#include <klineeditdlg.h>
 #include <kfiledialog.h>
 #include <kimageeffect.h>
 
@@ -343,7 +342,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
     //Prompt the user
     else{
      QApplication::restoreOverrideCursor(); 
-     QString currentSamplingRate = KLineEditDlg::getText(tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QString("%1").arg(datSamplingRate));
+
+     QString currentSamplingRate = QInputDialog::getText(this,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor)); 
      if(!currentSamplingRate.isEmpty())
       samplingRate = currentSamplingRate.toDouble();
@@ -401,7 +401,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
       //Prompt the user
       else{
        QApplication::restoreOverrideCursor(); 
-       QString currentSamplingRate = KLineEditDlg::getText(tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QString("%1").arg(datSamplingRate));
+       QString currentSamplingRate = QInputDialog::getText(this,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
+
        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor)); 
        if(!currentSamplingRate.isEmpty())
         samplingRate = currentSamplingRate.toDouble();

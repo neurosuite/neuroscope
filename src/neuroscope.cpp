@@ -26,6 +26,7 @@
 #include <QEvent>
 #include <QCustomEvent>
 #include <Q3PopupMenu>
+#include <QInputDialog>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -37,7 +38,6 @@
 
 #include <kprocess.h>
 #include <kguiitem.h>
-#include <klineeditdlg.h>
 
 // application specific includes
 #include "neuroscope.h"
@@ -3011,8 +3011,13 @@ void NeuroscopeApp::slotAddEventButtonActivated(int index){
   buttonEventIndex = index;
 
   QString description = addEventPopup->text(index);
-  if(index == (addEventPopup->idAt(addEventPopup->count() - 1)))
-   eventLabelToCreate = KLineEditDlg::getText(tr("New Event Description"),tr("Type in the new event description"),"");
+  if(index == (addEventPopup->idAt(addEventPopup->count() - 1))) {
+      bool ok;
+      QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+      if(ok) {
+          eventLabelToCreate = result;
+      }
+  }
   else eventLabelToCreate = description;
 
   addEvent();
@@ -3024,8 +3029,13 @@ void NeuroscopeApp::slotAddEventActivated(int index){
   eventIndex = index;
 
   QString description = menu->text(index);
-  if(index == static_cast<int>(menu->count() - 1))
-   eventLabelToCreate = KLineEditDlg::getText(tr("New Event Description"),tr("Type in the new event description"),"");
+  if(index == static_cast<int>(menu->count() - 1)) {
+      bool ok;
+      QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+      if(ok) {
+          eventLabelToCreate = result;
+      }
+  }
   else eventLabelToCreate = description;
 
   addEvent();
