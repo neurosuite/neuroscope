@@ -15,9 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 // include files for KDE
-#include <kapplication.h>       // for 'kapp'
-#include <kconfig.h>            // for KConfig
-            // for tr()
+#include <QSettings>
 
 //include files for the application
 #include "configuration.h"
@@ -52,6 +50,7 @@ Configuration::Configuration(){
 
 
 void Configuration::read() {
+    QSettings settings;
  KConfig* conf = kapp->config();
 
  //read general options
@@ -81,6 +80,7 @@ void Configuration::read() {
 }
 
 void Configuration::write() const {  
+    QSettings settings;
  KConfig* conf = kapp->config();
  //write general options
  conf->setGroup("General");

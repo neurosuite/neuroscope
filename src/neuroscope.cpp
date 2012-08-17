@@ -31,7 +31,7 @@
 #include <kiconloader.h>
 
 #include <kstatusbar.h>
-#include <kconfig.h>
+
 #include <kstdaction.h>
 #include <kglobal.h>
 
