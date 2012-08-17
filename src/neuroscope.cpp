@@ -969,8 +969,8 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
   slotStatusMsg(tr("Loading cluster file(s)..."));
 
-  QStringList urls=KFileDialog::getOpenURLs(QString(),
-      tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"), this, tr("Open Cluster Files..."));
+  QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
+      tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"));
   if(urls.size() != 0)
   {
     loadClusterFiles(urls);
@@ -983,8 +983,8 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
   slotStatusMsg(tr("Loading event file(s)..."));
 
-  QStringList urls=KFileDialog::getOpenURLs(QString(),
-      tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"), this, tr("Open Event Files..."));
+  QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
+      tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"));
   if(urls.size() != 0)
   {
     loadEventFiles(urls);
