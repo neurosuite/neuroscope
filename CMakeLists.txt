@@ -1,6 +1,9 @@
 project(neuroscope)
 cmake_minimum_required(VERSION 2.8.6)
+set (QT_MIN_VERSION "4.7.0")
 find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
 find_package(LibXml2 REQUIRED)
 add_definitions(${QT_DEFINITIONS} )
 
