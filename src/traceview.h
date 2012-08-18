@@ -35,7 +35,7 @@
 #include "eventdata.h"
 
 //Inclused files for KDE
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 //include files for c/c++ libraries
 #include <math.h>
@@ -90,7 +90,7 @@ public:
 	TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
             bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
             ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-            Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels, int rasterHeight,QImage backgroundImage,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,KStatusBar* statusBar = 0L,
+            Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels, int rasterHeight,QImage backgroundImage,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,QStatusBar* statusBar = 0L,
             int minSize = 500, int maxSize = 4000, int windowTopLeft = -500,int windowBottomRight = 1001, int border = 0);
 
 
@@ -599,7 +599,7 @@ private:
   bool greyScaleMode;
 
   /**Pointer to the status bar of the application.*/
-  KStatusBar* statusBar;
+  QStatusBar* statusBar;
 
   /**Provider of the channels data.*/
   TracesProvider& tracesProvider;

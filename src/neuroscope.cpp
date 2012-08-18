@@ -32,7 +32,7 @@
 // include files for KDE
 #include <kiconloader.h>
 
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 #include <kstdaction.h>
 

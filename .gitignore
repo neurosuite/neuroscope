@@ -3,15 +3,4 @@
 Makefile
 autom4te.cache
 src/.deps/
-src/clusterpropertieslayout.cpp
-src/clusterpropertieslayout.h
 src/neuroscope
-src/positionpropertieslayout.cpp
-src/positionpropertieslayout.h
-src/prefdefaultslayout.cpp
-src/prefdefaultslayout.h
-src/prefgenerallayout.cpp
-src/prefgenerallayout.h
-src/propertieslayout.cpp
-src/propertieslayout.h
-

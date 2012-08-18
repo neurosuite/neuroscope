@@ -56,7 +56,7 @@ const int TraceView::YMARGIN = 0;
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
                   bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
                   ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                  Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,KStatusBar* statusBar,
+                  Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,QStatusBar* statusBar,
            int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
           BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
           greyScaleMode(greyScale),statusBar(statusBar),tracesProvider(tracesProvider),

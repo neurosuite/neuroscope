@@ -21,7 +21,7 @@
 
 //Include files for KDE
 #include <kdockwidget.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 
 // include files for Qt
@@ -93,7 +93,7 @@ class NeuroscopeView : public KDockArea
      * @param parent the parent QWidget.
      * @param name name of the widget (can be used for introspection).
      */
-    NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,KStatusBar * statusBar,Q3ValueList<int>* channelsToDisplay,bool greyScale,
+    NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar * statusBar,Q3ValueList<int>* channelsToDisplay,bool greyScale,
                   TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                   bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
                   QMap<int,Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,

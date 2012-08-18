@@ -24,7 +24,7 @@
 
 // include files for KDE
 
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 
 
@@ -37,7 +37,7 @@
 
 class EventData;
 
-NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,KStatusBar* statusBar,Q3ValueList<int>* channelsToDisplay,
+NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar* statusBar,Q3ValueList<int>* channelsToDisplay,
                 bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                 bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
                 QMap<int,Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,

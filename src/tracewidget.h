@@ -34,7 +34,7 @@
 #include <Q3ValueList>
 
 //Inclused files for KDE
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 //include files for the application
 #include "traceview.h"
@@ -91,7 +91,7 @@ public:
              bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int gain,int acquisitionGain,ChannelColors* channelColors,
              QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,Q3ValueList<int>& channelOffsets,
              Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels,int rasterHeight,QImage backgroundImage, QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,
-             KStatusBar* statusBar = 0L,int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
+             QStatusBar* statusBar = 0L,int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
              int windowBottomRight = 1001, int border = 0);
 
 	~TraceWidget();
