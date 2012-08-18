@@ -26,7 +26,7 @@
 // include files for KDE 
 #include <kapp.h>
 
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kaccel.h>
 
 #include <kpopupmenu.h>

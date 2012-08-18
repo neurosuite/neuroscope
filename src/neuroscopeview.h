@@ -20,7 +20,7 @@
 
 
 //Include files for KDE
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <QStatusBar>
 
 

@@ -12,7 +12,7 @@ SET( QT_USE_QT3SUPPORT TRUE )
 include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QT3SUPPORT_INCLUDE_DIR})
 
 #FIXME
-add_definitions(-fexceptions)
+add_definitions(-fexceptions -DQT3_SUPPORT)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-neuroscope.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-neuroscope.h )
 
