@@ -6,6 +6,7 @@ set(neuroscope_SRCS main.cpp neuroscope.cpp neuroscopeview.cpp baseframe.cpp cha
 	sessionxmlwriter.cpp parameterxmlcreator.cpp parameterxmlmodifier.cpp imagecreator.cpp utilities.cpp globaleventsprovider.cpp
 	eventdata.cpp clusterpropertieslayout.cpp positionpropertieslayout.cpp  prefdefaultslayout.cpp  prefgenerallayout.cpp propertieslayout.cpp)
 
+qt4_add_resources(neuroscope_SRCS neuroscope-cursors.qrc)
 
 set(neuroscope_UI  propertieslayout.ui4 prefdefaultslayout.ui4 positionpropertieslayout.ui4 prefgenerallayout.ui4 clusterpropertieslayout.ui4)
 
@@ -18,6 +19,5 @@ target_link_libraries(neuroscope ${QT_LIBRARIES} ${LIBXML2_LIBRARIES})
 install(PROGRAMS neuroscope DESTINATION bin)
 
 add_subdirectory(icons)
-add_subdirectory(cursors)
 
 

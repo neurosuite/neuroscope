@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/cursors">
+        <file>cursors/measure_cursor.png</file>
+        <file>cursors/select_channels_cursor.png</file>
+        <file>cursors/select_event_cursor.png</file>
+        <file>cursors/select_time_cursor.png</file>
+        <file>cursors/time_line_cursor.png</file>
+        <file>cursors/zoom_cursor.png</file>
+        <file>cursors/add_event_cursor.png</file>
+    </qresource>
+</RCC>
