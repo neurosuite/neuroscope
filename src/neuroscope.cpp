@@ -34,11 +34,8 @@
 
 #include <QStatusBar>
 
-#include <kstdaction.h>
-
 
 #include <QProcess>
-#include <kguiitem.h>
 
 // application specific includes
 #include "neuroscope.h"

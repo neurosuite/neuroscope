@@ -36,7 +36,7 @@ using namespace std;
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
            int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
-           Q3Frame(parent,name,WRepaintNoErase|WResizeNoErase),
+           Q3Frame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
            MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
            viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
            firstClick(0,0),isDoubleClick(false),rubber(0),
@@ -62,7 +62,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
 
   //Create and set the zoom cursor (a magnifier).
   
-  zoomCursor = QCursor(QPixmap(":/icons/zoom_cursor",7,7);
+  zoomCursor = QCursor(QPixmap(":/icons/zoom_cursor"),7,7);
 }
 
 BaseFrame::~BaseFrame(){
@@ -365,16 +365,17 @@ void BaseFrame::drawRubber(){
     painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
     painter.setViewport(viewport);
     
-    painter.setRasterOp(NotROP);
+    //KDAB_PENDING painter.setRasterOp(NotROP);
     painter.setPen(QPen(Qt::color0,1));
     painter.setBrush(Qt::NoBrush);
 
     QRect normalizeRubber = rubber->normalize(); //not mandatory as it seems that drawPrimitive does the job (but more secure)
 
+#if KDAB_PENDING
     style().drawPrimitive(QStyle::PE_FocusRect, &painter,
                            QRect(normalizeRubber.x(), normalizeRubber.y(), normalizeRubber.width(),normalizeRubber.height()),
                            colorGroup(), QStyle::State_None, colorGroup().background() );
-
+#endif
     painter.end();
 }
 
