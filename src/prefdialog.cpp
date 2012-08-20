@@ -23,11 +23,6 @@
 #include <Q3VBoxLayout>
 
 
-#include <kiconloader.h>    // for KIconLoader
-        // for KGlobal
-#include <klineedit.h>      // for KLineEdit
-    // for KMessageBox
-
 //include files for the application
 #include "prefdialog.h"     // class PrefDialog
 //#include "prefdialog.moc"
@@ -60,7 +55,7 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
 
     //adding page "Default configuration"
     frame = addPage(tr("Defaults"), tr("NeuroScope Defaults"),
-        KGlobal::iconLoader()->loadIcon("defaults",KIcon::User));
+        KGlobal::iconLoader()->loadIcon("defaults"));
     frameLayout = new Q3VBoxLayout(frame,0,0);
    /* prefDefaults = new PrefDefaults(frame);
     frameLayout->addWidget(prefDefaults);*/

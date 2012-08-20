@@ -37,7 +37,7 @@
 #include <kapp.h>
 
 // include files for kde
-#include <kiconloader.h>
+
 
 
 
@@ -156,13 +156,13 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
  if(!multiColumns) updateWindow();
 
  //Create the cursors
- KIconLoader *loader = KGlobal::iconLoader();
- measureCursor = QCursor(loader->loadIcon("measure_cursor", KIcon::User),0,0);
- selectTimeCursor = QCursor(loader->loadIcon("select_time_cursor", KIcon::User),0,0);
- selectEventCursor = QCursor(loader->loadIcon("select_event_cursor", KIcon::User),0,0);
- addEventCursor = QCursor(loader->loadIcon("add_event_cursor", KIcon::User),0,0);
- selectCursor = QCursor(loader->loadIcon("select_channels_cursor", KIcon::User),0,0);
- drawLineCursor = QCursor(loader->loadIcon("time_line_cursor", KIcon::User),0,0);
+ 
+ measureCursor = QCursor(QPixmap(":/icons/measure_cursor",0,0);
+ selectTimeCursor = QCursor(QPixmap(":/icons/select_time_cursor",0,0);
+ selectEventCursor = QCursor(QPixmap(":/icons/select_event_cursor",0,0);
+ addEventCursor = QCursor(QPixmap(":/icons/add_event_cursor",0,0);
+ selectCursor = QCursor(QPixmap(":/icons/select_channels_cursor",0,0);
+ drawLineCursor = QCursor(QPixmap(":/icons/time_line_cursor",0,0);
 
  //Set the cursor shap to a magnifier as the only action allowed on the widget is to zoom.
  setCursor(zoomCursor);

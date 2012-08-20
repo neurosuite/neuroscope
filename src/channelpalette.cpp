@@ -41,7 +41,7 @@
 #include <QResizeEvent>
 
 //KDE includes
-#include <kiconloader.h>
+
 #include <kpopupmenu.h>
 
 //General C++ include files
@@ -826,8 +826,8 @@ void ChannelPalette::createGroup(int id){
    label->setText("?");
   }
   if(id == 0){
-   KIconLoader* loader = KGlobal::iconLoader();
-   label->setPixmap(loader->loadIcon("trash", KIcon::User));
+   
+   label->setPixmap(QPixmap(":/icons/trash");
   }
   
   //Set the size to 2 digits, max 99 groups

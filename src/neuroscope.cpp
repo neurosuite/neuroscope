@@ -30,7 +30,7 @@
 #include <QFileDialog>
 
 // include files for KDE
-#include <kiconloader.h>
+
 
 #include <QStatusBar>
 
@@ -131,23 +131,23 @@ void NeuroscopeApp::initActions()
   new KAction(tr("Close E&vent File"),0, this, SLOT(slotCloseEventFile()),actionCollection(),"close_event_file");
   new KAction(tr("Close Position File"),0, this, SLOT(slotClosePositionFile()),actionCollection(),"close_position_file");
 
-  KIconLoader* loader = KGlobal::iconLoader();
+
   
   //Edit menu
   new KAction(tr("Select &All"), Qt::CTRL + Qt::Key_A, this, SLOT(slotSelectAll()),actionCollection(),"edit_select_all");
   new KAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
     SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
   new KAction(tr("Deselect All"), Qt::CTRL + Qt::Key_U, this,SLOT(slotDeselectAll()),actionCollection(),"edit_deselect_all");
-  editMode = new KToggleAction(tr("&Edit Mode"),QIcon(loader->loadIcon("edit", KIcon::User)),Qt::CTRL + Qt::Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
+  editMode = new KToggleAction(tr("&Edit Mode"),QIcon(":/icons/edit"),Qt::CTRL + Qt::Key_E, this, SLOT(slotEditMode()), actionCollection(),"edit_mode");
   editMode->setChecked(true);
      
   //Tools menu
-  new KAction(tr("Zoom"),QIcon(loader->loadIcon("zoom_tool", KIcon::User)), Qt::Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
-  new KAction(tr("Select Channels"),QIcon(loader->loadIcon("select_tool", KIcon::User)), Qt::Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
-  new KAction(tr("Measure"),QIcon(loader->loadIcon("measure_tool", KIcon::User)), Qt::Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
-  new KAction(tr("Select Time"),QIcon(loader->loadIcon("time_tool", KIcon::User)), Qt::Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
-  new KAction(tr("Select Event"),QIcon(loader->loadIcon("event_tool", KIcon::User)), Qt::Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
-  addEventMenu = new KSelectAction(tr("Add Event"),QIcon(loader->loadIcon("add_event_tool", KIcon::User)),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
+  new KAction(tr("Zoom"),QIcon(":/icons/zoom_tool"), Qt::Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
+  new KAction(tr("Select Channels"),QIcon(":/icons/select_tool"), Qt::Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
+  new KAction(tr("Measure"),QIcon(":/icons/measure_tool"), Qt::Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
+  new KAction(tr("Select Time"),QIcon(":/icons/time_tool"), Qt::Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
+  new KAction(tr("Select Event"),QIcon(":/icons/event_tool"), Qt::Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
+  addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
   connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
 
@@ -157,7 +157,7 @@ void NeuroscopeApp::initActions()
   connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
   connect(addEventPopup, SIGNAL(activated(int)), this, SLOT(slotAddEventButtonActivated(int)));
       
-  new KAction(tr("Draw Time Line"),QIcon(loader->loadIcon("time_line_tool", KIcon::User)), Qt::Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
+  new KAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"), Qt::Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
    
   //Traces menu
   displayMode = new KToggleAction(tr("&Multiple Columns"), 0, this, SLOT(slotDisplayMode()), actionCollection(),"display_mode");
@@ -184,14 +184,14 @@ void NeuroscopeApp::initActions()
   new KAction(tr("&Close Active Display"), Qt::CTRL + Qt::Key_W, this, SLOT(slotDisplayClose()),actionCollection(),"close_display");
 
   //Channels Menu
-  new KAction(tr("Show &Channels"),QIcon(loader->loadIcon("eye", KIcon::User)),Qt::CTRL + Qt::Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
-  new KAction(tr("&Hide Channels"),QIcon(loader->loadIcon("eye_close", KIcon::User)),Qt::CTRL + Qt::Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
+  new KAction(tr("Show &Channels"),QIcon(":/icons/eye"),Qt::CTRL + Qt::Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
+  new KAction(tr("&Hide Channels"),QIcon(":/icons/eye_close"),Qt::CTRL + Qt::Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
   
-  new KAction(tr("&Move Channels to New Group"),QIcon(loader->loadIcon("new_group", KIcon::User)), Qt::CTRL + Qt::Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
-  new KAction(tr("&Remove Channels from Group"),QIcon(loader->loadIcon("remove", KIcon::User)),Qt::SHIFT + Qt::Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
-  new KAction(tr("&Discard Channels"),QIcon(loader->loadIcon("discard", KIcon::User)),Qt::Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
-  new KAction(tr("&Keep Channels"),QIcon(loader->loadIcon("keep", KIcon::User)),Qt::CTRL + Qt::SHIFT + Qt::Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
-  new KAction(tr("&Skip Channels"),QIcon(loader->loadIcon("skip", KIcon::User)),Qt::CTRL + Qt::SHIFT + Qt::Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
+  new KAction(tr("&Move Channels to New Group"),QIcon(":/icons/new_group"), Qt::CTRL + Qt::Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
+  new KAction(tr("&Remove Channels from Group"),QIcon(":/icons/remove"),Qt::SHIFT + Qt::Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
+  new KAction(tr("&Discard Channels"),QIcon(":/icons/discard"),Qt::Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
+  new KAction(tr("&Keep Channels"),QIcon(":/icons/keep"),Qt::CTRL + Qt::SHIFT + Qt::Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
+  new KAction(tr("&Skip Channels"),QIcon(":/icons/skip"),Qt::CTRL + Qt::SHIFT + Qt::Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
 
   new KAction(tr("&Synchronize Groups"), 0, this, SLOT(slotSynchronize()), actionCollection(),"synchronize");
   showHideLabels = new KToggleAction(tr("Show &Labels"),0,Qt::CTRL + Qt::Key_L, this, SLOT(slotShowLabels()), actionCollection(),"show_labels");
@@ -210,12 +210,12 @@ void NeuroscopeApp::initActions()
   clusterWaveforms->setChecked(false);
   new KAction(tr("&Increase Height"),Qt::CTRL + Qt::Key_Plus,this, SLOT(slotIncreaseRasterHeight()),actionCollection(), "increase_raster_height");
   new KAction(tr("&Decrease Height"),Qt::CTRL + Qt::Key_Minus,this, SLOT(slotDecreaseRasterHeight()),actionCollection(), "decrease_raster_height");  
-  new KAction(tr("&Next Spike"),QIcon(loader->loadIcon("forwardCluster", KIcon::User)),Qt::CTRL + Qt::SHIFT + Qt::Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
-  new KAction(tr("&Previous Spike"),QIcon(loader->loadIcon("backCluster", KIcon::User)),Qt::CTRL + Qt::SHIFT + Qt::Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
+  new KAction(tr("&Next Spike"),QIcon(":/icons/forwardCluster"),Qt::CTRL + Qt::SHIFT + Qt::Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
+  new KAction(tr("&Previous Spike"),QIcon(":/icons/backCluster"),Qt::CTRL + Qt::SHIFT + Qt::Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
 
   //Events Menu
-  new KAction(tr("&Next Event"),QIcon(loader->loadIcon("forwardEvent", KIcon::User)),Qt::CTRL + Qt::Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
-  new KAction(tr("&Previous Event"),QIcon(loader->loadIcon("backEvent", KIcon::User)),Qt::CTRL + Qt::Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
+  new KAction(tr("&Next Event"),QIcon(":/icons/forwardEvent"),Qt::CTRL + Qt::Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
+  new KAction(tr("&Previous Event"),QIcon(":/icons/backEvent"),Qt::CTRL + Qt::Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
   new KAction(tr("&Remove Event"),0,Qt::CTRL + Qt::Key_K,this, SLOT(removeEvent()),actionCollection(), "remove_event");
 
   //Positions Menu
@@ -289,16 +289,16 @@ void NeuroscopeApp::initStatusBar()
 }
 
 void NeuroscopeApp::initItemPanel(){
- KIconLoader* loader = KGlobal::iconLoader();
+
  
  //Creation of the left panel containing the channels.
  if(displayPaletteHeaders){
-  displayPanel = createDockWidget("displayPanel",loader->loadIcon("anatomy", KIcon::User), 0L, tr("Anatomy"), tr("Anatomy"));
-  spikePanel = createDockWidget("spikePanel",loader->loadIcon("spikes", KIcon::User), 0L, tr("Spikes"), tr("Spikes"));   
+  displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy", 0L, tr("Anatomy"), tr("Anatomy"));
+  spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes", 0L, tr("Spikes"), tr("Spikes"));
  }
  else{
-  displayPanel = createDockWidget("displayPanel",loader->loadIcon("anatomy", KIcon::User), 0L,"");
-  spikePanel = createDockWidget("spikePanel",loader->loadIcon("spikes", KIcon::User), 0L,"");   
+  displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy", 0L,"");
+  spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes", 0L,"");
  }
  //Initialisation of the channel palettes containing the channel list
  displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,displayPanel,"DisplaylPalette");
@@ -2563,10 +2563,10 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
 }
 
 void NeuroscopeApp::createClusterPalette(QString clusterFileId){  
-  KIconLoader* loader = KGlobal::iconLoader();
+
   KDockWidget* clusterDock;
-  if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",loader->loadIcon("clusters", KIcon::User), 0L,tr("Units"), tr("Units"));
-  else clusterDock = createDockWidget("clusterPanel",loader->loadIcon("clusters", KIcon::User), 0L,"");
+  if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters", 0L,tr("Units"), tr("Units"));
+  else clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters", 0L,"");
   ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
   clusterDock->setWidget(clusterPalette);
   clusterFileList.append(clusterFileId);
@@ -2778,10 +2778,10 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
 
 
 void NeuroscopeApp::createEventPalette(QString eventFileId){
-  KIconLoader* loader = KGlobal::iconLoader();
+
   KDockWidget* eventDock;
-  if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",loader->loadIcon("events", KIcon::User), 0L,tr("Events"), tr("Events"));
-  else eventDock = createDockWidget("eventPanel",loader->loadIcon("events", KIcon::User), 0L,"");
+  if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events", 0L,tr("Events"), tr("Events"));
+  else eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events", 0L,"");
   ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
   eventDock->setWidget(eventPalette);
   eventFileList.append(eventFileId);

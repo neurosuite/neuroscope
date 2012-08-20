@@ -19,7 +19,7 @@
 #include "properties.h"
 
 // include files for KDE
-#include <kiconloader.h>
+
 
 Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(parent,name),
                        intValidator(this),doubleValidator(this){
@@ -35,8 +35,8 @@ Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(pa
  connect(traceBackgroundButton,SIGNAL(clicked()),this,SLOT(updateTraceBackgroundImage()));
   
  //Set an icon on the backgroundButton button
- KIconLoader* loader = KGlobal::iconLoader();
- traceBackgroundButton->setIconSet(QIcon(loader->loadIcon("fileopen", KIcon::Small)));
+ 
+ traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen"));
 
 }
 Properties::~Properties(){

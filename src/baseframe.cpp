@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 
 // include files for kde
-#include <kiconloader.h>
+
 
 //General C++ include files
 #include <iostream>
@@ -61,8 +61,8 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
   setMaximumSize(MAX_SIZE + 2 * BORDER,MAX_SIZE + 2 * BORDER);
 
   //Create and set the zoom cursor (a magnifier).
-  KIconLoader *loader = KGlobal::iconLoader();
-  zoomCursor = QCursor(loader->loadIcon("zoom_cursor", KIcon::User),7,7);
+  
+  zoomCursor = QCursor(QPixmap(":/icons/zoom_cursor",7,7);
 }
 
 BaseFrame::~BaseFrame(){

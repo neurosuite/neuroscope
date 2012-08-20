@@ -42,7 +42,7 @@
 #include <QLabel>
 
 //KDE includes
-#include <kiconloader.h>
+
 #include <kpopupmenu.h>
 
 //General C++ include files

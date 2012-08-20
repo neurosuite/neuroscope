@@ -18,7 +18,7 @@
 #include "prefdefaults.h"
 
 // include files for KDE
-#include <kiconloader.h>
+
 
 PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLayout(parent,name),
               intValidator(this),doubleValidator(this) {
@@ -34,8 +34,8 @@ PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLay
  connect(traceBackgroundButton,SIGNAL(clicked()),this,SLOT(updateTraceBackgroundImage()));
  
  //Set an icon on the backgroundButton button
- KIconLoader* loader = KGlobal::iconLoader();
- traceBackgroundButton->setIconSet(QIcon(loader->loadIcon("fileopen", KIcon::Small)));
+ 
+ traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen")));
  
 }
 PrefDefaults::~PrefDefaults(){

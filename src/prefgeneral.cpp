@@ -21,7 +21,7 @@
 #include <QIcon>
 
 // include files for KDE
-#include <kiconloader.h>
+
 
 PrefGeneral::PrefGeneral(QWidget *parent, const char *name ) : PrefGeneralLayout(parent,name),validator(this) {
 }
