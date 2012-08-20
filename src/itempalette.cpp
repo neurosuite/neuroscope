@@ -41,10 +41,6 @@
 #include <Q3ValueList>
 #include <QLabel>
 
-//KDE includes
-
-#include <kpopupmenu.h>
-
 //General C++ include files
 #include <iostream>
 using namespace std;

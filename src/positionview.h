@@ -28,6 +28,7 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3ValueList>
+#include <Q3PaintDeviceMetrics>
 
 // application specific includes
 #include <baseframe.h>

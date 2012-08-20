@@ -19,18 +19,12 @@
 #define NEUROSCOPE_H
  
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 // include files for KDE 
-#include <kapp.h>
+
 
 #include <QDockWidget>
-#include <kaccel.h>
 
-#include <kpopupmenu.h>
-
+#include <QMenu>
 //QT include files
 #include <QCheckBox>
 //Added by qt3to4:
@@ -695,7 +689,7 @@ class NeuroscopeApp : public KDockMainWindow
     KToggleAction* editMode;
     KToggleAction* showHideLabels;
     KToggleAction* calibrationBar;
-    KPopupMenu* addEventPopup;
+    QMenu* addEventPopup;
     KSelectAction* addEventMenu;
     KToolBarPopupAction* addEventToolBarAction;
     KToggleAction* positionViewToggle;

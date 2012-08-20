@@ -40,9 +40,6 @@
 #include <QLabel>
 #include <QResizeEvent>
 
-//KDE includes
-
-#include <kpopupmenu.h>
 
 //General C++ include files
 #include <iostream>
@@ -179,7 +176,7 @@ void ChannelPalette::slotRightPressed(Q3IconViewItem* item){
 /*  if(!item) return; // right pressed on viewport
   else{       
    //Create a popmenu for the traces group related items.
-   KPopupMenu menu(this);
+   QMenu menu(this);
    menu.insertTitle(tr("Manage channels colors"));
 
    int changeSelectedColor = menu.insertItem(tr("Change color"));

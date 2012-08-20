@@ -34,7 +34,7 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PointArray>
-#include <kapp.h>
+
 
 // include files for kde
 
