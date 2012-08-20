@@ -20,72 +20,23 @@
 #include "utilities.h"
 #include <stdlib.h>
 
-// include files for KDE
-#include <QProcess>
-
-#include <QTemporaryFile>
 //Added by qt3to4:
 #include <Q3TextStream>
 
 
 int Utilities::getNbLines(QString path){
- int nbLines = -1;
- 
  // ' are added around the path to take care of directory names with blank.
  path = "'" + path + "'";
 
- QProcess childproc;
- const char* shellToUse = getenv("SHELL");
- if(shellToUse != NULL) childproc.setUseShell(true,shellToUse);
- else childproc.setUseShell(true);
-
- QTemporaryFile counterFile = QTemporaryFile();//make a unique file
- childproc << "wc -l "<<path<<" > "<<counterFile.name();
- childproc.start(QProcess::DontCare);
- sleep(1);
- QFileInfo fi(counterFile.fineName());
- while(!fi.exists()){
-  sleep(1);
- } 
- QFile tmpFile(counterFile.fineName());
- bool status = tmpFile.open(QIODevice::ReadOnly);
- 
- //If the number of lines could not be determined, stop here
- if(!status) return nbLines;
- 
- //Create a reader on the temp file
- Q3TextStream fileStream(&tmpFile);
- QString infoLine = fileStream.readLine();
- QString info;
- if(infoLine != NULL){
-  info = infoLine.trimmed();
-  QStringList parts = QStringList::split(" ", info);
-  nbLines = parts[0].toLong();
+ int numLines = 0;
+ QFile file(path);
+ if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+     while (!file.atEnd()) {
+         file.readLine();
+         ++numLines;
+     }
  }
-
- tmpFile.close();
-  
- //Remove the temporary file
- QProcess childproc2;
- childproc2.setUseShell(true);
- childproc2 <<"rm -f "<<counterFile.name();
- bool res = childproc2.start(QProcess::DontCare); 
- while(!res) res = childproc2.start(QProcess::DontCare);
- 
-
- //If the number of lines could not be determined, try again
- if(infoLine == NULL || info == ""){
-   cout<<"infoLine == NULL || info == ''"<<endl;
-   //make sure the file has been deleted before starting again
-   while(fi.exists()){
-    sleep(1);
-    while(!res) res = childproc2.start(QProcess::DontCare);
-   } 
- 
-  return getNbLines(path);   
- }
- 
- return nbLines;
+ return numLines;
 }
 
 

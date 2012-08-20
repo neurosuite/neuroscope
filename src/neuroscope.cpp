@@ -718,17 +718,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     fileOpenRecent->saveEntries(config);
     filePath = path;
 
-    QProcess* childproc = new QProcess();
-    childproc->setUseShell(true);
-
-    QString command = "neuroscope ";
-    command.append(url.path());
-    *childproc << command;
-    childproc->start(QProcess::DontCare);
-
-    childproc->detach();
-    delete childproc;
-
+    QProcess::startDetached("neuroscope", QStringList()<<url.path());
     QApplication::restoreOverrideCursor();
    }
   }
