@@ -21,6 +21,7 @@
 // include files for QT
 #include <QDir>
 #include <QString>
+#include <QApplication>
 
 //Application specific include files
 #include "neuroscope.h"
@@ -58,6 +59,10 @@ QString version;
 
 int main(int argc, char *argv[])
 {
+    QApplication::setOrganizationName("sourceforge");
+    QApplication::setOrganizationDomain("sourceforge.net");
+    QApplication::setApplicationName("neuroscope");
+
 #if KDAB_PENDING
 	KAboutData aboutData( "neuroscope", I18N_NOOP("NeuroScope"),
 		VERSION, description, KAboutData::License_GPL,
