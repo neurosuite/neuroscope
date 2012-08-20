@@ -189,7 +189,7 @@ void PositionView::drawPositions(QPainter& painter){
   for(int i = 1;i<nbPoints;++i) painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
   //The last position is emphasized, bigger points with white in the center.
   painter.setBrush(red);
-  painter.setPen(black);
+  painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
  }
  //If there are two spots, draw a line between them. The first point is red, the second green and the line is light grey.
@@ -211,10 +211,10 @@ void PositionView::drawPositions(QPainter& painter){
   if(data(nbPoints,1) > 0 && data(nbPoints,2) > 0 && data(nbPoints,3) > 0 && data(nbPoints,4) > 0)//if a spot has been misdetected, do not draw a line
     painter.drawLine(data(nbPoints,1),data(nbPoints,2),data(nbPoints,3),data(nbPoints,4));
   painter.setBrush(red);
-  painter.setPen(black);
+  painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
   painter.setBrush(green);
-  painter.setPen(black);
+  painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,3)-4,data(nbPoints,4)-4,8,8);   
  }
  //If there are n spots, draw a line between them. The first point is red, the second green and the line light grey.
@@ -259,10 +259,10 @@ void PositionView::drawPositions(QPainter& painter){
   painter.setBrush(QBrush::Qt::NoBrush);
   painter.drawPolygon(polygon,false,0,nbPointsInPolygon);  
   painter.setBrush(red);
-  painter.setPen(black);
+  painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
   painter.setBrush(green);
-  painter.setPen(black);
+  painter.setPen(Qt::black);
   for(int j = 3;j<nbCoordinates;j=j+2){
    painter.drawEllipse(data(nbPoints,j)-4,data(nbPoints,j+1)-4,8,8);
   }  
@@ -283,7 +283,7 @@ void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bo
  QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
  QFont f("Helvetica",8);
  printPainter.setFont(f);
- printPainter.setPen(black);
+ printPainter.setPen(Qt::black);
  printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
   QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(positionsProvider.getFilePath()).arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(timeFrameWidth));
 
