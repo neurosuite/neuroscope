@@ -19,9 +19,9 @@ set(neuroscope_SRCS
 	itemiconview.cpp 
 	#itempalette.cpp 
 	#neuroscopedoc.cpp 
-	neuroscopexmlreader.cpp 
-	positionproperties.cpp 
-	positionsprovider.cpp 
+	#neuroscopexmlreader.cpp 
+	#positionproperties.cpp 
+	#positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
 	prefdialog.cpp 

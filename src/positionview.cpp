@@ -232,7 +232,7 @@ void PositionView::drawPositions(QPainter& painter){
     }
     index = index + 2;
    }
-   painter.setBrush(QBrush::Qt::NoBrush);
+   painter.setBrush(Qt::NoBrush);
    painter.setPen(lineColor);
    painter.drawPolygon(polygon,false,0,nbPointsInPolygon); 
    painter.setPen(red);//first point red
@@ -321,7 +321,7 @@ void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bo
   printPainter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
   printPainter.setViewport(viewport);
 
-  if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,white);
+  if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(Qt::back,Qt::white);
   if(!whiteBackground && background.isNull()){
    QColor color = backgroundColor();
    printPainter.fillRect(back,color);  
