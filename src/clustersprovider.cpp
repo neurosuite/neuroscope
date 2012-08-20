@@ -27,10 +27,6 @@
 #include <stdlib.h>
 using namespace std;
 
-// include files for KDE
-
-#include <QProcess>
-
 
 //Unix include file
 #include <unistd.h>

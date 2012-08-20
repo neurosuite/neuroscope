@@ -28,10 +28,6 @@
 #include <iomanip> // Required for formated I/O.
 using namespace std;
 
-// include files for KDE
-
-#include <QProcess>
-
 
 //Unix include file
 #include <unistd.h>

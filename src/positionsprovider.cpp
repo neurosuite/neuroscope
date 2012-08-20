@@ -23,10 +23,6 @@
 #include <QStringList>
 #include <QFileInfo>
 
-// include files for KDE
-
-#include <QProcess>
-
 
 //General C++ include files
 #include <iostream>
