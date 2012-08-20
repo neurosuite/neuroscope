@@ -110,7 +110,7 @@ public:
  };
 
  /**Installs the event filter on the view contained in the widget.*/
- inline void installEventFilter(const QObject* filterObject){
+ inline void installEventFilter(QObject* filterObject){
   QObject::installEventFilter(filterObject);
   view.installEventFilter(filterObject);
  };
