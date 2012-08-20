@@ -18,10 +18,6 @@
 // include files for KDE
 #include "config-neuroscope.h"
 
-#include <kcmdlineargs.h>
-#include <kaboutdata.h>
-
-
 // include files for QT
 #include <QDir>
 #include <QString>
@@ -62,6 +58,7 @@ QString version;
 
 int main(int argc, char *argv[])
 {
+#if KDAB_PENDING
 	KAboutData aboutData( "neuroscope", I18N_NOOP("NeuroScope"),
 		VERSION, description, KAboutData::License_GPL,
 		"(c) 2004-2006, Lynn Hazan", 0, 0, "lynn.hazan.myrealbox.com");
@@ -104,6 +101,9 @@ int main(int argc, char *argv[])
 		}
 		args->clear();
   }
-
+#endif
+  //KDAB_TODO
+  NeuroscopeApp* neuroscope = new NeuroscopeApp();
+  neuroscope->show();
   return app.exec();
 }  
