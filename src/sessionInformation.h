@@ -25,9 +25,6 @@
 #include <QString>
 #include <qmap.h>
 
-// include files for KDE
-#include <kurl.h>
-
 //application specific include files.
 #include "eventsprovider.h"
 

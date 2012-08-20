@@ -7,18 +7,18 @@ set(neuroscope_SRCS
 	channelcolors.cpp 
 	channelgroupview.cpp 
 	channeliconview.cpp 
-	channelpalette.cpp 
+	#channelpalette.cpp 
 	clustercolors.cpp 
-	clusterproperties.cpp 
-	clustersprovider.cpp 
-	configuration.cpp 
+	#clusterproperties.cpp 
+	#clustersprovider.cpp 
+	#configuration.cpp 
 	dataprovider.cpp 
-	eventsprovider.cpp 
+	#eventsprovider.cpp 
 	itemcolors.cpp 
 	itemgroupview.cpp 
 	itemiconview.cpp 
-	itempalette.cpp 
-	neuroscopedoc.cpp 
+	#itempalette.cpp 
+	#neuroscopedoc.cpp 
 	neuroscopexmlreader.cpp 
 	positionproperties.cpp 
 	positionsprovider.cpp 

@@ -58,7 +58,7 @@ class ItemIconView : public Q3IconView  {
   signals:
    void mousePressWoModificators(QString sourceGroup);
    void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
-   void mousePressWQt::AltModifier(QString sourceGroup,int index);
+   void mousePressWAltButton(QString sourceGroup,int index);
    void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
    void mouseReleased(QString sourceGroup);
 

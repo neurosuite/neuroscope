@@ -86,7 +86,7 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
  
   Q3IconViewItem* item = findItem(event->pos()); 
   if(item != 0L){
-   emit mousePressWQt::AltModifier(this->name(),item->index());
+   emit mousePressWAltButton(this->name(),item->index());
   }  
   return;
  }

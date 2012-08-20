@@ -26,13 +26,7 @@
 #include <Q3PtrList>
 #include <QInputDialog>
 #include <QFileDialog>
-// include files for KDE
 
-
-#include <kio/job.h>
-
-
-#include <kimageeffect.h>
 
 // application specific includes
 #include "neuroscopedoc.h"
