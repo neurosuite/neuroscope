@@ -11,7 +11,7 @@ set( QT_USE_XML TRUE)
 
 
 # tell cmake where to search for Qt/KDE headers:
-include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QT3SUPPORT_INCLUDE_DIR})
+include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QT3SUPPORT_INCLUDE_DIR} ${QT_QTXML_INCLUDE_DIR})
 
 #FIXME
 add_definitions(-fexceptions -DQT3_SUPPORT)
