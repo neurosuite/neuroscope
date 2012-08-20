@@ -34,14 +34,14 @@ int Utilities::getNbLines(QString path){
  // ' are added around the path to take care of directory names with blank.
  path = "'" + path + "'";
 
- KProcess childproc;
+ QProcess childproc;
  const char* shellToUse = getenv("SHELL");
  if(shellToUse != NULL) childproc.setUseShell(true,shellToUse);
  else childproc.setUseShell(true);
 
  QTemporaryFile counterFile = QTemporaryFile();//make a unique file
  childproc << "wc -l "<<path<<" > "<<counterFile.name();
- childproc.start(KProcess::DontCare);
+ childproc.start(QProcess::DontCare);
  sleep(1);
  QFileInfo fi(counterFile.fineName());
  while(!fi.exists()){
@@ -66,11 +66,11 @@ int Utilities::getNbLines(QString path){
  tmpFile.close();
   
  //Remove the temporary file
- KProcess childproc2;
+ QProcess childproc2;
  childproc2.setUseShell(true);
  childproc2 <<"rm -f "<<counterFile.name();
- bool res = childproc2.start(KProcess::DontCare); 
- while(!res) res = childproc2.start(KProcess::DontCare);
+ bool res = childproc2.start(QProcess::DontCare); 
+ while(!res) res = childproc2.start(QProcess::DontCare);
  
 
  //If the number of lines could not be determined, try again
@@ -79,7 +79,7 @@ int Utilities::getNbLines(QString path){
    //make sure the file has been deleted before starting again
    while(fi.exists()){
     sleep(1);
-    while(!res) res = childproc2.start(KProcess::DontCare);
+    while(!res) res = childproc2.start(QProcess::DontCare);
    } 
  
   return getNbLines(path);   

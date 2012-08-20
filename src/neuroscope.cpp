@@ -718,13 +718,13 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     fileOpenRecent->saveEntries(config);
     filePath = path;
 
-    KProcess* childproc = new KProcess();
+    QProcess* childproc = new QProcess();
     childproc->setUseShell(true);
 
     QString command = "neuroscope ";
     command.append(url.path());
     *childproc << command;
-    childproc->start(KProcess::DontCare);
+    childproc->start(QProcess::DontCare);
 
     childproc->detach();
     delete childproc;
