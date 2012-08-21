@@ -1907,7 +1907,7 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
    painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
    painter.setViewport(viewport);
 
-   painter.setRasterOp(NotROP);
+   //KDAB_PENDING painter.setRasterOp(NotROP);
    painter.setPen(QPen(Qt::color0,1));
    painter.setBrush(Qt::NoBrush);
    int top = r.top();
@@ -2135,7 +2135,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
    painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
    painter.setViewport(viewport);
 
-   painter.setRasterOp(NotROP);
+   //KDAB_PENDING painter.setRasterOp(NotROP);
    painter.setPen(QPen(Qt::color0,1));
    painter.setBrush(Qt::NoBrush);
 
@@ -2203,7 +2203,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
    painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
    painter.setViewport(viewport);
 
-   painter.setRasterOp(NotROP);
+   //KDAB_PENDING painter.setRasterOp(NotROP);
    painter.setPen(QPen(Qt::color0,1));
    painter.setBrush(Qt::NoBrush);
    int top = r.top();
@@ -3546,7 +3546,7 @@ void TraceView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool 
   }
 
   printPainter.fillRect(back,backgroundColor());
-  printPainter.setClipRect(back,QPainter::CoordPainter);
+  //KDAB_PENDING printPainter.setClipRect(back,QPainter::CoordPainter);
 
   //Paint all the traces in the shownChannels list (in the double buffer)
   drawTraces(printPainter);
