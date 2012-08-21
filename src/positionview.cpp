@@ -184,11 +184,11 @@ void PositionView::drawPositions(QPainter& painter){
  if(nbPoints == 0) return;
  //If there is only one spot, draw a point in red
  if(nbSpots == 1){
-  painter.setPen(red);
-  painter.setBrush(red);
+  painter.setPen(Qt::red);
+  painter.setBrush(Qt::red);
   for(int i = 1;i<nbPoints;++i) painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
   //The last position is emphasized, bigger points with white in the center.
-  painter.setBrush(red);
+  painter.setBrush(Qt::red);
   painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
  }
@@ -199,21 +199,21 @@ void PositionView::drawPositions(QPainter& painter){
    painter.setPen(lineColor);
    if(data(i,1) > 0 && data(i,2) > 0 && data(i,3) > 0 && data(i,4) > 0)//if a spot has been misdetected, do not draw a line
     painter.drawLine(data(i,1),data(i,2),data(i,3),data(i,4));
-   painter.setPen(red);
-   painter.setBrush(red);
+   painter.setPen(Qt::red);
+   painter.setBrush(Qt::red);
    painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-   painter.setPen(green);
-   painter.setBrush(green);
+   painter.setPen(Qt::green);
+   painter.setBrush(Qt::green);
    painter.drawEllipse(data(i,3)-1,data(i,4)-1,2,2);        
   }
   //The last position is emphasized, white line and bigger points with white in the center.
-  painter.setPen(white);
+  painter.setPen(Qt::white);
   if(data(nbPoints,1) > 0 && data(nbPoints,2) > 0 && data(nbPoints,3) > 0 && data(nbPoints,4) > 0)//if a spot has been misdetected, do not draw a line
     painter.drawLine(data(nbPoints,1),data(nbPoints,2),data(nbPoints,3),data(nbPoints,4));
-  painter.setBrush(red);
+  painter.setBrush(Qt::red);
   painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
-  painter.setBrush(green);
+  painter.setBrush(Qt::green);
   painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,3)-4,data(nbPoints,4)-4,8,8);   
  }
@@ -235,11 +235,11 @@ void PositionView::drawPositions(QPainter& painter){
    painter.setBrush(Qt::NoBrush);
    painter.setPen(lineColor);
    painter.drawPolygon(polygon,false,0,nbPointsInPolygon); 
-   painter.setPen(red);//first point red
-   painter.setBrush(red);
+   painter.setPen(Qt::red);//first point red
+   painter.setBrush(Qt::red);
    painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-   painter.setPen(green);//other points green
-   painter.setBrush(green);
+   painter.setPen(Qt::green);//other points green
+   painter.setBrush(Qt::green);
    for(int j = 3;j<nbCoordinates;j=j+2){
     painter.drawEllipse(data(i,j)-1,data(i,j+1)-1,2,2);
    }    
@@ -255,13 +255,13 @@ void PositionView::drawPositions(QPainter& painter){
    }
    index = index + 2;
   }
-  painter.setPen(white);
-  painter.setBrush(QBrush::Qt::NoBrush);
+  painter.setPen(Qt::white);
+  painter.setBrush(Qt::NoBrush);
   painter.drawPolygon(polygon,false,0,nbPointsInPolygon);  
-  painter.setBrush(red);
+  painter.setBrush(Qt::red);
   painter.setPen(Qt::black);
   painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
-  painter.setBrush(green);
+  painter.setBrush(Qt::green);
   painter.setPen(Qt::black);
   for(int j = 3;j<nbCoordinates;j=j+2){
    painter.drawEllipse(data(nbPoints,j)-4,data(nbPoints,j+1)-4,8,8);

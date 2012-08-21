@@ -36,7 +36,7 @@
 
 class Properties;
   
-class PropertiesDialog : public KDialogBase  {
+class PropertiesDialog : public QDialog  {
    Q_OBJECT
 public:
   //Constructor

@@ -35,7 +35,7 @@ class ClusterProperties;
   *@author Lynn Hazan
   */
   
-class PrefDialog : public KDialogBase {
+class PrefDialog : public QDialog {
     Q_OBJECT
   public:
     /**Constructor*/
