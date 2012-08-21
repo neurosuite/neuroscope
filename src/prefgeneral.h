@@ -48,7 +48,10 @@ public:
 
 
   /**Sets the background color.*/
-  inline void setBackgroundColor(const QColor& color){backgroundColorButton->setColor(color);};
+  inline void setBackgroundColor(const QColor& color)
+  {
+	  //KDAB_PENDING backgroundColorButton->setColor(color);
+  }
 
   /**Sets the display of the palette headers.*/
   inline void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);};
@@ -60,7 +63,9 @@ public:
   inline void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);};
 
   /**Returns the background color.*/
-  inline QColor getBackgroundColor() const{return backgroundColorButton->color();};
+  inline QColor getBackgroundColor() const{
+	  //KDAB_PENDING return backgroundColorButton->color();
+  }
 
   /**Returns true if the palette headers are displayed, false othewise.*/
   inline bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();};

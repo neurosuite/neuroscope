@@ -48,7 +48,7 @@ bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
  xmlInitParser();
 
  // Load XML document
- doc = xmlParseFile(url.path());
+ doc = xmlParseFile(url);
  if(doc == NULL) return false;
  
  // Create xpath evaluation context

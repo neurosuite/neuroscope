@@ -45,7 +45,7 @@ eventPosition(static_cast<float>(position) / 100.0),modified(false){
  
  //Find the event file identifier and use it as the name for the provider
  //the file name is X.id.evt (id is a 3 character identifier)
- QString fileName = fileUrl.fileName();
+ QString fileName = fileUrl;
  int startingIndex = fileName.findRev("evt");
  if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.id.evt
   int nBStartingIndex = fileName.findRev(".",startingIndex - 2);
@@ -314,7 +314,7 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
  long count = 0;
  while(time <= endTime && startIndex <= nbEvents){
-  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<double>(startTime)) * currentSamplingRate))),0);
+  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<double>(startTime)) * currentSamplingRate))),0L);
   ids(1,count + 1) = eventIds[events(1,startIndex)]; 
   
   count++;
@@ -459,7 +459,7 @@ void EventsProvider::requestNextEventData(long startTime,long timeFrame,Q3ValueL
  //check that the event corresponding to the current startIndex
  //is not the one already at eventPosition, if so take the following start index
  time = static_cast<long>(floor(0.5 + timeStamps(1,startIndex)));
- dataType startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0);
+ dataType startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0L);
  while ((time == startTime) && (startIndex < nbEvents)){
   startIndex++;
   time = static_cast<long>(floor(0.5 + timeStamps(1,startIndex)));
@@ -491,7 +491,7 @@ void EventsProvider::requestNextEventData(long startTime,long timeFrame,Q3ValueL
  time = static_cast<long>(floor(0.5 + timeStamps(1,startIndex)));
 
  //compute the final starting time and the corresponding index
- startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0);
+ startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0L);
 
  long newStartIndex = startIndex;
  while(time > startingTime){
@@ -527,7 +527,7 @@ void EventsProvider::requestNextEventData(long startTime,long timeFrame,Q3ValueL
 
  long count = 0;
  while(time <= endTime && startIndex <= nbEvents){
-  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<float>(startingTime)) * currentSamplingRate))),0);
+  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<float>(startingTime)) * currentSamplingRate))),0L);
   ids(1,count + 1) = eventIds[events(1,startIndex)];
     
   count++;
@@ -671,7 +671,7 @@ void EventsProvider::requestPreviousEventData(long startTime,long timeFrame,Q3Va
  //check that the event corresponding to the startIndex
  //is not the one already at eventPosition, if so take the previous index.
  time = static_cast<long>(floor(0.5 + timeStamps(1,startIndex)));
- dataType startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0);
+ dataType startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0L);
  while((time == startTime) && (startIndex > 1)){
   startIndex--;
   time = static_cast<long>(floor(0.5 + timeStamps(1,startIndex))); 
@@ -701,7 +701,7 @@ void EventsProvider::requestPreviousEventData(long startTime,long timeFrame,Q3Va
  }
 
  //compute the final starting time and the corresponding index
- startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0);
+ startingTime = qMax(time - static_cast<long>(timeFrame * eventPosition),0L);
  long newStartIndex = startIndex;
 
  while(time > startingTime){
@@ -735,7 +735,7 @@ void EventsProvider::requestPreviousEventData(long startTime,long timeFrame,Q3Va
 
  long count = 0;
  while(time <= endTime && startIndex <= nbEvents){
-  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<float>(startingTime)) * currentSamplingRate))),0);  
+  times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<float>(startingTime)) * currentSamplingRate))),0L);  
   ids(1,count + 1) = eventIds[events(1,startIndex)];
   count++;
   startIndex++;
@@ -1205,7 +1205,8 @@ void EventsProvider::addEventDescription(QString eventDescriptionToAdd){
 
  descriptions.append(EventDescription(eventDescriptionToAdd));
 
- qSort(descriptions);
+ //KDAB_PENDING
+ //qSort(descriptions);
  long maxSize = 0;
  long sum = 0;
  long sumOfSquares = 0;
@@ -1260,7 +1261,7 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
  Q3ValueList<EventDescription> newDescriptions = eventIds.keys();
  newDescriptions.remove(EventDescription(eventDescriptionToRemove));
  
- qSort(newDescriptions);
+ //KDAB_PENDING qSort(newDescriptions);
  long maxSize = 0;
  long sum = 0;
  long sumOfSquares = 0;

@@ -23,7 +23,7 @@
 #include <QPixmap>
 
 
-PositionProperties::PositionProperties(QWidget *parent, const char *name ) : PositionPropertiesLayout(parent,name),
+PositionProperties::PositionProperties(QWidget *parent, const char *name ) : PositionPropertiesLayout(parent),
                                       intValidator(this),doubleValidator(this){
  //Set a validator on the line edits, the values have to be integers.
  samplingRateLineEdit->setValidator(&doubleValidator);

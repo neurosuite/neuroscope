@@ -1285,8 +1285,8 @@ void TraceView::drawTraces(Q3ValueList<int> channels,bool highlight){
 
      for(int i = 1; i < nbSpikes + 1;++i){
       dataType index = currentData(1,i);
-      int firstIndex = qMax(0,index - nbSamplesBefore);
-      int lastIndex = qMin(nbSamples,index + nbSamplesAfter);
+      int firstIndex = qMax(0L,index - nbSamplesBefore);
+      int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
       int nbWaveformSamples = lastIndex - firstIndex + 1;
       dataType clusterId = currentData(2,i);
 
@@ -1531,7 +1531,7 @@ void TraceView::drawTraces(QPainter& painter){
 
       for(int i = 1; i < nbSpikes + 1;++i){
        dataType index = currentData(1,i);
-       int firstIndex = qMax(1,index - nbSamplesBefore);
+       int firstIndex = qMax(1L,index - nbSamplesBefore);
        int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
        int nbWaveformSamples = lastIndex - firstIndex + 1;
        dataType clusterId = currentData(2,i);
@@ -1754,7 +1754,7 @@ qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
 
       for(int i = 1; i < nbSpikes + 1;++i){
        dataType index = currentData(1,i);
-       int firstIndex = qMax(1,index - nbSamplesBefore);
+       int firstIndex = qMax(1L,index - nbSamplesBefore);
        int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
        int nbWaveformSamples = lastIndex - firstIndex + 1;
        dataType clusterId = currentData(2,i);

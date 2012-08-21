@@ -9,28 +9,28 @@ set(neuroscope_SRCS
 	channeliconview.cpp 
 	#channelpalette.cpp 
 	clustercolors.cpp 
-	#clusterproperties.cpp 
+	clusterproperties.cpp 
 	#clustersprovider.cpp 
 	#configuration.cpp 
 	dataprovider.cpp 
-	#eventsprovider.cpp 
+	eventsprovider.cpp 
 	itemcolors.cpp 
 	itemgroupview.cpp 
 	itemiconview.cpp 
 	#itempalette.cpp 
 	#neuroscopedoc.cpp 
-	#neuroscopexmlreader.cpp 
+	neuroscopexmlreader.cpp 
 	#positionproperties.cpp 
 	#positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
 	#prefdialog.cpp 
-	#prefgeneral.cpp  
+	prefgeneral.cpp  
 	properties.cpp 
 	#propertiesdialog.cpp 
 	tags.cpp 
 	tracesprovider.cpp 
-	#traceview.cpp 
+	traceview.cpp 
 	tracewidget.cpp 
 	zoomwindow.cpp 
 	sessionxmlwriter.cpp 
