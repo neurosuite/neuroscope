@@ -211,7 +211,7 @@ private slots:
    else{
     QPixmap pixmap;
     pixmap.resize(getWidth(),getHeight());
-    pixmap.fill(black);
+    pixmap.fill(Qt::black);
     backgroundPixmap->setPixmap(pixmap);
    }
   };

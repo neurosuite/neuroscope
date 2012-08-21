@@ -20,7 +20,7 @@
 // include files for KDE
 
 
-PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLayout(parent,name),
+PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLayout(parent),
               intValidator(this),doubleValidator(this) {
  //Set a validator on the line edits, the values have to be integers.
  nbChannelsLineEdit->setValidator(&intValidator);
@@ -35,7 +35,7 @@ PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLay
  
  //Set an icon on the backgroundButton button
  
- traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen")));
+ traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen"));
  
 }
 PrefDefaults::~PrefDefaults(){

@@ -195,7 +195,7 @@
                 </widget>
               </item>
               <item>
-                <widget class="KColorButton" name="backgroundColorButton">
+                <widget class="QPushButton" name="backgroundColorButton">
                   <property name="sizePolicy">
                     <sizepolicy>
                       <hsizetype>5</hsizetype>
@@ -281,9 +281,6 @@
   </widget>
   <layoutdefault spacing="6" margin="11"/>
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <includes>
-    <include location="local">kcolorbutton.h</include>
-  </includes>
   <resources>
     <include location="prefgenerallayout.qrc"/>
   </resources>

@@ -143,7 +143,7 @@ void PositionView::updatePositionInformation(int width, int height,QImage backgr
 void PositionView::scaleBackgroundImage(){
   if(!background.isNull()){
    QRect contentsRec = contentsRect();
-   scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),PreferDither);    
+   scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
   }
 }
 
@@ -306,14 +306,14 @@ void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bo
  
   if(!whiteBackground && !background.isNull()){
    QPixmap printPixmap;
-   printPixmap.convertFromImage(background.smoothScale(viewport.width(),viewport.height()),PreferDither);
+   printPixmap.convertFromImage(background.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
    printPainter.drawPixmap(0,0,printPixmap);
   }
   
   //use the image dedicated for printing
   if(whiteBackground && !backgroundForPrinting.isNull()){
    QPixmap printPixmap;
-   printPixmap.convertFromImage(backgroundForPrinting.smoothScale(viewport.width(),viewport.height()),PreferDither);
+   printPixmap.convertFromImage(backgroundForPrinting.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
    printPainter.drawPixmap(0,0,printPixmap);  
   }
   
@@ -321,7 +321,7 @@ void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bo
   printPainter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
   printPainter.setViewport(viewport);
 
-  if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(Qt::back,Qt::white);
+  if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,Qt::white);
   if(!whiteBackground && background.isNull()){
    QColor color = backgroundColor();
    printPainter.fillRect(back,color);  
