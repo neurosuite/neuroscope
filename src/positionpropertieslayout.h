@@ -4,7 +4,7 @@
 #include "ui_positionpropertieslayout.h"
 
 
-class PositionPropertiesLayout : public QWidget, private Ui_PositionPropertiesLayout
+class PositionPropertiesLayout : public QWidget, public Ui_PositionPropertiesLayout
 {
     Q_OBJECT
 

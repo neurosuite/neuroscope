@@ -4,7 +4,7 @@
 #include "ui_propertieslayout.h"
 
 
-class PropertiesLayout : public QWidget, private Ui_PropertiesLayout
+class PropertiesLayout : public QWidget, public Ui_PropertiesLayout
 {
     Q_OBJECT
 

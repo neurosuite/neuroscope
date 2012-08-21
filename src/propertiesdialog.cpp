@@ -21,12 +21,6 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
-// include files for KDE
-
-        // for KGlobal
-#include <klineedit.h>      // for KLineEdit
-    // for KMessageBox
-
 //include files for the application
 #include "propertiesdialog.h"
         

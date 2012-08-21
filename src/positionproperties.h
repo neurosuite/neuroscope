@@ -66,7 +66,7 @@ public:
    backgroundLineEdit->setText(image);
    if(image != ""){
     backgroungImage.load(image);
-    if(backgroungImage != NULL){
+    if(!backgroungImage.isNull()){
      //flip and rotation values should have been set before any call to this function.
      updateDisplayedImage();
     }
@@ -194,7 +194,7 @@ public:
     if(!state){
      QPixmap pixmap;
      pixmap.resize(getWidth(),getHeight());
-     pixmap.fill(black);
+     pixmap.fill(Qt::black);
      backgroundPixmap->setPixmap(pixmap); 
     }
   };

@@ -24,8 +24,8 @@ set(neuroscope_SRCS
 	#positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
-	prefdialog.cpp 
-	prefgeneral.cpp  
+	#prefdialog.cpp 
+	#prefgeneral.cpp  
 	properties.cpp 
 	propertiesdialog.cpp 
 	tags.cpp 

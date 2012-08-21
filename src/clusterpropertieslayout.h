@@ -4,7 +4,7 @@
 #include "ui_clusterpropertieslayout.h"
 
 
-class ClusterPropertiesLayout : public QWidget, private Ui_ClusterPropertiesLayout
+class ClusterPropertiesLayout : public QWidget, public Ui_ClusterPropertiesLayout
 {
     Q_OBJECT
 
