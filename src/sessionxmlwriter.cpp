@@ -50,7 +50,7 @@ SessionXmlWriter::SessionXmlWriter():doc(){
 SessionXmlWriter::~SessionXmlWriter(){}
 
 bool SessionXmlWriter::writeTofile(const QString& url){ 
- QFile sessionFile(url.path());
+ QFile sessionFile(url);
  bool status = sessionFile.open(QIODevice::WriteOnly);
  if(!status) return status;
 
@@ -86,7 +86,7 @@ void SessionXmlWriter::setLoadedFilesInformation(Q3ValueList<SessionFile> fileLi
   typeElement.appendChild(typeValue);
 
   QDomElement urlElement = doc.createElement(URL);
-  QDomText urlValue = doc.createTextNode(fileUrl.url());
+  QDomText urlValue = doc.createTextNode(fileUrl);
   urlElement.appendChild(urlValue);
   
   QDomElement dateElement = doc.createElement(DATE);

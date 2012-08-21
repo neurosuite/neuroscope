@@ -30,7 +30,7 @@ set(neuroscope_SRCS
 	#propertiesdialog.cpp 
 	tags.cpp 
 	tracesprovider.cpp 
-	traceview.cpp 
+	#traceview.cpp 
 	tracewidget.cpp 
 	zoomwindow.cpp 
 	sessionxmlwriter.cpp 

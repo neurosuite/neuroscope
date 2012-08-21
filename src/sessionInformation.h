@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QString>
 #include <qmap.h>
+#include <QUrl>
 
 //application specific include files.
 #include "eventsprovider.h"
@@ -43,19 +44,19 @@ public:
   enum type{CLUSTER=0,SPIKE=1,EVENT=2,POSITION=3};
 
   inline SessionFile(){
-   fileUrl = KURL();
+   fileUrl = QUrl();
    fileType = CLUSTER;
    fileModification = QDateTime();//invalid QDateTime
   };
 
-  inline SessionFile(KURL url,type fileType,QDateTime modification):fileUrl(url),fileType(fileType),fileModification(modification){};
+  inline SessionFile(QUrl url,type fileType,QDateTime modification):fileUrl(url),fileType(fileType),fileModification(modification){};
   
   inline ~SessionFile(){};
 
   /**Sets the url of the file.
   * @param url url of the file.
   */
-  inline void setUrl(KURL url){fileUrl = url;};
+  inline void setUrl(QUrl url){fileUrl = url;};
   
   /**Sets the type of the file (see SessionFile#type).
   * @param fileType type of the file.
@@ -85,7 +86,7 @@ public:
   /**Gets the url of the file.
   * @return url of the file.
   */
-  inline KURL getUrl() const{return fileUrl;};
+  inline QUrl getUrl() const{return fileUrl;};
 
   /**Gets the type of the file (see SessionFile#type).
   * @return type of the file.
@@ -111,7 +112,7 @@ public:
   
 private:
   /**Url of the file.*/
-  KURL fileUrl;
+  QUrl fileUrl;
   /**Url of the background image.*/
   QString imagePath;
   /**Type of the file.*/

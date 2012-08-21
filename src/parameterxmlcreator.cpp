@@ -52,7 +52,7 @@ ParameterXmlCreator::ParameterXmlCreator():doc(){
 ParameterXmlCreator::~ParameterXmlCreator(){}
 
 bool ParameterXmlCreator::writeTofile(const QString& url){ 
- QFile parameterFile(url.path());
+ QFile parameterFile(url);
  bool status = parameterFile.open(QIODevice::WriteOnly);
  if(!status) return status;
 
