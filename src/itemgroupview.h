@@ -22,6 +22,7 @@
 #include <q3hbox.h>
 #include <q3iconview.h>
 #include <QObject> 
+#include <QDebug>
 
 //General C++ include files
 #include <iostream>
@@ -54,7 +55,7 @@ public:
     setAcceptDrops(TRUE);
   };
 
-  inline ~ItemGroupView(){cout<<"in ~ItemGroupView()"<<endl;};
+  inline ~ItemGroupView(){qDebug()<<"in ~ItemGroupView()"<<endl;};
 
   inline void setIconView(Q3IconView* view){
    iconView = view;

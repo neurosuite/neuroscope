@@ -36,7 +36,7 @@
 
 //Inclused files for KDE
 #include <QStatusBar>
-
+#include <Q3PaintDeviceMetrics>
 //include files for c/c++ libraries
 #include <math.h>
 

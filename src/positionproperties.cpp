@@ -22,10 +22,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-// include files for KDE
-
-#include <kimageeffect.h>
-
 
 PositionProperties::PositionProperties(QWidget *parent, const char *name ) : PositionPropertiesLayout(parent,name),
                                       intValidator(this),doubleValidator(this){
@@ -41,7 +37,7 @@ PositionProperties::PositionProperties(QWidget *parent, const char *name ) : Pos
 
   //Set an icon on the backgroundButton button
  
- backgroundButton->setIconSet(QIcon(":/icons/fileopen")));
+ backgroundButton->setIconSet(QIcon(":/icons/fileopen"));
  
 }
 
@@ -49,6 +45,7 @@ PositionProperties::~PositionProperties(){
 }
 
 void PositionProperties::updateDisplayedImage(){ 
+#if KDAB_PENDING
  if(backgroungImage != NULL){
    //apply first the rotation and then the flip
   QImage rotatedImage = backgroungImage;
@@ -82,6 +79,7 @@ void PositionProperties::updateDisplayedImage(){
   }
   if(pixmap.convertFromImage(flippedImage)) backgroundPixmap->setPixmap(pixmap); 
  }
+#endif
 }
 
 

@@ -24,6 +24,7 @@
 #include <Q3ValueList>
 #include <QLabel>
 #include <QKeyEvent>
+#include <QDebug>
 
 
 //General C++ include files
@@ -88,7 +89,7 @@ void TraceWidget::accelerate()
 	if ( !timer->isActive() ) return;
 	pageTime -= 125;
 	if ( pageTime < 0 ) pageTime = 0;
-	cout << "page time: " << pageTime << endl;
+	qDebug() << "page time: " << pageTime << endl;
 	timer->start(pageTime);
 }
 
@@ -97,7 +98,7 @@ void TraceWidget::decelerate()
 	if ( !timer->isActive() ) return;
 	pageTime += 125;
 	if ( pageTime > 1000 ) pageTime = 1000;
-	cout << "page time: " << pageTime << endl;
+	qDebug() << "page time: " << pageTime << endl;
 	timer->start(pageTime);
 }
 

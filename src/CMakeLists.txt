@@ -27,7 +27,7 @@ set(neuroscope_SRCS
 	#prefdialog.cpp 
 	#prefgeneral.cpp  
 	properties.cpp 
-	propertiesdialog.cpp 
+	#propertiesdialog.cpp 
 	tags.cpp 
 	tracesprovider.cpp 
 	traceview.cpp 

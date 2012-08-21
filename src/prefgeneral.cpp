@@ -23,7 +23,7 @@
 // include files for KDE
 
 
-PrefGeneral::PrefGeneral(QWidget *parent, const char *name ) : PrefGeneralLayout(parent,name),validator(this) {
+PrefGeneral::PrefGeneral(QWidget *parent, const char *name ) : PrefGeneralLayout(parent),validator(this) {
 }
 PrefGeneral::~PrefGeneral(){
 }

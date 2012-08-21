@@ -21,6 +21,8 @@
 #include <iostream>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QDebug>
+
 
 using namespace std;
 
@@ -30,7 +32,7 @@ ChannelColors::ChannelColors():channelList(){
 }
 
 ChannelColors::~ChannelColors(){
-   cout << "~ChannelColors()"<<endl;
+   qDebug() << "~ChannelColors()"<<endl;
 }
 
 

@@ -4,7 +4,7 @@
 #include "ui_prefdefaultslayout.h"
 
 
-class PrefDefaultsLayout : public QWidget, protected Ui_PrefDefaultsLayout
+class PrefDefaultsLayout : public QWidget, public Ui_PrefDefaultsLayout
 {
     Q_OBJECT
 

@@ -34,11 +34,12 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PointArray>
-
+#include <QApplication>
 
 // include files for kde
 
 
+#include <QDebug>
 
 
 //Unix include file
@@ -157,12 +158,12 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
  //Create the cursors
  
- measureCursor = QCursor(QPixmap(":/icons/measure_cursor",0,0);
- selectTimeCursor = QCursor(QPixmap(":/icons/select_time_cursor",0,0);
- selectEventCursor = QCursor(QPixmap(":/icons/select_event_cursor",0,0);
- addEventCursor = QCursor(QPixmap(":/icons/add_event_cursor",0,0);
- selectCursor = QCursor(QPixmap(":/icons/select_channels_cursor",0,0);
- drawLineCursor = QCursor(QPixmap(":/icons/time_line_cursor",0,0);
+ measureCursor = QCursor(QPixmap(":/icons/measure_cursor"),0,0);
+ selectTimeCursor = QCursor(QPixmap(":/icons/select_time_cursor"),0,0);
+ selectEventCursor = QCursor(QPixmap(":/icons/select_event_cursor"),0,0);
+ addEventCursor = QCursor(QPixmap(":/icons/add_event_cursor"),0,0);
+ selectCursor = QCursor(QPixmap(":/icons/select_channels_cursor"),0,0);
+ drawLineCursor = QCursor(QPixmap(":/icons/time_line_cursor"),0,0);
 
  //Set the cursor shap to a magnifier as the only action allowed on the widget is to zoom.
  setCursor(zoomCursor);
@@ -254,7 +255,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
  if(initiator != this) return;
 
 
-cout<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() <<endl;
+qDebug()<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() <<endl;
 
  ClusterData* clusterData = clustersData[providerName];
  clusterData->setStatus(true);
@@ -1581,7 +1582,7 @@ void TraceView::drawTraces(QPainter& painter){
      for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
       QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
-cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
+qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
 
 
       clustersOrder.append(identifier);
@@ -1809,7 +1810,7 @@ cout<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
      QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
-cout<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
+qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
 
      clustersOrder.append(identifier);
      rasterOrdinates.append(-Y);
@@ -3101,7 +3102,7 @@ void TraceView::correctZoom(QRect& r){
   }
  }
   /* if(zoomed && !firstZoom && zoomOut){
-     cout<<" zoomed && !firstZoom && zoomOut r.width() "<<r.width()<<endl;
+     qDebug()<<" zoomed && !firstZoom && zoomOut r.width() "<<r.width()<<endl;
     zoomOut = false;
     zoomed = false;
     if(zoomFactor != 1){
@@ -3109,7 +3110,7 @@ void TraceView::correctZoom(QRect& r){
      }
      else{
       zoomed = false;
-      cout<<"zoomFactor "<<zoomFactor<<endl;
+      qDebug()<<"zoomFactor "<<zoomFactor<<endl;
       int windowWidth = r.width();
 
 
@@ -3132,8 +3133,8 @@ void TraceView::correctZoom(QRect& r){
       r.setLeft(newLeft);
       r.setWidth(newWidth);
       window = ZoomWindow(r);
- cout<<"previousWindow.width() "<<previousWindow.width()<<" windowWidth "<<windowWidth<<" previousDownSampling "<<previousDownSampling<<" zoomFactor "<<zoomFactor<<endl;
-cout<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<r.left()<<" newLeft "<<newLeft<<" timeStep "<<timeStep<<endl;
+ qDebug()<<"previousWindow.width() "<<previousWindow.width()<<" windowWidth "<<windowWidth<<" previousDownSampling "<<previousDownSampling<<" zoomFactor "<<zoomFactor<<endl;
+qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<r.left()<<" newLeft "<<newLeft<<" timeStep "<<timeStep<<endl;
 
      }
     }
@@ -4086,7 +4087,7 @@ void TraceView::showNextCluster(){
    for(;iterator.current();++iterator){
     Q3ValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
 
-cout<<"key " <<iterator.currentKey().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
+qDebug()<<"key " <<iterator.currentKey().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
 
     if(!static_cast<ClusterData*>(iterator.current())->status() && ids.size() != 0) static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestNextClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
    }
@@ -4146,9 +4147,9 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
  if(initiator != this) return;
 
 
-cout<<" providerName " <<providerName<<" data.nbOfColumns() " <<data.nbOfColumns()<<" startingTime " <<startingTime <<endl;
+qDebug()<<" providerName " <<providerName<<" data.nbOfColumns() " <<data.nbOfColumns()<<" startingTime " <<startingTime <<endl;
 
-cout<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeInRecordingUnits " <<startingTimeInRecordingUnits<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
+qDebug()<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeInRecordingUnits " <<startingTimeInRecordingUnits<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
 
 
  //if no cluster has been found the return startingTime is the same as the send one (endTime).
@@ -4185,8 +4186,8 @@ cout<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeI
   else{
    clusterProviderToSkip = nextClusterProvider.first;
 
-cout<<" clusterProviderToSkip " <<clusterProviderToSkip<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<" startTime "<<startTime<<" endTime "<<endTime<<endl;
-cout<<" previousStartTimeInRecordingUnits " <<previousStartTimeInRecordingUnits<<" nextClusterProvider.second " <<nextClusterProvider.second<<" length "<<length<<endl;
+qDebug()<<" clusterProviderToSkip " <<clusterProviderToSkip<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<" startTime "<<startTime<<" endTime "<<endTime<<endl;
+qDebug()<<" previousStartTimeInRecordingUnits " <<previousStartTimeInRecordingUnits<<" nextClusterProvider.second " <<nextClusterProvider.second<<" length "<<length<<endl;
 
 
    //update the traceWidget time widgets and retrieve the data for the new start time for all the providers except the one containing the data for the new start time.

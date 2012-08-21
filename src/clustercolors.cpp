@@ -19,13 +19,14 @@
 
 //C, C++ include files
 #include <iostream>
+#include <QDebug>
 
 using namespace std;
 
 ClusterColors::ClusterColors():ItemColors(){}
 
 ClusterColors::~ClusterColors(){
-   cout << "~ClusterColors()"<<endl;
+   qDebug() << "~ClusterColors()"<<endl;
 }
 
 ClusterColors::ClusterColors(const ClusterColors& origin){
