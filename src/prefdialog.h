@@ -22,7 +22,7 @@
 #include <qwidget.h>
 
 // include files for KDE
-#include <kdialogbase.h>
+#include <QDialog>
 
 class PrefGeneral;
 class PrefDefaults;

@@ -22,7 +22,7 @@
 #include <qwidget.h>
 
 //includes files for KDE
-#include <kdialogbase.h>
+#include <QDialog>
 
 //include files for the application
 #include "properties.h"  
