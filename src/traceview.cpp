@@ -2069,7 +2069,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
  }
  else{
   //Compute the time
-  if(x < 0) statusBar->changeItem("",1);//on the left side of the display.
+  if(x < 0) statusBar->clearMessage();//on the left side of the display.
   else{
    float relativeTime;
    if(multiColumns){
@@ -2123,7 +2123,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
   }
  }
 
- statusBar->changeItem(message,1);
+ statusBar->showMessage(message);
 
  //Paint the channels selected while dragging
  if(mode == SELECT && selectedChannels.size() != 0 && (event->state() == Qt::LeftButton)){
