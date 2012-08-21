@@ -1532,7 +1532,7 @@ void TraceView::drawTraces(QPainter& painter){
       for(int i = 1; i < nbSpikes + 1;++i){
        dataType index = currentData(1,i);
        int firstIndex = qMax(1,index - nbSamplesBefore);
-       int lastIndex = qMin(nbSamples,index + nbSamplesAfter);
+       int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
        int nbWaveformSamples = lastIndex - firstIndex + 1;
        dataType clusterId = currentData(2,i);
 
@@ -1755,7 +1755,7 @@ qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
       for(int i = 1; i < nbSpikes + 1;++i){
        dataType index = currentData(1,i);
        int firstIndex = qMax(1,index - nbSamplesBefore);
-       int lastIndex = qMin(nbSamples,index + nbSamplesAfter);
+       int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
        int nbWaveformSamples = lastIndex - firstIndex + 1;
        dataType clusterId = currentData(2,i);
 
