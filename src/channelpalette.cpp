@@ -86,7 +86,7 @@ ChannelPalette::~ChannelPalette()
 {
     // no need to delete child widgets, Qt does it all for us
 }
-
+#include <Q3ListBox>
 void ChannelPalette::setGreyScale(bool grey){
  greyScale = grey;
  
@@ -98,7 +98,7 @@ void ChannelPalette::setGreyScale(bool grey){
  for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
   int groupId = (*channelsGroups)[iterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(iterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
   //Get the channelColor associated with the item
   QColor color = channelColors->color(iterator.key());
@@ -357,7 +357,7 @@ void ChannelPalette::hideUnselectAllChannels(){
   //Update the pixmap
   int groupId = (*channelsGroups)[iterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(iterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
   //Add an item to the target group with the same text but an update icon.
   QPixmap pixmap(14,14);
@@ -405,7 +405,7 @@ void ChannelPalette::updateShowHideStatus(const Q3ValueList<int>& channelIds,boo
   int groupId = (*channelsGroups)[*channelIterator];
 
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(*channelIterator),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
   bool selected;
   if(!edit && showStatus) selected = true;
@@ -468,7 +468,7 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
   int groupId = (*channelsGroups)[channelId];
 
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(channelId),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(channelId),Q3ListBox::ExactMatch);
 
   bool selected = item->isSelected();
   
@@ -526,7 +526,7 @@ void ChannelPalette::updateSkipStatus(const Q3ValueList<int>&channelIds,bool ski
   int groupId = (*channelsGroups)[*channelIterator];
 
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(*channelIterator),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
   bool selected = item->isSelected();
     
@@ -573,7 +573,7 @@ void ChannelPalette::updateColor(const Q3ValueList<int>& channelIds){
  for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
   int groupId = (*channelsGroups)[*channelIterator];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(*channelIterator),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
   //Get the channelColor associated with the item
    QColor color = channelColors->color(*channelIterator);
@@ -593,7 +593,7 @@ void ChannelPalette::updateColor(int channelId){
 
  int groupId = (*channelsGroups)[channelId];
  iconView = iconviewDict[QString("%1").arg(groupId)];
- item =  iconView->findItem(QString("%1").arg(channelId),Qt::ExactMatch);
+ item =  iconView->findItem(QString("%1").arg(channelId),Q3ListBox::ExactMatch);
 
  //Get the channelColor associated with the item
  QColor color = channelColors->color(channelId);
@@ -634,7 +634,7 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
  for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
   int groupId = (*channelsGroups)[iterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(iterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
   //Get the channelColor associated with the item
   QColor color;
@@ -660,7 +660,7 @@ void ChannelPalette::applyCustomColor(){
  for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
   int groupId = (*channelsGroups)[iterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(iterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
   //Get the channelColor associated with the item
   QColor color = channelColors->color(iterator.key());
@@ -711,7 +711,7 @@ void ChannelPalette::changeBackgroundColor(QColor color){
  for(groupIterator = channelsGroups->begin(); groupIterator != channelsGroups->end(); ++groupIterator){
   int groupId = (*channelsGroups)[groupIterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(groupIterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(groupIterator.key()),Q3ListBox::ExactMatch);
 
   //update the color of the skip channels
   if(channelsSkipStatus[groupIterator.key()]) channelColors->setColor(groupIterator.key(),backgroundColor);
@@ -737,12 +737,12 @@ void ChannelPalette::changeColor(Q3IconViewItem* item,bool single){
   if(color.isValid()){
    if(single){
     //Update the channelColor only if the channel is not skipped
-    if(!channelsSkipStatus[id]) channelColors->setColor(id,result);
+    if(!channelsSkipStatus[id]) channelColors->setColor(id,color);
 
     //Update the icon
     QPixmap* pixmap = item->pixmap();
     QPainter painter;
-    drawItem(painter,pixmap,result,channelsShowHideStatus[id],channelsSkipStatus[id]);
+    drawItem(painter,pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
 
    //As soon a color changes a signal is emitted.
    emit singleChangeColor(id);
@@ -794,7 +794,7 @@ void ChannelPalette::selectChannels(const Q3ValueList<int>& selectedChannels){
   for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
    int groupId = (*channelsGroups)[*channelIterator];
    iconView = iconviewDict[QString("%1").arg(groupId)];
-   currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Qt::ExactMatch);
+   currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
    currentIcon->setSelected(true,true);
   }
 
@@ -824,7 +824,7 @@ void ChannelPalette::createGroup(int id){
   }
   if(id == 0){
    
-   label->setPixmap(QPixmap(":/icons/trash");
+   label->setPixmap(QPixmap(":/icons/trash"));
   }
   
   //Set the size to 2 digits, max 99 groups
@@ -1114,7 +1114,7 @@ void ChannelPalette::moveChannels(int targetGroup){
   //Delete the entries in the source group
   Q3ValueList<int>::iterator it;
   for(it = currentMovedChannels.begin(); it != currentMovedChannels.end(); ++it){
-   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Qt::ExactMatch);
+   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
    delete currentIcon;
   }
   //Update groupsChannels
@@ -1295,7 +1295,7 @@ void ChannelPalette::moveChannels(const Q3ValueList<int>& channelIds,QString sou
   
  for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
   //Delete the item from the sourceGroup
-  Q3IconViewItem* currentIcon = sourceIconView->findItem(QString("%1").arg(*iterator),Qt::ExactMatch);
+  Q3IconViewItem* currentIcon = sourceIconView->findItem(QString("%1").arg(*iterator),Q3ListBox::ExactMatch);
   delete currentIcon;
 
   //Add an item to the target group.
@@ -1420,7 +1420,7 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
   //Delete the entries in the source group
   Q3ValueList<int>::iterator it;
   for(it = currentMovedChannels.begin(); it != currentMovedChannels.end(); ++it){
-   Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*it),Qt::ExactMatch);
+   Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
    delete currentIcon;
   }
   //Update groupsChannels
@@ -1482,7 +1482,7 @@ void ChannelPalette::trashChannelsMovedAround(const Q3ValueList<int>& channelIds
  //If the items have to be moved before the first item, insert them after the first item
  //and then move the first item after the others
  if(beforeFirst) after = 0;
- else after = trash->findItem(afterId,Qt::ExactMatch);
+ else after = trash->findItem(afterId,Q3ListBox::ExactMatch);
  
  //Actually move the channels
  moveChannels(channelIds,"0",after);
@@ -1504,7 +1504,7 @@ void ChannelPalette::moveChannels(const Q3ValueList<int>& channelIds,QString sou
  }
  for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
   //Delete the item corresponding to the channel Id
-  Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*iterator),Qt::ExactMatch);
+  Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*iterator),Q3ListBox::ExactMatch);
   delete currentIcon;
 
   //Add a new item corresponding to the channel Id.
@@ -1620,7 +1620,7 @@ void ChannelPalette::discardChannels(const Q3ValueList<int>& channelsToDiscard){
   //Delete the entries in the source group
   Q3ValueList<int>::iterator it;
   for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Qt::ExactMatch);
+   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
    delete currentIcon;
   }
   //Update groupsChannels
@@ -1671,7 +1671,7 @@ void ChannelPalette::discardChannels(const Q3ValueList<int>& channelsToDiscard,Q
   after = trash->firstItem();
   moveFirst = true; 
  } 
- else after = trash->findItem(afterId,Qt::ExactMatch);
+ else after = trash->findItem(afterId,Q3ListBox::ExactMatch);
   
  //Get the destination group color to later update the group color of the moved channels, default is blue
  QColor groupColor;
@@ -1690,7 +1690,7 @@ void ChannelPalette::discardChannels(const Q3ValueList<int>& channelsToDiscard,Q
   int groupId = (*channelsGroups)[*channelIterator];
   Q3ValueList<int> sourceChannels = (*groupsChannels)[groupId];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Qt::ExactMatch);
+  currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
   delete currentIcon;
 
   //Add a new item corresponding to the channel Id. The channel is hidden.
@@ -1760,7 +1760,7 @@ void ChannelPalette::setEditMode(bool edition){
  for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
   int groupId = (*channelsGroups)[iterator.key()];
   iconView = iconviewDict[QString("%1").arg(groupId)];
-  item =  iconView->findItem(QString("%1").arg(iterator.key()),Qt::ExactMatch);
+  item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
   bool selected = false;
   if(edition){
@@ -1934,7 +1934,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
   //Delete the entries in the source group
   Q3ValueList<int>::iterator it;
   for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Qt::ExactMatch);
+   Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
    delete currentIcon;
   }
   //Update groupsChannels
