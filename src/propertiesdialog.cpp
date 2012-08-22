@@ -110,7 +110,7 @@ void PropertiesDialog::slotVerify(){
  if(nbChannels != properties->getNbChannels() && !atStartUp){
   if(KMessageBox::warningContinueCancel(this, tr("Changing the number of channels "
       "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
-      tr("Continue"))==KMessageBox::Cancel){
+      tr("Continue"))==QMessageBox::Cancel){
    properties->setNbChannels(nbChannels);
    nbChannelsModified = false;
    oops = true;
