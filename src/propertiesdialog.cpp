@@ -20,7 +20,7 @@
 #include <q3frame.h>         // for QFrame
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-
+#include <QMessageBox>
 //include files for the application
 #include "propertiesdialog.h"
         

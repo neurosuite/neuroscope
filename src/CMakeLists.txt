@@ -11,13 +11,13 @@ set(neuroscope_SRCS
 	clustercolors.cpp 
 	clusterproperties.cpp 
 	#clustersprovider.cpp 
-	#configuration.cpp 
+	configuration.cpp 
 	dataprovider.cpp 
 	eventsprovider.cpp 
 	itemcolors.cpp 
 	itemgroupview.cpp 
 	itemiconview.cpp 
-	itempalette.cpp 
+	#itempalette.cpp 
 	#neuroscopedoc.cpp 
 	neuroscopexmlreader.cpp 
 	#positionproperties.cpp 
