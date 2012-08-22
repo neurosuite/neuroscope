@@ -32,7 +32,7 @@ ChannelColors::ChannelColors():channelList(){
 }
 
 ChannelColors::~ChannelColors(){
-   qDebug() << "~ChannelColors()"<<endl;
+   qDebug() << "~ChannelColors()";
 }
 
 

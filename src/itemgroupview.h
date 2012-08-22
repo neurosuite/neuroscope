@@ -55,7 +55,7 @@ public:
     setAcceptDrops(TRUE);
   };
 
-  inline ~ItemGroupView(){qDebug()<<"in ~ItemGroupView()"<<endl;};
+  inline ~ItemGroupView(){qDebug()<<"in ~ItemGroupView()";};
 
   inline void setIconView(Q3IconView* view){
    iconView = view;

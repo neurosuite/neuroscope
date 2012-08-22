@@ -255,7 +255,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
  if(initiator != this) return;
 
 
-qDebug()<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() <<endl;
+qDebug()<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() ;
 
  ClusterData* clusterData = clustersData[providerName];
  clusterData->setStatus(true);
@@ -1582,7 +1582,7 @@ void TraceView::drawTraces(QPainter& painter){
      for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
       QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
-qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
+qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
 
 
       clustersOrder.append(identifier);
@@ -1810,7 +1810,7 @@ qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
      QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
-qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes <<endl;
+qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
 
      clustersOrder.append(identifier);
      rasterOrdinates.append(-Y);
@@ -3102,7 +3102,7 @@ void TraceView::correctZoom(QRect& r){
   }
  }
   /* if(zoomed && !firstZoom && zoomOut){
-     qDebug()<<" zoomed && !firstZoom && zoomOut r.width() "<<r.width()<<endl;
+     qDebug()<<" zoomed && !firstZoom && zoomOut r.width() "<<r.width();
     zoomOut = false;
     zoomed = false;
     if(zoomFactor != 1){
@@ -3110,7 +3110,7 @@ void TraceView::correctZoom(QRect& r){
      }
      else{
       zoomed = false;
-      qDebug()<<"zoomFactor "<<zoomFactor<<endl;
+      qDebug()<<"zoomFactor "<<zoomFactor;
       int windowWidth = r.width();
 
 
@@ -3133,8 +3133,8 @@ void TraceView::correctZoom(QRect& r){
       r.setLeft(newLeft);
       r.setWidth(newWidth);
       window = ZoomWindow(r);
- qDebug()<<"previousWindow.width() "<<previousWindow.width()<<" windowWidth "<<windowWidth<<" previousDownSampling "<<previousDownSampling<<" zoomFactor "<<zoomFactor<<endl;
-qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<r.left()<<" newLeft "<<newLeft<<" timeStep "<<timeStep<<endl;
+ qDebug()<<"previousWindow.width() "<<previousWindow.width()<<" windowWidth "<<windowWidth<<" previousDownSampling "<<previousDownSampling<<" zoomFactor "<<zoomFactor;
+qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<r.left()<<" newLeft "<<newLeft<<" timeStep "<<timeStep;
 
      }
     }
@@ -4087,7 +4087,7 @@ void TraceView::showNextCluster(){
    for(;iterator.current();++iterator){
     Q3ValueList<int> ids = idsToBrowse[iterator.currentKey().toInt()];
 
-qDebug()<<"key " <<iterator.currentKey().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
+qDebug()<<"key " <<iterator.currentKey().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits ;
 
     if(!static_cast<ClusterData*>(iterator.current())->status() && ids.size() != 0) static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestNextClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
    }
@@ -4147,9 +4147,9 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
  if(initiator != this) return;
 
 
-qDebug()<<" providerName " <<providerName<<" data.nbOfColumns() " <<data.nbOfColumns()<<" startingTime " <<startingTime <<endl;
+qDebug()<<" providerName " <<providerName<<" data.nbOfColumns() " <<data.nbOfColumns()<<" startingTime " <<startingTime ;
 
-qDebug()<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeInRecordingUnits " <<startingTimeInRecordingUnits<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
+qDebug()<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeInRecordingUnits " <<startingTimeInRecordingUnits<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits ;
 
 
  //if no cluster has been found the return startingTime is the same as the send one (endTime).
@@ -4186,8 +4186,8 @@ qDebug()<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingT
   else{
    clusterProviderToSkip = nextClusterProvider.first;
 
-qDebug()<<" clusterProviderToSkip " <<clusterProviderToSkip<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<" startTime "<<startTime<<" endTime "<<endTime<<endl;
-qDebug()<<" previousStartTimeInRecordingUnits " <<previousStartTimeInRecordingUnits<<" nextClusterProvider.second " <<nextClusterProvider.second<<" length "<<length<<endl;
+qDebug()<<" clusterProviderToSkip " <<clusterProviderToSkip<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<" startTime "<<startTime<<" endTime "<<endTime;
+qDebug()<<" previousStartTimeInRecordingUnits " <<previousStartTimeInRecordingUnits<<" nextClusterProvider.second " <<nextClusterProvider.second<<" length "<<length;
 
 
    //update the traceWidget time widgets and retrieve the data for the new start time for all the providers except the one containing the data for the new start time.
