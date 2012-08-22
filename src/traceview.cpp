@@ -35,9 +35,7 @@
 #include <QMouseEvent>
 #include <Q3PointArray>
 #include <QApplication>
-
-// include files for kde
-
+#include <QMessageBox>
 
 #include <QDebug>
 
@@ -191,7 +189,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
  if(data.nbOfRows() == 0){
    QApplication::restoreOverrideCursor();
 
-  KMessageBox::error(this,tr("An error has occured, the data file could not be opened or the file size is incorrect."), tr("IO Error"));
+  QMessageBox::critical(this, tr("IO Error"),tr("An error has occured, the data file could not be opened or the file size is incorrect."));
   if(mode == SELECT) setCursor(selectCursor);
   if(mode == ZOOM) setCursor(zoomCursor);
   if(mode == MEASURE) setCursor(measureCursor);
@@ -2807,8 +2805,8 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
   }
  }
  if(mode == ADD_EVENT && (event->button() & Qt::LeftButton)){
-  if(eventDescriptionToCreate == ""){
-   KMessageBox::error (this,tr("In order to add an event you have to choose an event description first!"), tr("Unselected description type!"));
+  if(eventDescriptionToCreate.isEmpty()){
+   QMessageBox::critical (this, tr("Unselected description type!"),tr("In order to add an event you have to choose an event description first!"));
    return;
   }
 
