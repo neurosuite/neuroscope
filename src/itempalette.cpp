@@ -40,6 +40,7 @@
 #include <QResizeEvent>
 #include <Q3ValueList>
 #include <QLabel>
+#include <Q3ListBox>
 
 //General C++ include files
 #include <iostream>
@@ -254,7 +255,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
        QString label = item->text();
        redrawItem(iconView,itemColors,currentIndex,browsingMap);
        isInSelectItems = true;//redrawItem sets it back to false
-       item = iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+       item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
       }         
      }
      itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -271,7 +272,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
        QString label = item->text();
        redrawItem(iconView,itemColors,currentIndex,browsingMap);
        isInSelectItems = true;//redrawItem sets it back to false
-       item = iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+       item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
       }        
      }
      else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -307,7 +308,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
       QString label = item->text();
       redrawItem(iconView,itemColors,currentIndex,browsingMap);
       isInSelectItems = true;//redrawItem sets it back to false
-      item = iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+      item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
       itemsToSkip.append(itemColors->itemId(currentIndex));
      }
      else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -335,7 +336,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
      bool hasChanged = false;
      Q3IconViewItem* item;
      for(int i = 0;i<2;++i){
-      item = iconView->findItem(QString("%1").arg(i),Qt::ExactMatch|Qt::CaseSensitive);
+      item = iconView->findItem(QString("%1").arg(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
       if(item != 0){
        item->setSelected(false);
        int currentIndex = item->index();
@@ -345,7 +346,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
         QString label = item->text();
         redrawItem(iconView,itemColors,currentIndex,browsingMap);
         isInSelectItems = true;//redrawItem sets it back to false
-        item = iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+        item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
         itemsToSkip.append(itemColors->itemId(currentIndex));
        }     
        else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -488,7 +489,7 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
       QString label = item->text();
       redrawItem(iterator.current(),itemColors,currentIndex,browsingMap);
       isInSelectItems = true;////redrawItem sets it back to false
-      item = iterator.current()->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+      item = iterator.current()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
       itemsToSkip.append(itemColors->itemId(currentIndex));
      }
      else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -518,7 +519,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int i
  isInSelectItems = true;
 
  QString label =  itemColors->itemLabel(index);
- Q3IconViewItem* currentItem =  iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+ Q3IconViewItem* currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
  bool selected = currentItem->isSelected();
  bool browsingStatus = browsingMap[index];
 
@@ -572,7 +573,7 @@ void ItemPalette::slotMousePressWQt::AltModifier(QString sourceGroup,int index){
  ItemIconView* iconView = iconviewDict[sourceGroup];
  ItemColors* itemColors = itemColorsDict[sourceGroup];
  QString label =  itemColors->itemLabel(index);
- currentItem =  iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+ currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
  Q3ValueList<int> itemsToRedraw;
  bool browsingEnable = false;
  
@@ -735,14 +736,14 @@ void ItemPalette::selectItems(QString groupName,Q3ValueList<int> itemsToSelect,Q
    QString label = itemColors->itemLabel(item->index());
    redrawItem(iconView,itemColors,item->index(),browsingMap);
    isInSelectItems = true;//redrawItem sets it back to false
-   item = iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+   item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
   }
   browsingStatus.insert(groupName,browsingMap);
 
   Q3ValueList<int>::iterator itemIterator;
   for(itemIterator = itemsToSelect.begin(); itemIterator != itemsToSelect.end(); ++itemIterator){
    QString label =  itemColors->itemLabelById(*itemIterator);
-   currentIcon =  iconView->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);        
+   currentIcon =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
    currentIcon->setSelected(true,true);
   }
  
@@ -839,11 +840,11 @@ void ItemPalette::removeGroup(QString groupName){
  //a group must always be selected.
  if(selected == groupName){
   if(type == CLUSTER && clusterGroupList.count() > 0){
-   qSort(clusterGroupList);
+   //KDAB_PENDING //KDAB_PENDING qSort(clusterGroupList);
    selectGroupLabel(QString("%1").arg(clusterGroupList[0]));
   }
   else if(type == EVENT && itemGroupList.count() > 0){
-   qSort(itemGroupList);
+   //KDAB_PENDING qSort(itemGroupList);
    selectGroupLabel(itemGroupList[0]);
   }
   else  selected = "";//never reach
@@ -853,12 +854,12 @@ void ItemPalette::removeGroup(QString groupName){
 
 void ItemPalette::selectGroup(QString groupName){
  if(type == CLUSTER && clusterGroupList.count() > 0){
-  qSort(clusterGroupList);
+  //KDAB_PENDING qSort(clusterGroupList);
   if(clusterGroupList.contains(groupName.toInt())) selectGroupLabel(groupName);
   else selectGroupLabel(QString("%1").arg(clusterGroupList[0]));
  }
  else if(type == EVENT && itemGroupList.count() > 0){
-  qSort(itemGroupList);
+  //KDAB_PENDING qSort(itemGroupList);
   if(itemGroupList.contains(groupName)) selectGroupLabel(groupName);
   else selectGroupLabel(itemGroupList[0]);
  }
@@ -907,7 +908,7 @@ void ItemPalette::deselectAllItems(){
     QString label = item->text();
     redrawItem(iterator.current(),itemColors,currentIndex,browsingMap);
     isInSelectItems = true;//redrawItem sets it back to false
-    item = iterator.current()->findItem(label,Qt::ExactMatch|Qt::CaseSensitive);
+    item = iterator.current()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
     itemsToSkip.append(itemColors->itemId(currentIndex));
    }
    else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -929,13 +930,13 @@ void ItemPalette::orderTheGroups(){
  for(;it.current();++it) verticalContainer->removeChild(it.current());
 
  if(type == CLUSTER){
-  qSort(clusterGroupList);  
+  //KDAB_PENDING qSort(clusterGroupList);
   Q3ValueList<int>::iterator iterator;
   for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
    verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);   
  }
  else{
-  qSort(itemGroupList);  
+  //KDAB_PENDING qSort(itemGroupList);
   Q3ValueList<QString>::iterator iterator;
   for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator) 
    verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);
