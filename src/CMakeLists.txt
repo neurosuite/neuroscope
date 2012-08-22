@@ -10,8 +10,8 @@ set(neuroscope_SRCS
 	channelpalette.cpp 
 	clustercolors.cpp 
 	clusterproperties.cpp 
-	clustersprovider.cpp 
-	#configuration.cpp 
+	#clustersprovider.cpp 
+	configuration.cpp 
 	dataprovider.cpp 
 	eventsprovider.cpp 
 	itemcolors.cpp 

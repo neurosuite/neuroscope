@@ -45,7 +45,7 @@ ClustersProvider::ClustersProvider(QString fileUrl,double samplingRate,double cu
  
  //Find the cluster file number and use it as the name for the provider
  //the file name can be X.clu.n or X.n.clu
- QString fileName = fileUrl.fileName();
+ QString fileName = fileUrl;
  int startingIndex = fileName.findRev("clu");
  if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.n.clu
   int nBStartingIndex = fileName.findRev(".",startingIndex - 2);
@@ -57,7 +57,7 @@ ClustersProvider::ClustersProvider(QString fileUrl,double samplingRate,double cu
  }
 
  fileName = fileName.replace(startingIndex,3,"res" );
- timeFileUrl.setFileName(fileName);
+ timeFileUrl=(fileName);
 }
 
 ClustersProvider::~ClustersProvider(){
