@@ -20,7 +20,7 @@
 #include <QFileInfo>
 //Added by qt3to4:
 #include <Q3ValueList>
- 
+#include <QMap> 
 //General C++ include files
 #include <iostream>
 #include <fstream>
@@ -111,7 +111,12 @@ RestartTimer();
 
  //Get the number of clusters stored on the first line.
  QString sNbClusters;
- clusterFile.readLine(sNbClusters,255);
+ QByteArray buf; 
+ buf.resize(255);
+ int ret=clusterFile.readLine(buf.data(), 255); 
+ sNbClusters = QString::fromLatin1(buf, ret);
+
+
  nbClusters = QString(sNbClusters).toInt();
  //This map is used as an easy way to compute the unique list of cluster ids
  QMap<int,long> ids;

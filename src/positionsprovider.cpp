@@ -70,7 +70,13 @@ if(nbPositions == 0){
 RestartTimer();
 
  QString firstLine;
- positionFile.readLine(firstLine,255);
+
+ QByteArray buf;
+ buf.resize(255);
+ int ret=positionFile.readLine(buf.data(), 255);
+ firstLine = QString::fromLatin1(buf, ret);
+
+
  //Set the size of the Arrays containing the positions using the first line.
  firstLine = firstLine.simplified();
  QStringList lineParts = QStringList::split(" ", firstLine);

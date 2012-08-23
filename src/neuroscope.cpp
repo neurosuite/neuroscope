@@ -60,8 +60,6 @@ NeuroscopeApp::NeuroscopeApp():KDockMainWindow(0, "NeuroScope"),prefDialog(0L),d
     select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
     eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false){
 
-    //Gets the configuration object of the application throught the static reference to the application kapp
-    config = kapp->config();
     printer = new QPrinter();
 
     //Apply the user settings.
@@ -87,7 +85,7 @@ NeuroscopeApp::NeuroscopeApp():KDockMainWindow(0, "NeuroScope"),prefDialog(0L),d
     setAutoSaveSettings();
 
     // initialize the recent file list
-    fileOpenRecent->loadEntries(config);
+    ///KDAB_PENDING fileOpenRecent->loadEntries(config);
 
     //Disable some actions at startup (see the neuroscope.rc file)
     slotStateChanged("initState");
@@ -2892,7 +2890,7 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
 
     //Loop on the files
     int counter = 0;
-    Q3ValueList<QString>::iterator iterator;
+    QStringList::iterator iterator;
     for(iterator = urls.begin();iterator != urls.end();++iterator){
         //Create the provider
         int returnStatus = doc->loadEventFile(*iterator,view);

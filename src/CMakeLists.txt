@@ -1,7 +1,7 @@
 project(neuroscope-src)
 set(neuroscope_SRCS 
-	main.cpp 
-	neuroscope.cpp 
+	#main.cpp 
+	#neuroscope.cpp 
 	#neuroscopeview.cpp 
 	baseframe.cpp 
 	channelcolors.cpp 
@@ -10,7 +10,7 @@ set(neuroscope_SRCS
 	channelpalette.cpp 
 	clustercolors.cpp 
 	clusterproperties.cpp 
-	#clustersprovider.cpp 
+clustersprovider.cpp 
 	configuration.cpp 
 	dataprovider.cpp 
 	eventsprovider.cpp 
@@ -21,7 +21,7 @@ set(neuroscope_SRCS
 	#neuroscopedoc.cpp 
 	neuroscopexmlreader.cpp 
 	#positionproperties.cpp 
-	#positionsprovider.cpp 
+	positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
 	#prefdialog.cpp 
