@@ -1,7 +1,7 @@
 project(neuroscope-src)
 set(neuroscope_SRCS 
-	#main.cpp 
-	#neuroscope.cpp 
+	main.cpp 
+	neuroscope.cpp 
 	#neuroscopeview.cpp 
 	baseframe.cpp 
 	channelcolors.cpp 

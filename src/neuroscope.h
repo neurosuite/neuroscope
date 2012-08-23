@@ -620,7 +620,7 @@ class NeuroscopeApp : public KDockMainWindow
    * Called after a click on the actionbar.
    * @param index currently checked item in the addEvent submenu.
    */
-   void slotAddEventButtonActivated(int index);
+   void slotAddEventButtonActivated(QAction * act );
 
    /**Shows or hides the position view in the current display.*/
    void slotShowPositionView();
@@ -676,24 +676,24 @@ class NeuroscopeApp : public KDockMainWindow
     PrefDialog* prefDialog;
 
     //Action and toolbar pointers
-    KRecentFilesAction* fileOpenRecent;
-    KToggleAction* viewMainToolBar;
-    KToggleAction* viewToolBar;
-    KToggleAction* viewStatusBar;
-    KToggleAction* viewParameterBar;
-    KToggleAction* greyScale;
-    KToggleAction* displayMode;
-    KToggleAction* clusterVerticalLines;
-    KToggleAction* clusterRaster;
-    KToggleAction* clusterWaveforms;
-    KToggleAction* editMode;
-    KToggleAction* showHideLabels;
-    KToggleAction* calibrationBar;
+    QAction* fileOpenRecent;
+    QAction* viewMainToolBar;
+    QAction* viewToolBar;
+    QAction* viewStatusBar;
+    QAction* viewParameterBar;
+    QAction* greyScale;
+    QAction* displayMode;
+    QAction* clusterVerticalLines;
+    QAction* clusterRaster;
+    QAction* clusterWaveforms;
+    QAction* editMode;
+    QAction* showHideLabels;
+    QAction* calibrationBar;
     QMenu* addEventPopup;
-    KSelectAction* addEventMenu;
-    KToolBarPopupAction* addEventToolBarAction;
-    KToggleAction* positionViewToggle;
-    KToggleAction* showEventsInPositionView;
+    QAction* addEventMenu;
+    QAction* addEventToolBarAction;
+    QAction* positionViewToggle;
+    QAction* showEventsInPositionView;
     
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;

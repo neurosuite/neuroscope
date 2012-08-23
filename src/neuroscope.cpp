@@ -191,11 +191,14 @@ void NeuroscopeApp::initActions()
     connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
 
-    addEventToolBarAction = new KToolBarPopupAction(tr("Add Event"),"add_event_tool",0,this, SLOT(addEvent()),actionCollection(), "add_event_toolbarAction");
-    addEventPopup = addEventToolBarAction->popupMenu();
+    addEventToolBarAction = new QAction(tr("Add Event"),QICon(":icons/add_event_tool"));
+    connect(addEventToolBarAction,SIGNAL(triggered()), this,SLOT(addEvent()));
+
+    addEventPopup = new QMenu;
+    addEventToolBarAction->setMenu(addEventPopup);
     addEventPopup->setCheckable(true);
     connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
-    connect(addEventPopup, SIGNAL(activated(int)), this, SLOT(slotAddEventButtonActivated(int)));
+    connect(addEventPopup, SIGNAL(triggered(QAction *)), this, SLOT(slotAddEventButtonActivated(QAction *)));
 
     VARIABLE = MENU->addAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"));
     VARIABLE->setShortcuts(Qt::Key_L);
@@ -3129,10 +3132,11 @@ void NeuroscopeApp::addEvent(){
 
 
 void NeuroscopeApp::slotAddEventAboutToShow(){
+#if KDAB_PENDING
     addEventPopup->clear();
     addEventPopup->resize(0,0);
     addEventPopup->adjustSize();
-    addEventMenu->popupMenu()->clear();
+    addEventMenu->menu()->clear();
 
     eventIndex = -1;
     QStringList list;
@@ -3160,12 +3164,16 @@ void NeuroscopeApp::slotAddEventAboutToShow(){
         addEventPopup->setItemChecked(buttonEventIndex,true);
     }
     else eventLabelToCreate = "";
+#endif
 }
 
-void NeuroscopeApp::slotAddEventButtonActivated(int index){
+void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
+    if(!act)
+        return;
+#if KDAB_PENDING
     buttonEventIndex = index;
 
-    QString description = addEventPopup->text(index);
+    QString description = act->text();
     if(index == (addEventPopup->idAt(addEventPopup->count() - 1))) {
         bool ok;
         QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
@@ -3174,13 +3182,13 @@ void NeuroscopeApp::slotAddEventButtonActivated(int index){
         }
     }
     else eventLabelToCreate = description;
-
+#endif
     addEvent();
 }
 
 void NeuroscopeApp::slotAddEventActivated(int index){
-    if(eventProvider == "") return;
-    Q3PopupMenu* menu = addEventMenu->popupMenu();
+    if(eventProvider.isEmpty()) return;
+    QMenu* menu = addEventMenu->menu();
     eventIndex = index;
 
     QString description = menu->text(index);
