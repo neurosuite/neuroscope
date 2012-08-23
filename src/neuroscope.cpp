@@ -104,7 +104,9 @@ void NeuroscopeApp::initActions()
 {
     KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
     fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const QString&)), actionCollection());
-    new KAction(tr("&Close"), "fileclose",0,this, SLOT(slotFileClose()),actionCollection(), "file_close");
+    VARIABLE = MENU->addAction(tr("&Close"), "fileclose");
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotFileClose()));
+
     KStdAction::save(this, SLOT(saveSession()), actionCollection());
     KStdAction::saveAs(this, SLOT(slotSessionSaveAs()), actionCollection());
 
@@ -119,22 +121,44 @@ void NeuroscopeApp::initActions()
     //Custom actions and menus
 
     //File Menu
-    new KAction(tr("&Properties"),0,this,SLOT(slotFileProperties()),actionCollection(),"file_properties");
-    new KAction(tr("Load Cl&uster File(s)..."),0,this,SLOT(slotLoadClusterFiles()),actionCollection(),"load_cluster_files");
-    new KAction(tr("Load &Event File(s)..."),0,this,SLOT(slotLoadEventFiles()),actionCollection(),"load_event_files");
-    new KAction(tr("Load Posi&tion File..."),0,this,SLOT(slotLoadPositionFile()),actionCollection(),"load_position_file");
-    new KAction(tr("Create Event &File..."),0,this,SLOT(slotCreateEventFile()),actionCollection(),"create_event_file");
-    new KAction(tr("Close C&luster File"),0, this, SLOT(slotCloseClusterFile()),actionCollection(),"close_cluster_file");
-    new KAction(tr("Close E&vent File"),0, this, SLOT(slotCloseEventFile()),actionCollection(),"close_event_file");
-    new KAction(tr("Close Position File"),0, this, SLOT(slotClosePositionFile()),actionCollection(),"close_position_file");
+    VARIABLE = MENU->addAction(tr("&Properties"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotFileProperties()));
+
+    VARIABLE = MENU->addAction(tr("Load Cl&uster File(s)..."));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadClusterFiles()));
+
+    VARIABLE = MENU->addAction(tr("Load &Event File(s)..."));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadEventFiles()));
+
+    VARIABLE = MENU->addAction(tr("Load Posi&tion File..."));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadPositionFile()));
+
+    VARIABLE = MENU->addAction(tr("Create Event &File..."));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCreateEventFile()));
+
+    VARIABLE = MENU->addAction(tr("Close C&luster File"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCloseClusterFile()));
+
+    VARIABLE = MENU->addAction(tr("Close E&vent File"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCloseEventFile()));
+
+    VARIABLE = MENU->addAction(tr("Close Position File"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotClosePositionFile()));
+
 
 
 
     //Edit menu
-    new KAction(tr("Select &All"), Qt::CTRL + Qt::Key_A, this, SLOT(slotSelectAll()),actionCollection(),"edit_select_all");
-    new KAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
+    VARIABLE = MENU->addAction(tr("Select &All"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_A);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
+
+    new QAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
                 SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
-    new KAction(tr("Deselect All"), Qt::CTRL + Qt::Key_U, this,SLOT(slotDeselectAll()),actionCollection(),"edit_deselect_all");
+    VARIABLE = MENU->addAction(tr("Deselect All"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_U);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDeselectAll()));
+
     editMode = MENU->addAction(tr("&Edit Mode"),QIcon(":/icons/edit"));
     editMode->setShortcuts(Qt::CTRL + Qt::Key_E);
     editMode->setCheckable(true);
@@ -143,11 +167,26 @@ void NeuroscopeApp::initActions()
     editMode->setChecked(true);
 
     //Tools menu
-    new KAction(tr("Zoom"),QIcon(":/icons/zoom_tool"), Qt::Key_Z,this, SLOT(slotZoom()),actionCollection(), "zoom");
-    new KAction(tr("Select Channels"),QIcon(":/icons/select_tool"), Qt::Key_C,this, SLOT(slotSelect()),actionCollection(), "select");
-    new KAction(tr("Measure"),QIcon(":/icons/measure_tool"), Qt::Key_V,this, SLOT(slotMeasure()),actionCollection(), "measure");
-    new KAction(tr("Select Time"),QIcon(":/icons/time_tool"), Qt::Key_T,this, SLOT(slotSelectTime()),actionCollection(), "time");
-    new KAction(tr("Select Event"),QIcon(":/icons/event_tool"), Qt::Key_E,this, SLOT(slotSelectEvent()),actionCollection(), "select_event");
+    VARIABLE = MENU->addAction(tr("Zoom"),QIcon(":/icons/zoom_tool"));
+    VARIABLE->setShortcuts(Qt::Key_Z);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotZoom()));
+
+    VARIABLE = MENU->addAction(tr("Select Channels"),QIcon(":/icons/select_tool"));
+    VARIABLE->setShortcuts(Qt::Key_C);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelect()));
+
+    VARIABLE = MENU->addAction(tr("Measure"),QIcon(":/icons/measure_tool"));
+    VARIABLE->setShortcuts(Qt::Key_V);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotMeasure()));
+
+    VARIABLE = MENU->addAction(tr("Select Time"),QIcon(":/icons/time_tool"));
+    VARIABLE->setShortcuts(Qt::Key_T);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectTime()));
+
+    VARIABLE = MENU->addAction(tr("Select Event"),QIcon(":/icons/event_tool"));
+    VARIABLE->setShortcuts(Qt::Key_E);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
+
     addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
     connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
@@ -158,7 +197,10 @@ void NeuroscopeApp::initActions()
     connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventPopup, SIGNAL(activated(int)), this, SLOT(slotAddEventButtonActivated(int)));
 
-    new KAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"), Qt::Key_L,this, SLOT(slotDrawTimeLine()),actionCollection(), "draw_time_line");
+    VARIABLE = MENU->addAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"));
+    VARIABLE->setShortcuts(Qt::Key_L);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDrawTimeLine()));
+
 
     //Traces menu
     displayMode = MENU->addAction(tr("&Multiple Columns"));
@@ -171,36 +213,97 @@ void NeuroscopeApp::initActions()
     connect(greyScale,SIGNAL(triggered()), this,SLOT(slotSetGreyScale()));
 
     greyScale->setChecked(false);
-    new KAction(tr("&Increase All Channel Amplitudes"),Qt::CTRL + Qt::Key_I,this, SLOT(slotIncreaseAllChannelsAmplitude()),actionCollection(), "increase_all_channels");
-    new KAction(tr("&Decrease All Channel Amplitudes"),Qt::CTRL + Qt::Key_D,this, SLOT(slotDecreaseAllChannelsAmplitude()),actionCollection(), "decrease_all_channels");
-    new KAction(tr("I&ncrease Selected Channel Amplitudes"),Qt::CTRL + Qt::SHIFT + Qt::Key_I,this, SLOT(slotIncreaseSelectedChannelsAmplitude()),actionCollection(), "increase_selected_channels");
-    new KAction(tr("D&ecrease Selected Channel Amplitudes"),Qt::CTRL + Qt::SHIFT + Qt::Key_D,this, SLOT(slotDecreaseSelectedChannelsAmplitude()),actionCollection(), "decrease_selected_channels");
-    new KAction(tr("Reset Selected Channel &Offsets"),0, this, SLOT(slotResetOffsets()), actionCollection(),"reset_offsets");
-    new KAction(tr("Reset Selected Channel &Amplitudes"),0, this, SLOT(slotResetGains()), actionCollection(),"reset_gains");
-    new KAction(tr("&Set Current Offsets as Defaults"),0, this, SLOT(slotSetDefaultOffsets()), actionCollection(),"set_default_offsets");
-    new KAction(tr("Set Default Offsets to &Zero"),0, this, SLOT(slotResetDefaultOffsets()), actionCollection(),"set_default_offsets_0");
+    VARIABLE = MENU->addAction(tr("&Increase All Channel Amplitudes"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_I);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseAllChannelsAmplitude()));
+
+    VARIABLE = MENU->addAction(tr("&Decrease All Channel Amplitudes"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_D);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseAllChannelsAmplitude()));
+
+    VARIABLE = MENU->addAction(tr("I&ncrease Selected Channel Amplitudes"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseSelectedChannelsAmplitude()));
+
+    VARIABLE = MENU->addAction(tr("D&ecrease Selected Channel Amplitudes"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseSelectedChannelsAmplitude()));
+
+    VARIABLE = MENU->addAction(tr("Reset Selected Channel &Offsets"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetOffsets()));
+
+    VARIABLE = MENU->addAction(tr("Reset Selected Channel &Amplitudes"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetGains()));
+
+    VARIABLE = MENU->addAction(tr("&Set Current Offsets as Defaults"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSetDefaultOffsets()));
+
+    VARIABLE = MENU->addAction(tr("Set Default Offsets to &Zero"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
+
 
     /// Added by M.Zugaro to enable automatic forward paging
-    new KAction(tr("Page"),Qt::CTRL + Qt::SHIFT + Qt::Key_Space,this, SLOT(page()),actionCollection(), "page");
-    new KAction(tr("Accelerate"),Qt::CTRL + Qt::Key_Up,this, SLOT(accelerate()),actionCollection(), "accelerate");
-    new KAction(tr("Decelerate"),Qt::CTRL + Qt::Key_Down,this, SLOT(decelerate()),actionCollection(), "decelerate");
+    VARIABLE = MENU->addAction(tr("Page"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(page()));
+
+    VARIABLE = MENU->addAction(tr("Accelerate"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Up);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(accelerate()));
+
+    VARIABLE = MENU->addAction(tr("Decelerate"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Down);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(decelerate()));
+
 
     //Displays Menu
-    new KAction(tr("&New Display"),Qt::CTRL + Qt::Key_N,this,SLOT(slotNewDisplay()),actionCollection(),"new_display");
-    new KAction(tr("&Rename Active Display"), Qt::CTRL + Qt::Key_R, this, SLOT(slotRenameActiveDisplay()),actionCollection(),"rename_display");
-    new KAction(tr("&Close Active Display"), Qt::CTRL + Qt::Key_W, this, SLOT(slotDisplayClose()),actionCollection(),"close_display");
+    VARIABLE = MENU->addAction(tr("&New Display"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_N);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotNewDisplay()));
+
+    VARIABLE = MENU->addAction(tr("&Rename Active Display"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_R);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotRenameActiveDisplay()));
+
+    VARIABLE = MENU->addAction(tr("&Close Active Display"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_W);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDisplayClose()));
+
 
     //Channels Menu
-    new KAction(tr("Show &Channels"),QIcon(":/icons/eye"),Qt::CTRL + Qt::Key_C, this, SLOT(slotShowChannels()), actionCollection(),"show_channels");
-    new KAction(tr("&Hide Channels"),QIcon(":/icons/eye_close"),Qt::CTRL + Qt::Key_H, this, SLOT(slotHideChannels()), actionCollection(),"hide_channels");
+    VARIABLE = MENU->addAction(tr("Show &Channels"),QIcon(":/icons/eye"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_C);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowChannels()));
 
-    new KAction(tr("&Move Channels to New Group"),QIcon(":/icons/new_group"), Qt::CTRL + Qt::Key_G, this, SLOT(slotCreateGroup()), actionCollection(),"create_group");
-    new KAction(tr("&Remove Channels from Group"),QIcon(":/icons/remove"),Qt::SHIFT + Qt::Key_Delete, this, SLOT(slotDiscardSpikeChannels()), actionCollection(),"discard_spike_channels");
-    new KAction(tr("&Discard Channels"),QIcon(":/icons/discard"),Qt::Key_Delete, this, SLOT(slotDiscardChannels()), actionCollection(),"discard_channels");
-    new KAction(tr("&Keep Channels"),QIcon(":/icons/keep"),Qt::CTRL + Qt::SHIFT + Qt::Key_K, this, SLOT(slotKeepChannels()), actionCollection(),"keep_channels");
-    new KAction(tr("&Skip Channels"),QIcon(":/icons/skip"),Qt::CTRL + Qt::SHIFT + Qt::Key_S, this, SLOT(slotSkipChannels()), actionCollection(),"skip_channels");
+    VARIABLE = MENU->addAction(tr("&Hide Channels"),QIcon(":/icons/eye_close"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_H);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotHideChannels()));
 
-    new KAction(tr("&Synchronize Groups"), 0, this, SLOT(slotSynchronize()), actionCollection(),"synchronize");
+
+    VARIABLE = MENU->addAction(tr("&Move Channels to New Group"),QIcon(":/icons/new_group"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_G);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCreateGroup()));
+
+    VARIABLE = MENU->addAction(tr("&Remove Channels from Group"),QIcon(":/icons/remove"));
+    VARIABLE->setShortcuts(Qt::SHIFT + Qt::Key_Delete);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardSpikeChannels()));
+
+    VARIABLE = MENU->addAction(tr("&Discard Channels"),QIcon(":/icons/discard"));
+    VARIABLE->setShortcuts(Qt::Key_Delete);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardChannels()));
+
+    VARIABLE = MENU->addAction(tr("&Keep Channels"),QIcon(":/icons/keep"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotKeepChannels()));
+
+    VARIABLE = MENU->addAction(tr("&Skip Channels"),QIcon(":/icons/skip"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSkipChannels()));
+
+
+    VARIABLE = MENU->addAction(tr("&Synchronize Groups"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
+
     showHideLabels = MENU->addAction(tr("Show &Labels"),0);
     showHideLabels->setShortcuts(Qt::CTRL + Qt::Key_L);
     showHideLabels->setCheckable(true);
@@ -209,8 +312,12 @@ void NeuroscopeApp::initActions()
     showHideLabels->setChecked(false);
 
     //Color section
-    new KAction(tr("Color by &Anatomical Groups"),0, this, SLOT(slotApplyDisplayColor()), actionCollection(),"apply_display_color");
-    new KAction(tr("Color by S&pike Groups"),0, this, SLOT(slotApplySpikeColor()), actionCollection(),"apply_spike_color");
+    VARIABLE = MENU->addAction(tr("Color by &Anatomical Groups"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotApplyDisplayColor()));
+
+    VARIABLE = MENU->addAction(tr("Color by S&pike Groups"));
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotApplySpikeColor()));
+
 
     //Units Menu
     clusterVerticalLines = MENU->addAction(tr("&Vertical Lines"));
@@ -228,15 +335,36 @@ void NeuroscopeApp::initActions()
     connect(clusterWaveforms,SIGNAL(triggered()), this,SLOT(slotClustersWaveforms()));
 
     clusterWaveforms->setChecked(false);
-    new KAction(tr("&Increase Height"),Qt::CTRL + Qt::Key_Plus,this, SLOT(slotIncreaseRasterHeight()),actionCollection(), "increase_raster_height");
-    new KAction(tr("&Decrease Height"),Qt::CTRL + Qt::Key_Minus,this, SLOT(slotDecreaseRasterHeight()),actionCollection(), "decrease_raster_height");
-    new KAction(tr("&Next Spike"),QIcon(":/icons/forwardCluster"),Qt::CTRL + Qt::SHIFT + Qt::Key_F, this, SLOT(slotShowNextCluster()), actionCollection(),"show_next_cluster");
-    new KAction(tr("&Previous Spike"),QIcon(":/icons/backCluster"),Qt::CTRL + Qt::SHIFT + Qt::Key_B, this, SLOT(slotShowPreviousCluster()), actionCollection(),"show_previous_cluster");
+    VARIABLE = MENU->addAction(tr("&Increase Height"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Plus);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseRasterHeight()));
+
+    VARIABLE = MENU->addAction(tr("&Decrease Height"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Minus);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseRasterHeight()));
+
+    VARIABLE = MENU->addAction(tr("&Next Spike"),QIcon(":/icons/forwardCluster"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextCluster()));
+
+    VARIABLE = MENU->addAction(tr("&Previous Spike"),QIcon(":/icons/backCluster"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousCluster()));
+
 
     //Events Menu
-    new KAction(tr("&Next Event"),QIcon(":/icons/forwardEvent"),Qt::CTRL + Qt::Key_F, this, SLOT(slotShowNextEvent()), actionCollection(),"show_next_event");
-    new KAction(tr("&Previous Event"),QIcon(":/icons/backEvent"),Qt::CTRL + Qt::Key_B, this, SLOT(slotShowPreviousEvent()), actionCollection(),"show_previous_event");
-    new KAction(tr("&Remove Event"),0,Qt::CTRL + Qt::Key_K,this, SLOT(removeEvent()),actionCollection(), "remove_event");
+    VARIABLE = MENU->addAction(tr("&Next Event"),QIcon(":/icons/forwardEvent"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_F);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextEvent()));
+
+    VARIABLE = MENU->addAction(tr("&Previous Event"),QIcon(":/icons/backEvent"));
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_B);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousEvent()));
+
+    VARIABLE = MENU->addAction(tr("&Remove Event"),0);
+    VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_K);
+    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(removeEvent()));
+
 
     //Positions Menu
     positionViewToggle = MENU->addAction(tr("&Show Position View"));
