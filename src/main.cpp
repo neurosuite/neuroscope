@@ -55,8 +55,6 @@ static KCmdLineOptions options[] =
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
 #endif
-QString version;
-
 int main(int argc, char *argv[])
 {
     QApplication::setOrganizationName("sourceforge");

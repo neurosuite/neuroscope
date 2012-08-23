@@ -34,8 +34,6 @@ using namespace std;
 
 using namespace neuroscope;
 
-extern QString version;
-
 NeuroscopeXmlReader::NeuroscopeXmlReader():readVersion(""){
 }
 NeuroscopeXmlReader::~NeuroscopeXmlReader(){

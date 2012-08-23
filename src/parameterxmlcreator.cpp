@@ -31,9 +31,9 @@ using namespace std;
 #include <QFile> 
 #include <QString> 
 
-using namespace neuroscope;
+#include "config-neuroscope.h"
 
-extern QString version;
+using namespace neuroscope;
 
 const QString  ParameterXmlCreator::parameterVersion = "1.0";
 
@@ -45,7 +45,7 @@ ParameterXmlCreator::ParameterXmlCreator():doc(){
  //Create the root element and its attributes.
  root = doc.createElement(PARAMETERS);
  root.setAttribute(VERSION,parameterVersion);
- root.setAttribute(CREATOR,"neuroscope-" + version);
+ root.setAttribute(CREATOR, QString::fromLatin1("neuroscope-%1").arg(NEUROSCOPE_VERSION));
  doc.appendChild(root);
 }
 
@@ -57,7 +57,7 @@ bool ParameterXmlCreator::writeTofile(const QString& url){
  if(!status) return status;
 
  QDomElement neuroscope = doc.createElement(NEUROSCOPE);
- neuroscope.setAttribute(VERSION,version);
+ neuroscope.setAttribute(VERSION,NEUROSCOPE_VERSION);
  neuroscope.appendChild(miscellaneous);
  neuroscope.appendChild(neuroscopeVideo);
  if(!spikes.isNull()) neuroscope.appendChild(spikes);
