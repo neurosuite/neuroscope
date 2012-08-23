@@ -284,14 +284,14 @@ class NeuroscopeApp : public KDockMainWindow
     * This function is called when it is time for Neuroscope to save its
     * properties for session management purposes.
     */
-    virtual void saveProperties(KConfig* config);
+    virtual void saveProperties();
     
    /**
     * This function is called when this Neuroscope is restored. The KConfig
     * object points to the session management config file that was saved.
     * with @ref saveProperties
     */
-    virtual void readProperties(KConfig* config);
+    virtual void readProperties();
 
     
     void customEvent (QCustomEvent* event);
@@ -664,8 +664,6 @@ class NeuroscopeApp : public KDockMainWindow
    void slotShowEventsInPositionView();
    
   private:
-    /** The configuration object of the application */
-    KConfig *config;
  
     /** Doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
@@ -878,28 +876,6 @@ class NeuroscopeApp : public KDockMainWindow
    */
    void loadPositionFile(QString url);
    
- class printDialogPage : public KPrintDialogPage{
-  public:
-   inline printDialogPage(QWidget* parent = 0,const char* name = 0): KPrintDialogPage(parent,name){
-    setTitle(QObject::tr("Background Color"));
-    backgroundColor = new QCheckBox("Use white background",this);
-    backgroundColor->adjustSize();
-   };
-
-    inline void getOptions(QMap<QString,QString>& opts,bool incldef){
-      opts["kde-neuroscope-backgroundColor"] = (backgroundColor->isChecked() ? "1" : "-1");
-    };
-
-    inline void setOptions(const QMap<QString,QString>& opts){
-     backgroundColor->setChecked(opts["kde-neuroscope-backgroundColor"] == "1"); 
-    };
-
-    inline bool isValid(QString& message){return true;};
-
-  private:
-    QCheckBox* backgroundColor;
-  };
- 
   /**Updates the spike and event browsing status.*/
   void updateBrowsingStatus();
 };

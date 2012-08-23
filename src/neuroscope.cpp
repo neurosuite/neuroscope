@@ -945,8 +945,9 @@ void NeuroscopeApp::updateBrowsingStatus(){
     }
 }
 
-void NeuroscopeApp::saveProperties(KConfig* config)
+void NeuroscopeApp::saveProperties()
 {
+#if KDAB_PENDING
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
@@ -954,11 +955,13 @@ void NeuroscopeApp::saveProperties(KConfig* config)
     //Save the recent file list
     fileOpenRecent->saveEntries(config);
     config->writePathEntry("openFile",filePath);
+#endif
 }
 
 
-void NeuroscopeApp::readProperties(KConfig* config)
+void NeuroscopeApp::readProperties()
 {
+#if KDAB_PENDING
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
     // the app is being restored.  read in here whatever you wrote
@@ -970,6 +973,7 @@ void NeuroscopeApp::readProperties(KConfig* config)
     QString url;
     url.setPath(filePath);
     openDocumentFile(url);
+#endif
 }
 
 

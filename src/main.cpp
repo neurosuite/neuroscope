@@ -25,7 +25,7 @@
 
 //Application specific include files
 #include "neuroscope.h"
-
+#if KDAB_PENDING
 
 static const char *description =
   I18N_NOOP("NeuroScope - Viewer for Local Field Potentials, spikes, events and positional data");
@@ -54,7 +54,7 @@ static KCmdLineOptions options[] =
   { 0, 0, 0 }
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
-
+#endif
 QString version;
 
 int main(int argc, char *argv[])
