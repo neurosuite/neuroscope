@@ -119,45 +119,47 @@ void NeuroscopeApp::initActions()
     //Custom actions and menus
 
     //File Menu
-    VARIABLE = MENU->addAction(tr("&Properties"));
+    QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+    VARIABLE = fileMenu->addAction(tr("&Properties"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotFileProperties()));
 
-    VARIABLE = MENU->addAction(tr("Load Cl&uster File(s)..."));
+    VARIABLE = fileMenu->addAction(tr("Load Cl&uster File(s)..."));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadClusterFiles()));
 
-    VARIABLE = MENU->addAction(tr("Load &Event File(s)..."));
+    VARIABLE = fileMenu->addAction(tr("Load &Event File(s)..."));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadEventFiles()));
 
-    VARIABLE = MENU->addAction(tr("Load Posi&tion File..."));
+    VARIABLE = fileMenu->addAction(tr("Load Posi&tion File..."));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotLoadPositionFile()));
 
-    VARIABLE = MENU->addAction(tr("Create Event &File..."));
+    VARIABLE = fileMenu->addAction(tr("Create Event &File..."));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCreateEventFile()));
 
-    VARIABLE = MENU->addAction(tr("Close C&luster File"));
+    VARIABLE = fileMenu->addAction(tr("Close C&luster File"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCloseClusterFile()));
 
-    VARIABLE = MENU->addAction(tr("Close E&vent File"));
+    VARIABLE = fileMenu->addAction(tr("Close E&vent File"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCloseEventFile()));
 
-    VARIABLE = MENU->addAction(tr("Close Position File"));
+    VARIABLE = fileMenu->addAction(tr("Close Position File"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotClosePositionFile()));
 
 
 
 
     //Edit menu
-    VARIABLE = MENU->addAction(tr("Select &All"));
+    QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
+    VARIABLE = editMenu->addAction(tr("Select &All"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_A);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
 
     new QAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
                 SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
-    VARIABLE = MENU->addAction(tr("Deselect All"));
+    VARIABLE = editMenu->addAction(tr("Deselect All"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_U);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDeselectAll()));
 
-    editMode = MENU->addAction(tr("&Edit Mode"),QIcon(":/icons/edit"));
+    editMode = editMenu->addAction(tr("&Edit Mode"),QIcon(":/icons/edit"));
     editMode->setShortcuts(Qt::CTRL + Qt::Key_E);
     editMode->setCheckable(true);
     connect(editMode,SIGNAL(triggered()), this,SLOT(slotEditMode()));
@@ -165,23 +167,24 @@ void NeuroscopeApp::initActions()
     editMode->setChecked(true);
 
     //Tools menu
-    VARIABLE = MENU->addAction(tr("Zoom"),QIcon(":/icons/zoom_tool"));
+    QMenu *toolMenu = menuBar()->addMenu(tr("Edit"));
+    VARIABLE = toolMenu->addAction(tr("Zoom"),QIcon("v:/icons/zoom_tool"));
     VARIABLE->setShortcuts(Qt::Key_Z);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotZoom()));
 
-    VARIABLE = MENU->addAction(tr("Select Channels"),QIcon(":/icons/select_tool"));
+    VARIABLE = toolMenu->addAction(tr("Select Channels"),QIcon(":/icons/select_tool"));
     VARIABLE->setShortcuts(Qt::Key_C);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelect()));
 
-    VARIABLE = MENU->addAction(tr("Measure"),QIcon(":/icons/measure_tool"));
+    VARIABLE = toolMenu->addAction(tr("Measure"),QIcon(":/icons/measure_tool"));
     VARIABLE->setShortcuts(Qt::Key_V);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotMeasure()));
 
-    VARIABLE = MENU->addAction(tr("Select Time"),QIcon(":/icons/time_tool"));
+    VARIABLE = toolMenu->addAction(tr("Select Time"),QIcon(":/icons/time_tool"));
     VARIABLE->setShortcuts(Qt::Key_T);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectTime()));
 
-    VARIABLE = MENU->addAction(tr("Select Event"),QIcon(":/icons/event_tool"));
+    VARIABLE = toolMenu->addAction(tr("Select Event"),QIcon(":/icons/event_tool"));
     VARIABLE->setShortcuts(Qt::Key_E);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
 
@@ -198,75 +201,78 @@ void NeuroscopeApp::initActions()
     connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventPopup, SIGNAL(triggered(QAction *)), this, SLOT(slotAddEventButtonActivated(QAction *)));
 
-    VARIABLE = MENU->addAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"));
+    VARIABLE = toolMenu->addAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"));
     VARIABLE->setShortcuts(Qt::Key_L);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDrawTimeLine()));
 
 
     //Traces menu
-    displayMode = MENU->addAction(tr("&Multiple Columns"));
+    QMenu *traceMenu = menuBar()->addMenu(tr("&Traces"));
+    displayMode = traceMenu->addAction(tr("&Multiple Columns"));
     displayMode->setCheckable(true);
     connect(displayMode,SIGNAL(triggered()), this,SLOT(slotDisplayMode()));
 
     displayMode->setChecked(false);
-    greyScale = MENU->addAction(tr("&Grey-Scale"));
+    greyScale = traceMenu->addAction(tr("&Grey-Scale"));
     greyScale->setCheckable(true);
     connect(greyScale,SIGNAL(triggered()), this,SLOT(slotSetGreyScale()));
 
     greyScale->setChecked(false);
-    VARIABLE = MENU->addAction(tr("&Increase All Channel Amplitudes"));
+    VARIABLE = traceMenu->addAction(tr("&Increase All Channel Amplitudes"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_I);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseAllChannelsAmplitude()));
 
-    VARIABLE = MENU->addAction(tr("&Decrease All Channel Amplitudes"));
+    VARIABLE = traceMenu->addAction(tr("&Decrease All Channel Amplitudes"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_D);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseAllChannelsAmplitude()));
 
-    VARIABLE = MENU->addAction(tr("I&ncrease Selected Channel Amplitudes"));
+    VARIABLE = traceMenu->addAction(tr("I&ncrease Selected Channel Amplitudes"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseSelectedChannelsAmplitude()));
 
-    VARIABLE = MENU->addAction(tr("D&ecrease Selected Channel Amplitudes"));
+    VARIABLE = traceMenu->addAction(tr("D&ecrease Selected Channel Amplitudes"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseSelectedChannelsAmplitude()));
 
-    VARIABLE = MENU->addAction(tr("Reset Selected Channel &Offsets"));
+    VARIABLE = traceMenu->addAction(tr("Reset Selected Channel &Offsets"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetOffsets()));
 
-    VARIABLE = MENU->addAction(tr("Reset Selected Channel &Amplitudes"));
+    VARIABLE = traceMenu->addAction(tr("Reset Selected Channel &Amplitudes"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetGains()));
 
-    VARIABLE = MENU->addAction(tr("&Set Current Offsets as Defaults"));
+    VARIABLE = traceMenu->addAction(tr("&Set Current Offsets as Defaults"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSetDefaultOffsets()));
 
-    VARIABLE = MENU->addAction(tr("Set Default Offsets to &Zero"));
+    VARIABLE = traceMenu->addAction(tr("Set Default Offsets to &Zero"));
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
 
 
     /// Added by M.Zugaro to enable automatic forward paging
-    VARIABLE = MENU->addAction(tr("Page"));
+    VARIABLE = traceMenu->addAction(tr("Page"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(page()));
 
-    VARIABLE = MENU->addAction(tr("Accelerate"));
+    VARIABLE = traceMenu->addAction(tr("Accelerate"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Up);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(accelerate()));
 
-    VARIABLE = MENU->addAction(tr("Decelerate"));
+    VARIABLE = traceMenu->addAction(tr("Decelerate"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_Down);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
     //Displays Menu
-    VARIABLE = MENU->addAction(tr("&New Display"));
+    QMenu *displaysMenu = menuBar()->addMenu(tr("&Displays"));
+
+    VARIABLE = displaysMenu->addAction(tr("&New Display"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_N);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotNewDisplay()));
 
-    VARIABLE = MENU->addAction(tr("&Rename Active Display"));
+    VARIABLE = displaysMenu->addAction(tr("&Rename Active Display"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_R);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotRenameActiveDisplay()));
 
-    VARIABLE = MENU->addAction(tr("&Close Active Display"));
+    VARIABLE = displaysMenu->addAction(tr("&Close Active Display"));
     VARIABLE->setShortcuts(Qt::CTRL + Qt::Key_W);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDisplayClose()));
 
@@ -457,12 +463,12 @@ void NeuroscopeApp::initItemPanel(){
 
     //Creation of the left panel containing the channels.
     if(displayPaletteHeaders){
-        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy", 0L, tr("Anatomy"), tr("Anatomy"));
-                spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes", 0L, tr("Spikes"), tr("Spikes"));
+        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
+        spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
     }
     else{
-        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy", 0L,"");
-                spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes", 0L,"");
+        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L,"");
+        spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L,"");
     }
     //Initialisation of the channel palettes containing the channel list
     displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,displayPanel,"DisplaylPalette");
