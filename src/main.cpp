@@ -108,6 +108,8 @@ int main(int argc, char *argv[])
   }
 #endif
   //KDAB_TODO
+  QApplication app(argc, argv);
+
   NeuroscopeApp* neuroscope = new NeuroscopeApp();
   neuroscope->show();
   return app.exec();
