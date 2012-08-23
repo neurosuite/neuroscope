@@ -150,17 +150,17 @@ void NeuroscopeApp::initActions()
     //Edit menu
     QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
     VARIABLE = editMenu->addAction(tr("Select &All"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_A);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_A);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
 
     new QAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
                 SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
     VARIABLE = editMenu->addAction(tr("Deselect All"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_U);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_U);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDeselectAll()));
 
     editMode = editMenu->addAction(tr("&Edit Mode"),QIcon(":/icons/edit"));
-    editMode->setShortcutQt::CTRL + Qt::Key_E);
+    editMode->setShortcut(Qt::CTRL + Qt::Key_E);
     editMode->setCheckable(true);
     connect(editMode,SIGNAL(triggered()), this,SLOT(slotEditMode()));
 
@@ -169,23 +169,23 @@ void NeuroscopeApp::initActions()
     //Tools menu
     QMenu *toolMenu = menuBar()->addMenu(tr("Edit"));
     VARIABLE = toolMenu->addAction(tr("Zoom"),QIcon("v:/icons/zoom_tool"));
-    VARIABLE->setShortcutQt::Key_Z);
+    VARIABLE->setShortcut(Qt::Key_Z);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotZoom()));
 
     VARIABLE = toolMenu->addAction(tr("Select Channels"),QIcon(":/icons/select_tool"));
-    VARIABLE->setShortcutQt::Key_C);
+    VARIABLE->setShortcut(Qt::Key_C);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelect()));
 
     VARIABLE = toolMenu->addAction(tr("Measure"),QIcon(":/icons/measure_tool"));
-    VARIABLE->setShortcutQt::Key_V);
+    VARIABLE->setShortcut(Qt::Key_V);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotMeasure()));
 
     VARIABLE = toolMenu->addAction(tr("Select Time"),QIcon(":/icons/time_tool"));
-    VARIABLE->setShortcutQt::Key_T);
+    VARIABLE->setShortcut(Qt::Key_T);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectTime()));
 
     VARIABLE = toolMenu->addAction(tr("Select Event"),QIcon(":/icons/event_tool"));
-    VARIABLE->setShortcutQt::Key_E);
+    VARIABLE->setShortcut(Qt::Key_E);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
 
     addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
@@ -202,7 +202,7 @@ void NeuroscopeApp::initActions()
     connect(addEventPopup, SIGNAL(triggered(QAction *)), this, SLOT(slotAddEventButtonActivated(QAction *)));
 
     VARIABLE = toolMenu->addAction(tr("Draw Time Line"),QIcon(":/icons/time_line_tool"));
-    VARIABLE->setShortcutQt::Key_L);
+    VARIABLE->setShortcut(Qt::Key_L);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDrawTimeLine()));
 
 
@@ -219,19 +219,19 @@ void NeuroscopeApp::initActions()
 
     greyScale->setChecked(false);
     VARIABLE = traceMenu->addAction(tr("&Increase All Channel Amplitudes"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_I);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_I);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseAllChannelsAmplitude()));
 
     VARIABLE = traceMenu->addAction(tr("&Decrease All Channel Amplitudes"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_D);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_D);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseAllChannelsAmplitude()));
 
     VARIABLE = traceMenu->addAction(tr("I&ncrease Selected Channel Amplitudes"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_I);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseSelectedChannelsAmplitude()));
 
     VARIABLE = traceMenu->addAction(tr("D&ecrease Selected Channel Amplitudes"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_D);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseSelectedChannelsAmplitude()));
 
     VARIABLE = traceMenu->addAction(tr("Reset Selected Channel &Offsets"));
@@ -249,15 +249,15 @@ void NeuroscopeApp::initActions()
 
     /// Added by M.Zugaro to enable automatic forward paging
     VARIABLE = traceMenu->addAction(tr("Page"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_Space);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(page()));
 
     VARIABLE = traceMenu->addAction(tr("Accelerate"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_Up);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Up);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(accelerate()));
 
     VARIABLE = traceMenu->addAction(tr("Decelerate"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_Down);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Down);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
@@ -265,46 +265,46 @@ void NeuroscopeApp::initActions()
     QMenu *displaysMenu = menuBar()->addMenu(tr("&Displays"));
 
     VARIABLE = displaysMenu->addAction(tr("&New Display"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_N);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_N);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotNewDisplay()));
 
     VARIABLE = displaysMenu->addAction(tr("&Rename Active Display"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_R);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_R);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotRenameActiveDisplay()));
 
     VARIABLE = displaysMenu->addAction(tr("&Close Active Display"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_W);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_W);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDisplayClose()));
 
 
     //Channels Menu
     VARIABLE = MENU->addAction(tr("Show &Channels"),QIcon(":/icons/eye"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_C);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_C);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowChannels()));
 
     VARIABLE = MENU->addAction(tr("&Hide Channels"),QIcon(":/icons/eye_close"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_H);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_H);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotHideChannels()));
 
 
     VARIABLE = MENU->addAction(tr("&Move Channels to New Group"),QIcon(":/icons/new_group"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_G);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_G);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCreateGroup()));
 
     VARIABLE = MENU->addAction(tr("&Remove Channels from Group"),QIcon(":/icons/remove"));
-    VARIABLE->setShortcutQt::SHIFT + Qt::Key_Delete);
+    VARIABLE->setShortcut(Qt::SHIFT + Qt::Key_Delete);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardSpikeChannels()));
 
     VARIABLE = MENU->addAction(tr("&Discard Channels"),QIcon(":/icons/discard"));
-    VARIABLE->setShortcutQt::Key_Delete);
+    VARIABLE->setShortcut(Qt::Key_Delete);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardChannels()));
 
     VARIABLE = MENU->addAction(tr("&Keep Channels"),QIcon(":/icons/keep"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_K);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotKeepChannels()));
 
     VARIABLE = MENU->addAction(tr("&Skip Channels"),QIcon(":/icons/skip"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_S);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSkipChannels()));
 
 
@@ -312,7 +312,7 @@ void NeuroscopeApp::initActions()
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
 
     showHideLabels = MENU->addAction(tr("Show &Labels"),0);
-    showHideLabels->setShortcutQt::CTRL + Qt::Key_L);
+    showHideLabels->setShortcut(Qt::CTRL + Qt::Key_L);
     showHideLabels->setCheckable(true);
     connect(showHideLabels,SIGNAL(triggered()), this,SLOT(slotShowLabels()));
 
@@ -343,33 +343,33 @@ void NeuroscopeApp::initActions()
 
     clusterWaveforms->setChecked(false);
     VARIABLE = MENU->addAction(tr("&Increase Height"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_Plus);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Plus);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseRasterHeight()));
 
     VARIABLE = MENU->addAction(tr("&Decrease Height"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_Minus);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Minus);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseRasterHeight()));
 
     VARIABLE = MENU->addAction(tr("&Next Spike"),QIcon(":/icons/forwardCluster"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_F);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextCluster()));
 
     VARIABLE = MENU->addAction(tr("&Previous Spike"),QIcon(":/icons/backCluster"));
-    VARIABLE->setShortcutQt::CTRL + Qt::SHIFT + Qt::Key_B);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousCluster()));
 
 
     //Events Menu
     VARIABLE = MENU->addAction(tr("&Next Event"),QIcon(":/icons/forwardEvent"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_F);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_F);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextEvent()));
 
     VARIABLE = MENU->addAction(tr("&Previous Event"),QIcon(":/icons/backEvent"));
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_B);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_B);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousEvent()));
 
     VARIABLE = MENU->addAction(tr("&Remove Event"),0);
-    VARIABLE->setShortcutQt::CTRL + Qt::Key_K);
+    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_K);
     connect(VARIABLE,SIGNAL(triggered()), this,SLOT(removeEvent()));
 
 
@@ -789,7 +789,9 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QString title = "File not found: ";
             title.append(filePath);
             int answer = KMessageBox::questionYesNo(this,tr("The selected file no longer exists. Do you want to remove it from the list?"), tr(title));
-            if(answer == KMessageBox::Yes) fileOpenRecent->removeURL(url);
+            if(answer == KMessageBox::Yes) {
+                //KDAB_PENDING fileOpenRecent->removeURL(url);
+               }
             else  {
                 //KDAB_PENDING fileOpenRecent->addURL(url); //hack, unselect the item
             }
@@ -800,14 +802,14 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     //Do not handle remote files
     else{
         KMessageBox::sorry(this,tr("Sorry, NeuroScope does not handle remote files."),tr("Remote file handling"));
-        fileOpenRecent->removeURL(url);
+        //KDAB_PENDING fileOpenRecent->removeURL(url);
         return;
     }
 
     //Check if the file exists
     if(!file.exists()){
         KMessageBox::error (this,tr("The selected file does not exist."), tr("Error!"));
-        fileOpenRecent->removeURL(url);
+        //KDAB_PENDING fileOpenRecent->removeURL(url);
         return;
     }
 
