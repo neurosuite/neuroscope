@@ -158,7 +158,8 @@ const QString& NeuroscopeDoc::url() const
 }
 
 QString NeuroscopeDoc::sessionPath() const{
-    return sessionUrl.path();
+    //KDAB_PENDING return sessionUrl.path();
+    return QString();
 }
 
 void NeuroscopeDoc::closeDocument(){  
@@ -226,7 +227,7 @@ bool NeuroscopeDoc::isADocumentToClose(){
 
 int NeuroscopeDoc::openDocument(const QString& url)
 {
-
+#if KDAB_PENDING
     channelColorList = new ChannelColors();
     docUrl = url;
 
@@ -339,7 +340,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
             else{
                 QApplication::restoreOverrideCursor();
 
-                QString currentSamplingRate = QInputDialog::getText(this,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
+                QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
                 QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                 if(!currentSamplingRate.isEmpty())
                     samplingRate = currentSamplingRate.toDouble();
@@ -397,7 +398,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                     //Prompt the user
                     else{
                         QApplication::restoreOverrideCursor();
-                        QString currentSamplingRate = QInputDialog::getText(this,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
+                        QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
 
                         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                         if(!currentSamplingRate.isEmpty())
@@ -472,6 +473,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
     //Use the channel default offsets
     if(!sessionFileExist) emit noSession(channelDefaultOffsets,skipStatus);
+#endif
     return OK;
 }
 
@@ -482,7 +484,7 @@ int NeuroscopeDoc::saveEventFiles(){
         if(provider->isA("EventsProvider")){
             EventsProvider* eventProvider = static_cast<EventsProvider*>(provider);
             if(eventProvider->isModified()){
-                QFile eventFile(iterator.data().path());
+                QFile eventFile(iterator.data());
                 bool status = eventFile.open(QIODevice::WriteOnly);
                 if(!status) return SAVE_ERROR;
                 int saveStatus;
@@ -497,7 +499,7 @@ int NeuroscopeDoc::saveEventFiles(){
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
     //Save the document information
-    QFileInfo parFileInfo = QFileInfo(parameterUrl.path());
+    QFileInfo parFileInfo = QFileInfo(parameterUrl);
     //If the parameter file exists, modify it
     if(parFileInfo.exists()){
         //Check that the file is writable
@@ -557,7 +559,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
     for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
         SessionFile sessionFile;
         sessionFile.setUrl(iterator.data());
-        QFileInfo fileInfo = QFileInfo(iterator.data().path());
+        QFileInfo fileInfo = QFileInfo(iterator.data());
         sessionFile.setModification(fileInfo.lastModified());
         DataProvider* provider = providers[iterator.key()];
 
@@ -609,7 +611,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         if(view->getClusterVerticalLines()) displayInformation.addSpikeDisplayType(DisplayInformation::LINES);
         displayInformation.setRasterHeight(view->getRasterHeight());
 
-
+#if KDAB_PENDING
         //loop on all the loaded files and set the clusters,event ids show in the current display
         Q3DictIterator<DataProvider> it(providers);
         for( ; it.current(); ++it){
@@ -628,7 +630,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
                 displayInformation.setSkippedEvents(static_cast<QString>(providerUrls[name]).url(),skippedEventIds);
             }
         }
-
+#endif
         /***********TO DO**************************/
         //loop on all the loaded spike files and set the spikes show in the current display
         /* QValueList<QString> files;
@@ -966,6 +968,7 @@ void NeuroscopeDoc::setChannelNb(int nb){
 }
 
 void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
+#if KDAB_PENDING
     int resolutionRead = reader.getResolution();
     if(resolutionRead != 0) resolution = resolutionRead;
     int channelNbRead = reader.getNbChannels();
@@ -986,11 +989,10 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     if(reader.getType() == NeuroscopeXmlReader::PARAMETER){
         if(reader.getBackgroundImage() != "-") backgroundImage = reader.getBackgroundImage();
 
-        if(backgroundImage != ""){
+        if(!backgroundImage.isEmpty()){
             QFileInfo fileInfo = QFileInfo(backgroundImage);
             if(!fileInfo.exists()){
-                QString imageUrl;
-                imageUrl.setPath(backgroundImage);
+                QString imageUrl(backgroundImage);
                 QString fileName = imageUrl.fileName();
                 imageUrl = docUrl;
                 imageUrl.setFileName(fileName);
@@ -1117,6 +1119,7 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
         //Compute the peak index using the datSamplingRate.
         peakSampleIndex = static_cast<int>(static_cast<float>(datSamplingRate / 1000) * indexLength);
     }
+#endif
 }
 
 void NeuroscopeDoc::computeClusterFilesMapping(){
@@ -1144,7 +1147,7 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
 }
 
 void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){  
-
+#if KDAB_PENDING
     //Get the file video information
     if(reader.getRotation() != 0) rotation = reader.getRotation();
     if(reader.getFlip() != 0) flip = reader.getFlip();
@@ -1430,6 +1433,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
             }
         }
     }
+#endif
 }
 
 void NeuroscopeDoc::setProviders(NeuroscopeView* activeView){  
@@ -1549,7 +1553,7 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
     if(!image.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = image;
-
+#if KDAB_PENDING
         if(rotation != 0){
             KImageEffect::RotateDirection angle;
             //KDE counts clockwise, to have a counterclock-wise rotation 90 and 270 are inverted
@@ -1558,7 +1562,7 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
             if(rotation == 270) angle = KImageEffect::Rotate90;
             rotatedImage = KImageEffect::rotate(image,angle);
         }
-
+#endif
         QImage flippedImage = rotatedImage;
         // 0 stands for none, 1 for vertical flip and 2 for horizontal flip.
         int flip = getFlip();
@@ -1708,7 +1712,7 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,NeuroscopeView* activeView){
     //Check that the selected file is a cluster file
-    QString fileName = clusterUrl.fileName();
+    QString fileName = clusterUrl;
     if(fileName.find(".clu") == -1) return INCORRECT_FILE;
 
     ClustersProvider* clustersProvider = new ClustersProvider(clusterUrl,datSamplingRate,samplingRate,tracesProvider->getTotalNbSamples(),clusterPosition);
@@ -1782,22 +1786,22 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
     //already be loaded once).
-    QString fileName = clusterUrl.fileName();
+    QString fileName = clusterUrl;
     if(fileName.find(".clu") == -1){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file " + clusterUrl.path() + " has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
-                                + "Therefore will not be loaded."));
+        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file %1 has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
+                                                 "Therefore will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_FILE;
     }
 
 
     //check if the file still exist before trying to load it
-    QFileInfo fileInfo = QFileInfo(clusterUrl.path());
+    QFileInfo fileInfo = QFileInfo(clusterUrl);
 
     if(!fileInfo.exists()){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The file " + clusterUrl.path() + " does not exist anymore."));
+        QMessageBox::critical (0, tr("Error!"),tr("The file %1 does not exist anymore.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return OPEN_ERROR;
     }
@@ -1814,7 +1818,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     if(name.contains(QRegExp("\\D")) != 0){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file " + clusterUrl.path() + " has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
+        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file " + clusterUrl + " has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
                                 + "Therefore will not be loaded."));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_FILE;
@@ -1824,31 +1828,31 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     if(returnStatus == ClustersProvider::OPEN_ERROR){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("Could not load the file " + clusterUrl.path()));
+        QMessageBox::critical (0, tr("Error!"),tr("Could not load the file %1").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return OPEN_ERROR;
     }
     else if(returnStatus == ClustersProvider::MISSING_FILE){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("There is no time file (.res) corresponding to the requested file " + clusterUrl.path() +
-                                 ", therefore this file will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("There is no time file (.res) corresponding to the requested file %1"
+                                                  ", therefore this file will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return MISSING_FILE;
     }
     else if(returnStatus == ClustersProvider::COUNT_ERROR){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The number of spikes of the requested file " + clusterUrl.path() + " could not be determined."
-                                 " Therefore this file will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The number of spikes of the requested file %1 could not be determined."
+                                                  " Therefore this file will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return CREATION_ERROR;
     }
     else if(returnStatus == ClustersProvider::INCORRECT_CONTENT){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The number of spikes read in the requested file  " + clusterUrl.path() + " or the corresponding time file (.res) does not correspond to number of spikes computed." +
-                                 " Therefore this file will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The number of spikes read in the requested file %1 or the corresponding time file (.res) does not correspond to number of spikes computed."
+                                                  " Therefore this file will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_CONTENT;
     }
@@ -1879,8 +1883,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
 
     if(modified == true){
         QApplication::restoreOverrideCursor();
-        QMessageBox::information(0, tr("Error!"),tr("The requested file " + clusterUrl.path() + " has been modified since the last session,"
-                                      " therefore some session information may be lost."));
+        QMessageBox::information(0, tr("Error!"),tr("The requested file %1 has been modified since the last session,"
+                                                    " therefore some session information may be lost.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
 
@@ -1926,7 +1930,7 @@ void NeuroscopeDoc::setClusterPosition(int position){
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file
-    QString fileName = eventUrl.fileName();
+    QString fileName = eventUrl;
     if(fileName.find(".evt") == -1) return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
@@ -1995,7 +1999,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
     //Check that the selected file is a event file (should always be the case as the file has
     //already be loaded once).
-    QString fileName = eventUrl.fileName();
+    QString fileName = eventUrl;
     if(fileName.find(".evt") == -1){
         QApplication::restoreOverrideCursor();
         QMessageBox::critical (0, tr("Error!"),tr("The requested event file " + eventUrl/*.path()*/ + " has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded."));
@@ -2004,7 +2008,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     }
 
     //check if the file still exist before trying to load it
-    QFileInfo fileInfo = QFileInfo(eventUrl.path());
+    QFileInfo fileInfo = QFileInfo(eventUrl);
 
     if(!fileInfo.exists()){
         QApplication::restoreOverrideCursor();
@@ -2082,8 +2086,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
 
     if(modified == true){
         QApplication::restoreOverrideCursor();
-        QMessageBox::information(0, tr("Error!"),tr("The requested file " + eventUrl.path() + " has been modified since the last session,"
-                                      " therefore some session information may be lost."));
+        QMessageBox::information(0, tr("Error!"),tr("The requested file %1 has been modified since the last session,"
+                                                    " therefore some session information may be lost.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
 
@@ -2382,7 +2386,7 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,in
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QString eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file name
-    QString fileName = eventUrl.fileName();
+    QString fileName = eventUrl;
     if(fileName.find(".evt") == -1) return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
@@ -2427,7 +2431,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QStrin
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString url,NeuroscopeView* activeView){
     //get the sampling rate for the given position file extension, if there is none already set, use the default
-    QString positionFileName = url.fileName();
+    QString positionFileName = url;
     QStringList fileParts = QStringList::split(".", positionFileName);
     if(fileParts.count() < 2) return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];
@@ -2470,9 +2474,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString fileUrl){
     //get the sampling rate for the given position file extension, if there is none already set, use the default
-    QString positionUrl = QString();
-    positionUrl.setPath(fileUrl);
-    QString positionFileName = positionUrl.fileName();
+    QString positionUrl = fileUrl;
+    QString positionFileName = positionUrl;
     QStringList fileParts = QStringList::split(".", positionFileName);
     if(fileParts.count() < 2) return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];
