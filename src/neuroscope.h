@@ -725,6 +725,23 @@ private:
     QAction* mNewDisplay;
     QAction* mRenameActiveDisplay;
     QAction* mCloseActiveDisplay;
+    QAction* mShowChannel;
+    QAction* mHideChannel;
+    QAction* mMoveToNewGroup;
+    QAction* mRemoveChannelFromGroup;
+    QAction* mDiscardChannels;
+    QAction* mKeepChannels;
+    QAction* mSkipChannels;
+    QAction* mSynchronizeGroups;
+    QAction* mColorAnatomicalGroups;
+    QAction* mColorSpikeGroups;
+    QAction* mIncreaseHeight;
+    QAction* mDecreaseHeight;
+    QAction* mNextSpike;
+    QAction* mPreviousSpike;
+    QAction* mNextEvent;
+    QAction* mPreviousEvent;
+    QAction* mRemoveEvent;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 

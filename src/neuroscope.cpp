@@ -216,8 +216,8 @@ void NeuroscopeApp::initActions()
 
     mDrawTimeLine = toolMenu->addAction(tr("Draw Time Line"));
     mDrawTimeLine->setIcon(QIcon(":/icons/time_line_tool"));
-    VARIABLE->setShortcut(Qt::Key_L);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDrawTimeLine()));
+    mDrawTimeLine->setShortcut(Qt::Key_L);
+    connect(mDrawTimeLine,SIGNAL(triggered()), this,SLOT(slotDrawTimeLine()));
 
 
     //Traces menu
@@ -292,40 +292,48 @@ void NeuroscopeApp::initActions()
 
 
     //Channels Menu
-    VARIABLE = MENU->addAction(tr("Show &Channels"),QIcon(":/icons/eye"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_C);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowChannels()));
+    QMenu *channelsMenu = menuBar()->addMenu(tr("&Channels"));
+    mShowChannel = channelsMenu->addAction(tr("Show &Channels"));
+    mShowChannel->setIcon(QIcon(":/icons/eye"));
+    mShowChannel->setShortcut(Qt::CTRL + Qt::Key_C);
+    connect(mShowChannel,SIGNAL(triggered()), this,SLOT(slotShowChannels()));
 
-    VARIABLE = MENU->addAction(tr("&Hide Channels"),QIcon(":/icons/eye_close"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_H);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotHideChannels()));
-
-
-    VARIABLE = MENU->addAction(tr("&Move Channels to New Group"),QIcon(":/icons/new_group"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_G);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotCreateGroup()));
-
-    VARIABLE = MENU->addAction(tr("&Remove Channels from Group"),QIcon(":/icons/remove"));
-    VARIABLE->setShortcut(Qt::SHIFT + Qt::Key_Delete);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardSpikeChannels()));
-
-    VARIABLE = MENU->addAction(tr("&Discard Channels"),QIcon(":/icons/discard"));
-    VARIABLE->setShortcut(Qt::Key_Delete);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDiscardChannels()));
-
-    VARIABLE = MENU->addAction(tr("&Keep Channels"),QIcon(":/icons/keep"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotKeepChannels()));
-
-    VARIABLE = MENU->addAction(tr("&Skip Channels"),QIcon(":/icons/skip"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSkipChannels()));
+    mHideChannel = channelsMenu->addAction(tr("&Hide Channels"));
+    mHideChannel->setIcon(QIcon(":/icons/eye_close"));
+    mHideChannel->setShortcut(Qt::CTRL + Qt::Key_H);
+    connect(mHideChannel,SIGNAL(triggered()), this,SLOT(slotHideChannels()));
 
 
-    VARIABLE = MENU->addAction(tr("&Synchronize Groups"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
+    mMoveToNewGroup = channelsMenu->addAction(tr("&Move Channels to New Group"));
+    mMoveToNewGroup->setIcon(QIcon(":/icons/new_group"));
+    mMoveToNewGroup->setShortcut(Qt::CTRL + Qt::Key_G);
+    connect(mMoveToNewGroup,SIGNAL(triggered()), this,SLOT(slotCreateGroup()));
 
-    showHideLabels = MENU->addAction(tr("Show &Labels"),0);
+    mRemoveChannelFromGroup = channelsMenu->addAction(tr("&Remove Channels from Group"));
+    mRemoveChannelFromGroup->setIcon(QIcon(":/icons/remove"));
+    mRemoveChannelFromGroup->setShortcut(Qt::SHIFT + Qt::Key_Delete);
+    connect(mRemoveChannelFromGroup,SIGNAL(triggered()), this,SLOT(slotDiscardSpikeChannels()));
+
+    mDiscardChannels = channelsMenu->addAction(tr("&Discard Channels"));
+    mDiscardChannels->setIcon(QIcon(":/icons/discard"));
+    mDiscardChannels->setShortcut(Qt::Key_Delete);
+    connect(mDiscardChannels,SIGNAL(triggered()), this,SLOT(slotDiscardChannels()));
+
+    mKeepChannels = channelsMenu->addAction(tr("&Keep Channels"));
+    mKeepChannels->setIcon(QIcon(":/icons/keep"));
+    mKeepChannels->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K);
+    connect(mKeepChannels,SIGNAL(triggered()), this,SLOT(slotKeepChannels()));
+
+    mSkipChannels = channelsMenu->addAction(tr("&Skip Channels"));
+    mSkipChannels->setIcon(QIcon(":/icons/skip"));
+    mSkipChannels->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    connect(mSkipChannels,SIGNAL(triggered()), this,SLOT(slotSkipChannels()));
+
+
+    mSynchronizeGroups =channelsMenu->addAction(tr("&Synchronize Groups"));
+    connect(mSynchronizeGroups,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
+
+    showHideLabels = channelsMenu->addAction(tr("Show &Labels"));
     showHideLabels->setShortcut(Qt::CTRL + Qt::Key_L);
     showHideLabels->setCheckable(true);
     connect(showHideLabels,SIGNAL(triggered()), this,SLOT(slotShowLabels()));
@@ -333,84 +341,92 @@ void NeuroscopeApp::initActions()
     showHideLabels->setChecked(false);
 
     //Color section
-    VARIABLE = MENU->addAction(tr("Color by &Anatomical Groups"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotApplyDisplayColor()));
+    mColorAnatomicalGroups = channelsMenu->addAction(tr("Color by &Anatomical Groups"));
+    connect(mColorAnatomicalGroups,SIGNAL(triggered()), this,SLOT(slotApplyDisplayColor()));
 
-    VARIABLE = MENU->addAction(tr("Color by S&pike Groups"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotApplySpikeColor()));
+    mColorSpikeGroups = channelsMenu->addAction(tr("Color by S&pike Groups"));
+    connect(mColorSpikeGroups,SIGNAL(triggered()), this,SLOT(slotApplySpikeColor()));
 
 
     //Units Menu
-    clusterVerticalLines = MENU->addAction(tr("&Vertical Lines"));
+    QMenu *unitsMenu = menuBar()->addMenu(tr("&Units"));
+    clusterVerticalLines = unitsMenu->addAction(tr("&Vertical Lines"));
     clusterVerticalLines->setCheckable(true);
     connect(clusterVerticalLines,SIGNAL(triggered()), this,SLOT(slotClustersVerticalLines()));
 
     clusterVerticalLines->setChecked(false);
-    clusterRaster = MENU->addAction(tr("&Raster"));
+    clusterRaster = unitsMenu->addAction(tr("&Raster"));
     clusterRaster->setCheckable(true);
     connect(clusterRaster,SIGNAL(triggered()), this,SLOT(slotClustersRaster()));
 
     clusterRaster->setChecked(true);
-    clusterWaveforms = MENU->addAction(tr("&Waveforms"));
+    clusterWaveforms = unitsMenu->addAction(tr("&Waveforms"));
     clusterWaveforms->setCheckable(true);
     connect(clusterWaveforms,SIGNAL(triggered()), this,SLOT(slotClustersWaveforms()));
 
     clusterWaveforms->setChecked(false);
-    VARIABLE = MENU->addAction(tr("&Increase Height"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Plus);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseRasterHeight()));
+    mIncreaseHeight = unitsMenu->addAction(tr("&Increase Height"));
+    mIncreaseHeight->setShortcut(Qt::CTRL + Qt::Key_Plus);
+    connect(mIncreaseHeight,SIGNAL(triggered()), this,SLOT(slotIncreaseRasterHeight()));
 
-    VARIABLE = MENU->addAction(tr("&Decrease Height"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_Minus);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseRasterHeight()));
+    mDecreaseHeight = unitsMenu->addAction(tr("&Decrease Height"));
+    mDecreaseHeight->setShortcut(Qt::CTRL + Qt::Key_Minus);
+    connect(mDecreaseHeight,SIGNAL(triggered()), this,SLOT(slotDecreaseRasterHeight()));
 
-    VARIABLE = MENU->addAction(tr("&Next Spike"),QIcon(":/icons/forwardCluster"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextCluster()));
+    mNextSpike = unitsMenu->addAction(tr("&Next Spike"));
+    mNextSpike->setIcon(QIcon(":/icons/forwardCluster"));
+    mNextSpike->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
+    connect(mNextSpike,SIGNAL(triggered()), this,SLOT(slotShowNextCluster()));
 
-    VARIABLE = MENU->addAction(tr("&Previous Spike"),QIcon(":/icons/backCluster"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousCluster()));
+    mPreviousSpike = unitsMenu->addAction(tr("&Previous Spike"));
+    mPreviousSpike->setIcon(QIcon(":/icons/backCluster"));
+    mPreviousSpike->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
+    connect(mPreviousSpike,SIGNAL(triggered()), this,SLOT(slotShowPreviousCluster()));
 
 
     //Events Menu
-    VARIABLE = MENU->addAction(tr("&Next Event"),QIcon(":/icons/forwardEvent"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_F);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowNextEvent()));
+    QMenu *eventMenu = menuBar()->addMenu(tr("E&vents"));
+    mNextEvent = eventMenu->addAction(tr("&Next Event"));
+    mNextEvent->setIcon(QIcon(":/icons/forwardEvent"));
+    mNextEvent->setShortcut(Qt::CTRL + Qt::Key_F);
+    connect(mNextEvent,SIGNAL(triggered()), this,SLOT(slotShowNextEvent()));
 
-    VARIABLE = MENU->addAction(tr("&Previous Event"),QIcon(":/icons/backEvent"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_B);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotShowPreviousEvent()));
+    mPreviousEvent = eventMenu->addAction(tr("&Previous Event"));
+    mPreviousEvent->setIcon(QIcon(":/icons/backEvent"));
+    mPreviousEvent->setShortcut(Qt::CTRL + Qt::Key_B);
+    connect(mPreviousEvent,SIGNAL(triggered()), this,SLOT(slotShowPreviousEvent()));
 
-    VARIABLE = MENU->addAction(tr("&Remove Event"),0);
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_K);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(removeEvent()));
+    mRemoveEvent = eventMenu->addAction(tr("&Remove Event"));
+    mRemoveEvent->setShortcut(Qt::CTRL + Qt::Key_K);
+    connect(mRemoveEvent,SIGNAL(triggered()), this,SLOT(removeEvent()));
 
 
     //Positions Menu
-    positionViewToggle = MENU->addAction(tr("&Show Position View"));
+    QMenu *positionsMenu = menuBar()->addMenu(tr("&Positions"));
+    positionViewToggle = positionsMenu->addAction(tr("&Show Position View"));
     positionViewToggle->setCheckable(true);
     connect(positionViewToggle,SIGNAL(triggered()), this,SLOT(slotShowPositionView()));
 
     positionViewToggle->setChecked(false);
-    showEventsInPositionView = MENU->addAction(tr("Show &Events"));
+    showEventsInPositionView = positionsMenu->addAction(tr("Show &Events"));
     showEventsInPositionView->setCheckable(true);
     connect(showEventsInPositionView,SIGNAL(triggered()), this,SLOT(slotShowEventsInPositionView()));
 
     showEventsInPositionView->setChecked(false);
 
     //Settings menu
-    viewToolBar = MENU->addAction(tr("Show T&ools"));
+    QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
+    viewToolBar = settingsMenu->addAction(tr("Show T&ools"));
     viewToolBar->setCheckable(true);
     connect(viewToolBar,SIGNAL(triggered()), this,SLOT(slotViewToolBar()));
 
     viewToolBar->setChecked(true);
-    viewParameterBar = MENU->addAction(tr("Show &Parameters"));
+    viewParameterBar = settingsMenu->addAction(tr("Show &Parameters"));
     viewParameterBar->setCheckable(true);
     connect(viewParameterBar,SIGNAL(triggered()), this,SLOT(slotViewParameterBar()));
 
     viewParameterBar->setChecked(true);
-    calibrationBar = MENU->addAction(tr("&Display Calibration"));
+    calibrationBar = settingsMenu->addAction(tr("&Display Calibration"));
     calibrationBar->setCheckable(true);
     connect(calibrationBar,SIGNAL(triggered()), this,SLOT(slotShowCalibration()));
 
@@ -471,7 +487,7 @@ void NeuroscopeApp::initStatusBar()
 }
 
 void NeuroscopeApp::initItemPanel(){
-
+#if KDAB_PENDING
 
     //Creation of the left panel containing the channels.
     if(displayPaletteHeaders){
@@ -496,6 +512,7 @@ void NeuroscopeApp::initItemPanel(){
     //Create the QDockWidget which will contain the paletteArea and be dock to the mainDock.
     palettePanel = createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
     palettePanel->setWidget(paletteArea);
+#endif
 }
 
 void NeuroscopeApp::executePreferencesDlg(){
@@ -693,7 +710,8 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //Initialize the spinboxe and scrollbar
 
     //Create the mainDock (first view)
-    if(tabLabel == "") tabLabel = "Field Potentials Display";
+    if(tabLabel.isEmpty())
+        tabLabel = tr("Field Potentials Display");
     mainDock = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
     //KDAB_PENDING mainDock->setDockWindowTransient(this,true);
 
@@ -723,8 +741,8 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //allow dock on the left side only
     //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockLeft);
 
-    setView(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
-    setMainDockWidget(mainDock);
+    //KDAB_PENDING setView(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
+    //KDAB_PENDING setMainDockWidget(mainDock);
 
     //disable docking abilities of mainDock itself
     //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockNone);
@@ -1058,7 +1076,7 @@ bool NeuroscopeApp::queryClose()
                         eventSaveStatus = doc->saveEventFiles();
                         QApplication::restoreOverrideCursor();
                         if(eventSaveStatus != IO_Ok){
-                            switch(QMessageBox::warningYesNo(0, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
+                            switch(QMessageBox::warning(0, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
                                                                   "Close anyway ?"),QMessageBox::Close|QMessageBox::Discard)){
                             case QMessageBox::Close:
                                 break;
@@ -2332,8 +2350,8 @@ void NeuroscopeApp::slotDisplayClose(){
                     message = tr("Your configuration and some events have changed, do you want to save the configuration and the event file(s)?");
                     title = tr("Modification");
                 }
-                switch(QMessageBox::warningYesNoCancel(0,title,message,KGuiItem("Save"),KGuiItem("Discard"))){
-                case QMessageBox::Yes://<=> Save
+                switch(QMessageBox::warningYesNoCancel(0,title,message,QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel)){
+                case QMessageBox::Save://<=> Save
                     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     if(eventsModified){
                         eventSaveStatus = doc->saveEventFiles();
@@ -2373,7 +2391,7 @@ void NeuroscopeApp::slotDisplayClose(){
                         }
                     }
                     break;
-                case QMessageBox::No://<=> Discard
+                case QMessageBox::Discard://<=> Discard
                     break;
                 case QMessageBox::Cancel:
                     return;
@@ -2441,6 +2459,7 @@ void NeuroscopeApp::slotDisplayClose(){
 
 void NeuroscopeApp::slotRenameActiveDisplay(){
     if(tabsParent){
+#if KDAB_PENDING
         QDockWidget* current;
 
         //Get the active tab
@@ -2454,6 +2473,7 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
             //KDAB_PENDING  current->setTabPageLabel(newLabel);
             activeView()->setTabName(newLabel);
         }
+#endif
     }
 }
 
@@ -2484,7 +2504,8 @@ void NeuroscopeApp::slotNewDisplay(){
 void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,bool greyMode,
                                   Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
     if(mainDock){
-        if(tabLabel == "") tabLabel = "Field Potentials Display";
+        if(tabLabel.isEmpty())
+            tabLabel = tr("Field Potentials Display");
         QDockWidget* display = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
@@ -2757,19 +2778,19 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes read in the requested file (" + static_cast<QString>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes read in the requested file (%1) or the corresponding time file (.res) does not correspond to number of spikes computed.").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes of the requested file (%1) could not be determined.").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."));
+            QMessageBox::critical (this, tr("Error!"),tr("The requested file (%1) is already loaded.").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
@@ -2786,10 +2807,12 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
 void NeuroscopeApp::createClusterPalette(QString clusterFileId){  
 
     QDockWidget* clusterDock;
-    if(displayPaletteHeaders)
+    if(displayPaletteHeaders) {
         clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
-    else
+    }
+    else{
         clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
+    }
     ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
     clusterDock->setWidget(clusterPalette);
     clusterFileList.append(clusterFileId);
@@ -2943,7 +2966,7 @@ void NeuroscopeApp::loadPositionFile(QString url){
     }
     if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (" + url.path() + "): extension missing."));
+        QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (%1): extension missing.").arg(url));
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
@@ -2979,25 +3002,25 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."));
+            QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (%1): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier).").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The number of events of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of events of the requested file (%1) could not be determined.").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The content of the requested file (" + static_cast<QString>(*iterator).path() + ") is incorrect (see file format information)."));
+            QMessageBox::critical (this, tr("Error!"),tr("The content of the requested file (%1) is incorrect (see file format information).").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"),tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."));
+            QMessageBox::critical (this, tr("Error!"),tr("The requested file (%1) is already loaded.").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
@@ -3015,10 +3038,16 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
 void NeuroscopeApp::createEventPalette(QString eventFileId){
 
     QDockWidget* eventDock;
-    if(displayPaletteHeaders)
-        eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
-    else
-        eventDock = createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
+    if(displayPaletteHeaders) {
+        eventDock = new QDockWidget(tr("Events"));
+        eventDock->setWindowIcon(QIcon(":/icons/events"));
+                //createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
+    }
+    else {
+        eventDock = new QDockWidget();
+        eventDock->setWindowIcon(QIcon(":/icons/events"));
+                //createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
+       }
     ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
     eventDock->setWidget(eventPalette);
     eventFileList.append(eventFileId);
@@ -3284,7 +3313,7 @@ void NeuroscopeApp::slotAddEventActivated(int index){
     QString description = menu->text(index);
     if(index == static_cast<int>(menu->count() - 1)) {
         bool ok;
-        QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+        QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
         if(ok) {
             eventLabelToCreate = result;
         }
