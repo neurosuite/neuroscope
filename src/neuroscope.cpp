@@ -199,11 +199,11 @@ void NeuroscopeApp::initActions()
     mEventTool->setIcon(QIcon(":/icons/event_tool"));
     mEventTool->setShortcut(Qt::Key_E);
     connect(mEventTool,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
-
+#if KDAB_PENDING
     addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
     connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
-
+#endif
     addEventToolBarAction = new QAction(tr("Add Event"));
     addEventToolBarAction->setIcon(QIcon(":icons/add_event_tool"));
     connect(addEventToolBarAction,SIGNAL(triggered()), this,SLOT(addEvent()));
@@ -232,33 +232,33 @@ void NeuroscopeApp::initActions()
     connect(greyScale,SIGNAL(triggered()), this,SLOT(slotSetGreyScale()));
 
     greyScale->setChecked(false);
-    VARIABLE = traceMenu->addAction(tr("&Increase All Channel Amplitudes"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_I);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseAllChannelsAmplitude()));
+    mIncreaseAllChannelAmplitudes = traceMenu->addAction(tr("&Increase All Channel Amplitudes"));
+    mIncreaseAllChannelAmplitudes->setShortcut(Qt::CTRL + Qt::Key_I);
+    connect(mIncreaseAllChannelAmplitudes,SIGNAL(triggered()), this,SLOT(slotIncreaseAllChannelsAmplitude()));
 
-    VARIABLE = traceMenu->addAction(tr("&Decrease All Channel Amplitudes"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::Key_D);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseAllChannelsAmplitude()));
+    mDecreaseAllChannelAmplitudes = traceMenu->addAction(tr("&Decrease All Channel Amplitudes"));
+    mDecreaseAllChannelAmplitudes->setShortcut(Qt::CTRL + Qt::Key_D);
+    connect(mDecreaseAllChannelAmplitudes,SIGNAL(triggered()), this,SLOT(slotDecreaseAllChannelsAmplitude()));
 
-    VARIABLE = traceMenu->addAction(tr("I&ncrease Selected Channel Amplitudes"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotIncreaseSelectedChannelsAmplitude()));
+    mIncreaseSelectedChannelAmplitude = traceMenu->addAction(tr("I&ncrease Selected Channel Amplitudes"));
+    mIncreaseSelectedChannelAmplitude->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
+    connect(mIncreaseSelectedChannelAmplitude,SIGNAL(triggered()), this,SLOT(slotIncreaseSelectedChannelsAmplitude()));
 
-    VARIABLE = traceMenu->addAction(tr("D&ecrease Selected Channel Amplitudes"));
-    VARIABLE->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotDecreaseSelectedChannelsAmplitude()));
+    mDecreaseSelectedChannelAmplitude = traceMenu->addAction(tr("D&ecrease Selected Channel Amplitudes"));
+    mDecreaseSelectedChannelAmplitude->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+    connect(mDecreaseSelectedChannelAmplitude,SIGNAL(triggered()), this,SLOT(slotDecreaseSelectedChannelsAmplitude()));
 
-    VARIABLE = traceMenu->addAction(tr("Reset Selected Channel &Offsets"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetOffsets()));
+    mResetSelectedChannel = traceMenu->addAction(tr("Reset Selected Channel &Offsets"));
+    connect(mResetSelectedChannel,SIGNAL(triggered()), this,SLOT(slotResetOffsets()));
 
-    VARIABLE = traceMenu->addAction(tr("Reset Selected Channel &Amplitudes"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetGains()));
+    mResetSelectedChannelAmplitudes = traceMenu->addAction(tr("Reset Selected Channel &Amplitudes"));
+    connect(mResetSelectedChannelAmplitudes,SIGNAL(triggered()), this,SLOT(slotResetGains()));
 
-    VARIABLE = traceMenu->addAction(tr("&Set Current Offsets as Defaults"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotSetDefaultOffsets()));
+    mSetCurrentOffsetsAsDefault = traceMenu->addAction(tr("&Set Current Offsets as Defaults"));
+    connect(mSetCurrentOffsetsAsDefault,SIGNAL(triggered()), this,SLOT(slotSetDefaultOffsets()));
 
-    VARIABLE = traceMenu->addAction(tr("Set Default Offsets to &Zero"));
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
+    mSetDefaultOffsetToZero = traceMenu->addAction(tr("Set Default Offsets to &Zero"));
+    connect(mSetDefaultOffsetToZero,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
 
 
     /// Added by M.Zugaro to enable automatic forward paging
@@ -2350,7 +2350,7 @@ void NeuroscopeApp::slotDisplayClose(){
                     message = tr("Your configuration and some events have changed, do you want to save the configuration and the event file(s)?");
                     title = tr("Modification");
                 }
-                switch(QMessageBox::warningYesNoCancel(0,title,message,QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel)){
+                switch(QMessageBox::warning(0,title,message,QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel)){
                 case QMessageBox::Save://<=> Save
                     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     if(eventsModified){
@@ -3313,7 +3313,7 @@ void NeuroscopeApp::slotAddEventActivated(int index){
     QString description = menu->text(index);
     if(index == static_cast<int>(menu->count() - 1)) {
         bool ok;
-        QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+        //KDAB_PENDING QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
         if(ok) {
             eventLabelToCreate = result;
         }

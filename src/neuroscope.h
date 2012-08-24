@@ -742,6 +742,14 @@ private:
     QAction* mNextEvent;
     QAction* mPreviousEvent;
     QAction* mRemoveEvent;
+    QAction* mIncreaseAllChannelAmplitudes;
+    QAction* mDecreaseAllChannelAmplitudes;
+    QAction* mIncreaseSelectedChannelAmplitude;
+    QAction* mDecreaseSelectedChannelAmplitude;
+    QAction* mResetSelectedChannel;
+    QAction* mResetSelectedChannelAmplitudes;
+    QAction* mSetCurrentOffsetsAsDefault;
+    QAction* mSetDefaultOffsetToZero;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 
