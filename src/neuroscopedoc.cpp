@@ -26,6 +26,7 @@
 #include <Q3PtrList>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QApplication>
 
 
 // application specific includes
@@ -1545,7 +1546,7 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
     }
     else image = QImage(backgroundImage);
 
-    if(image != NULL){
+    if(!image.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = image;
 

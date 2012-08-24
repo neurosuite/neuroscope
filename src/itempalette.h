@@ -126,7 +126,7 @@ public:
     
 public slots:
     void slotMousePressWoModificators(QString sourceGroup);
-    void slotMousePressWQt::AltModifier(QString sourceGroup,int index);
+    void slotMousePressWAltButton(QString sourceGroup,int index);
     
 protected slots:
     void slotRightPressed(Q3IconViewItem* item);

@@ -35,7 +35,7 @@ class ItemColors  {
 
 public:
 
-    enum SelectionMode {BY_INDEX=0,BY_ITEM_NUMBER=1}
+    enum SelectionMode {BY_INDEX=0,BY_ITEM_NUMBER=1};
 
     ItemColors();
     virtual ~ItemColors();

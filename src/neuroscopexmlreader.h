@@ -44,9 +44,9 @@ class NeuroscopeXmlReader {
 public:
 
     /**Type of xml file supported by this class.*/
-    enum fileType{PARAMETER=0,SESSION=1}
+    enum fileType{PARAMETER=0,SESSION=1};
 
-                 NeuroscopeXmlReader();
+    NeuroscopeXmlReader();
     ~NeuroscopeXmlReader();
 
     /**Opens and parses the file with the @p url.

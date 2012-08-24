@@ -73,16 +73,17 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.data()) skippedChannels.append(iterator.key());
 
     //Create the mainDock
-    mainDock = createDockWidget("Main", QPixmap(), 0L, tr("field potentials"), tr("field potentials"));
+    mainDock = new QDockWidget(tr("field potentials"));
+            //createDockWidget("Main", QPixmap(), 0L, tr("field potentials"), tr("field potentials"));
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
 
     mainDock->setWidget(traceWidget);
-    mainDock->setEnableDocking(KDockWidget::DockCorner);
-    mainDock->setDockSite(KDockWidget::DockCorner);
-    setMainDockWidget(mainDock);
+    //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockCorner);
+    //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockCorner);
+    //KDAB_PENDING setMainDockWidget(mainDock);
 
     //Set Connection(s) common to all widgets.
     connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
@@ -149,7 +150,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
 
 
 
-    mainDock->setEnableDocking(KDockWidget::DockNone);
+    //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockNone);
 }
 
 NeuroscopeView::~NeuroscopeView()
@@ -433,13 +434,14 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
     eventsInPositionView = showEvents;
 
     //Create and add the position view
-    KDockWidget* positions = createDockWidget( "Positions", QPixmap());
+    QDockWidget* positions = new QDockWidget();
+            //createDockWidget( "Positions", QPixmap());
     positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positions,"PositionView",backgroundColor);
     positions->setWidget(positionView);//assign the widget
 
-    positions->manualDock(mainDock,KDockWidget::DockTop,25);
-    positions->setEnableDocking(KDockWidget::DockCorner);
-    positions->setDockSite(KDockWidget::DockCorner);
+    //KDAB_PENDING positions->manualDock(mainDock,QDockWidget::DockTop,25);
+    //KDAB_PENDING positions->setEnableDocking(QDockWidget::DockCorner);
+    //KDAB_PENDING positions->setDockSite(QDockWidget::DockCorner);
 
     //Enable the View to be inform that the positions dockWidget is being close.
     //To do so, connect the positions dockwidget close button to the dockBeingClosed slot of is contained widget
@@ -474,9 +476,9 @@ void  NeuroscopeView::positionDockClosed(QWidget* view){
 }
 
 void NeuroscopeView::removePositionView(){
-    KDockWidget* dock = dockManager->findWidgetParentDock(positionView);
-    dock->undock();
-    delete dock;
+    //KDAB_PENDING QDockWidget* dock = dockManager->findWidgetParentDock(positionView);
+    //KDAB_PENDING dock->undock();
+    //KDAB_PENDING delete dock;
     positionView = 0L;
     isPositionFileShown = false;
 }

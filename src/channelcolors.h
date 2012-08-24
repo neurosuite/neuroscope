@@ -56,7 +56,7 @@ private:
         ChannelColor(const ChannelColor& origin):channelId(origin.channelId),
             color(origin.color),groupColor(origin.groupColor),spikeGroupColor(origin.spikeGroupColor){}
         ~ChannelColor(){}
-    }
+    };
 
     /**list of the ChannelColor contained in the class.*/
     Q3PtrList<ChannelColor> channelList;

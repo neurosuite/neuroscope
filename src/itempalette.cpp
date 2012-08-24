@@ -567,7 +567,7 @@ bool ItemPalette::isBrowsingEnable(){
     return browsingEnable;
 }
 
-void ItemPalette::slotMousePressWQt::AltModifier(QString sourceGroup,int index){
+void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
     QMap<int,bool> browsingMap = browsingStatus[sourceGroup];
     Q3IconViewItem* currentItem = 0L;
     ItemIconView* iconView = iconviewDict[sourceGroup];
@@ -817,7 +817,7 @@ void ItemPalette::createGroup(QString id){
     connect(iconView,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QString)),this, SLOT(slotMousePressed(int,Q3IconViewItem*,QString)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(mousePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
-    connect(iconView,SIGNAL(mousePressWQt::AltModifier(QString,int)),this, SLOT(slotMousePressWAltButton(QString,int)));
+    connect(iconView,SIGNAL(mousePressWAltButton(QString,int)),this, SLOT(slotMousePressWAltButton(QString,int)));
     connect(iconView,SIGNAL(mouseReleased(QString)),this, SLOT(slotMouseReleased(QString)));
 
     connect(label,SIGNAL(leftClickOnLabel(QString,bool,bool)),this, SLOT(slotMousePressed(QString,bool,bool)));
