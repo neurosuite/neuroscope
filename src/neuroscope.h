@@ -30,6 +30,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QCustomEvent>
+#include <QTabWidget>
 
 //application specific include files
 #include "neuroscopeview.h"
@@ -722,17 +723,17 @@ class NeuroscopeApp : public KDockMainWindow
     /**tabsParent groups all the display tabs, it is updated eache time a display is added.
     * It is null when there is only one display open. It enables to get the active tab.
     */
-    KDockTabGroup* tabsParent;
+    QTabWidget* tabsParent;
 
     /**paletteTabsParent groups all the palettes tabs, it is updated eache time a palette is added or removed.
     * It enables to get the active palette.
     */
-    KDockTabGroup* paletteTabsParent;
+    QTabWidget* paletteTabsParent;
 
     /**Panel container (contains a KDockArea) for all the palettes of the application (ClusterPalette,EventPalette,channelsPalette).
     * The main Palette is the channel palette
     * use to specify the display order of the field potentials.*/
-    KDockWidget* palettePanel;
+    QDockWidget* palettePanel;
 
     /**Boolean used to prevent the trigger of changes during initialization.*/
     bool isInit;

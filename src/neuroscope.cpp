@@ -749,8 +749,8 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     displayPanel->setDockSite(KDockWidget::DockNone);
     spikePanel->setDockSite(KDockWidget::DockNone);
 
-    //The grandParent's widget is the KDockTabGroup regrouping all the tabs
-    paletteTabsParent = static_cast<KDockTabGroup*>(grandParent->getWidget());
+    //The grandParent's widget is the QTabWidget regrouping all the tabs
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
@@ -2467,8 +2467,8 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
         //Disconnect the previous connection
         if(tabsParent != NULL) disconnect(tabsParent,0,0,0);
 
-        //The grandParent's widget is the KDockTabGroup regrouping all the tabs
-        tabsParent = static_cast<KDockTabGroup*>(grandParent->getWidget());
+        //The grandParent's widget is the QTabWidget regrouping all the tabs
+        tabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
@@ -2754,8 +2754,8 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     //Disconnect the previous connection
     if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
-    //The grandParent's widget is the KDockTabGroup regrouping all the tabs
-    paletteTabsParent = static_cast<KDockTabGroup*>(grandParent->getWidget());
+    //The grandParent's widget is the QTabWidget regrouping all the tabs
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
@@ -2976,8 +2976,8 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     //Disconnect the previous connection
     if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
-    //The grandParent's widget is the KDockTabGroup regrouping all the tabs
-    paletteTabsParent = static_cast<KDockTabGroup*>(grandParent->getWidget());
+    //The grandParent's widget is the QTabWidget regrouping all the tabs
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
