@@ -523,10 +523,10 @@ void NeuroscopeApp::applyPreferences() {
             //loop on the palettes (if their are any skipped channels, their color are going to be updated to the new background color)
             for(int i = 0; i < paletteTabsParent->count();++i){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
-                if((current->getWidget())->isA("ChannelPalette"))
-                    static_cast<ChannelPalette*>(current->getWidget())->changeBackgroundColor(backgroundColor);
-                else if((current->getWidget())->isA("ItemPalette"))
-                    static_cast<ItemPalette*>(current->getWidget())->changeBackgroundColor(backgroundColor);
+                if((current->widget())->isA("ChannelPalette"))
+                    static_cast<ChannelPalette*>(current->widget())->changeBackgroundColor(backgroundColor);
+                else if((current->widget())->isA("ItemPalette"))
+                    static_cast<ItemPalette*>(current->widget())->changeBackgroundColor(backgroundColor);
             }
             doc->setBackgroundColor(backgroundColor); //will take care of displays
         }
@@ -759,7 +759,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     spikePanel->setDockSite(QDockWidget::DockNone);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
@@ -822,7 +822,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
 
     //Check if the file exists
     if(!file.exists()){
-        KMessageBox::error (this,tr("The selected file does not exist."), tr("Error!"));
+        QMessageBox::critical (this, tr("Error!"),tr("The selected file does not exist."));
         //KDAB_PENDING fileOpenRecent->removeURL(url);
         return;
     }
@@ -838,7 +838,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         int returnStatus = doc->openDocument(url);
         if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The selected file is invalid, it has to be of the form baseName.nrs, baseName.xml or baseName.*"), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The selected file is invalid, it has to be of the form baseName.nrs, baseName.xml or baseName.*"));
             //close the document
             doc->closeDocument();
             resetState();
@@ -846,7 +846,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
         if(returnStatus == NeuroscopeDoc::DOWNLOAD_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("Could not get the data file."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("Could not get the data file."));
             //close the document
             doc->closeDocument();
             resetState();
@@ -854,7 +854,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
         if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("Could not open the files."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("Could not open the files."));
             //close the document
             doc->closeDocument();
             resetState();
@@ -862,7 +862,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
         if(returnStatus == NeuroscopeDoc::PARSE_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error(this,tr("Either the parameter file or the session file could not be parsed correctly."), tr("IO Error!"));
+            QMessageBox::critical(this, tr("IO Error!"),tr("Either the parameter file or the session file could not be parsed correctly."));
             //close the document
             doc->closeDocument();
             resetState();
@@ -870,7 +870,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
         if(returnStatus == NeuroscopeDoc::MISSING_FILE){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error(this,tr("The parameter file is missing."), tr("IO Error!"));
+            QMessageBox::critical(this, tr("IO Error!"),tr("The parameter file is missing."));
             //close the document
             doc->closeDocument();
             resetState();
@@ -928,8 +928,8 @@ void NeuroscopeApp::updateBrowsingStatus(){
         for(int i = 0; i<paletteTabsParent->count();i++){
             QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
             QString name = current->name();
-            if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
-                palette = static_cast<ItemPalette*>(current->getWidget());
+            if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
+                palette = static_cast<ItemPalette*>(current->widget());
                 break;
             }
         }
@@ -954,8 +954,8 @@ void NeuroscopeApp::updateBrowsingStatus(){
         for(int i = 0; i<paletteTabsParent->count();i++){
             QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
             QString name = current->name();
-            if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
-                palette = static_cast<ItemPalette*>(current->getWidget());
+            if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+                palette = static_cast<ItemPalette*>(current->widget());
                 break;
             }
         }
@@ -1221,7 +1221,7 @@ void NeuroscopeApp::slotCreateEventFile(){
         //Check if the file already exist
         QFileInfo fileInfo = QFileInfo(url.path());
         if(fileInfo.exists()){
-            KMessageBox::error(this,tr("The selected file already exist."), tr("Error!"));
+            QMessageBox::critical(this, tr("Error!"),tr("The selected file already exist."));
             return;
         }
 
@@ -1380,9 +1380,9 @@ void NeuroscopeApp::slotFileClose(){
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(0));
-                if((current->getWidget())->isA("ChannelPalette")){
+                if((current->widget())->isA("ChannelPalette")){
                     current = static_cast<QDockWidget*>(paletteTabsParent->page(1));
-                    if((current->getWidget())->isA("ChannelPalette"))
+                    if((current->widget())->isA("ChannelPalette"))
                         current = static_cast<QDockWidget*>(paletteTabsParent->page(2));
                 }
                 paletteTabsParent->removePage(current);
@@ -1552,7 +1552,7 @@ void NeuroscopeApp::slotSelect(){
 
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->getWidget())->isA("ChannelPalette")){
+    if((current->widget())->isA("ChannelPalette")){
         //the 2 palettes have the same selected channels
         displayChannelPalette->selectionTool();
     }
@@ -1611,7 +1611,7 @@ NeuroscopeView* NeuroscopeApp::activeView(){
     //or the active window if there is only one display (which can only be the mainDock)
     else current = mainDock;
 
-    return static_cast<NeuroscopeView*>(current->getWidget());
+    return static_cast<NeuroscopeView*>(current->widget());
 }
 
 void NeuroscopeApp::slotSingleChannelColorUpdate(int channelId){
@@ -1628,7 +1628,7 @@ void NeuroscopeApp::slotChannelGroupColorUpdate(int groupId){
 
 void NeuroscopeApp::slotUpdateShownChannels(const Q3ValueList<int>& shownChannels){  
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
 
     NeuroscopeView* view = activeView();
     view->shownChannelsUpdate(shownChannels);
@@ -1645,7 +1645,7 @@ void NeuroscopeApp::slotUpdateShownChannels(const Q3ValueList<int>& shownChannel
 void NeuroscopeApp::slotUpdateHiddenChannels(const Q3ValueList<int>& hiddenChannels){
     //Update the show/hide status of the inactive palette
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
 
     if(channelPalette == displayChannelPalette) spikeChannelPalette->updateShowHideStatus(hiddenChannels,false);
     else displayChannelPalette->updateShowHideStatus(hiddenChannels,false);
@@ -1906,7 +1906,7 @@ void NeuroscopeApp::slotSetGreyScale(){
 void NeuroscopeApp::slotCreateGroup(){
     //Get the active palette
     QDockWidget* current = dynamic_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = dynamic_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = dynamic_cast<ChannelPalette*>(current->widget());
     channelPalette->createGroup();
 }
 
@@ -1925,7 +1925,7 @@ void NeuroscopeApp::slotResetGains(){
 void NeuroscopeApp::slotSelectAll(){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->getWidget())->isA("ChannelPalette")){
+    if((current->widget())->isA("ChannelPalette")){
         //update the 2 palettes
         spikeChannelPalette->selectAllChannels();
         displayChannelPalette->selectAllChannels();
@@ -1935,18 +1935,18 @@ void NeuroscopeApp::slotSelectAll(){
     }
     else{
         //Update the selected items of the current palette
-        if((current->getWidget())->isA("ItemPalette")){
+        if((current->widget())->isA("ItemPalette")){
             QString name = current->name();
             //update the cluster palette
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 Q3ValueList<int> clustersToHide;
                 doc->showAllClustersExcept(clusterPalette,view,clustersToHide);
             }
             //update the event palette
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 doc->showAllEvents(eventPalette,view);
             }
@@ -1959,7 +1959,7 @@ void NeuroscopeApp::slotSelectAll(){
 void NeuroscopeApp::slotDeselectAll(){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->getWidget())->isA("ChannelPalette")){
+    if((current->widget())->isA("ChannelPalette")){
         //update the 2 palettes
         spikeChannelPalette->deselectAllChannels();
         displayChannelPalette->deselectAllChannels();
@@ -1969,18 +1969,18 @@ void NeuroscopeApp::slotDeselectAll(){
     }
     else{
         //Update the selected items of the current palette
-        if((current->getWidget())->isA("ItemPalette")){
+        if((current->widget())->isA("ItemPalette")){
             QString name = current->name();
             //update the cluster palette
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 doc->deselectAllClusters(clusterPalette,view);
                 //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
             }
             //update the event palette
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 doc->deselectAllEvents(eventPalette,view);
                 //KDAB_PENDING slotStateChanged("noEventBrowsingState");
@@ -1995,11 +1995,11 @@ void NeuroscopeApp::slotSelectAllWO01(){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
     //Update the selected items of the current palette
-    if((current->getWidget())->isA("ItemPalette")){
+    if((current->widget())->isA("ItemPalette")){
         QString name = current->name();
         //update the cluster palette
         if(name.contains("clusterPanel")){
-            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
             NeuroscopeView* view = activeView();
             Q3ValueList<int> clustersToHide;
             clustersToHide.append(0);
@@ -2043,7 +2043,7 @@ void NeuroscopeApp::slotClustersWaveforms(){
 void NeuroscopeApp::slotDiscardChannels(){
     //Get the active palette.
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
     channelPalette->discardChannels();
 }
 
@@ -2059,7 +2059,7 @@ void NeuroscopeApp::slotKeepChannels(){
     //The order in which the palettes are updated matters. The first one will give the new color for the
     //channels which change status
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if((current->getWidget()) == displayChannelPalette){
+    if((current->widget()) == displayChannelPalette){
         displayChannelPalette->updateSkipStatus(selectedChannels,false);
         spikeChannelPalette->updateSkipStatus(selectedChannels,false);
     }
@@ -2100,7 +2100,7 @@ void NeuroscopeApp::slotChannelsDiscarded(const Q3ValueList<int>& discarded){
 
     //Update the inactive palette
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
 
     if(channelPalette == displayChannelPalette) spikeChannelPalette->discardChannels(discarded);
     else displayChannelPalette->discardChannels(discarded);
@@ -2112,20 +2112,20 @@ void NeuroscopeApp::slotChannelsDiscarded(const Q3ValueList<int>& discarded){
 void NeuroscopeApp::slotShowChannels(){
     //Get the active palette if there are 2 or the displayChannelPalette otherwise.
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
     channelPalette->showChannels();
 }
 
 void NeuroscopeApp::slotHideChannels(){
     //Get the active palette if there are 2 or the displayChannelPalette otherwise.
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
     channelPalette->hideChannels();
 }
 
 void NeuroscopeApp::slotTabChange(QWidget* widget){
     QDockWidget* display = dynamic_cast<QDockWidget*>(widget);
-    NeuroscopeView* activeView = dynamic_cast<NeuroscopeView*>(display->getWidget());
+    NeuroscopeView* activeView = dynamic_cast<NeuroscopeView*>(display->widget());
 
     isInit = true; //prevent the KToggleAction to trigger during initialisation
 
@@ -2153,7 +2153,7 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->getWidget())->isA("ChannelPalette")){
+    if((current->widget())->isA("ChannelPalette")){
         //update the channel palettes
         displayChannelPalette->hideUnselectAllChannels();
         spikeChannelPalette->hideUnselectAllChannels();
@@ -2179,9 +2179,9 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
     //Disable some actions when no document is open (see the klustersui.rc file)
-    if((current->getWidget())->isA("ChannelPalette")){
+    if((current->widget())->isA("ChannelPalette")){
         if(editMode->isChecked()){
-            if((current->getWidget()) == displayChannelPalette){
+            if((current->widget()) == displayChannelPalette){
                 //KDAB_PENDING slotStateChanged("displayChannelState");
             }
             else{
@@ -2207,10 +2207,10 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     else{
         //KDAB_PENDING slotStateChanged("noChannelState");
         //Update the selected items of the current palette
-        if((current->getWidget())->isA("ItemPalette")){
+        if((current->widget())->isA("ItemPalette")){
             QString name = current->name();
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 Q3ValueList<QString>::iterator iterator;
                 for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
@@ -2229,7 +2229,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
             }
             //update the event palettes
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
                 NeuroscopeView* view = activeView();
                 Q3ValueList<QString>::iterator iterator;
                 for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
@@ -2296,7 +2296,7 @@ void NeuroscopeApp::slotDisplayClose(){
             tabsParent = 0L;
         }
         //Remove the view from the document list
-        NeuroscopeView* view = dynamic_cast<NeuroscopeView*>(current->getWidget());
+        NeuroscopeView* view = dynamic_cast<NeuroscopeView*>(current->widget());
         doc->removeView(view);
 
         //Delete the view
@@ -2411,9 +2411,9 @@ void NeuroscopeApp::slotDisplayClose(){
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(0));
-                if((current->getWidget())->isA("ChannelPalette")){
+                if((current->widget())->isA("ChannelPalette")){
                     current = static_cast<QDockWidget*>(paletteTabsParent->page(1));
-                    if((current->getWidget())->isA("ChannelPalette"))
+                    if((current->widget())->isA("ChannelPalette"))
                         current = static_cast<QDockWidget*>(paletteTabsParent->page(2));
                 }
                 paletteTabsParent->removePage(current);
@@ -2515,7 +2515,7 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
         if(tabsParent != NULL) disconnect(tabsParent,0,0,0);
 
         //The grandParent's widget is the QTabWidget regrouping all the tabs
-        tabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
+        tabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
@@ -2550,7 +2550,7 @@ void NeuroscopeApp::slotEditMode(){
 
     if(editMode->isChecked()){
         //KDAB_PENDING slotStateChanged("editState");
-        if((current->getWidget()) == displayChannelPalette){
+        if((current->widget()) == displayChannelPalette){
             //KDAB_PENDING slotStateChanged("displayChannelState");
         }
         else{
@@ -2563,7 +2563,7 @@ void NeuroscopeApp::slotEditMode(){
         doc->setNoneEditMode(view);
         select = false;
 
-        if((current->getWidget())->isA("ChannelPalette")){
+        if((current->widget())->isA("ChannelPalette")){
             //the 2 palettes have the same selected channels
             displayChannelPalette->selectionTool();
         }
@@ -2611,7 +2611,7 @@ void NeuroscopeApp::slotChannelsSelected(const Q3ValueList<int>& selectedIds){
     else activeView()->setSelectedChannels(selectedIds);
 
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
 
     //Update the selection of the inactive palette.
     if(channelPalette == displayChannelPalette) spikeChannelPalette->selectChannels(selectedIds);
@@ -2621,8 +2621,8 @@ void NeuroscopeApp::slotChannelsSelected(const Q3ValueList<int>& selectedIds){
 void NeuroscopeApp::slotIncreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if(current->getWidget()->isA("ChannelPalette")){
-        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    if(current->widget()->isA("ChannelPalette")){
+        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
         activeView()->increaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else
@@ -2634,8 +2634,8 @@ void NeuroscopeApp::slotIncreaseSelectedChannelsAmplitude(){
 void NeuroscopeApp::slotDecreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if(current->getWidget()->isA("ChannelPalette")){
-        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->getWidget());
+    if(current->widget()->isA("ChannelPalette")){
+        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
         activeView()->decreaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else
@@ -2648,21 +2648,20 @@ void NeuroscopeApp::saveSession(){
     if(eventsModified){
         int eventSaveStatus = doc->saveEventFiles();
         if(eventSaveStatus != IO_Ok)
-            KMessageBox::error(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."),
-                               tr("I/O Error !"));
+            QMessageBox::critical(0,tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."));
         else eventsModified = false;
     }
     //Save the session
     int saveStatus = doc->saveSession();
     if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
-        KMessageBox::error(0,tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                " You may consider saving your session file to another location using the Save As entry in the File menu."), tr("I/O Error !"));
+        QMessageBox::critical(0, tr("I/O Error !"),tr("The current session could not be saved possibly because of insufficient file access permissions."
+                                " You may consider saving your session file to another location using the Save As entry in the File menu."));
     }
     else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
-        KMessageBox::error(0,tr("The current session could not be saved because the parameter file is incorrect."), tr("Parsing error !"));
+        QMessageBox::critical(0, tr("Parsing error !"),tr("The current session could not be saved because the parameter file is incorrect."));
     }
     else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
-        KMessageBox::error(0,tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), tr("Writing error !"));
+        QMessageBox::critical(0, tr("Writing error !"),tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"));
     }
     else{
         groupsModified = false;
@@ -2675,8 +2674,8 @@ void NeuroscopeApp::slotSessionSaveAs(){
     if(eventsModified){
         int eventSaveStatus = doc->saveEventFiles();
         if(eventSaveStatus != IO_Ok)
-            KMessageBox::error(0,tr("The event file(s) could not be saved possibly because of insufficient file access permissions."),
-                               tr("I/O Error !"));
+            QMessageBox::critical(0,tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions.")
+                               );
         else eventsModified = false;
     }
     //Save the session
@@ -2685,13 +2684,13 @@ void NeuroscopeApp::slotSessionSaveAs(){
     if(!url.isEmpty()){
         int saveStatus = doc->saveSession(url);
         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
-            KMessageBox::error(0,tr("The current session could not be saved possibly because of insufficient file access permissions."), tr("I/O Error !"));
+            QMessageBox::critical(0, tr("I/O Error !"),tr("The current session could not be saved possibly because of insufficient file access permissions."));
         }
         else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
-            KMessageBox::error(0,tr("The current session could not be saved because the parameter file is incorrect."), tr("Parsing error !"));
+            QMessageBox::critical(0, tr("Parsing error !"),tr("The current session could not be saved because the parameter file is incorrect."));
         }
         else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
-            KMessageBox::error(0,tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"), tr("Writing error !"));
+            QMessageBox::critical(0, tr("Writing error !"),tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"));
         }
         else{
             groupsModified = false;
@@ -2737,37 +2736,38 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
         int returnStatus = doc->loadClusterFile(*iterator,view);
         if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("Could not load the file " + static_cast<QString>(*iterator).path()), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("Could not load the file " + static_cast<QString>(*iterator).path()));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),
+                                   tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::MISSING_FILE){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("There is no time file (.res) corresponding to the requested file " + static_cast<QString>(*iterator).path()), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("There is no time file (.res) corresponding to the requested file " + static_cast<QString>(*iterator).path()));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The number of spikes read in the requested file (" + static_cast<QString>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes read in the requested file (" + static_cast<QString>(*iterator).path() + ") or the corresponding time file (.res) does not correspond to number of spikes computed."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The number of spikes of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of spikes of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
@@ -2784,8 +2784,8 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
 void NeuroscopeApp::createClusterPalette(QString clusterFileId){  
 
     QDockWidget* clusterDock;
-    if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters", 0L,tr("Units"), tr("Units"));
-            else clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters", 0L,"");
+    if(displayPaletteHeaders) clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
+            else clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
             ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
     clusterDock->setWidget(clusterPalette);
     clusterFileList.append(clusterFileId);
@@ -2806,7 +2806,7 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
@@ -2848,8 +2848,8 @@ void NeuroscopeApp::addClusterFile(QString clusterFileId){
     for(int i = 0; i<paletteTabsParent->count();i++){
         QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
         QString name = current->name();
-        if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
-            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+        if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
+            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
             //Create the list
             clusterPalette->createItemList(doc->providerColorList(clusterFileId),clusterFileId,0);
             break;
@@ -2861,7 +2861,7 @@ void NeuroscopeApp::addClusterFile(QString clusterFileId){
 void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){  
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
+    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
         NeuroscopeView* view = activeView();
         doc->clusterColorUpdate(providerName,clusterId,view);
     }
@@ -2871,7 +2871,7 @@ void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
 void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,Q3ValueList<int> >& selection){ 
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
+    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
         QMap<QString,Q3ValueList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -2885,8 +2885,8 @@ void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,Q3ValueList<int> 
 void NeuroscopeApp::slotCloseClusterFile(){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("clusterPanel")){
-        ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
+    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
+        ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
         QString providerName = clusterPalette->selectedGroup();
 
         if(providerName != ""){
@@ -2934,12 +2934,12 @@ void NeuroscopeApp::loadPositionFile(QString url){
     int returnStatus = doc->loadPositionFile(url,view);
     if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
         QApplication::restoreOverrideCursor();
-        KMessageBox::error (this,tr("Could not load the file " + url.path()), tr("Error !"));
+        QMessageBox::critical (this, tr("Error !"),tr("Could not load the file " + url.path()));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
     if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
         QApplication::restoreOverrideCursor();
-        KMessageBox::error (0,tr("Incorrect file name (" + url.path() + "): extension missing."), tr("Error!"));
+        QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (" + url.path() + "): extension missing."));
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
@@ -2969,31 +2969,31 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
         int returnStatus = doc->loadEventFile(*iterator,view);
         if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("Could not load the file " + static_cast<QString>(*iterator).path()), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("Could not load the file " + static_cast<QString>(*iterator).path()));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (0,tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier)."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::CREATION_ERROR){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The number of events of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The number of events of the requested file (" + static_cast<QString>(*iterator).path() + ") could not be determined."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::INCORRECT_CONTENT){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The content of the requested file (" + static_cast<QString>(*iterator).path() + ") is incorrect (see file format information)."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The content of the requested file (" + static_cast<QString>(*iterator).path() + ") is incorrect (see file format information)."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
         else if(returnStatus == NeuroscopeDoc::ALREADY_OPENED){
             QApplication::restoreOverrideCursor();
-            KMessageBox::error (this,tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."), tr("Error!"));
+            QMessageBox::critical (this, tr("Error!"),tr("The requested file (" + static_cast<QString>(*iterator).path() + ") is already loaded."));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
@@ -3011,9 +3011,9 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
 void NeuroscopeApp::createEventPalette(QString eventFileId){
 
     QDockWidget* eventDock;
-    if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events", 0L,tr("Events"), tr("Events"));
-            else eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events", 0L,"");
-            ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
+    if(displayPaletteHeaders) eventDock = createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
+    else eventDock = createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
+    ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
     eventDock->setWidget(eventPalette);
     eventFileList.append(eventFileId);
 
@@ -3040,7 +3040,7 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->getWidget());
+    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
@@ -3070,8 +3070,8 @@ void NeuroscopeApp::addEventFile(QString eventFileId){
     for(int i = 0; i<paletteTabsParent->count();i++){
         QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
         QString name = current->name();
-        if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
-            ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
+        if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+            ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
             //Create the list
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
             break;
@@ -3085,7 +3085,7 @@ void NeuroscopeApp::addEventFile(QString eventFileId){
 void NeuroscopeApp::slotEventColorUpdate(int eventId,QString providerName){  
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
+    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
         doc->eventColorUpdate(providerName,eventId,view);
     }
@@ -3094,7 +3094,7 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId,QString providerName){
 void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,Q3ValueList<int> >& selection){  
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
+    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
         QMap<QString,Q3ValueList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -3108,8 +3108,8 @@ void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,Q3ValueList<int> >&
 void NeuroscopeApp::slotCloseEventFile(){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     QString name = current->name();
-    if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
-        ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
+    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+        ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
 
         NeuroscopeView* view = activeView();
         if(eventFileList.count() == 1) doc->removeEventFile(eventProvider,view,true);
@@ -3294,8 +3294,8 @@ ItemPalette* NeuroscopeApp::getEventPalette(){
     for(int i = 0; i< paletteTabsParent->count();++i){
         QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
         QString name = current->name();
-        if((current->getWidget())->isA("ItemPalette") && name.contains("eventPanel")){
-            eventPalette = static_cast<ItemPalette*>(current->getWidget());
+        if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+            eventPalette = static_cast<ItemPalette*>(current->widget());
             break;
         }
     }
