@@ -176,7 +176,7 @@ class NeuroscopeApp : public KDockMainWindow
    /**Informs the application that a position file has been loaded from the session file.*/
    inline void positionFileLoaded(){
     isPositionFileLoaded = true;
-    slotStateChanged("positionState");
+    //KDAB_PENDING slotStateChanged("positionState");
    };
       
    /**Tells if there are cluster files loaded.
@@ -237,26 +237,26 @@ class NeuroscopeApp : public KDockMainWindow
   /**Disables clusters browsing as no clusters have been selected for browsing.
   */
   inline void slotNoClustersToBrowse(){
-      slotStateChanged("noClusterBrowsingState");
+      //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
   }
 
   /**Enables clusters browsing as some clusters have been selected for browsing.
   */
   inline void slotClustersToBrowse(){
-      slotStateChanged("clusterBrowsingState");
+      //KDAB_PENDING slotStateChanged("clusterBrowsingState");
                                     }
 
 
   /**Disables events browsing as no events have been selected for browsing.
   */
   inline void slotNoEventsToBrowse(){
-      slotStateChanged("noEventBrowsingState");
+      //KDAB_PENDING slotStateChanged("noEventBrowsingState");
   }
   
   /**Enables events browsing as some events have been selected for browsing.
   */
   inline void slotEventsToBrowse(){
-      slotStateChanged("eventBrowsingState");
+      //KDAB_PENDING slotStateChanged("eventBrowsingState");
   }
 
   protected:

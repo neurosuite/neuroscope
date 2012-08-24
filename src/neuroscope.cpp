@@ -88,7 +88,7 @@ NeuroscopeApp::NeuroscopeApp():KDockMainWindow(0, "NeuroScope"),prefDialog(0L),d
     ///KDAB_PENDING fileOpenRecent->loadEntries(config);
 
     //Disable some actions at startup (see the neuroscope.rc file)
-    slotStateChanged("initState");
+    //KDAB_PENDING slotStateChanged("initState");
 }
 
 NeuroscopeApp::~NeuroscopeApp()
@@ -771,14 +771,14 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     palettePanel->setEnableDocking(KDockWidget::DockNone);
 
     //Enable some actions now that a document is open (see the klustersui.rc file)
-    slotStateChanged("documentState");
-    slotStateChanged("displayChannelState");
+    //KDAB_PENDING slotStateChanged("documentState");
+    //KDAB_PENDING slotStateChanged("displayChannelState");
     if(clusterRaster->isChecked()) {
-        slotStateChanged("clusterRasterState");
+        //KDAB_PENDING slotStateChanged("clusterRasterState");
     }
     else{
 
-        slotStateChanged("noClusterRasterState");
+        //KDAB_PENDING slotStateChanged("noClusterRasterState");
     }
 }
 
@@ -877,7 +877,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
 
         //Update the menu related to the display of events in the PositionView
         if(isPositionFileLoaded && !eventFileList.isEmpty()){
-            slotStateChanged("eventsInPositionViewEnableState");
+            //KDAB_PENDING slotStateChanged("eventsInPositionViewEnableState");
         }
 
         setCaption(url.path());
@@ -934,10 +934,10 @@ void NeuroscopeApp::updateBrowsingStatus(){
         }
 
         if(!palette->isBrowsingEnable()) {
-            slotStateChanged("noClusterBrowsingState");
+            //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
         }
         else {
-            slotStateChanged("clusterBrowsingState");
+            //KDAB_PENDING slotStateChanged("clusterBrowsingState");
         }
     }
     if(!eventFileList.isEmpty()){
@@ -960,10 +960,10 @@ void NeuroscopeApp::updateBrowsingStatus(){
         }
 
         if(!palette->isBrowsingEnable()){
-            slotStateChanged("noEventBrowsingState");
+            //KDAB_PENDING slotStateChanged("noEventBrowsingState");
         }
         else{
-            slotStateChanged("eventBrowsingState");
+            //KDAB_PENDING slotStateChanged("eventBrowsingState");
         }
     }
 }
@@ -1817,7 +1817,7 @@ void NeuroscopeApp::resetState(){
 
     clusterWaveforms->setChecked(false);
     clusterRaster->setChecked(true);
-    slotStateChanged("clusterRasterState");
+    //KDAB_PENDING slotStateChanged("clusterRasterState");
     clusterVerticalLines->setChecked(false);
     greyScale->setChecked(false);
     displayMode->setChecked(false);
@@ -1847,7 +1847,7 @@ void NeuroscopeApp::resetState(){
 
 
     //Disable some actions when no document is open (see the klustersui.rc file)
-    slotStateChanged("initState");
+    //KDAB_PENDING slotStateChanged("initState");
     setCaption("");
 }
 
@@ -1969,14 +1969,14 @@ void NeuroscopeApp::slotDeselectAll(){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->getWidget());
                 NeuroscopeView* view = activeView();
                 doc->deselectAllClusters(clusterPalette,view);
-                slotStateChanged("noClusterBrowsingState");
+                //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
             }
             //update the event palette
             if(name.contains("eventPanel")){
                 ItemPalette* eventPalette = static_cast<ItemPalette*>(current->getWidget());
                 NeuroscopeView* view = activeView();
                 doc->deselectAllEvents(eventPalette,view);
-                slotStateChanged("noEventBrowsingState");
+                //KDAB_PENDING slotStateChanged("noEventBrowsingState");
             }
             //update the spike palette
 
@@ -2019,11 +2019,11 @@ void NeuroscopeApp::slotClustersVerticalLines(){
 
 void NeuroscopeApp::slotClustersRaster(){
     if(clusterRaster->isChecked()) {
-        slotStateChanged("clusterRasterState");
+        //KDAB_PENDING slotStateChanged("clusterRasterState");
     }
     else{
 
-        slotStateChanged("noClusterRasterState");
+        //KDAB_PENDING slotStateChanged("noClusterRasterState");
     }
     NeuroscopeView* view = activeView();
     view->setClusterRaster(clusterRaster->isChecked());
@@ -2125,10 +2125,10 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
     clusterVerticalLines->setChecked(activeView->getClusterVerticalLines());
     clusterRaster->setChecked(activeView->getClusterRaster());
     if(clusterRaster->isChecked()) {
-        slotStateChanged("clusterRasterState");
+        //KDAB_PENDING slotStateChanged("clusterRasterState");
     }
     else{
-        slotStateChanged("noClusterRasterState");
+        //KDAB_PENDING slotStateChanged("noClusterRasterState");
     }
     clusterWaveforms->setChecked(activeView->getClusterWaveforms());
     showHideLabels->setChecked(activeView->getLabelStatus());
@@ -2175,16 +2175,16 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     if((current->getWidget())->isA("ChannelPalette")){
         if(editMode->isChecked()){
             if((current->getWidget()) == displayChannelPalette){
-                slotStateChanged("displayChannelState");
+                //KDAB_PENDING slotStateChanged("displayChannelState");
             }
             else{
 
-                slotStateChanged("spikeChannelState");
+                //KDAB_PENDING slotStateChanged("spikeChannelState");
             }
         }
         else{
 
-            slotStateChanged("enableEditState");
+            //KDAB_PENDING slotStateChanged("enableEditState");
         }
 
         //update the channel palettes
@@ -2198,7 +2198,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
         spikeChannelPalette->selectChannels(selectedChannels);
     }
     else{
-        slotStateChanged("noChannelState");
+        //KDAB_PENDING slotStateChanged("noChannelState");
         //Update the selected items of the current palette
         if((current->getWidget())->isA("ItemPalette")){
             QString name = current->name();
@@ -2211,13 +2211,13 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
                     const Q3ValueList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
                     clusterPalette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
                 }
-                slotStateChanged("clusterTabState");
+                //KDAB_PENDING slotStateChanged("clusterTabState");
 
                 if(!clusterPalette->isBrowsingEnable()) {
-                    slotStateChanged("noClusterBrowsingState");
+                    //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
                 }
                 else{
-                    slotStateChanged("clusterBrowsingState");
+                    //KDAB_PENDING slotStateChanged("clusterBrowsingState");
                 }
             }
             //update the event palettes
@@ -2230,12 +2230,12 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
                     const Q3ValueList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
                     eventPalette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
                 }
-                slotStateChanged("eventTabState");
+                //KDAB_PENDING slotStateChanged("eventTabState");
                 if(!eventPalette->isBrowsingEnable()){
-                    slotStateChanged("noEventBrowsingState");
+                    //KDAB_PENDING slotStateChanged("noEventBrowsingState");
                 }
                 else {
-                    slotStateChanged("eventBrowsingState");
+                    //KDAB_PENDING slotStateChanged("eventBrowsingState");
                 }
             }
 
@@ -2285,7 +2285,7 @@ void NeuroscopeApp::slotDisplayClose(){
         displayCount --;
         //If there is only one display left, the group of tabs will be deleted so we set tabsParent to null
         if(nbOfTabs == 2){
-            slotStateChanged("noTabState");
+            //KDAB_PENDING slotStateChanged("noTabState");
             tabsParent = 0L;
         }
         //Remove the view from the document list
@@ -2514,7 +2514,7 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
         //the active display change.
         connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
 
-        slotStateChanged("tabState");
+        //KDAB_PENDING slotStateChanged("tabState");
 
         //Back to enable dock to the left side only
         mainDock->setDockSite(KDockWidget::DockLeft);
@@ -2542,16 +2542,16 @@ void NeuroscopeApp::slotEditMode(){
     KDockWidget* current = static_cast<KDockWidget*>(paletteTabsParent->currentPage());
 
     if(editMode->isChecked()){
-        slotStateChanged("editState");
+        //KDAB_PENDING slotStateChanged("editState");
         if((current->getWidget()) == displayChannelPalette){
-            slotStateChanged("displayChannelState");
+            //KDAB_PENDING slotStateChanged("displayChannelState");
         }
         else{
-            slotStateChanged("spikeChannelState");
+            //KDAB_PENDING slotStateChanged("spikeChannelState");
         }
     }
     else{
-        slotStateChanged("noEditState");
+        //KDAB_PENDING slotStateChanged("noEditState");
         NeuroscopeView* view = activeView();
         doc->setNoneEditMode(view);
         select = false;
@@ -2583,7 +2583,7 @@ void NeuroscopeApp::slotSynchronize(){
     //show all the encapsulated widgets of all controlled dockwidgets
     dockManager->activate();
 
-    slotStateChanged("displayChannelState");
+    //KDAB_PENDING slotStateChanged("displayChannelState");
 
 }
 
@@ -2824,14 +2824,14 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     connect(clusterPalette,SIGNAL(noClustersToBrowse()),this, SLOT(slotNoClustersToBrowse()));
     connect(clusterPalette,SIGNAL(clustersToBrowse()),this, SLOT(slotClustersToBrowse()));
 
-    slotStateChanged("clusterState");
+    //KDAB_PENDING slotStateChanged("clusterState");
     //Waveforms are allowed only for dat and fil files.
     if(filePath.contains(".dat")||filePath.contains(".fil")) {
-        slotStateChanged("datState");
+        //KDAB_PENDING slotStateChanged("datState");
     }
     else{
 
-        slotStateChanged("noDatState");
+        //KDAB_PENDING slotStateChanged("noDatState");
     }
 }
 
@@ -2892,16 +2892,16 @@ void NeuroscopeApp::slotCloseClusterFile(){
             if(clusterFileList.isEmpty()){
                 paletteTabsParent->removePage(current);
                 delete current;
-                slotStateChanged("noClusterState");
+                //KDAB_PENDING slotStateChanged("noClusterState");
             }
             else{
-                slotStateChanged("clusterState");
+                //KDAB_PENDING slotStateChanged("clusterState");
                 if(!clusterPalette->isBrowsingEnable()) {
-                    slotStateChanged("noClusterBrowsingState");
+                    //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
                 }
                 else{
 
-                    slotStateChanged("clusterBrowsingState");
+                    //KDAB_PENDING slotStateChanged("clusterBrowsingState");
                 }
             }
         }
@@ -2940,9 +2940,9 @@ void NeuroscopeApp::loadPositionFile(QString url){
         isPositionFileLoaded = true;
         positionViewToggle->setChecked(true);
 
-        slotStateChanged("positionState");
+        //KDAB_PENDING slotStateChanged("positionState");
         if(!eventFileList.isEmpty()){
-            slotStateChanged("eventsInPositionViewEnableState");
+            //KDAB_PENDING slotStateChanged("eventsInPositionViewEnableState");
         }
     }
 
@@ -3051,9 +3051,9 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     // allow others to dock to the left side only
     eventDock->setDockSite(KDockWidget::DockRight);
 
-    slotStateChanged("eventState");
+    //KDAB_PENDING slotStateChanged("eventState");
     if(isPositionFileLoaded) {
-        slotStateChanged("eventsInPositionViewEnableState");
+        //KDAB_PENDING slotStateChanged("eventsInPositionViewEnableState");
     }
 }
 
@@ -3069,7 +3069,7 @@ void NeuroscopeApp::addEventFile(QString eventFileId){
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
             break;
             if(isPositionFileLoaded) {
-                slotStateChanged("eventsInPositionViewEnableState");
+                //KDAB_PENDING slotStateChanged("eventsInPositionViewEnableState");
             }
         }
     }
@@ -3116,17 +3116,17 @@ void NeuroscopeApp::slotCloseEventFile(){
             currentNbUndo = 0;
             currentNbRedo = 0;
             delete current;
-            slotStateChanged("noEventState");
+            //KDAB_PENDING slotStateChanged("noEventState");
             showEventsInPositionView->setChecked(false);
         }
         else{
-            slotStateChanged("eventState");
+            //KDAB_PENDING slotStateChanged("eventState");
             if(!eventPalette->isBrowsingEnable()) {
-                slotStateChanged("noEventBrowsingState");
+                //KDAB_PENDING slotStateChanged("noEventBrowsingState");
             }
             else{
 
-                slotStateChanged("eventBrowsingState");
+                //KDAB_PENDING slotStateChanged("eventBrowsingState");
             }
         }
     }
@@ -3148,8 +3148,8 @@ void NeuroscopeApp::slotEventModified(QString providerName,int selectedEventId,d
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;
-    slotStateChanged("undoState");
-    slotStateChanged("emptyRedoState");
+    //KDAB_PENDING slotStateChanged("undoState");
+    //KDAB_PENDING slotStateChanged("emptyRedoState");
     doc->eventModified(providerName,selectedEventId,time,newTime,activeView());
 }
 
@@ -3159,7 +3159,7 @@ void NeuroscopeApp::slotUndo()
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     currentNbUndo = 0;
-    slotStateChanged("emptyUndoState");
+    //KDAB_PENDING slotStateChanged("emptyUndoState");
     currentNbRedo = 1;
     eventsModified = true;//in case the user saved and then undo, this will allowed to save again
     undoRedoInprocess = true;
@@ -3176,8 +3176,8 @@ void NeuroscopeApp::slotRedo()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     currentNbUndo = 1;
     currentNbRedo = 0;
-    slotStateChanged("undoState");
-    slotStateChanged("emptyRedoState");
+    //KDAB_PENDING slotStateChanged("undoState");
+    //KDAB_PENDING slotStateChanged("emptyRedoState");
     eventsModified = true;//in case the user saved and then undo, this will allowed to save again
     undoRedoInprocess = true;
     doc->redo(activeView());
@@ -3196,8 +3196,8 @@ void NeuroscopeApp::slotEventRemoved(QString providerName,int selectedEventId,do
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;
-    slotStateChanged("undoState");
-    slotStateChanged("emptyRedoState");
+    //KDAB_PENDING slotStateChanged("undoState");
+    //KDAB_PENDING slotStateChanged("emptyRedoState");
     doc->eventRemoved(providerName,selectedEventId,time,activeView());
 }
 
@@ -3310,8 +3310,8 @@ void NeuroscopeApp::slotEventAdded(QString providerName,QString addEventDescript
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;
-    slotStateChanged("undoState");
-    slotStateChanged("emptyRedoState");
+    //KDAB_PENDING slotStateChanged("undoState");
+    //KDAB_PENDING slotStateChanged("emptyRedoState");
     doc->eventAdded(providerName,addEventDescription,time,activeView());
 }
 
@@ -3321,7 +3321,7 @@ void NeuroscopeApp::slotClosePositionFile(){
     isPositionFileLoaded = false;
     positionViewToggle->setChecked(false);
     showEventsInPositionView->setChecked(false);
-    slotStateChanged("noPositionState");
+    //KDAB_PENDING slotStateChanged("noPositionState");
 }
 
 void NeuroscopeApp::slotUpdateEventsToSkip(QString groupName,const Q3ValueList<int>& eventsToSkip){
