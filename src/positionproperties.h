@@ -195,7 +195,7 @@ public slots:
             QPixmap pixmap;
             pixmap.resize(getWidth(),getHeight());
             pixmap.fill(Qt::black);
-            backgroundPixmap->setPixmap(pixmap);
+            this->backgroundPixmap->setPixmap(pixmap);
         }
     }
 
@@ -203,7 +203,8 @@ public slots:
 private slots:
     inline void updateBackgroundImage(){
         QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
-        if(image != "") setBackgroundImage(image);
+        if(!image.isEmpty())
+            setBackgroundImage(image);
     }
 
     inline void updateBackgroundImage(const QString& image){
@@ -212,7 +213,7 @@ private slots:
             QPixmap pixmap;
             pixmap.resize(getWidth(),getHeight());
             pixmap.fill(Qt::black);
-            backgroundPixmap->setPixmap(pixmap);
+            this->backgroundPixmap->setPixmap(pixmap);
         }
     }
 

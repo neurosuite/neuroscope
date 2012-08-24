@@ -156,7 +156,9 @@ public:
     inline void setEnabledCurrentSamplingRate(bool state){properties->setCurrentSamplingRateEnabled(state);}
 
     /**Shows the page containing the position information in front.*/
-    inline void showPositionPage(){showPage(positionPageIndex);}
+    inline void showPositionPage(){
+        //KDAB_PENDING showPage(positionPageIndex);
+    }
 
 public slots:
     /** Will be called when any properties except the number of channels has been modified.*/
