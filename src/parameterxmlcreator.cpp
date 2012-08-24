@@ -38,336 +38,336 @@ using namespace neuroscope;
 const QString  ParameterXmlCreator::parameterVersion = "1.0";
 
 ParameterXmlCreator::ParameterXmlCreator():doc(){
- //create the processing instruction
- QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
- doc.appendChild(processingInstruction);
+    //create the processing instruction
+    QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
+    doc.appendChild(processingInstruction);
 
- //Create the root element and its attributes.
- root = doc.createElement(PARAMETERS);
- root.setAttribute(VERSION,parameterVersion);
- root.setAttribute(CREATOR, QString::fromLatin1("neuroscope-%1").arg(NEUROSCOPE_VERSION));
- doc.appendChild(root);
+    //Create the root element and its attributes.
+    root = doc.createElement(PARAMETERS);
+    root.setAttribute(VERSION,parameterVersion);
+    root.setAttribute(CREATOR, QString::fromLatin1("neuroscope-%1").arg(NEUROSCOPE_VERSION));
+    doc.appendChild(root);
 }
 
 ParameterXmlCreator::~ParameterXmlCreator(){}
 
 bool ParameterXmlCreator::writeTofile(const QString& url){ 
- QFile parameterFile(url);
- bool status = parameterFile.open(QIODevice::WriteOnly);
- if(!status) return status;
+    QFile parameterFile(url);
+    bool status = parameterFile.open(QIODevice::WriteOnly);
+    if(!status) return status;
 
- QDomElement neuroscope = doc.createElement(NEUROSCOPE);
- neuroscope.setAttribute(VERSION,NEUROSCOPE_VERSION);
- neuroscope.appendChild(miscellaneous);
- neuroscope.appendChild(neuroscopeVideo);
- if(!spikes.isNull()) neuroscope.appendChild(spikes);
- neuroscope.appendChild(channels);
- 
- root.appendChild(acquisitionSystem);
- if(!video.isNull())root.appendChild(video);
- root.appendChild(lfp);
- if(!files.isNull()) root.appendChild(files);
- root.appendChild(anatomicalDescription);
- root.appendChild(spikeDetection);
- root.appendChild(neuroscope);
+    QDomElement neuroscope = doc.createElement(NEUROSCOPE);
+    neuroscope.setAttribute(VERSION,NEUROSCOPE_VERSION);
+    neuroscope.appendChild(miscellaneous);
+    neuroscope.appendChild(neuroscopeVideo);
+    if(!spikes.isNull()) neuroscope.appendChild(spikes);
+    neuroscope.appendChild(channels);
 
- QString xmlDocument = doc.toString();
- 
- Q3TextStream stream(&parameterFile);
- stream<< xmlDocument;
- parameterFile.close();
- 
- return true;
+    root.appendChild(acquisitionSystem);
+    if(!video.isNull())root.appendChild(video);
+    root.appendChild(lfp);
+    if(!files.isNull()) root.appendChild(files);
+    root.appendChild(anatomicalDescription);
+    root.appendChild(spikeDetection);
+    root.appendChild(neuroscope);
+
+    QString xmlDocument = doc.toString();
+
+    Q3TextStream stream(&parameterFile);
+    stream<< xmlDocument;
+    parameterFile.close();
+
+    return true;
 }
 
 void ParameterXmlCreator::setAcquisitionSystemInformation(int resolution,int nbChannels,double samplingRate,int voltageRange,int amplification,int offset){
- acquisitionSystem = doc.createElement(ACQUISITION);
+    acquisitionSystem = doc.createElement(ACQUISITION);
 
- QDomElement resolutionElement = doc.createElement(BITS);
- QDomText resolutionValue = doc.createTextNode(QString("%1").arg(resolution));
- resolutionElement.appendChild(resolutionValue);
+    QDomElement resolutionElement = doc.createElement(BITS);
+    QDomText resolutionValue = doc.createTextNode(QString("%1").arg(resolution));
+    resolutionElement.appendChild(resolutionValue);
 
- QDomElement nbChannelsElement = doc.createElement(NB_CHANNELS);
- QDomText nbChannelsValue = doc.createTextNode(QString("%1").arg(nbChannels));
- nbChannelsElement.appendChild(nbChannelsValue);
+    QDomElement nbChannelsElement = doc.createElement(NB_CHANNELS);
+    QDomText nbChannelsValue = doc.createTextNode(QString("%1").arg(nbChannels));
+    nbChannelsElement.appendChild(nbChannelsValue);
 
- QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
- QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate));
- samplingRateElement.appendChild(samplingRateValue);
+    QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
+    QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate));
+    samplingRateElement.appendChild(samplingRateValue);
 
- QDomElement voltageRangeElement = doc.createElement(VOLTAGE_RANGE);
- QDomText voltageRangeValue = doc.createTextNode(QString("%1").arg(voltageRange));
- voltageRangeElement.appendChild(voltageRangeValue);
+    QDomElement voltageRangeElement = doc.createElement(VOLTAGE_RANGE);
+    QDomText voltageRangeValue = doc.createTextNode(QString("%1").arg(voltageRange));
+    voltageRangeElement.appendChild(voltageRangeValue);
 
- QDomElement amplificationElement = doc.createElement(AMPLIFICATION);
- QDomText amplificationValue = doc.createTextNode(QString("%1").arg(amplification));
- amplificationElement.appendChild(amplificationValue);
-  
- QDomElement offsetElement = doc.createElement(OFFSET);
- QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
- offsetElement.appendChild(offsetValue);
- 
- acquisitionSystem.appendChild(resolutionElement);
- acquisitionSystem.appendChild(nbChannelsElement);
- acquisitionSystem.appendChild(samplingRateElement);
- acquisitionSystem.appendChild(voltageRangeElement);
- acquisitionSystem.appendChild(amplificationElement); 
- acquisitionSystem.appendChild(offsetElement); 
+    QDomElement amplificationElement = doc.createElement(AMPLIFICATION);
+    QDomText amplificationValue = doc.createTextNode(QString("%1").arg(amplification));
+    amplificationElement.appendChild(amplificationValue);
+
+    QDomElement offsetElement = doc.createElement(OFFSET);
+    QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
+    offsetElement.appendChild(offsetValue);
+
+    acquisitionSystem.appendChild(resolutionElement);
+    acquisitionSystem.appendChild(nbChannelsElement);
+    acquisitionSystem.appendChild(samplingRateElement);
+    acquisitionSystem.appendChild(voltageRangeElement);
+    acquisitionSystem.appendChild(amplificationElement);
+    acquisitionSystem.appendChild(offsetElement);
 }
 
 void ParameterXmlCreator::setLfpInformation(double lfpSamplingRate){
- lfp = doc.createElement(FIELD_POTENTIALS);
- QDomElement lfpElement = doc.createElement(LFP_SAMPLING_RATE);
- QDomText lfpValue = doc.createTextNode(QString("%1").arg(lfpSamplingRate));
- lfpElement.appendChild(lfpValue);
+    lfp = doc.createElement(FIELD_POTENTIALS);
+    QDomElement lfpElement = doc.createElement(LFP_SAMPLING_RATE);
+    QDomText lfpValue = doc.createTextNode(QString("%1").arg(lfpSamplingRate));
+    lfpElement.appendChild(lfpValue);
 
- lfp.appendChild(lfpElement);
+    lfp.appendChild(lfpElement);
 }
 
 
 void ParameterXmlCreator::setMiscellaneousInformation(float screenGain,QString traceBackgroundImage){
- miscellaneous = doc.createElement(MISCELLANEOUS);
+    miscellaneous = doc.createElement(MISCELLANEOUS);
 
- QDomElement gainElement = doc.createElement(SCREENGAIN);
- QDomText gainValue = doc.createTextNode(QString("%1").arg(screenGain));
- gainElement.appendChild(gainValue);
- 
- QDomElement imageElement = doc.createElement(TRACE_BACKGROUND_IMAGE);
- QDomText imageValue = doc.createTextNode(QString("%1").arg(traceBackgroundImage));
- imageElement.appendChild(imageValue); 
+    QDomElement gainElement = doc.createElement(SCREENGAIN);
+    QDomText gainValue = doc.createTextNode(QString("%1").arg(screenGain));
+    gainElement.appendChild(gainValue);
 
- miscellaneous.appendChild(gainElement);
- miscellaneous.appendChild(imageElement);
+    QDomElement imageElement = doc.createElement(TRACE_BACKGROUND_IMAGE);
+    QDomText imageValue = doc.createTextNode(QString("%1").arg(traceBackgroundImage));
+    imageElement.appendChild(imageValue);
+
+    miscellaneous.appendChild(gainElement);
+    miscellaneous.appendChild(imageElement);
 }
 
 
 
 void ParameterXmlCreator::setChannelDisplayInformation(ChannelColors* channelColors,QMap<int,int>& channelsGroups,QMap<int,int>& channelDefaultOffsets){
- channels = doc.createElement(CHANNELS);
- 
- QMap<int,int>::Iterator iterator;
- for(iterator = channelsGroups.begin(); iterator != channelsGroups.end(); ++iterator){
-  //Get the channel information (id, default offset and colors)
-  int channelId = iterator.key();
-  QColor color = channelColors->color(channelId);
-  QColor anatomicalColor = channelColors->groupColor(channelId);
-  QColor spikeColor = channelColors->spikeGroupColor(channelId);
-  int offset = channelDefaultOffsets[channelId];
+    channels = doc.createElement(CHANNELS);
 
-  QDomElement idElement = doc.createElement(CHANNEL);
-  QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
-  idElement.appendChild(idValue);
+    QMap<int,int>::Iterator iterator;
+    for(iterator = channelsGroups.begin(); iterator != channelsGroups.end(); ++iterator){
+        //Get the channel information (id, default offset and colors)
+        int channelId = iterator.key();
+        QColor color = channelColors->color(channelId);
+        QColor anatomicalColor = channelColors->groupColor(channelId);
+        QColor spikeColor = channelColors->spikeGroupColor(channelId);
+        int offset = channelDefaultOffsets[channelId];
 
-  QDomElement colorElement = doc.createElement(COLOR);
-  QDomText colorValue = doc.createTextNode(color.name());
-  colorElement.appendChild(colorValue);
+        QDomElement idElement = doc.createElement(CHANNEL);
+        QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
+        idElement.appendChild(idValue);
 
-  QDomElement anatomicalColorElement = doc.createElement(ANATOMY_COLOR);
-  QDomText anatomicalColorValue = doc.createTextNode(anatomicalColor.name());
-  anatomicalColorElement.appendChild(anatomicalColorValue);
+        QDomElement colorElement = doc.createElement(COLOR);
+        QDomText colorValue = doc.createTextNode(color.name());
+        colorElement.appendChild(colorValue);
 
-  QDomElement spikeColorElement = doc.createElement(SPIKE_COLOR);
-  QDomText spikeColorValue = doc.createTextNode(spikeColor.name());
-  spikeColorElement.appendChild(spikeColorValue);
-  
-  QDomElement channelDisplay = doc.createElement(CHANNEL_COLORS);
-  channelDisplay.appendChild(idElement);
-  channelDisplay.appendChild(colorElement);
-  channelDisplay.appendChild(anatomicalColorElement);
-  channelDisplay.appendChild(spikeColorElement);
+        QDomElement anatomicalColorElement = doc.createElement(ANATOMY_COLOR);
+        QDomText anatomicalColorValue = doc.createTextNode(anatomicalColor.name());
+        anatomicalColorElement.appendChild(anatomicalColorValue);
 
-  QDomElement idElement2 = doc.createElement(CHANNEL);
-  QDomText idValue2 = doc.createTextNode(QString("%1").arg(channelId));
-  idElement2.appendChild(idValue2);
-  
-  QDomElement offsetElement = doc.createElement(DEFAULT_OFFSET);
-  QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
-  offsetElement.appendChild(offsetValue);
-  
-  QDomElement channelOffset = doc.createElement(CHANNEL_OFFSET);
-  channelOffset.appendChild(idElement2);
-  channelOffset.appendChild(offsetElement);
-  
-  channels.appendChild(channelDisplay);
-  channels.appendChild(channelOffset);
- }
+        QDomElement spikeColorElement = doc.createElement(SPIKE_COLOR);
+        QDomText spikeColorValue = doc.createTextNode(spikeColor.name());
+        spikeColorElement.appendChild(spikeColorValue);
+
+        QDomElement channelDisplay = doc.createElement(CHANNEL_COLORS);
+        channelDisplay.appendChild(idElement);
+        channelDisplay.appendChild(colorElement);
+        channelDisplay.appendChild(anatomicalColorElement);
+        channelDisplay.appendChild(spikeColorElement);
+
+        QDomElement idElement2 = doc.createElement(CHANNEL);
+        QDomText idValue2 = doc.createTextNode(QString("%1").arg(channelId));
+        idElement2.appendChild(idValue2);
+
+        QDomElement offsetElement = doc.createElement(DEFAULT_OFFSET);
+        QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
+        offsetElement.appendChild(offsetValue);
+
+        QDomElement channelOffset = doc.createElement(CHANNEL_OFFSET);
+        channelOffset.appendChild(idElement2);
+        channelOffset.appendChild(offsetElement);
+
+        channels.appendChild(channelDisplay);
+        channels.appendChild(channelOffset);
+    }
 }
 
 void ParameterXmlCreator::setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
- anatomicalDescription = doc.createElement(ANATOMY);
- QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
+    anatomicalDescription = doc.createElement(ANATOMY);
+    QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
- //Create the anatomical groups
- QMap<int,Q3ValueList<int> >::Iterator iterator;
- //The iterator gives the keys sorted.
- for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
-  //the trash group is not stored
-  if(iterator.key() == 0) continue;
-  Q3ValueList<int> channelIds = iterator.data();
-  Q3ValueList<int>::iterator channelIterator;
+    //Create the anatomical groups
+    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    //The iterator gives the keys sorted.
+    for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
+        //the trash group is not stored
+        if(iterator.key() == 0) continue;
+        Q3ValueList<int> channelIds = iterator.data();
+        Q3ValueList<int>::iterator channelIterator;
 
-  QDomElement groupElement = doc.createElement(GROUP);
-  
-  for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
-   idElement.appendChild(idValue);
-   idElement.setAttribute(SKIP,skipStatus[*channelIterator]);
-   groupElement.appendChild(idElement);
-  }
+        QDomElement groupElement = doc.createElement(GROUP);
 
-  channelGroupsElement.appendChild(groupElement);
- }//end of groups loop
- 
- if(channelGroupsElement.hasChildNodes()) anatomicalDescription.appendChild(channelGroupsElement); 
+        for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            idElement.appendChild(idValue);
+            idElement.setAttribute(SKIP,skipStatus[*channelIterator]);
+            groupElement.appendChild(idElement);
+        }
+
+        channelGroupsElement.appendChild(groupElement);
+    }//end of groups loop
+
+    if(channelGroupsElement.hasChildNodes()) anatomicalDescription.appendChild(channelGroupsElement);
 }
 
 void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups){
- //The spikes element is a neuroscope specific element. The tag contains nbSamples and peakSampleIndex information used for all the spike groups 
- //in Neuroscope.
- spikes = doc.createElement(SPIKES);
- 
- QDomElement nbSamplesElement = doc.createElement(NB_SAMPLES);
- QDomText nbSamplesValue = doc.createTextNode(QString("%1").arg(nbSamples));
- nbSamplesElement.appendChild(nbSamplesValue);
+    //The spikes element is a neuroscope specific element. The tag contains nbSamples and peakSampleIndex information used for all the spike groups
+    //in Neuroscope.
+    spikes = doc.createElement(SPIKES);
 
- QDomElement peakElement = doc.createElement(PEAK_SAMPLE_INDEX);
- QDomText peakValue = doc.createTextNode(QString("%1").arg(peakSampleIndex));
- peakElement.appendChild(peakValue);
+    QDomElement nbSamplesElement = doc.createElement(NB_SAMPLES);
+    QDomText nbSamplesValue = doc.createTextNode(QString("%1").arg(nbSamples));
+    nbSamplesElement.appendChild(nbSamplesValue);
 
- spikes.appendChild(nbSamplesElement);
- spikes.appendChild(peakElement);
+    QDomElement peakElement = doc.createElement(PEAK_SAMPLE_INDEX);
+    QDomText peakValue = doc.createTextNode(QString("%1").arg(peakSampleIndex));
+    peakElement.appendChild(peakValue);
 
- /*******Creation of the spike groups******/
- spikeDetection = doc.createElement(SPIKE);
- QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
+    spikes.appendChild(nbSamplesElement);
+    spikes.appendChild(peakElement);
 
- //Create the spike groups  
- QMap<int,Q3ValueList<int> >::Iterator iterator;
- //The iterator gives the keys sorted.
- for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
-  //the trashs groups are not stored
-  if(iterator.key() == -1 || iterator.key() == 0) continue;
-  Q3ValueList<int> channelIds = iterator.data();
-  Q3ValueList<int>::iterator channelIterator;
+    /*******Creation of the spike groups******/
+    spikeDetection = doc.createElement(SPIKE);
+    QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
-  QDomElement groupElement = doc.createElement(GROUP);
-  QDomElement channelListElement = doc.createElement(CHANNELS);
+    //Create the spike groups
+    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    //The iterator gives the keys sorted.
+    for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
+        //the trashs groups are not stored
+        if(iterator.key() == -1 || iterator.key() == 0) continue;
+        Q3ValueList<int> channelIds = iterator.data();
+        Q3ValueList<int>::iterator channelIterator;
 
-  for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
-   idElement.appendChild(idValue);
-   channelListElement.appendChild(idElement);
-  }
+        QDomElement groupElement = doc.createElement(GROUP);
+        QDomElement channelListElement = doc.createElement(CHANNELS);
 
-  groupElement.appendChild(channelListElement);
-  channelGroupsElement.appendChild(groupElement);
- }//end of groups loop
+        for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            idElement.appendChild(idValue);
+            channelListElement.appendChild(idElement);
+        }
 
- 
- if(channelGroupsElement.hasChildNodes()) spikeDetection.appendChild(channelGroupsElement);
+        groupElement.appendChild(channelListElement);
+        channelGroupsElement.appendChild(groupElement);
+    }//end of groups loop
+
+
+    if(channelGroupsElement.hasChildNodes()) spikeDetection.appendChild(channelGroupsElement);
 }
 
 
 void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups){
- spikeDetection = doc.createElement(SPIKE);
+    spikeDetection = doc.createElement(SPIKE);
 
- QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
+    QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
- //Create the spike groups
- QMap<int,Q3ValueList<int> >::Iterator iterator;
- //The iterator gives the keys sorted.
- for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
-  //the trashs groups are not stored
-  if(iterator.key() == -1 || iterator.key() == 0) continue;
-  Q3ValueList<int> channelIds = iterator.data();
-  Q3ValueList<int>::iterator channelIterator;
+    //Create the spike groups
+    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    //The iterator gives the keys sorted.
+    for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
+        //the trashs groups are not stored
+        if(iterator.key() == -1 || iterator.key() == 0) continue;
+        Q3ValueList<int> channelIds = iterator.data();
+        Q3ValueList<int>::iterator channelIterator;
 
-  QDomElement groupElement = doc.createElement(GROUP);
-  QDomElement channelListElement = doc.createElement(CHANNELS);
+        QDomElement groupElement = doc.createElement(GROUP);
+        QDomElement channelListElement = doc.createElement(CHANNELS);
 
-  for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
-   idElement.appendChild(idValue);
-   channelListElement.appendChild(idElement);
-  }
+        for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            idElement.appendChild(idValue);
+            channelListElement.appendChild(idElement);
+        }
 
-  groupElement.appendChild(channelListElement);
-  channelGroupsElement.appendChild(groupElement);
- }//end of groups loop
+        groupElement.appendChild(channelListElement);
+        channelGroupsElement.appendChild(groupElement);
+    }//end of groups loop
 
 
- if(channelGroupsElement.hasChildNodes()) spikeDetection.appendChild(channelGroupsElement);
+    if(channelGroupsElement.hasChildNodes()) spikeDetection.appendChild(channelGroupsElement);
 }
 
 
 void ParameterXmlCreator::setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory){
- neuroscopeVideo = doc.createElement(VIDEO);
+    neuroscopeVideo = doc.createElement(VIDEO);
 
- QDomElement rotationElement = doc.createElement(ROTATE);
- QDomText rotationValue = doc.createTextNode(QString("%1").arg(rotation));
- rotationElement.appendChild(rotationValue);
+    QDomElement rotationElement = doc.createElement(ROTATE);
+    QDomText rotationValue = doc.createTextNode(QString("%1").arg(rotation));
+    rotationElement.appendChild(rotationValue);
 
- QDomElement flipElement = doc.createElement(FLIP);
- QDomText flipValue = doc.createTextNode(QString("%1").arg(flip));
- flipElement.appendChild(flipValue);
+    QDomElement flipElement = doc.createElement(FLIP);
+    QDomText flipValue = doc.createTextNode(QString("%1").arg(flip));
+    flipElement.appendChild(flipValue);
 
- QDomElement pathElement = doc.createElement(VIDEO_IMAGE);
- QDomText pathValue = doc.createTextNode(backgroundPath);
- pathElement.appendChild(pathValue);
- 
- QDomElement drawTrajectoryElement = doc.createElement(POSITIONS_BACKGROUND);
- QDomText drawTrajectoryValue = doc.createTextNode(QString("%1").arg(drawTrajectory));
- drawTrajectoryElement.appendChild(drawTrajectoryValue);
- 
- neuroscopeVideo.appendChild(rotationElement);
- neuroscopeVideo.appendChild(flipElement);
- neuroscopeVideo.appendChild(pathElement);
- neuroscopeVideo.appendChild(drawTrajectoryElement);
+    QDomElement pathElement = doc.createElement(VIDEO_IMAGE);
+    QDomText pathValue = doc.createTextNode(backgroundPath);
+    pathElement.appendChild(pathValue);
+
+    QDomElement drawTrajectoryElement = doc.createElement(POSITIONS_BACKGROUND);
+    QDomText drawTrajectoryValue = doc.createTextNode(QString("%1").arg(drawTrajectory));
+    drawTrajectoryElement.appendChild(drawTrajectoryValue);
+
+    neuroscopeVideo.appendChild(rotationElement);
+    neuroscopeVideo.appendChild(flipElement);
+    neuroscopeVideo.appendChild(pathElement);
+    neuroscopeVideo.appendChild(drawTrajectoryElement);
 }
 
 void ParameterXmlCreator::setVideoInformation(int width,int height){
- //The sampling rate used in NeuroScope is the one contained in the file information section.
- //The sampling rate contained in the video section correspond to the video acquisition system sampling rate and not the 
- //sampling rate used to create the position files.
- video = doc.createElement(VIDEO);
+    //The sampling rate used in NeuroScope is the one contained in the file information section.
+    //The sampling rate contained in the video section correspond to the video acquisition system sampling rate and not the
+    //sampling rate used to create the position files.
+    video = doc.createElement(VIDEO);
 
- QDomElement widthElement = doc.createElement(WIDTH);
- QDomText widthValue = doc.createTextNode(QString("%1").arg(width));
- widthElement.appendChild(widthValue);
+    QDomElement widthElement = doc.createElement(WIDTH);
+    QDomText widthValue = doc.createTextNode(QString("%1").arg(width));
+    widthElement.appendChild(widthValue);
 
- QDomElement heightElement = doc.createElement(HEIGHT);
- QDomText heightValue = doc.createTextNode(QString("%1").arg(height));
- heightElement.appendChild(heightValue);
+    QDomElement heightElement = doc.createElement(HEIGHT);
+    QDomText heightValue = doc.createTextNode(QString("%1").arg(height));
+    heightElement.appendChild(heightValue);
 
- video.appendChild(widthElement);
- video.appendChild(heightElement);
+    video.appendChild(widthElement);
+    video.appendChild(heightElement);
 }
 
 void ParameterXmlCreator::setSampleRateByExtension(QMap<QString,double> extensionSamplingRates){
- files = doc.createElement(FILES);
+    files = doc.createElement(FILES);
 
- QMap<QString,double>::Iterator iterator;
- for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
-  //Get the extension information (extension and sampling rate)
-  QString extension = iterator.key();
-  double samplingRate = iterator.data();
+    QMap<QString,double>::Iterator iterator;
+    for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
+        //Get the extension information (extension and sampling rate)
+        QString extension = iterator.key();
+        double samplingRate = iterator.data();
 
-  QDomElement extensionElement = doc.createElement(EXTENSION);
-  QDomText extensionValue = doc.createTextNode(extension);
-  extensionElement.appendChild(extensionValue);
+        QDomElement extensionElement = doc.createElement(EXTENSION);
+        QDomText extensionValue = doc.createTextNode(extension);
+        extensionElement.appendChild(extensionValue);
 
-  QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
-  QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate));
-  samplingRateElement.appendChild(samplingRateValue);
- 
-  QDomElement extensionSamplingRate = doc.createElement(neuroscope::FILE);
-  extensionSamplingRate.appendChild(extensionElement);
-  extensionSamplingRate.appendChild(samplingRateElement);
+        QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
+        QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate));
+        samplingRateElement.appendChild(samplingRateValue);
 
-  files.appendChild(extensionSamplingRate);
- } 
+        QDomElement extensionSamplingRate = doc.createElement(neuroscope::FILE);
+        extensionSamplingRate.appendChild(extensionElement);
+        extensionSamplingRate.appendChild(samplingRateElement);
+
+        files.appendChild(extensionSamplingRate);
+    }
 }
 

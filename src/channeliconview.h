@@ -39,36 +39,36 @@ using namespace std;
   */
 
 class ChannelIconView : public Q3IconView  {
-   Q_OBJECT
+    Q_OBJECT
 public:
-   ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
-   inline ~ChannelIconView(){};
-   
-  protected:
-   virtual Q3DragObject* dragObject();
-   virtual void contentsDropEvent(QDropEvent* event);
-   virtual void contentsMousePressEvent(QMouseEvent* event);
-   inline void contentsWheelEvent(QWheelEvent* event){event->accept();};
+    ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
+    inline ~ChannelIconView(){}
 
-  signals:
-   void channelsMoved(QString targetGroup,Q3IconViewItem* after);
-   void channelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
-   void dropLabel(int sourceId,int targetId,int start,int destination);
-   void moussePressWoModificators(QString sourceGroup);
+protected:
+    virtual Q3DragObject* dragObject();
+    virtual void contentsDropEvent(QDropEvent* event);
+    virtual void contentsMousePressEvent(QMouseEvent* event);
+    inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
-  public slots:
-    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;};
-      
-  protected slots:
-   void slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList);
+signals:
+    void channelsMoved(QString targetGroup,Q3IconViewItem* after);
+    void channelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void dropLabel(int sourceId,int targetId,int start,int destination);
+    void moussePressWoModificators(QString sourceGroup);
 
-  private:
-  /**Return 0 if it has to be before the first one.*/
-   Q3IconViewItem* findItemToInsertAfter(QPoint position);
+public slots:
+    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
-   /**True the drag and drop is allow, false otherwise.*/
-   bool drag;
-      
+protected slots:
+    void slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList);
+
+private:
+    /**Return 0 if it has to be before the first one.*/
+    Q3IconViewItem* findItemToInsertAfter(QPoint position);
+
+    /**True the drag and drop is allow, false otherwise.*/
+    bool drag;
+
 };
 
 #endif

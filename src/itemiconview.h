@@ -36,31 +36,31 @@ using namespace std;
   */
 
 class ItemIconView : public Q3IconView  {
-   Q_OBJECT
-  public:
-   ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
-   inline ~ItemIconView(){};
-  
-  private slots:
-   inline void slotMousePressed(int button,Q3IconViewItem* item){
-    emit mouseButtonPressed(button,item,this->name());
-   };
-  inline void contentsMouseReleaseEvent(QMouseEvent* event){
-    Q3IconView::contentsMouseReleaseEvent(event);
-    emit mouseReleased(this->name());
-   };
-   
-  
-  protected:
-   void contentsMousePressEvent(QMouseEvent* event);
-   inline void contentsWheelEvent(QWheelEvent* event){event->accept();};
-   
-  signals:
-   void mousePressWoModificators(QString sourceGroup);
-   void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
-   void mousePressWAltButton(QString sourceGroup,int index);
-   void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
-   void mouseReleased(QString sourceGroup);
+    Q_OBJECT
+public:
+    ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
+    inline ~ItemIconView(){}
+
+private slots:
+    inline void slotMousePressed(int button,Q3IconViewItem* item){
+        emit mouseButtonPressed(button,item,this->name());
+    }
+    inline void contentsMouseReleaseEvent(QMouseEvent* event){
+        Q3IconView::contentsMouseReleaseEvent(event);
+        emit mouseReleased(this->name());
+    }
+
+
+protected:
+    void contentsMousePressEvent(QMouseEvent* event);
+    inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
+
+signals:
+    void mousePressWoModificators(QString sourceGroup);
+    void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
+    void mousePressWAltButton(QString sourceGroup,int index);
+    void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
+    void mouseReleased(QString sourceGroup);
 
 };
 

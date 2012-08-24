@@ -19,8 +19,8 @@
 
 
 DataProvider::DataProvider(QString fileUrl):QObject(){
- //Download the file if need it
- fileName =fileUrl;
+    //Download the file if need it
+    fileName =fileUrl;
 }
 DataProvider::~DataProvider(){
 }

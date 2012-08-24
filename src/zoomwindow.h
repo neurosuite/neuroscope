@@ -2,8 +2,8 @@
                           floatrect.h  -  description
                              -------------------
     begin                : Thu Aug 21 2003
-    copyright            : (C) 2003 by 
-    email                : 
+    copyright            : (C) 2003 by
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,7 +22,7 @@
 #include <qpoint.h>
 #include <math.h>
 
-  /**
+/**
   * This class is used to enable zoom feature. It computes the dimensions of the QRect
   * (the window of a Qframe) corresponding to the part of the drawing
   * which will actually be drawn onto the widget.
@@ -34,31 +34,31 @@ class ZoomWindow {
 
 public: 
 
-/**
+    /**
 * Constructor using a QRect
 * @param rect initial rectangle.
 */
-  ZoomWindow(const QRect& rect);
-/**
+    ZoomWindow(const QRect& rect);
+    /**
 * Destructor
 */
-  ~ZoomWindow();
-/**
+    ~ZoomWindow();
+    /**
 * Conversion to a QRect
 */
-operator QRect() const;
+    operator QRect() const;
 
-/**
+    /**
 * Zooms the width and the height of the rectangle by @p factor and center it on the specified center (@p centerX, @p centerY).
 * @param factor zoom factor
 * @param centerX absciss of the center point for the newly zoomed rectangle
 * @param centerY ordinate of the center point for the newly zoomed rectangle
 * @return boolean indicating if the zoom has been done
 */
-bool zoom(float factor, float centerX, float centerY);
+    bool zoom(float factor, float centerX, float centerY);
 
 
-/**
+    /**
 * This is an overloaded member function, provided for convenience.
 * It behaves essentially like the above function.
 * Zoom the rectangle by @p factor and center it on @p center.
@@ -66,12 +66,12 @@ bool zoom(float factor, float centerX, float centerY);
 * @param center center point for the newly zoomed rectangle
 * @return boolean indicating if the zoom has been done
 */
-inline bool zoom(float factor, const QPoint& center){
-  return zoom(factor, center.x(), center.y());
-};
+    inline bool zoom(float factor, const QPoint& center){
+        return zoom(factor, center.x(), center.y());
+    }
 
 
-/**
+    /**
 * Zooms on the rectangle specified by two diagonal points (firstClickX,firstClickY) and (secondClickX,secondClickY).
 * @param firstClickX absciss of the first selected point
 * @param firstClickY ordinate of the first selected point
@@ -79,9 +79,9 @@ inline bool zoom(float factor, const QPoint& center){
 * @param secondClickY ordinate of the first selected point
 * @return boolean indicating if the zoom has been done
 */
-bool zoom(int firstClickX, int firstClickY, int secondClickX, int secondClickY);
+    bool zoom(int firstClickX, int firstClickY, int secondClickX, int secondClickY);
 
-/**
+    /**
 * This is an overloaded member function, provided for convenience.
 * It behaves essentially like the above function.
 * Zoom on the rectangle specified by two diagonal points @p firstPoint and @p secondPoint.
@@ -89,74 +89,74 @@ bool zoom(int firstClickX, int firstClickY, int secondClickX, int secondClickY);
 * @param secondPoint Qpoint of the first selected point
 * @return boolean indicating if the zoom has been done
 */
-inline bool zoom(QPoint firstPoint, QPoint secondPoint) {
-   return zoom(firstPoint.x(), firstPoint.y(), secondPoint.x(), secondPoint.y());
-};
+    inline bool zoom(QPoint firstPoint, QPoint secondPoint) {
+        return zoom(firstPoint.x(), firstPoint.y(), secondPoint.x(), secondPoint.y());
+    }
 
 protected:
-/**
+    /**
 * Make sure that the new window remains inside the intial boundaries.
 */
-void correctWindow();
+    void correctWindow();
 
 
 private:
-/**
+    /**
 * Left coordinate of the rectangle.
 */
-float left;
-/**
+    float left;
+    /**
 * Right coordinate of the rectangle.
 */
-float right;
-/**
+    float right;
+    /**
 * Bottom coordinate of the rectangle.
 */
-float bottom;
-/**
+    float bottom;
+    /**
 * Top coordinate of the rectangle.
 */
-float top;
+    float top;
 
 
-/**
+    /**
 * Initial left coordinate of the rectangle.
 */
-float initialLeft;
-/**
+    float initialLeft;
+    /**
 * Initial right coordinate of the rectangle.
 */
-float initialRight;
-/**
+    float initialRight;
+    /**
 * Initial bottom coordinate of the rectangle.
 */
-float initialBottom;
-/**
+    float initialBottom;
+    /**
 * Initial top coordinate of the rectangle.
 */
-float initialTop;
+    float initialTop;
 
-/**
+    /**
 * Minimum zoom allowed
 */
-static const float MIN_SCALE;
+    static const float MIN_SCALE;
 
-/**
+    /**
 * Maximum zoom allowed
 */
-static const float MAX_SCALE;
+    static const float MAX_SCALE;
 
 public:
 
-/**
+    /**
 * Resets the zoomWindow to its initialize state
 */
-inline void reset(){
- left   = initialLeft;
- right  = initialRight;
- top    = initialTop;
- bottom = initialBottom;
-};
+    inline void reset(){
+        left   = initialLeft;
+        right  = initialRight;
+        top    = initialTop;
+        bottom = initialBottom;
+    }
 
 };
 

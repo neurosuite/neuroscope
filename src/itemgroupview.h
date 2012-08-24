@@ -33,57 +33,57 @@ using namespace std;
   */
 
 class ItemGroupView : public Q3HBox  {
-   Q_OBJECT
+    Q_OBJECT
 public: 
-	inline ItemGroupView(QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),init(true){
+    inline ItemGroupView(QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),init(true){
 
-  //Set the groupview color, the foreground color depends on the background color
-    setPaletteBackgroundColor(backgroundColor);
-    int h;
-    int s;
-    int v;
-    backgroundColor.hsv(&h,&s,&v);
-    QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
-    setPaletteForegroundColor(legendColor);
+        //Set the groupview color, the foreground color depends on the background color
+        setPaletteBackgroundColor(backgroundColor);
+        int h;
+        int s;
+        int v;
+        backgroundColor.hsv(&h,&s,&v);
+        QColor legendColor;
+        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+        else legendColor = Qt::white;
+        setPaletteForegroundColor(legendColor);
 
-    setMargin(0);
-    setSpacing(0);
-    adjustSize();
+        setMargin(0);
+        setSpacing(0);
+        adjustSize();
 
-    setAcceptDrops(TRUE);
-  };
+        setAcceptDrops(TRUE);
+    }
 
-  inline ~ItemGroupView(){qDebug()<<"in ~ItemGroupView()";};
+    inline ~ItemGroupView(){qDebug()<<"in ~ItemGroupView()";}
 
-  inline void setIconView(Q3IconView* view){
-   iconView = view;
-  };
+    inline void setIconView(Q3IconView* view){
+        iconView = view;
+    }
 
 public slots:
-  inline void reAdjustSize(int parentWidth,int labelSize){
-   if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
-    init = false; 
-    int futurWidth = parentWidth ;
+    inline void reAdjustSize(int parentWidth,int labelSize){
+        if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
+            init = false;
+            int futurWidth = parentWidth ;
 
-    setFixedWidth(futurWidth);
-    int viewfuturWidth = width() - labelSize - 6;//give so space on the right
-    iconView->setFixedWidth(viewfuturWidth);
-    
-    if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-     setFixedHeight(iconView->contentsHeight());     
-   }
-   //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate    
-   if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-    setFixedHeight(iconView->contentsHeight());
-  };
+            setFixedWidth(futurWidth);
+            int viewfuturWidth = width() - labelSize - 6;//give so space on the right
+            iconView->setFixedWidth(viewfuturWidth);
+
+            if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+                setFixedHeight(iconView->contentsHeight());
+        }
+        //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate
+        if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+            setFixedHeight(iconView->contentsHeight());
+    }
 
 
- private:
-  Q3IconView* iconView;
+private:
+    Q3IconView* iconView;
 
-  bool init;
+    bool init;
 
 };
 

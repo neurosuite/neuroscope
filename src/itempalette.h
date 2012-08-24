@@ -47,7 +47,7 @@ class Q3IconView;
 class Q3IconViewItem;
 class ItemColors;
 
- /**
+/**
   * This class is used to create the cluster and event palettes of the application.
   * It receives the user selections and triggers the actions which have to be done.
   *@author Lynn Hazan
@@ -58,26 +58,26 @@ class ItemPalette : public Q3ScrollView
     
 public:
 
-    enum PaletteType {CLUSTER=0,EVENT=1};
+    enum PaletteType {CLUSTER=0,EVENT=1}
 
-    /**Constructor.
-    * @param type type of palette (clusters or events).
-    * @param backgroundColor background color.
-    * @param parent parent widget.
-    * @param name internal name of the palette.
-    * @param fl widget flags.
-    */
-    ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
-   /*
+                     /**Constructor.
+                     * @param type type of palette (clusters or events).
+                     * @param backgroundColor background color.
+                     * @param parent parent widget.
+                     * @param name internal name of the palette.
+                     * @param fl widget flags.
+                     */
+                     ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    /*
    *  Destroys the object and frees any allocated resources.
    */
-   ~ItemPalette();
+    ~ItemPalette();
 
     /**
     * Creates a list of the items of the group @p groupName.
     * @param itemColors list of colors for the given group.
     * @param groupName name of the group of items.
-    * @param descriptionLength value to use as the length for the event descriptions.    
+    * @param descriptionLength value to use as the length for the event descriptions.
     */
     void createItemList(ItemColors* itemColors,QString groupName,int descriptionLength);
 
@@ -101,7 +101,7 @@ public:
     /**Returns the currently selected group.
     * @return the name of the selected group.
     */
-    inline QString selectedGroup(){return selected;};
+    inline QString selectedGroup(){return selected;}
 
     /** Removes a group from the palette.
     * @param groupName name of the group to be removed.
@@ -132,7 +132,7 @@ protected slots:
     void slotRightPressed(Q3IconViewItem* item);
     void slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
-    void slotMidButtonPressed(QString sourceGroupName);  
+    void slotMidButtonPressed(QString sourceGroupName);
     void slotClickRedraw();
     void languageChange();
     void resizeEvent(QResizeEvent* event);
@@ -141,7 +141,7 @@ protected slots:
 
 signals:
     void colorChanged(int item,QString groupName);
-    void updateShownItems(const QMap<QString,Q3ValueList<int> >& selectedItems);    
+    void updateShownItems(const QMap<QString,Q3ValueList<int> >& selectedItems);
     void paletteResized(int parentWidth,int labelSize);
     void selectedGroupChanged(QString eventGroupName);
     void updateItemsToSkip(QString groupName,const Q3ValueList<int>& itemsToSkip);
@@ -199,9 +199,9 @@ private:
     bool updateIconPixmap;
     
     /**Stores the selection status of each group. The selection status is true if all the group items have been selected by a click on the group label, false otherwise.*/
-    QMap<QString,bool> selectionStatus;    
+    QMap<QString,bool> selectionStatus;
     
-   //Functions
+    //Functions
 
     /** Changes the color of a given item.
     * @param item item for which the color has to be changed.
@@ -230,7 +230,7 @@ private:
     */
     void redrawItem(ItemIconView* iconView,ItemColors* itemColors,int index,QMap<int,bool> browsingMap);
     
-    /**Selects the group identify by @p groupName.  
+    /**Selects the group identify by @p groupName.
     * @param groupName the group to be selected.
     */
     void selectGroupLabel(QString groupName);
@@ -241,30 +241,30 @@ private:
   *@author Lynn Hazan
   */
 class GroupNameLabel : public QLabel{
- Q_OBJECT
-  public:
-   inline GroupNameLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
-    QLabel(text,parent,name,f){};
+    Q_OBJECT
+public:
+    inline GroupNameLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
+        QLabel(text,parent,name,f){}
 
-  signals:
+signals:
     void leftClickOnLabel(QString sourceId,bool shiftKey,bool ctrlAlt);
     void middleClickOnLabel(QString sourceId);
-     
-  protected:
-   virtual inline void mousePressEvent(QMouseEvent* e){
-    if(e->button() == Qt::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
-     emit leftClickOnLabel(parent()->name(),false,false); 
+
+protected:
+    virtual inline void mousePressEvent(QMouseEvent* e){
+        if(e->button() == Qt::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+            emit leftClickOnLabel(parent()->name(),false,false);
+        }
+        if(e->button() == Qt::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+            emit leftClickOnLabel(parent()->name(),true,false);
+        }
+        if(e->button() == Qt::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){
+            emit leftClickOnLabel(parent()->name(),false,true);
+        }
+        if(e->button() == Qt::MidButton){
+            emit middleClickOnLabel(parent()->name());
+        }
     }
-    if(e->button() == Qt::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
-     emit leftClickOnLabel(parent()->name(),true,false); 
-    }
-    if(e->button() == Qt::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){
-     emit leftClickOnLabel(parent()->name(),false,true); 
-    }
-    if(e->button() == Qt::MidButton){
-     emit middleClickOnLabel(parent()->name());
-    }
-   };
 
 };
 

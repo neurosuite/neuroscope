@@ -25,7 +25,7 @@
 #include <QStringList> 
 #include <QFile>
 #include <QFileInfo>
- 
+
 //General C++ include files
 #include <iostream>
 #include <fstream>
@@ -36,29 +36,29 @@ using namespace std;
 */
 class Utilities{
 public:
-    inline Utilities(){};
-    inline ~Utilities(){};
+    inline Utilities(){}
+    inline ~Utilities(){}
     
     /**
     * Compares the versions
-    * @param oldVersion the old version 
+    * @param oldVersion the old version
     * @param newVersion the new version
     * @return true if @p newVersion is superior to @p oldVersion, false otherwise.
     */
     inline static bool compareVersion(QString oldVersion, QString newVersion){
-     QStringList oldList = QStringList::split(".", oldVersion);
-     QStringList newList = QStringList::split(".", newVersion);
-     int minLength = qMin(oldList.count(),newList.count());
-     for(int i = 0; i< minLength;++i){
-      if(newList[i] > oldList[i]) return true;
-     }
-     if(newList.count() > oldList.count()) return true;
-     else return false;
-    };
+        QStringList oldList = QStringList::split(".", oldVersion);
+        QStringList newList = QStringList::split(".", newVersion);
+        int minLength = qMin(oldList.count(),newList.count());
+        for(int i = 0; i< minLength;++i){
+            if(newList[i] > oldList[i]) return true;
+        }
+        if(newList.count() > oldList.count()) return true;
+        else return false;
+    }
 
     /**Counts and returns the number of lines in the file @p path.
     * @param path file path.
-    * @return the number of lines in the file. 
+    * @return the number of lines in the file.
     */
     static int getNbLines(QString path);
     

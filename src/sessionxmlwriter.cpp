@@ -37,349 +37,349 @@ using namespace neuroscope;
 extern QString version;
 
 SessionXmlWriter::SessionXmlWriter():doc(){
- //create the processing instruction
- QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
- doc.appendChild(processingInstruction);
+    //create the processing instruction
+    QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
+    doc.appendChild(processingInstruction);
 
- //Create the document and the root element.
- root = doc.createElement(NEUROSCOPE);
- root.setAttribute(VERSION,version);
- doc.appendChild(root);
+    //Create the document and the root element.
+    root = doc.createElement(NEUROSCOPE);
+    root.setAttribute(VERSION,version);
+    doc.appendChild(root);
 }
 
 SessionXmlWriter::~SessionXmlWriter(){}
 
 bool SessionXmlWriter::writeTofile(const QString& url){ 
- QFile sessionFile(url);
- bool status = sessionFile.open(QIODevice::WriteOnly);
- if(!status) return status;
+    QFile sessionFile(url);
+    bool status = sessionFile.open(QIODevice::WriteOnly);
+    if(!status) return status;
 
- root.appendChild(video);
- if(!samplingRates.isNull()) root.appendChild(samplingRates);
- root.appendChild(loadedFiles);
- root.appendChild(displays);
+    root.appendChild(video);
+    if(!samplingRates.isNull()) root.appendChild(samplingRates);
+    root.appendChild(loadedFiles);
+    root.appendChild(displays);
 
- QString xmlDocument = doc.toString();
- 
- Q3TextStream stream(&sessionFile);
- stream.setEncoding(Q3TextStream::UnicodeUTF8);
- stream<< xmlDocument;
- sessionFile.close();
- 
- return true;
+    QString xmlDocument = doc.toString();
+
+    Q3TextStream stream(&sessionFile);
+    stream.setEncoding(Q3TextStream::UnicodeUTF8);
+    stream<< xmlDocument;
+    sessionFile.close();
+
+    return true;
 }
 
 void SessionXmlWriter::setLoadedFilesInformation(Q3ValueList<SessionFile> fileList){
- loadedFiles = doc.createElement(FILES);
+    loadedFiles = doc.createElement(FILES);
 
- Q3ValueList<SessionFile>::iterator iterator;
- for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
-  //Get the file information
-  QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
-  int fileType = static_cast<SessionFile>(*iterator).getType();
-  QDateTime dateTime = static_cast<SessionFile>(*iterator).getModification();
-  QMap<EventDescription,QColor> colors = static_cast<SessionFile>(*iterator).getItemColors();
-  QString backgroundPath = static_cast<SessionFile>(*iterator).getBackgroundPath();
-   
-  QDomElement typeElement = doc.createElement(TYPE);
-  QDomText typeValue = doc.createTextNode(QString("%1").arg(fileType));
-  typeElement.appendChild(typeValue);
+    Q3ValueList<SessionFile>::iterator iterator;
+    for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
+        //Get the file information
+        QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
+        int fileType = static_cast<SessionFile>(*iterator).getType();
+        QDateTime dateTime = static_cast<SessionFile>(*iterator).getModification();
+        QMap<EventDescription,QColor> colors = static_cast<SessionFile>(*iterator).getItemColors();
+        QString backgroundPath = static_cast<SessionFile>(*iterator).getBackgroundPath();
 
-  QDomElement urlElement = doc.createElement(URL);
-  QDomText urlValue = doc.createTextNode(fileUrl);
-  urlElement.appendChild(urlValue);
-  
-  QDomElement dateElement = doc.createElement(DATE);
-  QDomText dateValue = doc.createTextNode(dateTime.toString(Qt::ISODate));
-  dateElement.appendChild(dateValue);
+        QDomElement typeElement = doc.createElement(TYPE);
+        QDomText typeValue = doc.createTextNode(QString("%1").arg(fileType));
+        typeElement.appendChild(typeValue);
 
-  QDomElement fileElement = doc.createElement(neuroscope::FILE);
-  fileElement.appendChild(typeElement);
-  fileElement.appendChild(urlElement);
-  fileElement.appendChild(dateElement);
+        QDomElement urlElement = doc.createElement(URL);
+        QDomText urlValue = doc.createTextNode(fileUrl);
+        urlElement.appendChild(urlValue);
 
-  //If there is no color, the file correspond to a position file with no items.
-  if(colors.count() != 0){ 
-   QDomElement itemsElement = doc.createElement(neuroscope::ITEMS);
+        QDomElement dateElement = doc.createElement(DATE);
+        QDomText dateValue = doc.createTextNode(dateTime.toString(Qt::ISODate));
+        dateElement.appendChild(dateValue);
 
-   QMap<EventDescription,QColor>::Iterator iterator;
-   for(iterator = colors.begin(); iterator != colors.end(); ++iterator){
-    //Get the item information (id and color)
-    QString id = iterator.key();
-    QColor color = iterator.data();
+        QDomElement fileElement = doc.createElement(neuroscope::FILE);
+        fileElement.appendChild(typeElement);
+        fileElement.appendChild(urlElement);
+        fileElement.appendChild(dateElement);
 
-    QDomElement idElement = doc.createElement(ITEM);
-    QDomText idValue = doc.createTextNode(QString("%1").arg(id));
-    idElement.appendChild(idValue);
+        //If there is no color, the file correspond to a position file with no items.
+        if(colors.count() != 0){
+            QDomElement itemsElement = doc.createElement(neuroscope::ITEMS);
 
-    QDomElement colorElement = doc.createElement(COLOR);
-    QDomText colorValue = doc.createTextNode(color.name());
-    colorElement.appendChild(colorValue);
+            QMap<EventDescription,QColor>::Iterator iterator;
+            for(iterator = colors.begin(); iterator != colors.end(); ++iterator){
+                //Get the item information (id and color)
+                QString id = iterator.key();
+                QColor color = iterator.data();
 
-    QDomElement itemDescription = doc.createElement(ITEM_DESCRIPTION);
-    itemDescription.appendChild(idElement);
-    itemDescription.appendChild(colorElement);
+                QDomElement idElement = doc.createElement(ITEM);
+                QDomText idValue = doc.createTextNode(QString("%1").arg(id));
+                idElement.appendChild(idValue);
 
-    itemsElement.appendChild(itemDescription);
-   }
-   fileElement.appendChild(itemsElement);
-  }
-  
-  loadedFiles.appendChild(fileElement);
- }
+                QDomElement colorElement = doc.createElement(COLOR);
+                QDomText colorValue = doc.createTextNode(color.name());
+                colorElement.appendChild(colorValue);
+
+                QDomElement itemDescription = doc.createElement(ITEM_DESCRIPTION);
+                itemDescription.appendChild(idElement);
+                itemDescription.appendChild(colorElement);
+
+                itemsElement.appendChild(itemDescription);
+            }
+            fileElement.appendChild(itemsElement);
+        }
+
+        loadedFiles.appendChild(fileElement);
+    }
 }
 
 void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> displayList){
- displays = doc.createElement(DISPLAYS);
- 
- Q3ValueList<DisplayInformation>::iterator iterator;
- for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator){
+    displays = doc.createElement(DISPLAYS);
 
-  QDomElement displayElement = doc.createElement(neuroscope::DISPLAY);
+    Q3ValueList<DisplayInformation>::iterator iterator;
+    for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator){
 
-  //Get the information store in DisplayInformation
-  QString tabLabel = static_cast<DisplayInformation>(*iterator).getTabLabel();
-  int showLabels = static_cast<DisplayInformation>(*iterator).getLabelStatus();
-  long startTime = static_cast<DisplayInformation>(*iterator).getStartTime();
-  long duration = static_cast<DisplayInformation>(*iterator).getTimeWindow();
-  int presentationMode = static_cast<DisplayInformation>(*iterator).getMode();
-  int rasterHeight = static_cast<DisplayInformation>(*iterator).getRasterHeight();
-  int greyScale = static_cast<DisplayInformation>(*iterator).getGreyScale();
-  int positionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
-  int showEvents = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
-  Q3ValueList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
-  QMap<QString, Q3ValueList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
-  QMap<QString, Q3ValueList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
-  Q3ValueList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
-  QMap<QString, Q3ValueList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
-  QMap<QString, Q3ValueList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();  
-  Q3ValueList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
-  Q3ValueList<int> channelIds = static_cast<DisplayInformation>(*iterator).getChannelIds();
-  Q3ValueList<int> selectedChannelIds = static_cast<DisplayInformation>(*iterator).getSelectedChannelIds(); 
-  
-  //Label when in the display is in tab mode
-  QDomElement labelElement = doc.createElement(TAB_LABEL);
-  QDomText labelValue = doc.createTextNode(tabLabel);
-  labelElement.appendChild(labelValue);
-  displayElement.appendChild(labelElement);
+        QDomElement displayElement = doc.createElement(neuroscope::DISPLAY);
 
-  //info to know if the labels next to the traces have to be shown
-  QDomElement showLabelsElement = doc.createElement(SHOW_LABELS);
-  QDomText showLabelsValue = doc.createTextNode(QString("%1").arg(showLabels));
-  showLabelsElement.appendChild(showLabelsValue);
-  displayElement.appendChild(showLabelsElement);
-  
-  //info concering the portion of the document presented
-  QDomElement startTimeElement = doc.createElement(START_TIME);
-  QDomText startTimeValue = doc.createTextNode(QString("%1").arg(startTime));
-  startTimeElement.appendChild(startTimeValue);
-  displayElement.appendChild(startTimeElement);
+        //Get the information store in DisplayInformation
+        QString tabLabel = static_cast<DisplayInformation>(*iterator).getTabLabel();
+        int showLabels = static_cast<DisplayInformation>(*iterator).getLabelStatus();
+        long startTime = static_cast<DisplayInformation>(*iterator).getStartTime();
+        long duration = static_cast<DisplayInformation>(*iterator).getTimeWindow();
+        int presentationMode = static_cast<DisplayInformation>(*iterator).getMode();
+        int rasterHeight = static_cast<DisplayInformation>(*iterator).getRasterHeight();
+        int greyScale = static_cast<DisplayInformation>(*iterator).getGreyScale();
+        int positionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
+        int showEvents = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
+        Q3ValueList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
+        QMap<QString, Q3ValueList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
+        QMap<QString, Q3ValueList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
+        Q3ValueList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
+        QMap<QString, Q3ValueList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
+        QMap<QString, Q3ValueList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
+        Q3ValueList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
+        Q3ValueList<int> channelIds = static_cast<DisplayInformation>(*iterator).getChannelIds();
+        Q3ValueList<int> selectedChannelIds = static_cast<DisplayInformation>(*iterator).getSelectedChannelIds();
 
-  QDomElement durationElement = doc.createElement(DURATION);
-  QDomText durationValue = doc.createTextNode(QString("%1").arg(duration));
-  durationElement.appendChild(durationValue);
-  displayElement.appendChild(durationElement);
-   
-  //info on the trace presentation (single or multiple columns)
-  QDomElement presentationElement = doc.createElement(MULTIPLE_COLUMNS);
-  QDomText presentationValue = doc.createTextNode(QString("%1").arg(presentationMode));
-  presentationElement.appendChild(presentationValue);
-  displayElement.appendChild(presentationElement);
+        //Label when in the display is in tab mode
+        QDomElement labelElement = doc.createElement(TAB_LABEL);
+        QDomText labelValue = doc.createTextNode(tabLabel);
+        labelElement.appendChild(labelValue);
+        displayElement.appendChild(labelElement);
 
-  //info on the grey-scale
-  QDomElement greyScaleElement = doc.createElement(GREYSCALE);
-  QDomText greyScaleValue = doc.createTextNode(QString("%1").arg(greyScale));
-  greyScaleElement.appendChild(greyScaleValue);
-  displayElement.appendChild(greyScaleElement);
+        //info to know if the labels next to the traces have to be shown
+        QDomElement showLabelsElement = doc.createElement(SHOW_LABELS);
+        QDomText showLabelsValue = doc.createTextNode(QString("%1").arg(showLabels));
+        showLabelsElement.appendChild(showLabelsValue);
+        displayElement.appendChild(showLabelsElement);
 
-  //info on the PositionView
-  QDomElement positionViewElement = doc.createElement(POSITIONVIEW);
-  QDomText positionViewValue = doc.createTextNode(QString("%1").arg(positionView));
-  positionViewElement.appendChild(positionViewValue);
-  displayElement.appendChild(positionViewElement);
-  
-  //info on the display of events in the PositionView
-  QDomElement showEventsElement = doc.createElement(SHOWEVENTS);
-  QDomText showEventsValue = doc.createTextNode(QString("%1").arg(showEvents));
-  showEventsElement.appendChild(showEventsValue);
-  displayElement.appendChild(showEventsElement);
-  
-  //info on the spike presentation
-  Q3ValueList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
-  for(typeIterator = spikeDisplayTypes.begin(); typeIterator != spikeDisplayTypes.end(); ++typeIterator){
-   QDomElement typeElement = doc.createElement(SPIKE_PRESENTATION);
-   QDomText typeValue = doc.createTextNode(QString("%1").arg(*typeIterator));
-   typeElement.appendChild(typeValue);
-   displayElement.appendChild(typeElement);
-  }
+        //info concering the portion of the document presented
+        QDomElement startTimeElement = doc.createElement(START_TIME);
+        QDomText startTimeValue = doc.createTextNode(QString("%1").arg(startTime));
+        startTimeElement.appendChild(startTimeValue);
+        displayElement.appendChild(startTimeElement);
 
-  //Info on the raster height
-  QDomElement rasterHeightElement = doc.createElement(RASTER_HEIGHT);
-  QDomText rasterHeightValue = doc.createTextNode(QString("%1").arg(rasterHeight));
-  rasterHeightElement.appendChild(rasterHeightValue);
-  displayElement.appendChild(rasterHeightElement);
-  
-  //Create the information concerning the selected clusters
-  QMap<QString, Q3ValueList<int> >::Iterator clustersIterator;
-  //The iterator gives the keys sorted.
-  for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
-   QDomElement clustersElement = doc.createElement(CLUSTERS_SELECTED);
+        QDomElement durationElement = doc.createElement(DURATION);
+        QDomText durationValue = doc.createTextNode(QString("%1").arg(duration));
+        durationElement.appendChild(durationValue);
+        displayElement.appendChild(durationElement);
 
-   //url of the cluster file
-   QDomElement fileElement = doc.createElement(FILE_URL);
-   QDomText fileValue = doc.createTextNode(clustersIterator.key());
-   fileElement.appendChild(fileValue);
-   clustersElement.appendChild(fileElement);
+        //info on the trace presentation (single or multiple columns)
+        QDomElement presentationElement = doc.createElement(MULTIPLE_COLUMNS);
+        QDomText presentationValue = doc.createTextNode(QString("%1").arg(presentationMode));
+        presentationElement.appendChild(presentationValue);
+        displayElement.appendChild(presentationElement);
 
-   //list of cluster ids
-   Q3ValueList<int> clustersIds = clustersIterator.data();
-   Q3ValueList<int>::iterator idIterator;
-   for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
-    QDomElement idElement = doc.createElement(CLUSTER);
-    QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
-    idElement.appendChild(idValue);
-    clustersElement.appendChild(idElement);
-   }
-   displayElement.appendChild(clustersElement);
-  }
- 
-  
-  //Create the information concerning the selected events
-  QMap<QString, Q3ValueList<int> >::Iterator eventsIterator;
-  //The iterator gives the keys sorted.
-  for(eventsIterator = selectedEvents.begin(); eventsIterator != selectedEvents.end(); ++eventsIterator){
-   QDomElement eventsElement = doc.createElement(EVENTS_SELECTED);
+        //info on the grey-scale
+        QDomElement greyScaleElement = doc.createElement(GREYSCALE);
+        QDomText greyScaleValue = doc.createTextNode(QString("%1").arg(greyScale));
+        greyScaleElement.appendChild(greyScaleValue);
+        displayElement.appendChild(greyScaleElement);
 
-   //url of the event file
-   QDomElement fileElement = doc.createElement(FILE_URL);
-   QDomText fileValue = doc.createTextNode(eventsIterator.key());
-   fileElement.appendChild(fileValue);
-   eventsElement.appendChild(fileElement);
+        //info on the PositionView
+        QDomElement positionViewElement = doc.createElement(POSITIONVIEW);
+        QDomText positionViewValue = doc.createTextNode(QString("%1").arg(positionView));
+        positionViewElement.appendChild(positionViewValue);
+        displayElement.appendChild(positionViewElement);
 
-   //list of event ids
-   Q3ValueList<int> eventIds = eventsIterator.data();
-   Q3ValueList<int>::iterator idIterator;
-   for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
-    QDomElement idElement = doc.createElement(EVENT);
-    QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
-    idElement.appendChild(idValue);
-    eventsElement.appendChild(idElement);
-   }
-   displayElement.appendChild(eventsElement);
-  }
-  
-  //Create the information concerning the spike files
-  Q3ValueList<QString>::iterator spikeFileIterator;
-  for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
-   QDomElement selectedSpikesElement = doc.createElement(SPIKES_SELECTED);
+        //info on the display of events in the PositionView
+        QDomElement showEventsElement = doc.createElement(SHOWEVENTS);
+        QDomText showEventsValue = doc.createTextNode(QString("%1").arg(showEvents));
+        showEventsElement.appendChild(showEventsValue);
+        displayElement.appendChild(showEventsElement);
 
-   QDomElement fileElement = doc.createElement(FILE_URL);
-   QDomText fileValue = doc.createTextNode(*spikeFileIterator);
-   fileElement.appendChild(fileValue);
-   selectedSpikesElement.appendChild(fileElement);
-   displayElement.appendChild(selectedSpikesElement);
-  }
+        //info on the spike presentation
+        Q3ValueList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
+        for(typeIterator = spikeDisplayTypes.begin(); typeIterator != spikeDisplayTypes.end(); ++typeIterator){
+            QDomElement typeElement = doc.createElement(SPIKE_PRESENTATION);
+            QDomText typeValue = doc.createTextNode(QString("%1").arg(*typeIterator));
+            typeElement.appendChild(typeValue);
+            displayElement.appendChild(typeElement);
+        }
 
-  //Create the information concerning the skipped clusters
-  //The iterator gives the keys sorted.
-  for(clustersIterator = skippedClusters.begin(); clustersIterator != skippedClusters.end(); ++clustersIterator){
-   QDomElement clustersElement = doc.createElement(CLUSTERS_SKIPPED);
+        //Info on the raster height
+        QDomElement rasterHeightElement = doc.createElement(RASTER_HEIGHT);
+        QDomText rasterHeightValue = doc.createTextNode(QString("%1").arg(rasterHeight));
+        rasterHeightElement.appendChild(rasterHeightValue);
+        displayElement.appendChild(rasterHeightElement);
 
-   //url of the cluster file
-   QDomElement fileElement = doc.createElement(FILE_URL);
-   QDomText fileValue = doc.createTextNode(clustersIterator.key());
-   fileElement.appendChild(fileValue);
-   clustersElement.appendChild(fileElement);
+        //Create the information concerning the selected clusters
+        QMap<QString, Q3ValueList<int> >::Iterator clustersIterator;
+        //The iterator gives the keys sorted.
+        for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
+            QDomElement clustersElement = doc.createElement(CLUSTERS_SELECTED);
 
-   //list of cluster ids
-   Q3ValueList<int> clustersIds = clustersIterator.data();
-   Q3ValueList<int>::iterator idIterator;
-   for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
-    QDomElement idElement = doc.createElement(CLUSTER);
-    QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
-    idElement.appendChild(idValue);
-    clustersElement.appendChild(idElement);
-   }
-   displayElement.appendChild(clustersElement);
-  }
+            //url of the cluster file
+            QDomElement fileElement = doc.createElement(FILE_URL);
+            QDomText fileValue = doc.createTextNode(clustersIterator.key());
+            fileElement.appendChild(fileValue);
+            clustersElement.appendChild(fileElement);
 
- //Create the information concerning the skipped events
-  //The iterator gives the keys sorted.
-  for(eventsIterator = skippedEvents.begin(); eventsIterator != skippedEvents.end(); ++eventsIterator){
-   QDomElement eventsElement = doc.createElement(EVENTS_SKIPPED);
+            //list of cluster ids
+            Q3ValueList<int> clustersIds = clustersIterator.data();
+            Q3ValueList<int>::iterator idIterator;
+            for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
+                QDomElement idElement = doc.createElement(CLUSTER);
+                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                idElement.appendChild(idValue);
+                clustersElement.appendChild(idElement);
+            }
+            displayElement.appendChild(clustersElement);
+        }
 
-   //url of the event file
-   QDomElement fileElement = doc.createElement(FILE_URL);
-   QDomText fileValue = doc.createTextNode(eventsIterator.key());
-   fileElement.appendChild(fileValue);
-   eventsElement.appendChild(fileElement);
 
-   //list of event ids
-   Q3ValueList<int> eventIds = eventsIterator.data();
-   Q3ValueList<int>::iterator idIterator;
-   for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
-    QDomElement idElement = doc.createElement(EVENT);
-    QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
-    idElement.appendChild(idValue);
-    eventsElement.appendChild(idElement);
-   }
-   displayElement.appendChild(eventsElement);
-  }
-  
-  //Create the information concerning the channel positions (gain and offset)
-  QDomElement channelPositionsElement = doc.createElement(CHANNEL_POSITIONS);
-  Q3ValueList<TracePosition>::iterator positionIterator;
-  for(positionIterator = positions.begin(); positionIterator != positions.end(); ++positionIterator){
-   int channelId = static_cast<TracePosition>(*positionIterator).getId();
-   int gain = static_cast<TracePosition>(*positionIterator).getGain();
-   int offset = static_cast<TracePosition>(*positionIterator).getOffset();
+        //Create the information concerning the selected events
+        QMap<QString, Q3ValueList<int> >::Iterator eventsIterator;
+        //The iterator gives the keys sorted.
+        for(eventsIterator = selectedEvents.begin(); eventsIterator != selectedEvents.end(); ++eventsIterator){
+            QDomElement eventsElement = doc.createElement(EVENTS_SELECTED);
 
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
-   idElement.appendChild(idValue);
+            //url of the event file
+            QDomElement fileElement = doc.createElement(FILE_URL);
+            QDomText fileValue = doc.createTextNode(eventsIterator.key());
+            fileElement.appendChild(fileValue);
+            eventsElement.appendChild(fileElement);
 
-   QDomElement gainsetElement = doc.createElement(GAIN);
-   QDomText gainsetValue = doc.createTextNode(QString("%1").arg(gain));
-   gainsetElement.appendChild(gainsetValue);
+            //list of event ids
+            Q3ValueList<int> eventIds = eventsIterator.data();
+            Q3ValueList<int>::iterator idIterator;
+            for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
+                QDomElement idElement = doc.createElement(EVENT);
+                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                idElement.appendChild(idValue);
+                eventsElement.appendChild(idElement);
+            }
+            displayElement.appendChild(eventsElement);
+        }
 
-   QDomElement offsetElement = doc.createElement(OFFSET);
-   QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
-   offsetElement.appendChild(offsetValue);
+        //Create the information concerning the spike files
+        Q3ValueList<QString>::iterator spikeFileIterator;
+        for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
+            QDomElement selectedSpikesElement = doc.createElement(SPIKES_SELECTED);
 
-   QDomElement channelPositionElement = doc.createElement(CHANNEL_POSITION);
-   channelPositionElement.appendChild(idElement);
-   channelPositionElement.appendChild(gainsetElement);
-   channelPositionElement.appendChild(offsetElement);
-   
-   channelPositionsElement.appendChild(channelPositionElement);
-  }
-  displayElement.appendChild(channelPositionsElement);
+            QDomElement fileElement = doc.createElement(FILE_URL);
+            QDomText fileValue = doc.createTextNode(*spikeFileIterator);
+            fileElement.appendChild(fileValue);
+            selectedSpikesElement.appendChild(fileElement);
+            displayElement.appendChild(selectedSpikesElement);
+        }
 
-  //Create the information concerning the channels selected in the display
-  QDomElement channelSelectedElement = doc.createElement(CHANNELS_SELECTED);
-  Q3ValueList<int>::iterator channelSelectedIterator;
-  for(channelSelectedIterator = selectedChannelIds.begin(); channelSelectedIterator != selectedChannelIds.end(); ++channelSelectedIterator){
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(*channelSelectedIterator));
-   idElement.appendChild(idValue);
-   channelSelectedElement.appendChild(idElement);
-  }
-  displayElement.appendChild(channelSelectedElement);
+        //Create the information concerning the skipped clusters
+        //The iterator gives the keys sorted.
+        for(clustersIterator = skippedClusters.begin(); clustersIterator != skippedClusters.end(); ++clustersIterator){
+            QDomElement clustersElement = doc.createElement(CLUSTERS_SKIPPED);
 
-  //Create the information concerning the channels shown in the display
-  QDomElement channelsElement = doc.createElement(CHANNELS_SHOWN);
-  Q3ValueList<int>::iterator channelIterator;
-  for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
-   QDomElement idElement = doc.createElement(CHANNEL);
-   QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
-   idElement.appendChild(idValue);
-   channelsElement.appendChild(idElement);
-  }
-  displayElement.appendChild(channelsElement);
+            //url of the cluster file
+            QDomElement fileElement = doc.createElement(FILE_URL);
+            QDomText fileValue = doc.createTextNode(clustersIterator.key());
+            fileElement.appendChild(fileValue);
+            clustersElement.appendChild(fileElement);
 
-    
-  displays.appendChild(displayElement);
- } 
+            //list of cluster ids
+            Q3ValueList<int> clustersIds = clustersIterator.data();
+            Q3ValueList<int>::iterator idIterator;
+            for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
+                QDomElement idElement = doc.createElement(CLUSTER);
+                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                idElement.appendChild(idValue);
+                clustersElement.appendChild(idElement);
+            }
+            displayElement.appendChild(clustersElement);
+        }
+
+        //Create the information concerning the skipped events
+        //The iterator gives the keys sorted.
+        for(eventsIterator = skippedEvents.begin(); eventsIterator != skippedEvents.end(); ++eventsIterator){
+            QDomElement eventsElement = doc.createElement(EVENTS_SKIPPED);
+
+            //url of the event file
+            QDomElement fileElement = doc.createElement(FILE_URL);
+            QDomText fileValue = doc.createTextNode(eventsIterator.key());
+            fileElement.appendChild(fileValue);
+            eventsElement.appendChild(fileElement);
+
+            //list of event ids
+            Q3ValueList<int> eventIds = eventsIterator.data();
+            Q3ValueList<int>::iterator idIterator;
+            for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
+                QDomElement idElement = doc.createElement(EVENT);
+                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                idElement.appendChild(idValue);
+                eventsElement.appendChild(idElement);
+            }
+            displayElement.appendChild(eventsElement);
+        }
+
+        //Create the information concerning the channel positions (gain and offset)
+        QDomElement channelPositionsElement = doc.createElement(CHANNEL_POSITIONS);
+        Q3ValueList<TracePosition>::iterator positionIterator;
+        for(positionIterator = positions.begin(); positionIterator != positions.end(); ++positionIterator){
+            int channelId = static_cast<TracePosition>(*positionIterator).getId();
+            int gain = static_cast<TracePosition>(*positionIterator).getGain();
+            int offset = static_cast<TracePosition>(*positionIterator).getOffset();
+
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
+            idElement.appendChild(idValue);
+
+            QDomElement gainsetElement = doc.createElement(GAIN);
+            QDomText gainsetValue = doc.createTextNode(QString("%1").arg(gain));
+            gainsetElement.appendChild(gainsetValue);
+
+            QDomElement offsetElement = doc.createElement(OFFSET);
+            QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
+            offsetElement.appendChild(offsetValue);
+
+            QDomElement channelPositionElement = doc.createElement(CHANNEL_POSITION);
+            channelPositionElement.appendChild(idElement);
+            channelPositionElement.appendChild(gainsetElement);
+            channelPositionElement.appendChild(offsetElement);
+
+            channelPositionsElement.appendChild(channelPositionElement);
+        }
+        displayElement.appendChild(channelPositionsElement);
+
+        //Create the information concerning the channels selected in the display
+        QDomElement channelSelectedElement = doc.createElement(CHANNELS_SELECTED);
+        Q3ValueList<int>::iterator channelSelectedIterator;
+        for(channelSelectedIterator = selectedChannelIds.begin(); channelSelectedIterator != selectedChannelIds.end(); ++channelSelectedIterator){
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelSelectedIterator));
+            idElement.appendChild(idValue);
+            channelSelectedElement.appendChild(idElement);
+        }
+        displayElement.appendChild(channelSelectedElement);
+
+        //Create the information concerning the channels shown in the display
+        QDomElement channelsElement = doc.createElement(CHANNELS_SHOWN);
+        Q3ValueList<int>::iterator channelIterator;
+        for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+            QDomElement idElement = doc.createElement(CHANNEL);
+            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            idElement.appendChild(idValue);
+            channelsElement.appendChild(idElement);
+        }
+        displayElement.appendChild(channelsElement);
+
+
+        displays.appendChild(displayElement);
+    }
 }
 
 

@@ -34,130 +34,130 @@
   */
 
 class PositionsProvider : public DataProvider  {
-   Q_OBJECT
+    Q_OBJECT
 public: 
-  /**Constructor.
+    /**Constructor.
   * @param fileUrl the url of the position file containing the positions.
   * @param samplingRate sampling rate used to record the data.
   * @param width video image width.
   * @param height video image height.
   * @param rotation video image rotation angle.
-  * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.   
+  * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
   */
-  PositionsProvider(QString fileUrl,double samplingRate,int width,int height,int rotation,int flip);
-  
-  ~PositionsProvider();
+    PositionsProvider(QString fileUrl,double samplingRate,int width,int height,int rotation,int flip);
 
- /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
-  enum loadReturnMessage {OK=0,OPEN_ERROR=1,MISSING_FILE=3,COUNT_ERROR=4,INCORRECT_CONTENT=5};
+    ~PositionsProvider();
+
+    /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
+    enum loadReturnMessage {OK=0,OPEN_ERROR=1,MISSING_FILE=3,COUNT_ERROR=4,INCORRECT_CONTENT=5};
     
- /**Triggers the retrieve of the position information included in the time interval given by @p startTime and @p endTime.
+    /**Triggers the retrieve of the position information included in the time interval given by @p startTime and @p endTime.
   * @param startTime begining of the time interval from which to retrieve the data.
   * @param endTime end of the time interval from which to retrieve the data.
   * @param initiator instance requesting the data.
   */
-  void requestData(long startTime,long endTime,QObject* initiator);
+    void requestData(long startTime,long endTime,QObject* initiator);
 
-  
-  /**Triggers the retrieve of all the positions.
+
+    /**Triggers the retrieve of all the positions.
   * @param initiator instance requesting the data.
   */
-  void retrieveAllData(QObject* initiator); 
-  
-  /**Loads the positions.
+    void retrieveAllData(QObject* initiator);
+
+    /**Loads the positions.
   * @return an loadReturnMessage enum giving the load status
   */
-  int loadData();
+    int loadData();
 
-  /**Returns the name of the provider which is the position file name.
+    /**Returns the name of the provider which is the position file name.
   * @return provider'name.
   */
-  inline QString getName() const {return name;}
+    inline QString getName() const {return name;}
 
-  /**Returns the path to the position file.
+    /**Returns the path to the position file.
   * @return path.
   */
-  inline QString getFilePath() const {return fileName;}
-  
-  inline void updateVideoInformation(double videoSamplingRate,int rotation,int flip,int videoWidth,int videoHeight){
-    samplingRate = videoSamplingRate;
-    width = videoWidth;
-    height= videoHeight;
-    this->flip = flip;
-    this->rotation = rotation;
-  };
+    inline QString getFilePath() const {return fileName;}
 
-  /**Returns the number of spots for each animal position recorded. It is either 1 or 2.
+    inline void updateVideoInformation(double videoSamplingRate,int rotation,int flip,int videoWidth,int videoHeight){
+        samplingRate = videoSamplingRate;
+        width = videoWidth;
+        height= videoHeight;
+        this->flip = flip;
+        this->rotation = rotation;
+    }
+
+    /**Returns the number of spots for each animal position recorded. It is either 1 or 2.
   * @return number of spots.
-  */  
-  inline int getNbSpots()const {return nbCoordinates / 2;};
-  
- /**Returns the sampling rate used to record the data contained in the file identified by fileUrl.
   */
-  inline double getSamplingRate() const {return samplingRate;};
-  
+    inline int getNbSpots()const {return nbCoordinates / 2;}
+
+    /**Returns the sampling rate used to record the data contained in the file identified by fileUrl.
+  */
+    inline double getSamplingRate() const {return samplingRate;}
+
 signals:
-  /**Signals that the data have been retrieved.
+    /**Signals that the data have been retrieved.
   * @param data n column array containing the position of the animal. The two first columns contain
-  * the position of the first spot and the following optional pair of columns contain the position of optional spots.  
+  * the position of the first spot and the following optional pair of columns contain the position of optional spots.
   * @param initiator instance requesting the data.
   */
-  void dataReady(Array<dataType>& data,QObject* initiator);
+    void dataReady(Array<dataType>& data,QObject* initiator);
 
 
 private:
 
-  /**Provider's name.*/
-  QString name;
+    /**Provider's name.*/
+    QString name;
 
-  /**Sampling rate used to record the data.*/
-  double samplingRate;
-  
-  /* n column array containing the position of the animal. The two first columns contain
+    /**Sampling rate used to record the data.*/
+    double samplingRate;
+
+    /* n column array containing the position of the animal. The two first columns contain
   * the position of the first spot and following optional pair of columns two contain the position of optional spots.*/
-  Array<dataType> positions;
+    Array<dataType> positions;
 
-  /**The start time for the previously requested data.*/
-  long previousStartTime;
+    /**The start time for the previously requested data.*/
+    long previousStartTime;
 
-  /**The end time for the previously requested data.*/
-  long previousEndTime;
+    /**The end time for the previously requested data.*/
+    long previousEndTime;
 
-  /**The start index for the previously requested data.*/
-  long previousStartIndex;
+    /**The start index for the previously requested data.*/
+    long previousStartIndex;
 
-  /**The end index for the previously requested data.*/
-  long previousEndIndex;
+    /**The end index for the previously requested data.*/
+    long previousEndIndex;
 
-  /**Number of positions.*/
-  long nbPositions;
+    /**Number of positions.*/
+    long nbPositions;
 
-  /**The maximum time, in miliseconds, contained in the file.*/
-  long fileMaxTime;
+    /**The maximum time, in miliseconds, contained in the file.*/
+    long fileMaxTime;
 
-  /**Video image width.*/
-  int width;
-  /**Video image height.*/
-  int height;
+    /**Video image width.*/
+    int width;
+    /**Video image height.*/
+    int height;
 
-  /**Number of coordinates per line contained in the position file.*/
-  int nbCoordinates;
+    /**Number of coordinates per line contained in the position file.*/
+    int nbCoordinates;
 
-  /**Angle of rotation of the video records.*/
-  int rotation;
+    /**Angle of rotation of the video records.*/
+    int rotation;
 
-  /**Flip orientation of the video records. 0 stands for none, 1 for vertical flip and 2 for horizontal flip.*/
-  int flip;
+    /**Flip orientation of the video records. 0 stands for none, 1 for vertical flip and 2 for horizontal flip.*/
+    int flip;
 
-  //Functions
+    //Functions
 
-  /**Retrieves the peak index of each spike included in the time frame given by @p startTime and @p endTime.
+    /**Retrieves the peak index of each spike included in the time frame given by @p startTime and @p endTime.
   * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.
   * @param endTime end of the time frame from which to retrieve the data, given in milisecond.
   * @param initiator instance requesting the data.
   */
-  void retrieveData(long startTime,long endTime,QObject* initiator);
-  
+    void retrieveData(long startTime,long endTime,QObject* initiator);
+
 };
 
 #endif

@@ -36,91 +36,91 @@ using namespace std;
   */
 
 class ChannelGroupView : public Q3HBox  {
-   Q_OBJECT
+    Q_OBJECT
 public: 
-	inline ChannelGroupView(bool drag,QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),drag(drag),init(true){
+    inline ChannelGroupView(bool drag,QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),drag(drag),init(true){
 
-    //Set the groupview color, the foreground color depends on the background color
-    setPaletteBackgroundColor(backgroundColor);
-    int h;
-    int s;
-    int v;
-    backgroundColor.hsv(&h,&s,&v);
-    QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
-    setPaletteForegroundColor(legendColor);
-    setMargin(0);
-    setSpacing(0);
-    adjustSize();
+        //Set the groupview color, the foreground color depends on the background color
+        setPaletteBackgroundColor(backgroundColor);
+        int h;
+        int s;
+        int v;
+        backgroundColor.hsv(&h,&s,&v);
+        QColor legendColor;
+        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+        else legendColor = Qt::white;
+        setPaletteForegroundColor(legendColor);
+        setMargin(0);
+        setSpacing(0);
+        adjustSize();
 
-    setAcceptDrops(TRUE);
-  };
+        setAcceptDrops(TRUE);
+    }
 
-  inline ~ChannelGroupView(){};
+    inline ~ChannelGroupView(){}
 
-  inline void setIconView(Q3IconView* view){
-   iconView = view;
-  };
-  
+    inline void setIconView(Q3IconView* view){
+        iconView = view;
+    }
+
 signals:
-  void dropLabel(int sourceId,int targetId,int start, int destination);
-  void dragObjectMoved(QPoint position);
+    void dropLabel(int sourceId,int targetId,int start, int destination);
+    void dragObjectMoved(QPoint position);
     
 public slots:
-  inline void reAdjustSize(int parentWidth,int labelSize){
-   if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
-    init = false; 
-    int futurWidth = parentWidth ;
+    inline void reAdjustSize(int parentWidth,int labelSize){
+        if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
+            init = false;
+            int futurWidth = parentWidth ;
 
-    setFixedWidth(futurWidth);
-    int viewfuturWidth = width() - labelSize - 6;//give so space on the right
-    iconView->setFixedWidth(viewfuturWidth);
-    
-    if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-     setFixedHeight(iconView->contentsHeight());
-     
-   }
-   //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
-   if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-    setFixedHeight(iconView->contentsHeight());   
-  };
+            setFixedWidth(futurWidth);
+            int viewfuturWidth = width() - labelSize - 6;//give so space on the right
+            iconView->setFixedWidth(viewfuturWidth);
 
- inline void setDragAndDrop(bool dragDrop){drag = dragDrop;};
-  
+            if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+                setFixedHeight(iconView->contentsHeight());
+
+        }
+        //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
+        if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+            setFixedHeight(iconView->contentsHeight());
+    }
+
+    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
+
 protected:
-  inline virtual void dropEvent(QDropEvent* event){
-   if(event->source() == 0 || !drag){
- 	  event->ignore();
- 	  return;
-   }
+    inline virtual void dropEvent(QDropEvent* event){
+        if(event->source() == 0 || !drag){
+            event->ignore();
+            return;
+        }
 
-   QString information;
-   if(Q3TextDrag::decode(event,information)){
-    int groupSource = information.section("-",0,0).toInt();
-    int start = information.section("-",1,1).toInt();
-    QString groupTarget = this->name();
-    emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
-   }
-  };
+        QString information;
+        if(Q3TextDrag::decode(event,information)){
+            int groupSource = information.section("-",0,0).toInt();
+            int start = information.section("-",1,1).toInt();
+            QString groupTarget = this->name();
+            emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
+        }
+    }
 
-  inline virtual void dragEnterEvent(QDragEnterEvent* event){
-   if(event->source() == 0 || !drag){
- 	  event->ignore();
- 	  return;
-   }   
-   event->accept(Q3TextDrag::canDecode(event));
-   //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
-   emit dragObjectMoved(QWidget::mapToParent(event->pos()));
-  };
-                    
- private:
-  Q3IconView* iconView;
+    inline virtual void dragEnterEvent(QDragEnterEvent* event){
+        if(event->source() == 0 || !drag){
+            event->ignore();
+            return;
+        }
+        event->accept(Q3TextDrag::canDecode(event));
+        //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
+        emit dragObjectMoved(QWidget::mapToParent(event->pos()));
+    }
 
-  /**True the drag and drop is allow, false otherwise.*/
-  bool drag;
+private:
+    Q3IconView* iconView;
 
-  bool init;
+    /**True the drag and drop is allow, false otherwise.*/
+    bool drag;
+
+    bool init;
 
 };
 

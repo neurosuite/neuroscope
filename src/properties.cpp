@@ -22,21 +22,21 @@
 
 
 Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(parent),
-                       intValidator(this),doubleValidator(this){
- //Set a validator on the line edits, the values have to be integers or doubles.
- nbChannelsLineEdit->setValidator(&intValidator);
- samplingRateLineEdit->setValidator(&doubleValidator);
- offsetLineEdit->setValidator(&intValidator);
- screenGainLineEdit->setValidator(&doubleValidator);
- voltageRangeLineEdit->setValidator(&intValidator);
- amplificationLineEdit->setValidator(&intValidator);
- asSamplingRateLineEdit->setValidator(&doubleValidator);
- 
- connect(traceBackgroundButton,SIGNAL(clicked()),this,SLOT(updateTraceBackgroundImage()));
-  
- //Set an icon on the backgroundButton button
- 
- traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen"));
+    intValidator(this),doubleValidator(this){
+    //Set a validator on the line edits, the values have to be integers or doubles.
+    nbChannelsLineEdit->setValidator(&intValidator);
+    samplingRateLineEdit->setValidator(&doubleValidator);
+    offsetLineEdit->setValidator(&intValidator);
+    screenGainLineEdit->setValidator(&doubleValidator);
+    voltageRangeLineEdit->setValidator(&intValidator);
+    amplificationLineEdit->setValidator(&intValidator);
+    asSamplingRateLineEdit->setValidator(&doubleValidator);
+
+    connect(traceBackgroundButton,SIGNAL(clicked()),this,SLOT(updateTraceBackgroundImage()));
+
+    //Set an icon on the backgroundButton button
+
+    traceBackgroundButton->setIconSet(QIcon(":/icons/fileopen"));
 
 }
 Properties::~Properties(){

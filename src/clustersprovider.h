@@ -37,32 +37,32 @@
   */
 
 class ClustersProvider : public DataProvider  {
-   Q_OBJECT
+    Q_OBJECT
 public:
 
-  /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
-  enum loadReturnMessage {OK=0,OPEN_ERROR=1,MISSING_FILE=3,COUNT_ERROR=4,INCORRECT_CONTENT=5};
+    /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
+    enum loadReturnMessage {OK=0,OPEN_ERROR=1,MISSING_FILE=3,COUNT_ERROR=4,INCORRECT_CONTENT=5};
 
-  /**Constructor.
+    /**Constructor.
   * @param fileUrl the url of the cluster file containing the cluster ids.
   * @param samplingRate sampling rate used to record the data (of the acquisition system).
   * @param currentSamplingRate sampling rate of the current file.
-  * @param fileMaxTime maximum time of the current file in recording units.  
-  * @param position represents the percentage from the begining of the window where the clusters are display when browsing.    
+  * @param fileMaxTime maximum time of the current file in recording units.
+  * @param position represents the percentage from the begining of the window where the clusters are display when browsing.
   */
-  ClustersProvider(QString fileUrl,double samplingRate,double currentSamplingRate,dataType fileMaxTime,int position = 25);
-	~ClustersProvider();
+    ClustersProvider(QString fileUrl,double samplingRate,double currentSamplingRate,dataType fileMaxTime,int position = 25);
+    ~ClustersProvider();
 
- /**Triggers the retrieve of the cluster information included in the time interval given by @p startTime and @p endTime.
+    /**Triggers the retrieve of the cluster information included in the time interval given by @p startTime and @p endTime.
   * @param startTime begining of the time interval from which to retrieve the data in miliseconds.
   * @param endTime end of the time interval from which to retrieve  the data.
   * @param initiator instance requesting the data.
-  * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.   
+  * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.
   */
-  void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
+    void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
 
 
- /**Looks up for the first of the clusters included in the list @p selectedIds existing after the time @p startTime.
+    /**Looks up for the first of the clusters included in the list @p selectedIds existing after the time @p startTime.
   * All the clusters included in the time interval given by @p timeFrame are retrieved. The time interval start time is
   * computed in order to have the first cluster found located at @p clusterPosition percentage of the time interval.
   * @param startTime starting time, in miliseconds, for the look up.
@@ -71,10 +71,10 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-  void requestNextClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+    void requestNextClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
 
 
- /**Looks up for the first of the clusters included in the list @p selectedIds existing before the time @p endTime.
+    /**Looks up for the first of the clusters included in the list @p selectedIds existing before the time @p endTime.
   * All the clusters included in the time interval given by @p timeFrame are retrieved. The time interval start time is
   * computed in order to have the first cluster found located at @p clusterPosition percentage of the time interval.
   * @param startTime starting time, in miliseconds, for the look up.
@@ -83,69 +83,69 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-  void requestPreviousClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+    void requestPreviousClusterData(long startTime,long timeFrame,Q3ValueList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
     
-  /**Loads the cluster ids and the corresponding spike time.
+    /**Loads the cluster ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status
   */
-  int loadData();
+    int loadData();
 
-  /**Returns list of cluster Ids.
+    /**Returns list of cluster Ids.
   * @return */
-  inline Q3ValueList<int> clusterIdList() const{return clusterIds;};
-  
-  /**Returns the name of the provider which is the cluster file number.
+    inline Q3ValueList<int> clusterIdList() const{return clusterIds;}
+
+    /**Returns the name of the provider which is the cluster file number.
   * @return provider'name.
   */
-  inline QString getName() const {return name;}
+    inline QString getName() const {return name;}
 
-  /** Sets the position where the clusters are display when browsing.
+    /** Sets the position where the clusters are display when browsing.
   * @param position percentage from the begining of the window.
   */
-  inline void setClusterPosition(int position){clusterPosition = static_cast<float>(position) / 100.0;};  
+    inline void setClusterPosition(int position){clusterPosition = static_cast<float>(position) / 100.0;}
 
-  /**Updates the sampling rate for the current document.
+    /**Updates the sampling rate for the current document.
   * @param rate sampling rate.
   */
-  inline void updateSamplingRate(double rate){
-    dataCurrentRatio = static_cast<float>(samplingRate / rate);
+    inline void updateSamplingRate(double rate){
+        dataCurrentRatio = static_cast<float>(samplingRate / rate);
 
-    //Initialize the variables
-    previousStartTime = 0;
-    previousStartIndex = 1;
-    previousEndIndex = nbSpikes;
-    double maxTime =  static_cast<double>(static_cast<double>(clusters(2,nbSpikes)) * static_cast<double>(1000) / static_cast<double>(samplingRate));
-    previousEndTime = static_cast<dataType>(floor(0.5 + maxTime));
-    fileMaxTime = previousEndTime;
-  };
+        //Initialize the variables
+        previousStartTime = 0;
+        previousStartIndex = 1;
+        previousEndIndex = nbSpikes;
+        double maxTime =  static_cast<double>(static_cast<double>(clusters(2,nbSpikes)) * static_cast<double>(1000) / static_cast<double>(samplingRate));
+        previousEndTime = static_cast<dataType>(floor(0.5 + maxTime));
+        fileMaxTime = previousEndTime;
+    }
 
-  /**Updates the acquisition system sampling rate.
+    /**Updates the acquisition system sampling rate.
   * @param rate acquisition system sampling rate.
-  * @param currentSamplingRate sampling rate for the current document.  
+  * @param currentSamplingRate sampling rate for the current document.
   */
-  inline void updateAcquisitionSystemSamplingRate(double rate,double currentSamplingRate){
-    samplingRate = rate;
-    dataCurrentRatio = static_cast<float>(samplingRate / currentSamplingRate);
+    inline void updateAcquisitionSystemSamplingRate(double rate,double currentSamplingRate){
+        samplingRate = rate;
+        dataCurrentRatio = static_cast<float>(samplingRate / currentSamplingRate);
 
-    //Initialize the variables
-    previousStartTime = 0;
-    previousStartIndex = 1;
-    previousEndIndex = nbSpikes;
-    double maxTime =  static_cast<double>(static_cast<double>(clusters(2,nbSpikes)) * static_cast<double>(1000) / static_cast<double>(samplingRate));
-    previousEndTime = static_cast<dataType>(floor(0.5 + maxTime));
-    fileMaxTime = previousEndTime;        
-  };
+        //Initialize the variables
+        previousStartTime = 0;
+        previousStartIndex = 1;
+        previousEndIndex = nbSpikes;
+        double maxTime =  static_cast<double>(static_cast<double>(clusters(2,nbSpikes)) * static_cast<double>(1000) / static_cast<double>(samplingRate));
+        previousEndTime = static_cast<dataType>(floor(0.5 + maxTime));
+        fileMaxTime = previousEndTime;
+    }
     
 signals:
-  /**Signals that the data have been retrieved.
+    /**Signals that the data have been retrieved.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
   * @param initiator instance requesting the data.
-  * @param providerName name of the instance providing the data.  
+  * @param providerName name of the instance providing the data.
   */
-  void dataReady(Array<dataType>& data,QObject* initiator,QString providerName);
+    void dataReady(Array<dataType>& data,QObject* initiator,QString providerName);
 
-  /**Signals that the data for the next cluster have been retrieved.
+    /**Signals that the data for the next cluster have been retrieved.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
   * @param initiator instance requesting the data.
@@ -153,74 +153,74 @@ signals:
   * @param startingTime time from which the data have been retrieved in miliseconds.
   * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.
   */
-  void nextClusterDataReady(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
+    void nextClusterDataReady(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
 
-  /**Signals that the data for the previous cluster have been retrieved.
+    /**Signals that the data for the previous cluster have been retrieved.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   * @param startingTime time from which the data have been retrieved.
-  * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.  
+  * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.
   */
-  void previousClusterDataReady(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
- 
+    void previousClusterDataReady(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
+
 private:
 
-  /**Provider's name.*/
-  QString name;
+    /**Provider's name.*/
+    QString name;
 
-  /**Url of the spike time file (.res file).*/
-  QString timeFileUrl;
-  
-  /**Sampling rate used to record the data.*/
-  double samplingRate;
+    /**Url of the spike time file (.res file).*/
+    QString timeFileUrl;
 
-  /**A 2 line array containing the cluster ids and the spikes time.*/
-  Array<dataType> clusters;
+    /**Sampling rate used to record the data.*/
+    double samplingRate;
 
-  /**The start time for the previously requested data.*/
-  long previousStartTime;
+    /**A 2 line array containing the cluster ids and the spikes time.*/
+    Array<dataType> clusters;
 
-  /**The end time for the previously requested data.*/
-  long previousEndTime;
-  
-  /**The start index for the previously requested data.*/
-  long previousStartIndex;
+    /**The start time for the previously requested data.*/
+    long previousStartTime;
 
-  /**The end index for the previously requested data.*/
-  long previousEndIndex;
+    /**The end time for the previously requested data.*/
+    long previousEndTime;
 
-  /**Number of spikes.*/
-  long nbSpikes;
+    /**The start index for the previously requested data.*/
+    long previousStartIndex;
 
-  /**Number of clusters in the cluster file the provider provides the data for.*/
-  int nbClusters;
+    /**The end index for the previously requested data.*/
+    long previousEndIndex;
 
-  /**Ratio between the sampling rate of the dat file and the one of the current file.*/
-  float dataCurrentRatio;
+    /**Number of spikes.*/
+    long nbSpikes;
 
-  /**List of the cluster ids.*/
-  Q3ValueList<int> clusterIds;
+    /**Number of clusters in the cluster file the provider provides the data for.*/
+    int nbClusters;
 
-  /**The maximum time, in miliseconds, contained in the file.*/
-  long fileMaxTime;
+    /**Ratio between the sampling rate of the dat file and the one of the current file.*/
+    float dataCurrentRatio;
 
-  /**Represents the percentage from the begining of the window where the clusters are display when browsing.*/
-  float clusterPosition;
-  
-  /**The maximum time of the data file in recording units.*/
-  dataType dataFileMaxTime;
-  
-  //Functions
+    /**List of the cluster ids.*/
+    Q3ValueList<int> clusterIds;
 
-  /**Retrieves the peak index of each spike included in the time frame given by @p startTime and @p endTime.
+    /**The maximum time, in miliseconds, contained in the file.*/
+    long fileMaxTime;
+
+    /**Represents the percentage from the begining of the window where the clusters are display when browsing.*/
+    float clusterPosition;
+
+    /**The maximum time of the data file in recording units.*/
+    dataType dataFileMaxTime;
+
+    //Functions
+
+    /**Retrieves the peak index of each spike included in the time frame given by @p startTime and @p endTime.
   * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.
   * @param endTime end of the time frame from which to retrieve the data, given in milisecond.
   * @param initiator instance requesting the data.
-  * @param startTimeInRecordingUnits begining of the time interval from which to retrieve  the data in recording units.     
+  * @param startTimeInRecordingUnits begining of the time interval from which to retrieve  the data in recording units.
   */
-  void retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
+    void retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
 
 };
 

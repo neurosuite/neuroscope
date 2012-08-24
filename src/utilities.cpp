@@ -20,34 +20,31 @@
 #include "utilities.h"
 #include <stdlib.h>
 
-//Added by qt3to4:
-#include <Q3TextStream>
-
 
 int Utilities::getNbLines(QString path){
- // ' are added around the path to take care of directory names with blank.
- path = "'" + path + "'";
+    // ' are added around the path to take care of directory names with blank.
+    path = "'" + path + "'";
 
- int numLines = 0;
- QFile file(path);
- if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-     while (!file.atEnd()) {
-         file.readLine();
-         ++numLines;
-     }
- }
- return numLines;
+    int numLines = 0;
+    QFile file(path);
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        while (!file.atEnd()) {
+            file.readLine();
+            ++numLines;
+        }
+    }
+    return numLines;
 }
 
 
 
 void Utilities::createBackup(QString path){
- QFile original(path);
- QFile backup(path+"~");
- original.open(QIODevice::ReadOnly);
- backup.open(QIODevice::WriteOnly);
- backup.write(original.readAll());
- original.close();
- backup.close();
+    QFile original(path);
+    QFile backup(path+"~");
+    original.open(QIODevice::ReadOnly);
+    backup.open(QIODevice::WriteOnly);
+    backup.write(original.readAll());
+    original.close();
+    backup.close();
 }
 

@@ -34,28 +34,28 @@ using namespace std;
 
 
 PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& globalEventProvider,QImage backgroundImage,long start,long timeFrameWidth,bool showEvents,int windowTopLeft,
-                          int windowBottomRight,QWidget* parent,const char* name,QColor backgroundColor,int minSize,int maxSize,
-                          int border) :
-  BaseFrame(0,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
-  background(backgroundImage),dataReady(false),isInit(true),resized(false),positionsProvider(provider),globalEventProvider(globalEventProvider),showEvents(showEvents) {
+                           int windowBottomRight,QWidget* parent,const char* name,QColor backgroundColor,int minSize,int maxSize,
+                           int border) :
+    BaseFrame(0,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
+    background(backgroundImage),dataReady(false),isInit(true),resized(false),positionsProvider(provider),globalEventProvider(globalEventProvider),showEvents(showEvents) {
 
-  //The video recording stores information like in the QT coordinate system: Y axis in oriented downwards
-  window = ZoomWindow(QRect(QPoint(0,0),QPoint(windowBottomRight,windowTopLeft)));
-  
-  startTime = start;
-  endTime = start + timeFrameWidth;
-  this->timeFrameWidth = timeFrameWidth;
-  nbSpots = positionsProvider.getNbSpots();
+    //The video recording stores information like in the QT coordinate system: Y axis in oriented downwards
+    window = ZoomWindow(QRect(QPoint(0,0),QPoint(windowBottomRight,windowTopLeft)));
+
+    startTime = start;
+    endTime = start + timeFrameWidth;
+    this->timeFrameWidth = timeFrameWidth;
+    nbSpots = positionsProvider.getNbSpots();
     
-  eventsData.setAutoDelete(true);
-  
-  //Set Connection.
-  connect(&positionsProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
+    eventsData.setAutoDelete(true);
 
- scaleBackgroundImage();
+    //Set Connection.
+    connect(&positionsProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
 
- //Get the data.
- positionsProvider.requestData(startTime,endTime,this);  
+    scaleBackgroundImage();
+
+    //Get the data.
+    positionsProvider.requestData(startTime,endTime,this);
 }
 
 
@@ -64,386 +64,386 @@ PositionView::~PositionView(){
 
 void PositionView::drawContents(QPainter* p){
 
- if(isInit){
-  QRect contentsRec = contentsRect();
-  viewport =  QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
-  if(viewport.width() == 0) update();
-  else scaleBackgroundImage();
-  
-  isInit = false;
- }
+    if(isInit){
+        QRect contentsRec = contentsRect();
+        viewport =  QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
+        if(viewport.width() == 0) update();
+        else scaleBackgroundImage();
 
- if(resized){
-  resized = false;
-  scaleBackgroundImage();
-  drawContentsMode = REDRAW;
-  update();
- }
-  
- if(drawContentsMode == REDRAW && dataReady){
-  QRect contentsRec = contentsRect();
-  QRect r((QRect)window);
+        isInit = false;
+    }
 
-  viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
+    if(resized){
+        resized = false;
+        scaleBackgroundImage();
+        drawContentsMode = REDRAW;
+        update();
+    }
 
-  //Resize the double buffer with the width and the height of the widget(QFrame)
-  doublebuffer.resize(contentsRec.width(),contentsRec.height());
+    if(drawContentsMode == REDRAW && dataReady){
+        QRect contentsRec = contentsRect();
+        QRect r((QRect)window);
 
-  //Create a painter to paint on the double buffer
-  QPainter painter;
-  painter.begin(&doublebuffer);
+        viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
 
-  //if need it, draw the background image before applying any transformation to the painter.
-  if(!background.isNull()) painter.drawPixmap(0,0,scaledBackground);
-  
- //Set the window (part of the world I want to show)
-  painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
+        //Resize the double buffer with the width and the height of the widget(QFrame)
+        doublebuffer.resize(contentsRec.width(),contentsRec.height());
 
-  //Set the viewport (part of the device I want to write on).
-  //By default, the viewport is the same as the device's rectangle (contentsRec).
-  painter.setViewport(viewport);
+        //Create a painter to paint on the double buffer
+        QPainter painter;
+        painter.begin(&doublebuffer);
 
-  //Fill the double buffer with the background color if no image has been set.
-  if(background.isNull()) doublebuffer.fill(paletteBackgroundColor());
+        //if need it, draw the background image before applying any transformation to the painter.
+        if(!background.isNull()) painter.drawPixmap(0,0,scaledBackground);
 
-  //Paint all the positions in the double buffer on top of the background image or the background color.
-  drawPositions(painter);
-  
-  //Paint the event if any
-  if(showEvents && selectedEvents.size() != 0) drawEvents(painter);
+        //Set the window (part of the world I want to show)
+        painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
 
-  //Closes the painter on the double buffer
-  painter.end();
+        //Set the viewport (part of the device I want to write on).
+        //By default, the viewport is the same as the device's rectangle (contentsRec).
+        painter.setViewport(viewport);
 
-  //Back to the default
-  drawContentsMode = REFRESH;
- }
- 
- //Draw the double buffer (pixmap) by copying it into the widget device.
- p->drawPixmap(0, 0, doublebuffer);
+        //Fill the double buffer with the background color if no image has been set.
+        if(background.isNull()) doublebuffer.fill(paletteBackgroundColor());
+
+        //Paint all the positions in the double buffer on top of the background image or the background color.
+        drawPositions(painter);
+
+        //Paint the event if any
+        if(showEvents && selectedEvents.size() != 0) drawEvents(painter);
+
+        //Closes the painter on the double buffer
+        painter.end();
+
+        //Back to the default
+        drawContentsMode = REFRESH;
+    }
+
+    //Draw the double buffer (pixmap) by copying it into the widget device.
+    p->drawPixmap(0, 0, doublebuffer);
 }
 
 void PositionView::updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){
-  background = backgroundImage;
-  //The video recording stores information like in the QT coordinate system: Y axis in oriented downwards
-  window = ZoomWindow(QRect(QPoint(0,0),QPoint(width,height)));
-  
-  scaleBackgroundImage();
+    background = backgroundImage;
+    //The video recording stores information like in the QT coordinate system: Y axis in oriented downwards
+    window = ZoomWindow(QRect(QPoint(0,0),QPoint(width,height)));
 
-  if(newOrientation){
-   //Get the updated data.
-   positionsProvider.requestData(startTime,endTime,this);
-  }
-  else{
-   drawContentsMode = REDRAW;
-   if(active) update();    
-  }
+    scaleBackgroundImage();
+
+    if(newOrientation){
+        //Get the updated data.
+        positionsProvider.requestData(startTime,endTime,this);
+    }
+    else{
+        drawContentsMode = REDRAW;
+        if(active) update();
+    }
 }
 
 void PositionView::scaleBackgroundImage(){
-  if(!background.isNull()){
-   QRect contentsRec = contentsRect();
-   scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
-  }
+    if(!background.isNull()){
+        QRect contentsRec = contentsRect();
+        scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
+    }
 }
 
 void PositionView::displayTimeFrame(long start,long timeFrameWidth){
- startTime = start;
- endTime = start + timeFrameWidth;
- this->timeFrameWidth = timeFrameWidth;
+    startTime = start;
+    endTime = start + timeFrameWidth;
+    this->timeFrameWidth = timeFrameWidth;
 
- //Request the data
- dataReady = false;
- QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    //Request the data
+    dataReady = false;
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  //Get the data.
- positionsProvider.requestData(startTime,endTime,this);
- globalEventProvider.requestData(startTime,endTime,this); 
+    //Get the data.
+    positionsProvider.requestData(startTime,endTime,this);
+    globalEventProvider.requestData(startTime,endTime,this);
 }
 
 void PositionView::dataAvailable(Array<dataType>& data,QObject* initiator){
- //If another widget was the initiator of the request, ignore the data.
- if(initiator != this) return;
- 
- this->data = data;
- dataReady = true;
+    //If another widget was the initiator of the request, ignore the data.
+    if(initiator != this) return;
 
- QApplication::restoreOverrideCursor();
- 
- //Everything has to be redraw
- drawContentsMode = REDRAW;
+    this->data = data;
+    dataReady = true;
 
- update();
+    QApplication::restoreOverrideCursor();
+
+    //Everything has to be redraw
+    drawContentsMode = REDRAW;
+
+    update();
 }
 
 void PositionView::drawPositions(QPainter& painter){
 
- //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
- if(nbSpots == 0) return;
- int nbPoints = data.nbOfRows();
- if(nbPoints == 0) return;
- //If there is only one spot, draw a point in red
- if(nbSpots == 1){
-  painter.setPen(Qt::red);
-  painter.setBrush(Qt::red);
-  for(int i = 1;i<nbPoints;++i) painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-  //The last position is emphasized, bigger points with white in the center.
-  painter.setBrush(Qt::red);
-  painter.setPen(Qt::black);
-  painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
- }
- //If there are two spots, draw a line between them. The first point is red, the second green and the line is light grey.
- else if(nbSpots == 2){
-  QColor lineColor = QColor(60,60,60);
-  for(int i = 1;i<nbPoints;++i){  
-   painter.setPen(lineColor);
-   if(data(i,1) > 0 && data(i,2) > 0 && data(i,3) > 0 && data(i,4) > 0)//if a spot has been misdetected, do not draw a line
-    painter.drawLine(data(i,1),data(i,2),data(i,3),data(i,4));
-   painter.setPen(Qt::red);
-   painter.setBrush(Qt::red);
-   painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-   painter.setPen(Qt::green);
-   painter.setBrush(Qt::green);
-   painter.drawEllipse(data(i,3)-1,data(i,4)-1,2,2);        
-  }
-  //The last position is emphasized, white line and bigger points with white in the center.
-  painter.setPen(Qt::white);
-  if(data(nbPoints,1) > 0 && data(nbPoints,2) > 0 && data(nbPoints,3) > 0 && data(nbPoints,4) > 0)//if a spot has been misdetected, do not draw a line
-    painter.drawLine(data(nbPoints,1),data(nbPoints,2),data(nbPoints,3),data(nbPoints,4));
-  painter.setBrush(Qt::red);
-  painter.setPen(Qt::black);
-  painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
-  painter.setBrush(Qt::green);
-  painter.setPen(Qt::black);
-  painter.drawEllipse(data(nbPoints,3)-4,data(nbPoints,4)-4,8,8);   
- }
- //If there are n spots, draw a line between them. The first point is red, the second green and the line light grey.
- else{
-  QColor lineColor = QColor(60,60,60);
-  int nbCoordinates = nbSpots*2;
-  for(int i = 1;i<nbPoints;++i){
-   Q3PointArray polygon(nbSpots);
-   int index = 1;
-   int nbPointsInPolygon = 0;
-   for(int j = 0;j<nbSpots;++j){
-    if(data(i,index) > 0 && data(i,index+1) > 0){ //if a spot has been misdetected, do not includd it in the polygon
-     polygon.setPoint(j,data(i,index),data(i,index+1));
-     nbPointsInPolygon++;
+    //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
+    if(nbSpots == 0) return;
+    int nbPoints = data.nbOfRows();
+    if(nbPoints == 0) return;
+    //If there is only one spot, draw a point in red
+    if(nbSpots == 1){
+        painter.setPen(Qt::red);
+        painter.setBrush(Qt::red);
+        for(int i = 1;i<nbPoints;++i) painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
+        //The last position is emphasized, bigger points with white in the center.
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
     }
-    index = index + 2;
-   }
-   painter.setBrush(Qt::NoBrush);
-   painter.setPen(lineColor);
-   painter.drawPolygon(polygon,false,0,nbPointsInPolygon); 
-   painter.setPen(Qt::red);//first point red
-   painter.setBrush(Qt::red);
-   painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-   painter.setPen(Qt::green);//other points green
-   painter.setBrush(Qt::green);
-   for(int j = 3;j<nbCoordinates;j=j+2){
-    painter.drawEllipse(data(i,j)-1,data(i,j+1)-1,2,2);
-   }    
-  }
-  //The last position is emphasized, white line and bigger points with white in the center.
-  Q3PointArray polygon(nbSpots);
-  int index = 1;
-  int nbPointsInPolygon = 0;
-  for(int j = 0;j<nbSpots;++j){
-   if(data(nbPoints,index) > 0 && data(nbPoints,index+1) > 0){ //if a spot has been misdetected, do not includd it in the polygon
-    polygon.setPoint(j,data(nbPoints,index),data(nbPoints,index+1));
-    nbPointsInPolygon++;
-   }
-   index = index + 2;
-  }
-  painter.setPen(Qt::white);
-  painter.setBrush(Qt::NoBrush);
-  painter.drawPolygon(polygon,false,0,nbPointsInPolygon);  
-  painter.setBrush(Qt::red);
-  painter.setPen(Qt::black);
-  painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
-  painter.setBrush(Qt::green);
-  painter.setPen(Qt::black);
-  for(int j = 3;j<nbCoordinates;j=j+2){
-   painter.drawEllipse(data(nbPoints,j)-4,data(nbPoints,j+1)-4,8,8);
-  }  
- }
+    //If there are two spots, draw a line between them. The first point is red, the second green and the line is light grey.
+    else if(nbSpots == 2){
+        QColor lineColor = QColor(60,60,60);
+        for(int i = 1;i<nbPoints;++i){
+            painter.setPen(lineColor);
+            if(data(i,1) > 0 && data(i,2) > 0 && data(i,3) > 0 && data(i,4) > 0)//if a spot has been misdetected, do not draw a line
+                painter.drawLine(data(i,1),data(i,2),data(i,3),data(i,4));
+            painter.setPen(Qt::red);
+            painter.setBrush(Qt::red);
+            painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
+            painter.setPen(Qt::green);
+            painter.setBrush(Qt::green);
+            painter.drawEllipse(data(i,3)-1,data(i,4)-1,2,2);
+        }
+        //The last position is emphasized, white line and bigger points with white in the center.
+        painter.setPen(Qt::white);
+        if(data(nbPoints,1) > 0 && data(nbPoints,2) > 0 && data(nbPoints,3) > 0 && data(nbPoints,4) > 0)//if a spot has been misdetected, do not draw a line
+            painter.drawLine(data(nbPoints,1),data(nbPoints,2),data(nbPoints,3),data(nbPoints,4));
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
+        painter.setBrush(Qt::green);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(data(nbPoints,3)-4,data(nbPoints,4)-4,8,8);
+    }
+    //If there are n spots, draw a line between them. The first point is red, the second green and the line light grey.
+    else{
+        QColor lineColor = QColor(60,60,60);
+        int nbCoordinates = nbSpots*2;
+        for(int i = 1;i<nbPoints;++i){
+            Q3PointArray polygon(nbSpots);
+            int index = 1;
+            int nbPointsInPolygon = 0;
+            for(int j = 0;j<nbSpots;++j){
+                if(data(i,index) > 0 && data(i,index+1) > 0){ //if a spot has been misdetected, do not includd it in the polygon
+                    polygon.setPoint(j,data(i,index),data(i,index+1));
+                    nbPointsInPolygon++;
+                }
+                index = index + 2;
+            }
+            painter.setBrush(Qt::NoBrush);
+            painter.setPen(lineColor);
+            painter.drawPolygon(polygon,false,0,nbPointsInPolygon);
+            painter.setPen(Qt::red);//first point red
+            painter.setBrush(Qt::red);
+            painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
+            painter.setPen(Qt::green);//other points green
+            painter.setBrush(Qt::green);
+            for(int j = 3;j<nbCoordinates;j=j+2){
+                painter.drawEllipse(data(i,j)-1,data(i,j+1)-1,2,2);
+            }
+        }
+        //The last position is emphasized, white line and bigger points with white in the center.
+        Q3PointArray polygon(nbSpots);
+        int index = 1;
+        int nbPointsInPolygon = 0;
+        for(int j = 0;j<nbSpots;++j){
+            if(data(nbPoints,index) > 0 && data(nbPoints,index+1) > 0){ //if a spot has been misdetected, do not includd it in the polygon
+                polygon.setPoint(j,data(nbPoints,index),data(nbPoints,index+1));
+                nbPointsInPolygon++;
+            }
+            index = index + 2;
+        }
+        painter.setPen(Qt::white);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPolygon(polygon,false,0,nbPointsInPolygon);
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
+        painter.setBrush(Qt::green);
+        painter.setPen(Qt::black);
+        for(int j = 3;j<nbCoordinates;j=j+2){
+            painter.drawEllipse(data(nbPoints,j)-4,data(nbPoints,j+1)-4,8,8);
+        }
+    }
 }
 
 void PositionView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting){
- //first  print the information on the file: name and position in the file.
- int nbMinutes = static_cast<int>(startTime / 60000.0);
- float remainingSeconds = static_cast<float>(fmod(static_cast<double>(startTime),60000));
- int nbSeconds = static_cast<int>(remainingSeconds / 1000);
- int nbMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000) + 0.5);
- if(nbMiliseconds == 1000){
-  nbMiliseconds = 0;
-  nbSeconds++;
- }
+    //first  print the information on the file: name and position in the file.
+    int nbMinutes = static_cast<int>(startTime / 60000.0);
+    float remainingSeconds = static_cast<float>(fmod(static_cast<double>(startTime),60000));
+    int nbSeconds = static_cast<int>(remainingSeconds / 1000);
+    int nbMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000) + 0.5);
+    if(nbMiliseconds == 1000){
+        nbMiliseconds = 0;
+        nbSeconds++;
+    }
 
- QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
- QFont f("Helvetica",8);
- printPainter.setFont(f);
- printPainter.setPen(Qt::black);
- printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
-  QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(positionsProvider.getFilePath()).arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(timeFrameWidth));
+    QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
+    QFont f("Helvetica",8);
+    printPainter.setFont(f);
+    printPainter.setPen(Qt::black);
+    printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
+                          QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(positionsProvider.getFilePath()).arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(timeFrameWidth));
 
- //Modify the viewport so the positions will not be drawn on the legend
- QRect newViewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
- newViewport.setBottom(printPainter.viewport().bottom() - 20);
- printPainter.setViewport(newViewport);
+    //Modify the viewport so the positions will not be drawn on the legend
+    QRect newViewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
+    newViewport.setBottom(printPainter.viewport().bottom() - 20);
+    printPainter.setViewport(newViewport);
 
- //print the positions and the choosen background.
+    //print the positions and the choosen background.
 
- 
- //Draw the double buffer (pixmap) by copying it into the printer device throught the painter.
- QRect viewportOld = QRect(viewport.left(),viewport.top(),viewport.width(),viewport.height());
 
- viewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
- QRect r = ((QRect)window);
+    //Draw the double buffer (pixmap) by copying it into the printer device throught the painter.
+    QRect viewportOld = QRect(viewport.left(),viewport.top(),viewport.width(),viewport.height());
 
- //Fill the background with the background color if
-  QRect back = QRect(r.left(),r.top(),r.width(),r.height());
- 
-  if(!whiteBackground && !background.isNull()){
-   QPixmap printPixmap;
-   printPixmap.convertFromImage(background.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
-   printPainter.drawPixmap(0,0,printPixmap);
-  }
-  
-  //use the image dedicated for printing
-  if(whiteBackground && !backgroundForPrinting.isNull()){
-   QPixmap printPixmap;
-   printPixmap.convertFromImage(backgroundForPrinting.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
-   printPainter.drawPixmap(0,0,printPixmap);  
-  }
-  
-  //Set the window (part of the world I want to show)
-  printPainter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
-  printPainter.setViewport(viewport);
+    viewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
+    QRect r = ((QRect)window);
 
-  if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,Qt::white);
-  if(!whiteBackground && background.isNull()){
-   QColor color = backgroundColor();
-   printPainter.fillRect(back,color);  
-  }
-  
-  //Paint all the positions in the printPainter on top of the background image or the background color.
-  drawPositions(printPainter);
+    //Fill the background with the background color if
+    QRect back = QRect(r.left(),r.top(),r.width(),r.height());
 
-  //Restore the previous state
-  viewport = QRect(viewportOld.left(),viewportOld.top(),viewportOld.width(),viewportOld.height());
+    if(!whiteBackground && !background.isNull()){
+        QPixmap printPixmap;
+        printPixmap.convertFromImage(background.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
+        printPainter.drawPixmap(0,0,printPixmap);
+    }
 
-  printPainter.resetXForm();
+    //use the image dedicated for printing
+    if(whiteBackground && !backgroundForPrinting.isNull()){
+        QPixmap printPixmap;
+        printPixmap.convertFromImage(backgroundForPrinting.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
+        printPainter.drawPixmap(0,0,printPixmap);
+    }
+
+    //Set the window (part of the world I want to show)
+    printPainter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
+    printPainter.setViewport(viewport);
+
+    if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,Qt::white);
+    if(!whiteBackground && background.isNull()){
+        QColor color = backgroundColor();
+        printPainter.fillRect(back,color);
+    }
+
+    //Paint all the positions in the printPainter on top of the background image or the background color.
+    drawPositions(printPainter);
+
+    //Restore the previous state
+    viewport = QRect(viewportOld.left(),viewportOld.top(),viewportOld.width(),viewportOld.height());
+
+    printPainter.resetXForm();
 }
 
 void PositionView::changeBackgroundColor(QColor color){
- BaseFrame::changeBackgroundColor(color);
+    BaseFrame::changeBackgroundColor(color);
 }
 
 void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
- //Update the list of selected events.
- this->selectedEvents.clear();
- QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
- for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-  Q3ValueList<int> eventsToShow = static_cast< Q3ValueList<int> >(providersIterator.data()); 
-  Q3ValueList<int> events;
-  Q3ValueList<int>::iterator shownEventsIterator;
-  for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
-   events.append(*shownEventsIterator);
-  }
-  this->selectedEvents.insert(providersIterator.key(),events);
- }
-  
- //Update the event data 
- this->eventsData.clear();
- Q3DictIterator<EventData> iterator(eventsData);
- for(;iterator.current();++iterator){
-  EventData* eventData = static_cast<EventData*>(iterator.current());
-  EventData* eventDataCopy = new EventData();
-  *eventDataCopy = *eventData;
-  this->eventsData.insert(iterator.currentKey(),eventDataCopy);       
- }
- 
- //Update the color list
- this->providerItemColors.clear();
- Q3DictIterator<ItemColors> colorIterator(providerItemColors);
- for(;colorIterator.current();++colorIterator){
-  this->providerItemColors.insert(colorIterator.currentKey(),colorIterator.current());       
- }
- 
- if(selectedEvents.size() !=0) computeEventPositions(samplingRate);
- 
- //Everything has to be redraw
- drawContentsMode = REDRAW;
- update();
+    //Update the list of selected events.
+    this->selectedEvents.clear();
+    QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
+    for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
+        Q3ValueList<int> eventsToShow = static_cast< Q3ValueList<int> >(providersIterator.data());
+        Q3ValueList<int> events;
+        Q3ValueList<int>::iterator shownEventsIterator;
+        for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
+            events.append(*shownEventsIterator);
+        }
+        this->selectedEvents.insert(providersIterator.key(),events);
+    }
+
+    //Update the event data
+    this->eventsData.clear();
+    Q3DictIterator<EventData> iterator(eventsData);
+    for(;iterator.current();++iterator){
+        EventData* eventData = static_cast<EventData*>(iterator.current());
+        EventData* eventDataCopy = new EventData();
+        *eventDataCopy = *eventData;
+        this->eventsData.insert(iterator.currentKey(),eventDataCopy);
+    }
+
+    //Update the color list
+    this->providerItemColors.clear();
+    Q3DictIterator<ItemColors> colorIterator(providerItemColors);
+    for(;colorIterator.current();++colorIterator){
+        this->providerItemColors.insert(colorIterator.currentKey(),colorIterator.current());
+    }
+
+    if(selectedEvents.size() !=0) computeEventPositions(samplingRate);
+
+    //Everything has to be redraw
+    drawContentsMode = REDRAW;
+    update();
 }
 
 void PositionView::computeEventPositions(double samplingRate){
- float samplingRateInMs = static_cast<float>(static_cast<float>(samplingRate) / 1000.0);
- double positionSamplingInterval = 1000.0 / positionsProvider.getSamplingRate();
- Q3DictIterator<EventData> iterator(eventsData);
- for(;iterator.current();++iterator){
-  EventData* eventData = static_cast<EventData*>(iterator.current());
-  int nbEvents = eventData->getTimes().nbOfColumns();
-       
-  eventData->computePositions(samplingRate,positionsProvider.getSamplingRate(),startTime);     
-  Array<dataType>& currentPositions =  eventData->getPositions(); 
- }
+    float samplingRateInMs = static_cast<float>(static_cast<float>(samplingRate) / 1000.0);
+    double positionSamplingInterval = 1000.0 / positionsProvider.getSamplingRate();
+    Q3DictIterator<EventData> iterator(eventsData);
+    for(;iterator.current();++iterator){
+        EventData* eventData = static_cast<EventData*>(iterator.current());
+        int nbEvents = eventData->getTimes().nbOfColumns();
+
+        eventData->computePositions(samplingRate,positionsProvider.getSamplingRate(),startTime);
+        Array<dataType>& currentPositions =  eventData->getPositions();
+    }
 }
 
 void PositionView::updateEventDisplay(){;
- if(showEvents) globalEventProvider.requestData(startTime,endTime,this); 
-}
+                                        if(showEvents) globalEventProvider.requestData(startTime,endTime,this);
+                                       }
 
 void PositionView::drawEvents(QPainter& painter){  
- QPen pen; 
- pen.setWidth(3);
- QMap<QString, Q3ValueList<int> >::Iterator iterator;
- for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-  Q3ValueList<int> eventList = iterator.data();
-  QString providerName = iterator.key();
-  if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
-  ItemColors* colors = providerItemColors[providerName];
-  Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getPositions();
-  Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
-  int nbEvents = currentData.nbOfColumns();
-  for(int i = 1; i <= nbEvents;++i){
-   dataType index = currentData(1,i);
-   int eventId = currentIds(1,i);
-   if(eventList.contains(eventId)){
-    QColor color = colors->color(eventId);
-    pen.setColor(color);
-    painter.setPen(pen);
-    painter.drawLine(data(index,1)-4,data(index,2)+4,data(index,1)+4,data(index,2)-4);
-    painter.drawLine(data(index,1)-4,data(index,2)-4,data(index,1)+4,data(index,2)+4);     
-   }
-  }
- }   
+    QPen pen;
+    pen.setWidth(3);
+    QMap<QString, Q3ValueList<int> >::Iterator iterator;
+    for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
+        Q3ValueList<int> eventList = iterator.data();
+        QString providerName = iterator.key();
+        if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+        ItemColors* colors = providerItemColors[providerName];
+        Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getPositions();
+        Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
+        int nbEvents = currentData.nbOfColumns();
+        for(int i = 1; i <= nbEvents;++i){
+            dataType index = currentData(1,i);
+            int eventId = currentIds(1,i);
+            if(eventList.contains(eventId)){
+                QColor color = colors->color(eventId);
+                pen.setColor(color);
+                painter.setPen(pen);
+                painter.drawLine(data(index,1)-4,data(index,2)+4,data(index,1)+4,data(index,2)-4);
+                painter.drawLine(data(index,1)-4,data(index,2)-4,data(index,1)+4,data(index,2)+4);
+            }
+        }
+    }
 }
 
 void PositionView::eventColorUpdate(QString name,int eventId,bool active){
- if(active){
-  drawContentsMode = REDRAW ;
-  update();
- }
+    if(active){
+        drawContentsMode = REDRAW ;
+        update();
+    }
 }
 
 void PositionView::removeEventProvider(QString name,bool active,bool lastFile){
- selectedEvents.remove(name);
- providerItemColors.remove(name);
- eventsData.remove(name);
- if(lastFile) showEvents = false;
- 
- drawContentsMode = REDRAW;
- if(active) update();
+    selectedEvents.remove(name);
+    providerItemColors.remove(name);
+    eventsData.remove(name);
+    if(lastFile) showEvents = false;
+
+    drawContentsMode = REDRAW;
+    if(active) update();
 }
 
 void PositionView::setEventsInPositionView(bool shown){
- showEvents = shown;
- if(shown) globalEventProvider.requestData(startTime,endTime,this); 
- else{
-  drawContentsMode = REDRAW;
-  update();  
- }
+    showEvents = shown;
+    if(shown) globalEventProvider.requestData(startTime,endTime,this);
+    else{
+        drawContentsMode = REDRAW;
+        update();
+    }
 }
 #include "positionview.moc"

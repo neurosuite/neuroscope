@@ -50,7 +50,7 @@ class Q3IconViewItem;
 class ChannelColors;
 class SpaceWidget;
 
- /**
+/**
   * This class represents the channel palettes of the application (anatomical and spike).
   * It receives the user selections and triggers the actions which have to be done.
   *@author Lynn Hazan
@@ -74,15 +74,15 @@ public:
     * @param fl widget flags.
     */
     ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
-   /*
+    /*
    *  Destroys the object and frees any allocated resources.
    */
-   ~ChannelPalette();
+    ~ChannelPalette();
 
     /**Dispatchs the channels in several iconviews to represent the different groups of channels.
     * @param channelColors list of colors for the channels.
     * @param groupsChannels map given the list of channels for each group.
-    * @param channelsGroups map given to which group each channel belongs. 
+    * @param channelsGroups map given to which group each channel belongs.
     */
     void createChannelLists(ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
 
@@ -110,26 +110,26 @@ public:
     * Gets the skip status for each channel.
     * @return map between the channel and skip status.
     */
-    inline const QMap<int,bool>getSkipStatus(){return channelsSkipStatus;};
+    inline const QMap<int,bool>getSkipStatus(){return channelsSkipStatus;}
 
-/**Interal class to represent an item in the palette. Contains a overloaded compare function to have
+    /**Interal class to represent an item in the palette. Contains a overloaded compare function to have
 * the items order by alphabetic order.
 */    
-class ChannelIconItem : public Q3IconViewItem{
+    class ChannelIconItem : public Q3IconViewItem{
 
- public:
-   inline ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
-     Q3IconViewItem(parent,text,icon){};
+    public:
+        inline ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
+            Q3IconViewItem(parent,text,icon){}
 
-   inline ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
-     Q3IconViewItem(parent,after,text,icon){};
+        inline ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
+            Q3IconViewItem(parent,after,text,icon){}
 
-   virtual inline int compare(Q3IconViewItem* item) const{
-    if(key().toInt() < item->key().toInt()) return -1;
-    else if(key().toInt() == item->key().toInt()) return 0;
-    else return 1;
-   };
- };
+        virtual inline int compare(Q3IconViewItem* item) const{
+            if(key().toInt() < item->key().toInt()) return -1;
+            else if(key().toInt() == item->key().toInt()) return 0;
+            else return 1;
+        }
+    };
 
     
 public slots:
@@ -149,7 +149,7 @@ public slots:
     void trashChannelsMovedAround(const Q3ValueList<int>& channelIds,QString afterId,bool beforeFirst);
     void discardChannels();
     void discardChannels(const Q3ValueList<int>& channelsToDiscard);
-    void discardChannels(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);    
+    void discardChannels(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
     void discardSpikeChannels();
     void showChannels();
     void hideChannels();
@@ -171,21 +171,21 @@ public slots:
     void removeChannelsFromTrash(const Q3ValueList<int>& channelIds);
     void slotMousePressWoModificators(QString sourceGroup);
     inline void selectionTool(){
-     emit channelsSelected(selectedChannels());
-    };
+        emit channelsSelected(selectedChannels());
+    }
     
 protected slots:
     virtual void slotRightPressed(Q3IconViewItem* item);
     virtual void slotMousePressed(int button,Q3IconViewItem* item);
     void slotMousePressed(QString sourceGroupName);
-    virtual void slotMidButtonPressed(QString sourceGroupId);   
+    virtual void slotMidButtonPressed(QString sourceGroupId);
     virtual void slotClickRedraw();
     virtual void languageChange();
     virtual void createGroup(int id);
     virtual void setChannelLists();
     virtual void resizeEvent(QResizeEvent* event);
     virtual void drawContents(QPainter* painter);
-    inline void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());};
+    inline void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
     
 signals:
     void singleChangeColor(int selectedChannel);
@@ -231,7 +231,7 @@ private:
     *Pointer to the variable belonging to NeuroscopeDoc.
     */
     QMap<int, Q3ValueList<int> >* groupsChannels;
- 
+
     int labelSize;
     
     /**True if the the colors are in grey-scale*/
@@ -254,11 +254,11 @@ private:
     
     /**Stores skip status of each channel.*/
     QMap<int,bool> channelsSkipStatus;
-   
+
     /**Stores the selection status of each group. The selection status is true if all the group items have been selected by a click on the group label, false otherwise.*/
-    QMap<QString,bool> selectionStatus;    
+    QMap<QString,bool> selectionStatus;
     
-   //Functions
+    //Functions
     
     /**
     * Updates the show/hide status of the currently slected channels.
@@ -272,8 +272,8 @@ private:
     * @param painter painer use to draw the pixmap.
     * @param pixmap pixmap to paint.
     * @param color color use to paint the pixmap.
-    * @param show boolean use to know the type of circle to draw.            
-    * @param skip boolean use to if the pixmap has to be drawn with the background color. 
+    * @param show boolean use to know the type of circle to draw.
+    * @param skip boolean use to if the pixmap has to be drawn with the background color.
     */
     void drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip);
 
@@ -305,45 +305,45 @@ private:
 /**IUtility class used to create the channel palettes of the application (anatomical and spike)..
 */  
 class SpaceWidget : public QWidget{
- Q_OBJECT
-  public:
-   inline SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
-    setAcceptDrops(TRUE); 
-   };
-   
-   inline virtual void dropEvent(QDropEvent* event){
-    if(event->source() == 0 || !drag){
- 	   event->ignore();
- 	   return;
+    Q_OBJECT
+public:
+    inline SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
+        setAcceptDrops(TRUE);
     }
 
-    QString information;
-    if(Q3TextDrag::decode(event,information)){
-     int groupSource = information.section("-",0,0).toInt();
-     int start = information.section("-",1,1).toInt();
-     //to inform that the target is the SpaceWidget, put -2 as the target group.
-     emit dropLabel(groupSource,-2,start,QWidget::mapToGlobal(event->pos()).y());
+    inline virtual void dropEvent(QDropEvent* event){
+        if(event->source() == 0 || !drag){
+            event->ignore();
+            return;
+        }
+
+        QString information;
+        if(Q3TextDrag::decode(event,information)){
+            int groupSource = information.section("-",0,0).toInt();
+            int start = information.section("-",1,1).toInt();
+            //to inform that the target is the SpaceWidget, put -2 as the target group.
+            emit dropLabel(groupSource,-2,start,QWidget::mapToGlobal(event->pos()).y());
+        }
     }
-   };
 
-   inline virtual void dragEnterEvent(QDragEnterEvent* event){
-    if(event->source() == 0 || !drag){
-  	  event->ignore();
-  	  return;
+    inline virtual void dragEnterEvent(QDragEnterEvent* event){
+        if(event->source() == 0 || !drag){
+            event->ignore();
+            return;
+        }
+        event->accept(Q3TextDrag::canDecode(event));
     }
-    event->accept(Q3TextDrag::canDecode(event));
-   };
 
-  public slots:
-    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;};
+public slots:
+    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
-  signals:
-   void dropLabel(int sourceId,int targetId,int start, int destination);
+signals:
+    void dropLabel(int sourceId,int targetId,int start, int destination);
 
-  private:
-   /**True the drag and drop is allow, false otherwise.*/
-   bool drag;
-      
+private:
+    /**True the drag and drop is allow, false otherwise.*/
+    bool drag;
+
 };
 
 /**
@@ -351,31 +351,31 @@ class SpaceWidget : public QWidget{
   *@author Lynn Hazan
   */
 class GroupLabel : public QLabel{
- Q_OBJECT
-  public:
-   inline GroupLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
-    QLabel(text,parent,name,f){};
+    Q_OBJECT
+public:
+    inline GroupLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
+        QLabel(text,parent,name,f){}
 
-  signals:
+signals:
     void middleClickOnLabel(QString sourceId);
     void leftClickOnLabel(QString sourceId);
-     
-  protected:
-   virtual inline void mousePressEvent(QMouseEvent* e){
-    if(e->button() == Qt::LeftButton){
 
-     QPoint firstClick = QWidget::mapToGlobal(e->pos());
-     QString information = parent()->name();
-     information.append(QString("-%1").arg(firstClick.y()));
-     Q3DragObject* drag = new Q3TextDrag(information,this);
-     drag->dragMove();       
-     
-     emit leftClickOnLabel(parent()->name());
+protected:
+    virtual inline void mousePressEvent(QMouseEvent* e){
+        if(e->button() == Qt::LeftButton){
+
+            QPoint firstClick = QWidget::mapToGlobal(e->pos());
+            QString information = parent()->name();
+            information.append(QString("-%1").arg(firstClick.y()));
+            Q3DragObject* drag = new Q3TextDrag(information,this);
+            drag->dragMove();
+
+            emit leftClickOnLabel(parent()->name());
+        }
+        if(e->button() == Qt::MidButton){
+            emit middleClickOnLabel(parent()->name());
+        }
     }
-    if(e->button() == Qt::MidButton){
-     emit middleClickOnLabel(parent()->name()); 
-    }
-   };
 };
 
 #endif // CHANNELPALETTE_H

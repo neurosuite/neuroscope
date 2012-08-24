@@ -796,7 +796,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             int answer = KMessageBox::questionYesNo(this,tr("The selected file no longer exists. Do you want to remove it from the list?"), tr(title));
             if(answer == KMessageBox::Yes) {
                 //KDAB_PENDING fileOpenRecent->removeURL(url);
-               }
+            }
             else  {
                 //KDAB_PENDING fileOpenRecent->addURL(url); //hack, unselect the item
             }

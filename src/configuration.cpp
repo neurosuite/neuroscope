@@ -108,8 +108,8 @@ void Configuration::write() const {
 }
 
 Configuration& configuration() {
-  //The C++ standard requires that static variables in functions
-  //have to be created upon first call of the function.
-  static Configuration conf;
-  return conf;
+    //The C++ standard requires that static variables in functions
+    //have to be created upon first call of the function.
+    static Configuration conf;
+    return conf;
 }

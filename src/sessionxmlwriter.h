@@ -40,51 +40,51 @@ class ChannelColors;
 class SessionXmlWriter {
 public:
 
-  /**Constructor which will write a session file to the @p url.
+    /**Constructor which will write a session file to the @p url.
   */
-  SessionXmlWriter();
+    SessionXmlWriter();
 
-  ~SessionXmlWriter();
+    ~SessionXmlWriter();
 
-  /**Writes the xml tree to a session file.
+    /**Writes the xml tree to a session file.
   * @param url url of the file to write to.
   * @return true if the session could be write to disk, falsse otherwise.
   */
-  bool writeTofile(const QString& url);
+    bool writeTofile(const QString& url);
 
- /**
+    /**
   * Creates the elements related to the list of files which where loaded during the session,
   * cluster, spike or event files.
   * @param fileList list of files loaded during the session.
   */
-  void setLoadedFilesInformation(Q3ValueList<SessionFile> fileList);
+    void setLoadedFilesInformation(Q3ValueList<SessionFile> fileList);
 
- /**
+    /**
   * Creates the elements related to the displays.
   * @param displayList list of DisplayInformation given the information on each display.
   */
-  void setDisplayInformation(Q3ValueList<DisplayInformation> displayList);
-  
-  private:
+    void setDisplayInformation(Q3ValueList<DisplayInformation> displayList);
 
-  /**The session document.*/    
-  QDomDocument doc;
+private:
 
-  /**The root element.*/
-  QDomElement root;   
+    /**The session document.*/
+    QDomDocument doc;
 
-  /**The element containing the video information.*/
-  QDomElement video;
+    /**The root element.*/
+    QDomElement root;
 
-  /**The sampling rate by extension element.*/
-  QDomElement samplingRates;
-  
-  /**The element corresponding gto the loaded files.*/
-  QDomElement loadedFiles;
+    /**The element containing the video information.*/
+    QDomElement video;
 
-  /**The element containing the display information.*/
-  QDomElement displays;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    /**The sampling rate by extension element.*/
+    QDomElement samplingRates;
+
+    /**The element corresponding gto the loaded files.*/
+    QDomElement loadedFiles;
+
+    /**The element containing the display information.*/
+    QDomElement displays;
+
 };
 
 #endif

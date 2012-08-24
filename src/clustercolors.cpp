@@ -26,15 +26,9 @@ using namespace std;
 ClusterColors::ClusterColors():ItemColors(){}
 
 ClusterColors::~ClusterColors(){
-   qDebug() << "~ClusterColors()";
+    qDebug() << "~ClusterColors()";
 }
 
 ClusterColors::ClusterColors(const ClusterColors& origin){
-  ItemColors(dynamic_cast<const ItemColors&>(origin));
+    ItemColors(dynamic_cast<const ItemColors&>(origin));
 }
-
-
-
-
-
-

@@ -33,38 +33,38 @@
   */
 
 class ClusterProperties : public ClusterPropertiesLayout  {
-   Q_OBJECT
+    Q_OBJECT
 public: 
-   ClusterProperties(QWidget *parent=0, const char *name=0);
-   ~ClusterProperties();
+    ClusterProperties(QWidget *parent=0, const char *name=0);
+    ~ClusterProperties();
 
 
-  /**Sets the number of samples per spike waveform.*/
-  inline void setNbSamples(int nb){nbSamplesLineEdit->setText(QString("%1").arg(nb));};
+    /**Sets the number of samples per spike waveform.*/
+    inline void setNbSamples(int nb){nbSamplesLineEdit->setText(QString("%1").arg(nb));}
 
-  /**Sets the index of the peak sample in the spike waveform.*/
-  inline void setPeakIndex(int index){peakIndexLineEdit->setText(QString("%1").arg(index));};
+    /**Sets the index of the peak sample in the spike waveform.*/
+    inline void setPeakIndex(int index){peakIndexLineEdit->setText(QString("%1").arg(index));}
 
-  /**Returns the number of samples per spike waveform.*/
-  inline int getNbSamples()const{return nbSamplesLineEdit->text().toInt();};
+    /**Returns the number of samples per spike waveform.*/
+    inline int getNbSamples()const{return nbSamplesLineEdit->text().toInt();}
 
-  /**Returns the index of the peak sample in the spike waveform.*/
-  inline int getPeakIndex()const{return peakIndexLineEdit->text().toInt();};
-  
- public slots:
-  /**Sets whether the widget is enabled
+    /**Returns the index of the peak sample in the spike waveform.*/
+    inline int getPeakIndex()const{return peakIndexLineEdit->text().toInt();}
+
+public slots:
+    /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */
-  inline void setEnabled (bool state){
-    groupBox->setEnabled(state);
-    nbSamplesLineEdit->setEnabled(state);
-    waveformLabel->setEnabled(state);
-    peakIndexLineEdit->setEnabled(state);
-    peakLabel->setEnabled(state);
-  };
+    inline void setEnabled (bool state){
+        groupBox->setEnabled(state);
+        nbSamplesLineEdit->setEnabled(state);
+        waveformLabel->setEnabled(state);
+        peakIndexLineEdit->setEnabled(state);
+        peakLabel->setEnabled(state);
+    }
 
- private:
-  QIntValidator intValidator;
+private:
+    QIntValidator intValidator;
 };
 
 #endif

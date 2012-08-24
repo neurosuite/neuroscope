@@ -18,9 +18,6 @@
 #ifndef NEUROSCOPEDOC_H
 #define NEUROSCOPEDOC_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif 
 
 // include files for QT
 #include <QObject>
@@ -50,7 +47,7 @@ class NeuroscopeXmlReader;
 class ItemColors;
 class ItemPalette;
 
- /**
+/**
   * The NeuroscopeDoc class provides a document object that can be used in conjunction with the classes
   * NeuroscopeApp and NeuroscopeView to create a document-view model for MDI (Multiple Document Interface)
   * based on KApplication and KDockMainWindow as main classes.
@@ -59,12 +56,12 @@ class ItemPalette;
   * data by NeuroscopeView objects. Also, NeuroscopeDoc contains the methods for serialization of the document data
   * from and to files.
   * @author Lynn Hazan
-  */  
+  */
 class NeuroscopeDoc : public QObject
 {
-  Q_OBJECT
-  
- private: 
+    Q_OBJECT
+
+private:
     /**The url of the document .*/
     QString docUrl;
 
@@ -92,7 +89,7 @@ class NeuroscopeDoc : public QObject
     /**Gain which takes the screen gain into account.*/
     int gain;
 
-   /**Acquisition system gain.*/
+    /**Acquisition system gain.*/
     int acquisitionGain;
 
     /**Screen gain in milivolts by centimeters used to display the field potentiels.*/
@@ -165,7 +162,7 @@ class NeuroscopeDoc : public QObject
     TracesProvider* tracesProvider;
 
     /**Pointer on the parent widget (main window).*/
-    QWidget* parent;    
+    QWidget* parent;
 
     /**The base name of the document. */
     QString baseName;
@@ -202,7 +199,7 @@ class NeuroscopeDoc : public QObject
     
     /**Default length corresponding to the index of peak of the spike.*/
     float indexLengthDefault;
-        
+
     /** Dictionary between the provider names and the provider except the TracesProvider.*/
     Q3Dict<DataProvider> providers;
 
@@ -211,11 +208,11 @@ class NeuroscopeDoc : public QObject
 
     /**Name of the last loaded provider. This name is displayed at the top of provider's palette*/
     QString lastLoadedProvider;
-        
+
     /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
     Q3Dict<ItemColors> providerItemColors;
 
-   /**A base file name can be used for different kind of files corresponding to the same data and having
+    /**A base file name can be used for different kind of files corresponding to the same data and having
     * different sampling rates. Each file is identified by its extension. This map contains the correspondance
     * between the file extensions with the sampling rates for the current document. This map does not
     * includes the sampling rates for the extension dat and eeg, they treated separately.
@@ -226,7 +223,7 @@ class NeuroscopeDoc : public QObject
     * This assumes that the cluster file names contain the identifier of
     * the spike group used to create them (myFile.clu.1 correspond to the
     * spike group 1).
-    */    
+    */
     QMap<int, Q3ValueList<int> > displayGroupsClusterFile;
 
     /**Extension of the open file.*/
@@ -257,7 +254,7 @@ class NeuroscopeDoc : public QObject
     bool newEventDescriptionCreated;
 
     /**Pair storing the the latest removed event description and the corresponding color.*/
-    QPair<QString,QString> removedDescription;    
+    QPair<QString,QString> removedDescription;
 
     /**Default video image width.*/
     int videoWidthDefault;
@@ -268,7 +265,7 @@ class NeuroscopeDoc : public QObject
     
     /**Default background image for the trace view.*/
     QString traceBackgroundImageDefault;
-        
+
     /**Default angle of rotation of the video records.*/
     int rotationDefault;
     /**Default flip orientation of the video records.
@@ -304,7 +301,7 @@ class NeuroscopeDoc : public QObject
     /**True if a position file has been opened at least one during the session (it can have been closed and not reopened), false otherwise.*/
     bool positionFileOpenOnce;
     
-   /**Extension of the opened position file.*/
+    /**Extension of the opened position file.*/
     QString positionFileExtension;
     
     /**Map between the channel and skip status.*/
@@ -334,14 +331,14 @@ class NeuroscopeDoc : public QObject
     * @return a QImage which is a transform copy of this image. The original QImage is not changed.
     */
     QImage transformBackgroundImage(bool useWhiteBackground = false);
-        
-  public:
+
+public:
 
     /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
     enum OpenSaveCreateReturnMessage {OK=0,OPEN_ERROR=1,DOWNLOAD_ERROR=3,INCORRECT_FILE=4,SAVE_ERROR=5,
-                               UPLOAD_ERROR=6,INCORRECT_CONTENT=7,CREATION_ERROR=8,PARSE_ERROR=9,MISSING_FILE=10,
-                               ALREADY_OPENED=11,NOT_WRITABLE=12};
-      
+                                      UPLOAD_ERROR=6,INCORRECT_CONTENT=7,CREATION_ERROR=8,PARSE_ERROR=9,MISSING_FILE=10,
+                                      ALREADY_OPENED=11,NOT_WRITABLE=12}
+
     /** Constructs a document.
     * @param parent the parent QWidget.
     * @param displayChannelPalette a reference to the channel palette used to specify the traces display.
@@ -350,9 +347,9 @@ class NeuroscopeDoc : public QObject
     * @param datSamplingRateDefault default sampling rate of the dat file in the settings.
     * @param eegSamplingRateDefault default sampling rate of the EEG file in the settings.
     * @param initialOffset initial default offset for all the field potentials.
-    * @param voltageRangeDefault voltage range of the acquisition system in volts.    
+    * @param voltageRangeDefault voltage range of the acquisition system in volts.
     * @param amplificationDefault default amplification of the acquisition system.
-    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels    
+    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels
     * @param resolutionDefault default resolution of the acquisition system.
     * @param eventPosition represents the event position, in percentage from the begining of the window, where the events are display when browsing.
     * @param clusterPosition represents the cluster position, in percentage from the begining of the window, where the clusters are display when browsing.
@@ -362,15 +359,15 @@ class NeuroscopeDoc : public QObject
     * @param width video image width.
     * @param height video image height.
     * @param backgroundImage image used as a background for the position view.
-    * @param traceBackgroundImage image used as a background for the trace view.    
+    * @param traceBackgroundImage image used as a background for the trace view.
     * @param rotation video image rotation angle.
-    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal. 
+    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
     * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
     NeuroscopeDoc(QWidget* parent,ChannelPalette& displayChannelPalette,ChannelPalette& spikeChannelPalette,int channelNbDefault,double datSamplingRateDefault,
                   double eegSamplingRateDefault, int initialOffset,int voltageRangeDefault,int amplificationDefault,float screenGainDefault,int resolutionDefault,
                   int eventPosition,int clusterPosition,int nbSamples, int peakSampleIndex,double videoSamplingRate, int width, int height, QString backgroundImage, QString traceBackgroundImage,
-                    int rotation,int flip,bool positionsBackground);
+                  int rotation,int flip,bool positionsBackground);
     /** Destructor for the fileclass of the application. */
     ~NeuroscopeDoc();
 
@@ -392,7 +389,7 @@ class NeuroscopeDoc : public QObject
     /**Saves the current session: displays, spike, cluster, event files opened and selected clusters and events.
     * It also saves the relevant changes in the parameter files (creating one if there is none).
      @return an OpenSaveCreateReturnMessage enum giving the saving status.
-    */    
+    */
     OpenSaveCreateReturnMessage saveSession();
 
     /**Saves the event files.
@@ -405,9 +402,9 @@ class NeuroscopeDoc : public QObject
     @return an OpenSaveCreateReturnMessage enum giving the saving status.
     */
     inline OpenSaveCreateReturnMessage saveSession(QString newSessionUrl){
-     sessionUrl = newSessionUrl;
-     return saveSession();  
-    };
+        sessionUrl = newSessionUrl;
+        return saveSession();
+    }
     
     /**Creates a new event file.
     * @param eventUrl url of the new event file.
@@ -424,12 +421,12 @@ class NeuroscopeDoc : public QObject
 
     /**Changes the color of a channel.
     * @param channelId id of the channel to redraw.
-    * @param activeView the view in which the change has to be immediate.    
+    * @param activeView the view in which the change has to be immediate.
     */
     void singleChannelColorUpdate(int channelId,NeuroscopeView* activeView);
 
     /**Changes the color of a cluster.
-    * @param providerName identifier of the cluster provider containing the updated cluster.    
+    * @param providerName identifier of the cluster provider containing the updated cluster.
     * @param clusterId id of the cluster to redraw.
     * @param activeView the view in which the change has to be immediate.
     */
@@ -444,14 +441,14 @@ class NeuroscopeDoc : public QObject
 
     /**Changes the color of a group of channels.
     * @param groupId id of the group for which the color have been changed.
-    * @param activeView the view in which the change has to be immediate.    
+    * @param activeView the view in which the change has to be immediate.
     */
     void channelGroupColorUpdate(int groupId,NeuroscopeView* activeView);
     
     /**Changes the color of selected channels.
     * @param selectedChannels ids of the channels  which have had its color changed.
-    * @param activeView the view in which the change has to be immediate.     
-    */    
+    * @param activeView the view in which the change has to be immediate.
+    */
     //void channelsColorUpdate(QValueList<int>selectedChannels,NeuroscopeView& view);
 
     /**Triggers the update of the displays due to a change in the display groups. Only the active display
@@ -459,235 +456,235 @@ class NeuroscopeDoc : public QObject
     * @param activeView the view in which the change has to be immediate.
     */
     void groupsModified(NeuroscopeView* activeView);
-       
-   /**Updates the background color used in the views.
+
+    /**Updates the background color used in the views.
    * @param backgroundColor color of the new background.
    */
-   void setBackgroundColor(QColor backgroundColor);
-   
-   /**Updates the background image used in the trace views.
+    void setBackgroundColor(QColor backgroundColor);
+
+    /**Updates the background image used in the trace views.
    * @param backgroundImagePath path of the image for the traces background.
    */
-   void setTraceBackgroundImage(QString traceBackgroundImagePath);   
+    void setTraceBackgroundImage(QString traceBackgroundImagePath);
 
-   /**Sets the initial offset for all the traces for the current document.*/
-   void setInitialOffset(int offset);
+    /**Sets the initial offset for all the traces for the current document.*/
+    void setInitialOffset(int offset);
 
-   /**Sets the various gains.
+    /**Sets the various gains.
    * @param voltageRange voltage range of the acquisition system in volts.oltage range of the acquisition system in volts.
    * @param amplification amplification of the acquisition system.
    * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
    */
-   void setGains(int voltageRange,int amplification,float screenGain);
+    void setGains(int voltageRange,int amplification,float screenGain);
 
-   /**Sets the resolution of the acquisition system of the current document.
+    /**Sets the resolution of the acquisition system of the current document.
    * @param resolution current resolution.
    */
-   void setResolution(int resolution);
+    void setResolution(int resolution);
 
-   /**Sets the sampling rate for the current document.
+    /**Sets the sampling rate for the current document.
    * @param rate sampling rate.
    */
-   void setSamplingRate(double rate);
+    void setSamplingRate(double rate);
 
-   /**Sets the acquisition system sampling rate. This function is call only if the current opened
+    /**Sets the acquisition system sampling rate. This function is call only if the current opened
    * file is not a dat file.
    * @param rate sampling rate.
    */
-   void setAcquisitionSystemSamplingRate(double rate);
+    void setAcquisitionSystemSamplingRate(double rate);
 
-   /**Sets the number of channels for the current document.
+    /**Sets the number of channels for the current document.
    * @param nb current number of channels.
    */
-   void setChannelNb(int nb);
-           
-   /**Gets the initial offset for all the traces for the current document.
+    void setChannelNb(int nb);
+
+    /**Gets the initial offset for all the traces for the current document.
    * @return initial offset.
    */
-   inline int getInitialOffset()const{return initialOffset;};
+    inline int getInitialOffset()const{return initialOffset;}
 
-   /**Gets the acquisition system gains.
+    /**Gets the acquisition system gains.
    * @return current acquisition gain.
    */
-   inline int getAcquisitionGain()const{return acquisitionGain;};
+    inline int getAcquisitionGain()const{return acquisitionGain;}
 
-   /**Gets the current gain based on the screen gain and the acquisition system gain.
+    /**Gets the current gain based on the screen gain and the acquisition system gain.
    * @return current gain.
    */
-   inline int getGain()const{return gain;};
+    inline int getGain()const{return gain;}
 
-   /**Gets the voltage range of the acquisition system in volts for the current document.
+    /**Gets the voltage range of the acquisition system in volts for the current document.
    * @return current voltage range.
    */
-   inline int getVoltageRange()const{return voltageRange;};
+    inline int getVoltageRange()const{return voltageRange;}
 
-   /**Gets the amplification of the acquisition system for the current document.
+    /**Gets the amplification of the acquisition system for the current document.
    * @return current amplification.
    */
-   inline int getAmplification()const{return amplification;};
+    inline int getAmplification()const{return amplification;}
 
-   /**Gets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
+    /**Gets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
    * @return current screen gain.
    */
-   inline float getScreenGain()const{return screenGain;};
+    inline float getScreenGain()const{return screenGain;}
 
-   /**Gets the resolution of the acquisition system for the current document.
+    /**Gets the resolution of the acquisition system for the current document.
    * @return current resolution.
    */
-   inline int getResolution()const{return resolution;};
+    inline int getResolution()const{return resolution;}
 
-   /**Gets the sampling rate  for the current document.
+    /**Gets the sampling rate  for the current document.
    * @return current sampling rate.
    */
-   inline double getSamplingRate()const{return samplingRate;};
+    inline double getSamplingRate()const{return samplingRate;}
 
 
-   /**Gets the acquisition system sampling rate.
+    /**Gets the acquisition system sampling rate.
    * @return acquisition system  sampling rate.
    */
-   inline double getAcquisitionSystemSamplingRate()const{return datSamplingRate;};
+    inline double getAcquisitionSystemSamplingRate()const{return datSamplingRate;}
 
-   /**All the positions contained in a position file can be used to create a background image for the PositionView.
+    /**All the positions contained in a position file can be used to create a background image for the PositionView.
    * The value return by this function tells if such background has to be created.
    * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
-   */  
-   inline bool getPositionsBackground()const{return drawPositionsOnBackground;};
+   */
+    inline bool getPositionsBackground()const{return drawPositionsOnBackground;}
     
 
-   /**Sets the various default gains.
+    /**Sets the various default gains.
    * @param voltageRangeDefault default voltage range of the acquisition system in volts.
    * @param amplificationDefault default amplification of the acquisition system.
    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels.
    */
-   inline void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
-    acquisitionGainDefault = static_cast<int>(0.5 +
-                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolutionDefault))
-                       / static_cast<float>(voltageRangeDefault * 1000))
-                       * amplificationDefault);
+    inline void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
+        acquisitionGainDefault = static_cast<int>(0.5 +
+                                                  static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolutionDefault))
+                                                                     / static_cast<float>(voltageRangeDefault * 1000))
+                                                  * amplificationDefault);
 
-    gainDefault = static_cast<int>(0.5 + screenGainDefault * acquisitionGainDefault);
-    this->voltageRangeDefault = voltageRangeDefault;
-    this->amplificationDefault = amplificationDefault;
-    this->screenGainDefault = screenGainDefault;
-   };
+        gainDefault = static_cast<int>(0.5 + screenGainDefault * acquisitionGainDefault);
+        this->voltageRangeDefault = voltageRangeDefault;
+        this->amplificationDefault = amplificationDefault;
+        this->screenGainDefault = screenGainDefault;
+    }
 
-   /**Sets the voltage range of the acquisition system in volts for the current document.
+    /**Sets the voltage range of the acquisition system in volts for the current document.
    * @param range current voltage range.
    */
-   inline void setVoltageRange(int range){
-    voltageRange = range;
-    acquisitionGain = static_cast<int>(0.5 +
-                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                       / static_cast<float>(voltageRange * 1000))
-                       * amplification);
+    inline void setVoltageRange(int range){
+        voltageRange = range;
+        acquisitionGain = static_cast<int>(0.5 +
+                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
+                                                              / static_cast<float>(voltageRange * 1000))
+                                           * amplification);
 
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-   };
+        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
+    }
 
-   /**Sets the amplification of the acquisition system for the current document.
+    /**Sets the amplification of the acquisition system for the current document.
    * @param amplification current amplification.
    */
-   inline void setAmplification(int amplification){
-    this->amplification = amplification;
-    acquisitionGain = static_cast<int>(0.5 +
-                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                       / static_cast<float>(voltageRange * 1000))
-                       * amplification);
+    inline void setAmplification(int amplification){
+        this->amplification = amplification;
+        acquisitionGain = static_cast<int>(0.5 +
+                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
+                                                              / static_cast<float>(voltageRange * 1000))
+                                           * amplification);
 
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-   };
+        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
+    }
 
-   /**Sets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
+    /**Sets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
    * @param gain current screen gain.
    */
-   inline void setScreenGain(float gain){
-    screenGain = gain;
-    acquisitionGain = static_cast<int>(0.5 +
-                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                       / static_cast<float>(voltageRange * 1000))
-                       * amplification);
+    inline void setScreenGain(float gain){
+        screenGain = gain;
+        acquisitionGain = static_cast<int>(0.5 +
+                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
+                                                              / static_cast<float>(voltageRange * 1000))
+                                           * amplification);
 
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-   };
-   
-   /**Sets the default initial offset for all the traces.
+        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
+    }
+
+    /**Sets the default initial offset for all the traces.
    * @param offset initial offset.
    */
-   inline void setDefaultInitialOffset(int offset){initialOffsetDefault = offset;};
+    inline void setDefaultInitialOffset(int offset){initialOffsetDefault = offset;}
 
-  /**Sets the default resolution of the acquisition system.
+    /**Sets the default resolution of the acquisition system.
    * @param resolution default resolution.
    */
-   inline void setDefaultResolution(int resolution){resolutionDefault = resolution;};
+    inline void setDefaultResolution(int resolution){resolutionDefault = resolution;}
 
-   /**Sets the default sampling rate of the EEG file.
+    /**Sets the default sampling rate of the EEG file.
    * @param rate default sampling rate.
    */
-   inline void setDefaultEegSamplingRate(double rate){eegSamplingRateDefault = rate;};
+    inline void setDefaultEegSamplingRate(double rate){eegSamplingRateDefault = rate;}
 
-   /**Sets the default sampling rate of the dat file.
+    /**Sets the default sampling rate of the dat file.
    * @param rate default sampling rate.
    */
-   inline void setDefaultDatSamplingRate(double rate){datSamplingRateDefault = rate;};
+    inline void setDefaultDatSamplingRate(double rate){datSamplingRateDefault = rate;}
 
-   /**Sets the default number of channels.
+    /**Sets the default number of channels.
    * @param nb default number of channels.
    */
-   inline void setDefaultChannelNb(int nb){channelNbDefault = nb;};
-   
-   /**Sets the default background image for the trace view.
+    inline void setDefaultChannelNb(int nb){channelNbDefault = nb;}
+
+    /**Sets the default background image for the trace view.
    * @param traceBackgroundImagePath background image.
    */
-   inline void setDefaultTraceBackgroundImage(QString traceBackgroundImagePath){
- 		traceBackgroundImageDefault = traceBackgroundImagePath;
- 	}
- 
-   /**Sets that some of the properties of the current document were provided on the command line.*/
-   inline void propertiesFromCommandLine(){isCommandLineProperties = true;};
+    inline void setDefaultTraceBackgroundImage(QString traceBackgroundImagePath){
+        traceBackgroundImageDefault = traceBackgroundImagePath;
+    }
 
-   /**Returns a pointer on the list of ItemColor objects used to represent the channel colors.
+    /**Sets that some of the properties of the current document were provided on the command line.*/
+    inline void propertiesFromCommandLine(){isCommandLineProperties = true;}
+
+    /**Returns a pointer on the list of ItemColor objects used to represent the channel colors.
    * @return ChannelColors containing the information on the channels and their associated color.
    */
-   inline ChannelColors* channelColors() const {return channelColorList;} ;
+    inline ChannelColors* channelColors() const {return channelColorList;}
 
-   /**Returns a reference on the DataProvider containing the information on the traces (TracesProvider).
+    /**Returns a reference on the DataProvider containing the information on the traces (TracesProvider).
    * @return TracesProvider object.
    */
-   inline TracesProvider& tracesDataProvider() const {return *tracesProvider;};
+    inline TracesProvider& tracesDataProvider() const {return *tracesProvider;}
 
-  /**Returns a reference on the Map given the correspondance between the channel ids and the display group ids.
-   */   
-   inline QMap<int,int>* getDisplayChannelsGroups() {return &displayChannelsGroups;};
-
-  /**Returns a reference on the map given th correspondance between the display group ids and the channel ids.
+    /**Returns a reference on the Map given the correspondance between the channel ids and the display group ids.
    */
-   inline QMap<int, Q3ValueList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;};   
+    inline QMap<int,int>* getDisplayChannelsGroups() {return &displayChannelsGroups;}
 
-  /**Returns a reference on the Map given the correspondance between the channel ids and the spike group ids.
+    /**Returns a reference on the map given th correspondance between the display group ids and the channel ids.
    */
-   inline QMap<int,int>* getChannelsSpikeGroups() {return &channelsSpikeGroups;};
+    inline QMap<int, Q3ValueList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;}
 
-  /**Returns a reference on the map given th correspondance between the spike group ids and the channel ids.
+    /**Returns a reference on the Map given the correspondance between the channel ids and the spike group ids.
    */
-   inline QMap<int, Q3ValueList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;};
+    inline QMap<int,int>* getChannelsSpikeGroups() {return &channelsSpikeGroups;}
 
-   /**Selects all the channels and shows them if the edit mode is not selected.
-   * @param activeView the view in which the change has to be immediate.
-   * @param editMode true if the edit mode is selected, false otherwise.
-   */   
-   void selectAllChannels(NeuroscopeView& activeView,bool editMode);
+    /**Returns a reference on the map given th correspondance between the spike group ids and the channel ids.
+   */
+    inline QMap<int, Q3ValueList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;}
 
-   /**Deselects all the channels and hides them if the edit mode is not selected.
+    /**Selects all the channels and shows them if the edit mode is not selected.
    * @param activeView the view in which the change has to be immediate.
    * @param editMode true if the edit mode is selected, false otherwise.
    */
-   void deselectAllChannels(NeuroscopeView& activeView,bool editMode);
+    void selectAllChannels(NeuroscopeView& activeView,bool editMode);
 
-   /**The two channel palettes are synchronized.
+    /**Deselects all the channels and hides them if the edit mode is not selected.
+   * @param activeView the view in which the change has to be immediate.
+   * @param editMode true if the edit mode is selected, false otherwise.
    */
-   void synchronize();
+    void deselectAllChannels(NeuroscopeView& activeView,bool editMode);
 
-   /**Updates the properties for the current file
+    /**The two channel palettes are synchronized.
+   */
+    void synchronize();
+
+    /**Updates the properties for the current file
    * (number of channels, sampling rate of the dat file and eeg file). This function is only called at the opening
    * of a file if the user has changed the default or command line values.
    * @param channelNb number of channels.
@@ -698,75 +695,75 @@ class NeuroscopeDoc : public QObject
    * @param amplification amplification of the acquisition system.
    * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
    * @param newNbSamples number of samples per spike waveform.
-   * @param newPeakSampleIndex sample index corresponding to the peak of a spike waveform.   
+   * @param newPeakSampleIndex sample index corresponding to the peak of a spike waveform.
    * @param videoSamplingRate video acquisition sampling rate.
    * @param width video image width.
    * @param height video image height.
    * @param backgroundImage image used as a background for the position view.
-   * @param traceBackgroundImage image used as a background for the trace view.   
+   * @param traceBackgroundImage image used as a background for the trace view.
    * @param rotation video image rotation angle.
    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
-   * @param acquisitionSystemSamplingRate acquisition system sampling.   
-   * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.  
+   * @param acquisitionSystemSamplingRate acquisition system sampling.
+   * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
-   inline void updateFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
-                                    float screenGain,int newNbSamples,int newPeakSampleIndex,double videoSamplingRate,
-                                    int width, int height, QString backgroundImage, QString traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
-                                    bool positionsBackground){
-    this->channelNb = channelNb;
-    if(extension != "dat") samplingRate = SR;
-    else samplingRate = acquisitionSystemSamplingRate;
-    datSamplingRate = acquisitionSystemSamplingRate;
-    this->voltageRange = voltageRange;
-    this->amplification = amplification;
-    this->screenGain = screenGain;
-    this->resolution = resolution;
-    initialOffset = offset;
-    nbSamples = newNbSamples;
-    peakSampleIndex = newPeakSampleIndex;
-    this->videoSamplingRate = videoSamplingRate;
-    videoWidth = width;
-    videoHeight = height;
-    this->backgroundImage = backgroundImage;    
-    this->traceBackgroundImage = traceBackgroundImage;
-    this->rotation = rotation;
-    this->flip = flip;
-    drawPositionsOnBackground = positionsBackground;
+    inline void updateFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
+                                     float screenGain,int newNbSamples,int newPeakSampleIndex,double videoSamplingRate,
+                                     int width, int height, QString backgroundImage, QString traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
+                                     bool positionsBackground){
+        this->channelNb = channelNb;
+        if(extension != "dat") samplingRate = SR;
+        else samplingRate = acquisitionSystemSamplingRate;
+        datSamplingRate = acquisitionSystemSamplingRate;
+        this->voltageRange = voltageRange;
+        this->amplification = amplification;
+        this->screenGain = screenGain;
+        this->resolution = resolution;
+        initialOffset = offset;
+        nbSamples = newNbSamples;
+        peakSampleIndex = newPeakSampleIndex;
+        this->videoSamplingRate = videoSamplingRate;
+        videoWidth = width;
+        videoHeight = height;
+        this->backgroundImage = backgroundImage;
+        this->traceBackgroundImage = traceBackgroundImage;
+        this->rotation = rotation;
+        this->flip = flip;
+        drawPositionsOnBackground = positionsBackground;
 
-     acquisitionGain = static_cast<int>(0.5 +
-                    static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                    / static_cast<float>(voltageRange * 1000))
-                    * amplification);
+        acquisitionGain = static_cast<int>(0.5 +
+                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
+                                                              / static_cast<float>(voltageRange * 1000))
+                                           * amplification);
 
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-   };
+        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
+    }
 
-   /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
-   inline bool isCurrentFileAdatFile(){
-    if(extension == "dat") return true;
-    else return false;
-   };
-   
-   /**Returns the base name of the document (common name for all the files). */
-   inline QString documentBaseName(){return baseName;};
+    /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
+    inline bool isCurrentFileAdatFile(){
+        if(extension == "dat") return true;
+        else return false;
+    }
 
-   /**Returns the session file path.*/
-   QString sessionPath() const;
+    /**Returns the base name of the document (common name for all the files). */
+    inline QString documentBaseName(){return baseName;}
 
-   /**Returns the total length of the document in seconds.*/
-   long long recordingLength();
+    /**Returns the session file path.*/
+    QString sessionPath() const;
 
-   /**Tells if there is opened document to be closed.
+    /**Returns the total length of the document in seconds.*/
+    long long recordingLength();
+
+    /**Tells if there is opened document to be closed.
    * @return true if there is a document to close, false otherwise.
    */
-   bool isADocumentToClose();
+    bool isADocumentToClose();
 
-   /**Informs the displays that the mode hase switch from edit to none edit.
-   * @param activeView the view in which the change has to be immediate.   
+    /**Informs the displays that the mode hase switch from edit to none edit.
+   * @param activeView the view in which the change has to be immediate.
    */
-   void setNoneEditMode(NeuroscopeView* activeView);
+    void setNoneEditMode(NeuroscopeView* activeView);
 
-   /**Verifies if the document can be close.
+    /**Verifies if the document can be close.
     * @param mainWindow the main window calling this method.
     * @param callingMethod the mainWindow's method which call this method.
     * @return true if the document can be close, false if there still thread running and
@@ -777,22 +774,22 @@ class NeuroscopeDoc : public QObject
     /** Shows or hides the calibration bar. This bar is meaningful only when all the channels
     *  have the same amplification.
     * @param show true if the bar has to be shown false otherwise.
-    * @param activeView the view in which the change has to be immediate.     
+    * @param activeView the view in which the change has to be immediate.
     */
     void showCalibration(bool show,NeuroscopeView* activeView);
 
     /**Returns the name used to identified the last loaded provider.
     */
-    inline QString lastLoadedProviderName(){return lastLoadedProvider;};
+    inline QString lastLoadedProviderName(){return lastLoadedProvider;}
     
     /**Returns the item color list for the given provider.
     * @param fileName name of the file containing the data of the provider.
     */
-    inline ItemColors* providerColorList(QString fileName){return providerItemColors[fileName];};
+    inline ItemColors* providerColorList(QString fileName){return providerItemColors[fileName];}
 
     /**Loads the cluster file identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.
-    * @param activeView the view in which the change has to be immediate.     
+    * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
     OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,NeuroscopeView* activeView);
@@ -810,7 +807,7 @@ class NeuroscopeDoc : public QObject
     /**Loads the position file and creates the position view in the current display.
     * @param url file to be opened.
     * @param activeView the view in which the change has to be immediate.
-    * @return an OpenSaveCreateReturnMessage enum giving the load status.    
+    * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
     OpenSaveCreateReturnMessage loadPositionFile(QString url,NeuroscopeView*activeView);
 
@@ -824,7 +821,7 @@ class NeuroscopeDoc : public QObject
     * from the list of providers.
     * @param providerName identifier of the cluster provider.
     * @param activeView the view in which the change has to be immediate.
-    */    
+    */
     void removeClusterFile(QString providerName,NeuroscopeView* activeView);
 
     /**Loads the event file identified by @p eventUrl.
@@ -858,8 +855,8 @@ class NeuroscopeDoc : public QObject
 
     /**Updates the selection of clusters to be shown by showing all the clusters
     * except those contained in @p clustersToNotShow.
-    * @param clusterPalette the palette containing the clusters to be shown.    
-    * @param activeView the view in which the change has to be immediate.    
+    * @param clusterPalette the palette containing the clusters to be shown.
+    * @param activeView the view in which the change has to be immediate.
     * @param clustersToHide list of clusters to not show.
     */
     void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,Q3ValueList<int> clustersToHide);
@@ -884,7 +881,7 @@ class NeuroscopeDoc : public QObject
     void deselectAllEvents(ItemPalette* eventPalette,NeuroscopeView* activeView);
 
     /**Returns the value to use as the length for the event descriptions in the event palette for the the last loaded event provider.*/
-    inline int getLastEventProviderGridX() const {return lastEventProviderGridX;};
+    inline int getLastEventProviderGridX() const {return lastEventProviderGridX;}
 
     /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
     void setEventPosition(int position);
@@ -897,7 +894,7 @@ class NeuroscopeDoc : public QObject
     * @param selectedEventId id of the modified event.
     * @param time initial time of the modified event.
     * @param newTime new time of the modified event.
-    * @param activeView the view in which the change has been made.    
+    * @param activeView the view in which the change has been made.
     */
     void eventModified(QString providerName,int selectedEventId,double time,double newTime,NeuroscopeView* activeView);
 
@@ -910,7 +907,7 @@ class NeuroscopeDoc : public QObject
     void eventRemoved(QString providerName,int selectedEventId,double time,NeuroscopeView* activeView);
 
     /** Reverts the last user action.
-    * @param activeView the currently active view. 
+    * @param activeView the currently active view.
     */
     void undo(NeuroscopeView* activeView);
 
@@ -923,7 +920,7 @@ class NeuroscopeDoc : public QObject
     * @param providerName name use to identified the event provider containing the added event.
     * @param addedEventDescription description of the added event.
     * @param time time of the added event.
-    * @param activeView the view in which the change has been made.    
+    * @param activeView the view in which the change has been made.
     */
     void eventAdded(QString providerName,QString addedEventDescription,double time,NeuroscopeView* activeView);
 
@@ -937,7 +934,7 @@ class NeuroscopeDoc : public QObject
 
     /**Sets the information used to display spike waveforms.
     * @param nb number of samples per spike waveform.
-    * @param index sample index corresponding to the peak of a spike waveform. 
+    * @param index sample index corresponding to the peak of a spike waveform.
     * @param activeView the view in which the change has been made.
     */
     void setWaveformInformation(int nb,int index,NeuroscopeView* activeView);
@@ -948,31 +945,31 @@ class NeuroscopeDoc : public QObject
     * @param index sample index corresponding to the peak of a spike waveform.
     */
     inline void setDefaultWaveformInformation(int nb,int index){
-     nbSamplesDefault = nb;
-     peakSampleIndexDefault = index;      
-    };
+        nbSamplesDefault = nb;
+        peakSampleIndexDefault = index;
+    }
 
     /**Returns the number of samples per spike waveform.*/
-    inline int getNbSamples()const{return nbSamples;};
+    inline int getNbSamples()const{return nbSamples;}
 
     /**Returns the index of the peak sample in the spike waveform.*/
-    inline int getPeakIndex()const{return peakSampleIndex;};
+    inline int getPeakIndex()const{return peakSampleIndex;}
 
 
-   /**Sets the information used to display the animal position.
+    /**Sets the information used to display the animal position.
    * @param videoSamplingRate video acquisition sampling rate.
    * @param width video image width.
    * @param height video image height.
    * @param backgroundImage image used as a background for the position view.
    * @param rotation video image rotation angle.
    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
-   * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.  
+   * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    * @param activeView the view in which the change has been made.
    */
-   void setPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,
-                    int rotation,int flip,bool positionsBackground,NeuroscopeView* activeView);
+    void setPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,
+                                int rotation,int flip,bool positionsBackground,NeuroscopeView* activeView);
 
-   /**Sets the default information used to display the animal position.
+    /**Sets the default information used to display the animal position.
    * @param videoSamplingRate video acquisition sampling rate.
    * @param width video image width.
    * @param height video image height.
@@ -981,146 +978,146 @@ class NeuroscopeDoc : public QObject
    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
    * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
-   void setDefaultPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,int rotation,int flip,bool positionsBackground);
-   
-   /**Gets the video sampling rate.
+    void setDefaultPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,int rotation,int flip,bool positionsBackground);
+
+    /**Gets the video sampling rate.
    * @return current video sampling rate.
    */
-   inline double getVideoSamplingRate()const{return videoSamplingRate;};
+    inline double getVideoSamplingRate()const{return videoSamplingRate;}
 
-   /**Gets the number of channels for the current document.
+    /**Gets the number of channels for the current document.
    * @return current number of channels.
    */
-   inline int getChannelNb()const{return channelNb;};
+    inline int getChannelNb()const{return channelNb;}
 
-   /**Returns the video image width.
+    /**Returns the video image width.
    * @return current video image width.
    */
-   inline int getWidth()const{return videoWidth;};
+    inline int getWidth()const{return videoWidth;}
 
-   /**Returns the video image height.
+    /**Returns the video image height.
    * @return current video image height.
    */
-   inline int getHeight()const{return videoHeight;};
+    inline int getHeight()const{return videoHeight;}
 
-   /**Returns the background image for the PositionView.
+    /**Returns the background image for the PositionView.
    * @return current background image;
    */
-   inline QString getBackgroundImage()const{return backgroundImage;};
+    inline QString getBackgroundImage()const{return backgroundImage;}
 
-   /**Returns the background image for the TraceView.
+    /**Returns the background image for the TraceView.
    * @return current traceBackground image;
    */
-   inline QString getTraceBackgroundImage()const{return traceBackgroundImage;};
+    inline QString getTraceBackgroundImage()const{return traceBackgroundImage;}
 
-   /**Returns the video image rotation angle.
+    /**Returns the video image rotation angle.
    * @return current rotation angle.
    */
-   inline int getRotation()const{return rotation;};
+    inline int getRotation()const{return rotation;}
 
-   /**Returns the video image flip orientation.
+    /**Returns the video image flip orientation.
    * 0 stands for none, 1 for vertical and 2 for horizontal.
    * @return current flip orientation.
    */
-   inline int getFlip()const{return flip;};
+    inline int getFlip()const{return flip;}
 
-   /**Removes the positon provider corresponding to the position file
+    /**Removes the positon provider corresponding to the position file
    * from the list of providers.
    * @param activeView the view in which the change has to be immediate.
    */
-   void removePositionFile(NeuroscopeView* activeView);
+    void removePositionFile(NeuroscopeView* activeView);
 
-   /**Adds a PositionView in the current display.
+    /**Adds a PositionView in the current display.
    * @param activeView the view in which the position view will be added.
    * @param backgroundColor
    */
-   void addPositionView(NeuroscopeView* activeView,QColor backgroundColor);
+    void addPositionView(NeuroscopeView* activeView,QColor backgroundColor);
     
     class CloseDocumentEvent;
     friend class CloseDocumentEvent;
 
     inline CloseDocumentEvent* getCloseDocumentEvent(QString origin){
-      return new CloseDocumentEvent(origin);
-    };
+        return new CloseDocumentEvent(origin);
+    }
 
     /**
     * Internal class use to send information to the main window to inform it that
     * the document could not be closed has there still have thread running.
     */
     class CloseDocumentEvent : public QCustomEvent{
-     //Only the method getCloseDocumentEvent of NeuroscopeDoc has access to the private part of CloseDocumentEvent,
-     //the constructor of CloseDocumentEvent being private, only this method con create a new CloseDocumentEvent
-     friend CloseDocumentEvent* NeuroscopeDoc::getCloseDocumentEvent(QString origin);
+        //Only the method getCloseDocumentEvent of NeuroscopeDoc has access to the private part of CloseDocumentEvent,
+        //the constructor of CloseDocumentEvent being private, only this method con create a new CloseDocumentEvent
+        friend CloseDocumentEvent* NeuroscopeDoc::getCloseDocumentEvent(QString origin);
 
     public:
-      inline QString methodOfOrigin(){return origin;};
-      inline ~CloseDocumentEvent(){};
+        inline QString methodOfOrigin(){return origin;}
+        inline ~CloseDocumentEvent(){}
 
     private:
-      CloseDocumentEvent(QString origin):QCustomEvent(QEvent::User + 200),origin(origin){};
+        CloseDocumentEvent(QString origin):QCustomEvent(QEvent::User + 200),origin(origin){}
 
-      QString origin;
+        QString origin;
     };
 
     
-   /**Gets a background image containing the animal trajectory on a white background. Transformation (rotation and flip have
+    /**Gets a background image containing the animal trajectory on a white background. Transformation (rotation and flip have
    * been applied if necessary).
    * @return a QImage which is a transform copy of this image (he original QImage is not changed) or an null image if the animal trajectory
    * is not currently set.
    */
-   inline QImage getWhiteTrajectoryBackground(){
-    if(!drawPositionsOnBackground) return QImage();
-    return transformBackgroundImage(true); 
-   };
+    inline QImage getWhiteTrajectoryBackground(){
+        if(!drawPositionsOnBackground) return QImage();
+        return transformBackgroundImage(true);
+    }
     
-   
-   /**Updates the color of the skipped channels to either white or background color.
+
+    /**Updates the color of the skipped channels to either white or background color.
    * @param whiteBackground true if the skipped channels should be colored in white, false otherwise.
    * @param backgroundColor current background color.
-   */   
-   void updateSkippedChannelColors(bool whiteBackground,QColor backgroundColor);
-   
-   /**Informs the views that the list of skipped channel has changed.*/
-   void updateSkipStatus();
-   
-   /*Sets the current channel offsets has the default offsets.
-   * @param activeView the view containing the offsets to be used as default.   
    */
-   void setDefaultOffsets(NeuroscopeView* activeView);
-   
-   /**Resets the channel default offsets to zero.*/
-   void resetDefaultOffsets();
-   
-   /**Returns a reference on the the map given the of channels default offsets.*/
-   inline  const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;};
-   
-  public slots:
+    void updateSkippedChannelColors(bool whiteBackground,QColor backgroundColor);
 
-   /**Updates the event palette and the views after the creation of a new event description.
+    /**Informs the views that the list of skipped channel has changed.*/
+    void updateSkipStatus();
+
+    /*Sets the current channel offsets has the default offsets.
+   * @param activeView the view containing the offsets to be used as default.
+   */
+    void setDefaultOffsets(NeuroscopeView* activeView);
+
+    /**Resets the channel default offsets to zero.*/
+    void resetDefaultOffsets();
+
+    /**Returns a reference on the the map given the of channels default offsets.*/
+    inline  const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;}
+
+public slots:
+
+    /**Updates the event palette and the views after the creation of a new event description.
    * @param providerName provider identifier.
    * @param oldNewEventIds map between the previous eventIds and the new ones.
-   * @param newOldEventIds map between the new eventIds and the previous ones.   
-   * @param eventDescriptionAdded new event description added.  
-   */   
-   void slotNewEventDescriptionCreated(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,QString eventDescriptionAdded);  
+   * @param newOldEventIds map between the new eventIds and the previous ones.
+   * @param eventDescriptionAdded new event description added.
+   */
+    void slotNewEventDescriptionCreated(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,QString eventDescriptionAdded);
 
-   /**Updates the event palette and the views after the suppression of an event description.
+    /**Updates the event palette and the views after the suppression of an event description.
    * @param providerName provider identifier.
    * @param oldNewEventIds map between the previous eventIds and the new ones.
    * @param newOldEventIds map between the new eventIds and the previous ones.
    * @param eventIdToRemove event id removed.
    * @param eventDescriptionToRemove removed event description.
    */
-   void slotEventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
-   
-  signals:
+    void slotEventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
+
+signals:
     /**Informs the application that there is no session file available.
     * @param channelDefaultOffsets map given the channel default offsets.
-    * @param skipStatus map given the skip status of the channels.    
+    * @param skipStatus map given the skip status of the channels.
     */
     void noSession(QMap<int,int>& channelDefaultOffsets,QMap<int,bool>& skipStatus);
 
-   /**Informs the application that there the first display to create will show
+    /**Informs the application that there the first display to create will show
    * the channels contained in @p channelsToDisplay.
    * @param channelsToDisplay list of channel ids to show at start up.
    * @param verticalLines true if vertical lines will be drawn if clusters are selected.
@@ -1137,15 +1134,15 @@ class NeuroscopeDoc : public QObject
    * @param duration time window in miliseconds.
    * @param tabLabel label for the display when in tab page mode.
    * @param positionView true if a position view in shown in the display, false otherwise.
-   * @param rasterHeight height of the rasters in the world coordinate system.   
-   * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwise.      
+   * @param rasterHeight height of the rasters in the world coordinate system.
+   * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwise.
    */
     void loadFirstDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
                           bool multipleColumns,bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
                           Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
                           bool showEventsInPositionView);
 
-  public:	
+public:
     /** The list of the views currently connected to the document */
     Q3PtrList<NeuroscopeView>* viewList;
 

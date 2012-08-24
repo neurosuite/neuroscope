@@ -40,79 +40,79 @@ class ChannelColors;
 class ParameterXmlModifier {
 public:
 
-  /**Constructor.
+    /**Constructor.
   */
-  ParameterXmlModifier();
+    ParameterXmlModifier();
 
-  ~ParameterXmlModifier();
+    ~ParameterXmlModifier();
 
- /**Opens and parses the file with the @p url.
+    /**Opens and parses the file with the @p url.
   * @param url url of the file to open.
   * @return true if the file was correctly parse, false othewise.
   */
-  bool parseFile(const QString& url);
-  
-  /**Writes the modified xml tree to a parameter file given by @p url.
+    bool parseFile(const QString& url);
+
+    /**Writes the modified xml tree to a parameter file given by @p url.
   * @param url url of the file to write to.
   * @return true if the parameter file could be write to disk, false otherwise.
   */
-   bool writeTofile(const QString& url);
- 
-  /**
+    bool writeTofile(const QString& url);
+
+    /**
   * Finds the first child node with the tag name @p childName direct child of the root node.
   * @param childName name of the child node tag to look up.
   * @return the first node starting from root having @p tagName as tag name.
   */
-  QDomNode findDirectChild(QString childName);
-  
-  /**
+    QDomNode findDirectChild(QString childName);
+
+    /**
   * Finds the first child node with the tag name @p childName direct child of the @p ancestor node.
   * @param childName name of thechild node tag to look up.
-  * @param ancestor starting node from which to look up for the node.  
+  * @param ancestor starting node from which to look up for the node.
   * @return the first node starting from @p ancestor having @p tagName as tag name.
   */
-  QDomNode findDirectChild(QString childName,QDomNode ancestor);
+    QDomNode findDirectChild(QString childName,QDomNode ancestor);
 
- /**
+    /**
   * Finds the first child node with the tag name @p childName direct child of the @p ancestor node.
   * This node has to contain a direct child node with the tag name @p grandChildName with a text
-  * value of @p value. 
+  * value of @p value.
   * @param childName name of the child node tag to look up.
-  * @param grandChildName name of the grandchild node tag to look up.  
-  * @param value value of the textNode contained in @p grandChildName.  
-  * @param ancestor starting node from which to look up for the child node.  
+  * @param grandChildName name of the grandchild node tag to look up.
+  * @param value value of the textNode contained in @p grandChildName.
+  * @param ancestor starting node from which to look up for the child node.
   * @return the first child node corresponding to the criteria.
   */
-  QDomNode findDirectChild(QString childName,QString grandChildName,QString value,QDomNode ancestor);
-  
-  /**
+    QDomNode findDirectChild(QString childName,QString grandChildName,QString value,QDomNode ancestor);
+
+    /**
   * Modifies the elements related to the acquisition system.
   * @param resolution resolution of the system in bits.
   * @param nbChannels number of channels.
-  * @param samplingRate the sampling rate in hertz.     
+  * @param samplingRate the sampling rate in hertz.
   * @param voltageRange voltage range of the acquisition system in volts.oltage range of the acquisition system in volts.
   * @param amplification amplification of the acquisition system.
-  * @param offset initial offset for all the traces.  
-  * @return true if the modification succeded, false otherwise.  
+  * @param offset initial offset for all the traces.
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setAcquisitionSystemInformation(int resolution,int nbChannels,double samplingRate,int voltageRange,int amplification,int offset);
+    bool setAcquisitionSystemInformation(int resolution,int nbChannels,double samplingRate,int voltageRange,int amplification,int offset);
 
-  /**
+    /**
   * Modifies the element related to the field potentials.
   * @param lfpSamplingRate local field potential sampling rate in hertz.
-  * @return true if the modification succeded, false otherwise.  
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setLfpInformation(double lfpSamplingRate);
-  
-  /**
+    bool setLfpInformation(double lfpSamplingRate);
+
+    /**
   * Creates the elements containing NeuroScope miscellaneous information.
   * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
   * @param traceBackgroungImage image used as background for the trace view.
   */
-  void setMiscellaneousInformation(float screenGain,QString traceBackgroungImage);
-  
+    void setMiscellaneousInformation(float screenGain,QString traceBackgroungImage);
 
- /**
+
+    /**
   * Creates the elements containing the video information of the neuroscope element.
   * @param rotation video image rotation angle.
   * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
@@ -120,112 +120,112 @@ public:
   * @param drawTrajectory all the positions contained in a position file can be used to create a background image for the PositionView.
   * This value tells if such background has to be created.
   */
-  void setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory);
-  
- /**
+    void setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory);
+
+    /**
   * Modifies the elements containing the video information.
   * @param width video image width.
-  * @param height video image height. 
-  * @return true if the modification succeded, false otherwise.  
+  * @param height video image height.
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setVideoInformation(int width,int height);
-  
-  /**
+    bool setVideoInformation(int width,int height);
+
+    /**
   * Modifies the elements related to the channels display.
   * @param channelColors list of colors for the channels (color use to display the channel,
   * color of the anatomical group to which the channel belongs,
   * color of the spike group to which the channel belongs).
-  * @param channelsGroups map given to which group each channel belongs.   
-  * @param channelDefaultOffsets map given the default channel offsets. 
-  * @return true if the modification succeded, false otherwise.  
+  * @param channelsGroups map given to which group each channel belongs.
+  * @param channelDefaultOffsets map given the default channel offsets.
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setChannelDisplayInformation(ChannelColors* channelColors,QMap<int,int>& channelsGroups,QMap<int,int>& channelDefaultOffsets);
-  
- /**
+    bool setChannelDisplayInformation(ChannelColors* channelColors,QMap<int,int>& channelsGroups,QMap<int,int>& channelDefaultOffsets);
+
+    /**
   * Modifies the elements related to the anatomical description.
   * @param anatomicalGroups map given to which anatomical group each channel belongs.
   * @param skipStatus map given the skip status of the channels.
-  * @return true if the modification succeded, false otherwise.  
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
+    bool setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
 
- /**
+    /**
   * Modifies the elements related to the spike detection.
   * @param nbSamples number of samples in a spike.
   * @param peakSampleIndex sample index corresponding to the peak of the spike.
-  * @param spikeGroups map given to which spike group each channel belongs.    
-  * @return true if the modification succeded, false otherwise.  
+  * @param spikeGroups map given to which spike group each channel belongs.
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups);
+    bool setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups);
 
- /**
+    /**
   * Modifies the elements related to the spike detection.
   * @param spikeGroups map given to which spike group each channel belongs.
-  * @return true if the modification succeded, false otherwise.  
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups);
+    bool setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups);
 
-  /**A base file name can be used for different kind of files corresponding to the same data and having
+    /**A base file name can be used for different kind of files corresponding to the same data and having
   * different sampling rates. Each file is identified by its extension. this function modifies the elements related to the mapping
   * between the file extensions with the sampling rates for the current document. This map does not
   * includes the sampling rates for the extension dat and eeg, they are treated separately.
   * @param extensionSamplingRates map between file extension and the sampling rate.
-  * @return true if the modification succeded, false otherwise.  
+  * @return true if the modification succeded, false otherwise.
   */
-  bool setSampleRateByExtension(QMap<QString,double> extensionSamplingRates);
-  
-  
-  private:
+    bool setSampleRateByExtension(QMap<QString,double> extensionSamplingRates);
 
-  /**The session document.*/    
-  QDomDocument doc;
 
-  /**The root element.*/
-  QDomNode root;   
-  
-  /**The miscellaneous element.*/
-  QDomNode miscellaneous;
-  
- /**The acquisition system element.*/
-  QDomNode acquisitionSystem;
-  
-  /**The element containing the information about the channel display.*/
-  QDomNode channels;
+private:
 
-  /**The anatomical description element.*/
-  QDomNode anatomicalDescription;
+    /**The session document.*/
+    QDomDocument doc;
 
-  /**The spike description element.*/
-  QDomNode spikeDetection;
-  
-  /**The neuroscope element.*/
-  QDomNode neuroscope;
-  
-  /**The spikes element contained in the neuroscope element.*/
-  QDomElement spikes;  
-                                                                                                                        /**The element containing the video information in the neuroscope element.*/
-  QDomElement neuroscopeVideo;
+    /**The root element.*/
+    QDomNode root;
 
-  /**The element containing the video information.*/
-  QDomNode video;
+    /**The miscellaneous element.*/
+    QDomNode miscellaneous;
 
-  /**The local field potential sampling rate element.*/
-  QDomNode lfp;
-  
- /**The files element contains the sampling rates by extension.*/
-  QDomNode files;
-  
-  /**True if a video node has been created, false otherwise.*/
-  bool  newVideoNode;
-  
-  /**True if a files node has been created, false otherwise.*/
-  bool newFilesNode;
+    /**The acquisition system element.*/
+    QDomNode acquisitionSystem;
 
-  /**The parameter file as it has been loaded.*/
-  QString initialXmlDocument;
-  
-  static const QString parameterVersion; 
-                        
+    /**The element containing the information about the channel display.*/
+    QDomNode channels;
+
+    /**The anatomical description element.*/
+    QDomNode anatomicalDescription;
+
+    /**The spike description element.*/
+    QDomNode spikeDetection;
+
+    /**The neuroscope element.*/
+    QDomNode neuroscope;
+
+    /**The spikes element contained in the neuroscope element.*/
+    QDomElement spikes;
+    /**The element containing the video information in the neuroscope element.*/
+    QDomElement neuroscopeVideo;
+
+    /**The element containing the video information.*/
+    QDomNode video;
+
+    /**The local field potential sampling rate element.*/
+    QDomNode lfp;
+
+    /**The files element contains the sampling rates by extension.*/
+    QDomNode files;
+
+    /**True if a video node has been created, false otherwise.*/
+    bool  newVideoNode;
+
+    /**True if a files node has been created, false otherwise.*/
+    bool newFilesNode;
+
+    /**The parameter file as it has been loaded.*/
+    QString initialXmlDocument;
+
+    static const QString parameterVersion;
+
 };
 
 #endif

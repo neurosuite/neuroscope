@@ -23,58 +23,58 @@
 #include <QMessageBox>
 //include files for the application
 #include "propertiesdialog.h"
-        
+
 //General C++ include files
 #include <iostream>
 using namespace std;
 
 PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, Qt::WFlags f):
- KDialogBase(Tabbed, tr("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
- modified(false),nbChannelsModified(false),oops(false),atStartUp(false){
+    KDialogBase(Tabbed, tr("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
+    modified(false),nbChannelsModified(false),oops(false),atStartUp(false){
 
- setHelp("properties","neuroscope");
+    setHelp("properties","neuroscope");
 
- //page "Channels"
- Q3Frame* channelFrame = addPage(tr("Channels"));
- Q3VBoxLayout* frameLayout = new Q3VBoxLayout(channelFrame,0,0);
- properties = new Properties(channelFrame);
- frameLayout->addWidget(properties);
+    //page "Channels"
+    Q3Frame* channelFrame = addPage(tr("Channels"));
+    Q3VBoxLayout* frameLayout = new Q3VBoxLayout(channelFrame,0,0);
+    properties = new Properties(channelFrame);
+    frameLayout->addWidget(properties);
 
- //adding "Units" page
- Q3Frame* clusterFrame = addPage(tr("Units"));
- frameLayout = new Q3VBoxLayout(clusterFrame,0,0);
- clusterProperties = new ClusterProperties(clusterFrame);
- frameLayout->addWidget(clusterProperties);
+    //adding "Units" page
+    Q3Frame* clusterFrame = addPage(tr("Units"));
+    frameLayout = new Q3VBoxLayout(clusterFrame,0,0);
+    clusterProperties = new ClusterProperties(clusterFrame);
+    frameLayout->addWidget(clusterProperties);
 
- //adding "Positions" page
- Q3Frame* positionFrame = addPage(tr("Positions"));
- frameLayout = new Q3VBoxLayout(positionFrame,0,0);
- positionProperties = new PositionProperties(positionFrame);
- //hard coded as there is a problem with the pageIndex() method
- positionPageIndex = 2;
- frameLayout->addWidget(positionProperties);
+    //adding "Positions" page
+    Q3Frame* positionFrame = addPage(tr("Positions"));
+    frameLayout = new Q3VBoxLayout(positionFrame,0,0);
+    positionProperties = new PositionProperties(positionFrame);
+    //hard coded as there is a problem with the pageIndex() method
+    positionPageIndex = 2;
+    frameLayout->addWidget(positionProperties);
 
- 
- // connect interactive widgets and selfmade signals to the enableApply slotDefault
- connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(channelNbModified()));
- connect(properties->screenGainLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->voltageRangeLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->amplificationLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->asSamplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->offsetLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(properties->resolutionComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
- connect(properties->traceBackgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(this,SIGNAL(okClicked()),this,SLOT(slotVerify()));
- connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(positionProperties->widthLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(positionProperties->heightLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
- connect(positionProperties->rotateComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
- connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
- connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(propertyModified()));
+
+    // connect interactive widgets and selfmade signals to the enableApply slotDefault
+    connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(channelNbModified()));
+    connect(properties->screenGainLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->voltageRangeLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->amplificationLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->asSamplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->offsetLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->resolutionComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
+    connect(properties->traceBackgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotVerify()));
+    connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(positionProperties->widthLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(positionProperties->heightLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(positionProperties->rotateComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
+    connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
+    connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(propertyModified()));
 }
 PropertiesDialog::~PropertiesDialog(){
 }
@@ -82,44 +82,44 @@ PropertiesDialog::~PropertiesDialog(){
 void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int offset,float screenGain,int voltageRange,
                                     int amplification,int nbSamples,int peakIndex,double videoSamplingRate, int width,
                                     int height, QString backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool positionsBackground,QString traceBackgroundImage){
-  properties->setScreenGain(screenGain);
-  properties->setAcquisitionSystemSamplingRate(acquisitionSystemSamplingRate);  
-  properties->setVoltageRange(voltageRange);
-  properties->setAmplification(amplification);
-  properties->setNbChannels(channelNb);
-  properties->setSamplingRate(SR);
-  properties->setOffset(offset);
-  properties->setResolution(resolution);
-  properties->setTraceBackgroundImage(traceBackgroundImage);
-  clusterProperties->setNbSamples(nbSamples);
-  clusterProperties->setPeakIndex(peakIndex);
-  positionProperties->setSamplingRate(videoSamplingRate);
-  positionProperties->setWidth(width);
-  positionProperties->setHeight(height);
-  //Rotation and flip values have to be set before calling setBackgroundImage
-  positionProperties->setRotation(rotation);
-  positionProperties->setFlip(flip);
-  positionProperties->setBackgroundImage(backgroundImage);
-  positionProperties->setPositionsBackground(positionsBackground);
-  
-  nbChannels = channelNb;
+    properties->setScreenGain(screenGain);
+    properties->setAcquisitionSystemSamplingRate(acquisitionSystemSamplingRate);
+    properties->setVoltageRange(voltageRange);
+    properties->setAmplification(amplification);
+    properties->setNbChannels(channelNb);
+    properties->setSamplingRate(SR);
+    properties->setOffset(offset);
+    properties->setResolution(resolution);
+    properties->setTraceBackgroundImage(traceBackgroundImage);
+    clusterProperties->setNbSamples(nbSamples);
+    clusterProperties->setPeakIndex(peakIndex);
+    positionProperties->setSamplingRate(videoSamplingRate);
+    positionProperties->setWidth(width);
+    positionProperties->setHeight(height);
+    //Rotation and flip values have to be set before calling setBackgroundImage
+    positionProperties->setRotation(rotation);
+    positionProperties->setFlip(flip);
+    positionProperties->setBackgroundImage(backgroundImage);
+    positionProperties->setPositionsBackground(positionsBackground);
+
+    nbChannels = channelNb;
 }
 
 
 void PropertiesDialog::slotVerify(){  
- if(nbChannels != properties->getNbChannels() && !atStartUp){
-  if(KMessageBox::warningContinueCancel(this, tr("Changing the number of channels "
-      "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
-      tr("Continue"))==QMessageBox::Cancel){
-   properties->setNbChannels(nbChannels);
-   nbChannelsModified = false;
-   oops = true;
-  }
-  else modified = true;   
- }
- else{
-  if(nbChannelsModified) modified = true; 
- }
+    if(nbChannels != properties->getNbChannels() && !atStartUp){
+        if(KMessageBox::warningContinueCancel(this, tr("Changing the number of channels "
+                                                       "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
+                                              tr("Continue"))==QMessageBox::Cancel){
+            properties->setNbChannels(nbChannels);
+            nbChannelsModified = false;
+            oops = true;
+        }
+        else modified = true;
+    }
+    else{
+        if(nbChannelsModified) modified = true;
+    }
 }
 
 

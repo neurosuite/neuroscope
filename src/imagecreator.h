@@ -38,10 +38,10 @@ Utility class used to create an image containing all the first spot positions of
 */
 class ImageCreator : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-   /**
-   * Constructor. 
+    /**
+   * Constructor.
    * @param provider a reference on the provider of the position data.
    * @param width video image width to use as the image width.
    * @param height video image height to use as the image height.
@@ -52,62 +52,62 @@ public:
     ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage="",QColor backgroundColor = Qt::black,QColor foregroundColor = "#BFBFBF");
     ~ImageCreator();
 
-   /**Creates an image containg all the positions of a given position file.*/ 
-   QImage createImage();
-   
-   /**Saves the current image.
+    /**Creates an image containg all the positions of a given position file.*/
+    QImage createImage();
+
+    /**Saves the current image.
    * @param fileName path to save the image under.
-   * @param format image format to use when saving the image.   
+   * @param format image format to use when saving the image.
    */
-   void saveImage(QString fileName,QString format = "PNG");
+    void saveImage(QString fileName,QString format = "PNG");
     
 public slots:     
 
-  /**Receive the data requested and actually creates the image containg all the positions.
+    /**Receive the data requested and actually creates the image containg all the positions.
    * @param data n column array containing the position of the animal. The two first columns contain
    * the position of the first spot and the following optional pair of columns contain the position of optional spots.
    * @param initiator instance requesting the data.
-   */ 
-   void dataAvailable(Array<dataType>& data,QObject* initiator);   
-   
+   */
+    void dataAvailable(Array<dataType>& data,QObject* initiator);
+
 private:
 
-  /**Provider of the position data.*/
-  PositionsProvider& positionsProvider;
+    /**Provider of the position data.*/
+    PositionsProvider& positionsProvider;
 
-  /**Image width.*/
-  int width;
-  
-  /**Image height.*/
-  int height;
-  
-  /**Image to use as the background.*/
-  QString backgroundImage;
-   
-  /**Image background color.*/
-  QColor backgroundColor;
-  
-  /**Image foreground color.*/
-  QColor foregroundColor;     
- 
- /**Array containing the position data.
+    /**Image width.*/
+    int width;
+
+    /**Image height.*/
+    int height;
+
+    /**Image to use as the background.*/
+    QString backgroundImage;
+
+    /**Image background color.*/
+    QColor backgroundColor;
+
+    /**Image foreground color.*/
+    QColor foregroundColor;
+
+    /**Array containing the position data.
   * n column array containing the position of the animal. The two first columns contain
   * the position of the first spot and the following optional pair of columns contain the position of optional spots.*/
-  Array<dataType> data;
-  
- /**Number of spots recorded for each position, from 1 to n.*/
-  int nbSpots;
-  
-  /**QImage containing the created image.*/
-  QImage image;
-  
-  ////Function
-  
-/**
+    Array<dataType> data;
+
+    /**Number of spots recorded for each position, from 1 to n.*/
+    int nbSpots;
+
+    /**QImage containing the created image.*/
+    QImage image;
+
+    ////Function
+
+    /**
   * Draws the positions.
   * @param painter painter on which to draw the positions.
   */
-  void drawPositions(QPainter& painter);    
+    void drawPositions(QPainter& painter);
 };
 
 #endif

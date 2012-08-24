@@ -40,41 +40,41 @@ class ItemColors;
 */
 class GlobalEventsProvider : public DataProvider
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-    inline GlobalEventsProvider():DataProvider(QString()){};
-    inline ~GlobalEventsProvider(){};
+    inline GlobalEventsProvider():DataProvider(QString()){}
+    inline ~GlobalEventsProvider(){}
 
- /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.
+    /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.
   * @param startTime begining of the time interval from which to retrieve the data in miliseconds.
   * @param endTime end of the time interval from which to retrieve the data.
   * @param initiator instance requesting the data.
   */
-  inline void requestData(long startTime,long endTime,QObject* initiator){
-   emit getCurrentEventInformation(startTime,endTime,initiator);
-  };
-  
-  signals:
-   void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
-  
-  /**Informs that data of the selected events providers corresponding to current time frame are available.
+    inline void requestData(long startTime,long endTime,QObject* initiator){
+        emit getCurrentEventInformation(startTime,endTime,initiator);
+    }
+
+signals:
+    void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
+
+    /**Informs that data of the selected events providers corresponding to current time frame are available.
   * @param eventsData dictionary between the event provider names and the event data and status.
   * @param selectedEvents map between the event provider names and the list of currently selected events.
   * @param providerItemColors dictionary between the provider names and the item color lists.
   */
-  void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
-   
-   
-  public slots:
-  /**Informs that data of the selected events providers corresponding to current time frame are available.
+    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
+
+
+public slots:
+    /**Informs that data of the selected events providers corresponding to current time frame are available.
   * @param eventsData dictionary between the event provider names and the event data and status.
   * @param selectedEvents map between the event provider names and the list of currently selected events.
   * @param providerItemColors dictionary between the provider names and the item color lists.
   * @param initiator instance requesting the data.
-  */    
-   inline void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator){
-     emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
-   };
+  */
+    inline void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator){
+        emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
+    }
     
 };
 

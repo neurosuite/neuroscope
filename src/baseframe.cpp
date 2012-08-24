@@ -35,175 +35,175 @@
 using namespace std;
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
-           int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
-           Q3Frame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
-           MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
-           viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
-           firstClick(0,0),isDoubleClick(false),rubber(0),
-           drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
-           wholeHeightRectangle(false){
+                      int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
+    Q3Frame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
+    MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
+    viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
+    firstClick(0,0),isDoubleClick(false),rubber(0),
+    drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
+    wholeHeightRectangle(false){
 
-  //Setting of the frame
-  setLineWidth (BORDER);
-  setPaletteBackgroundColor(backgroundColor);
-  setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
+    //Setting of the frame
+    setLineWidth (BORDER);
+    setPaletteBackgroundColor(backgroundColor);
+    setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
 
-  int h;
-  int s;
-  int v;
-  backgroundColor.hsv(&h,&s,&v);
-  if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = Qt::black;
-  else colorLegend = Qt::white;
-  
+    int h;
+    int s;
+    int v;
+    backgroundColor.hsv(&h,&s,&v);
+    if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = Qt::black;
+    else colorLegend = Qt::white;
 
-  //Set the minimum size to ensure that the frame rectangle may never be null or invalid.
-  setMinimumSize(static_cast<int>(MIN_SIZE*1.05)  + 2 * BORDER,MIN_SIZE  + 2 * BORDER);
-  setMaximumSize(MAX_SIZE + 2 * BORDER,MAX_SIZE + 2 * BORDER);
 
-  //Create and set the zoom cursor (a magnifier).
-  
-  zoomCursor = QCursor(QPixmap(":/icons/zoom_cursor"),7,7);
+    //Set the minimum size to ensure that the frame rectangle may never be null or invalid.
+    setMinimumSize(static_cast<int>(MIN_SIZE*1.05)  + 2 * BORDER,MIN_SIZE  + 2 * BORDER);
+    setMaximumSize(MAX_SIZE + 2 * BORDER,MAX_SIZE + 2 * BORDER);
+
+    //Create and set the zoom cursor (a magnifier).
+
+    zoomCursor = QCursor(QPixmap(":/icons/zoom_cursor"),7,7);
 }
 
 BaseFrame::~BaseFrame(){
 }
 
 void BaseFrame::changeBackgroundColor(QColor color){
-  setPaletteBackgroundColor(color);
-  int h;
-  int s;
-  int v;
-  color.hsv(&h,&s,&v);
-  if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = Qt::black;
-  else colorLegend = Qt::white;
-  drawContentsMode = REDRAW;
+    setPaletteBackgroundColor(color);
+    int h;
+    int s;
+    int v;
+    color.hsv(&h,&s,&v);
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = Qt::black;
+    else colorLegend = Qt::white;
+    drawContentsMode = REDRAW;
 }
 
 void BaseFrame::mousePressEvent(QMouseEvent* e){
- if(mode == ZOOM || isRubberBandToBeDrawn){
-    //Test if a selected rectangle exist, if so draw it and delete it.
-    if(rubber){
-      drawRubber();
-      delete rubber;
-      rubber = 0;
-    }
+    if(mode == ZOOM || isRubberBandToBeDrawn){
+        //Test if a selected rectangle exist, if so draw it and delete it.
+        if(rubber){
+            drawRubber();
+            delete rubber;
+            rubber = 0;
+        }
 
-   if(e->button() == Qt::LeftButton){
-       //Assign firstClick
-       QRect r((QRect)window);
-       
-       if(r.left() != 0) firstClick = viewportToWorld(e->x(),e->y() - Yborder);
-       else firstClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
-                                                                      
-       //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
-       //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
-       //drawn on whole the height of the window.
-       if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber = new QRect(firstClick.x(),r.top(),1,1);
-       else rubber = new QRect(firstClick.x(),firstClick.y(),1,1);
-   }
- }
+        if(e->button() == Qt::LeftButton){
+            //Assign firstClick
+            QRect r((QRect)window);
+
+            if(r.left() != 0) firstClick = viewportToWorld(e->x(),e->y() - Yborder);
+            else firstClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+
+            //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
+            //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
+            //drawn on whole the height of the window.
+            if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber = new QRect(firstClick.x(),r.top(),1,1);
+            else rubber = new QRect(firstClick.x(),firstClick.y(),1,1);
+        }
+    }
 }
 
 
 void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
- //We do not consider the other button events but we consider key press
- if(e->button() & Qt::LeftButton){
-  bool isZoomed = false;
+    //We do not consider the other button events but we consider key press
+    if(e->button() & Qt::LeftButton){
+        bool isZoomed = false;
 
-  if(isRubberBandToBeDrawn){
-   //Test if a selected rectangle exist, if so draw it and delete it.
-   if(rubber){
-     drawRubber();
-     delete rubber;
-     rubber = 0;
-   }  
-  }
-  
-  if(mode == ZOOM){
-   //if double click, only update isDoubleClick, action has been taken in mouseDoubleClickEvent
-   if(isDoubleClick){
-      isDoubleClick = false;
-      return;
-   }
+        if(isRubberBandToBeDrawn){
+            //Test if a selected rectangle exist, if so draw it and delete it.
+            if(rubber){
+                drawRubber();
+                delete rubber;
+                rubber = 0;
+            }
+        }
 
-  //Test if a selected rectangle exist, if so draw it and delete it.
-   if(rubber){
-     drawRubber();
-     delete rubber;
-     rubber = 0;
-   }
+        if(mode == ZOOM){
+            //if double click, only update isDoubleClick, action has been taken in mouseDoubleClickEvent
+            if(isDoubleClick){
+                isDoubleClick = false;
+                return;
+            }
 
-   //Calculate the selected point in world coordinates
-   QPoint secondClick;
-   QRect r((QRect)window);
-   if(r.left() != 0) secondClick = viewportToWorld(e->x(),e->y() - Yborder);
-   else secondClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
-   
-   //If the distance between the first and second selected points are > 5:
-   //the user wanted to draw a rectangle otherwise he intended to select a single point
-   if((abs(secondClick.x() - firstClick.x()) > 5) || (abs(secondClick.y() - firstClick.y()) > 5)){
-    //CAUTION this correction is intended to compensate for a selection in the left margin which is not part of the widget'window.
-    //If the widget contains a left margin and draws in the negative abscisses this correction will not work. 
-    if(firstClick.x() < 0 && Xborder > 0) firstClick.setX(0);
-    if(secondClick.x() < 0 && Xborder > 0) secondClick.setX(0);
-    isZoomed = window.zoom(firstClick, secondClick);
-   }
-   else{
-     float factor;
+            //Test if a selected rectangle exist, if so draw it and delete it.
+            if(rubber){
+                drawRubber();
+                delete rubber;
+                rubber = 0;
+            }
 
-     //Shrink asked
-     if(e->state() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
-     //Enlarge asked
-     else factor = static_cast<float>(2);
-     
-     //modify the window rectangle
-     isZoomed = window.zoom(factor, secondClick);
-   }
-   if(isZoomed){
-    drawContentsMode = REDRAW;
-    update();
-   }
-  }
- }
+            //Calculate the selected point in world coordinates
+            QPoint secondClick;
+            QRect r((QRect)window);
+            if(r.left() != 0) secondClick = viewportToWorld(e->x(),e->y() - Yborder);
+            else secondClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+
+            //If the distance between the first and second selected points are > 5:
+            //the user wanted to draw a rectangle otherwise he intended to select a single point
+            if((abs(secondClick.x() - firstClick.x()) > 5) || (abs(secondClick.y() - firstClick.y()) > 5)){
+                //CAUTION this correction is intended to compensate for a selection in the left margin which is not part of the widget'window.
+                //If the widget contains a left margin and draws in the negative abscisses this correction will not work.
+                if(firstClick.x() < 0 && Xborder > 0) firstClick.setX(0);
+                if(secondClick.x() < 0 && Xborder > 0) secondClick.setX(0);
+                isZoomed = window.zoom(firstClick, secondClick);
+            }
+            else{
+                float factor;
+
+                //Shrink asked
+                if(e->state() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
+                //Enlarge asked
+                else factor = static_cast<float>(2);
+
+                //modify the window rectangle
+                isZoomed = window.zoom(factor, secondClick);
+            }
+            if(isZoomed){
+                drawContentsMode = REDRAW;
+                update();
+            }
+        }
+    }
 }
 
 void BaseFrame::mouseMoveEvent(QMouseEvent* e){
-  //We do not consider the other button events
-  if(e->state() == Qt::LeftButton){
-    //Test if a selected rectangle exist, if so draw to erase the previous one,
-    //update it and draw again.
-    if(rubber){
-     QPoint current;
-     QRect r((QRect)window);
-     if(r.left() != 0) current = viewportToWorld(e->x(),e->y() - Yborder);
-     else current = viewportToWorld(e->x()- Xborder,e->y() - Yborder);
-     if(current == rubber->bottomRight()) return; //did not move
-     drawRubber();
-     rubber->setRight(current.x());
-     //The ordinate is the bottom of the window if the rubber band has to
-     //drawn on whole the height of the window.
-     if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber->setBottom(r.bottom());     
-     else rubber->setBottom(current.y());
-     drawRubber();
+    //We do not consider the other button events
+    if(e->state() == Qt::LeftButton){
+        //Test if a selected rectangle exist, if so draw to erase the previous one,
+        //update it and draw again.
+        if(rubber){
+            QPoint current;
+            QRect r((QRect)window);
+            if(r.left() != 0) current = viewportToWorld(e->x(),e->y() - Yborder);
+            else current = viewportToWorld(e->x()- Xborder,e->y() - Yborder);
+            if(current == rubber->bottomRight()) return; //did not move
+            drawRubber();
+            rubber->setRight(current.x());
+            //The ordinate is the bottom of the window if the rubber band has to
+            //drawn on whole the height of the window.
+            if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber->setBottom(r.bottom());
+            else rubber->setBottom(current.y());
+            drawRubber();
+        }
     }
-  }
 }
 
 void BaseFrame::mouseDoubleClickEvent(QMouseEvent* e){
-  if(mode == ZOOM){
-    if ((e->button() == Qt::LeftButton) && !(e->state() & Qt::ShiftModifier)){
-     //Reset to the initial window
-     window.reset();
-     drawContentsMode = REDRAW;
-     update();
-     //Update the boolean so in mouserelease we know that we do not have to zoom
-     isDoubleClick = true;
+    if(mode == ZOOM){
+        if ((e->button() == Qt::LeftButton) && !(e->state() & Qt::ShiftModifier)){
+            //Reset to the initial window
+            window.reset();
+            drawContentsMode = REDRAW;
+            update();
+            //Update the boolean so in mouserelease we know that we do not have to zoom
+            isDoubleClick = true;
+        }
     }
- }
 }
 
 void BaseFrame::resizeEvent(QResizeEvent* e){
-  drawContentsMode = REDRAW;
+    drawContentsMode = REDRAW;
 }
 
 /**
@@ -213,41 +213,41 @@ void BaseFrame::resizeEvent(QResizeEvent* e){
 */
 QPoint BaseFrame::viewportToWorld(int vx, int vy){
 
-  //Coordinates in the viewport
-  float viewportX = vx;
-  float viewportY = vy;
-  //Coordinates in the window
-  float windowX;
-  float windowY;
-  //Coordinates in the world
-  float worldX;
-  float worldY;
+    //Coordinates in the viewport
+    float viewportX = vx;
+    float viewportY = vy;
+    //Coordinates in the window
+    float windowX;
+    float windowY;
+    //Coordinates in the world
+    float worldX;
+    float worldY;
 
-  //The coordinates of a point take the frame width into account so we have to substract
-  //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
-  viewportX -= frameWidth();
-  viewportY -= frameWidth();
+    //The coordinates of a point take the frame width into account so we have to substract
+    //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
+    viewportX -= frameWidth();
+    viewportY -= frameWidth();
 
-  //We have to translate the viewport's coordinates to window's coordinates
-  //NB: the window is the part of the world which is drawn in the viewport.
-  //The transformation is done by using the following formula:
-  //windowX = viewportX * (windowWidth/viewportWidth)
-  //windowY = viewportY * (windowHeight/viewportHeight)
+    //We have to translate the viewport's coordinates to window's coordinates
+    //NB: the window is the part of the world which is drawn in the viewport.
+    //The transformation is done by using the following formula:
+    //windowX = viewportX * (windowWidth/viewportWidth)
+    //windowY = viewportY * (windowHeight/viewportHeight)
 
-  windowX = viewportX * (static_cast<float>(((QRect)window).width())/static_cast<float>(viewport.width()));
-  windowY = viewportY * (static_cast<float>(((QRect)window).height())/static_cast<float>(viewport.height()));
+    windowX = viewportX * (static_cast<float>(((QRect)window).width())/static_cast<float>(viewport.width()));
+    windowY = viewportY * (static_cast<float>(((QRect)window).height())/static_cast<float>(viewport.height()));
 
-  //The final step is to translate the window's coordinates to world's coordinates
-  //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
-  //WindowCoordinatesCenterX = ((QRect)window).left()
-  //WindowCoordinatesCenterY = ((QRect)window).top()
-  //The transformation is done by using the following formula:
-  //worldX = WindowCoordinatesCenterX + windowX
-  //worldY = WindowCoordinatesCenterY + windowY
-  worldX = ((QRect)window).left() + windowX;
-  worldY = ((QRect)window).top() + windowY;
+    //The final step is to translate the window's coordinates to world's coordinates
+    //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
+    //WindowCoordinatesCenterX = ((QRect)window).left()
+    //WindowCoordinatesCenterY = ((QRect)window).top()
+    //The transformation is done by using the following formula:
+    //worldX = WindowCoordinatesCenterX + windowX
+    //worldY = WindowCoordinatesCenterY + windowY
+    worldX = ((QRect)window).left() + windowX;
+    worldY = ((QRect)window).top() + windowY;
 
-  return QPoint(static_cast<int>(worldX),static_cast<int>(worldY));
+    return QPoint(static_cast<int>(worldX),static_cast<int>(worldY));
 }
 
 
@@ -258,100 +258,100 @@ QPoint BaseFrame::viewportToWorld(int vx, int vy){
 */
 QPoint BaseFrame::worldToViewport(int wx, int wy){
 
-  //Coordinates in the viewport
-  float viewportX;
-  float viewportY;
-  //Coordinates in the window
-  float windowX;
-  float windowY;
-  //Coordinates in the world
-  float worldX = wx;
-  float worldY = wy;
+    //Coordinates in the viewport
+    float viewportX;
+    float viewportY;
+    //Coordinates in the window
+    float windowX;
+    float windowY;
+    //Coordinates in the world
+    float worldX = wx;
+    float worldY = wy;
 
-  //We have to translate the world's coordinates to window's coordinates
-  //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
-  //WindowCoordinatesCenterX = ((QRect)window).left()
-  //WindowCoordinatesCenterY = ((QRect)window).top()
-  //The transformation is done by using the following formula:
-  //windowX = worldX - WindowCoordinatesCenterX
-  //windowY = worldY - WindowCoordinatesCenterY
-  windowX = worldX - ((QRect)window).left();
-  windowY = worldY - ((QRect)window).top();
+    //We have to translate the world's coordinates to window's coordinates
+    //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
+    //WindowCoordinatesCenterX = ((QRect)window).left()
+    //WindowCoordinatesCenterY = ((QRect)window).top()
+    //The transformation is done by using the following formula:
+    //windowX = worldX - WindowCoordinatesCenterX
+    //windowY = worldY - WindowCoordinatesCenterY
+    windowX = worldX - ((QRect)window).left();
+    windowY = worldY - ((QRect)window).top();
 
-  //We have now to translate the window's coordinates to viewport's coordinates
-  //NB: the window is the part of the world which is drawn in the viewport.
-  //The transformation is done by using the following formula:
-  //viewportX = windowX * (viewportWidth/windowWidth)
-  //viewportY = windowY * (viewportHeight/windowHeight)
-  viewportX = windowX * (static_cast<float>(viewport.width())/static_cast<float>(((QRect)window).width()));
-  viewportY = windowY * (static_cast<float>(viewport.height())/static_cast<float>(((QRect)window).height()));
+    //We have now to translate the window's coordinates to viewport's coordinates
+    //NB: the window is the part of the world which is drawn in the viewport.
+    //The transformation is done by using the following formula:
+    //viewportX = windowX * (viewportWidth/windowWidth)
+    //viewportY = windowY * (viewportHeight/windowHeight)
+    viewportX = windowX * (static_cast<float>(viewport.width())/static_cast<float>(((QRect)window).width()));
+    viewportY = windowY * (static_cast<float>(viewport.height())/static_cast<float>(((QRect)window).height()));
 
 
-  //The coordinates of a point take the frame width into account so we have to substract
-  //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
-  viewportX += frameWidth();
-  viewportY += frameWidth();
+    //The coordinates of a point take the frame width into account so we have to substract
+    //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
+    viewportX += frameWidth();
+    viewportY += frameWidth();
 
-  return QPoint(static_cast<int>(viewportX),static_cast<int>(viewportY));
+    return QPoint(static_cast<int>(viewportX),static_cast<int>(viewportY));
 }
 
 
 long BaseFrame::worldToViewportAbscissa(long wx){
-  //Coordinate in the viewport
-  float viewportX;
-  //Coordinate in the window
-  float windowX;
-  //Coordinate in the world
-  float worldX = wx;
+    //Coordinate in the viewport
+    float viewportX;
+    //Coordinate in the window
+    float windowX;
+    //Coordinate in the world
+    float worldX = wx;
 
-  //We have to translate the world's coordinate to window's coordinate
-  //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
-  //WindowCoordinatesCenterX = ((QRect)window).left()
-  //The transformation is done by using the following formula:
-  //windowX = worldX - WindowCoordinatesCenterX
-  windowX = worldX - ((QRect)window).left();
+    //We have to translate the world's coordinate to window's coordinate
+    //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
+    //WindowCoordinatesCenterX = ((QRect)window).left()
+    //The transformation is done by using the following formula:
+    //windowX = worldX - WindowCoordinatesCenterX
+    windowX = worldX - ((QRect)window).left();
 
-  //We have now to translate the window's coordinate to viewport's coordinate
-  //NB: the window is the part of the world which is drawn in the viewport.
-  //The transformation is done by using the following formula:
-  //viewportX = windowX * (viewportWidth/windowWidth)
-  viewportX = windowX * (static_cast<float>(viewport.width())/static_cast<float>(((QRect)window).width()));
+    //We have now to translate the window's coordinate to viewport's coordinate
+    //NB: the window is the part of the world which is drawn in the viewport.
+    //The transformation is done by using the following formula:
+    //viewportX = windowX * (viewportWidth/windowWidth)
+    viewportX = windowX * (static_cast<float>(viewport.width())/static_cast<float>(((QRect)window).width()));
 
-  //The coordinates of a point take the frame width into account so we have to substract
-  //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
-  viewportX += frameWidth();
+    //The coordinates of a point take the frame width into account so we have to substract
+    //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
+    viewportX += frameWidth();
 
-  return static_cast<long>(viewportX);
+    return static_cast<long>(viewportX);
 
 }
 
 long BaseFrame::worldToViewportOrdinate(long wy){
-  //Coordinate in the viewport
-  float viewportY;
-  //Coordinate in the window
-  float windowY;
-  //Coordinate in the world
-  float worldY = wy;
+    //Coordinate in the viewport
+    float viewportY;
+    //Coordinate in the window
+    float windowY;
+    //Coordinate in the world
+    float worldY = wy;
 
-  //We have to translate the world's coordinate to window's coordinate
-  //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
-  //WindowCoordinatesCenterY = ((QRect)window).top()
-  //The transformation is done by using the following formula:
-  //windowY = worldY - WindowCoordinatesCenterY
-  windowY = worldY - ((QRect)window).top();
+    //We have to translate the world's coordinate to window's coordinate
+    //For that, we need the world's coordinates of the window center of coordinates (WindowCoordinatesCenter):
+    //WindowCoordinatesCenterY = ((QRect)window).top()
+    //The transformation is done by using the following formula:
+    //windowY = worldY - WindowCoordinatesCenterY
+    windowY = worldY - ((QRect)window).top();
 
-  //We have now to translate the window's coordinate to viewport's coordinate
-  //NB: the window is the part of the world which is drawn in the viewport.
-  //The transformation is done by using the following formula:
-  //viewportY = windowY * (viewportHeight/windowHeight)
-  viewportY = windowY * (static_cast<float>(viewport.height())/static_cast<float>(((QRect)window).height()));
+    //We have now to translate the window's coordinate to viewport's coordinate
+    //NB: the window is the part of the world which is drawn in the viewport.
+    //The transformation is done by using the following formula:
+    //viewportY = windowY * (viewportHeight/windowHeight)
+    viewportY = windowY * (static_cast<float>(viewport.height())/static_cast<float>(((QRect)window).height()));
 
 
-  //The coordinates of a point take the frame width into account so we have to substract
-  //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
-  viewportY += frameWidth();
+    //The coordinates of a point take the frame width into account so we have to substract
+    //it from the coordinates to have the position inside the viewport (viewport: rectangle inside the frame).
+    viewportY += frameWidth();
 
-  return static_cast<long>(viewportY);
+    return static_cast<long>(viewportY);
 }
 
 void BaseFrame::drawRubber(){
@@ -373,8 +373,8 @@ void BaseFrame::drawRubber(){
 
 #if KDAB_PENDING
     style().drawPrimitive(QStyle::PE_FocusRect, &painter,
-                           QRect(normalizeRubber.x(), normalizeRubber.y(), normalizeRubber.width(),normalizeRubber.height()),
-                           colorGroup(), QStyle::State_None, colorGroup().background() );
+                          QRect(normalizeRubber.x(), normalizeRubber.y(), normalizeRubber.width(),normalizeRubber.height()),
+                          colorGroup(), QStyle::State_None, colorGroup().background() );
 #endif
     painter.end();
 }

@@ -28,67 +28,67 @@ using namespace std;
 
 
 ImageCreator::ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage,QColor backgroundColor,QColor foregroundColor):positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
- nbSpots = positionsProvider.getNbSpots();
-  
- //Set Connection.
- connect(&positionsProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
- }
+    nbSpots = positionsProvider.getNbSpots();
+
+    //Set Connection.
+    connect(&positionsProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
+}
 
 ImageCreator::~ImageCreator(){}
 
 QImage ImageCreator::createImage(){ 
- //request the data need it to create the image.
- positionsProvider.retrieveAllData(this);
- 
- return image;
+    //request the data need it to create the image.
+    positionsProvider.retrieveAllData(this);
+
+    return image;
 }
 
 void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
- //If another widget was the initiator of the request, ignore the data.
- if(initiator != this) return;
+    //If another widget was the initiator of the request, ignore the data.
+    if(initiator != this) return;
 
- this->data = data;
-  
- //Create a painter to paint on the pixmap
- QPainter painter;
- QPixmap pixmap(width,height);
- painter.begin(&pixmap);
- 
- //If an image has been set to be used as background, scale it if need it and then draw it.
- if(backgroundImage != ""){
-  QImage image(backgroundImage);
-  QPixmap scaledBackground;
-  scaledBackground.convertFromImage(image.smoothScale(width,height),Qt::PreferDither);     
-  painter.drawPixmap(0,0,scaledBackground); 
- }
-  
- //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
- painter.setWindow(QRect(QPoint(0,0),QPoint(width,height)));
+    this->data = data;
+
+    //Create a painter to paint on the pixmap
+    QPainter painter;
+    QPixmap pixmap(width,height);
+    painter.begin(&pixmap);
+
+    //If an image has been set to be used as background, scale it if need it and then draw it.
+    if(backgroundImage != ""){
+        QImage image(backgroundImage);
+        QPixmap scaledBackground;
+        scaledBackground.convertFromImage(image.smoothScale(width,height),Qt::PreferDither);
+        painter.drawPixmap(0,0,scaledBackground);
+    }
+
+    //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
+    painter.setWindow(QRect(QPoint(0,0),QPoint(width,height)));
     
- //Fill the pixmap with the background color if no image has been set as background.
- if(backgroundImage.isEmpty()) pixmap.fill(backgroundColor);
-   
- //Paint all the positions on the pixmap.
- drawPositions(painter);
+    //Fill the pixmap with the background color if no image has been set as background.
+    if(backgroundImage.isEmpty()) pixmap.fill(backgroundColor);
+
+    //Paint all the positions on the pixmap.
+    drawPositions(painter);
     
- //Closes the painter on the pixmap
- painter.end(); 
- 
- image = pixmap.convertToImage();
+    //Closes the painter on the pixmap
+    painter.end();
+
+    image = pixmap.convertToImage();
 }
 
 void ImageCreator::saveImage(QString fileName,QString format){
- //Save the image
- image.save(fileName,format,80);  
+    //Save the image
+    image.save(fileName,format,80);
 }
 
 void ImageCreator::drawPositions(QPainter& painter){
- //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
- if(nbSpots == 0) return;
- int nbPoints = data.nbOfRows();
- if(nbPoints == 0) return;
- painter.setPen(foregroundColor);
- for(int i = 1;i<=nbPoints;++i) painter.drawPoint(data(i,1),data(i,2));
+    //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
+    if(nbSpots == 0) return;
+    int nbPoints = data.nbOfRows();
+    if(nbPoints == 0) return;
+    painter.setPen(foregroundColor);
+    for(int i = 1;i<=nbPoints;++i) painter.drawPoint(data(i,1),data(i,2));
 }
 
 #include "imagecreator.moc"

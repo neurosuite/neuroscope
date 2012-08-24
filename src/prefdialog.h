@@ -30,14 +30,14 @@ class PositionProperties;
 class ClusterProperties;
 
 
- /**
+/**
   * Class representing the Neuroscope preferences dialog.
   *@author Lynn Hazan
   */
-  
+
 class PrefDialog : public QDialog {
     Q_OBJECT
-  public:
+public:
     /**Constructor*/
     PrefDialog(QWidget *parent,const char *name=0, Qt::WFlags f=0);
 
@@ -46,9 +46,9 @@ class PrefDialog : public QDialog {
     /** Transfers the settings from the dialog to the configuration object.*/
     void updateConfiguration();
     /** */
-    inline bool isApplyEnable(){return applyEnable;};
+    inline bool isApplyEnable(){return applyEnable;}
     
-  public slots:
+public slots:
     /**Will be called when the "Default" button has been clicked.*/
     void slotDefault();
     /**Will be called when the "Apply" button has been clicked.*/
@@ -56,17 +56,17 @@ class PrefDialog : public QDialog {
     /**Will be called whenever a setting was changed.*/
     void enableApply();
 
-  signals:
+signals:
     /// Will be emitted when the new settings should be applied.
     void settingsChanged();
 
-  
-  private:
+
+private:
     PrefGeneral* prefGeneral;
     PrefDefaults* prefDefaults;
     PositionProperties* positionProperties;
     ClusterProperties* clusterProperties;
     bool applyEnable;
-};
+}
 
 #endif  // PREFDIALOG_H

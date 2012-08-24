@@ -52,9 +52,9 @@ class EventsProvider;
   */
 
 class TraceView : public BaseFrame  {
-   Q_OBJECT
+    Q_OBJECT
 public:
- /**Constructor.
+    /**Constructor.
   * @param tracesProvider a reference on the provider of the channels data.
   * @param greyScale true if all the channels are display either in a gradation of grey false if they are display in color.
   * @param multiColumns true if the traces are displayed on multiple columns, false otherwise.
@@ -87,211 +87,211 @@ public:
   * to the part of the drawing which will actually be drawn onto the widget).
   * @param border size of the border between the frame and the contents.
   */
-	TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
-            bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
-            ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-            Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels, int rasterHeight,QImage backgroundImage,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,QStatusBar* statusBar = 0L,
-            int minSize = 500, int maxSize = 4000, int windowTopLeft = -500,int windowBottomRight = 1001, int border = 0);
+    TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
+              bool raster,bool waveforms,bool labelsDisplay,Q3ValueList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
+              ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
+              Q3ValueList<int>& channelOffsets,Q3ValueList<int>& gains,const Q3ValueList<int>& skippedChannels, int rasterHeight,QImage backgroundImage,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,QStatusBar* statusBar = 0L,
+              int minSize = 500, int maxSize = 4000, int windowTopLeft = -500,int windowBottomRight = 1001, int border = 0);
 
 
 
-	~TraceView();
+    ~TraceView();
 
-  /// Added by M.Zugaro to enable automatic forward paging
-  inline long long recordingLength() const { return length; };
-  inline void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); };
+    /// Added by M.Zugaro to enable automatic forward paging
+    inline long long recordingLength() const { return length; }
+    inline void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
 
-  /**Enum to be use as a Mode.
+    /**Enum to be use as a Mode.
   * <ul>
   * <li>SELECT Enumeration indicating that the user is in a mode enabling him to select traces.</li>
   * </ul>
   */
-  enum {SELECT = ZOOM+1,MEASURE = ZOOM+2,SELECT_TIME = ZOOM+3,SELECT_EVENT = ZOOM+4,ADD_EVENT = ZOOM+5,DRAW_LINE = ZOOM+6};
+    enum {SELECT = ZOOM+1,MEASURE = ZOOM+2,SELECT_TIME = ZOOM+3,SELECT_EVENT = ZOOM+4,ADD_EVENT = ZOOM+5,DRAW_LINE = ZOOM+6};
 
 
-  /**
+    /**
   * Sets the mode of presentation to single or multiple columns.
   * @param multiple true if the traces are presented on multiple columns, false if they are presented on a single column.
   */
-  void setMultiColumns(bool multiple);
+    void setMultiColumns(bool multiple);
 
-  /**Displays or hides vertical lines to show the clusters.
+    /**Displays or hides vertical lines to show the clusters.
   * @param lines true if the vertical lines are drawn for each cluster, false otherwise.
   */
-  void setClusterVerticalLines(bool lines);
+    void setClusterVerticalLines(bool lines);
 
-  /**Displays or hides a raster to show the clusters.
+    /**Displays or hides a raster to show the clusters.
   * @param raster true if a raster is drawn, false otherwise.
   */
-  void setClusterRaster(bool raster);
+    void setClusterRaster(bool raster);
 
-  /**Displays or hides the cluster waveforms on top of the traces.
+    /**Displays or hides the cluster waveforms on top of the traces.
   * @param waveforms true if the waveforms are drawn, false otherwise.
   */
-  void setClusterWaveforms(bool waveforms);
+    void setClusterWaveforms(bool waveforms);
 
 
-  /**All the channels of the display are now display either in a gradation of grey or in color.
+    /**All the channels of the display are now display either in a gradation of grey or in color.
    * @param grey true if the channels have to be displayed in grey false otherwise.
    */
-  void setGreyScale(bool grey);
+    void setGreyScale(bool grey);
 
-  /**Updates the traces to show between @p start and @p start + @p timeFrameWidth.
+    /**Updates the traces to show between @p start and @p start + @p timeFrameWidth.
    * @param start starting time in miliseconds.
    * @param timeFrameWidth time window in miliseconds.
    */
-  void displayTimeFrame(long start,long timeFrameWidth);
+    void displayTimeFrame(long start,long timeFrameWidth);
 
-  /**
+    /**
   * Updates the list of channels shown with @p channelsToShow.
   * @param channelsToShow new list of channels to be shown.
   */
-  void showChannels(const Q3ValueList<int>& channelsToShow);
+    void showChannels(const Q3ValueList<int>& channelsToShow);
 
-  /**Increases of the amplitude of all the channels.
+    /**Increases of the amplitude of all the channels.
   */
-  void increaseAllAmplitude();
+    void increaseAllAmplitude();
 
-  /**Decreases of the amplitude of all the channels.
+    /**Decreases of the amplitude of all the channels.
   */
-  void decreaseAllAmplitude();
+    void decreaseAllAmplitude();
 
-  /**Increases of the amplitude of the selected channels.
+    /**Increases of the amplitude of the selected channels.
   * @param channelIds ids of the channels for which the amplitude has to be increased.
   */
-  void increaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds);
+    void increaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds);
 
-  /**Decreases of the amplitude of the selected channels.
+    /**Decreases of the amplitude of the selected channels.
   * @param channelIds ids of the channels for which the amplitude has to be decreased.
   */
-  void decreaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds);
+    void decreaseSelectedChannelsAmplitude(const Q3ValueList<int>& channelIds);
 
-  /**Sets the unit gain and the acquisition system gain.
+    /**Sets the unit gain and the acquisition system gain.
   * @param gain initial gain use to draw the traces in the TraceView.
   * @param acquisitionGain acquisition gain.
   */
-  void setGains(int gain,int acquisitionGain);
+    void setGains(int gain,int acquisitionGain);
 
-  /**Changes the color of a channel.
+    /**Changes the color of a channel.
   * @param channelId id of the channel to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-  void channelColorUpdate(int channelId,bool active);
+    void channelColorUpdate(int channelId,bool active);
 
-  /**Changes the color of a group of channels.
+    /**Changes the color of a group of channels.
   * @param groupId id of the group for which the color have been changed.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void groupColorUpdate(int groupId,bool active){
-   //Everything has to be redraw
-   drawContentsMode = REDRAW ;
-    if(active) update();
-  };
+    inline void groupColorUpdate(int groupId,bool active){
+        //Everything has to be redraw
+        drawContentsMode = REDRAW ;
+        if(active) update();
+    }
 
-  /**Update the information presented in the view.*/
-  inline void updateDrawing(){
-   if(retrieveClusterData) updateClusterData(true);
-   else{
-    //Everything has to be redraw
-    drawContentsMode = REDRAW ;
-    update();
-   }
-  };
+    /**Update the information presented in the view.*/
+    inline void updateDrawing(){
+        if(retrieveClusterData) updateClusterData(true);
+        else{
+            //Everything has to be redraw
+            drawContentsMode = REDRAW ;
+            update();
+        }
+    }
 
-  /**Updates of the display due to a change in the display groups if @p active is true,
+    /**Updates of the display due to a change in the display groups if @p active is true,
   * otherwise simply updates the internal variables.
   * @param active true if the view is the active one, false otherwise.
   */
-  void groupsModified(bool active);
+    void groupsModified(bool active);
 
-  /**Change the current mode, call by a selection of a tool.
+    /**Change the current mode, call by a selection of a tool.
   * @param selectedMode new mode of drawing.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void setMode(BaseFrame::Mode selectedMode,bool active){
-   Mode previousMode = mode;
-   mode = selectedMode;
-   if(selectedMode == SELECT){
-    setCursor(selectCursor);
-    drawRubberBand(false);
-   }
-   if(selectedMode == SELECT_EVENT){
-    setCursor(selectEventCursor);
-    drawRubberBand(false);
-   }
-   if(selectedMode == ADD_EVENT){
-    setCursor(addEventCursor);
-    drawRubberBand(false);
-   }
-   if(selectedMode == ZOOM){
-    setCursor(zoomCursor);
-    drawRubberBand(false);
-   }
-   if(selectedMode == MEASURE){
-    drawRubberBand(true);
-    setCursor(measureCursor);
-   }
-   if(selectedMode == SELECT_TIME){
-    drawRubberBand(true,true);
-    setCursor(selectTimeCursor);
-   }
-   if(selectedMode == DRAW_LINE){
-    setCursor(drawLineCursor);
-    drawRubberBand(false);
-   }
-   if(previousMode == SELECT){
-    selectedChannels.clear();
-    drawContentsMode = REDRAW;
-    if(active) update();
-   }
-   if(previousMode == SELECT_EVENT){
-    selectedEvent.first = "";
-    selectedEvent.second = 0;
-    drawContentsMode = REDRAW;
-    if(active) update();
-   }
-   if(previousMode == ADD_EVENT){
-    newEventPosition = -1;
-   }
-   if(previousMode == DRAW_LINE){
-    linePositions.clear();
-   }
-  };
+    inline void setMode(BaseFrame::Mode selectedMode,bool active){
+        Mode previousMode = mode;
+        mode = selectedMode;
+        if(selectedMode == SELECT){
+            setCursor(selectCursor);
+            drawRubberBand(false);
+        }
+        if(selectedMode == SELECT_EVENT){
+            setCursor(selectEventCursor);
+            drawRubberBand(false);
+        }
+        if(selectedMode == ADD_EVENT){
+            setCursor(addEventCursor);
+            drawRubberBand(false);
+        }
+        if(selectedMode == ZOOM){
+            setCursor(zoomCursor);
+            drawRubberBand(false);
+        }
+        if(selectedMode == MEASURE){
+            drawRubberBand(true);
+            setCursor(measureCursor);
+        }
+        if(selectedMode == SELECT_TIME){
+            drawRubberBand(true,true);
+            setCursor(selectTimeCursor);
+        }
+        if(selectedMode == DRAW_LINE){
+            setCursor(drawLineCursor);
+            drawRubberBand(false);
+        }
+        if(previousMode == SELECT){
+            selectedChannels.clear();
+            drawContentsMode = REDRAW;
+            if(active) update();
+        }
+        if(previousMode == SELECT_EVENT){
+            selectedEvent.first = "";
+            selectedEvent.second = 0;
+            drawContentsMode = REDRAW;
+            if(active) update();
+        }
+        if(previousMode == ADD_EVENT){
+            newEventPosition = -1;
+        }
+        if(previousMode == DRAW_LINE){
+            linePositions.clear();
+        }
+    }
 
-  /**Selects the channels .
+    /**Selects the channels .
   *@param selectedIds ids of the selected channels.
   */
-  void selectChannels(const Q3ValueList<int>& selectedIds);
+    void selectChannels(const Q3ValueList<int>& selectedIds);
 
-  /**Resets the offset of the selected channels to the default values.
+    /**Resets the offset of the selected channels to the default values.
   * @param selectedChannelDefaultOffsets map given the default offsets for the selected channels.
   */
-  void resetOffsets(const QMap<int,int>& selectedChannelDefaultOffsets);
+    void resetOffsets(const QMap<int,int>& selectedChannelDefaultOffsets);
 
-  /**Resets the gain of the selected channels.
+    /**Resets the gain of the selected channels.
   *@param selectedChannels ids of the selected channels.
   */
-  void resetGains(const Q3ValueList<int>& selectedChannels);
+    void resetGains(const Q3ValueList<int>& selectedChannels);
 
-  /**Resets the state of the view.*/
-  void reset();
+    /**Resets the state of the view.*/
+    void reset();
 
-  /**Shows or hide the labels next to the channels displaying the channel id and the gain.
+    /**Shows or hide the labels next to the channels displaying the channel id and the gain.
   * @param show true if the labels have to be shown, false otherwise.
   */
-  void showHideLabels(bool show);
+    void showHideLabels(bool show);
 
-  /**Shows or hide the calibration scale.
+    /**Shows or hide the calibration scale.
   * @param show true if the scale has to be shown, false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void showCalibration(bool show,bool active){
-   drawContentsMode = REDRAW;
-   showCalibrationScale = show;
-   if(active) update();
-  };
+    inline void showCalibration(bool show,bool active){
+        drawContentsMode = REDRAW;
+        showCalibrationScale = show;
+        if(active) update();
+    }
 
-  /**Adds a new provider of cluster data.
+    /**Adds a new provider of cluster data.
   * @param clustersProvider provider of cluster data.
   * @param name name use to identified the cluster provider.
   * @param clusterColors list of colors for the clusters.
@@ -303,33 +303,33 @@ public:
   * @param nbSamplesAfter number of samples contained in the waveform of a spike after the sample of the peak.
   * @param clustersToSkip list of clusters to not use while browsing.
   */
-  void addClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,
-                          bool active,Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,
-                          QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip);
+    void addClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,
+                            bool active,Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,
+                            QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip);
 
-  /**Removes a provider of cluster data.
+    /**Removes a provider of cluster data.
   * @param name name use to identified the cluster provider.
   * @param active true if the view is the active one, false otherwise.
   */
-  void removeClusterProvider(QString name,bool active);
+    void removeClusterProvider(QString name,bool active);
 
-  /**
+    /**
   * Updates the list of clusters shown with @p clustersToShow for the cluster provider identified
   * by @p name.
   * @param name name use to identified the cluster provider containing the clusters to show.
   * @param clustersToShow new list of clusters to be shown.
   */
-  void showClusters(QString name,Q3ValueList<int>& clustersToShow);
+    void showClusters(QString name,Q3ValueList<int>& clustersToShow);
 
-  /**Changes the color of a cluster.
+    /**Changes the color of a cluster.
   * @param name name use to identified the cluster provider containing the updated cluster.
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-  void clusterColorUpdate(QString name,int clusterId,bool active);
+    void clusterColorUpdate(QString name,int clusterId,bool active);
 
 
-  /**Adds a new provider of event data.
+    /**Adds a new provider of event data.
   * @param eventsProvider provider of event data.
   * @param name name use to identified the event provider.
   * @param eventColors list of colors for the events.
@@ -337,166 +337,156 @@ public:
   * @param eventsToShow list of events to be shown.
   * @param eventsToSkip list of events to not use while browsing.
   */
-  void addEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,
+    void addEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,
                           bool active,Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToSkip);
 
-  /**Removes a provider of event data.
+    /**Removes a provider of event data.
   * @param name name use to identified the event provider.
   * @param active true if the view is the active one, false otherwise.
   */
-  void removeEventProvider(QString name,bool active);
+    void removeEventProvider(QString name,bool active);
 
-  /**
+    /**
   * Updates the list of events shown with @p eventsToShow for the event provider identified
   * by @p name.
   * @param name name use to identified the event provider containing the events to show.
   * @param eventsToShow new list of events to be shown.
   */
-  void showEvents(QString name,Q3ValueList<int>& eventsToShow);
+    void showEvents(QString name,Q3ValueList<int>& eventsToShow);
 
-  /**Changes the color of an event.
+    /**Changes the color of an event.
   * @param name name use to identified the event provider containing the updated event.
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-  void eventColorUpdate(QString name,int eventId,bool active);
+    void eventColorUpdate(QString name,int eventId,bool active);
 
-  /**Prints the currently display information on a printer via the painter @p printPainter.
+    /**Prints the currently display information on a printer via the painter @p printPainter.
   * Does not print zoomed display.
   * @param printPainter painter on a printer.
   * @param metrics object providing informatin about the printer.
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   */
-  void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground);
+    void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground);
 
-  /**Retrieves the next event.*/
-  void showNextEvent();
+    /**Retrieves the next event.*/
+    void showNextEvent();
 
-  /**Retrieves the previous event.*/
-  void showPreviousEvent();
+    /**Retrieves the previous event.*/
+    void showPreviousEvent();
 
-  /**Updates the event data provided by @p providerName due to a modification of an event.
+    /**Updates the event data provided by @p providerName due to a modification of an event.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-  inline void updateEvents(QString providerName,bool active){
-   if(!eventProvidersToUpdate.contains(providerName)) eventProvidersToUpdate.append(providerName);
-   if(active) update();
-  };
+    inline void updateEvents(QString providerName,bool active){
+        if(!eventProvidersToUpdate.contains(providerName)) eventProvidersToUpdate.append(providerName);
+        if(active) update();
+    }
 
-  /**Updates the event data provided by @p providerName due to the addition of an event.
+    /**Updates the event data provided by @p providerName due to the addition of an event.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToShow new list of events to be shown.
   * @param active true if the view is the active one, false otherwise.
   */
-  void updateEvents(QString providerName,Q3ValueList<int>& eventsToShow,bool active);
+    void updateEvents(QString providerName,Q3ValueList<int>& eventsToShow,bool active);
 
-  /**Deletes the selected event.
+    /**Deletes the selected event.
   */
-  void removeEvent();
+    void removeEvent();
 
-  /**Retrieves the next cluster.*/
-  void showNextCluster();
+    /**Retrieves the next cluster.*/
+    void showNextCluster();
 
-  /**Retrieves the previous cluster.*/
-  void showPreviousCluster();
+    /**Retrieves the previous cluster.*/
+    void showPreviousCluster();
 
-  /**Updates the list of events to not use while browsing.
+    /**Updates the list of events to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-  void updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse);
+    void updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse);
 
-  /**Updates the list of clusters to not use while browsing.
+    /**Updates the list of clusters to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param clustersToNotBrowse new list of clusters to not use while browsing.
   */
-  void updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse);
+    void updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse);
 
-  /** Updates the description of a spike waveform.
+    /** Updates the description of a spike waveform.
   * @param nbSamplesBefore number of samples contained in the waveform of a spike before the sample of the peak.
   * @param nbSamplesAfter number of samples contained in the waveform of a spike after the sample of the peak.
   * @param active true if the view is the active one, false otherwise.
   */
-  void updateWaveformInformation(int nbSamplesBefore,int nbSamplesAfter,bool active);
+    void updateWaveformInformation(int nbSamplesBefore,int nbSamplesAfter,bool active);
 
-  /**
+    /**
   * Updates the length of the document due to a modification of the sampling rate.
   * @param length the newly computed length of the document.
   */
-  inline void samplingRateModified(long long length){
-   this->length = length;
-   int samplingRate = tracesProvider.getSamplingRate();
-   timeStepUnit = timeStep = static_cast<float>(static_cast<float>(1000) / static_cast<float>(samplingRate));
-  };
+    inline void samplingRateModified(long long length){
+        this->length = length;
+        int samplingRate = tracesProvider.getSamplingRate();
+        timeStepUnit = timeStep = static_cast<float>(static_cast<float>(1000) / static_cast<float>(samplingRate));
+    }
 
-  /**Updates the cluster information presented on the display.
+    /**Updates the cluster information presented on the display.
   * @param active true if the view is the active one, false otherwise.
   */
-  void updateClusterData(bool active);
+    void updateClusterData(bool active);
 
- /**Updates the display due to modification of clusters provided by the cluster provider identified
+    /**Updates the display due to modification of clusters provided by the cluster provider identified
   * by @p name.
   * @param name name use to identified the cluster provider containing the clusters to show.
   * @param clustersToShow new list of clusters to be shown.
   * @param clusterColors list of colors for the clusters.
   * @param active true if the view is the active one, false otherwise.
   */
-  void updateClusters(QString name,Q3ValueList<int>& clustersToShow,ItemColors* clusterColors,bool active);
+    void updateClusters(QString name,Q3ValueList<int>& clustersToShow,ItemColors* clusterColors,bool active);
 
-  /**Increases the display ratio between the traces and the rasters when they are present.*/
-  void increaseRatio();
+    /**Increases the display ratio between the traces and the rasters when they are present.*/
+    void increaseRatio();
 
-  /**Decreases the display ratio between the traces and the rasters when they are present.*/
-  void decreaseRatio();
+    /**Decreases the display ratio between the traces and the rasters when they are present.*/
+    void decreaseRatio();
 
-  /**Gets the event information for all the available eventProviders.
+    /**Gets the event information for all the available eventProviders.
   * @param startTime begining of the time interval from which to retrieve the data in miliseconds.
   * @param endTime end of the time interval from which to retrieve the data.
   * @param initiator instance requesting the data.
   */
-  void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
+    void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
 
-  /**Updates the background image.
+    /**Updates the background image.
   * @param traceBackgroundImage image to be used as background.
   * @param active true if the view is the active one, false otherwise.
   */
-  void traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active);
+    void traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active);
 
 public slots:
-  /**Displays the data that has been retrieved.
+    /**Displays the data that has been retrieved.
   * @param data array of data (number of channels X number of samples).
   * @param initiator instance requesting the data.
   */
-  void dataAvailable(Array<dataType>& data,QObject* initiator);
+    void dataAvailable(Array<dataType>& data,QObject* initiator);
 
- /**Displays the cluster information that has been retrieved.
+    /**Displays the cluster information that has been retrieved.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   */
-  void dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName);
+    void dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName);
 
- /**Displays the event information that has been retrieved.
+    /**Displays the event information that has been retrieved.
   * @param times 1 line array containing the time (in recording samples) of each event existing in the requested time frame.
   * @param ids 1 line array containing the identifiers of each event existing in the requested time frame.
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   */
-  void dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName);
+    void dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName);
 
- /**Compute the cluster information that has been retrieved regarding the next cluster to display.
-  * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
-  * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
-  * @param initiator instance requesting the data.
-  * @param providerName name of the instance providing the data.
-  * @param startingTime time from which the data have been retreived in milisesonds.
-  * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.
-  */
-  void nextClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
-
- /**Compute the cluster information that has been retrieved regarding the previous cluster to display.
+    /**Compute the cluster information that has been retrieved regarding the next cluster to display.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
   * @param initiator instance requesting the data.
@@ -504,581 +494,591 @@ public slots:
   * @param startingTime time from which the data have been retreived in milisesonds.
   * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.
   */
-  void previousClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
+    void nextClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
 
- /**Compute the event information that has been retrieved regarding the next event to display.
+    /**Compute the cluster information that has been retrieved regarding the previous cluster to display.
+  * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
+  * corresponding cluster id. The first line contains the sample index and the second line the cluster id.
+  * @param initiator instance requesting the data.
+  * @param providerName name of the instance providing the data.
+  * @param startingTime time from which the data have been retreived in milisesonds.
+  * @param startingTimeInRecordingUnits time from which the data have been retrieved in recording units.
+  */
+    void previousClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
+
+    /**Compute the event information that has been retrieved regarding the next event to display.
   * @param times 1 line array containing the time (in recording samples) of each event existing in the requested time frame.
   * @param ids 1 line array containing the identifiers of each event existing in the requested time frame.
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   * @param startingTime time from which the data have been retreived.
   */
-  void nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime);
+    void nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime);
 
- /**Compute the event information that has been retrieved regarding the previous event to display.
+    /**Compute the event information that has been retrieved regarding the previous event to display.
   * @param times 1 line array containing the time (in recording samples) of each event existing in the requested time frame.
   * @param ids 1 line array containing the identifiers of each event existing in the requested time frame.
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   * @param startingTime time from which the data have been retreived.
   */
-  void previousEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime);
+    void previousEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime);
 
-  /**Stores the properties for the next event to be added.
+    /**Stores the properties for the next event to be added.
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-  inline void eventToAddProperties(QString providerName,QString eventDescription){
-   //If an event is being modified, this function can be called with eventDescription set to empty,
-   //this should not be taken into account.
-   if(!eventBeingModified){
-    eventDescriptionToCreate = eventDescription;
-    eventProvider = providerName;
-   }
-  };
+    inline void eventToAddProperties(QString providerName,QString eventDescription){
+        //If an event is being modified, this function can be called with eventDescription set to empty,
+        //this should not be taken into account.
+        if(!eventBeingModified){
+            eventDescriptionToCreate = eventDescription;
+            eventProvider = providerName;
+        }
+    }
 
-  /**Updates the list of skipped channels.
+    /**Updates the list of skipped channels.
   * @param skippedChannels list of skipped channels
   **/
-  void skipStatusChanged(const Q3ValueList<int>& skippedChannels);
+    void skipStatusChanged(const Q3ValueList<int>& skippedChannels);
 
-  /**Returns the height of the rasters in the world coordinate system.
+    /**Returns the height of the rasters in the world coordinate system.
   *@return raster height.
   */
-  inline int getRasterHeight(){return rasterHeight;};
+    inline int getRasterHeight(){return rasterHeight;}
 
 
 signals:
-  void channelsSelected(const Q3ValueList<int>& selectedIds);
-  void setStartAndDuration(long time,long duration);
-  void eventModified(QString providerName,int selectedEventId,double time,double newTime);
-  void eventRemoved(QString providerName,int selectedEventId,double time);
-  void eventAdded(QString providerName,QString addedEventDescription,double time);
-  void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+    void channelsSelected(const Q3ValueList<int>& selectedIds);
+    void setStartAndDuration(long time,long duration);
+    void eventModified(QString providerName,int selectedEventId,double time,double newTime);
+    void eventRemoved(QString providerName,int selectedEventId,double time);
+    void eventAdded(QString providerName,QString addedEventDescription,double time);
+    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
 
 protected:
-  /**
+    /**
   * Draws the contents of the frame
   * @param painter painter used to draw the contents
   */
-  void drawContents(QPainter* painter);
+    void drawContents(QPainter* painter);
 
-  /**The view responds to a mouse move event.
+    /**The view responds to a mouse move event.
   * The time is display in the status bar.
   * @param event mouse move event.
   */
-  void mouseMoveEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
 
-  /**The view responds to a resize event.
+    /**The view responds to a resize event.
   * The window is recomputed.
   * @param event resize event.
   */
-  inline void resizeEvent(QResizeEvent* event){
-   drawContentsMode = REDRAW;
-   resized = true;
-  };
+    inline void resizeEvent(QResizeEvent* event){
+        drawContentsMode = REDRAW;
+        resized = true;
+    }
 
-  /**The view responds to a mouse click.
+    /**The view responds to a mouse click.
   * @param event mouse release event.
   */
-  void mousePressEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 
-  /**The view responds to a mouse release.
+    /**The view responds to a mouse release.
   * @param event mouse event.
   */
-  void mouseReleaseEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
 
-  /**The view responds to a double click.
+    /**The view responds to a double click.
   * @param event mouse event.
   */
-  void mouseDoubleClickEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 
 private:
 
-  /**True if the the colors are in grey-scale*/
-  bool greyScaleMode;
+    /**True if the the colors are in grey-scale*/
+    bool greyScaleMode;
 
-  /**Pointer to the status bar of the application.*/
-  QStatusBar* statusBar;
+    /**Pointer to the status bar of the application.*/
+    QStatusBar* statusBar;
 
-  /**Provider of the channels data.*/
-  TracesProvider& tracesProvider;
+    /**Provider of the channels data.*/
+    TracesProvider& tracesProvider;
 
-  /**True if the traces are displayed on multiple columns, false otherwise.*/
-  bool multiColumns;
+    /**True if the traces are displayed on multiple columns, false otherwise.*/
+    bool multiColumns;
 
-  /**True if vertical lines are displayed to show the clusters, false otherwise.*/
-  bool verticalLines;
+    /**True if vertical lines are displayed to show the clusters, false otherwise.*/
+    bool verticalLines;
 
-  /**True if a raster is drawn to show the clusters, false otherwise.*/
-  bool raster;
+    /**True if a raster is drawn to show the clusters, false otherwise.*/
+    bool raster;
 
-  /**True if waveforms are drawn on top of the traces, false otherwise.*/
-  bool waveforms;
+    /**True if waveforms are drawn on top of the traces, false otherwise.*/
+    bool waveforms;
 
-  /**List of the presented channels.*/
-  Q3ValueList<int> shownChannels;
+    /**List of the presented channels.*/
+    Q3ValueList<int> shownChannels;
 
-  /**True if the data information needed to draw the traces are available.*/
-  bool dataReady;
+    /**True if the data information needed to draw the traces are available.*/
+    bool dataReady;
 
-  /**Array containing the traces data.*/
-  Array<dataType> data;
+    /**Array containing the traces data.*/
+    Array<dataType> data;
 
-  /**List containing the offset for each channel.*/
-  Q3ValueList<int>& channelOffsets;
+    /**List containing the offset for each channel.*/
+    Q3ValueList<int>& channelOffsets;
 
-  /**List of the factors use to calculate the ordinate value to been drawn.
+    /**List of the factors use to calculate the ordinate value to been drawn.
   * The factor equals 0.75 raised to the power of the gain (Yworld = alpha.factor.Ydata).
   */
-  Q3ValueList<float> channelFactors;
+    Q3ValueList<float> channelFactors;
 
-  /**List of the exponents used to compute the drawing gain for each channel.
+    /**List of the exponents used to compute the drawing gain for each channel.
   * The actual gain is 0.75 raised to the power of gain.
   */
-  Q3ValueList<int>& gains;
+    Q3ValueList<int>& gains;
 
-  /**Size in pixels corresponding to the vertical space allocated to a trace.*/
-  int traceVspace;
+    /**Size in pixels corresponding to the vertical space allocated to a trace.*/
+    int traceVspace;
 
-  /**Number of channels used to record the data.*/
-  int nbChannels;
+    /**Number of channels used to record the data.*/
+    int nbChannels;
 
-  /**Position of the peak among the points decribing waveforms.*/
-  int peakPositionInWaveform;
+    /**Position of the peak among the points decribing waveforms.*/
+    int peakPositionInWaveform;
 
-  /**Number of points used to describe a waveform.*/
-  int nbSamplesInWaveform;
+    /**Number of points used to describe a waveform.*/
+    int nbSamplesInWaveform;
 
-  /**This variable keeps track of the current start time of the time window.*/
-  long startTime;
+    /**This variable keeps track of the current start time of the time window.*/
+    long startTime;
 
-  /**This variable keeps track of the current end time of the time window.*/
-  long endTime;
+    /**This variable keeps track of the current end time of the time window.*/
+    long endTime;
 
-  /**Pointer on the ChannelColors storing the color information for the channels.*/
-  ChannelColors* channelColors;
+    /**Pointer on the ChannelColors storing the color information for the channels.*/
+    ChannelColors* channelColors;
 
-  /**Map the correspondence between the channel group ids and the channel ids.
+    /**Map the correspondence between the channel group ids and the channel ids.
   *Pointer to the variable belonging to NeuroscopeDoc.
   */
-  QMap<int, Q3ValueList<int> >* groupsChannels;
+    QMap<int, Q3ValueList<int> >* groupsChannels;
 
-  /**Stores to which group each channel belongs. Pointer to the variable belonging to
+    /**Stores to which group each channel belongs. Pointer to the variable belonging to
   NeuroscopeDoc.*/
-  QMap<int,int>* channelsGroups;
+    QMap<int,int>* channelsGroups;
 
-  /**Map the correspondence between the channel group ids and the channel ids for the displayed channels.
+    /**Map the correspondence between the channel group ids and the channel ids for the displayed channels.
   */
-  QMap<int, Q3ValueList<int> > shownGroupsChannels;
+    QMap<int, Q3ValueList<int> > shownGroupsChannels;
 
-  /**Minimal abscissa in window coordinate*/
-  long abscissaMin;
+    /**Minimal abscissa in window coordinate*/
+    long abscissaMin;
 
-  /**Maximal abscissa in window coordinate*/
-  long abscissaMax;
+    /**Maximal abscissa in window coordinate*/
+    long abscissaMax;
 
-  /**Minimal ordinate in window coordinate*/
-  long ordinateMin;
+    /**Minimal ordinate in window coordinate*/
+    long ordinateMin;
 
-  /**Maximal ordinate in window coordinate*/
-  long ordinateMax;
+    /**Maximal ordinate in window coordinate*/
+    long ordinateMax;
 
-  /**The border on the left and right sides.*/
-  int borderX;
+    /**The border on the left and right sides.*/
+    int borderX;
 
-  /**The border at the top and bottom.*/
-  int borderY;
+    /**The border at the top and bottom.*/
+    int borderY;
 
-  /**The delta between the starting ordinates of two channels.*/
-  int Yshift;
+    /**The delta between the starting ordinates of two channels.*/
+    int Yshift;
 
-  /**The delta between the starting abcisses of two channels.*/
-  int Xshift;
+    /**The delta between the starting abcisses of two channels.*/
+    int Xshift;
 
-  /**Abscissa step between two points of a given trace.*/
-  int Xstep;
+    /**Abscissa step between two points of a given trace.*/
+    int Xstep;
 
-  /**Abscissa space between two groups (when groups are display on several columns).*/
-  int XGroupSpace;
+    /**Abscissa space between two groups (when groups are display on several columns).*/
+    int XGroupSpace;
 
-  /**Ordinate space between two channels.*/
-  int Yspace;
+    /**Ordinate space between two channels.*/
+    int Yspace;
 
-  /**Ordinate space between two groups (when groups are display on a single columns).*/
-  int YGroupSpace;
+    /**Ordinate space between two groups (when groups are display on a single columns).*/
+    int YGroupSpace;
 
-  /**Ordinate space between the traces and the raster.*/
-  int YTracesRasterSeparator;
+    /**Ordinate space between the traces and the raster.*/
+    int YTracesRasterSeparator;
 
-  /**Ordinate space between two cluster trains.*/
-  int YRasterSpace;
+    /**Ordinate space between two cluster trains.*/
+    int YRasterSpace;
 
-  /**The abscissa of the system coordinate center for the channel
+    /**The abscissa of the system coordinate center for the channel
   * which is presented at the top of the view.*/
-  long X0;
+    long X0;
 
-  /**The ordinate of the system coordinate center for the channel
+    /**The ordinate of the system coordinate center for the channel
   * which is presented at the top of the view.*/
-  long Y0;
+    long Y0;
 
-  /**The ordinate for the first cluster raster.*/
-  long Y0Raster;
+    /**The ordinate for the first cluster raster.*/
+    long Y0Raster;
 
-  /**
+    /**
   * Buffer to enable smooth updating, obtain flicker-free drawing.
   * Prevent from unnecessary redrawing.
   */
-  QPixmap doublebuffer;
+    QPixmap doublebuffer;
 
-  /**Background image.*/
-  QImage background;
+    /**Background image.*/
+    QImage background;
 
-  /**Scaled background pixmap.*/
-  QPixmap scaledBackground;
+    /**Scaled background pixmap.*/
+    QPixmap scaledBackground;
 
 
-  /**Time in milisseconds corresponding to a step between two points of a given trace.*/
-  float timeStep;
+    /**Time in milisseconds corresponding to a step between two points of a given trace.*/
+    float timeStep;
 
-  /**Time in milisseconds corresponding to a step between two samples.*/
-  float timeStepUnit;
+    /**Time in milisseconds corresponding to a step between two samples.*/
+    float timeStepUnit;
 
-  /**Acquisition system gain in recording unit by milivolts.*/
-  int acquisitionGain;
+    /**Acquisition system gain in recording unit by milivolts.*/
+    int acquisitionGain;
 
-  /**Unit gain in recording unit by centimeters.*/
-  int unitGain;
+    /**Unit gain in recording unit by centimeters.*/
+    int unitGain;
 
-  /**Factor, in pixels by recording units, to convert the data in recording units to data
+    /**Factor, in pixels by recording units, to convert the data in recording units to data
   * in pixels of the world (Yworld = alpha.factor.Ydata).
   * This factor is computed using the amplitude maximal of theta and the acquisition system gain.
   */
-  float alpha;
+    float alpha;
 
-  /**List of the gains display next to each drawn channel.
+    /**List of the gains display next to each drawn channel.
   */
-  Q3ValueList<float> channelDisplayGains;
+    Q3ValueList<float> channelDisplayGains;
 
-  int nbClusters;
+    int nbClusters;
 
-  /**Size in pixels corresponding to the height of a raster.*/
-  int rasterHeight;
+    /**Size in pixels corresponding to the height of a raster.*/
+    int rasterHeight;
 
-  /**Time amount, in milisecond, of the time frame used to display the traces.*/
-  long timeFrameWidth;
+    /**Time amount, in milisecond, of the time frame used to display the traces.*/
+    long timeFrameWidth;
 
-  /**Stores the ordinate of the first sample of each channel.*/
-  QMap<int,int> channelsStartingOrdinate;
+    /**Stores the ordinate of the first sample of each channel.*/
+    QMap<int,int> channelsStartingOrdinate;
 
-  /**Stores the abscissa of the first sample of each channel.*/
-  QMap<int,int> channelsStartingAbscissa;
+    /**Stores the abscissa of the first sample of each channel.*/
+    QMap<int,int> channelsStartingAbscissa;
 
-  /**Default value for the border on the left and right sides inside the window (QRect corresponding
+    /**Default value for the border on the left and right sides inside the window (QRect corresponding
   * to the part of the drawing which will actually be drawn onto the widget).*/
-  static const int XMARGIN;
+    static const int XMARGIN;
 
-  /**Default value for the border on the top and bottom sides inside the window (QRect corresponding
+    /**Default value for the border on the top and bottom sides inside the window (QRect corresponding
   * to the part of the drawing which will actually be drawn onto the widget).*/
-  static const int YMARGIN;
+    static const int YMARGIN;
 
-  /**Border on the left and right sides inside the window (QRect corresponding
+    /**Border on the left and right sides inside the window (QRect corresponding
   * to the part of the drawing which will actually be drawn onto the widget).*/
-  int xMargin;
+    int xMargin;
 
-  /**Border on the top and bottom sides inside the window (QRect corresponding
+    /**Border on the top and bottom sides inside the window (QRect corresponding
   * to the part of the drawing which will actually be drawn onto the widget).*/
-  int yMargin;
+    int yMargin;
 
-  /**Boolean used to update the display after a change in the mode of display: single or multicolumns.*/
-  bool columnDisplayChanged;
+    /**Boolean used to update the display after a change in the mode of display: single or multicolumns.*/
+    bool columnDisplayChanged;
 
-  /**Boolean used to update the display after a resize event.*/
-  bool resized;
+    /**Boolean used to update the display after a resize event.*/
+    bool resized;
 
-  /**List of the selected channels.*/
-  Q3ValueList<int> selectedChannels;
+    /**List of the selected channels.*/
+    Q3ValueList<int> selectedChannels;
 
-  /**Boolean used to update the display after a change in the number of groups.*/
-  bool groupsChanged;
+    /**Boolean used to update the display after a change in the number of groups.*/
+    bool groupsChanged;
 
-  /**Ordinate of the previous position while dragging an event.*/
-  int previousDragOrdinate;
+    /**Ordinate of the previous position while dragging an event.*/
+    int previousDragOrdinate;
 
-  /**Ordinate of the last click before dragging channels.*/
-  int lastClickOrdinate;
+    /**Ordinate of the last click before dragging channels.*/
+    int lastClickOrdinate;
 
-  /*Boolean used to update the display after a change in the number of samples per trace.**/
-  bool nbSamplesModified;
+    /*Boolean used to update the display after a change in the number of samples per trace.**/
+    bool nbSamplesModified;
 
-  /*Boolean used to update the display after a change in the selection of the traces.**/
-  bool alreadySelected;
+    /*Boolean used to update the display after a change in the selection of the traces.**/
+    bool alreadySelected;
 
-  /**Boolean used to correctly display multicolumns at startup.*/
-  bool isInit;
+    /**Boolean used to correctly display multicolumns at startup.*/
+    bool isInit;
 
-  /**Screen resolution in pixel by centimeter, the default is 30 (equivalent to 75 pixels by inch).*/
-  int screenResolution;
+    /**Screen resolution in pixel by centimeter, the default is 30 (equivalent to 75 pixels by inch).*/
+    int screenResolution;
 
-  /**Channel for which the voltage has to be determined.*/
-  int channelforVoltageComputation;
+    /**Channel for which the voltage has to be determined.*/
+    int channelforVoltageComputation;
 
-  /**Index of the starting drag, use to determine the time when selecting a zone for measure.*/
-  int startingIndex;
+    /**Index of the starting drag, use to determine the time when selecting a zone for measure.*/
+    int startingIndex;
 
-  /**A cursor to represent the selection of channels.*/
-  QCursor selectCursor;
+    /**A cursor to represent the selection of channels.*/
+    QCursor selectCursor;
 
-  /**A cursor to represent the measure state.*/
-  QCursor measureCursor;
+    /**A cursor to represent the measure state.*/
+    QCursor measureCursor;
 
-  /**A cursor to represent the selection of time state.*/
-  QCursor selectTimeCursor;
+    /**A cursor to represent the selection of time state.*/
+    QCursor selectTimeCursor;
 
-  /**A cursor to represent the selection of an event.*/
-  QCursor selectEventCursor;
+    /**A cursor to represent the selection of an event.*/
+    QCursor selectEventCursor;
 
-  /**A cursor to represent the addition of an event.*/
-  QCursor addEventCursor;
+    /**A cursor to represent the addition of an event.*/
+    QCursor addEventCursor;
 
-  /**A cursor to represent the drawing of a line.*/
-  QCursor drawLineCursor;
+    /**A cursor to represent the drawing of a line.*/
+    QCursor drawLineCursor;
 
-  /**Boolean indicating that the labels next to the traces have to be shown or hide.
+    /**Boolean indicating that the labels next to the traces have to be shown or hide.
   * If true, they have to be shown, if false they have to be hidden. They are hidden by default.
   */
-  bool showLabels;
+    bool showLabels;
 
-  /**Boolean indicating that the calibration scale has to be shown or hide.
+    /**Boolean indicating that the calibration scale has to be shown or hide.
   * If true, the scale has to be shown, if false it has to be hidden. It is hidden by default.
   */
-  bool showCalibrationScale;
+    bool showCalibrationScale;
 
 
-  /**Number of samples to leave out while drawing in order to speed the browsing of the data.
+    /**Number of samples to leave out while drawing in order to speed the browsing of the data.
   * This number takes into account the size of the window
   * and the the size of the widget.*/
-  float downSampling;
+    float downSampling;
 
-  /**Boolean indicating that the view has been zoomed.*/
-  bool zoomed;
+    /**Boolean indicating that the view has been zoomed.*/
+    bool zoomed;
 
-  /***Boolean indicating that the view has been zoomed for the no zoom state.*/
-  bool firstZoom;
+    /***Boolean indicating that the view has been zoomed for the no zoom state.*/
+    bool firstZoom;
 
-  /***Boolean indicating that the view has been zoomed and a reset has been asked.
+    /***Boolean indicating that the view has been zoomed and a reset has been asked.
   * If so the original down sampling has to be restore.*/
-  bool doubleClick;
+    bool doubleClick;
 
-  /**Initial downSampling before any zoom.*/
-  float initialDownSampling;
+    /**Initial downSampling before any zoom.*/
+    float initialDownSampling;
 
-  /**Stores the current factor of zoom.*/
-  float zoomFactor;
+    /**Stores the current factor of zoom.*/
+    float zoomFactor;
 
-  /***Boolean indicating that the view has been zoomed to the maximum.*/
-  bool maxZoomReached;
+    /***Boolean indicating that the view has been zoomed to the maximum.*/
+    bool maxZoomReached;
 
-  /***Boolean indicating that the view has been zoomed out.*/
-  bool zoomOut;
+    /***Boolean indicating that the view has been zoomed out.*/
+    bool zoomOut;
 
-  /**Initial window before any zoom.*/
-  QRect initialWindow;
+    /**Initial window before any zoom.*/
+    QRect initialWindow;
 
-  /**Window used before the current zoom..*/
-  QRect previousWindow;
+    /**Window used before the current zoom..*/
+    QRect previousWindow;
 
-  /**The current size of a trace in the world while in multi columns mode.*/
-  int traceWidth;
+    /**The current size of a trace in the world while in multi columns mode.*/
+    int traceWidth;
 
-  /**The initial abscissa space between two groups (when groups are display on several columns) before any zoom..*/
-  int initialXGroupSpace;
+    /**The initial abscissa space between two groups (when groups are display on several columns) before any zoom..*/
+    int initialXGroupSpace;
 
-  /**The initial delta between the starting abcisses of two channels before any zoom.*/
-  int initialXshift;
+    /**The initial delta between the starting abcisses of two channels before any zoom.*/
+    int initialXshift;
 
-  /**The initial size of a trace in the world while in multi columns mode.*/
-  int initialTraceWidth;
+    /**The initial size of a trace in the world while in multi columns mode.*/
+    int initialTraceWidth;
 
-  /**Map between the cluster provider names and the list of selected clusters.*/
-  QMap<int, Q3ValueList<int> > selectedClusters;
+    /**Map between the cluster provider names and the list of selected clusters.*/
+    QMap<int, Q3ValueList<int> > selectedClusters;
 
-  /**Structure representing cluster data, actual data and status.*/
-  struct ClusterData{
-    Array<dataType> data;
-    bool ready;
+    /**Structure representing cluster data, actual data and status.*/
+    struct ClusterData{
+        Array<dataType> data;
+        bool ready;
 
-    ClusterData(Array<dataType> d,bool status){
-      data = d;
-      ready = status;
-    };
-    ClusterData(){
-     ready = false;
-    };
-    void setStatus(bool status){ready = status;};
-    void setData(Array<dataType>& d){data = d;};
-    bool status(){return ready;};
-    Array<dataType>& getData(){return data;};
+        ClusterData(Array<dataType> d,bool status){
+            data = d;
+            ready = status;
+        }
+        ClusterData(){
+            ready = false;
+        }
+        void setStatus(bool status){ready = status;}
+        void setData(Array<dataType>& d){data = d;}
+        bool status(){return ready;}
+        Array<dataType>& getData(){return data;}
 
-    ~ClusterData(){};
-  };
+        ~ClusterData(){}
+    }
 
-  /**Dictionary between the cluster provider names and the cluster data and status.*/
-  Q3Dict<ClusterData> clustersData;
+    /**Dictionary between the cluster provider names and the cluster data and status.*/
+    Q3Dict<ClusterData> clustersData;
 
-  /** Dictionary between the cluster provider names and the providers.*/
-  Q3Dict<ClustersProvider> clusterProviders;
+    /** Dictionary between the cluster provider names and the providers.*/
+    Q3Dict<ClustersProvider> clusterProviders;
 
-  /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
-  Q3Dict<ItemColors> providerItemColors;
+    /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
+    Q3Dict<ItemColors> providerItemColors;
 
-  /**Stores the cluster order used when they are presented in raster. Each cluster is identified
+    /**Stores the cluster order used when they are presented in raster. Each cluster is identified
   * by a string build as the ClusterProvider name plus a dash plus the cluster id.
   */
-  Q3ValueList<QString> clustersOrder;
+    Q3ValueList<QString> clustersOrder;
 
-  /**Stores the cluster raster ordinate position.*/
-  Q3ValueList<int> rasterOrdinates;
+    /**Stores the cluster raster ordinate position.*/
+    Q3ValueList<int> rasterOrdinates;
 
-  /**Stores the cluster raster abscissa position.*/
-  Q3ValueList<int> rasterAbscisses;
+    /**Stores the cluster raster abscissa position.*/
+    Q3ValueList<int> rasterAbscisses;
 
-  /**Map given the list of cluster file containing data for a given display group.
+    /**Map given the list of cluster file containing data for a given display group.
   * This assumes that the cluster file names contain the identifier of
   * the spike group used to create them (myFile.clu.1 correspond to the
   * spike group 1).
   */
-  QMap<int, Q3ValueList<int> >* groupClusterFiles;
+    QMap<int, Q3ValueList<int> >* groupClusterFiles;
 
-  /*Map between the channel ids and the spike group ids. */
-  QMap<int,int>* channelClusterFiles;
+    /*Map between the channel ids and the spike group ids. */
+    QMap<int,int>* channelClusterFiles;
 
-  /*Number of samples before the sample of the peak are contained in the waveform of a spike.*/
-  int nbSamplesBefore;
+    /*Number of samples before the sample of the peak are contained in the waveform of a spike.*/
+    int nbSamplesBefore;
 
-  /*Number of samples after the sample of the peak are contained in the waveform of a spike.*/
-  int nbSamplesAfter;
+    /*Number of samples after the sample of the peak are contained in the waveform of a spike.*/
+    int nbSamplesAfter;
 
-  /*True if the view is currently been printed, false otherwise.**/
-  bool printState;
+    /*True if the view is currently been printed, false otherwise.**/
+    bool printState;
 
-  /**Map between the event provider names and the list of selected events.*/
-  QMap<QString, Q3ValueList<int> > selectedEvents;
+    /**Map between the event provider names and the list of selected events.*/
+    QMap<QString, Q3ValueList<int> > selectedEvents;
 
-  /**Pair storing the cluster provider having a selected cluster the closer in time to the current endTime,
+    /**Pair storing the cluster provider having a selected cluster the closer in time to the current endTime,
   * the pair stores also the starting time of the retrieve data.*/
-  QPair<QString,long> nextClusterProvider;
+    QPair<QString,long> nextClusterProvider;
 
-  /**Pair storing the cluster provider having a selected cluster the closer in time to the current startTime,
+    /**Pair storing the cluster provider having a selected cluster the closer in time to the current startTime,
   * the pair stores also the starting time of the retrieve data.*/
-  QPair<QString,long> previousClusterProvider;
+    QPair<QString,long> previousClusterProvider;
 
-  /**Stores the cluster provider which contains the cluster id look up in a nextCluster or previousCluster action.*/
-  QString clusterProviderToSkip;
+    /**Stores the cluster provider which contains the cluster id look up in a nextCluster or previousCluster action.*/
+    QString clusterProviderToSkip;
 
-  /**This variable keeps track of the current start time of the time window in recording unit when
+    /**This variable keeps track of the current start time of the time window in recording unit when
   * browsing on the spikes.
   */
-  long startTimeInRecordingUnits;
+    long startTimeInRecordingUnits;
 
-  /**This variable keeps track of the previous start time of the time window in recording unit when
+    /**This variable keeps track of the previous start time of the time window in recording unit when
   * browsing on the spikes.
   */
-  long previousStartTimeInRecordingUnits;
+    long previousStartTimeInRecordingUnits;
 
-  /**True if the user has just browsed spikes, false otherwise.*/
-  bool spikeBrowsing;
+    /**True if the user has just browsed spikes, false otherwise.*/
+    bool spikeBrowsing;
 
-  /**Dictionary between the event provider names and the event data and status.*/
-  Q3Dict<EventData> eventsData;
+    /**Dictionary between the event provider names and the event data and status.*/
+    Q3Dict<EventData> eventsData;
 
-  /** Dictionary between the event provider names and the providers.*/
-  Q3Dict<EventsProvider> eventProviders;
+    /** Dictionary between the event provider names and the providers.*/
+    Q3Dict<EventsProvider> eventProviders;
 
-  /**Pair storing the event provider having a selected event the closer in time to the current endTime,
+    /**Pair storing the event provider having a selected event the closer in time to the current endTime,
   * the pair stores also the starting time of the retrieve data.*/
-  QPair<QString,long> nextEventProvider;
+    QPair<QString,long> nextEventProvider;
 
-  /**Pair storing the event provider having a selected event the closer in time to the current startTime,
+    /**Pair storing the event provider having a selected event the closer in time to the current startTime,
   * the pair stores also the starting time of the retrieve data.*/
-  QPair<QString,long> previousEventProvider;
+    QPair<QString,long> previousEventProvider;
 
-  /**Stores the event provider which contains the event id look up in a nextEvent or previousEvent action.*/
-  QString eventProviderToSkip;
+    /**Stores the event provider which contains the event id look up in a nextEvent or previousEvent action.*/
+    QString eventProviderToSkip;
 
-  /**Length of the recording in miliseconds.*/
-  long long length;
+    /**Length of the recording in miliseconds.*/
+    long long length;
 
-  /**Pair storing the event provider and the event id corresponding to the currently selected event.*/
-  QPair<QString,int> selectedEvent;
+    /**Pair storing the event provider and the event id corresponding to the currently selected event.*/
+    QPair<QString,int> selectedEvent;
 
-  /**Abscissa of the previous position while dragging channels.*/
-  int previousDragAbscissa;
+    /**Abscissa of the previous position while dragging channels.*/
+    int previousDragAbscissa;
 
-  /**Abscissa of the last click before dragging an event.*/
-  int lastClickAbscissa;
+    /**Abscissa of the last click before dragging an event.*/
+    int lastClickAbscissa;
 
-  /**Contains the original abscissa and index of the selected event.*/
-  Q3ValueList<int> selectedEventPosition;
+    /**Contains the original abscissa and index of the selected event.*/
+    Q3ValueList<int> selectedEventPosition;
 
-  /**True if it is the beginning of an event dragging.*/
-  bool startEventDragging;
+    /**True if it is the beginning of an event dragging.*/
+    bool startEventDragging;
 
- /**Stores the event providers containing events which have been modified and thus
+    /**Stores the event providers containing events which have been modified and thus
  * needing to be update.*/
-  Q3ValueList<QString> eventProvidersToUpdate;
+    Q3ValueList<QString> eventProvidersToUpdate;
 
-  /**Index of the new event to create.*/
-  int newEventPosition;
+    /**Index of the new event to create.*/
+    int newEventPosition;
 
-  /**Label corresponding to the type of event to create at the next addEvent.*/
-  QString eventDescriptionToCreate;
+    /**Label corresponding to the type of event to create at the next addEvent.*/
+    QString eventDescriptionToCreate;
 
-  /**Identifier of the event file to which a new event will be added.*/
-  QString eventProvider;
+    /**Identifier of the event file to which a new event will be added.*/
+    QString eventProvider;
 
-  /**Boolean indicating that the modification of an event is in process.*/
-  bool eventBeingModified;
+    /**Boolean indicating that the modification of an event is in process.*/
+    bool eventBeingModified;
 
-  /**Map between the cluster provider names and the list of clusters to not be used for browsing.*/
-  QMap<QString, Q3ValueList<int> > clustersNotUsedForBrowsing;
+    /**Map between the cluster provider names and the list of clusters to not be used for browsing.*/
+    QMap<QString, Q3ValueList<int> > clustersNotUsedForBrowsing;
 
-  /**Map between the event provider names and the list of events to not be used for browsing.*/
-  QMap<QString, Q3ValueList<int> > eventsNotUsedForBrowsing;
+    /**Map between the event provider names and the list of events to not be used for browsing.*/
+    QMap<QString, Q3ValueList<int> > eventsNotUsedForBrowsing;
 
-  bool retrieveClusterData;
+    bool retrieveClusterData;
 
-  /*List of skipped channels.*/
-  Q3ValueList<int> skippedChannels;
+    /*List of skipped channels.*/
+    Q3ValueList<int> skippedChannels;
 
-  /*List of positions for the current lines to be drawn.*/
-  Q3ValueList<int> linePositions;
+    /*List of positions for the current lines to be drawn.*/
+    Q3ValueList<int> linePositions;
 
- //***************Functions************
+    //***************Functions************
 
- /**Updates the dimension of the window.*/
- void updateWindow();
+    /**Updates the dimension of the window.*/
+    void updateWindow();
 
- /**
+    /**
  * Updates shownGroupsChannels.
  * @param channelsToShow list of channels to shown in the display.
  */
- void updateShownGroupsChannels(const Q3ValueList<int>& channelsToShow);
+    void updateShownGroupsChannels(const Q3ValueList<int>& channelsToShow);
 
- /**
+    /**
  * Draws the traces.
  * @param painter painter on which to draw the traces.
  */
- void drawTraces(QPainter& painter);
+    void drawTraces(QPainter& painter);
 
- /**
+    /**
  * Draws the traces for a subset of channels.
  * @param channels list of channels to draw.
  * @param highlight true if the channels have to be highlighted, false otherwise.
  */
- void drawTraces(Q3ValueList<int> channels,bool highlight);
+    void drawTraces(Q3ValueList<int> channels,bool highlight);
 
- /**
+    /**
  * Draws the trace for the channel @p channelId.
  * @param painter painter on which to draw the traces.
  * @param limit the number of pixels in the world beneath which only one pixel is drawn
@@ -1090,49 +1090,49 @@ private:
  * @param mouseMoveEvent true if the function has been called from the mouseMoveEvent function. In that
  * case no waveforms are drawn even if requested.
  */
- void drawTrace(QPainter& painter,int limit,int basePosition,int X,int channelId,int nbSamplesToDraw,bool mouseMoveEvent = false);
+    void drawTrace(QPainter& painter,int limit,int basePosition,int X,int channelId,int nbSamplesToDraw,bool mouseMoveEvent = false);
 
- /**Draws on the left side the id and the amplitude for each channel.
+    /**Draws on the left side the id and the amplitude for each channel.
  * @param painter painter on which to draw the information.
  */
- void drawChannelIdsAndGain(QPainter& painter);
+    void drawChannelIdsAndGain(QPainter& painter);
 
- /**Computes the channelDisplayGains.*/
- void computeChannelDisplayGain();
+    /**Computes the channelDisplayGains.*/
+    void computeChannelDisplayGain();
 
- /**Computes the channelDisplayGains for the selected channels.
+    /**Computes the channelDisplayGains for the selected channels.
  * @param selectedChannels ids of the selected channels.
  */
- void computeChannelDisplayGain(const Q3ValueList<int>& selectedChannels);
+    void computeChannelDisplayGain(const Q3ValueList<int>& selectedChannels);
 
- /**Draw the calibration scale.
+    /**Draw the calibration scale.
  * @param painter painter on which to draw the information.
  */
- void drawCalibrationScale(QPainter& painter);
+    void drawCalibrationScale(QPainter& painter);
 
- /** Corrects the window due to a zoom.
+    /** Corrects the window due to a zoom.
  * @param r rectangle corresponding to the window.
  */
- void correctZoom(QRect& r);
+    void correctZoom(QRect& r);
 
 
- /** Draws a single event.
+    /** Draws a single event.
  * @param providerName name of the instance providing the data for the event to draw.
  * @param selectedEventId id of the event to draw.
  * @param selectedEventIndex index of the event to draw.
  * @param highlight true if the event has to be highlighted, false otherwise.
  */
- void drawEvent(QString providerName,int selectedEventId,dataType selectedEventIndex,bool highlight);
+    void drawEvent(QString providerName,int selectedEventId,dataType selectedEventIndex,bool highlight);
 
-/** Draws a vertical line at the cursor position. If the traces are displayed on multiple columns, a line is drawn in each column.
+    /** Draws a vertical line at the cursor position. If the traces are displayed on multiple columns, a line is drawn in each column.
  * @param x abscissa of the cursor.
  * @param initialLine true if the line is drawn for the first time, false otherwise.
  * @param eraseLine true if the line has to be erase and not redraw.
  */
- void drawTimeLine(int x,bool initialLine,bool eraseLine = false);
+    void drawTimeLine(int x,bool initialLine,bool eraseLine = false);
 
-  /**Scale the background image to fit it in the widget.*/
-  void scaleBackgroundImage();
+    /**Scale the background image to fit it in the widget.*/
+    void scaleBackgroundImage();
 
 };
 
