@@ -703,6 +703,28 @@ private:
     QAction* positionViewToggle;
     QAction* showEventsInPositionView;
     
+    QAction* mProperties;
+    QAction* mLoadClusterFiles;
+    QAction* mLoadEventFiles;
+    QAction* mLoadPositionFile;
+    QAction* mCreateEventFile;
+    QAction* mCloseCluster;
+    QAction* mCloseEvent;
+    QAction* mClosePositionFile;
+    QAction* mSelectAll;
+    QAction* mDeselectAll;
+    QAction* mZoomTool;
+    QAction* mSelectTool;
+    QAction* mMeasureTool;
+    QAction* mTimeTool;
+    QAction* mEventTool;
+    QAction* mDrawTimeLine;
+    QAction* mPage;
+    QAction* mAccelerate;
+    QAction* mDecelerate;
+    QAction* mNewDisplay;
+    QAction* mRenameActiveDisplay;
+    QAction* mCloseActiveDisplay;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 
