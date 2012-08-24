@@ -31,7 +31,7 @@
 #include <Q3ValueList>
 #include <QCustomEvent>
 #include <QTabWidget>
-
+#include <QMainWindow>
 //application specific include files
 #include "neuroscopeview.h"
 
@@ -48,7 +48,7 @@ class ItemPalette;
   * and statusbar. There is only one document open by application.
   * @author Lynn Hazan
   */
-class NeuroscopeApp : public KDockMainWindow
+class NeuroscopeApp : public QMainWindow
 {
     Q_OBJECT
 
@@ -709,15 +709,15 @@ private:
     /** mainDock is the main DockWidget to which all other dockWidget will be dock. Inititalized in
      * initDisplay()
      */
-    KDockWidget* mainDock;
+    QDockWidget* mainDock;
 
     /**displayPanel is the DockWidget containing the channel palette used to specify the traces display.
      */
-    KDockWidget* displayPanel;
+    QDockWidget* displayPanel;
 
     /**spikePanel is the DockWidget containing the channel palette used to create the spike groups.
      */
-    KDockWidget* spikePanel;
+    QDockWidget* spikePanel;
 
     /**displayChannelPalette is the Widget containing the channel list used to specify the traces display.
     * Inititalized in initItemPanel().

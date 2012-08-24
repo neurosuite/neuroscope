@@ -58,16 +58,16 @@ class ItemPalette : public Q3ScrollView
     
 public:
 
-    enum PaletteType {CLUSTER=0,EVENT=1}
+    enum PaletteType {CLUSTER=0,EVENT=1};
 
-                     /**Constructor.
+    /**Constructor.
                      * @param type type of palette (clusters or events).
                      * @param backgroundColor background color.
                      * @param parent parent widget.
                      * @param name internal name of the palette.
                      * @param fl widget flags.
                      */
-                     ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     /*
    *  Destroys the object and frees any allocated resources.
    */

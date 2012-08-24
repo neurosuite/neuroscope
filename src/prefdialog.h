@@ -67,6 +67,6 @@ private:
     PositionProperties* positionProperties;
     ClusterProperties* clusterProperties;
     bool applyEnable;
-}
+};
 
 #endif  // PREFDIALOG_H

@@ -54,7 +54,9 @@
 using namespace std;
 
 
-NeuroscopeApp::NeuroscopeApp():KDockMainWindow(0, "NeuroScope"),prefDialog(0L),displayCount(0),mainDock(0),
+NeuroscopeApp::NeuroscopeApp()
+    :QMainWindow(0, "NeuroScope")
+    ,prefDialog(0L),displayCount(0),mainDock(0),
     displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
     palettePanel(0L),isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
     select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),

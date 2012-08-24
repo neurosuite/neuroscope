@@ -921,7 +921,7 @@ private:
         Array<dataType>& getData(){return data;}
 
         ~ClusterData(){}
-    }
+    };
 
     /**Dictionary between the cluster provider names and the cluster data and status.*/
     Q3Dict<ClusterData> clustersData;

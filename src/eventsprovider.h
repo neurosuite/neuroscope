@@ -53,7 +53,7 @@ class EventsProvider : public DataProvider  {
 public:
 
     /**Information retun after a call to loadFile/saveDocument/createFeatureFile*/
-    enum loadReturnMessage {OK=0,OPEN_ERROR=1,INCORRECT_CONTENT=2,COUNT_ERROR=3}
+    enum loadReturnMessage {OK=0,OPEN_ERROR=1,INCORRECT_CONTENT=2,COUNT_ERROR=3};
 
 
     /**Constructor.

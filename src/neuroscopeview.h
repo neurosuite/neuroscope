@@ -59,7 +59,7 @@ using namespace std;
  * The NeuroscopeView class inherits QWidget as a KDockArea to give it the ability to contains dockWidgets.
  * @author Lynn Hazan
  */
-class NeuroscopeView : public KDockArea
+class NeuroscopeView : public QWidget
 {
     Q_OBJECT
 public:
@@ -149,7 +149,7 @@ public:
 
     /**Show all the encapsulated widgets contain in the view. The widgets know how to draw themselves.*/
     inline void showAllWidgets(){
-        dockManager->activate();
+        //KDAB_PENDING dockManager->activate();
         emit updateContents();
     }
 
@@ -802,7 +802,7 @@ private:
     /** mainDock is the main DockWidget to which all other dockWidget will be dock. Inititalized in
   * the constructor.
   */
-    KDockWidget* mainDock;
+    QDockWidget* mainDock;
 
     /**True if the traces are displayed on multiple columns, false otherwise.*/
     bool multiColumns;

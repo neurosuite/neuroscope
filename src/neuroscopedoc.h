@@ -337,7 +337,7 @@ public:
     /**Information retun after a call to openFile/saveDocument/createFeatureFile*/
     enum OpenSaveCreateReturnMessage {OK=0,OPEN_ERROR=1,DOWNLOAD_ERROR=3,INCORRECT_FILE=4,SAVE_ERROR=5,
                                       UPLOAD_ERROR=6,INCORRECT_CONTENT=7,CREATION_ERROR=8,PARSE_ERROR=9,MISSING_FILE=10,
-                                      ALREADY_OPENED=11,NOT_WRITABLE=12}
+                                      ALREADY_OPENED=11,NOT_WRITABLE=12};
 
     /** Constructs a document.
     * @param parent the parent QWidget.
