@@ -232,23 +232,32 @@ class NeuroscopeApp : public KDockMainWindow
   void slotEventAdded(QString providerName,QString addedEventDescription,double time);
 
   /**Update the positions menu due to the closing of the current position view.*/
-  inline void positionViewClosed(){positionViewToggle->setChecked(false);};
+  inline void positionViewClosed(){positionViewToggle->setChecked(false);}
 
   /**Disables clusters browsing as no clusters have been selected for browsing.
   */
-  inline void slotNoClustersToBrowse(){slotStateChanged("noClusterBrowsingState");};
+  inline void slotNoClustersToBrowse(){
+      slotStateChanged("noClusterBrowsingState");
+  }
 
   /**Enables clusters browsing as some clusters have been selected for browsing.
   */
-  inline void slotClustersToBrowse(){slotStateChanged("clusterBrowsingState");};
+  inline void slotClustersToBrowse(){
+      slotStateChanged("clusterBrowsingState");
+                                    }
+
 
   /**Disables events browsing as no events have been selected for browsing.
   */
-  inline void slotNoEventsToBrowse(){slotStateChanged("noEventBrowsingState");};
+  inline void slotNoEventsToBrowse(){
+      slotStateChanged("noEventBrowsingState");
+  }
   
   /**Enables events browsing as some events have been selected for browsing.
   */
-  inline void slotEventsToBrowse(){slotStateChanged("eventBrowsingState");};
+  inline void slotEventsToBrowse(){
+      slotStateChanged("eventBrowsingState");
+  }
 
   protected:
     /** initializes the KActions of the application */

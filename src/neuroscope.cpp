@@ -773,8 +773,13 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //Enable some actions now that a document is open (see the klustersui.rc file)
     slotStateChanged("documentState");
     slotStateChanged("displayChannelState");
-    if(clusterRaster->isChecked()) slotStateChanged("clusterRasterState");
-    else slotStateChanged("noClusterRasterState");
+    if(clusterRaster->isChecked()) {
+        slotStateChanged("clusterRasterState");
+    }
+    else{
+
+        slotStateChanged("noClusterRasterState");
+    }
 }
 
 void NeuroscopeApp::openDocumentFile(const QString& url)
@@ -871,7 +876,9 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         updateBrowsingStatus();
 
         //Update the menu related to the display of events in the PositionView
-        if(isPositionFileLoaded && !eventFileList.isEmpty()) slotStateChanged("eventsInPositionViewEnableState");
+        if(isPositionFileLoaded && !eventFileList.isEmpty()){
+            slotStateChanged("eventsInPositionViewEnableState");
+        }
 
         setCaption(url.path());
         QApplication::restoreOverrideCursor();
@@ -926,8 +933,12 @@ void NeuroscopeApp::updateBrowsingStatus(){
             palette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
         }
 
-        if(!palette->isBrowsingEnable()) slotStateChanged("noClusterBrowsingState");
-        else slotStateChanged("clusterBrowsingState");
+        if(!palette->isBrowsingEnable()) {
+            slotStateChanged("noClusterBrowsingState");
+        }
+        else {
+            slotStateChanged("clusterBrowsingState");
+        }
     }
     if(!eventFileList.isEmpty()){
         ItemPalette* palette;
@@ -948,8 +959,12 @@ void NeuroscopeApp::updateBrowsingStatus(){
             palette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
         }
 
-        if(!palette->isBrowsingEnable()) slotStateChanged("noEventBrowsingState");
-        else slotStateChanged("eventBrowsingState");
+        if(!palette->isBrowsingEnable()){
+            slotStateChanged("noEventBrowsingState");
+        }
+        else{
+            slotStateChanged("eventBrowsingState");
+        }
     }
 }
 
@@ -2003,8 +2018,13 @@ void NeuroscopeApp::slotClustersVerticalLines(){
 }
 
 void NeuroscopeApp::slotClustersRaster(){
-    if(clusterRaster->isChecked()) slotStateChanged("clusterRasterState");
-    else slotStateChanged("noClusterRasterState");
+    if(clusterRaster->isChecked()) {
+        slotStateChanged("clusterRasterState");
+    }
+    else{
+
+        slotStateChanged("noClusterRasterState");
+    }
     NeuroscopeView* view = activeView();
     view->setClusterRaster(clusterRaster->isChecked());
 }
@@ -2104,8 +2124,12 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 
     clusterVerticalLines->setChecked(activeView->getClusterVerticalLines());
     clusterRaster->setChecked(activeView->getClusterRaster());
-    if(clusterRaster->isChecked()) slotStateChanged("clusterRasterState");
-    else slotStateChanged("noClusterRasterState");
+    if(clusterRaster->isChecked()) {
+        slotStateChanged("clusterRasterState");
+    }
+    else{
+        slotStateChanged("noClusterRasterState");
+    }
     clusterWaveforms->setChecked(activeView->getClusterWaveforms());
     showHideLabels->setChecked(activeView->getLabelStatus());
     positionViewToggle->setChecked(activeView->isPositionView());
@@ -2150,10 +2174,18 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     //Disable some actions when no document is open (see the klustersui.rc file)
     if((current->getWidget())->isA("ChannelPalette")){
         if(editMode->isChecked()){
-            if((current->getWidget()) == displayChannelPalette) slotStateChanged("displayChannelState");
-            else slotStateChanged("spikeChannelState");
+            if((current->getWidget()) == displayChannelPalette){
+                slotStateChanged("displayChannelState");
+            }
+            else{
+
+                slotStateChanged("spikeChannelState");
+            }
         }
-        else slotStateChanged("enableEditState");
+        else{
+
+            slotStateChanged("enableEditState");
+        }
 
         //update the channel palettes
         NeuroscopeView* view = activeView();
@@ -2181,8 +2213,12 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
                 }
                 slotStateChanged("clusterTabState");
 
-                if(!clusterPalette->isBrowsingEnable()) slotStateChanged("noClusterBrowsingState");
-                else slotStateChanged("clusterBrowsingState");
+                if(!clusterPalette->isBrowsingEnable()) {
+                    slotStateChanged("noClusterBrowsingState");
+                }
+                else{
+                    slotStateChanged("clusterBrowsingState");
+                }
             }
             //update the event palettes
             if(name.contains("eventPanel")){
@@ -2195,8 +2231,12 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
                     eventPalette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
                 }
                 slotStateChanged("eventTabState");
-                if(!eventPalette->isBrowsingEnable()) slotStateChanged("noEventBrowsingState");
-                else slotStateChanged("eventBrowsingState");
+                if(!eventPalette->isBrowsingEnable()){
+                    slotStateChanged("noEventBrowsingState");
+                }
+                else {
+                    slotStateChanged("eventBrowsingState");
+                }
             }
 
             //update the spike palettes
@@ -2503,8 +2543,12 @@ void NeuroscopeApp::slotEditMode(){
 
     if(editMode->isChecked()){
         slotStateChanged("editState");
-        if((current->getWidget()) == displayChannelPalette) slotStateChanged("displayChannelState");
-        else slotStateChanged("spikeChannelState");
+        if((current->getWidget()) == displayChannelPalette){
+            slotStateChanged("displayChannelState");
+        }
+        else{
+            slotStateChanged("spikeChannelState");
+        }
     }
     else{
         slotStateChanged("noEditState");
@@ -2782,8 +2826,13 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
 
     slotStateChanged("clusterState");
     //Waveforms are allowed only for dat and fil files.
-    if(filePath.contains(".dat")||filePath.contains(".fil")) slotStateChanged("datState");
-    else slotStateChanged("noDatState");
+    if(filePath.contains(".dat")||filePath.contains(".fil")) {
+        slotStateChanged("datState");
+    }
+    else{
+
+        slotStateChanged("noDatState");
+    }
 }
 
 void NeuroscopeApp::addClusterFile(QString clusterFileId){
@@ -2847,8 +2896,13 @@ void NeuroscopeApp::slotCloseClusterFile(){
             }
             else{
                 slotStateChanged("clusterState");
-                if(!clusterPalette->isBrowsingEnable()) slotStateChanged("noClusterBrowsingState");
-                else slotStateChanged("clusterBrowsingState");
+                if(!clusterPalette->isBrowsingEnable()) {
+                    slotStateChanged("noClusterBrowsingState");
+                }
+                else{
+
+                    slotStateChanged("clusterBrowsingState");
+                }
             }
         }
     }
@@ -2887,7 +2941,9 @@ void NeuroscopeApp::loadPositionFile(QString url){
         positionViewToggle->setChecked(true);
 
         slotStateChanged("positionState");
-        if(!eventFileList.isEmpty()) slotStateChanged("eventsInPositionViewEnableState");
+        if(!eventFileList.isEmpty()){
+            slotStateChanged("eventsInPositionViewEnableState");
+        }
     }
 
     QApplication::restoreOverrideCursor();
@@ -2996,7 +3052,9 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     eventDock->setDockSite(KDockWidget::DockRight);
 
     slotStateChanged("eventState");
-    if(isPositionFileLoaded) slotStateChanged("eventsInPositionViewEnableState");
+    if(isPositionFileLoaded) {
+        slotStateChanged("eventsInPositionViewEnableState");
+    }
 }
 
 void NeuroscopeApp::addEventFile(QString eventFileId){
@@ -3010,7 +3068,9 @@ void NeuroscopeApp::addEventFile(QString eventFileId){
             //Create the list
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
             break;
-            if(isPositionFileLoaded) slotStateChanged("eventsInPositionViewEnableState");
+            if(isPositionFileLoaded) {
+                slotStateChanged("eventsInPositionViewEnableState");
+            }
         }
     }
 }
@@ -3061,8 +3121,13 @@ void NeuroscopeApp::slotCloseEventFile(){
         }
         else{
             slotStateChanged("eventState");
-            if(!eventPalette->isBrowsingEnable()) slotStateChanged("noEventBrowsingState");
-            else slotStateChanged("eventBrowsingState");
+            if(!eventPalette->isBrowsingEnable()) {
+                slotStateChanged("noEventBrowsingState");
+            }
+            else{
+
+                slotStateChanged("eventBrowsingState");
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 project(neuroscope-src)
 set(neuroscope_SRCS 
-	#main.cpp 
-	#neuroscope.cpp 
-	#neuroscopeview.cpp 
+	main.cpp 
+	neuroscope.cpp 
+	neuroscopeview.cpp 
 	baseframe.cpp 
 	channelcolors.cpp 
 	channelgroupview.cpp 
@@ -17,17 +17,17 @@ clustersprovider.cpp
 	itemcolors.cpp 
 	itemgroupview.cpp 
 	itemiconview.cpp 
-	#itempalette.cpp 
-	#neuroscopedoc.cpp 
+	itempalette.cpp 
+	neuroscopedoc.cpp 
 	neuroscopexmlreader.cpp 
-	#positionproperties.cpp 
+	positionproperties.cpp 
 	positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
-	#prefdialog.cpp 
+	prefdialog.cpp 
 	prefgeneral.cpp  
 	properties.cpp 
-	#propertiesdialog.cpp 
+	propertiesdialog.cpp 
 	tags.cpp 
 	tracesprovider.cpp 
 	traceview.cpp 
