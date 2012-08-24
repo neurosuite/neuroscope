@@ -62,10 +62,10 @@ public:
     inline void setHeight(int height){heightLineEdit->setText(QString("%1").arg(height));}
 
     /**Sets the background image.*/
-    inline void setBackgroundImage(QString image){
+    inline void setBackgroundImage(const QString& image){
         backgroundLineEdit->setText(image);
-        if(image != ""){
-            backgroungImage.load(image);
+        if(!image.isEmpty()){
+           backgroungImage.load(image);
             if(!backgroungImage.isNull()){
                 //flip and rotation values should have been set before any call to this function.
                 updateDisplayedImage();
@@ -195,7 +195,7 @@ public slots:
             QPixmap pixmap;
             pixmap.resize(getWidth(),getHeight());
             pixmap.fill(Qt::black);
-            this->backgroundPixmap->setPixmap(pixmap);
+            backgroundPixmap2->setPixmap(pixmap);
         }
     }
 
@@ -213,7 +213,7 @@ private slots:
             QPixmap pixmap;
             pixmap.resize(getWidth(),getHeight());
             pixmap.fill(Qt::black);
-            this->backgroundPixmap->setPixmap(pixmap);
+            backgroundPixmap2->setPixmap(pixmap);
         }
     }
 

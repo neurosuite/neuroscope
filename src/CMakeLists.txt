@@ -18,7 +18,7 @@ clustersprovider.cpp
 	itemgroupview.cpp 
 	itemiconview.cpp 
 	itempalette.cpp 
-	neuroscopedoc.cpp 
+	#neuroscopedoc.cpp 
 	neuroscopexmlreader.cpp 
 	positionproperties.cpp 
 	positionsprovider.cpp 
