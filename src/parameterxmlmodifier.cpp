@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 //application specific include files.
+#include "config-neuroscope.h"
 #include "parameterxmlmodifier.h"
 #include "tags.h"
 #include "channelcolors.h"
@@ -32,8 +33,6 @@ using namespace std;
 #include <QString> 
 
 using namespace neuroscope;
-
-extern QString version;
 
 ParameterXmlModifier::ParameterXmlModifier(){}
 ParameterXmlModifier::~ParameterXmlModifier(){}
@@ -99,7 +98,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
 
     //Creates the neuroscope tag
     QDomElement neuroscopeElement = doc.createElement(NEUROSCOPE);
-    neuroscopeElement.setAttribute(VERSION,version);
+    neuroscopeElement.setAttribute(VERSION,NEUROSCOPE_VERSION);
     neuroscopeElement.appendChild(miscellaneous);
     neuroscopeElement.appendChild(neuroscopeVideo);
 

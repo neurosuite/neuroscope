@@ -750,6 +750,7 @@ private:
     QAction* mResetSelectedChannelAmplitudes;
     QAction* mSetCurrentOffsetsAsDefault;
     QAction* mSetDefaultOffsetToZero;
+    QAction* mSelectAllExcept0And1;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 

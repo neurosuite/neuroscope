@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 //application specific include files.
+#include "config-neuroscope.h"
 #include "sessionxmlwriter.h"
 #include "tags.h"
 #include "channelcolors.h"
@@ -34,8 +35,6 @@ using namespace std;
 
 using namespace neuroscope;
 
-extern QString version;
-
 SessionXmlWriter::SessionXmlWriter():doc(){
     //create the processing instruction
     QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
@@ -43,7 +42,7 @@ SessionXmlWriter::SessionXmlWriter():doc(){
 
     //Create the document and the root element.
     root = doc.createElement(NEUROSCOPE);
-    root.setAttribute(VERSION,version);
+    root.setAttribute(VERSION,NEUROSCOPE_VERSION);
     doc.appendChild(root);
 }
 

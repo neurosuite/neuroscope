@@ -159,8 +159,10 @@ void NeuroscopeApp::initActions()
     mSelectAll->setShortcut(Qt::CTRL + Qt::Key_A);
     connect(mSelectAll,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
 
-    new QAction(tr("Select All e&xcept 0 and 1"), Qt::CTRL + Qt::SHIFT + Qt::Key_A, this,
-                SLOT(slotSelectAllWO01()),actionCollection(),"edit_select_all_except01");
+    mSelectAllExcept0And1 = editMenu->addAction(tr("Select All e&xcept 0 and 1"));
+    mSelectAllExcept0And1->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
+    connect(mSelectAllExcept0And1,SIGNAL(triggered()), this,SLOT(slotSelectAllWO01()));
+
     mDeselectAll = editMenu->addAction(tr("Deselect All"));
     mDeselectAll->setShortcut(Qt::CTRL + Qt::Key_U);
     connect(mDeselectAll,SIGNAL(triggered()), this,SLOT(slotDeselectAll()));
@@ -204,7 +206,7 @@ void NeuroscopeApp::initActions()
     connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
     connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
 #endif
-    addEventToolBarAction = new QAction(tr("Add Event"));
+    addEventToolBarAction = toolMenu->addAction(tr("Add Event"));
     addEventToolBarAction->setIcon(QIcon(":icons/add_event_tool"));
     connect(addEventToolBarAction,SIGNAL(triggered()), this,SLOT(addEvent()));
 
@@ -516,6 +518,7 @@ void NeuroscopeApp::initItemPanel(){
 }
 
 void NeuroscopeApp::executePreferencesDlg(){
+#if KDAB_PENDING
     if(prefDialog == 0L){
         prefDialog = new PrefDialog(this);
         // connect to the "settingsChanged" signal
@@ -532,6 +535,7 @@ void NeuroscopeApp::executePreferencesDlg(){
             applyPreferences();                      // let settings take effect
         }
     }
+#endif
 }
 
 void NeuroscopeApp::applyPreferences() {
@@ -712,7 +716,8 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //Create the mainDock (first view)
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
-    mainDock = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
+    mainDock = new QDockWidget(doc->url());
+            //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
     //KDAB_PENDING mainDock->setDockWindowTransient(this,true);
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
@@ -772,7 +777,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
 
     //Add spikeChannelPalette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
     //and spikeChannelPalette.
-    QDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
+    //KDAB_PENDINGQDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
 
     //KDAB_PENDING displayPanel->setEnableDocking(QDockWidget::DockNone);
     //KDAB_PENDING spikePanel->setEnableDocking(QDockWidget::DockNone);
@@ -780,11 +785,11 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //KDAB_PENDING spikePanel->setDockSite(QDockWidget::DockNone);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
+    //KDAB_PENDINGpaletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    //KDAB_PENDINGconnect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
     //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
@@ -1671,6 +1676,7 @@ void NeuroscopeApp::slotUpdateHiddenChannels(const Q3ValueList<int>& hiddenChann
 }
 
 void NeuroscopeApp::slotFileProperties(){
+#if KDAB_PENDING
     if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
@@ -1739,13 +1745,14 @@ void NeuroscopeApp::slotFileProperties(){
                                             propertiesDialog->getBackgroundImage(),propertiesDialog->getRotation(),propertiesDialog->getFlip(),propertiesDialog->getPositionsBackground(),activeView());
         }
     }
+#endif
 }
 
 void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
                                           float screenGain,int currentNbSamples,int currentPeakIndex,double videoSamplingRate,int width,
                                           int height, QString backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool isaDatFile,bool positionsBackground,QString traceBackgroundImage){
     QApplication::restoreOverrideCursor();
-
+#if 0
     if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
@@ -1777,7 +1784,7 @@ void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution
     }
 
     propertiesDialog->openState(false);
-
+#endif
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
@@ -2506,7 +2513,8 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
     if(mainDock){
         if(tabLabel.isEmpty())
             tabLabel = tr("Field Potentials Display");
-        QDockWidget* display = createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
+        QDockWidget* display = new QDockWidget(doc->url());
+                //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
@@ -2532,17 +2540,17 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
         //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockCenter);
         //Add the new display as a tab and get a new DockWidget, grandParent of the target (mainDock)
         //and the new display.
-        QDockWidget* grandParent = display->manualDock(mainDock,QDockWidget::DockCenter);
+        //KDAB_PENDING QDockWidget* grandParent = display->manualDock(mainDock,QDockWidget::DockCenter);
 
         //Disconnect the previous connection
-        if(tabsParent != NULL) disconnect(tabsParent,0,0,0);
+        //KDAB_PENDING if(tabsParent != NULL) disconnect(tabsParent,0,0,0);
 
         //The grandParent's widget is the QTabWidget regrouping all the tabs
-        tabsParent = static_cast<QTabWidget*>(grandParent->widget());
+        //KDAB_PENDING tabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
-        connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
+        //KDAB_PENDING connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
 
         //KDAB_PENDING slotStateChanged("tabState");
 
@@ -2594,8 +2602,8 @@ void NeuroscopeApp::slotEditMode(){
 }
 
 void NeuroscopeApp::slotSynchronize(){
-    if(QMessageBox::warningContinueCancel(this,tr("This will overwrite all your spike groups by your anatomical groups. Do you wish to continue?"),
-                                          tr("Synchronize anatomic and spike groups")) == QMessageBox::Cancel)
+    if(QMessageBox::warning(this,tr("Synchronize anatomic and spike groups"),tr("This will overwrite all your spike groups by your anatomical groups. Do you wish to continue?"), QMessageBox::Ok|QMessageBox::Cancel
+                                          ) == QMessageBox::Cancel)
         return;
 
     groupsModified = true;
@@ -2766,7 +2774,7 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
         else if(returnStatus == NeuroscopeDoc::INCORRECT_FILE){
             QApplication::restoreOverrideCursor();
             QMessageBox::critical (this, tr("Error!"),
-                                   tr("Incorrect file name (" + static_cast<QString>(*iterator).path() + "): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier)."));
+                                   tr("Incorrect file name (%1): the name has to be of the form baseName.n.clu or baseName.clu.n (with n a number identifier).").arg(*iterator));
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
@@ -2808,10 +2816,14 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
 
     QDockWidget* clusterDock;
     if(displayPaletteHeaders) {
-        clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
+        clusterDock = new QDockWidget(tr("Units"));
+        clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
+                //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
     }
     else{
-        clusterDock = createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
+        clusterDock = new QDockWidget;
+        clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
+                //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
     }
     ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
     clusterDock->setWidget(clusterPalette);
@@ -2827,17 +2839,17 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     
     //Add the new palette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
     //and the new palette.
-    QDockWidget* grandParent = clusterDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
+    //KDAB_PENDING QDockWidget* grandParent = clusterDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
 
     //Disconnect the previous connection
-    if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
+    //KDAB_PENDING if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
+    //KDAB_PENDING paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
     //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
@@ -3069,17 +3081,17 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     //KDAB_PENDING displayPanel->setDockSite(QDockWidget::DockCenter);
     //Add the new palette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
     //and the new palette.
-    QDockWidget* grandParent = eventDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
+    //KDAB_PENDING QDockWidget* grandParent = eventDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
 
     //Disconnect the previous connection
-    if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
+    //KDAB_PENDING if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
-    paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
+    //KDAB_PENDING paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
     //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
@@ -3313,10 +3325,12 @@ void NeuroscopeApp::slotAddEventActivated(int index){
     QString description = menu->text(index);
     if(index == static_cast<int>(menu->count() - 1)) {
         bool ok;
+#if KDAB_PENDING
         //KDAB_PENDING QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
         if(ok) {
             eventLabelToCreate = result;
         }
+#endif
     }
     else eventLabelToCreate = description;
 
