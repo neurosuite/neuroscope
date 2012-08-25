@@ -751,6 +751,14 @@ private:
     QAction* mSetCurrentOffsetsAsDefault;
     QAction* mSetDefaultOffsetToZero;
     QAction* mSelectAllExcept0And1;
+    QAction* mPrintAction;
+    QAction* mQuitAction;
+    QAction* mSaveAction;
+    QAction* mSaveAsAction;
+    QAction* mCloseAction;
+    QAction* mOpenAction;
+    QAction* mUndo;
+    QAction* mRedo;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 

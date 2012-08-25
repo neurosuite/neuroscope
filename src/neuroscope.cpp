@@ -106,20 +106,10 @@ NeuroscopeApp::~NeuroscopeApp()
 void NeuroscopeApp::initActions()
 {
 #if KDAB_PENDING
-    KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
     fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const QString&)), actionCollection());
-    VARIABLE = MENU->addAction(tr("&Close"), "fileclose");
-    connect(VARIABLE,SIGNAL(triggered()), this,SLOT(slotFileClose()));
 
-    KStdAction::save(this, SLOT(saveSession()), actionCollection());
-    KStdAction::saveAs(this, SLOT(slotSessionSaveAs()), actionCollection());
-
-    KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
-    KStdAction::quit(this, SLOT(close()), actionCollection());
     viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
     viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-    KStdAction::undo(this, SLOT(slotUndo()), actionCollection());
-    KStdAction::redo(this, SLOT(slotRedo()), actionCollection());
     KStdAction::preferences(this,SLOT(executePreferencesDlg()), actionCollection());
 #endif
     //Custom actions and menus
@@ -128,6 +118,28 @@ void NeuroscopeApp::initActions()
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     mProperties = fileMenu->addAction(tr("&Properties"));
     connect(mProperties,SIGNAL(triggered()), this,SLOT(slotFileProperties()));
+
+    mOpenAction = fileMenu->addAction(tr("&Open..."));
+    mOpenAction->setShortcut(QKeySequence::Open);
+    connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
+
+
+    mPrintAction = fileMenu->addAction(tr("Print"));
+    mPrintAction->setShortcut(QKeySequence::Print);
+    connect(mPrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
+
+    mSaveAction = fileMenu->addAction(tr("Save..."));
+    mSaveAction->setShortcut(QKeySequence::Save);
+    connect(mSaveAction, SIGNAL(triggered()), this, SLOT(saveSession()));
+
+    mSaveAsAction = fileMenu->addAction(tr("&Save As..."));
+    mSaveAsAction->setShortcut(QKeySequence::SaveAs);
+    connect(mSaveAsAction, SIGNAL(triggered()), this, SLOT(slotSessionSaveAs()));
+
+    mCloseAction = fileMenu->addAction(tr("Close"));
+    mCloseAction->setShortcut(QKeySequence::Close);
+    connect(mCloseAction, SIGNAL(triggered()), this, SLOT(slotFileClose()));
+
 
     mLoadClusterFiles = fileMenu->addAction(tr("Load Cl&uster File(s)..."));
     connect(mLoadClusterFiles,SIGNAL(triggered()), this,SLOT(slotLoadClusterFiles()));
@@ -150,6 +162,9 @@ void NeuroscopeApp::initActions()
     mClosePositionFile = fileMenu->addAction(tr("Close Position File"));
     connect(mClosePositionFile,SIGNAL(triggered()), this,SLOT(slotClosePositionFile()));
 
+    mQuitAction = fileMenu->addAction(tr("Quit"));
+    mQuitAction->setShortcut(QKeySequence::Print);
+    connect(mQuitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 
 
@@ -158,6 +173,15 @@ void NeuroscopeApp::initActions()
     mSelectAll = editMenu->addAction(tr("Select &All"));
     mSelectAll->setShortcut(Qt::CTRL + Qt::Key_A);
     connect(mSelectAll,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
+
+    mUndo = editMenu->addAction(tr("Undo"));
+    mUndo->setShortcut(QKeySequence::Undo);
+    connect(mUndo, SIGNAL(triggered()), this, SLOT(slotUndo()));
+
+    mRedo = editMenu->addAction(tr("Redo"));
+    mRedo->setShortcut(QKeySequence::Redo);
+    connect(mRedo, SIGNAL(triggered()), this, SLOT(slotRedo()));
+
 
     mSelectAllExcept0And1 = editMenu->addAction(tr("Select All e&xcept 0 and 1"));
     mSelectAllExcept0And1->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
