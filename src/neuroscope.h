@@ -176,7 +176,7 @@ public:
     /**Informs the application that a position file has been loaded from the session file.*/
     inline void positionFileLoaded(){
         isPositionFileLoaded = true;
-        //KDAB_PENDING slotStateChanged("positionState");
+        slotStateChanged("positionState");
     }
 
     /**Tells if there are cluster files loaded.
@@ -237,28 +237,29 @@ public slots:
     /**Disables clusters browsing as no clusters have been selected for browsing.
   */
     inline void slotNoClustersToBrowse(){
-        //KDAB_PENDING slotStateChanged("noClusterBrowsingState");
+        slotStateChanged("noClusterBrowsingState");
     }
 
     /**Enables clusters browsing as some clusters have been selected for browsing.
   */
     inline void slotClustersToBrowse(){
-        //KDAB_PENDING slotStateChanged("clusterBrowsingState");
+        slotStateChanged("clusterBrowsingState");
     }
 
 
     /**Disables events browsing as no events have been selected for browsing.
   */
     inline void slotNoEventsToBrowse(){
-        //KDAB_PENDING slotStateChanged("noEventBrowsingState");
+        slotStateChanged("noEventBrowsingState");
     }
 
     /**Enables events browsing as some events have been selected for browsing.
   */
     inline void slotEventsToBrowse(){
-        //KDAB_PENDING slotStateChanged("eventBrowsingState");
+        slotStateChanged("eventBrowsingState");
     }
 
+    void slotStateChanged(const QString& state);
 protected:
     /** initializes the KActions of the application */
     void initActions();
@@ -290,19 +291,6 @@ protected:
      */
     virtual bool queryExit();
     
-    /**
-    * This function is called when it is time for Neuroscope to save its
-    * properties for session management purposes.
-    */
-    virtual void saveProperties();
-    
-    /**
-    * This function is called when this Neuroscope is restored. The KConfig
-    * object points to the session management config file that was saved.
-    * with @ref saveProperties
-    */
-    virtual void readProperties();
-
     
     void customEvent (QCustomEvent* event);
     
