@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/cursors">
+    <qresource prefix="/">
         <file>cursors/measure_cursor.png</file>
         <file>cursors/select_channels_cursor.png</file>
         <file>cursors/select_event_cursor.png</file>
