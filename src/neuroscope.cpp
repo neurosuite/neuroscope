@@ -63,8 +63,11 @@ NeuroscopeApp::NeuroscopeApp()
     displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
     palettePanel(0L),isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
     select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
-    eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false){
-
+    eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
+{
+    //Prepare the actions
+    initActions();
+    createToolBar();
     printer = new QPrinter();
 
     //Apply the user settings.
@@ -81,8 +84,6 @@ NeuroscopeApp::NeuroscopeApp()
                             eventPosition,clusterPosition,nbSamplesDefault,peakIndexDefault,videoSamplingRateDefault,videoWidthDefault,videoHeightDefault,backgroundImageDefault,traceBackgroundImageDefault,
                             rotationDefault,flipDefault,drawPositionsOnBackgroundDefault);
 
-    //Prepare the actions
-    initActions();
 
     // Apply the saved mainwindow settings, if any, and ask the mainwindow
     // to automatically save settings if changed: window size, toolbar
@@ -101,6 +102,11 @@ NeuroscopeApp::~NeuroscopeApp()
     //Clear the memory by deleting all the pointers
     delete doc;
     delete printer;
+}
+
+void NeuroscopeApp::createToolBar()
+{
+
 }
 
 void NeuroscopeApp::initActions()

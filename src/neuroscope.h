@@ -171,7 +171,7 @@ public:
     /**Returns the current background color.
    * @return the current background color.
    */
-    inline QColor getBackgroundColor()const{return backgroundColor;}   ;
+    inline QColor getBackgroundColor()const{return backgroundColor;}
 
     /**Informs the application that a position file has been loaded from the session file.*/
     inline void positionFileLoaded(){
@@ -663,6 +663,7 @@ private slots:
 
 private:
 
+    void createToolBar();
     /** Doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
      */
