@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/icons">
+    <qresource prefix="/">
         <file>icons/add_event_tool.png</file>
         <file>icons/anatomy.png</file>
         <file>icons/backCluster.png</file>
