@@ -295,6 +295,9 @@ protected:
     void customEvent (QCustomEvent* event);
     
 private slots:
+
+    void slotAbout();
+
     /**Open a file and load it into the document.*/
     void slotFileOpen();
 

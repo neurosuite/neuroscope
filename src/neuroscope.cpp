@@ -464,6 +464,13 @@ void NeuroscopeApp::initActions()
 
     calibrationBar->setChecked(false);
 
+
+    //Help menu
+    QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
+    QAction *about = helpMenu->addAction(tr("About"));
+    connect(about,SIGNAL(triggered()), this,SLOT(slotAbout()));
+
+
     //Custom connections
     connect(doc, SIGNAL(noSession(QMap<int,int>&,QMap<int,bool>&)),this, SLOT(slotDefaultSetUp(QMap<int,int>&,QMap<int,bool>&)));
     connect(doc, SIGNAL(loadFirstDisplay(Q3ValueList<int>*,bool,bool,bool,bool,bool,bool,Q3ValueList<int>,Q3ValueList<int>,Q3ValueList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
@@ -3451,4 +3458,8 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     }
 }
 
+void NeuroscopeApp::slotAbout()
+{
+
+}
 #include "neuroscope.moc"
