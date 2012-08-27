@@ -3460,6 +3460,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
 
 void NeuroscopeApp::slotAbout()
 {
+    QMessageBox::about(this,tr("Neuroscope"),tr("Viewer for Local Field Potentials, spikes, events and positional data"));
 
 }
 #include "neuroscope.moc"
