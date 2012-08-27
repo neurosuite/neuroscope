@@ -25,7 +25,7 @@
 #include <iostream>
 #include <fstream>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 using namespace std;
 
@@ -60,8 +60,8 @@ bool SessionXmlWriter::writeTofile(const QString& url){
 
     QString xmlDocument = doc.toString();
 
-    Q3TextStream stream(&sessionFile);
-    stream.setEncoding(Q3TextStream::UnicodeUTF8);
+    QTextStream stream(&sessionFile);
+    stream.setEncoding(QTextStream::UnicodeUTF8);
     stream<< xmlDocument;
     sessionFile.close();
 

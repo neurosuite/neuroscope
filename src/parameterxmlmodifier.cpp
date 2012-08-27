@@ -24,7 +24,7 @@
 #include <iostream>
 #include <fstream>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 using namespace std;
 
@@ -78,7 +78,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
     if(newVideoNode){
         newChild = root.insertAfter(video,acquisitionSystem);
         if(newChild.isNull()){
-            Q3TextStream stream(&sessionFile);
+            QTextStream stream(&sessionFile);
             stream<< initialXmlDocument;
             sessionFile.close();
             return false;
@@ -89,7 +89,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
     if(newFilesNode){
         newChild = root.insertAfter(files,lfp);
         if(newChild.isNull()){
-            Q3TextStream stream(&sessionFile);
+            QTextStream stream(&sessionFile);
             stream<< initialXmlDocument;
             sessionFile.close();
             return false;
@@ -108,7 +108,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
     if(!neuroscope.isNull()) newChild = root.replaceChild(neuroscopeElement,neuroscope);
     else newChild = root.insertAfter(neuroscopeElement,spikeDetection);
     if (newChild.isNull()){
-        Q3TextStream stream(&sessionFile);
+        QTextStream stream(&sessionFile);
         stream<< initialXmlDocument;
         sessionFile.close();
         return false;
@@ -116,7 +116,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
 
     QString xmlDocument = doc.toString();
 
-    Q3TextStream stream(&sessionFile);
+    QTextStream stream(&sessionFile);
     stream<< xmlDocument;
     sessionFile.close();
 

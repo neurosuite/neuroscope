@@ -19,7 +19,7 @@
 #include <QFileInfo> 
 #include <QRegExp>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 //General C++ include files
@@ -93,7 +93,7 @@ int EventsProvider::loadData(){
     events.setSize(1,nbEvents);
     timeStamps.setSize(1,nbEvents);
 
-    Q3TextStream fileStream(&eventFile);
+    QTextStream fileStream(&eventFile);
     QString line;
     int lineCounter = 0;
     QStringList list;
@@ -1065,7 +1065,7 @@ void EventsProvider::clearUndoRedoData(){
 }
 
 int EventsProvider::save(QFile* eventFile){
-    Q3TextStream fileStream(eventFile);
+    QTextStream fileStream(eventFile);
     fileStream.precision(12);
 
     for(int i = 1;i<=nbEvents;++i) fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n";
