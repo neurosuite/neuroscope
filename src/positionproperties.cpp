@@ -53,14 +53,18 @@ void PositionProperties::updateDisplayedImage(){
 
         int angle = getRotation();
         if(angle != 0){
-            KImageEffect::RotateDirection rotationAngle;
+            QTransform rot;
             //KDE counts clockwise, to have a counterclock-wise rotation 90 and 270 are inverted
-            if(angle == 90) rotationAngle = KImageEffect::Rotate270;
-            if(angle == 180) rotationAngle = KImageEffect::Rotate180;
-            if(angle == 270) rotationAngle = KImageEffect::Rotate90;
-            rotatedImage = KImageEffect::rotate(backgroungImage,rotationAngle);
+            if(angle == 90)
+                rot.rotate(90);
+            else if(angle == 180)
+                rot.rotate(180);
+            else if(angle == 270)
+                rot.rotate(270);
+            rotatedImage = backgroungImage.transformed(rot);
         }
 
+        //Scale
         QImage flippedImage = rotatedImage;
         // 0 stands for none, 1 for vertical flip and 2 for horizontal flip.
         int flip = getFlip();
@@ -70,8 +74,7 @@ void PositionProperties::updateDisplayedImage(){
             if(flip == 1){
                 horizontal = false;
                 vertical = true;
-            }
-            else{
+            } else {
                 horizontal = true;
                 vertical = false;
             }

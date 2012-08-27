@@ -27,7 +27,7 @@
 #include <QPainter>
 #include <QLayout>
 #include <QToolTip>
-#include <q3whatsthis.h>
+
 #include <QPixmap>
 #include <QBitmap>
 #include <q3scrollview.h>
