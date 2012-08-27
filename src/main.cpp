@@ -27,10 +27,6 @@
 #include "neuroscope.h"
 #if KDAB_PENDING
 
-static const char *description =
-        I18N_NOOP("NeuroScope - Viewer for Local Field Potentials, spikes, events and positional data");
-// INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
-
 
 static KCmdLineOptions options[] =
 {
@@ -62,13 +58,6 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("neuroscope");
 
 #if KDAB_PENDING
-    KAboutData aboutData( "neuroscope", I18N_NOOP("NeuroScope"),
-                          VERSION, description, KAboutData::License_GPL,
-                          "(c) 2004-2006, Lynn Hazan", 0, 0, "lynn.hazan.myrealbox.com");
-    aboutData.addAuthor("Lynn Hazan",I18N_NOOP("Designer and developer"), "lynn.hazan.myrealbox.com");
-    aboutData.addAuthor("Michael Zugaro",I18N_NOOP("Provided technical assistance and co-designed the interface. Tested the application."), "michael.zugaro@college-de-france.fr");
-    aboutData.addCredit("CMBN Members",I18N_NOOP("Helped define the set of features and tested the application."),0, "http://osiris.rutgers.edu");
-    KCmdLineArgs::init(argc,argv,&aboutData );
     KCmdLineArgs::addCmdLineOptions(options);
 
     version = VERSION;
