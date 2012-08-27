@@ -49,7 +49,7 @@ clustersprovider.cpp
 
 qt4_add_resources(neuroscope_SRCS neuroscope-cursors.qrc neuroscope-icons.qrc)
 
-set(neuroscope_UI  propertieslayout.ui4 prefdefaultslayout.ui4 positionpropertieslayout.ui4 prefgenerallayout.ui4 clusterpropertieslayout.ui4)
+set(neuroscope_UI  propertieslayout.ui prefdefaultslayout.ui positionpropertieslayout.ui prefgenerallayout.ui clusterpropertieslayout.ui)
 
 qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
