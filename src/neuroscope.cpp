@@ -789,7 +789,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //allow dock on the left side only
     //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockLeft);
 
-    //KDAB_PENDING setView(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
+    setCentralWidget(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
     //KDAB_PENDING setMainDockWidget(mainDock);
 
     //disable docking abilities of mainDock itself
