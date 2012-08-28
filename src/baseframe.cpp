@@ -23,7 +23,7 @@
 #include <QStyle>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 
 // include files for kde
@@ -36,7 +36,7 @@ using namespace std;
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
-    Q3Frame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
+    QFrame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
     MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
     viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
     firstClick(0,0),isDoubleClick(false),rubber(0),
@@ -46,7 +46,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
     //Setting of the frame
     setLineWidth (BORDER);
     setPaletteBackgroundColor(backgroundColor);
-    setFrameStyle(Q3Frame::Box|Q3Frame::Plain);
+    setFrameStyle(QFrame::Box|QFrame::Plain);
 
     int h;
     int s;

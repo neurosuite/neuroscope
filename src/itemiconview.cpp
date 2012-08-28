@@ -26,7 +26,7 @@
 #include <QTextCodec>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 
 ItemIconView::ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name,Qt::WFlags f):
@@ -34,7 +34,7 @@ ItemIconView::ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos positi
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
-    setFrameStyle(Q3Frame::NoFrame);
+    setFrameStyle(QFrame::NoFrame);
     setArrangement(LeftToRight);
     setResizeMode(Q3IconView::Adjust);
     setItemTextPos(position);
@@ -64,7 +64,7 @@ ItemIconView::ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos positi
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-    setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
+    setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
 
     connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,const QPoint&)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));

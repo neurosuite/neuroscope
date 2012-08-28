@@ -26,7 +26,7 @@
 #include <QTextCodec>
 //Added by qt3to4:
 #include <QDropEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QMouseEvent>
 
@@ -37,7 +37,7 @@ ChannelIconView::ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
-    setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
+    setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
     setArrangement(Q3IconView::LeftToRight);
     setResizeMode(Q3IconView::Adjust);

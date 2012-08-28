@@ -20,7 +20,7 @@
 // include files for QT
 #include <QString>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QLabel>
 #include <QKeyEvent>
@@ -144,7 +144,7 @@ void TraceWidget::initSelectionWidgets(){
 
     //Create and initialize the spin boxe and lineEdit.
     startLabel = new QLabel("Start time",selectionWidgets);
-    startLabel->setFrameStyle(QFrame::StyledPanel|Q3Frame::Plain);
+    startLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     startLabel->setFont(font);
 
     minutePart = recordingLength / 60000;
@@ -170,7 +170,7 @@ void TraceWidget::initSelectionWidgets(){
 
 
     durationLabel = new QLabel("  Duration (ms)",selectionWidgets);
-    durationLabel->setFrameStyle(QFrame::StyledPanel|Q3Frame::Plain);
+    durationLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     durationLabel->setFont(font);
     duration = new QLineEdit(QString("%1").arg(timeWindow),selectionWidgets);
     duration->setMinimumSize(50,duration->minimumHeight());
