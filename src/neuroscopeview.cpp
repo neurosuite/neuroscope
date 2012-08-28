@@ -150,7 +150,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
 
 
 
-    //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockNone);
+    //KDAB_PENDING mainDock->setEnableDocking(Qt::NoDockWidgetArea);
 }
 
 NeuroscopeView::~NeuroscopeView()

@@ -793,7 +793,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //KDAB_PENDING setMainDockWidget(mainDock);
 
     //disable docking abilities of mainDock itself
-    //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockNone);
+    mainDock->setAllowedAreas(Qt::NoDockWidgetArea);
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
@@ -822,10 +822,10 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //and spikeChannelPalette.
     //KDAB_PENDINGQDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
 
-    //KDAB_PENDING displayPanel->setEnableDocking(QDockWidget::DockNone);
-    //KDAB_PENDING spikePanel->setEnableDocking(QDockWidget::DockNone);
-    //KDAB_PENDING displayPanel->setDockSite(QDockWidget::DockNone);
-    //KDAB_PENDING spikePanel->setDockSite(QDockWidget::DockNone);
+    //KDAB_PENDING displayPanel->setEnableDocking(Qt::NoDockWidgetArea);
+    //KDAB_PENDING spikePanel->setEnableDocking(Qt::NoDockWidgetArea);
+    //KDAB_PENDING displayPanel->setDockSite(Qt::NoDockWidgetArea);
+    //KDAB_PENDING spikePanel->setDockSite(Qt::NoDockWidgetArea);
 
     //The grandParent's widget is the QTabWidget regrouping all the tabs
     //KDAB_PENDINGpaletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
@@ -835,8 +835,8 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //KDAB_PENDINGconnect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
-    //KDAB_PENDING grandParent->setDockSite(QDockWidget::DockNone);
+    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
+    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
 
     //allow dock on the right side only (the displays will be on the rigth side)
     //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
@@ -846,7 +846,7 @@ void NeuroscopeApp::initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<
     //KDAB_PENDING palettePanel->manualDock(mainDock,QDockWidget::DockLeft,20);  // relation target/this (in percent)
 
     //forbit docking abilities of palettePanel itself
-    //KDAB_PENDING palettePanel->setEnableDocking(QDockWidget::DockNone);
+    //KDAB_PENDING palettePanel->setEnableDocking(Qt::NoDockWidgetArea);
 
     //Enable some actions now that a document is open (see the klustersui.rc file)
     slotStateChanged("documentState");
@@ -2571,7 +2571,7 @@ void NeuroscopeApp::createDisplay(Q3ValueList<int>* channelsToDisplay,bool verti
        //KDAB_PENDING  mainDock->setDockSite(QDockWidget::DockLeft);
 
         // forbit docking abilities of display itself
-        //KDAB_PENDING display->setEnableDocking(QDockWidget::DockNone);
+        //KDAB_PENDING display->setEnableDocking(Qt::NoDockWidgetArea);
         // allow others to dock to the left side only
         //KDAB_PENDING display->setDockSite(QDockWidget::DockLeft);
 
@@ -2865,14 +2865,14 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
-    //KDAB_PENDING grandParent->setDockSite(QDockWidget::DockNone);
+    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
+    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
 
     //allow dock on the right side only (the displays will be on the rigth side)
     //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
 
     // forbit docking abilities of the clusterDock itself
-    //KDAB_PENDING clusterDock->setEnableDocking(QDockWidget::DockNone);
+    //KDAB_PENDING clusterDock->setEnableDocking(Qt::NoDockWidgetArea);
     // allow others to dock to the left side only
     //KDAB_PENDING clusterDock->setDockSite(QDockWidget::DockRight);
 
@@ -3107,14 +3107,14 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(QDockWidget::DockNone);
-    //KDAB_PENDING grandParent->setDockSite(QDockWidget::DockNone);
+    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
+    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
 
     //allow dock on the right side only (the displays will be on the rigth side)
     //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
 
     // forbit docking abilities of the clusterDock itself
-    //KDAB_PENDING eventDock->setEnableDocking(QDockWidget::DockNone);
+    //KDAB_PENDING eventDock->setEnableDocking(Qt::NoDockWidgetArea);
     // allow others to dock to the left side only
     //KDAB_PENDING eventDock->setDockSite(QDockWidget::DockRight);
 
