@@ -21,7 +21,7 @@
 // include files for Qt
 #include <q3ptrlist.h>
 #include <QColor>
-#include <q3valuelist.h>
+#include <QList>
 
 // application specific includes
 #include "itemcolors.h"
@@ -149,7 +149,7 @@ public:
   * the last reset of their status.
   * @return cluster ids list.
   */
-    virtual inline Q3ValueList<int> colorChangedClusterList(){
+    virtual inline QList<int> colorChangedClusterList(){
         return ItemColors::colorChangedItemList();
     }
 

@@ -23,8 +23,8 @@
 // include files for QT
 #include <q3dict.h> 
 //Added by qt3to4:
-#include <Q3ValueList>
-
+#include <QList>
+#include <QMap>
 //include files for the application
 #include <dataprovider.h>
 #include <types.h>
@@ -62,7 +62,7 @@ signals:
   * @param selectedEvents map between the event provider names and the list of currently selected events.
   * @param providerItemColors dictionary between the provider names and the item color lists.
   */
-    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
+    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
 
 
 public slots:
@@ -72,7 +72,7 @@ public slots:
   * @param providerItemColors dictionary between the provider names and the item color lists.
   * @param initiator instance requesting the data.
   */
-    inline void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator){
+    inline void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator){
         emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
     }
     

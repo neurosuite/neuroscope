@@ -25,7 +25,7 @@
 //General C++ include files
 #include <iostream>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 using namespace std;
 
 //include files for QT
@@ -296,8 +296,8 @@ int NeuroscopeXmlReader::getOffset()const{
 }
 
 
-Q3ValueList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
-    Q3ValueList<ChannelDescription> list;
+QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
+    QList<ChannelDescription> list;
 
     xmlXPathObjectPtr result;
     xmlChar* searchPath = xmlCharStrdup("//" + CHANNELS + "/" + CHANNEL_COLORS);
@@ -391,13 +391,13 @@ void NeuroscopeXmlReader::getChannelDefaultOffset(QMap<int,int>& channelDefaultO
     xmlXPathFreeObject(result);
 }
 
-void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spikeChannelsGroups,QMap<int, Q3ValueList<int> >& spikeGroupsChannels){ 
+void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spikeChannelsGroups,QMap<int, QList<int> >& spikeGroupsChannels){ 
     //Anatomical goups and spike groups share the trash group. the spikeChannelsGroups already contains the trash group, if any, set after retrieving the anatomical groups information.
     //At first, if a channel is not in the trash group it is put in the undefined group, the -1 (this correspond to no spike group).
     //Then reading for the file, the right information is set.
-    Q3ValueList<int> trashList;
+    QList<int> trashList;
     if(spikeGroupsChannels.contains(0)) trashList = spikeGroupsChannels[0];
-    Q3ValueList<int> spikeTrashList;
+    QList<int> spikeTrashList;
     for(int i = 0; i < nbChannels; ++i){
         if(!trashList.contains(i)){
             spikeTrashList.append(i);
@@ -420,7 +420,7 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
             //loop on all the GROUP.
             int nbGroups = nodeset->nodeNr;
             for(int i = 0; i < nbGroups; ++i){
-                Q3ValueList<int> channelList;
+                QList<int> channelList;
                 xmlNodePtr child;
                 for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
                     //skip the carriage return (text node named text and containing /n)
@@ -447,10 +447,10 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
     xmlXPathFreeObject(result);
 }
 
-void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>& displayChannelsGroups,QMap<int, Q3ValueList<int> >& displayGroupsChannels,QMap<int,bool>& skipStatus){
+void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>& displayChannelsGroups,QMap<int, QList<int> >& displayGroupsChannels,QMap<int,bool>& skipStatus){
     //First, everything is put in the trash group with a skip status at false (this correspond to no anatomical group).
     //Then reading for the file, the right information is set.
-    Q3ValueList<int> trashList;
+    QList<int> trashList;
     for(int i = 0; i < nbChannels; ++i){
         trashList.append(i);
         displayChannelsGroups.insert(i,0);
@@ -468,7 +468,7 @@ void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>&
             //loop on all the GROUP.
             int nbGroups = nodeset->nodeNr;
             for(int i = 0; i < nbGroups; ++i){
-                Q3ValueList<int> channelList;
+                QList<int> channelList;
                 xmlNodePtr child;
                 for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
                     //skip the carriage return (text node named text and containing /n)
@@ -765,8 +765,8 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
     return traceBackgroundPath;
 } 
 
-Q3ValueList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
-    Q3ValueList<SessionFile> list;
+QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
+    QList<SessionFile> list;
     xmlXPathObjectPtr result;
     xmlChar* searchPath = xmlCharStrdup("/" + NEUROSCOPE + "/" + FILES + "/" + neuroscope::FILE);
 
@@ -851,8 +851,8 @@ Q3ValueList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
 }
 
 
-Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
-    Q3ValueList<DisplayInformation> list;
+QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
+    QList<DisplayInformation> list;
     xmlXPathObjectPtr result;
     xmlChar* searchPath = xmlCharStrdup("/" + NEUROSCOPE + "/" + DISPLAYS + "/" + DISPLAY);
 
@@ -946,7 +946,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                         //loop on the CLUSTERS
                         xmlNodePtr clusters;
                         QString clusterFile;
-                        Q3ValueList<int> clusterIds;
+                        QList<int> clusterIds;
                         for(clusters = child->children;clusters != NULL;clusters = clusters->next){
                             //skip the carriage return (text node named text and containing /n)
                             if(clusters->type == XML_TEXT_NODE) continue;
@@ -967,7 +967,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                     }
 
                     if(QString((char*)child->name) == SPIKES_SELECTED){
-                        Q3ValueList<QString> files;
+                        QList<QString> files;
                         //loop on the urls of the files
                         xmlNodePtr spikes;
                         for(spikes = child->children;spikes != NULL;spikes = spikes->next){
@@ -987,7 +987,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                         //loop on the EVENTS
                         xmlNodePtr events;
                         QString eventFile;
-                        Q3ValueList<int> eventIds;
+                        QList<int> eventIds;
                         for(events = child->children;events != NULL;events = events->next){
                             //skip the carriage return (text node named text and containing /n)
                             if(events->type == XML_TEXT_NODE) continue;
@@ -1011,7 +1011,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                         //loop on the CLUSTERS
                         xmlNodePtr clusters;
                         QString clusterFile;
-                        Q3ValueList<int> clusterIds;
+                        QList<int> clusterIds;
                         for(clusters = child->children;clusters != NULL;clusters = clusters->next){
                             //skip the carriage return (text node named text and containing /n)
                             if(clusters->type == XML_TEXT_NODE) continue;
@@ -1035,7 +1035,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                         //loop on the EVENTS
                         xmlNodePtr events;
                         QString eventFile;
-                        Q3ValueList<int> eventIds;
+                        QList<int> eventIds;
                         for(events = child->children;events != NULL;events = events->next){
                             //skip the carriage return (text node named text and containing /n)
                             if(events->type == XML_TEXT_NODE) continue;
@@ -1057,7 +1057,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
 
 
                     if(QString((char*)child->name) == CHANNEL_POSITIONS){
-                        Q3ValueList<TracePosition> positions;
+                        QList<TracePosition> positions;
                         //loop on the POSITIONS
                         xmlNodePtr positionElements;
                         for(positionElements = child->children;positionElements != NULL;positionElements = positionElements->next){
@@ -1097,7 +1097,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                     }
 
                     if(QString((char*)child->name) == CHANNELS_SELECTED){
-                        Q3ValueList<int> channelIds;
+                        QList<int> channelIds;
                         //loop on the urls of the files
                         xmlNodePtr channels;
                         for(channels = child->children;channels != NULL;channels = channels->next){
@@ -1115,7 +1115,7 @@ Q3ValueList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                     }
 
                     if(QString((char*)child->name) == CHANNELS_SHOWN){
-                        Q3ValueList<int> channelIds;
+                        QList<int> channelIds;
                         //loop on the urls of the files
                         xmlNodePtr channels;
                         for(channels = child->children;channels != NULL;channels = channels->next){

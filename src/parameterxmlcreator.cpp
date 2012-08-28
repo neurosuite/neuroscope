@@ -24,7 +24,7 @@
 #include <fstream>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 using namespace std;
 
 //include files for QT
@@ -193,18 +193,18 @@ void ParameterXmlCreator::setChannelDisplayInformation(ChannelColors* channelCol
     }
 }
 
-void ParameterXmlCreator::setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
+void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
     anatomicalDescription = doc.createElement(ANATOMY);
     QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
     //Create the anatomical groups
-    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    QMap<int,QList<int> >::Iterator iterator;
     //The iterator gives the keys sorted.
     for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
         //the trash group is not stored
         if(iterator.key() == 0) continue;
-        Q3ValueList<int> channelIds = iterator.data();
-        Q3ValueList<int>::iterator channelIterator;
+        QList<int> channelIds = iterator.data();
+        QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
 
@@ -222,7 +222,7 @@ void ParameterXmlCreator::setAnatomicalDescription(QMap<int, Q3ValueList<int> >&
     if(channelGroupsElement.hasChildNodes()) anatomicalDescription.appendChild(channelGroupsElement);
 }
 
-void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups){
+void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, QList<int> >& spikeGroups){
     //The spikes element is a neuroscope specific element. The tag contains nbSamples and peakSampleIndex information used for all the spike groups
     //in Neuroscope.
     spikes = doc.createElement(SPIKES);
@@ -243,13 +243,13 @@ void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSam
     QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
     //Create the spike groups
-    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    QMap<int,QList<int> >::Iterator iterator;
     //The iterator gives the keys sorted.
     for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
         //the trashs groups are not stored
         if(iterator.key() == -1 || iterator.key() == 0) continue;
-        Q3ValueList<int> channelIds = iterator.data();
-        Q3ValueList<int>::iterator channelIterator;
+        QList<int> channelIds = iterator.data();
+        QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
         QDomElement channelListElement = doc.createElement(CHANNELS);
@@ -270,19 +270,19 @@ void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSam
 }
 
 
-void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups){
+void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, QList<int> >& spikeGroups){
     spikeDetection = doc.createElement(SPIKE);
 
     QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
     //Create the spike groups
-    QMap<int,Q3ValueList<int> >::Iterator iterator;
+    QMap<int,QList<int> >::Iterator iterator;
     //The iterator gives the keys sorted.
     for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
         //the trashs groups are not stored
         if(iterator.key() == -1 || iterator.key() == 0) continue;
-        Q3ValueList<int> channelIds = iterator.data();
-        Q3ValueList<int>::iterator channelIterator;
+        QList<int> channelIds = iterator.data();
+        QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
         QDomElement channelListElement = doc.createElement(CHANNELS);

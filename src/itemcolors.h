@@ -21,7 +21,7 @@
 // include files for Qt
 #include <q3ptrlist.h>
 #include <QColor>
-#include <q3valuelist.h>
+#include <QList>
 
 
 /**
@@ -225,7 +225,7 @@ public:
   * the last reset of their status.
   * @return item ids list.
   */
-    virtual Q3ValueList<int> colorChangedItemList();
+    virtual QList<int> colorChangedItemList();
 
     /**
   * Resets the status color of the object to false.

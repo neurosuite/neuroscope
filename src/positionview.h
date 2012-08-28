@@ -27,7 +27,7 @@
 #include <q3dict.h> 
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PaintDeviceMetrics>
 
 // application specific includes
@@ -110,7 +110,7 @@ public slots:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file in Hz.
   */
-    void dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+    void dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
 
     /**Updates the event display if any event are available.*/
     void updateEventDisplay();
@@ -205,7 +205,7 @@ private:
     Q3Dict<EventData> eventsData;
 
     /**Map between the event provider names and the list of selected events.*/
-    QMap<QString, Q3ValueList<int> > selectedEvents;
+    QMap<QString, QList<int> > selectedEvents;
     
     /**Dictionary between the provider names and the item color lists.*/
     Q3Dict<ItemColors> providerItemColors;

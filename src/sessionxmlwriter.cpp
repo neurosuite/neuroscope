@@ -26,7 +26,7 @@
 #include <fstream>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 using namespace std;
 
 //include files for QT
@@ -68,10 +68,10 @@ bool SessionXmlWriter::writeTofile(const QString& url){
     return true;
 }
 
-void SessionXmlWriter::setLoadedFilesInformation(Q3ValueList<SessionFile> fileList){
+void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
     loadedFiles = doc.createElement(FILES);
 
-    Q3ValueList<SessionFile>::iterator iterator;
+    QList<SessionFile>::iterator iterator;
     for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
         //Get the file information
         QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
@@ -128,10 +128,10 @@ void SessionXmlWriter::setLoadedFilesInformation(Q3ValueList<SessionFile> fileLi
     }
 }
 
-void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> displayList){
+void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayList){
     displays = doc.createElement(DISPLAYS);
 
-    Q3ValueList<DisplayInformation>::iterator iterator;
+    QList<DisplayInformation>::iterator iterator;
     for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator){
 
         QDomElement displayElement = doc.createElement(neuroscope::DISPLAY);
@@ -146,15 +146,15 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
         int greyScale = static_cast<DisplayInformation>(*iterator).getGreyScale();
         int positionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
         int showEvents = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
-        Q3ValueList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
-        QMap<QString, Q3ValueList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
-        QMap<QString, Q3ValueList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
-        Q3ValueList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
-        QMap<QString, Q3ValueList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
-        QMap<QString, Q3ValueList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
-        Q3ValueList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
-        Q3ValueList<int> channelIds = static_cast<DisplayInformation>(*iterator).getChannelIds();
-        Q3ValueList<int> selectedChannelIds = static_cast<DisplayInformation>(*iterator).getSelectedChannelIds();
+        QList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
+        QMap<QString, QList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
+        QMap<QString, QList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
+        QList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
+        QMap<QString, QList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
+        QMap<QString, QList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
+        QList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
+        QList<int> channelIds = static_cast<DisplayInformation>(*iterator).getChannelIds();
+        QList<int> selectedChannelIds = static_cast<DisplayInformation>(*iterator).getSelectedChannelIds();
 
         //Label when in the display is in tab mode
         QDomElement labelElement = doc.createElement(TAB_LABEL);
@@ -204,7 +204,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
         displayElement.appendChild(showEventsElement);
 
         //info on the spike presentation
-        Q3ValueList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
+        QList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
         for(typeIterator = spikeDisplayTypes.begin(); typeIterator != spikeDisplayTypes.end(); ++typeIterator){
             QDomElement typeElement = doc.createElement(SPIKE_PRESENTATION);
             QDomText typeValue = doc.createTextNode(QString("%1").arg(*typeIterator));
@@ -219,7 +219,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
         displayElement.appendChild(rasterHeightElement);
 
         //Create the information concerning the selected clusters
-        QMap<QString, Q3ValueList<int> >::Iterator clustersIterator;
+        QMap<QString, QList<int> >::Iterator clustersIterator;
         //The iterator gives the keys sorted.
         for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
             QDomElement clustersElement = doc.createElement(CLUSTERS_SELECTED);
@@ -231,8 +231,8 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
             clustersElement.appendChild(fileElement);
 
             //list of cluster ids
-            Q3ValueList<int> clustersIds = clustersIterator.data();
-            Q3ValueList<int>::iterator idIterator;
+            QList<int> clustersIds = clustersIterator.data();
+            QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
                 QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
@@ -244,7 +244,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
 
 
         //Create the information concerning the selected events
-        QMap<QString, Q3ValueList<int> >::Iterator eventsIterator;
+        QMap<QString, QList<int> >::Iterator eventsIterator;
         //The iterator gives the keys sorted.
         for(eventsIterator = selectedEvents.begin(); eventsIterator != selectedEvents.end(); ++eventsIterator){
             QDomElement eventsElement = doc.createElement(EVENTS_SELECTED);
@@ -256,8 +256,8 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
             eventsElement.appendChild(fileElement);
 
             //list of event ids
-            Q3ValueList<int> eventIds = eventsIterator.data();
-            Q3ValueList<int>::iterator idIterator;
+            QList<int> eventIds = eventsIterator.data();
+            QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);
                 QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
@@ -268,7 +268,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
         }
 
         //Create the information concerning the spike files
-        Q3ValueList<QString>::iterator spikeFileIterator;
+        QList<QString>::iterator spikeFileIterator;
         for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
             QDomElement selectedSpikesElement = doc.createElement(SPIKES_SELECTED);
 
@@ -291,8 +291,8 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
             clustersElement.appendChild(fileElement);
 
             //list of cluster ids
-            Q3ValueList<int> clustersIds = clustersIterator.data();
-            Q3ValueList<int>::iterator idIterator;
+            QList<int> clustersIds = clustersIterator.data();
+            QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
                 QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
@@ -314,8 +314,8 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
             eventsElement.appendChild(fileElement);
 
             //list of event ids
-            Q3ValueList<int> eventIds = eventsIterator.data();
-            Q3ValueList<int>::iterator idIterator;
+            QList<int> eventIds = eventsIterator.data();
+            QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);
                 QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
@@ -327,7 +327,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
 
         //Create the information concerning the channel positions (gain and offset)
         QDomElement channelPositionsElement = doc.createElement(CHANNEL_POSITIONS);
-        Q3ValueList<TracePosition>::iterator positionIterator;
+        QList<TracePosition>::iterator positionIterator;
         for(positionIterator = positions.begin(); positionIterator != positions.end(); ++positionIterator){
             int channelId = static_cast<TracePosition>(*positionIterator).getId();
             int gain = static_cast<TracePosition>(*positionIterator).getGain();
@@ -356,7 +356,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
 
         //Create the information concerning the channels selected in the display
         QDomElement channelSelectedElement = doc.createElement(CHANNELS_SELECTED);
-        Q3ValueList<int>::iterator channelSelectedIterator;
+        QList<int>::iterator channelSelectedIterator;
         for(channelSelectedIterator = selectedChannelIds.begin(); channelSelectedIterator != selectedChannelIds.end(); ++channelSelectedIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
             QDomText idValue = doc.createTextNode(QString("%1").arg(*channelSelectedIterator));
@@ -367,7 +367,7 @@ void SessionXmlWriter::setDisplayInformation(Q3ValueList<DisplayInformation> dis
 
         //Create the information concerning the channels shown in the display
         QDomElement channelsElement = doc.createElement(CHANNELS_SHOWN);
-        Q3ValueList<int>::iterator channelIterator;
+        QList<int>::iterator channelIterator;
         for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
             QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));

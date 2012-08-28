@@ -31,7 +31,7 @@
 #include <QPainter>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QMouseEvent>
 
 // application specific includes
@@ -86,14 +86,14 @@ public:
     * @param itemsToSelect list of items to be selected.
     * @param itemsToSkip list of items to be marked as skiped while browsing.
     */
-    void selectItems(QString groupName,Q3ValueList<int> itemsToSelect,Q3ValueList<int> itemsToSkip);
+    void selectItems(QString groupName,QList<int> itemsToSelect,QList<int> itemsToSkip);
 
     /**Resets the internal variables.*/
     void reset();
     
     /**Returns the list of selected items by group
     * @return map given the list of selected items for a given group.*/
-    const QMap<QString,Q3ValueList<int> > selectedItems();
+    const QMap<QString,QList<int> > selectedItems();
 
     /**Updates the background color of the palette.*/
     void changeBackgroundColor(QColor color);
@@ -141,10 +141,10 @@ protected slots:
 
 signals:
     void colorChanged(int item,QString groupName);
-    void updateShownItems(const QMap<QString,Q3ValueList<int> >& selectedItems);
+    void updateShownItems(const QMap<QString,QList<int> >& selectedItems);
     void paletteResized(int parentWidth,int labelSize);
     void selectedGroupChanged(QString eventGroupName);
-    void updateItemsToSkip(QString groupName,const Q3ValueList<int>& itemsToSkip);
+    void updateItemsToSkip(QString groupName,const QList<int>& itemsToSkip);
     void noClustersToBrowse();
     void noEventsToBrowse();
     void clustersToBrowse();
@@ -181,10 +181,10 @@ private:
     QString selected;
 
     /**List used to order the electrode groups.*/
-    Q3ValueList<int> clusterGroupList;
+    QList<int> clusterGroupList;
     
     /**List used to order the event groups.*/
-    Q3ValueList<QString> itemGroupList;
+    QList<QString> itemGroupList;
 
     /**The width for the columns of the event iconviews.*/
     int gridX;
@@ -193,7 +193,7 @@ private:
     QMap<QString, QMap<int,bool> > browsingStatus;
 
     /**Stores the items that have to be redrawn.*/
-    QMap<QString, Q3ValueList<int> > needRedrawing;
+    QMap<QString, QList<int> > needRedrawing;
 
     /**True if icon pixmaps have to be updated, false otherwise.*/
     bool updateIconPixmap;

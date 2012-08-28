@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QFrame>
-#include <Q3ValueList>
+#include <QList>
 #include <QMouseEvent>
 
 
@@ -73,8 +73,8 @@ ChannelIconView::ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-    connect(this,SIGNAL(dropped(QDropEvent *,const Q3ValueList<Q3IconDragItem> &)),
-            this,SLOT(slotDropped(QDropEvent *,const Q3ValueList<Q3IconDragItem> &)));
+    connect(this,SIGNAL(dropped(QDropEvent *,const QList<Q3IconDragItem> &)),
+            this,SLOT(slotDropped(QDropEvent *,const QList<Q3IconDragItem> &)));
 }
 
 Q3DragObject* ChannelIconView::dragObject(){
@@ -104,7 +104,7 @@ Q3DragObject* ChannelIconView::dragObject(){
     return drag;
 }
 
-void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
+void ChannelIconView::slotDropped(QDropEvent* event,const QList<Q3IconDragItem>& draggedList){
     //The source of the drag is not a widget of the application
     if(event->source() == 0 || !drag){
         event->ignore();
@@ -129,8 +129,8 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
 
         QString groupSource = (event->source())->parent()->name();
 
-        Q3ValueList<int> channelIds;
-        Q3ValueList<Q3IconDragItem>::const_iterator iterator;
+        QList<int> channelIds;
+        QList<Q3IconDragItem>::const_iterator iterator;
         for(iterator = draggedList.begin(); iterator != draggedList.end(); ++iterator){
             QTextCodec* codec = QTextCodec::codecForLocale();
             QByteArray data =  (*iterator).data();
@@ -138,7 +138,7 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
             channelIds.append(channelId);
         }
 
-        Q3ValueList<int> selectedChannels;
+        QList<int> selectedChannels;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
             if(item->isSelected()) selectedChannels.append(item->text().toInt());
 
@@ -166,7 +166,7 @@ void ChannelIconView::contentsDropEvent(QDropEvent* event){
     //Move items around in the iconview
     Q3IconViewItem* item = findItem(event->pos());
     if(item == 0){
-        Q3ValueList<int> selectedChannels;
+        QList<int> selectedChannels;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
             if(item->isSelected()) selectedChannels.append(item->text().toInt());
 

@@ -28,7 +28,7 @@
 //QT include files
 #include <QCheckBox>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QCustomEvent>
 #include <QTabWidget>
 #include <QMainWindow>
@@ -136,9 +136,9 @@ public:
    * @param rasterHeight height of the rasters in the world coordinate system.
    * @param tabLabel label for the display when in tab page mode.
    */
-    void createDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
-                       bool multipleColumns,bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
-                       Q3ValueList<int> selectedChannels,long startTime,long duration,int rasterHeight,QString tabLabel = "");
+    void createDisplay(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
+                       bool multipleColumns,bool greyMode,QList<int> offsets,QList<int> channelGains,
+                       QList<int> selectedChannels,long startTime,long duration,int rasterHeight,QString tabLabel = "");
 
     /**Creates a cluster palette and adds a group corresponding to the cluster file identified by @p clusterFileId.
    * @param clusterFileId identifier of the cluster file providing the data accessible through
@@ -278,8 +278,8 @@ protected:
     * @param startTime starting time in miliseconds.
     * @param tabLabel label for the display when in tab page mode.
     */
-    void initDisplay(Q3ValueList<int>* channelsToDisplay,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
-                     Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = "");
+    void initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
+                     QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = "");
     
     /** queryClose is called by KDocMainWindow call just before being closed.
      */
@@ -417,12 +417,12 @@ private slots:
     /**Draws the channels contain in @p selectedChannels list.
     * @param selectedChannels list of channels which have been selected to be shown.
     */
-    void slotUpdateShownChannels(const Q3ValueList<int>& selectedChannels);
+    void slotUpdateShownChannels(const QList<int>& selectedChannels);
 
     /**Updates the show/hide status of the channels contain in @p selectedChannels list.
     * @param hiddenChannels list of channels which have been selected to be hidden.
     */
-    void slotUpdateHiddenChannels(const Q3ValueList<int>& hiddenChannels);
+    void slotUpdateHiddenChannels(const QList<int>& hiddenChannels);
 
     /**Creates the default set up: one display starting at the begining of the file and all the channels selected.
     * @param channelDefaultOffsets map given the channel default offsets.
@@ -449,8 +449,8 @@ private slots:
     * @param rasterHeight height of the rasters in the world coordinate system.
     * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwis.
     */
-    void slotSetUp(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
-                   bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,
+    void slotSetUp(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
+                   bool greyMode,QList<int> offsets,QList<int> channelGains,QList<int> selectedChannels,QMap<int,bool>& skipStatus,
                    long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,bool showEventsInPositionView);
 
     /**All the channels of the current display are display either in a gradation of grey or in color.*/
@@ -490,7 +490,7 @@ private slots:
     /**The selected channels have been moved to the trash group.
     * @param discarded ids of the channels to move to the trash group.
     */
-    void slotChannelsDiscarded(const Q3ValueList<int>& discarded);
+    void slotChannelsDiscarded(const QList<int>& discarded);
 
     /**Shows the selected channels.*/
     void slotShowChannels();
@@ -526,7 +526,7 @@ private slots:
     /**Selects the channels in the active channel palette or in both if none is active.
    *@param selectedIds ids of the selected channels.
    */
-    void slotSelectChannelsInPalette(const Q3ValueList<int>& selectedIds);
+    void slotSelectChannelsInPalette(const QList<int>& selectedIds);
 
     /**Triggers the increase of the amplitude of all the channels.
    */
@@ -548,7 +548,7 @@ private slots:
    * selects the channels in the active TraceView.
    *@param selectedIds ids of the selected channels.
    */
-    void slotChannelsSelected(const Q3ValueList<int>& selectedIds);
+    void slotChannelsSelected(const QList<int>& selectedIds);
 
     /**Resets the offset of the selected channels.*/
     void slotResetOffsets();
@@ -577,7 +577,7 @@ private slots:
     /**Updates the active display with the clusters selected in the cluster palette.
    *@param selection map given the list of the selected clusters by cluster file identified.
    */
-    void slotUpdateShownClusters(const QMap<QString,Q3ValueList<int> >& selection);
+    void slotUpdateShownClusters(const QMap<QString,QList<int> >& selection);
 
     /**Retrieves the next cluster.*/
     void slotShowNextCluster();
@@ -594,7 +594,7 @@ private slots:
     /**Updates the active display with the events selected in the event palette.
    *@param selection map given the list of the selected events by event file identified.
    */
-    void slotUpdateShownEvents(const QMap<QString,Q3ValueList<int> >& selection);
+    void slotUpdateShownEvents(const QMap<QString,QList<int> >& selection);
 
     /**Retrieves the next event.*/
     void slotShowNextEvent();
@@ -630,13 +630,13 @@ private slots:
    * @param groupName identifier of the file containing the events to browse.
    * @param eventsToSkip new list of events to skip while browsing
    */
-    void slotUpdateEventsToSkip(QString groupName,const Q3ValueList<int>& eventsToSkip);
+    void slotUpdateEventsToSkip(QString groupName,const QList<int>& eventsToSkip);
 
     /**Updates the active display with the clusters to skip while browsing.
    * @param groupName identifier of the file containing the clusters to browse.
    * @param clustersToSkip new list of clusters to skip while browsing
    */
-    void slotUpdateClustersToSkip(QString groupName,const Q3ValueList<int>& clustersToSkip);
+    void slotUpdateClustersToSkip(QString groupName,const QList<int>& clustersToSkip);
     
     /**Marks the selected channels has keeped.*/
     void slotKeepChannels();
@@ -848,10 +848,10 @@ private:
     QPrinter* printer;
 
     /**List storing the identifiers of the opened cluster files.*/
-    Q3ValueList<QString> clusterFileList;
+    QList<QString> clusterFileList;
     
     /**List storing the identifiers of the opened event files.*/
-    Q3ValueList<QString> eventFileList;
+    QList<QString> eventFileList;
 
     /**Boolean indicating if the headers of the palettes have to be diplayed.*/
     bool displayPaletteHeaders;

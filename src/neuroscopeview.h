@@ -30,7 +30,7 @@
 #include <QImage>
 #include <QPrinter>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 // application specific includes
 #include "baseframe.h"
@@ -93,11 +93,11 @@ public:
      * @param parent the parent QWidget.
      * @param name name of the widget (can be used for introspection).
      */
-    NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar * statusBar,Q3ValueList<int>* channelsToDisplay,bool greyScale,
+    NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar * statusBar,QList<int>* channelsToDisplay,bool greyScale,
                    TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                    bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
-                   QMap<int,Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                   Q3ValueList<int> offsets,Q3ValueList<int> channelGains,Q3ValueList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,
+                   QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
+                   QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,
                    QWidget *parent = 0, const char *name=0);
     /** Destructor for the main view. */
     ~NeuroscopeView();
@@ -170,12 +170,12 @@ public:
     * Makes the different views update their drawing if need it. This method is called only on the active view.
     * @param channelsToShow new list of channels to be shown.
     */
-    void shownChannelsUpdate(const Q3ValueList<int>& channelsToShow);
+    void shownChannelsUpdate(const QList<int>& channelsToShow);
 
     /**Returns the list of the channels presented in the view.
     * @return list of channels ids.
     */
-    inline const Q3ValueList<int>& channels() const {return *shownChannels;}
+    inline const QList<int>& channels() const {return *shownChannels;}
 
     /**
     * Updates the list of clusters for the cluster provider @p name shown with @p clustersToShow.
@@ -183,7 +183,7 @@ public:
     * @param name name use to identified the cluster provider containing the clusters to show.
     * @param clustersToShow list of clusters to be shown.
     */
-    void shownClustersUpdate(QString name,Q3ValueList<int>& clustersToShow);
+    void shownClustersUpdate(QString name,QList<int>& clustersToShow);
 
     /**
     * Updates the list of events for the event provider @p name shown with @p eventsToShow.
@@ -191,7 +191,7 @@ public:
     * @param name name use to identified the event provider containing the events to show.
     * @param eventsToShow list of events to be shown.
     */
-    void shownEventsUpdate(QString name,Q3ValueList<int>& eventsToShow);
+    void shownEventsUpdate(QString name,QList<int>& eventsToShow);
 
     /**
     * Sets the mode of presentation to single or multiple columns.
@@ -235,13 +235,13 @@ public:
    * @param name name use to identified the cluster provider containing selected the clusters.
    * @return the list of selected clusters.
    */
-    inline const Q3ValueList<int>* getSelectedClusters(QString name) const{return selectedClusters[name];}
+    inline const QList<int>* getSelectedClusters(QString name) const{return selectedClusters[name];}
 
     /** Returns the list containing the selected events for the given event provider @p identified by name.
    * @param name name use to identified the event provider containing selected the events.
    * @return the list of selected events.
    */
-    inline const Q3ValueList<int>* getSelectedEvents(QString name) const{return selectedEvents[name];}
+    inline const QList<int>* getSelectedEvents(QString name) const{return selectedEvents[name];}
 
     /**Updates the selected tool, methode call after the user selected a tool.
    * @param selectedMode the new mode.
@@ -280,10 +280,10 @@ public:
 
     /**Triggers the increase of the amplitude of the selected channels.
    */
-    inline void increaseSelectedChannelsAmplitude(const Q3ValueList<int> selectedIds){
+    inline void increaseSelectedChannelsAmplitude(const QList<int> selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
             selectedChannels.append(*selectedIterator);
 
@@ -292,10 +292,10 @@ public:
 
     /**Triggers the decrease of the amplitude of the selected channels.
    */
-    inline void decreaseSelectedChannelsAmplitude(const Q3ValueList<int> selectedIds){
+    inline void decreaseSelectedChannelsAmplitude(const QList<int> selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
             selectedChannels.append(*selectedIterator);
 
@@ -315,9 +315,9 @@ public:
     /**Selects the channels in the TraceView.
    *@param selectedIds ids of the selected channels.
    */
-    inline void selectChannels(const Q3ValueList<int>& selectedIds){
+    inline void selectChannels(const QList<int>& selectedIds){
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
             selectedChannels.append(*selectedIterator);
         }
@@ -328,15 +328,15 @@ public:
     /**Resets the offset of the selected channels.
    *@param selectedIds ids of the selected channels.
    */
-    void resetOffsets(const Q3ValueList<int>& selectedIds);
+    void resetOffsets(const QList<int>& selectedIds);
 
     /**Resets the gain of the selected channels.
    *@param selectedIds ids of the selected channels.
    */
-    void resetGains(const Q3ValueList<int>& selectedIds){
+    void resetGains(const QList<int>& selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
             selectedChannels.append(*selectedIterator);
 
@@ -347,25 +347,25 @@ public:
     /** Returns the list containing the offset for each channel.
    * @return the list of the offsets.
    */
-    inline const Q3ValueList<int>& getChannelOffset() const{return channelOffsets;}
+    inline const QList<int>& getChannelOffset() const{return channelOffsets;}
 
     /** Returns the list containing the exponents used to compute the drawing gain for each channel.
    * @return the list of gains.
    */
-    inline const Q3ValueList<int>& getGains() const{return gains;}
+    inline const QList<int>& getGains() const{return gains;}
 
     /** Returns the list containing the selected channels.
    * @return the list of selected channels.
    */
-    inline const Q3ValueList<int>& getSelectedChannels() const{return selectedChannels;}
+    inline const QList<int>& getSelectedChannels() const{return selectedChannels;}
 
     /** Sets the channels selected in the channel palettes.
    *@param selectedIds ids of the selected channels.
    */
-    inline void setSelectedChannels(const Q3ValueList<int>& selectedIds){
+    inline void setSelectedChannels(const QList<int>& selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
             selectedChannels.append(*selectedIterator);
         }
@@ -423,8 +423,8 @@ public:
   * @param clustersToSkip list of clusters to be skipped while browsing.
   */
     void setClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
-                            Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,QMap<int,int>* channelsSpikeGroups,
-                            int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip);
+                            QList<int>& clustersToShow,QMap<int, QList<int> >* displayGroupsClusterFile,QMap<int,int>* channelsSpikeGroups,
+                            int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip);
 
     /**Removes a provider of cluster data.
   * @param name name use to identified the cluster provider.
@@ -457,7 +457,7 @@ public:
   * @param eventsToSkip list of clusters to be skipped while browsing.
   */
     void setEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
-                          Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToSkip);
+                          QList<int>& eventsToShow,const QList<int>& eventsToSkip);
 
     /**Removes a provider of event data.
   * @param name name use to identified the event provider.
@@ -588,30 +588,30 @@ public:
   * @param name name use to identified the cluster provider containing the clusters to skip.
   * @return the list of skipped clusters.
   */
-    inline const Q3ValueList<int>* getClustersNotUsedForBrowsing(QString name) const{return clustersNotUsedForBrowsing[name];}
+    inline const QList<int>* getClustersNotUsedForBrowsing(QString name) const{return clustersNotUsedForBrowsing[name];}
 
     /** Returns the list of events to be not used for browsing for the given event provider @p identified by name.
   * @param name name use to identified the event provider containing the events to skip.
   * @return the list of skipped events.
   */
-    inline const Q3ValueList<int>* getEventsNotUsedForBrowsing(QString name) const{return eventsNotUsedForBrowsing[name];}
+    inline const QList<int>* getEventsNotUsedForBrowsing(QString name) const{return eventsNotUsedForBrowsing[name];}
 
     /**Updates the list of events to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-    void updateNoneBrowsingEventList(QString providerName,const Q3ValueList<int>& eventsToNotBrowse);
+    void updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse);
 
     /**Updates the list of clusters to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
   * @param clustersToNotBrowse new list of clusters to not use while browsing.
   */
-    void updateNoneBrowsingClusterList(QString providerName,const Q3ValueList<int>& clustersToNotBrowse);
+    void updateNoneBrowsingClusterList(QString providerName,const QList<int>& clustersToNotBrowse);
 
     /**Updates the list of skipped channels.
   * @param skippedChannels list of skipped channels
   **/
-    inline void updateSkipStatus(const Q3ValueList<int>& skippedChannels){emit skipStatusChanged(skippedChannels);}
+    inline void updateSkipStatus(const QList<int>& skippedChannels){emit skipStatusChanged(skippedChannels);}
 
     /**Increases the height of the rasters.*/
     inline void increaseRasterHeight(){emit increaseTheRasterHeight();}
@@ -633,9 +633,9 @@ public slots:
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
-    inline void slotChannelsSelected(const Q3ValueList<int>& selectedIds){
+    inline void slotChannelsSelected(const QList<int>& selectedIds){
         selectedChannels.clear();
-        Q3ValueList<int>::const_iterator selectedIterator;
+        QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
             selectedChannels.append(*selectedIterator);
 
@@ -730,39 +730,39 @@ signals:
     void clusterRasterDisplay(bool raster);
     void clusterVerticalLinesDisplay(bool lines);
     void multiColumnsDisplay(bool multi);
-    void channelsSelected(const Q3ValueList<int>& selectedIds);
+    void channelsSelected(const QList<int>& selectedIds);
     void modeToSet(BaseFrame::Mode selectedMode,bool active);
-    void showChannels(const Q3ValueList<int>& channelsToShow);
+    void showChannels(const QList<int>& channelsToShow);
     void channelColorUpdate(int channelId,bool active);
     void groupColorUpdate(int groupId,bool active);
     void increaseAllAmplitude();
     void decreaseAllAmplitude();
-    void increaseAmplitude(const Q3ValueList<int>& selectedIds);
-    void decreaseAmplitude(const Q3ValueList<int>& selectedIds);
+    void increaseAmplitude(const QList<int>& selectedIds);
+    void decreaseAmplitude(const QList<int>& selectedIds);
     void updateGains(int gain,int acquisitionGain);
     void updateDrawing();
     void groupsHaveBeenModified(bool);
-    void channelsToBeSelected(const Q3ValueList<int>& selectedIds);
+    void channelsToBeSelected(const QList<int>& selectedIds);
     void resetChannelOffsets(const QMap<int,int>& selectedChannelDefaultOffsets);
-    void resetChannelGains(const Q3ValueList<int>& selectedChannels);
+    void resetChannelGains(const QList<int>& selectedChannels);
     void drawTraces();
     void reset();
     void showLabels(bool show);
     void displayCalibration(bool show,bool active);
     void newClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
-                            Q3ValueList<int>& clustersToShow,QMap<int, Q3ValueList<int> >* displayGroupsClusterFile,
-                            QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const Q3ValueList<int>& clustersToSkip);
+                            QList<int>& clustersToShow,QMap<int, QList<int> >* displayGroupsClusterFile,
+                            QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip);
     void newSamplingRate(long long recordingLength);
     void clusterProviderRemoved(QString name,bool active);
-    void showClusters(QString name,Q3ValueList<int>& clustersToShow);
+    void showClusters(QString name,QList<int>& clustersToShow);
     void clusterColorUpdated(QString name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();
     void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,QString filePath,bool whiteBackground);
     void newEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
-                          Q3ValueList<int>& eventsToShow,const Q3ValueList<int>& eventsToSkip);
+                          QList<int>& eventsToShow,const QList<int>& eventsToSkip);
     void eventProviderRemoved(QString name,bool active,bool lastFile);
-    void showEvents(QString name,Q3ValueList<int>& eventsToShow);
+    void showEvents(QString name,QList<int>& eventsToShow);
     void eventColorUpdated(QString name,int eventId,bool active);
     void nextEvent();
     void previousEvent();
@@ -773,15 +773,15 @@ signals:
     void updateEvents(bool active,QString providerName,double time);
     void newEventProperties(QString providerName,QString eventId);
     void eventAdded(QString providerName,QString addedEventDescription,double time);
-    void updateEvents(QString providerName,Q3ValueList<int>& eventsToShow,bool active);
+    void updateEvents(QString providerName,QList<int>& eventsToShow,bool active);
     void waveformInformationUpdated(int nbSamplesBefore,int nbSamplesAfter,bool active);
     void positionInformationUpdated(int width, int height,QImage backgroundImage,bool newOrientation,bool active);
     void timeChanged(long start,long duration);
     void positionViewClosed();
     void clusterProviderUpdated(bool active);
-    void noneBrowsingClusterListUpdated(QString providerName,const Q3ValueList<int>& clustersToNotBrowse);
-    void noneBrowsingEventListUpdated(QString providerName,const Q3ValueList<int>& eventsToNotBrowse);
-    void skipStatusChanged(const Q3ValueList<int>& skippedChannels);
+    void noneBrowsingClusterListUpdated(QString providerName,const QList<int>& clustersToNotBrowse);
+    void noneBrowsingEventListUpdated(QString providerName,const QList<int>& eventsToNotBrowse);
+    void skipStatusChanged(const QList<int>& skippedChannels);
     void decreaseTheRasterHeight();
     void increaseTheRasterHeight();
     void updateEventDisplay();
@@ -791,7 +791,7 @@ signals:
 private:
 
     /**List of the presented channels.*/
-    Q3ValueList<int>* shownChannels;
+    QList<int>* shownChannels;
 
     /**Reference on the main window.*/
     NeuroscopeApp& mainWindow;
@@ -820,14 +820,14 @@ private:
     bool selectMode;
 
     /**List containing the offset for each channel.*/
-    Q3ValueList<int> channelOffsets;
+    QList<int> channelOffsets;
 
     /**List of the exponents used to compute the drawing gain for each channel.
  */
-    Q3ValueList<int> gains;
+    QList<int> gains;
 
     /*List of the currently selected channels.*/
-    Q3ValueList<int> selectedChannels;
+    QList<int> selectedChannels;
 
     /**Label for the display when in tab page mode.*/
     QString tabLabel;
@@ -842,16 +842,16 @@ private:
     bool labelsDisplay;
 
     /**Dictionary given the list of selected clusters of each cluster provider.*/
-    Q3Dict< Q3ValueList<int> > selectedClusters;
+    Q3Dict< QList<int> > selectedClusters;
 
     /**Dictionary given the list of selected events of each event provider.*/
-    Q3Dict< Q3ValueList<int> > selectedEvents;
+    Q3Dict< QList<int> > selectedEvents;
 
     /**Dictionary given the list of clusters to not be used for browsing for each cluster provider.*/
-    Q3Dict<Q3ValueList<int> > clustersNotUsedForBrowsing;
+    Q3Dict<QList<int> > clustersNotUsedForBrowsing;
 
     /**Dictionary given the list of events to be not used for browsing for each event provider.*/
-    Q3Dict<Q3ValueList<int> > eventsNotUsedForBrowsing;
+    Q3Dict<QList<int> > eventsNotUsedForBrowsing;
 
     /**Boolean indicating whether a position file is been shown.*/
     bool isPositionFileShown;

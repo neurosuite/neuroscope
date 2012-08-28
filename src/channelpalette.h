@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QResizeEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -84,18 +84,18 @@ public:
     * @param groupsChannels map given the list of channels for each group.
     * @param channelsGroups map given to which group each channel belongs.
     */
-    void createChannelLists(ChannelColors* channelColors,QMap<int, Q3ValueList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
+    void createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
 
     /**Selects the channels contain in @p selectedChannels.
     * @param selectedChannels list of channels to select.
     */
-    void selectChannels(const Q3ValueList<int>& selectedChannels);
+    void selectChannels(const QList<int>& selectedChannels);
 
     /**Resets the internal information of the palette.*/
     void reset();
     
     /**Returns the list of selected channels*/
-    const Q3ValueList<int> selectedChannels();
+    const QList<int> selectedChannels();
 
     /**updates the background color of the palette.*/
     void changeBackgroundColor(QColor color);
@@ -104,7 +104,7 @@ public:
     * Gets the channels with the @p showStatus show/hide status.
     * @return list of channels having a show/hide status equals to showStatus.
     */
-    const Q3ValueList<int> getShowHideChannels(bool showStatus);
+    const QList<int> getShowHideChannels(bool showStatus);
 
     /**
     * Gets the skip status for each channel.
@@ -145,19 +145,19 @@ public slots:
     /**Channels moved to an existing group in a specific location.*/
     void slotChannelsMoved(QString targetGroup,Q3IconViewItem* after);
     /**Channels moved around in a group.*/
-    void slotChannelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
-    void trashChannelsMovedAround(const Q3ValueList<int>& channelIds,QString afterId,bool beforeFirst);
+    void slotChannelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void trashChannelsMovedAround(const QList<int>& channelIds,QString afterId,bool beforeFirst);
     void discardChannels();
-    void discardChannels(const Q3ValueList<int>& channelsToDiscard);
-    void discardChannels(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
+    void discardChannels(const QList<int>& channelsToDiscard);
+    void discardChannels(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
     void discardSpikeChannels();
     void showChannels();
     void hideChannels();
     void hideUnselectAllChannels();
-    void updateShowHideStatus(const Q3ValueList<int>&channelIds,bool showStatus);
+    void updateShowHideStatus(const QList<int>&channelIds,bool showStatus);
     void updateSkipStatus(const QMap<int,bool>& skipStatus);
-    void updateSkipStatus(const Q3ValueList<int>&channelIds,bool skipStatus);
-    void updateColor(const Q3ValueList<int>& channelIds);
+    void updateSkipStatus(const QList<int>&channelIds,bool skipStatus);
+    void updateColor(const QList<int>& channelIds);
     void updateColor(int channelId);
     /**Sets the channel color to the group color for all the channels in the same group has channelId.
     * The group to used is determine with the palette type.
@@ -168,7 +168,7 @@ public slots:
     void applyCustomColor();
     void setEditMode(bool edition);
     void groupToMove(int sourceId,int targetId,int start, int destination);
-    void removeChannelsFromTrash(const Q3ValueList<int>& channelIds);
+    void removeChannelsFromTrash(const QList<int>& channelIds);
     void slotMousePressWoModificators(QString sourceGroup);
     inline void selectionTool(){
         emit channelsSelected(selectedChannels());
@@ -191,16 +191,16 @@ signals:
     void singleChangeColor(int selectedChannel);
     void groupChangeColor(int groupId);
     //void channelsChangeColor(QValueList<int> selectedChannels);
-    void updateShownChannels(const Q3ValueList<int>& shownChannels);
-    void updateHideChannels(const Q3ValueList<int>& hiddenChannels);
+    void updateShownChannels(const QList<int>& shownChannels);
+    void updateHideChannels(const QList<int>& hiddenChannels);
     void paletteResized(int parentWidth,int labelSize);
-    void channelsDiscarded(const Q3ValueList<int>& discarded);
+    void channelsDiscarded(const QList<int>& discarded);
     void setDragAndDrop(bool dragAndDrop);
     void groupModified();
-    void channelsMovedToTrash(const Q3ValueList<int>&channelIds,QString afterId,bool beforeFirst);
-    void channelsMovedAroundInTrash(const Q3ValueList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
-    void channelsRemovedFromTrash(const Q3ValueList<int>& channelIds);
-    void channelsSelected(const Q3ValueList<int>& selectedChannels);
+    void channelsMovedToTrash(const QList<int>&channelIds,QString afterId,bool beforeFirst);
+    void channelsMovedAroundInTrash(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
+    void channelsRemovedFromTrash(const QList<int>& channelIds);
+    void channelsSelected(const QList<int>& selectedChannels);
     
 private:    
     /**Pointer on the ChannelColors storing the color information for the channels.*/
@@ -230,7 +230,7 @@ private:
     /**Map the correspondence between the channel group ids and the channel ids.
     *Pointer to the variable belonging to NeuroscopeDoc.
     */
-    QMap<int, Q3ValueList<int> >* groupsChannels;
+    QMap<int, QList<int> >* groupsChannels;
 
     int labelSize;
     
@@ -281,10 +281,10 @@ private:
     void moveTrashesToBottom();
 
     /**Moves channels around in a group.*/
-    void moveChannels(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void moveChannels(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
 
     /**Channels moved to an empty group.*/
-    void moveChannels(const Q3ValueList<int>& channelIds,QString sourceGroup,QString targetGroup);
+    void moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup);
 
     /**Moves channels to either the trash group or the unspecified group in the spike palette.
     * @param destinationGroup the id of the group of destination.

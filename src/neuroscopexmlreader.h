@@ -30,7 +30,7 @@
 #include <libxml/xpathInternals.h>
 
 //include files for QT
-#include <q3valuelist.h> 
+#include <QList> 
 
 //Application specific includes
 #include "sessionInformation.h"
@@ -118,7 +118,7 @@ public:
     /** Returns the list of ChannelDescription, class given the color for each channel.
   * @return list of ChannelDescription.
   */
-    Q3ValueList<ChannelDescription> getChannelDescription();
+    QList<ChannelDescription> getChannelDescription();
 
     /** Returns the list of channel default offsets.
   * @param channelDefaultOffsets empty map to be filled with the channel default offsets.
@@ -132,7 +132,7 @@ public:
   * @param displayGroupsChannels reference to the map given the correspondance between the display group ids and the channel ids.
   * @param skipStatus reference to the map given the correspondance between the channels and their skip status.
   */
-    void getAnatomicalDescription(int nbChannels,QMap<int,int>& displayChannelsGroups,QMap<int, Q3ValueList<int> >& displayGroupsChannels,
+    void getAnatomicalDescription(int nbChannels,QMap<int,int>& displayChannelsGroups,QMap<int, QList<int> >& displayGroupsChannels,
                                   QMap<int,bool>& skipStatus);
 
     /**
@@ -141,7 +141,7 @@ public:
   * @param spikeChannelsGroups reference to the map given the correspondance between the channel ids and the spike group ids.
   * @param spikeGroupsChannels reference to the map given the correspondance between the spike group ids and the channel ids.
   */
-    void getSpikeDescription(int nbChannels,QMap<int,int>& spikeChannelsGroups,QMap<int, Q3ValueList<int> >& spikeGroupsChannels);
+    void getSpikeDescription(int nbChannels,QMap<int,int>& spikeChannelsGroups,QMap<int, QList<int> >& spikeGroupsChannels);
 
     /**Returns the number of samples in a spike,
   * or zero if the element could not be found in the file.
@@ -171,12 +171,12 @@ public:
     /** Returns the list of files which where loaded in the last session, cluster, spike or event files.
   * @return list of the files to load.
   */
-    Q3ValueList<SessionFile> getFilesToLoad();
+    QList<SessionFile> getFilesToLoad();
 
     /** Returns the list of DisplayInformation, class given the information on a display.
   * @return list of DisplayInformation.
   */
-    Q3ValueList<DisplayInformation> getDisplayInformation();
+    QList<DisplayInformation> getDisplayInformation();
 
 
     /**A base file name can be used for different kind of files corresponding to the same data and having

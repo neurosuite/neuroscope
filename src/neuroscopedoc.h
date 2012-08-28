@@ -25,7 +25,7 @@
 #include <q3ptrlist.h>
 #include <QPair>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QCustomEvent>
 #include <QEvent>
 
@@ -141,13 +141,13 @@ private:
     QMap<int,int> displayChannelsGroups;
 
     /**Map given the correspondance between the display group ids and the channel ids.*/
-    QMap<int, Q3ValueList<int> > displayGroupsChannels;
+    QMap<int, QList<int> > displayGroupsChannels;
 
     /**Map given the correspondance between the channel ids and the spike group ids.*/
     QMap<int,int> channelsSpikeGroups;
 
     /**Map given the correspondance between the spike group ids and the channel ids.*/
-    QMap<int, Q3ValueList<int> > spikeGroupsChannels;
+    QMap<int, QList<int> > spikeGroupsChannels;
 
     /**True if some properties for the current file were provided by the command line, false otherwise.*/
     bool isCommandLineProperties;
@@ -224,7 +224,7 @@ private:
     * the spike group used to create them (myFile.clu.1 correspond to the
     * spike group 1).
     */
-    QMap<int, Q3ValueList<int> > displayGroupsClusterFile;
+    QMap<int, QList<int> > displayGroupsClusterFile;
 
     /**Extension of the open file.*/
     QString extension;
@@ -658,7 +658,7 @@ public:
 
     /**Returns a reference on the map given th correspondance between the display group ids and the channel ids.
    */
-    inline QMap<int, Q3ValueList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;}
+    inline QMap<int, QList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;}
 
     /**Returns a reference on the Map given the correspondance between the channel ids and the spike group ids.
    */
@@ -666,7 +666,7 @@ public:
 
     /**Returns a reference on the map given th correspondance between the spike group ids and the channel ids.
    */
-    inline QMap<int, Q3ValueList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;}
+    inline QMap<int, QList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;}
 
     /**Selects all the channels and shows them if the edit mode is not selected.
    * @param activeView the view in which the change has to be immediate.
@@ -859,7 +859,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @param clustersToHide list of clusters to not show.
     */
-    void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,Q3ValueList<int> clustersToHide);
+    void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,QList<int> clustersToHide);
 
     /**Updates the selection of clusters to be shown by hiding all the clusters.
     * @param clusterPalette the palette containing the clusters to be shown.
@@ -929,7 +929,7 @@ public:
     * @param providerName identifier of the event file.
     * @return list of the event descriptions.
     */
-    Q3ValueList<EventDescription> eventIds(QString providerName);
+    QList<EventDescription> eventIds(QString providerName);
 
 
     /**Sets the information used to display spike waveforms.
@@ -1137,9 +1137,9 @@ signals:
    * @param rasterHeight height of the rasters in the world coordinate system.
    * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwise.
    */
-    void loadFirstDisplay(Q3ValueList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
-                          bool multipleColumns,bool greyMode,Q3ValueList<int> offsets,Q3ValueList<int> channelGains,
-                          Q3ValueList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
+    void loadFirstDisplay(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
+                          bool multipleColumns,bool greyMode,QList<int> offsets,QList<int> channelGains,
+                          QList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
                           bool showEventsInPositionView);
 
 public:

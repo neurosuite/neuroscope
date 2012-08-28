@@ -25,7 +25,7 @@
 #include "sessionInformation.h"
 
 //include files for QT
-#include <q3valuelist.h>
+#include <QList>
 #include <qmap.h>
 #include <qdom.h> 
 
@@ -147,7 +147,7 @@ public:
   * @param skipStatus map given the skip status of the channels.
   * @return true if the modification succeded, false otherwise.
   */
-    bool setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
+    bool setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
 
     /**
   * Modifies the elements related to the spike detection.
@@ -156,14 +156,14 @@ public:
   * @param spikeGroups map given to which spike group each channel belongs.
   * @return true if the modification succeded, false otherwise.
   */
-    bool setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups);
+    bool setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, QList<int> >& spikeGroups);
 
     /**
   * Modifies the elements related to the spike detection.
   * @param spikeGroups map given to which spike group each channel belongs.
   * @return true if the modification succeded, false otherwise.
   */
-    bool setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups);
+    bool setSpikeDetectionInformation(QMap<int, QList<int> >& spikeGroups);
 
     /**A base file name can be used for different kind of files corresponding to the same data and having
   * different sampling rates. Each file is identified by its extension. this function modifies the elements related to the mapping

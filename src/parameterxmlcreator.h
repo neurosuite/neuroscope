@@ -25,7 +25,7 @@
 #include "sessionInformation.h"
 
 //include files for QT
-#include <q3valuelist.h>
+#include <QList>
 #include <qmap.h>
 #include <qdom.h> 
 
@@ -91,7 +91,7 @@ public:
   * @param anatomicalGroups map given to which anatomical group each channel belongs.
   * @param skipStatus map given the skip status of the channels.
   */
-    void setAnatomicalDescription(QMap<int, Q3ValueList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
+    void setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
 
     /**
   * Creates the elements related to the spike detection.
@@ -99,13 +99,13 @@ public:
   * @param peakSampleIndex sample index corresponding to the peak of the spike.
   * @param spikeGroups map given to which spike group each channel belongs.
   */
-    void setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, Q3ValueList<int> >& spikeGroups);
+    void setSpikeDetectionInformation(int nbSamples,int peakSampleIndex,QMap<int, QList<int> >& spikeGroups);
 
     /**
   * Creates the elements related to the spike detection.
   * @param spikeGroups map given to which spike group each channel belongs.
   */
-    void setSpikeDetectionInformation(QMap<int, Q3ValueList<int> >& spikeGroups);
+    void setSpikeDetectionInformation(QMap<int, QList<int> >& spikeGroups);
 
 
     /**

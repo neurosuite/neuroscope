@@ -26,7 +26,7 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QWheelEvent>
 #include <QDropEvent>
 
@@ -52,7 +52,7 @@ protected:
 
 signals:
     void channelsMoved(QString targetGroup,Q3IconViewItem* after);
-    void channelsMoved(const Q3ValueList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void channelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
     void dropLabel(int sourceId,int targetId,int start,int destination);
     void moussePressWoModificators(QString sourceGroup);
 
@@ -60,7 +60,7 @@ public slots:
     inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 protected slots:
-    void slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList);
+    void slotDropped(QDropEvent* event,const QList<Q3IconDragItem>& draggedList);
 
 private:
     /**Return 0 if it has to be before the first one.*/

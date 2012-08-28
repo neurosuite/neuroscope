@@ -19,7 +19,7 @@
 #include "qapplication.h"
 //Added by qt3to4:
 #include <Q3PointArray>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 //include files for the application
@@ -340,14 +340,14 @@ void PositionView::changeBackgroundColor(QColor color){
     BaseFrame::changeBackgroundColor(color);
 }
 
-void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, Q3ValueList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
+void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
     //Update the list of selected events.
     this->selectedEvents.clear();
-    QMap<QString, Q3ValueList<int> >::Iterator providersIterator;
+    QMap<QString, QList<int> >::Iterator providersIterator;
     for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-        Q3ValueList<int> eventsToShow = static_cast< Q3ValueList<int> >(providersIterator.data());
-        Q3ValueList<int> events;
-        Q3ValueList<int>::iterator shownEventsIterator;
+        QList<int> eventsToShow = static_cast< QList<int> >(providersIterator.data());
+        QList<int> events;
+        QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
             events.append(*shownEventsIterator);
         }
@@ -398,9 +398,9 @@ void PositionView::updateEventDisplay(){;
 void PositionView::drawEvents(QPainter& painter){  
     QPen pen;
     pen.setWidth(3);
-    QMap<QString, Q3ValueList<int> >::Iterator iterator;
+    QMap<QString, QList<int> >::Iterator iterator;
     for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-        Q3ValueList<int> eventList = iterator.data();
+        QList<int> eventList = iterator.data();
         QString providerName = iterator.key();
         if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
         ItemColors* colors = providerItemColors[providerName];
