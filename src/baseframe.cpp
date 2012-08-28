@@ -355,28 +355,7 @@ long BaseFrame::worldToViewportOrdinate(long wy){
 }
 
 void BaseFrame::drawRubber(){
-    if(!rubber) return;
-
-    QPainter painter;
-    painter.begin(this);
-    //set the window (part of the word I want to show)
-    QRect r((QRect)window);
-
-    painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
-    painter.setViewport(viewport);
-    
-    //KDAB_PENDING painter.setRasterOp(NotROP);
-    painter.setPen(QPen(Qt::color0,1));
-    painter.setBrush(Qt::NoBrush);
-
-    QRect normalizeRubber = rubber->normalize(); //not mandatory as it seems that drawPrimitive does the job (but more secure)
-
-#if KDAB_PENDING
-    style().drawPrimitive(QStyle::PE_FocusRect, &painter,
-                          QRect(normalizeRubber.x(), normalizeRubber.y(), normalizeRubber.width(),normalizeRubber.height()),
-                          colorGroup(), QStyle::State_None, colorGroup().background() );
-#endif
-    painter.end();
+    //KDAB_PENDING use qrubberBand
 }
 
 

@@ -85,10 +85,6 @@ NeuroscopeApp::NeuroscopeApp()
                             rotationDefault,flipDefault,drawPositionsOnBackgroundDefault);
 
 
-    // Apply the saved mainwindow settings, if any, and ask the mainwindow
-    // to automatically save settings if changed: window size, toolbar
-    // position, icon size, etc.
-    //KDAB_PENDING setAutoSaveSettings();
 
     // initialize the recent file list
     ///KDAB_PENDING fileOpenRecent->loadEntries(config);
@@ -448,6 +444,12 @@ void NeuroscopeApp::initActions()
 
     //Settings menu
     QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
+
+    mViewStatusBar = settingsMenu->addAction(tr("Show StatusBar"));
+    mViewStatusBar->setCheckable(true);
+    connect(mViewStatusBar,SIGNAL(triggered()), this,SLOT(slotViewStatusBar()));
+
+
     viewToolBar = settingsMenu->addAction(tr("Show T&ools"));
     viewToolBar->setCheckable(true);
     connect(viewToolBar,SIGNAL(triggered()), this,SLOT(slotViewToolBar()));

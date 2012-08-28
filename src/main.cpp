@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
 #endif
     //KDAB_TODO
     QApplication app(argc, argv);
+    QStringList args = QApplication::arguments();
 
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
     neuroscope->show();
