@@ -840,11 +840,11 @@ void ItemPalette::removeGroup(QString groupName){
     //a group must always be selected.
     if(selected == groupName){
         if(type == CLUSTER && clusterGroupList.count() > 0){
-            //KDAB_PENDING //KDAB_PENDING qSort(clusterGroupList);
+            qSort(clusterGroupList);
             selectGroupLabel(QString("%1").arg(clusterGroupList[0]));
         }
         else if(type == EVENT && itemGroupList.count() > 0){
-            //KDAB_PENDING qSort(itemGroupList);
+            qSort(itemGroupList);
             selectGroupLabel(itemGroupList[0]);
         }
         else  selected = "";//never reach
@@ -854,12 +854,12 @@ void ItemPalette::removeGroup(QString groupName){
 
 void ItemPalette::selectGroup(QString groupName){
     if(type == CLUSTER && clusterGroupList.count() > 0){
-        //KDAB_PENDING qSort(clusterGroupList);
+        qSort(clusterGroupList);
         if(clusterGroupList.contains(groupName.toInt())) selectGroupLabel(groupName);
-        else selectGroupLabel(QString("%1").arg(clusterGroupList[0]));
+        else selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList[0]));
     }
     else if(type == EVENT && itemGroupList.count() > 0){
-        //KDAB_PENDING qSort(itemGroupList);
+        qSort(itemGroupList);
         if(itemGroupList.contains(groupName)) selectGroupLabel(groupName);
         else selectGroupLabel(itemGroupList[0]);
     }
@@ -930,13 +930,13 @@ void ItemPalette::orderTheGroups(){
     for(;it.current();++it) verticalContainer->removeChild(it.current());
 
     if(type == CLUSTER){
-        //KDAB_PENDING qSort(clusterGroupList);
+        qSort(clusterGroupList);
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
             verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);
     }
     else{
-        //KDAB_PENDING qSort(itemGroupList);
+        qSort(itemGroupList);
         QList<QString>::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
             verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);
