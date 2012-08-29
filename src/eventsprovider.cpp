@@ -1205,8 +1205,7 @@ void EventsProvider::addEventDescription(QString eventDescriptionToAdd){
 
     descriptions.append(EventDescription(eventDescriptionToAdd));
 
-    //KDAB_PENDING
-    //qSort(descriptions);
+    qSort(descriptions);
     long maxSize = 0;
     long sum = 0;
     long sumOfSquares = 0;
@@ -1261,7 +1260,7 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
     QList<EventDescription> newDescriptions = eventIds.keys();
     newDescriptions.remove(EventDescription(eventDescriptionToRemove));
 
-    //KDAB_PENDING qSort(newDescriptions);
+    qSort(newDescriptions);
     long maxSize = 0;
     long sum = 0;
     long sumOfSquares = 0;
