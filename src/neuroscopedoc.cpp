@@ -227,7 +227,6 @@ bool NeuroscopeDoc::isADocumentToClose(){
 
 int NeuroscopeDoc::openDocument(const QString& url)
 {
-#if KDAB_PENDING
     channelColorList = new ChannelColors();
     docUrl = url;
 
@@ -256,51 +255,57 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
 
     bool sessionFileExist = false;
-    QString fileName = url.fileName();
+    QFileInfo urlFileInfo(url);
+    QString fileName = urlFileInfo.fileName();
     QStringList fileParts = QStringList::split(".", fileName);
-    if(fileParts.count() < 2) return INCORRECT_FILE;
+    if(fileParts.count() < 2)
+        return INCORRECT_FILE;
     //QString extension;
 
     //Treat the case when the selected file is a neuroscope session file or a par file.
-    if(fileName.contains(".nrs") || fileName.contains(".xml")){
-        if((fileName.contains(".nrs") && fileParts[fileParts.count() - 1] != "nrs") || (fileName.contains(".xml") && fileParts[fileParts.count() - 1] != "xml")) return INCORRECT_FILE;
-        else{
+    if(fileName.contains(QLatin1String(".nrs")) || fileName.contains(QLatin1String(".xml"))){
+        if((fileName.contains(".nrs") && fileParts[fileParts.count() - 1] != "nrs") || (fileName.contains(".xml") && fileParts[fileParts.count() - 1] != "xml")) {
+            return INCORRECT_FILE;
+        } else {
             baseName = fileParts[0];
-            for(uint i = 1;i < fileParts.count() - 1; ++i) baseName += "." + fileParts[i];
+            for(uint i = 1;i < fileParts.count() - 1; ++i)
+                baseName += "." + fileParts[i];
 
             //As all the files with the same base name share the same session and par files, ask the user to selected the desire one.
-            QString startUrl(url);
-            startUrl.setFileName(baseName);
+            QString startUrl = urlFileInfo.absolutePath() + QDir::separator() + baseName;
             QString filter = baseName + ".dat " +  " " + baseName + ".eeg" +  " " +  baseName + ".fil";
             filter.append(tr("|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n"));
             filter.append(baseName + ".*");
-            QString openUrl = QFileDialog::getOpenFileName(parent, tr("Open Data File..."),startUrl.path(),filter);
-            if(!openUrl.isEmpty()) docUrl = openUrl;
-            else{
+
+            const QString openUrl = QFileDialog::getOpenFileName(parent, tr("Open Data File..."),startUrl,filter);
+            if(!openUrl.isEmpty()) {
+                docUrl = openUrl;
+            } else{
                 QString docFile = baseName + ".dat";
-                docUrl.setFileName(docFile);
-                if(!KIO::NetAccess::exists(docUrl)) return DOWNLOAD_ERROR;
+                docUrl = urlFileInfo.absolutePath() + QDir::separator() + docFile;
+
+                if(!QFile::exists(docUrl))
+                    return DOWNLOAD_ERROR;
             }
         }
     }
 
-    fileName = docUrl.fileName();
+    fileName = QFileInfo(docUrl).fileName();
     fileParts = QStringList::split(".", fileName);
     baseName = fileParts[0];
-    for(uint i = 1;i < fileParts.count() - 1; ++i) baseName += "." + fileParts[i];
+    for(uint i = 1;i < fileParts.count() - 1; ++i)
+        baseName += "." + fileParts[i];
     QString sessionFile = baseName + ".nrs";
-    sessionUrl = docUrl;
-    sessionUrl.setFileName(sessionFile);
+    sessionUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() + sessionFile;
 
     extension = fileParts[fileParts.count() - 1];
 
     //Look up in the parameter file
-    QString parFileUrl(docUrl);
-    parFileUrl.setFileName(baseName +".xml");
+    const QString parFileUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() +baseName +".xml";
     parameterUrl = parFileUrl;
     
-    QFileInfo parFileInfo = QFileInfo(parFileUrl.path());
-    QFileInfo sessionFileInfo = QFileInfo(sessionUrl.path());
+    QFileInfo parFileInfo = QFileInfo(parFileUrl);
+    QFileInfo sessionFileInfo = QFileInfo(sessionUrl);
 
     if(parFileInfo.exists()){
         if(isCommandLineProperties){
@@ -327,17 +332,20 @@ int NeuroscopeDoc::openDocument(const QString& url)
             sessionFileExist = true;
             if(reader.parseFile(sessionUrl,NeuroscopeXmlReader::SESSION)){
                 //if the session file has been created by a version of NeuroScope prior to the 1.2.3, it contains the extension information
-                if(reader.getVersion() == "" || reader.getVersion() == "1.2.2") extensionSamplingRates = reader.getSampleRateByExtension();
+                if(reader.getVersion().isEmpty() || reader.getVersion() == QLatin1String("1.2.2"))
+                    extensionSamplingRates = reader.getSampleRateByExtension();
+            } else {
+                return PARSE_ERROR;
             }
-            else return PARSE_ERROR;
         }
 
         //If the file extension is not a .dat or .eeg look up the sampling rate for
         //the extension. If no sampling rate is available, prompt the user for the information.
         if(extension != "eeg" && extension != "dat" && extension != "xml"){
-            if(extensionSamplingRates.contains(extension)) samplingRate = extensionSamplingRates[extension];
+            if(extensionSamplingRates.contains(extension)) {
+                samplingRate = extensionSamplingRates[extension];
             //Prompt the user
-            else{
+            } else {
                 QApplication::restoreOverrideCursor();
 
                 QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
@@ -348,15 +356,16 @@ int NeuroscopeDoc::openDocument(const QString& url)
                     samplingRate = datSamplingRate;//default
                 extensionSamplingRates.insert(extension,samplingRate);
             }
-        }
-        else{
-            if(extension == "eeg") samplingRate = eegSamplingRate;
+        } else {
+            if(extension == "eeg")
+                samplingRate = eegSamplingRate;
             //Assign the default, dat sampling rate
-            else samplingRate = datSamplingRate;
+            else
+                samplingRate = datSamplingRate;
         }
 
         //Create the tracesProvider with the information gather before.
-        tracesProvider = new TracesProvider(docUrl.path(),channelNb,resolution,samplingRate,initialOffset);
+        tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
 
         //Is there a session file?
         if(sessionFileExist){
@@ -375,7 +384,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 //get the file version. If it is "" or "1.2.2, the documentation information can be stored in the session file,
                 //read it from there, otherwise it is an error. After version 1.2.2 a parameter file should always exit at the same time that the session
                 //file => return an error.
-                if(reader.getVersion() == "" || reader.getVersion() == "1.2.2"){
+                if(reader.getVersion().isEmpty() || reader.getVersion() == "1.2.2"){
                     if(isCommandLineProperties){
                         QApplication::restoreOverrideCursor();
                         QMessageBox::information(0, tr("Warning!"),tr("A session file has be found, the command line "
@@ -385,8 +394,9 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
                     //Load the general info
                     loadDocumentInformation(reader);
+                }else {
+                    return MISSING_FILE;
                 }
-                else return MISSING_FILE;
 
                 //Load the extension-sampling rate maping (prior to the 1.2.3 version, the information was store in the session file)
                 extensionSamplingRates = reader.getSampleRateByExtension();
@@ -409,13 +419,15 @@ int NeuroscopeDoc::openDocument(const QString& url)
                     }
                 }
                 else{
-                    if(extension == "eeg") samplingRate = eegSamplingRate;
+                    if(extension == "eeg")
+                        samplingRate = eegSamplingRate;
                     //Assign the default, dat sampling rate
-                    else samplingRate = datSamplingRate;
+                    else
+                        samplingRate = datSamplingRate;
                 }
 
                 //Create the tracesProvider with the information gather before.
-                tracesProvider = new TracesProvider(docUrl.path(),channelNb,resolution,samplingRate,initialOffset);
+                tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
 
                 //Load the session information
                 loadSession(reader);
@@ -427,19 +439,23 @@ int NeuroscopeDoc::openDocument(const QString& url)
         //No parameter or session file. Use defaults and or command line information (any of the command line arguments have overwritten the default values).
         else{
             bool isaDatFile = true;
-            if(extension != "dat") isaDatFile = false;
+            if(extension != "dat")
+                isaDatFile = false;
             //Show a dialog to inform the user what are the parameters which will be used.
             dynamic_cast<NeuroscopeApp*>(parent)->displayFileProperties(channelNb,samplingRate,resolution,initialOffset,voltageRange,
                                                                         amplification,screenGain,nbSamples,peakSampleIndex,videoSamplingRate,videoWidth,videoHeight,backgroundImage,
                                                                         rotation,flip,datSamplingRate,isaDatFile,drawPositionsOnBackground,traceBackgroundImage);
 
-            if(extension == "eeg") eegSamplingRate = samplingRate;
+            if(extension == "eeg")
+                eegSamplingRate = samplingRate;
             //if the extension is not dat, the sampling rate for the dat file while be the default one.
-            else if(extension == "dat") datSamplingRate = samplingRate;
-            else extensionSamplingRates.insert(extension,samplingRate);
+            else if(extension == "dat")
+                datSamplingRate = samplingRate;
+            else
+                extensionSamplingRates.insert(extension,samplingRate);
 
             //Create the tracesProvider with the information gather before.
-            tracesProvider = new TracesProvider(docUrl.path(),channelNb,resolution,samplingRate,initialOffset);
+            tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
 
             //No group of channels exist, put all the channels in the same group (1 for the display palette and
             //-1 (the trash group) for the spike palette) and assign them the same blue color.
@@ -472,8 +488,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
     }
 
     //Use the channel default offsets
-    if(!sessionFileExist) emit noSession(channelDefaultOffsets,skipStatus);
-#endif
+    if(!sessionFileExist)
+        emit noSession(channelDefaultOffsets,skipStatus);
     return OK;
 }
 
