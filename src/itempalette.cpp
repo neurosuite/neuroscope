@@ -52,6 +52,7 @@ ItemPalette::ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent
 {
     itemGroupViewDict.setAutoDelete(true);
 
+    setAutoFillBackground(true);
     //Set the palette color
     setPaletteBackgroundColor(backgroundColor);
     //Set the palette color, the foreground color depends on the background color

@@ -43,7 +43,7 @@ ItemIconView::ItemIconView(QColor backgroundColor,Q3IconView::ItemTextPos positi
     arrangeItemsInGrid();
     setWordWrapIconText(false);
     setDragAutoScroll(false);
-
+    setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
     setPaletteBackgroundColor(backgroundColor);
     int h;

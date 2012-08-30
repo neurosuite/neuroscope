@@ -60,7 +60,7 @@ ChannelPalette::ChannelPalette(PaletteType type,QColor backgroundColor,bool edit
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
-
+    setAutoFillBackground(true);
     setPaletteBackgroundColor(backgroundColor);
     setPaletteForegroundColor(legendColor);
     setHScrollBarMode(Q3ScrollView::AlwaysOff);

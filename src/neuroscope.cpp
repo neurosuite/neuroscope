@@ -25,7 +25,6 @@
 #include <QList>
 #include <QEvent>
 #include <QCustomEvent>
-#include <Q3PopupMenu>
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMenu>
