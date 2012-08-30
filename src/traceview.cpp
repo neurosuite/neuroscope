@@ -3544,7 +3544,7 @@ void TraceView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool 
     }
 
     printPainter.fillRect(back,backgroundColor());
-    //KDAB_PENDING printPainter.setClipRect(back,QPainter::CoordPainter);
+    printPainter.setClipRect(back);
 
     //Paint all the traces in the shownChannels list (in the double buffer)
     drawTraces(printPainter);
