@@ -5,6 +5,9 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 find_package(LibXml2 REQUIRED)
+
+
+find_package(LibKlustersShared REQUIRED)
 add_definitions(${QT_DEFINITIONS} )
 SET( QT_USE_QT3SUPPORT TRUE )
 set( QT_USE_XML TRUE)
