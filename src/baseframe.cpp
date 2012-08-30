@@ -42,6 +42,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
     firstClick(0,0),isDoubleClick(false),rubber(0),
     drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
     wholeHeightRectangle(false){
+    setAutoFillBackground(true);
 
     //Setting of the frame
     setLineWidth (BORDER);
