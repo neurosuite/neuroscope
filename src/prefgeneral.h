@@ -50,31 +50,31 @@ public:
   /**Sets the background color.*/
   inline void setBackgroundColor(const QColor& color)
   {
-	  //KDAB_PENDING backgroundColorButton->setColor(color);
+      backgroundColorButton->setColor(color);
   }
 
   /**Sets the display of the palette headers.*/
-  inline void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);};
+  inline void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);}
 
   /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
-  inline void setEventPosition(int position){eventPositionSpinBox->setValue(position);};
+  inline void setEventPosition(int position){eventPositionSpinBox->setValue(position);}
 
   /**Sets the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  inline void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);};
+  inline void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
 
   /**Returns the background color.*/
   inline QColor getBackgroundColor() const{
-	  //KDAB_PENDING return backgroundColorButton->color();
+      return backgroundColorButton->color();
   }
 
   /**Returns true if the palette headers are displayed, false othewise.*/
-  inline bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();};
+  inline bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();}
 
   /**Returns the event position in percentage from the begining of the window where the events are display when browsing.*/
-  inline int getEventPosition()const{return eventPositionSpinBox->value();};
+  inline int getEventPosition()const{return eventPositionSpinBox->value();}
 
   /**Returns the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  inline int getClusterPosition()const{return clusterPositionSpinBox->value();};
+  inline int getClusterPosition()const{return clusterPositionSpinBox->value();}
   
  private:
 
