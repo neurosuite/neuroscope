@@ -84,7 +84,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
     //Event related variables
     eventsData.setAutoDelete(true);
-    selectedEvent.first = "";
+    selectedEvent.first.clear();
     selectedEvent.second = 0;
 
     //Set the default modes
