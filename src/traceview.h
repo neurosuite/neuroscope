@@ -561,7 +561,7 @@ protected:
   * Draws the contents of the frame
   * @param painter painter used to draw the contents
   */
-    void drawContents(QPainter* painter);
+    void paintEvent ( QPaintEvent*ainter);
 
     /**The view responds to a mouse move event.
   * The time is display in the status bar.

@@ -89,7 +89,7 @@ ItemPalette::~ItemPalette()
 }
 
 
-void ItemPalette::drawContents(QPainter* painter){
+void ItemPalette::paintEvent ( QPaintEvent*){
     if(updateIconPixmap){
         QMap<QString,QList<int> > selected = selectedItems();
         //update the icons if need it

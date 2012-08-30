@@ -123,11 +123,6 @@ signals:
     void parentDockBeingClosed(QWidget* viewWidget);
 
 protected:
-    /**
-  * Draws the contents of the frame
-  * @param p painter used to draw the contents
-  */
-    virtual void drawContents(QPainter* p)=0;
 
     /**The view responds to a resize event.
   * @param event resize event.

@@ -148,7 +148,7 @@ protected:
   * Draws the contents of the frame
   * @param p painter used to draw the contents
   */
-    void drawContents(QPainter* p);
+    void paintEvent ( QPaintEvent*);
 
     /**The view responds to a resize event.
   * The bachground image is recomputed.

@@ -136,7 +136,7 @@ protected slots:
     void slotClickRedraw();
     void languageChange();
     void resizeEvent(QResizeEvent* event);
-    void drawContents(QPainter* painter);
+    void paintEvent ( QPaintEvent*ainter);
     void slotMouseReleased(QString sourceGroupName);
 
 signals:

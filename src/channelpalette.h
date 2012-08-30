@@ -184,7 +184,7 @@ protected slots:
     virtual void createGroup(int id);
     virtual void setChannelLists();
     virtual void resizeEvent(QResizeEvent* event);
-    virtual void drawContents(QPainter* painter);
+    void paintEvent (QPaintEvent*);
     inline void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
     
 signals:

@@ -111,7 +111,7 @@ void ChannelPalette::setGreyScale(bool grey){
 
 }
 
-void ChannelPalette::drawContents(QPainter* painter){
+void ChannelPalette::paintEvent ( QPaintEvent*){
 
     //When all the channels of a group have been remove by a drag-drop it can not be suppress immediately
     //(the mouse is still in the iconView area). To make sure the groups are suppressed, isGroupToRemove

@@ -62,7 +62,7 @@ PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& glo
 PositionView::~PositionView(){
 }
 
-void PositionView::drawContents(QPainter* p){
+void PositionView::paintEvent ( QPaintEvent*){
 
     if(isInit){
         QRect contentsRec = contentsRect();
@@ -79,7 +79,7 @@ void PositionView::drawContents(QPainter* p){
         drawContentsMode = REDRAW;
         update();
     }
-
+QPainter p(this);
     if(drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
@@ -120,7 +120,7 @@ void PositionView::drawContents(QPainter* p){
     }
 
     //Draw the double buffer (pixmap) by copying it into the widget device.
-    p->drawPixmap(0, 0, doublebuffer);
+    p.drawPixmap(0, 0, doublebuffer);
 }
 
 void PositionView::updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){

@@ -462,7 +462,7 @@ void TraceView::showHideLabels(bool show){
     update();
 }
 
-void TraceView::drawContents(QPainter* p){
+void TraceView::paintEvent ( QPaintEvent*){
     bool isInitAndResized = false;
     if(isInit){
         if(resized){
@@ -514,7 +514,7 @@ void TraceView::drawContents(QPainter* p){
         }
         return;
     }
-
+    QPainter p(this);
     if(drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
@@ -575,7 +575,7 @@ void TraceView::drawContents(QPainter* p){
     //if drawContentsMode == REFRESH, we reuse the double buffer (pixmap)
 
     //Draw the double buffer (pixmap) by copying it into the widget device.
-    p->drawPixmap(0, 0, doublebuffer);
+    p.drawPixmap(0, 0, doublebuffer);
 
     if(resized){
         resized = false;
