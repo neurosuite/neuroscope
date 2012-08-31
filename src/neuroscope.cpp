@@ -108,7 +108,6 @@ void NeuroscopeApp::initActions()
 
     viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
     viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-    KStdAction::preferences(this,SLOT(executePreferencesDlg()), actionCollection());
 #endif
     //Custom actions and menus
 
@@ -467,6 +466,10 @@ void NeuroscopeApp::initActions()
 
     calibrationBar->setChecked(false);
 
+
+    settingsMenu->addSeparator();
+    mPreferenceAction = settingsMenu->addAction(tr("Preferences"));
+    connect(mPreferenceAction,SIGNAL(triggered()), this,SLOT(executePreferencesDlg()));
 
     //Help menu
     QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
@@ -1232,9 +1235,6 @@ void NeuroscopeApp::slotCreateEventFile(){
     eventUrl.setFileName(baseName);
 
     QFileDialog dialog(this,tr("CreateEvent"),eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
-    //KDAB: can't change button label in qfiledialog
-    //KPushButton* ok = dialog.okButton();
-    ok->setText(tr("Create"));
     dialog.setCaption(tr("Create Event File as..."));
     if(!dialog.exec())
         return;
