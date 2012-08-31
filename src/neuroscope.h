@@ -41,6 +41,7 @@ class PrefDialog;
 class PropertiesDialog;
 class ChannelPalette;
 class ItemPalette;
+class QRecentFileAction;
 
 /**
   * The Neuroscope main window and central class. It sets up the main
@@ -752,6 +753,8 @@ private:
     QAction* mUndo;
     QAction* mRedo;
     QAction* mViewStatusBar;
+
+    QRecentFileAction *mFileOpenRecent;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
 

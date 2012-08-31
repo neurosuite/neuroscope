@@ -31,7 +31,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMessageBox>
-// include files for KDE
+#include <qrecentfileaction.h>
 
 
 #include <QStatusBar>
@@ -85,8 +85,6 @@ NeuroscopeApp::NeuroscopeApp()
 
 
 
-    // initialize the recent file list
-    ///KDAB_PENDING fileOpenRecent->loadEntries(config);
 
     //Disable some actions at startup (see the neuroscope.rc file)
     slotStateChanged("initState");
@@ -107,7 +105,6 @@ void NeuroscopeApp::createToolBar()
 void NeuroscopeApp::initActions()
 {
 #if KDAB_PENDING
-    fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const QString&)), actionCollection());
 
     viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
     viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
@@ -123,6 +120,11 @@ void NeuroscopeApp::initActions()
     mOpenAction = fileMenu->addAction(tr("&Open..."));
     mOpenAction->setShortcut(QKeySequence::Open);
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
+
+    mFileOpenRecent = new QRecentFileAction(this);
+    fileMenu->addAction(mFileOpenRecent);
+    connect(mFileOpenRecent, SIGNAL(recentFileSelected(QString)), this, SLOT(slotFileOpenRecent(QString)));
+
 
 
     mPrintAction = fileMenu->addAction(tr("Print"));
@@ -862,36 +864,27 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 void NeuroscopeApp::openDocumentFile(const QString& url)
 {
     slotStatusMsg(tr("Opening file..."));
-#if KDAB_PENDING
-    filePath = url.path();
+    filePath = url;
     QFileInfo file(filePath);
 
-    if(url.protocol() == "file"){
-        if((fileOpenRecent->items().contains(url.prettyURL())) && !file.exists()){
-            QString title = "File not found: ";
-            title.append(filePath);
-            int answer = QMessageBox::questionYesNo(this,tr("The selected file no longer exists. Do you want to remove it from the list?"), tr(title));
-            if(answer == QMessageBox::Yes) {
-                //KDAB_PENDING fileOpenRecent->removeURL(url);
-            }
-            else  {
-                //KDAB_PENDING fileOpenRecent->addURL(url); //hack, unselect the item
-            }
-            filePath = "";
-            return;
+    if(!file.exists()){
+        QString title = tr("File not found: ");
+        title.append(filePath);
+        int answer = QMessageBox::question(this,title, tr("The selected file no longer exists. Do you want to remove it from the list?"));
+        if(answer == QMessageBox::Yes) {
+            mFileOpenRecent->removeRecentFile(url);
         }
-    }
-    //Do not handle remote files
-    else{
-        QMessageBox::sorry(this,tr("Sorry, NeuroScope does not handle remote files."),tr("Remote file handling"));
-        //KDAB_PENDING fileOpenRecent->removeURL(url);
+        else  {
+            mFileOpenRecent->addRecentFile(url); //hack, unselect the item
+        }
+        filePath = "";
         return;
     }
 
     //Check if the file exists
     if(!file.exists()){
         QMessageBox::critical (this, tr("Error!"),tr("The selected file does not exist."));
-        //KDAB_PENDING fileOpenRecent->removeURL(url);
+        mFileOpenRecent->removeRecentFile(url);
         return;
     }
 
@@ -900,7 +893,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     //If no document is open already, open the document asked.
     if(!mainDock){
         displayCount = 0;
-        //KDAB_PENDING fileOpenRecent->addURL(url);
+        mFileOpenRecent->addRecentFile(url);
 
         // Open the file (that will also initialize the document)
         int returnStatus = doc->openDocument(url);
@@ -946,8 +939,6 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
         
 
-        //Save the recent file list
-        fileOpenRecent->saveEntries(config);
 
         //update the spike and event browsing status
         updateBrowsingStatus();
@@ -957,30 +948,27 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             slotStateChanged("eventsInPositionViewEnableState");
         }
 
-        setCaption(url.path());
+        setCaption(url);
         QApplication::restoreOverrideCursor();
     }
     // check, if this document is already open. If yes, do not do anything
     else{
-        QString path = doc->url().path();
+        QString path = doc->url();
 
-        if(path == url.path()){
-            //KDAB_PENDING fileOpenRecent->addURL(url); //hack, unselect the item
+        if(path == url){
+            mFileOpenRecent->addRecentFile(url); //hack, unselect the item
             QApplication::restoreOverrideCursor();
             return;
         }
         //If the document asked is not the already open. Open a new instance of the application with it.
         else{
-            //KDAB_PENDING fileOpenRecent->addURL(url);
-            //Save the recent file list
-            //KDAB_PENDING fileOpenRecent->saveEntries(config);
+            mFileOpenRecent->addRecentFile(url);
             filePath = path;
 
-            QProcess::startDetached("neuroscope", QStringList()<<url.path());
+            QProcess::startDetached("neuroscope", QStringList()<<url);
             QApplication::restoreOverrideCursor();
         }
     }
-#endif
     slotStatusMsg(tr("Ready."));
 }
 
@@ -1057,8 +1045,6 @@ void NeuroscopeApp::slotGroupsModified(){
 
 bool NeuroscopeApp::queryClose()
 {
-    //Save the recent file list
-    //KDAB_PENDING fileOpenRecent->saveEntries(config);
 
     //call when the kDockMainWindow will be close
     if(doc == 0 || !doc->isADocumentToClose()) return true;
