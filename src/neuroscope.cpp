@@ -65,8 +65,6 @@ NeuroscopeApp::NeuroscopeApp()
     eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
 {
     //Prepare the actions
-    initActions();
-    createToolBar();
     printer = new QPrinter();
 
     //Apply the user settings.
@@ -84,6 +82,8 @@ NeuroscopeApp::NeuroscopeApp()
                             rotationDefault,flipDefault,drawPositionsOnBackgroundDefault);
 
 
+    initActions();
+    createToolBar();
 
 
     //Disable some actions at startup (see the neuroscope.rc file)
@@ -530,16 +530,26 @@ void NeuroscopeApp::initStatusBar()
 }
 
 void NeuroscopeApp::initItemPanel(){
-#if KDAB_PENDING
 
     //Creation of the left panel containing the channels.
     if(displayPaletteHeaders){
-        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
-        spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
+        displayPanel = new QDockWidget(tr("Anatomy"));
+        displayPanel->setWindowIcon(QPixmap(":/icons/spikes"));
+
+                //createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
+        spikePanel = new QDockWidget(tr("Spikes"));
+        spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
+
+                //createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
     }
     else{
-        displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L,"");
-        spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L,"");
+        displayPanel = new QDockWidget(tr("Anatomy"));
+        displayPanel->setWindowIcon(QPixmap(":/icons/spikes"));
+        //displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L,"");
+        //spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L,"");
+        spikePanel = new QDockWidget(tr("Spikes"));
+        spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
+
     }
     //Initialisation of the channel palettes containing the channel list
     displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,displayPanel,"DisplaylPalette");
@@ -548,14 +558,16 @@ void NeuroscopeApp::initItemPanel(){
     displayPanel->setWidget(displayChannelPalette);
     spikePanel->setWidget(spikeChannelPalette);
 
+#if KDAB_REMOVE
     //Create the paletteArea which will contain all the palettes.
     KDockArea* paletteArea = new KDockArea(mainDock,"PanelArea");
     paletteArea->setMainDockWidget(displayPanel);
-
-    //Create the QDockWidget which will contain the paletteArea and be dock to the mainDock.
-    palettePanel = createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
-    palettePanel->setWidget(paletteArea);
 #endif
+    //Create the QDockWidget which will contain the paletteArea and be dock to the mainDock.
+    palettePanel = new QDockWidget(tr("Palettes"));
+
+            //createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
+    palettePanel->setWidget(mainDock);
 }
 
 void NeuroscopeApp::executePreferencesDlg(){
@@ -857,7 +869,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
         slotStateChanged("clusterRasterState");
     }
     else{
-
         slotStateChanged("noClusterRasterState");
     }
 }
@@ -878,7 +889,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         else  {
             mFileOpenRecent->addRecentFile(url); //hack, unselect the item
         }
-        filePath = "";
+        filePath.clear();
         return;
     }
 
