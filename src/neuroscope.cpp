@@ -105,9 +105,7 @@ void NeuroscopeApp::createToolBar()
 void NeuroscopeApp::initActions()
 {
 #if KDAB_PENDING
-
     viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
-    viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
 #endif
     //Custom actions and menus
 
