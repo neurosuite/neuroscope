@@ -35,6 +35,7 @@
 
 
 #include <QStatusBar>
+#include <QToolBar>
 
 
 #include <QProcess>
@@ -557,6 +558,41 @@ channelsMenu->addSeparator();
 
     connect(displayChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
     connect(spikeChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
+
+    mMainToolBar = new QToolBar;
+    mMainToolBar->addAction(editMode);
+    addToolBar(mMainToolBar);
+
+    mToolBar = new QToolBar(tr("Tools"));
+    mToolBar->addAction(mZoomTool);
+    mToolBar->addAction(mDrawTimeLine);
+    mToolBar->addAction(mSelectTool);
+    mToolBar->addAction(mEventTool);
+    //mToolBar->addAction(/*add_event_toolbarAction*/)
+    mToolBar->addAction(mMeasureTool);
+    mToolBar->addAction(mTimeTool);
+    addToolBar(Qt::LeftToolBarArea, mToolBar);
+
+    mChannelToolBar = new QToolBar(tr("Channels Actions"));
+    //mChannelToolBar->addAction(mCreateEventFile);
+    mChannelToolBar->addAction(mRemoveChannelFromGroup);
+    mChannelToolBar->addAction(mDiscardChannels);
+    mChannelToolBar->addAction(mKeepChannels);
+    mChannelToolBar->addAction(mSkipChannels);
+    mChannelToolBar->addAction(mShowChannel);
+    mChannelToolBar->addAction(mHideChannel);
+
+    addToolBar(Qt::LeftToolBarArea, mChannelToolBar);
+
+    mEventToolBar = new QToolBar(tr("Events Actions"));
+    mEventToolBar->addAction(mPreviousEvent);
+    mEventToolBar->addAction(mNextEvent);
+    addToolBar(Qt::LeftToolBarArea, mEventToolBar);
+
+    mClusterToolBar = new QToolBar(tr("Clusters Actions"));
+    mClusterToolBar->addAction(mPreviousSpike);
+    mClusterToolBar->addAction(mNextSpike);
+    addToolBar(Qt::LeftToolBarArea, mClusterToolBar);
 
 }
 

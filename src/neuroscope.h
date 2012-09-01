@@ -755,6 +755,12 @@ private:
     QAction* mViewStatusBar;
     QAction* mPreferenceAction;
 
+    QToolBar *mMainToolBar;
+    QToolBar *mToolBar;
+    QToolBar *mChannelToolBar;
+    QToolBar *mEventToolBar;
+    QToolBar *mClusterToolBar;
+
     QRecentFileAction *mFileOpenRecent;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
     int displayCount;
