@@ -560,6 +560,13 @@ channelsMenu->addSeparator();
     connect(spikeChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
 
     mMainToolBar = new QToolBar;
+    mMainToolBar->addAction(mOpenAction);
+    mMainToolBar->addAction(mSaveAction);
+    mMainToolBar->addAction(mPrintAction);
+    mMainToolBar->addSeparator();
+    mMainToolBar->addAction(mUndo);
+    mMainToolBar->addAction(mRedo);
+    mMainToolBar->addSeparator();
     mMainToolBar->addAction(editMode);
     addToolBar(mMainToolBar);
 
