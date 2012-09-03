@@ -41,7 +41,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,Q
     viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
     firstClick(0,0),isDoubleClick(false),rubber(0),
     drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
-    wholeHeightRectangle(false){
+    wholeHeightRectangle(false),mRubberBand(0){
     setAutoFillBackground(true);
 
     //Setting of the frame
@@ -82,14 +82,10 @@ void BaseFrame::changeBackgroundColor(QColor color){
 
 void BaseFrame::mousePressEvent(QMouseEvent* e){
     if(mode == ZOOM || isRubberBandToBeDrawn){
-        //Test if a selected rectangle exist, if so draw it and delete it.
-        if(rubber){
-            drawRubber();
-            delete rubber;
-            rubber = 0;
-        }
-
         if(e->button() == Qt::LeftButton){
+            if (!mRubberBand)
+                mRubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+
             //Assign firstClick
             QRect r((QRect)window);
 
@@ -99,8 +95,13 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
             //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
             //drawn on whole the height of the window.
-            if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber = new QRect(firstClick.x(),r.top(),1,1);
-            else rubber = new QRect(firstClick.x(),firstClick.y(),1,1);
+            if(isRubberBandToBeDrawn && wholeHeightRectangle)
+                rubber = new QRect(firstClick.x(),r.top(),1,1);
+            else
+                rubber = new QRect(firstClick.x(),firstClick.y(),1,1);
+            mRubberBand->setGeometry(*rubber);
+            mRubberBand->show();
+
         }
     }
 }
@@ -114,7 +115,6 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
         if(isRubberBandToBeDrawn){
             //Test if a selected rectangle exist, if so draw it and delete it.
             if(rubber){
-                drawRubber();
                 delete rubber;
                 rubber = 0;
             }
@@ -129,9 +129,11 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
 
             //Test if a selected rectangle exist, if so draw it and delete it.
             if(rubber){
-                drawRubber();
                 delete rubber;
                 rubber = 0;
+            }
+            if(mRubberBand) {
+                mRubberBand->hide();
             }
 
             //Calculate the selected point in world coordinates
@@ -172,20 +174,8 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e){
     //We do not consider the other button events
     if(e->state() == Qt::LeftButton){
         //Test if a selected rectangle exist, if so draw to erase the previous one,
-        //update it and draw again.
-        if(rubber){
-            QPoint current;
-            QRect r((QRect)window);
-            if(r.left() != 0) current = viewportToWorld(e->x(),e->y() - Yborder);
-            else current = viewportToWorld(e->x()- Xborder,e->y() - Yborder);
-            if(current == rubber->bottomRight()) return; //did not move
-            drawRubber();
-            rubber->setRight(current.x());
-            //The ordinate is the bottom of the window if the rubber band has to
-            //drawn on whole the height of the window.
-            if(isRubberBandToBeDrawn && wholeHeightRectangle) rubber->setBottom(r.bottom());
-            else rubber->setBottom(current.y());
-            drawRubber();
+        if(mRubberBand) {
+            mRubberBand->setGeometry(QRect(firstClick, e->pos()).normalized());
         }
     }
 }
@@ -354,10 +344,5 @@ long BaseFrame::worldToViewportOrdinate(long wy){
 
     return static_cast<long>(viewportY);
 }
-
-void BaseFrame::drawRubber(){
-    //KDAB_PENDING use qrubberBand
-}
-
 
 #include "baseframe.moc"
