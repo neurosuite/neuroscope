@@ -45,8 +45,8 @@ PositionProperties::~PositionProperties(){
 }
 
 void PositionProperties::updateDisplayedImage(){ 
-#if KDAB_PENDING
-    if(backgroungImage != NULL){
+#if 1
+    if(!backgroungImage.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = backgroungImage;
         QPixmap pixmap;
@@ -80,7 +80,8 @@ void PositionProperties::updateDisplayedImage(){
             }
             flippedImage = rotatedImage.mirror(horizontal,vertical);
         }
-        if(pixmap.convertFromImage(flippedImage)) backgroundPixmap->setPixmap(pixmap);
+        if(pixmap.convertFromImage(flippedImage))
+            backgroundPixmap2->setPixmap(pixmap);
     }
 #endif
 }
