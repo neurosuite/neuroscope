@@ -45,7 +45,6 @@ PositionProperties::~PositionProperties(){
 }
 
 void PositionProperties::updateDisplayedImage(){ 
-#if 1
     if(!backgroungImage.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = backgroungImage;
@@ -83,7 +82,6 @@ void PositionProperties::updateDisplayedImage(){
         if(pixmap.convertFromImage(flippedImage))
             backgroundPixmap2->setPixmap(pixmap);
     }
-#endif
 }
 
 
