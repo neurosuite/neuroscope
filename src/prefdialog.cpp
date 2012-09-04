@@ -75,7 +75,7 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(prefGeneral->headerCheckBox,SIGNAL(clicked()),this,SLOT(enableApply()));
-    connect(prefGeneral->backgroundColorButton,SIGNAL(changed(const QColor&)),this,SLOT(enableApply()));
+    connect(prefGeneral->backgroundColorButton,SIGNAL(colorChanged(const QColor&)),this,SLOT(enableApply()));
     connect(prefGeneral->eventPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
     connect(prefGeneral->clusterPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
     connect(prefDefaults->screenGainLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
