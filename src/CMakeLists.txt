@@ -24,10 +24,10 @@ clustersprovider.cpp
 	positionsprovider.cpp 
 	positionview.cpp 
 	prefdefaults.cpp 
-	#prefdialog.cpp 
+	prefdialog.cpp 
 	prefgeneral.cpp  
-	#properties.cpp 
-	#propertiesdialog.cpp 
+	properties.cpp 
+	propertiesdialog.cpp 
 	tags.cpp 
 	tracesprovider.cpp 
 	traceview.cpp 

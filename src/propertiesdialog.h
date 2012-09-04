@@ -22,7 +22,7 @@
 #include <qwidget.h>
 
 //includes files for KDE
-#include <QDialog>
+#include "qpagedialog.h"
 
 //include files for the application
 #include "properties.h"  
@@ -36,7 +36,7 @@
 
 class Properties;
 
-class PropertiesDialog : public QDialog  {
+class PropertiesDialog : public QPageDialog  {
     Q_OBJECT
 public:
     //Constructor

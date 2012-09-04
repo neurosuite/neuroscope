@@ -21,8 +21,7 @@
 // include files for QT
 #include <qwidget.h>
 
-// include files for KDE
-#include <QDialog>
+#include <qpagedialog.h>
 
 class PrefGeneral;
 class PrefDefaults;
@@ -35,7 +34,7 @@ class ClusterProperties;
   *@author Lynn Hazan
   */
 
-class PrefDialog : public QDialog {
+class PrefDialog : public QPageDialog {
     Q_OBJECT
 public:
     /**Constructor*/

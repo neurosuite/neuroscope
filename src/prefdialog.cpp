@@ -22,10 +22,11 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
+#include <QMessageBox>
+
 
 //include files for the application
 #include "prefdialog.h"     // class PrefDialog
-//#include "prefdialog.moc"
 
 #include "configuration.h"          // class Configuration and Config()
 #include "prefgeneral.h"            // class PrefGeneral
@@ -33,35 +34,35 @@
 #include "positionproperties.h"
 #include "clusterproperties.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
-
 /**
   *@author Lynn Hazan
 */
 
 PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
-    : KDialogBase(IconList, tr("Preferences"), Help|Default|Ok|Apply|Cancel, Ok, parent, name, f)
+    : QPageDialog(parent)
 {
+
+    setButtons(Help | Default | Ok | Apply | Cancel);
+    setDefaultButton(Ok);
+    setFaceType(List);
+    setCaption(tr("Preferences"));
+
+
     setHelp("settings","neuroscope");
     
     //adding page "General options"
-    Q3Frame* frame = addPage(tr("General"), tr("NeuroScope Configuration"),
-                             KGlobal::iconLoader()->loadIcon("kfm",KIcon::Panel,0,false) );
-    Q3VBoxLayout* frameLayout = new Q3VBoxLayout(frame,0,0);
-    prefGeneral = new PrefGeneral(frame);
-    frameLayout->addWidget(prefGeneral);
+    QWidget * w = new QWidget(this);
+    prefGeneral = new PrefGeneral(w);
+    QPageWidgetItem *item = new QPageWidgetItem(prefGeneral,tr("General"));
+    item->setHeader(tr("NeuroScope Configuration"));
+    item->setIcon(QIcon(":/icons/kfm"));
 
-    //adding page "Default configuration"
-    frame = addPage(tr("Defaults"), tr("NeuroScope Defaults"),
-                    KGlobal::iconLoader()->loadIcon("defaults"));
-    frameLayout = new Q3VBoxLayout(frame,0,0);
-    /* prefDefaults = new PrefDefaults(frame);
-    frameLayout->addWidget(prefDefaults);*/
 
-    QTabWidget* tabWidget = new QTabWidget(frame);
-    frameLayout->addWidget(tabWidget);
+    addPage(item);
+
+
+    w = new QWidget(this);
+    QTabWidget* tabWidget = new QTabWidget(w);
     //adding "Channels" tab
     prefDefaults = new PrefDefaults();
     tabWidget->addTab(prefDefaults,tr("Channels"));
@@ -72,6 +73,14 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
     //adding "Positions" tab
     positionProperties = new PositionProperties();
     tabWidget->addTab(positionProperties,tr("Positions"));
+
+
+    item = new QPageWidgetItem(tabWidget,tr("Defaults"));
+    item->setHeader(tr("NeuroScope Defaults"));
+    item->setIcon(QIcon(":/icons/default"));
+
+
+    addPage(item);
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(prefGeneral->headerCheckBox,SIGNAL(clicked()),this,SLOT(enableApply()));
@@ -160,9 +169,9 @@ void PrefDialog::updateConfiguration(){
 
 
 void PrefDialog::slotDefault() {
-    if(KMessageBox::warningContinueCancel(this, tr("This will set the default options "
-                                                   "in ALL pages of the preferences dialog! Do you wish to continue?"), tr("Set default options?"),
-                                          tr("Set defaults"))==KMessageBox::Continue){
+    if(QMessageBox::warning(this, tr("Set default options?"), tr("This will set the default options "
+                                                   "in ALL pages of the preferences dialog! Do you wish to continue?"),
+                                          tr("Set defaults"))==QMessageBox::Ok){
         
         prefGeneral->setBackgroundColor(configuration().getBackgroundColorDefault());
         prefGeneral->setPaletteHeaders(configuration().isPaletteHeadersDisplayedDefault());
@@ -175,7 +184,7 @@ void PrefDialog::slotDefault() {
         prefDefaults->setDatSamplingRate(configuration().getDatSamplingRateDefault());
         prefDefaults->setEegSamplingRate(configuration().getEegSamplingRateDefault());
         prefDefaults->setOffset(configuration().getOffsetDefault());
-        prefDefaults->setResolution(configuration().getResolutionIndexDefault());
+        //KDAB_PORTING prefDefaults->setResolution(configuration().getResolutionIndexDefault());
         prefDefaults->setTraceBackgroundImage(configuration().getTraceBackgroundImage());
         clusterProperties->setNbSamples(configuration().getNbSamplesDefault());
         clusterProperties->setPeakIndex(configuration().getPeakIndexDefault());

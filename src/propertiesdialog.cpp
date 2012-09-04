@@ -24,36 +24,41 @@
 //include files for the application
 #include "propertiesdialog.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, Qt::WFlags f):
-    KDialogBase(Tabbed, tr("File Properties"), Help|Ok|Cancel, Ok, parent, name, f),
-    modified(false),nbChannelsModified(false),oops(false),atStartUp(false){
+    QPageDialog(parent)
+  ,modified(false),
+    nbChannelsModified(false)
+  ,oops(false)
+  ,atStartUp(false)
+{
+
+    setButtons(Help | Default | Ok | Apply | Cancel);
+    setDefaultButton(Ok);
+    setFaceType(Tabbed);
+    setCaption(tr("File Properties"));
+
 
     setHelp("properties","neuroscope");
 
     //page "Channels"
-    Q3Frame* channelFrame = addPage(tr("Channels"));
-    Q3VBoxLayout* frameLayout = new Q3VBoxLayout(channelFrame,0,0);
-    properties = new Properties(channelFrame);
-    frameLayout->addWidget(properties);
+
+    QWidget * w = new QWidget(this);
+    properties = new Properties(w);
+    addPage(properties,tr("Channels"));
 
     //adding "Units" page
-    Q3Frame* clusterFrame = addPage(tr("Units"));
-    frameLayout = new Q3VBoxLayout(clusterFrame,0,0);
-    clusterProperties = new ClusterProperties(clusterFrame);
-    frameLayout->addWidget(clusterProperties);
+    w = new QWidget(this);
+    clusterProperties = new ClusterProperties(w);
+    addPage(properties,tr("Units"));
 
     //adding "Positions" page
-    Q3Frame* positionFrame = addPage(tr("Positions"));
-    frameLayout = new Q3VBoxLayout(positionFrame,0,0);
-    positionProperties = new PositionProperties(positionFrame);
+    w = new QWidget(this);
+    positionProperties = new PositionProperties(w);
+    addPage(positionProperties,tr("Positions"));
+
     //hard coded as there is a problem with the pageIndex() method
     positionPageIndex = 2;
-    frameLayout->addWidget(positionProperties);
-
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(channelNbModified()));
@@ -108,7 +113,7 @@ void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int 
 
 void PropertiesDialog::slotVerify(){  
     if(nbChannels != properties->getNbChannels() && !atStartUp){
-        if(KMessageBox::warningContinueCancel(this, tr("Changing the number of channels "
+        if(QMessageBox::warning(this, tr("Changing the number of channels "
                                                        "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
                                               tr("Continue"))==QMessageBox::Cancel){
             properties->setNbChannels(nbChannels);
