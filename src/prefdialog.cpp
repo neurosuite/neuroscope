@@ -106,6 +106,9 @@ PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(enableApply()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(enableApply()));
 
+    connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
+    connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
+
     applyEnable = false;
 }
 
