@@ -983,7 +983,6 @@ void NeuroscopeDoc::setChannelNb(int nb){
 }
 
 void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
-#if KDAB_PENDING
     int resolutionRead = reader.getResolution();
     if(resolutionRead != 0) resolution = resolutionRead;
     int channelNbRead = reader.getNbChannels();
@@ -1008,10 +1007,9 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
             QFileInfo fileInfo = QFileInfo(backgroundImage);
             if(!fileInfo.exists()){
                 QString imageUrl(backgroundImage);
-                QString fileName = imageUrl.fileName();
-                imageUrl = docUrl;
-                imageUrl.setFileName(fileName);
-                backgroundImage = imageUrl.path();
+                QString fileName = QFileInfo(imageUrl).fileName();
+                imageUrl = docUrl + QDir::separator() + fileName;
+                backgroundImage = QFileInfo(imageUrl).absolutePath();
             }
         }
     }
@@ -1025,12 +1023,10 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
         if(!traceBackgroundImage.isEmpty()){
             QFileInfo fileInfo = QFileInfo(traceBackgroundImage);
             if(!fileInfo.exists()){
-                QString imageUrl;
-                imageUrl.setPath(traceBackgroundImage);
-                QString fileName = imageUrl.fileName();
-                imageUrl = docUrl;
-                imageUrl.setFileName(fileName);
-                traceBackgroundImage = imageUrl.path();
+                QString imageUrl = traceBackgroundImage;
+                QString fileName = QFileInfo(imageUrl).fileName();
+                imageUrl = docUrl + QDir::separator() + fileName;
+                traceBackgroundImage = QFileInfo(imageUrl).absolutePath();
             }
         }
     }
@@ -1135,7 +1131,6 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
         //Compute the peak index using the datSamplingRate.
         peakSampleIndex = static_cast<int>(static_cast<float>(datSamplingRate / 1000) * indexLength);
     }
-#endif
 }
 
 void NeuroscopeDoc::computeClusterFilesMapping(){
