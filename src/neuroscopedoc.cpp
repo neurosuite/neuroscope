@@ -1158,7 +1158,6 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
 }
 
 void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){  
-#if KDAB_PENDING
     //Get the file video information
     if(reader.getRotation() != 0) rotation = reader.getRotation();
     if(reader.getFlip() != 0) flip = reader.getFlip();
@@ -1276,17 +1275,16 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                 if(fileType == SessionFile::CLUSTER){
                     //If the file does not exist in the location specified in the session file (absolute path), look up in the directory
                     //where the session file is. This is useful if you moved your file or you backup them (<=> the absolute path is not good anymore)
-                    QFileInfo fileInfo = QFileInfo(fileUrl.path());
+                    QFileInfo fileInfo = QFileInfo(fileUrl).absolutePath();
                     if(!fileInfo.exists()){
-                        QList<int> ids = selectedClusters[fileUrl.url()];
-                        QList<int> skippedIds = skippedClusters[fileUrl.url()];
-                        selectedClusters.remove(fileUrl.url());
-                        skippedClusters.remove(fileUrl.url());
-                        QString fileName = fileUrl.fileName();
-                        fileUrl = sessionUrl;
-                        fileUrl.setFileName(fileName);
-                        selectedClusters.insert(fileUrl.url(),ids);
-                        skippedClusters.insert(fileUrl.url(),skippedIds);
+                        QList<int> ids = selectedClusters[fileUrl];
+                        QList<int> skippedIds = skippedClusters[fileUrl];
+                        selectedClusters.remove(fileUrl);
+                        skippedClusters.remove(fileUrl);
+                        QString fileName = QFileInfo(fileUrl).fileName();
+                        fileUrl = sessionUrl + QDir::separator() + fileName;
+                        selectedClusters.insert(fileUrl,ids);
+                        skippedClusters.insert(fileUrl,skippedIds);
                     }
                     OpenSaveCreateReturnMessage status = loadClusterFile(fileUrl,itemColors,lastModified,fistClusterFile);
                     if(status == OK){
@@ -1297,17 +1295,16 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                 if(fileType == SessionFile::EVENT){
                     //If the file does not exist in the location specified in the session file (absolute path), look up in the directory
                     //where the session file is. This is useful if you moved your file or ypu backup them (<=> the absolute path is not good anymore)
-                    QFileInfo fileInfo = QFileInfo(fileUrl.path());
+                    QFileInfo fileInfo = QFileInfo(fileUrl).absolutePath();
                     if(!fileInfo.exists()){
-                        QList<int> ids = selectedEvents[fileUrl.url()];
-                        QList<int> skippedIds = skippedEvents[fileUrl.url()];
-                        selectedEvents.remove(fileUrl.url());
-                        skippedEvents.remove(fileUrl.url());
-                        QString fileName = fileUrl.fileName();
-                        fileUrl = sessionUrl;
-                        fileUrl.setFileName(fileName);
-                        selectedEvents.insert(fileUrl.url(),ids);
-                        skippedEvents.insert(fileUrl.url(),skippedIds);
+                        QList<int> ids = selectedEvents[fileUrl];
+                        QList<int> skippedIds = skippedEvents[fileUrl];
+                        selectedEvents.remove(fileUrl);
+                        skippedEvents.remove(fileUrl);
+                        QString fileName = QFileInfo(fileUrl).fileName();
+                        fileUrl = sessionUrl + QDir::separator() + fileName;
+                        selectedEvents.insert(fileUrl,ids);
+                        skippedEvents.insert(fileUrl,skippedIds);
                     }
                     OpenSaveCreateReturnMessage status = loadEventFile(fileUrl,itemColors,lastModified,fistEventFile);
                     if(status == OK){
@@ -1326,11 +1323,10 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                 if(fileType == SessionFile::POSITION){
                     //If the file does not exist in the location specified in the session file (absolute path), look up in the directory
                     //where the session file is. This is useful if you moved your file or you backup them (<=> the absolute path is not good anymore)
-                    QFileInfo fileInfo = QFileInfo(fileUrl.path());
+                    QFileInfo fileInfo = QFileInfo(fileUrl).absolutePath();
                     if(!fileInfo.exists()){
-                        QString fileName = fileUrl.fileName();
-                        fileUrl = sessionUrl;
-                        fileUrl.setFileName(fileName);
+                        QString fileName = QFileInfo(fileUrl).fileName();
+                        fileUrl = sessionUrl+QDir::separator() + fileName;
                     }
 
                     //Create the transformedBackground
@@ -1340,17 +1336,15 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         if(backgroundImage != ""){
                             fileInfo = QFileInfo(backgroundImage);
                             if(!fileInfo.exists()){
-                                QString imageUrl;
-                                imageUrl.setPath(backgroundImage);
-                                QString fileName = imageUrl.fileName();
-                                imageUrl = sessionUrl;
-                                imageUrl.setFileName(fileName);
-                                backgroundImage = imageUrl.path();
+                                QString imageUrl= backgroundImage;
+                                QString fileName = QFileInfo(imageUrl).fileName();
+                                imageUrl = sessionUrl + QDir::separator() + fileName;
+                                backgroundImage = QFileInfo(imageUrl).absolutePath();
                             }
                         }
                     }
 
-                    OpenSaveCreateReturnMessage status = loadPositionFile(fileUrl.path());
+                    OpenSaveCreateReturnMessage status = loadPositionFile(QFileInfo(fileUrl).absolutePath());
                     if(status == OK){
                         loadedPositionFile = lastLoadedProvider;
                         if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground)) transformedBackground = transformBackgroundImage();
@@ -1375,7 +1369,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         //Cluster files
         for(providerIterator = loadedClusterFiles.begin(); providerIterator != loadedClusterFiles.end(); ++providerIterator){
             QString name = *providerIterator;
-            QString fileURL = static_cast<QString>(providerUrls[name]).url();
+            QString fileURL = providerUrls[name];
             QList<int> clustersIds;
             QList<int> clustersIdsToSkip;
             QList<int> ids = selectedClusters[fileURL];
@@ -1400,7 +1394,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         //Event files
         for(providerIterator = loadedEventFiles.begin(); providerIterator != loadedEventFiles.end(); ++providerIterator){
             QString name = *providerIterator;
-            QString fileURL = static_cast<QString>(providerUrls[name]).url();
+            QString fileURL = providerUrls[name];
             QList<int> eventsIds;
             QList<int> eventsIdsToSkip;
             QList<int> ids = selectedEvents[fileURL];
@@ -1444,7 +1438,6 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
             }
         }
     }
-#endif
 }
 
 void NeuroscopeDoc::setProviders(NeuroscopeView* activeView){  
@@ -1564,16 +1557,15 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
     if(!image.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = image;
-#if KDAB_PENDING
-        if(rotation != 0){
-            KImageEffect::RotateDirection angle;
-            //KDE counts clockwise, to have a counterclock-wise rotation 90 and 270 are inverted
-            if(rotation == 90) angle = KImageEffect::Rotate270;
-            if(rotation == 180) angle = KImageEffect::Rotate180;
-            if(rotation == 270) angle = KImageEffect::Rotate90;
-            rotatedImage = KImageEffect::rotate(image,angle);
-        }
-#endif
+        QTransform rot;
+        //KDE counts clockwise, to have a counterclock-wise rotation 90 and 270 are inverted
+        if(rotation == 90)
+            rot.rotate(90);
+        else if(rotation == 180)
+            rot.rotate(180);
+        else if(rotation == 270)
+            rot.rotate(270);
+        rotatedImage = image.transformed(rot);
         QImage flippedImage = rotatedImage;
         // 0 stands for none, 1 for vertical flip and 2 for horizontal flip.
         int flip = getFlip();
