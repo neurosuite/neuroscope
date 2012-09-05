@@ -3355,19 +3355,18 @@ void NeuroscopeApp::addEvent(){
 
 
 void NeuroscopeApp::slotAddEventAboutToShow(){
-#if KDAB_PENDING
     addEventPopup->clear();
     addEventPopup->resize(0,0);
     addEventPopup->adjustSize();
     addEventMenu->menu()->clear();
-
+#if KDAB_PENDING
     eventIndex = -1;
     QStringList list;
     QList<EventDescription> eventList = doc->eventIds(eventProvider);
 
     QList<EventDescription>::iterator it;
     for(it = eventList.begin(); it != eventList.end(); ++it){
-        QString label = static_cast<QString>(*it);
+        QString label = *it;
         int index = addEventPopup->insertItem(label);
         list.append(label);
         if(eventLabelToCreate == label){
@@ -3386,7 +3385,8 @@ void NeuroscopeApp::slotAddEventAboutToShow(){
         addEventMenu->setCurrentItem(eventIndex);
         addEventPopup->setItemChecked(buttonEventIndex,true);
     }
-    else eventLabelToCreate = "";
+    else
+        eventLabelToCreate.clear();
 #endif
 }
 
@@ -3397,14 +3397,16 @@ void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
     buttonEventIndex = index;
 
     QString description = act->text();
+
     if(index == (addEventPopup->idAt(addEventPopup->count() - 1))) {
         bool ok;
-        QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+        QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString(),&ok);
         if(ok) {
             eventLabelToCreate = result;
         }
     }
-    else eventLabelToCreate = description;
+    else
+        eventLabelToCreate = description;
 #endif
     addEvent();
 }
@@ -3417,12 +3419,10 @@ void NeuroscopeApp::slotAddEventActivated(int index){
     QString description = menu->text(index);
     if(index == static_cast<int>(menu->count() - 1)) {
         bool ok;
-#if KDAB_PENDING
-        //KDAB_PENDING QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString::Null,&ok);
+        QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString(),&ok);
         if(ok) {
             eventLabelToCreate = result;
         }
-#endif
     }
     else eventLabelToCreate = description;
 

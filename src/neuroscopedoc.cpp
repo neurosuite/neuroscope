@@ -626,26 +626,24 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         if(view->getClusterVerticalLines()) displayInformation.addSpikeDisplayType(DisplayInformation::LINES);
         displayInformation.setRasterHeight(view->getRasterHeight());
 
-#if KDAB_PENDING
         //loop on all the loaded files and set the clusters,event ids show in the current display
         Q3DictIterator<DataProvider> it(providers);
         for( ; it.current(); ++it){
             QString name = it.currentKey();
             if(it.current()->isA("ClustersProvider")){
                 QList<int> clusterIds = *(view->getSelectedClusters(name));
-                displayInformation.setSelectedClusters(static_cast<QString>(providerUrls[name]).url(),clusterIds);
+                displayInformation.setSelectedClusters(providerUrls[name],clusterIds);
                 QList<int> skippedClusterIds = *(view->getClustersNotUsedForBrowsing(name));
-                displayInformation.setSkippedClusters(static_cast<QString>(providerUrls[name]).url(),skippedClusterIds);
+                displayInformation.setSkippedClusters(providerUrls[name],skippedClusterIds);
             }
             if(it.current()->isA("EventsProvider")){
                 //An id has been assigned to each event, this id is used internally in NeuroScope and in the session file.
                 QList<int> eventIds = *(view->getSelectedEvents(name));
-                displayInformation.setSelectedEvents(static_cast<QString>(providerUrls[name]).url(),eventIds);
+                displayInformation.setSelectedEvents(providerUrls[name],eventIds);
                 QList<int> skippedEventIds = *(view->getEventsNotUsedForBrowsing(name));
-                displayInformation.setSkippedEvents(static_cast<QString>(providerUrls[name]).url(),skippedEventIds);
+                displayInformation.setSkippedEvents(providerUrls[name],skippedEventIds);
             }
         }
-#endif
         /***********TO DO**************************/
         //loop on all the loaded spike files and set the spikes show in the current display
         /* QValueList<QString> files;
