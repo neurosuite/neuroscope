@@ -157,7 +157,7 @@ public:
 
     /**Shows the page containing the position information in front.*/
     inline void showPositionPage(){
-        //KDAB_PENDING showPage(positionPageIndex);
+        setCurrentPage(mPositionPageIndex);
     }
 
 public slots:
@@ -172,7 +172,8 @@ protected:
         if(oops){
             oops = false;
         }
-        else QDialog::accept();
+        else
+            QDialog::accept();
     }
 
 private slots:
@@ -188,7 +189,7 @@ private:
     int nbChannels;
     bool oops;
     bool atStartUp;
-    int positionPageIndex;
+    QPageWidgetItem* mPositionPageIndex;
 };
 
 #endif

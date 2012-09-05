@@ -55,10 +55,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, Qt::WFlags
     //adding "Positions" page
     w = new QWidget(this);
     positionProperties = new PositionProperties(w);
-    addPage(positionProperties,tr("Positions"));
-
-    //hard coded as there is a problem with the pageIndex() method
-    positionPageIndex = 2;
+    mPositionPageIndex = addPage(positionProperties,tr("Positions"));
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(channelNbModified()));
@@ -120,10 +117,12 @@ void PropertiesDialog::slotVerify(){
             nbChannelsModified = false;
             oops = true;
         }
-        else modified = true;
+        else
+            modified = true;
     }
     else{
-        if(nbChannelsModified) modified = true;
+        if(nbChannelsModified)
+            modified = true;
     }
 }
 
