@@ -105,9 +105,6 @@ void NeuroscopeApp::createToolBar()
 
 void NeuroscopeApp::initActions()
 {
-#if KDAB_PENDING
-    viewMainToolBar = KStdAction::showToolbar(this, SLOT(slotViewMainToolBar()), actionCollection());
-#endif
     //Custom actions and menus
 
     //File Menu
@@ -304,7 +301,7 @@ void NeuroscopeApp::initActions()
     mSkipChannels->setIcon(QIcon(":/icons/skip"));
     mSkipChannels->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     connect(mSkipChannels,SIGNAL(triggered()), this,SLOT(slotSkipChannels()));
-channelsMenu->addSeparator();
+    channelsMenu->addSeparator();
 
     mSynchronizeGroups =channelsMenu->addAction(tr("&Synchronize Groups"));
     connect(mSynchronizeGroups,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
@@ -480,6 +477,10 @@ channelsMenu->addSeparator();
     //Settings menu
     QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 
+    viewMainToolBar = settingsMenu->addAction(tr("Show Main Toolbar"));
+
+    viewMainToolBar->setCheckable(true);
+    connect(viewMainToolBar,SIGNAL(triggered()), this,SLOT(slotViewMainToolBar()));
 
 
     viewToolBar = settingsMenu->addAction(tr("Show T&ools"));
@@ -654,7 +655,6 @@ void NeuroscopeApp::initItemPanel(){
 }
 
 void NeuroscopeApp::executePreferencesDlg(){
-#if KDAB_PENDING
     if(prefDialog == 0L){
         prefDialog = new PrefDialog(this);
         // connect to the "settingsChanged" signal
@@ -671,7 +671,6 @@ void NeuroscopeApp::executePreferencesDlg(){
             applyPreferences();                      // let settings take effect
         }
     }
-#endif
 }
 
 void NeuroscopeApp::applyPreferences() {
