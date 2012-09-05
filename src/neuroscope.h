@@ -760,6 +760,7 @@ private:
     QToolBar *mChannelToolBar;
     QToolBar *mEventToolBar;
     QToolBar *mClusterToolBar;
+    QToolBar *mParameterToolBar;
 
     QRecentFileAction *mFileOpenRecent;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/

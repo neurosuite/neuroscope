@@ -158,16 +158,15 @@ const QString& NeuroscopeDoc::url() const
 }
 
 QString NeuroscopeDoc::sessionPath() const{
-    //KDAB_PENDING return sessionUrl.path();
-    return QString();
+    return QFileInfo(sessionUrl).absolutePath();
 }
 
 void NeuroscopeDoc::closeDocument(){  
     //If a document has been open reset the members
     viewList->clear();
-    docUrl = QString();
-    sessionUrl = QString();
-    baseName = "";
+    docUrl.clear();
+    sessionUrl.clear();
+    baseName.clear();
     //Use the default values
     channelNb = channelNbDefault;
     datSamplingRate = samplingRate = datSamplingRateDefault;
@@ -1020,9 +1019,10 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     //The background image information for the trace view is stored in the parameter file starting with the version 1.3.4
     if(reader.getType() == NeuroscopeXmlReader::PARAMETER){
 
-        if(reader.getTraceBackgroundImage() != "-") traceBackgroundImage = reader.getTraceBackgroundImage();
+        if(reader.getTraceBackgroundImage() != "-")
+            traceBackgroundImage = reader.getTraceBackgroundImage();
 
-        if(traceBackgroundImage != ""){
+        if(!traceBackgroundImage.isEmpty()){
             QFileInfo fileInfo = QFileInfo(traceBackgroundImage);
             if(!fileInfo.exists()){
                 QString imageUrl;

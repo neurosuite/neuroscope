@@ -560,6 +560,9 @@ void NeuroscopeApp::initActions()
     connect(displayChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
     connect(spikeChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
 
+    //TODO
+    mParameterToolBar = new QToolBar;
+
     mMainToolBar = new QToolBar;
     mMainToolBar->addAction(mOpenAction);
     mMainToolBar->addAction(mSaveAction);
@@ -1558,11 +1561,11 @@ void NeuroscopeApp::slotViewMainToolBar()
     // turn Toolbar on or off
     if(!viewMainToolBar->isChecked())
     {
-        //KDAB_PENDING toolBar("mainToolBar")->hide();
+        mMainToolBar->hide();
     }
     else
     {
-        //KDAB_PENDING toolBar("mainToolBar")->show();
+        mMainToolBar->show();
     }
 
     slotStatusMsg(tr("Ready."));
@@ -1575,11 +1578,11 @@ void NeuroscopeApp::slotViewToolBar()
     // turn Toolbar on or off
     if(!viewToolBar->isChecked())
     {
-        //KDAB_PENDING toolBar("toolBar")->hide();
+        mToolBar->hide();
     }
     else
     {
-        //KDAB_PENDING toolBar("toolBar")->show();
+        mToolBar->show();
     }
 
     slotStatusMsg(tr("Ready."));
@@ -1608,11 +1611,11 @@ void NeuroscopeApp::slotViewParameterBar(){
     // turn Toolbar on or off
     if(!viewParameterBar->isChecked())
     {
-        //KDAB_PENDING toolBar("parameterBar")->hide();
+        mParameterToolBar->hide();
     }
     else
     {
-        //KDAB_PENDING toolBar("parameterBar")->show();
+        mParameterToolBar->show();
     }
     slotStatusMsg(tr("Ready."));
 }
