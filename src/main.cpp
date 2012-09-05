@@ -22,84 +22,88 @@
 #include <QDir>
 #include <QString>
 #include <QApplication>
-
+#include <QDebug>
 //Application specific include files
 #include "neuroscope.h"
-#if KDAB_PENDING
-
-
-static KCmdLineOptions options[] =
-{
-    { "r",0, 0 },
-    { "resolution ", I18N_NOOP("Resolution of the acquisition system."), 0 },
-    { "c",0, 0 },
-    { "nbChannels ", I18N_NOOP("Number of channels."), 0 },
-    { "o",0, 0 },
-    { "offset ", I18N_NOOP("Initial offset."), 0 },
-    { "m",0, 0 },
-    { "voltageRange ", I18N_NOOP("Voltage range."), 0 },
-    { "a",0, 0 },
-    { "amplification ", I18N_NOOP("Amplification."), 0 },
-    { "g",0, 0 },
-    { "screenGain ", I18N_NOOP("Screen gain."), 0 },
-    { "s",0, 0 },
-    { "samplingRate ", I18N_NOOP("Sampling rate."), 0 },
-    { "t",0, 0 },
-    { "timeWindow ", I18N_NOOP("Initial time window (in miliseconds)."), 0 },
-    { "+file", I18N_NOOP("Document to open."), 0 },
-    { 0, 0, 0 }
-    // INSERT YOUR COMMANDLINE OPTIONS HERE
-};
-#endif
 int main(int argc, char *argv[])
 {
     QApplication::setOrganizationName("sourceforge");
     QApplication::setOrganizationDomain("sourceforge.net");
     QApplication::setApplicationName("neuroscope");
 
-#if KDAB_PENDING
-    KCmdLineArgs::addCmdLineOptions(options);
-
-    version = VERSION;
-
-    KApplication app;
-    // see if we are starting with session management
-    if(app.isRestored())
-    {
-        RESTORE(NeuroscopeApp);
-    }
-    // no session.. just start up normally
-    else
-    {
-        NeuroscopeApp* neuroscope = new NeuroscopeApp();
-        KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-        neuroscope->show();
-
-        //Set the specific features for the future open document.
-        neuroscope->setFileProperties(args->getOption("nbChannels"),args->getOption("samplingRate"),args->getOption("resolution"),
-                                      args->getOption("offset"),args->getOption("voltageRange"),args->getOption("amplification"),
-                                      args->getOption("screenGain"),args->getOption("timeWindow"));
-
-        //If there is an argument provided it is the name of the file.
-        if(args->count()){
-            QString file = args->arg(0);
-            if(file.left(1) != "/"){
-                QString url = QString();
-                url.setPath((QDir::currentPath()).append("/"));
-                url.setFileName(file);
-                neuroscope->openDocumentFile(url);
-            }
-            else  neuroscope->openDocumentFile(file);
-        }
-        args->clear();
-    }
-#endif
-    //KDAB_TODO
     QApplication app(argc, argv);
     QStringList args = QApplication::arguments();
+    QString channelNb;
+    QString SR;
+    QString resolution;
+    QString offset;
+    QString voltageRange;
+    QString amplification;
+    QString screenGain;
+    QString timeWindow;
+    QString file;
+    for (int i = 1, n = args.size(); i < n; ++i) {
+        const QString arg = args.at(i);
+        if (arg == "-h" || arg == "--help" || arg == "-help") {
+            qWarning() << "Usage: " << qPrintable(args.at(0))
+                       << " [file]"
+                       << "\n\n"
+                       << "Arguments:\n"
+                       << "  -r, --resolution        Resolution of the acquisition system.\n"
+                       << "  -c, --nbChannels        Number of channels.\n"
+                       << "  -o, --offset            Initial offset.\n"
+                       << "  -m, --voltageRange      Voltage range.\n"
+                       << "  -a, --amplification     Amplification.\n"
+                       << "  -g, --screenGain        Screen gain.\n"
+                       << "  -s, --samplingRate      Sampling rate.\n"
+                       << "  -t, --timeWindow        Initial time window (in miliseconds).\n"
+                       << "  -h, --help              print this help\n";
+            return 1;
+        }
 
+        bool handled = true;
+         if (i < n - 1) {
+             if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
+                 resolution = args.at(++i);
+             else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels")
+                 channelNb = args.at(++i);
+             else if (arg == "o-" || arg == "--offset" || arg == "-offset")
+                  offset = args.at(++i);
+             else if (arg == "-m" || arg == "--voltageRange" || arg == "-voltageRange")
+                  voltageRange = args.at(++i);
+             else if (arg == "-a" || arg == "--amplification" || arg == "-amplification")
+                  amplification = args.at(++i);
+             else if (arg == "-g" || arg == "--screenGain" || arg == "-screenGain")
+                  screenGain = args.at(++i);
+             else if (arg == "-s" || arg == "--samplingRate" || arg == "-samplingRate")
+                  SR = args.at(++i);
+             else if (arg == "-t" || arg == "--timeWindow" || arg == "-timeWindow")
+                  timeWindow = args.at(++i);
+             else
+                 handled = false;
+
+         }
+         // Nothing know. Treat it as path.
+         if (!handled)
+             file = args.at(i);
+    }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
     neuroscope->show();
+    if(!file.isEmpty()){
+        if(file.left(1) != "/"){
+            QString url = QDir::currentPath().append("/") + file;
+            neuroscope->openDocumentFile(url);
+        }
+        else
+            neuroscope->openDocumentFile(file);
+    }
+
+
+    neuroscope->setFileProperties(channelNb,SR,resolution,
+                                  offset,voltageRange,amplification,
+                                  screenGain,timeWindow);
+
+
     const int ret = app.exec();
     delete neuroscope;
     return ret;
