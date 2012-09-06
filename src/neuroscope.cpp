@@ -712,25 +712,25 @@ void NeuroscopeApp::applyPreferences() {
                         label = "Events";
 
                     paletteTabsParent->setTabLabel(current,label);
-                    //KDAB_PENDING current->setTabPageLabel(label);
+                    current->setWindowTitle(label);
                 }
             }
             else{
                 for(int i = 0; i< paletteTabsParent->count();i++){
                     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
                     paletteTabsParent->setTabLabel(current,"");
-                    //KDAB_PENDING current->setTabPageLabel("");
+                    current->setWindowTitle("");
                 }
             }
         }
         else{
             if(displayPaletteHeaders){
-                //KDAB_PENDING displayPanel->setTabPageLabel("Anatomy");
-                //KDAB_PENDING spikePanel->setTabPageLabel("Spikes");
+                displayPanel->setWindowTitle("Anatomy");
+                spikePanel->setWindowTitle("Spikes");
             }
             else{
-                //KDAB_PENDING displayPanel->setTabPageLabel("");
-                //KDAB_PENDING spikePanel->setTabPageLabel("");
+                displayPanel->setWindowTitle("");
+                spikePanel->setWindowTitle("");
             }
         }
     }
@@ -2401,10 +2401,10 @@ void NeuroscopeApp::slotDisplayClose(){
         if(current == mainDock){
             if(tabsParent->currentPageIndex() == 0){
                 mainDock = static_cast<QDockWidget*>(tabsParent->page(1));
-                //KDAB_PENDING setMainDockWidget(mainDock);
+                setCentralWidget(mainDock);
             }
             else {
-                //KDAB_PENDING setMainDockWidget(static_cast<QDockWidget*>(tabsParent->page(0)));
+                setCentralWidget(static_cast<QDockWidget*>(tabsParent->page(0)));
             }
         }
         //Remove the display from the group of tabs
@@ -2558,7 +2558,6 @@ void NeuroscopeApp::slotDisplayClose(){
 
 void NeuroscopeApp::slotRenameActiveDisplay(){
     if(tabsParent){
-#if KDAB_PENDING
         QDockWidget* current;
 
         //Get the active tab
@@ -2566,13 +2565,12 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
 
         bool ok;
         QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
-                                                 current->tabPageLabel(),&ok,this);
+                                                 current->windowTitle(),&ok,this);
         if(ok&& !newLabel.isEmpty()){
             tabsParent->setTabLabel(current,newLabel);
-            //KDAB_PENDING  current->setTabPageLabel(newLabel);
+            current->setWindowTitle(newLabel);
             activeView()->setTabName(newLabel);
         }
-#endif
     }
 }
 
