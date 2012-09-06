@@ -149,7 +149,6 @@ public:
 
     /**Show all the encapsulated widgets contain in the view. The widgets know how to draw themselves.*/
     inline void showAllWidgets(){
-        //KDAB_PENDING dockManager->activate();
         emit updateContents();
     }
 

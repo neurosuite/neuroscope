@@ -2655,8 +2655,6 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         //Keep track of the number of displays
         displayCount ++;
 
-        //show all the encapsulated widgets of all controlled dockwidgets
-        //KDAB_PENDING dockManager->activate();
 
         //Show the calibration bars if need it
         view->showCalibration(calibrationBar->isChecked(),false);
@@ -2708,8 +2706,6 @@ void NeuroscopeApp::slotSynchronize(){
     //update the display of spikes
     slotGroupsModified();
 
-    //show all the encapsulated widgets of all controlled dockwidgets
-    //KDAB_PENDING dockManager->activate();
 
     slotStateChanged("displayChannelState");
 
