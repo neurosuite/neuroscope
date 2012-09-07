@@ -32,7 +32,6 @@
 #include <QBitmap>
 #include <q3scrollview.h>
 #include <QLayout> 
-#include <q3hbox.h>
 #include <QStyle>
 #include <QColorDialog>
 //Added by qt3to4:

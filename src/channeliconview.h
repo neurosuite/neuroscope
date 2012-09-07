@@ -30,10 +30,6 @@
 #include <QWheelEvent>
 #include <QDropEvent>
 
-//General C++ include files
-#include <iostream>
-using namespace std;
-
 /**Utilitary class used to build the channel palettes (anatomical and spike).
   *@author Lynn Hazan
   */
@@ -41,7 +37,7 @@ using namespace std;
 class ChannelIconView : public Q3IconView  {
     Q_OBJECT
 public:
-    ChannelIconView(QColor backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
+    ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0, Qt::WFlags f = 0);
     inline ~ChannelIconView(){}
 
 protected:
