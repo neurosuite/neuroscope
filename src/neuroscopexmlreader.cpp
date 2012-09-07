@@ -74,7 +74,7 @@ void NeuroscopeXmlReader::closeFile(){
     //Cleanup
     xmlXPathFreeContext(xpathContex);
     xmlFreeDoc(doc);
-    readVersion = "";
+    readVersion.clear();
 
     //Shutdown libxml
     xmlCleanupParser();

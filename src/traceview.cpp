@@ -360,7 +360,7 @@ void TraceView::updateClusterData(bool active){
             if(iterator.currentKey() != clusterProviderToSkip){
                 static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
-            else clusterProviderToSkip = "";
+            else clusterProviderToSkip.clear();
         }
     }
 
@@ -404,7 +404,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
             if(iterator.currentKey() != clusterProviderToSkip){
                 static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
-            else clusterProviderToSkip = "";
+            else clusterProviderToSkip.clear();
         }
     }
 
@@ -436,7 +436,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
             if(iterator.currentKey() != eventProviderToSkip){
                 static_cast<EventsProvider*>(eventProviders[iterator.currentKey()])->requestData(startTime,endTime,this);
             }
-            else eventProviderToSkip = "";
+            else eventProviderToSkip.clear();
         }
     }
 
@@ -987,7 +987,7 @@ void TraceView::updateWindow(){
 void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int channelId,int nbSamplesToDraw,bool mouseMoveEvent){
     bool areClustersToDraw = false;
     int clusterFileId = 0;
-    QString providerName = "";
+    QString providerName;
     if(!clusterProviders.isEmpty()){
         clusterFileId = (*channelClusterFiles)[channelId];
         providerName = QString::fromLatin1("%1").arg(clusterFileId);
@@ -1217,7 +1217,7 @@ void TraceView::drawTraces(QList<int> channels,bool highlight){
         else{
             bool areClustersToDraw = false;
             int clusterFileId = 0;
-            QString providerName = "";
+            QString providerName;
             if(!clusterProviders.isEmpty()){
                 areClustersToDraw = true;
                 clusterFileId = (*channelClusterFiles)[*iterator];
@@ -1489,7 +1489,7 @@ void TraceView::drawTraces(QPainter& painter){
                 else{
                     bool areClustersToDraw = false;
                     int clusterFileId = 0;
-                    QString providerName = "";
+                    QString providerName;
                     if(!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
                         clusterFileId = (*channelClusterFiles)[channelId];
@@ -1710,7 +1710,7 @@ void TraceView::drawTraces(QPainter& painter){
                 else{
                     bool areClustersToDraw = false;
                     int clusterFileId = 0;
-                    QString providerName = "";
+                    QString providerName;
 
                     if(!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
@@ -2093,7 +2093,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
             //between columns
             if(relativeTime > timeFrameWidth){
-                message = "";
+                message.clear();
             }
             else{
                 float time;
@@ -2796,7 +2796,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 }
             }
             previousDragAbscissa = 0;
-            selectedEvent.first = "";
+            selectedEvent.first.clear();
             selectedEvent.second = 0;
             startEventDragging = true;
             drawContentsMode = REDRAW;
@@ -3718,7 +3718,7 @@ void TraceView::showNextEvent(){
         if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
-            nextEventProvider.first = "";
+            nextEventProvider.first.clear();
             nextEventProvider.second = 0;
             Q3DictIterator<EventData> iterator(eventsData);
             for(;iterator.current();++iterator){
@@ -3764,7 +3764,7 @@ void TraceView::showPreviousEvent(){
         if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
-            previousEventProvider.first = "";
+            previousEventProvider.first.clear();
             previousEventProvider.second = 0;
             Q3DictIterator<EventData> iterator(eventsData);
             for(;iterator.current();++iterator){
@@ -3805,7 +3805,7 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
         if((nextEventProvider.second + timeFrameWidth > length)){
             //new start time =  length - timeFrameWidth
             //update the traceWidget time widgets and retrieve the data for the new start time for all the providers.
-            eventProviderToSkip = "";
+            eventProviderToSkip.clear();
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
         }
         else{
@@ -3858,7 +3858,7 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
     if(ready && previousEventProvider.second != startTime && previousEventProvider.second < length){
         long timeFrameWidth = endTime - startTime;
         if(previousEventProvider.second + timeFrameWidth > length){
-            eventProviderToSkip = "";
+            eventProviderToSkip.clear();
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
         }
         else{
@@ -3879,7 +3879,7 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
     }
     else if(ready && previousEventProvider.second > length){
         long timeFrameWidth = endTime - startTime;
-        previousEventProvider.first = "";
+        previousEventProvider.first.clear();
         previousEventProvider.second = 0;
         Q3DictIterator<EventData> iterator(eventsData);
         for(;iterator.current();++iterator){
@@ -4035,7 +4035,7 @@ void TraceView::removeEvent(){
     }
 
     previousDragAbscissa = 0;
-    selectedEvent.first = "";
+    selectedEvent.first.clear();
     selectedEvent.second = 0;
     startEventDragging = true;
     drawContentsMode = REDRAW;
@@ -4078,7 +4078,7 @@ void TraceView::showNextCluster(){
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
-            nextClusterProvider.first = "";
+            nextClusterProvider.first.clear();
             nextClusterProvider.second = 0;
             previousStartTimeInRecordingUnits = startTimeInRecordingUnits;
             Q3DictIterator<ClusterData> iterator(clustersData);
@@ -4128,7 +4128,7 @@ void TraceView::showPreviousCluster(){
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
-            previousClusterProvider.first = "";
+            previousClusterProvider.first.clear();
             previousClusterProvider.second = 0;
             previousStartTimeInRecordingUnits = startTimeInRecordingUnits;
             Q3DictIterator<ClusterData> iterator(clustersData);
@@ -4178,7 +4178,7 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
         if(nextClusterProvider.second + timeFrameWidth > length){
             //new start time =  length - timeFrameWidth
             //update the traceWidget time widgets and retrieve the data for the new start time for all the providers.
-            clusterProviderToSkip = "";
+            clusterProviderToSkip.clear();
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
         }
         else{
@@ -4238,7 +4238,7 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     if(ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && previousClusterProvider.second < length){
         long timeFrameWidth = endTime - startTime;
         if(previousClusterProvider.second + timeFrameWidth > length){
-            clusterProviderToSkip = "";
+            clusterProviderToSkip.clear();
 
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
         }
@@ -4260,9 +4260,9 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     }
     //if the new start time is superior to the recording lenght, look up in all the files at the last timeFrameWidth of the data file
     else if(ready && previousClusterProvider.second > length){
-        clusterProviderToSkip = "";
+        clusterProviderToSkip.clear();
         long timeFrameWidth = endTime - startTime;
-        previousClusterProvider.first = "";
+        previousClusterProvider.first.clear();
         previousClusterProvider.second = 0;
         Q3DictIterator<ClusterData> iterator(clustersData);
         for(;iterator.current();++iterator){

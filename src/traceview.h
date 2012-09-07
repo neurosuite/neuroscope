@@ -245,7 +245,7 @@ public:
             if(active) update();
         }
         if(previousMode == SELECT_EVENT){
-            selectedEvent.first = "";
+            selectedEvent.first.clear();
             selectedEvent.second = 0;
             drawContentsMode = REDRAW;
             if(active) update();

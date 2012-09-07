@@ -1962,11 +1962,11 @@ void NeuroscopeApp::resetState(){
     groupsModified = false;
     colorModified = false;
     eventsModified = false;
-    filePath = "";
+    filePath.clear();
     clusterFileList.clear();
     eventFileList.clear();
-    eventLabelToCreate = "";
-    eventProvider = "";
+    eventLabelToCreate.clear();
+    eventProvider.clear();
     currentNbUndo = 0;
     currentNbRedo = 0;
 
@@ -3252,7 +3252,7 @@ void NeuroscopeApp::slotCloseEventFile(){
 
         if(eventFileList.isEmpty()){
             paletteTabsParent->removePage(current);
-            eventProvider = "";
+            eventProvider.clear();
             currentNbUndo = 0;
             currentNbRedo = 0;
             delete current;
@@ -3443,7 +3443,7 @@ void NeuroscopeApp::slotEventGroupSelected(QString eventGroupName){
     //this should not be taken into account.
     if(undoRedoInprocess) return;
     eventProvider = eventGroupName;
-    eventLabelToCreate = "";
+    eventLabelToCreate.clear();
     NeuroscopeView* view = activeView();
     view->eventToAddProperties(eventProvider,eventLabelToCreate);
 }

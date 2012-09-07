@@ -810,7 +810,7 @@ void ChannelPalette::reset(){
     channelGroupViewDict.clear();
     channelsShowHideStatus.clear();
     edit = true;
-    selected = "";
+    selected.clear();
     selectionStatus.clear();
 
     isInSelectItems = false;
@@ -1350,7 +1350,7 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
     if(targetGroup == "0" ){
         if(after == 0){
             beforeFirst = true;
-            afterId = "";
+            afterId.clear();
         }
         else afterId = after->text();
     }
@@ -1542,7 +1542,7 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds,QString sour
         bool beforeFirst = false;
         if(after == 0){
             beforeFirst = true;
-            afterId = "";
+            afterId.clear();
         }
         else afterId = after->text();
 

@@ -762,7 +762,7 @@ void ItemPalette::reset(){
     iconviewDict.clear();
     itemGroupViewDict.clear();
     itemColorsDict.clear();
-    selected = "";
+    selected.clear();
     clusterGroupList.clear();
     itemGroupList.clear();
     browsingStatus.clear();
@@ -849,7 +849,7 @@ void ItemPalette::removeGroup(QString groupName){
             qSort(itemGroupList);
             selectGroupLabel(itemGroupList[0]);
         }
-        else  selected = "";//never reach
+        else  selected.clear();//never reach
     }
 
 }
@@ -865,7 +865,7 @@ void ItemPalette::selectGroup(QString groupName){
         if(itemGroupList.contains(groupName)) selectGroupLabel(groupName);
         else selectGroupLabel(itemGroupList[0]);
     }
-    else  selected = "";//never reach
+    else  selected.clear();//never reach
 }
 
 void ItemPalette::selectAllItems(){
