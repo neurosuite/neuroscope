@@ -21,8 +21,6 @@
 #include <iostream>
 #include <QDebug>
 
-using namespace std;
-
 ClusterColors::ClusterColors():ItemColors(){}
 
 ClusterColors::~ClusterColors(){

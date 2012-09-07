@@ -49,7 +49,7 @@ public:
    * @param backgroundColor color used as the image background if no image has been set.
    * @param foregroundColor color used as the image foreground.
    */
-    ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage="",QColor backgroundColor = Qt::black,QColor foregroundColor = "#BFBFBF");
+    ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage=QString(),QColor backgroundColor = Qt::black,const QColor& foregroundColor = "#BFBFBF");
     ~ImageCreator();
 
     /**Creates an image containg all the positions of a given position file.*/
@@ -59,7 +59,7 @@ public:
    * @param fileName path to save the image under.
    * @param format image format to use when saving the image.
    */
-    void saveImage(QString fileName,QString format = "PNG");
+    void saveImage(QString fileName,const QString& format = "PNG");
     
 public slots:     
 

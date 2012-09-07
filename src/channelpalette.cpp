@@ -31,7 +31,8 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <q3scrollview.h>
-#include <QLayout> 
+#include <Q3ListBox>
+#include <QLayout>
 #include <QStyle>
 #include <QColorDialog>
 //Added by qt3to4:
@@ -40,9 +41,6 @@
 #include <QResizeEvent>
 
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 ChannelPalette::ChannelPalette(PaletteType type,QColor backgroundColor,bool edition,QWidget* parent,const char* name,Qt::WFlags fl)
     : Q3ScrollView(parent,name,fl),channelColors(0L),backgroundColor(backgroundColor),isInSelectItems(false),
@@ -85,7 +83,7 @@ ChannelPalette::~ChannelPalette()
 {
     // no need to delete child widgets, Qt does it all for us
 }
-#include <Q3ListBox>
+
 void ChannelPalette::setGreyScale(bool grey){
     greyScale = grey;
 

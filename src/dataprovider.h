@@ -36,7 +36,7 @@ public:
     /**Constructor.
   * @param fileUrl the url of the file containing the data provided by this class.
   */
-    DataProvider(QString fileUrl);
+    DataProvider(const QString &fileUrl);
     virtual ~DataProvider();
 
     /**Triggers the retrieve of the traces included in the time interval given by @p startTime and @p endTime.

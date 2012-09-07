@@ -27,7 +27,7 @@
 using namespace std;
 
 
-ImageCreator::ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage,QColor backgroundColor,QColor foregroundColor):positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
+ImageCreator::ImageCreator(PositionsProvider& provider, int width, int height, QString backgroundImage, QColor backgroundColor, const QColor &foregroundColor):positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
     nbSpots = positionsProvider.getNbSpots();
 
     //Set Connection.
@@ -55,7 +55,7 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     painter.begin(&pixmap);
 
     //If an image has been set to be used as background, scale it if need it and then draw it.
-    if(backgroundImage != ""){
+    if(!backgroundImage.isEmpty()){
         QImage image(backgroundImage);
         QPixmap scaledBackground;
         scaledBackground.convertFromImage(image.smoothScale(width,height),Qt::PreferDither);
@@ -66,7 +66,8 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     painter.setWindow(QRect(QPoint(0,0),QPoint(width,height)));
     
     //Fill the pixmap with the background color if no image has been set as background.
-    if(backgroundImage.isEmpty()) pixmap.fill(backgroundColor);
+    if(backgroundImage.isEmpty())
+        pixmap.fill(backgroundColor);
 
     //Paint all the positions on the pixmap.
     drawPositions(painter);
@@ -77,18 +78,21 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     image = pixmap.convertToImage();
 }
 
-void ImageCreator::saveImage(QString fileName,QString format){
+void ImageCreator::saveImage(QString fileName, const QString &format){
     //Save the image
     image.save(fileName,format,80);
 }
 
 void ImageCreator::drawPositions(QPainter& painter){
     //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
-    if(nbSpots == 0) return;
+    if(nbSpots == 0)
+        return;
     int nbPoints = data.nbOfRows();
-    if(nbPoints == 0) return;
+    if(nbPoints == 0)
+        return;
     painter.setPen(foregroundColor);
-    for(int i = 1;i<=nbPoints;++i) painter.drawPoint(data(i,1),data(i,2));
+    for(int i = 1;i<=nbPoints;++i)
+        painter.drawPoint(data(i,1),data(i,2));
 }
 
 #include "imagecreator.moc"

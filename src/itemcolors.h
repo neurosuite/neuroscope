@@ -50,12 +50,14 @@ private:
         bool isChanged;
         QString label;
 
-        ItemColor(int id, QColor c,QString l = ""){
+        ItemColor(int id, const QColor& c,const QString& l = QString()){
             itemId = id;
             color = c;
             isChanged = false;
-            if(l == "") label = QString::fromLatin1("%1").arg(id);
-            else label = l;
+            if(l.isEmpty())
+                label = QString::fromLatin1("%1").arg(id);
+            else
+                label = l;
         }
         ItemColor(const ItemColor& origin):itemId(origin.itemId),
             color(origin.color),isChanged(origin.isChanged),label(origin.label){}
