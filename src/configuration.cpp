@@ -82,12 +82,12 @@ void Configuration::write() const {
     QSettings settings;
     //write general options
     settings.beginGroup("General");
-    //KDAB_PENDING settings.setValue("screenGain",screenGain,true,false,'g',14,false);
+    settings.setValue("screenGain",QString::fromLatin1("%1").arg(screenGain,0,'g',14));
     settings.setValue("voltageRange",voltageRange);
     settings.setValue("amplification",amplification);
     settings.setValue("nbChannels",nbChannels);
-    //KDAB_PENDING settings.setValue("datSamplingRate",datSamplingRate,true,false,'g',14,false);
-    //KDAB_PENDING settings.setValue("eegSamplingRate",eegSamplingRate,true,false,'g',14,false);
+    settings.setValue("datSamplingRate",QString::fromLatin1("%1").arg(datSamplingRate,0,'g',14));
+    settings.setValue("eegSamplingRate",QString::fromLatin1("%1").arg(eegSamplingRate,0,'g',14));
     settings.setValue("backgroundColor",backgroundColor);
     settings.setValue("displayPaletteHeaders",displayPaletteHeaders);
     settings.setValue("offset",offset);
@@ -96,7 +96,7 @@ void Configuration::write() const {
     settings.setValue("clusterPosition",clusterPosition);
     settings.setValue("nbSamples",nbSamples);
     settings.setValue("peakIndex",peakIndex);
-    //KDAB_PENDING settings.setValue("videoSamplingRate",videoSamplingRate,true,false,'g',14,false);
+    settings.setValue("videoSamplingRate",QString::fromLatin1("%1").arg(videoSamplingRate,0,'g',14));
     settings.setValue("width",width);
     settings.setValue("height",height);
     settings.setValue("backgroundImage",backgroundImage);
