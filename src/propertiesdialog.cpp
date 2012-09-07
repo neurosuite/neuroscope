@@ -17,20 +17,17 @@
 // include files for QT
 #include <QLayout>        // for QVBoxLayout
 #include <QLabel>         // for QLabel
-#include <q3frame.h>         // for QFrame
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 #include <QMessageBox>
 //include files for the application
 #include "propertiesdialog.h"
 
 
-PropertiesDialog::PropertiesDialog(QWidget *parent):
-    QPageDialog(parent)
-  ,modified(false),
-    nbChannelsModified(false)
-  ,oops(false)
-  ,atStartUp(false)
+PropertiesDialog::PropertiesDialog(QWidget *parent)
+    : QPageDialog(parent)
+    ,modified(false)
+    ,nbChannelsModified(false)
+    ,oops(false)
+    ,atStartUp(false)
 {
 
     setButtons(Help | Default | Ok | Apply | Cancel);
@@ -111,8 +108,8 @@ void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int 
 void PropertiesDialog::slotVerify(){  
     if(nbChannels != properties->getNbChannels() && !atStartUp){
         if(QMessageBox::warning(this, tr("Changing the number of channels "
-                                                       "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
-                                              tr("Continue"))==QMessageBox::Cancel){
+                                         "will rest all the groups. Do you wish to continue?"), tr("Change the number of channels?"),
+                                tr("Continue"))==QMessageBox::Cancel){
             properties->setNbChannels(nbChannels);
             nbChannelsModified = false;
             oops = true;

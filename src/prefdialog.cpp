@@ -17,10 +17,7 @@
 // include files for QT
 #include <QLayout>        // for QVBoxLayout
 #include <QLabel>         // for QLabel
-#include <q3frame.h>         // for QFrame
 #include <QTabWidget>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 #include <QMessageBox>
 
