@@ -20,8 +20,10 @@
 // include files for KDE
 
 
-PrefDefaults::PrefDefaults(QWidget *parent, const char *name ) : PrefDefaultsLayout(parent),
-    intValidator(this),doubleValidator(this) {
+PrefDefaults::PrefDefaults(QWidget *parent )
+    : PrefDefaultsLayout(parent),
+      intValidator(this),doubleValidator(this)
+{
     //Set a validator on the line edits, the values have to be integers.
     nbChannelsLineEdit->setValidator(&intValidator);
     datSamplingRateLineEdit->setValidator(&doubleValidator);

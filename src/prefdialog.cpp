@@ -38,7 +38,7 @@
   *@author Lynn Hazan
 */
 
-PrefDialog::PrefDialog(QWidget *parent, const char *name, Qt::WFlags f)
+PrefDialog::PrefDialog(QWidget *parent)
     : QPageDialog(parent)
 {
 

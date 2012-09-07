@@ -35,7 +35,9 @@ using namespace std;
 
 using namespace neuroscope;
 
-SessionXmlWriter::SessionXmlWriter():doc(){
+SessionXmlWriter::SessionXmlWriter()
+    :doc()
+{
     //create the processing instruction
     QDomProcessingInstruction processingInstruction = doc.createProcessingInstruction("xml","version='1.0'");
     doc.appendChild(processingInstruction);
@@ -51,7 +53,8 @@ SessionXmlWriter::~SessionXmlWriter(){}
 bool SessionXmlWriter::writeTofile(const QString& url){ 
     QFile sessionFile(url);
     bool status = sessionFile.open(QIODevice::WriteOnly);
-    if(!status) return status;
+    if(!status)
+        return status;
 
     root.appendChild(video);
     if(!samplingRates.isNull()) root.appendChild(samplingRates);

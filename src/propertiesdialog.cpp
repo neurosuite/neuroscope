@@ -25,7 +25,7 @@
 #include "propertiesdialog.h"
 
 
-PropertiesDialog::PropertiesDialog(QWidget *parent, const char *name, Qt::WFlags f):
+PropertiesDialog::PropertiesDialog(QWidget *parent):
     QPageDialog(parent)
   ,modified(false),
     nbChannelsModified(false)

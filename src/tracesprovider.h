@@ -43,7 +43,7 @@ public:
   * @param samplingRate sampling rate used to record the data contained in the file identified by fileUrl.
   * @param offset offset to apply to the data contained in the file identified by fileUrl.
   */
-    TracesProvider(QString fileUrl,int nbChannels,int resolution,double samplingRate,int offset);
+    TracesProvider(const QString &fileUrl, int nbChannels, int resolution, double samplingRate, int offset);
     ~TracesProvider();
 
     /// Added by M.Zugaro to enable automatic forward paging

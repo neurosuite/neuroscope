@@ -40,7 +40,7 @@
 class PrefDefaults : public PrefDefaultsLayout  {
     Q_OBJECT
 public: 
-    PrefDefaults(QWidget *parent=0, const char *name=0);
+    PrefDefaults(QWidget *parent=0);
     ~PrefDefaults();
 
 

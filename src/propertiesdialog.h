@@ -40,7 +40,7 @@ class PropertiesDialog : public QPageDialog  {
     Q_OBJECT
 public:
     //Constructor
-    PropertiesDialog(QWidget *parent,const char *name=0, Qt::WFlags f=0);
+    PropertiesDialog(QWidget *parent);
     ~PropertiesDialog();
 
     /** Updates the dialog.

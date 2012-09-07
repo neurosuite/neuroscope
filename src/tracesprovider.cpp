@@ -31,7 +31,7 @@ using namespace std;
 #include <QFile>
 #include <QRegExp>
 
-TracesProvider::TracesProvider(QString fileUrl,int nbChannels,int resolution,double samplingRate,int offset):
+TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset):
     DataProvider(fileUrl),nbChannels(nbChannels),resolution(resolution),samplingRate(samplingRate),offset(offset){
     computeRecordingLength();
 }

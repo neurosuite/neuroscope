@@ -149,7 +149,8 @@ QDomNode ParameterXmlModifier::findDirectChild(QString childName,QDomNode ancest
 }
 
 QDomNode ParameterXmlModifier::findDirectChild(QString childName,QString grandChildName,QString value,QDomNode ancestor){
-    if(ancestor.isNull()) return QDomNode();
+    if(ancestor.isNull())
+        return QDomNode();
     QDomNode child = ancestor.firstChild();
     while(!child.isNull()){
         // the node really is an element and has the right tag.
@@ -229,15 +230,19 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
 
 bool ParameterXmlModifier::setLfpInformation(double lfpSamplingRate){
     lfp = findDirectChild(FIELD_POTENTIALS);
-    if(lfp.isNull()) return false;
+    if(lfp.isNull())
+        return false;
 
     QDomNode lfpSamplingRateNode = findDirectChild(LFP_SAMPLING_RATE,lfp);
     if(!lfpSamplingRateNode.isNull()){
         QDomText lfpSamplingRateTextChild = lfpSamplingRateNode.firstChild().toText();
-        if(!lfpSamplingRateTextChild.isNull()) lfpSamplingRateTextChild.setNodeValue(QString::fromLatin1("%1").arg(lfpSamplingRate,0,'g',14));
-        else return false;
+        if(!lfpSamplingRateTextChild.isNull())
+            lfpSamplingRateTextChild.setNodeValue(QString::fromLatin1("%1").arg(lfpSamplingRate,0,'g',14));
+        else
+            return false;
     }
-    else return false;
+    else
+        return false;
 
     return true;
 }

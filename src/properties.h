@@ -35,9 +35,6 @@
 #include <propertieslayout.h>
 
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
  /**
   * Class used to set the properties of the current document.
@@ -46,38 +43,38 @@ using namespace std;
 class Properties : public PropertiesLayout  {
    Q_OBJECT
 public: 
-	Properties(QWidget *parent=0, const char *name=0);
+    Properties(QWidget *parent=0);
 	~Properties();
 
   /**Sets the screen gain in milivolts by centimeters used to display the field potentiels..
   */
   inline void setScreenGain(float gain){
    screenGainLineEdit->setText(QString::fromLatin1("%1").arg(gain));
-  };
+  }
 
   /**Sets the voltage range of the acquisition system in milivolts.
   */
   inline void setVoltageRange(int value){
    voltageRangeLineEdit->setText(QString::fromLatin1("%1").arg(value));
-  };
+  }
 
   /**Sets the amplification of the acquisition system.
   */
   inline void setAmplification(int value){
    amplificationLineEdit->setText(QString::fromLatin1("%1").arg(value));
-  };
+  }
 
   /**Sets the number of channels.*/
-  inline void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::fromLatin1("%1").arg(nb));};
+  inline void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
 
   /**Sets the sampling rate for the current file.*/
-  inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));};
+  inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
   /**Sets the sampling rate of the acquisition system.*/
-  inline void setAcquisitionSystemSamplingRate(double rate){asSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));};
+  inline void setAcquisitionSystemSamplingRate(double rate){asSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
   /**Sets the initial offset for all the field potentials.*/
-  inline void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));};
+  inline void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));}
 
   /**Sets the resolution of the acquisition system.*/
   inline void setResolution(int res){
@@ -98,33 +95,33 @@ public:
         resolutionComboBox->setCurrentItem(2);
         break;
    }
-  };
+  }
   
   /**Sets the background image.*/
   inline void setTraceBackgroundImage(QString image){  
    traceBackgroundLineEdit->setText(image);
-  };
+  }
   
   /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
   */
   inline float getScreenGain() const{
    return screenGainLineEdit->text().toFloat();
-  };
+  }
 
   /**Returns the voltage range of the acquisition system in volts.
   */
   inline int getVoltageRange() const{
    return voltageRangeLineEdit->text().toInt();
-  };
+  }
 
   /**Returns the amplification of the acquisition system.
   */
   inline int getAmplification() const{
    return amplificationLineEdit->text().toInt();
-  };
+  }
 
   /**Returns the number of channels.*/
-  inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();};
+  inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();}
 
   /**Returns the sampling rate  for the current file.*/
   inline double getSamplingRate() const{return samplingRateLineEdit->text().toDouble();}

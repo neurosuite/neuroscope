@@ -43,7 +43,7 @@
 class PrefGeneral : public PrefGeneralLayout  {
    Q_OBJECT
 public: 
-	PrefGeneral(QWidget *parent=0, const char *name=0);
+    PrefGeneral(QWidget *parent=0);
 	~PrefGeneral();
 
 

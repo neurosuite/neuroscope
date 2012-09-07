@@ -21,8 +21,10 @@
 // include files for KDE
 
 
-Properties::Properties(QWidget *parent, const char *name ) : PropertiesLayout(parent),
-    intValidator(this),doubleValidator(this){
+Properties::Properties(QWidget *parent)
+    : PropertiesLayout(parent),
+      intValidator(this),doubleValidator(this)
+{
     //Set a validator on the line edits, the values have to be integers or doubles.
     nbChannelsLineEdit->setValidator(&intValidator);
     samplingRateLineEdit->setValidator(&doubleValidator);
