@@ -25,7 +25,6 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <qscrollbar.h>
-#include <q3hbox.h>
 #include <QPainter>
 #include <QStyle>
 //Added by qt3to4:
@@ -682,7 +681,7 @@ private:
     long pageStep;
 
     /**Container for the selection widget.*/
-    Q3HBox* selectionWidgets;
+    QWidget* selectionWidgets;
 
     /**When converting the recording length in minutes, seconds and miliseconds this represents the number of minutes.*/
     int minutePart;

@@ -47,7 +47,7 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     setLayout(lay);
     recordingLength = tracesProvider.recordingLength();
 
-    selectionWidgets = new Q3HBox(this);
+    selectionWidgets = new QWidget(this);
     lay->addWidget(selectionWidgets);
     lay->setMargin(0);
     lay->setSpacing(0);
@@ -140,12 +140,15 @@ void TraceWidget::setGreyScale(bool grey){
 
 
 void TraceWidget::initSelectionWidgets(){
+    QHBoxLayout *lay = new QHBoxLayout;
+    selectionWidgets->setLayout(lay);
     QFont font("Helvetica",9);
 
     //Create and initialize the spin boxe and lineEdit.
     startLabel = new QLabel("Start time",selectionWidgets);
     startLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     startLabel->setFont(font);
+    lay->addWidget(startLabel);
 
     minutePart = recordingLength / 60000;
     int remainingSeconds = static_cast<int>(fmod(static_cast<double>(recordingLength),60000));
@@ -158,21 +161,26 @@ void TraceWidget::initSelectionWidgets(){
     int remainingMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000));
 
     startMinute = new QSpinBox(0,minutePart,1,selectionWidgets,"minStart");
+    lay->addWidget(startMinute);
     startMinute->setSuffix( " min" );
     startMinute->setWrapping(true);
     startMinute->setValue(nbMinutes);
     startSecond = new QSpinBox(0,recordingLength/1000,1,selectionWidgets,"sStart");
+    lay->addWidget(startSecond);
     startSecond->setSuffix( " s" );
     startSecond->setValue(nbSeconds);
     startMilisecond = new QSpinBox(0,recordingLength,1,selectionWidgets,"msStart");
+    lay->addWidget(startMilisecond);
     startMilisecond->setSuffix( " ms" );
     startMilisecond->setValue(remainingMiliseconds);
 
 
     durationLabel = new QLabel("  Duration (ms)",selectionWidgets);
+    lay->addWidget(durationLabel);
     durationLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     durationLabel->setFont(font);
     duration = new QLineEdit(QString::fromLatin1("%1").arg(timeWindow),selectionWidgets);
+    lay->addWidget(duration);
     duration->setMinimumSize(50,duration->minimumHeight());
     duration->setMaximumSize(50,duration->maximumHeight());
     duration->setMaxLength(5);
@@ -190,6 +198,7 @@ void TraceWidget::initSelectionWidgets(){
     lineStep = static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
 
     scrollBar = new QScrollBar(0,recordingLength - timeWindow,lineStep,pageStep,pageStep,Qt::Horizontal,selectionWidgets);
+    lay->addWidget(scrollBar);
     scrollBar->setValue(startTime);
     connect(scrollBar,SIGNAL(sliderReleased()),this, SLOT(slotScrollBarUpdated()));
     connect(scrollBar,SIGNAL(nextLine()),this, SLOT(slotScrollBarUpdated()));
@@ -202,15 +211,15 @@ void TraceWidget::initSelectionWidgets(){
     scrollBar->setFocusPolicy(Qt::StrongFocus);
     connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(slotScrollBarUpdated()));
 
-    selectionWidgets->setMargin(0);
-    selectionWidgets->setSpacing(0);
-    selectionWidgets->setStretchFactor(startLabel,0);
-    selectionWidgets->setStretchFactor(startMinute,0);
-    selectionWidgets->setStretchFactor(startSecond,0);
-    selectionWidgets->setStretchFactor(startMilisecond,0);
-    selectionWidgets->setStretchFactor(durationLabel,0);
-    selectionWidgets->setStretchFactor(duration,0);
-    selectionWidgets->setStretchFactor(scrollBar,200);
+    lay->setMargin(0);
+    lay->setSpacing(0);
+    lay->setStretchFactor(startLabel,0);
+    lay->setStretchFactor(startMinute,0);
+    lay->setStretchFactor(startSecond,0);
+    lay->setStretchFactor(startMilisecond,0);
+    lay->setStretchFactor(durationLabel,0);
+    lay->setStretchFactor(duration,0);
+    lay->setStretchFactor(scrollBar,200);
 }
 
 void TraceWidget::samplingRateModified(long long length){
