@@ -17,8 +17,6 @@
 
 #include "clustercolors.h"
 
-//C, C++ include files
-#include <iostream>
 #include <QDebug>
 
 ClusterColors::ClusterColors():ItemColors(){}
