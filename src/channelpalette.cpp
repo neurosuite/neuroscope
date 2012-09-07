@@ -39,6 +39,7 @@
 #include <QList>
 #include <QLabel>
 #include <QResizeEvent>
+#include <Q3HBox>
 
 
 
@@ -814,7 +815,8 @@ void ChannelPalette::reset(){
 }
 
 void ChannelPalette::createGroup(int id){  
-    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer,QString::fromLatin1("%1").arg(id));
+    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer);
+    group->setObjectName(QString::fromLatin1("%1").arg(id));
     GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group,"label");
     if(id == -1){
         label->setText("?");
@@ -847,8 +849,8 @@ void ChannelPalette::createGroup(int id){
     }
     else iconView->adjustSize();
 
-    group->setStretchFactor(label,0);
-    group->setStretchFactor(iconView,200);
+    //group->setStretchFactor(label,0);
+    //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
 
     iconviewDict.insert(QString::fromLatin1("%1").arg(id),iconView);

@@ -773,7 +773,9 @@ void ItemPalette::reset(){
 }
 
 void ItemPalette::createGroup(QString id){  
-    ItemGroupView* group = new ItemGroupView(backgroundColor,verticalContainer,id);
+    ItemGroupView* group = new ItemGroupView(backgroundColor,verticalContainer);
+
+    group->setObjectName(id);
     GroupNameLabel* label = new GroupNameLabel(id,group,"label");
 
     //Set the size to 2 digits, max 99 groups
@@ -786,18 +788,21 @@ void ItemPalette::createGroup(QString id){
 
     ItemIconView* iconView;
     QFontInfo fontInfo = QFontInfo(f);
-    if(type == CLUSTER) iconView = new ItemIconView(backgroundColor,Q3IconView::Bottom,fontInfo.pixelSize() * 2,5,group,id);
-    else iconView = new ItemIconView(backgroundColor,Q3IconView::Right,gridX,5,group,id);
+    if(type == CLUSTER)
+        iconView = new ItemIconView(backgroundColor,Q3IconView::Bottom,fontInfo.pixelSize() * 2,5,group,id);
+    else
+        iconView = new ItemIconView(backgroundColor,Q3IconView::Right,gridX,5,group,id);
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     if(iconviewDict.count() >= 1){
         Q3DictIterator<ItemIconView> iterator(iconviewDict);
         iconView->resizeContents((iconviewDict[iterator.currentKey()])->contentsWidth(),2);
     }
-    else iconView->adjustSize();
+    else
+        iconView->adjustSize();
 
-    group->setStretchFactor(label,0);
-    group->setStretchFactor(iconView,200);
+    //group->setStretchFactor(label,0);
+    //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
 
     iconviewDict.insert(id,iconView);

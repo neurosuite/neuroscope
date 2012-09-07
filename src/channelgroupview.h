@@ -19,26 +19,28 @@
 #define CHANNELGROUPVIEW_H
 
 #include <qwidget.h>
-#include <q3hbox.h>
 #include <q3iconview.h>
 #include <QObject> 
 #include <QPainter>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QDropEvent>
-
-//General C++ include files
-#include <iostream>
-using namespace std;
+#include <QHBoxLayout>
 
 /**Utilitary class used to build the channel palettes (anatomical and spike).
   *@author Lynn Hazan
   */
 
-class ChannelGroupView : public Q3HBox  {
+class ChannelGroupView : public QWidget  {
     Q_OBJECT
 public: 
-    inline ChannelGroupView(bool drag,QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),drag(drag),init(true){
+    inline ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent=0)
+        :QWidget(parent),iconView(0L),drag(drag),init(true){
+
+        mLayout = new QHBoxLayout;
+        mLayout->setMargin(0);
+        mLayout->setSpacing(0);
+        setLayout(mLayout);
 
         //Set the groupview color, the foreground color depends on the background color
         setPaletteBackgroundColor(backgroundColor);
@@ -47,11 +49,10 @@ public:
         int v;
         backgroundColor.hsv(&h,&s,&v);
         QColor legendColor;
-        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
+        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+            legendColor = Qt::black;
         else legendColor = Qt::white;
         setPaletteForegroundColor(legendColor);
-        setMargin(0);
-        setSpacing(0);
         adjustSize();
 
         setAcceptDrops(TRUE);
@@ -61,6 +62,7 @@ public:
 
     inline void setIconView(Q3IconView* view){
         iconView = view;
+        mLayout->addWidget(iconView);
     }
 
 signals:
@@ -119,7 +121,7 @@ private:
 
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;
-
+    QHBoxLayout *mLayout;
     bool init;
 
 };

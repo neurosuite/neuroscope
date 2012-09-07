@@ -19,24 +19,27 @@
 #define ITEMGROUPVIEW_H
 
 #include <qwidget.h>
-#include <q3hbox.h>
+#include <QHBoxLayout>
 #include <q3iconview.h>
 #include <QObject> 
 #include <QDebug>
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 /**Utilitary class used to build the cluster and event palettes.
   *@author Lynn Hazan
   */
 
-class ItemGroupView : public Q3HBox  {
+class ItemGroupView : public QWidget  {
     Q_OBJECT
 public: 
-    inline ItemGroupView(QColor backgroundColor,QWidget* parent=0, const char* name=0):Q3HBox(parent,name),iconView(0L),init(true){
+    inline ItemGroupView(const QColor& backgroundColor,QWidget* parent=0)
+        :QWidget(parent),iconView(0L),init(true)
+    {
+        mLayout = new QHBoxLayout;
+        mLayout->setMargin(0);
+        mLayout->setSpacing(0);
 
+        setLayout(mLayout);
         //Set the groupview color, the foreground color depends on the background color
         setPaletteBackgroundColor(backgroundColor);
         int h;
@@ -44,12 +47,12 @@ public:
         int v;
         backgroundColor.hsv(&h,&s,&v);
         QColor legendColor;
-        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-        else legendColor = Qt::white;
+        if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+            legendColor = Qt::black;
+        else
+            legendColor = Qt::white;
         setPaletteForegroundColor(legendColor);
 
-        setMargin(0);
-        setSpacing(0);
         adjustSize();
 
         setAcceptDrops(TRUE);
@@ -59,6 +62,7 @@ public:
 
     inline void setIconView(Q3IconView* view){
         iconView = view;
+        mLayout->addWidget(iconView);
     }
 
 public slots:
@@ -82,7 +86,7 @@ public slots:
 
 private:
     Q3IconView* iconView;
-
+    QHBoxLayout *mLayout;
     bool init;
 
 };
