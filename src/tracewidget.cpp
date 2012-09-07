@@ -25,12 +25,8 @@
 #include <QLabel>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QVBoxLayout>
 
-
-//General C++ include files
-#include <iostream>
-#include <stdlib.h>
-using namespace std;
 
 /// Added by M.Zugaro to enable automatic forward paging
 #include <QTimer>
@@ -41,19 +37,23 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
                          QMap<int,int>* channelsGroups,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent,
                          const char* name,QColor backgroundColor,QStatusBar* statusBar,
                          int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
-    Q3VBox(parent,name),timeWindow(duration),
+   QWidget(parent),timeWindow(duration),
     view(tracesProvider,greyScale,multiColumns,verticalLines,raster,waveforms,labelsDisplay,channelsToDisplay,gain,acquisitionGain,
          startTime,timeWindow,channelColors,groupsChannels,channelsGroups,channelOffsets,gains,skippedChannels,rasterHeight,backgroundImage,this,name,
          backgroundColor,statusBar,minSize,maxSize,windowTopLeft,windowBottomRight,border),startTime(startTime),
     validator(this),isInit(true),updateView(true){
 
+    QVBoxLayout *lay = new QVBoxLayout;
+    setLayout(lay);
     recordingLength = tracesProvider.recordingLength();
 
     selectionWidgets = new Q3HBox(this);
-    setMargin(0);
-    setSpacing(0);
-    setStretchFactor(selectionWidgets,0);
-    setStretchFactor(&view,200);
+    lay->addWidget(selectionWidgets);
+    lay->setMargin(0);
+    lay->setSpacing(0);
+    lay->setStretchFactor(selectionWidgets,0);
+    lay->setStretchFactor(&view,200);
+    lay->addWidget(&view);
 
     setFocusPolicy(Qt::StrongFocus);
 

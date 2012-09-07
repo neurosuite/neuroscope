@@ -20,7 +20,6 @@
 
 // include files for QT
 #include <qwidget.h>
-#include <q3vbox.h>
 #include <qspinbox.h>
 #include <QValidator>
 #include <QLineEdit>
@@ -50,7 +49,7 @@ class ChannelColors;
   * Class containing the TraceView and all the widgets used to select the position in the file.
   * @author Lynn Hazan
   */
-class TraceWidget : public Q3VBox  {
+class TraceWidget : public QWidget  {
     Q_OBJECT
 
 public:

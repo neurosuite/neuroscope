@@ -39,7 +39,6 @@
 #include <QList>
 #include <QLabel>
 #include <QResizeEvent>
-#include <Q3HBox>
 
 
 
