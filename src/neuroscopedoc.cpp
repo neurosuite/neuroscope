@@ -347,7 +347,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
             } else {
                 QApplication::restoreOverrideCursor();
 
-                QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
+                QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString::fromLatin1("%1").arg(datSamplingRate));
                 QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                 if(!currentSamplingRate.isEmpty())
                     samplingRate = currentSamplingRate.toDouble();
@@ -407,7 +407,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                     //Prompt the user
                     else{
                         QApplication::restoreOverrideCursor();
-                        QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString("%1").arg(datSamplingRate));
+                        QString currentSamplingRate = QInputDialog::getText(0,tr("Sampling Rate"),tr("Type in the sampling rate for the current document"),QLineEdit::Normal,QString::fromLatin1("%1").arg(datSamplingRate));
 
                         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                         if(!currentSamplingRate.isEmpty())
@@ -585,7 +585,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
             QList<int>::iterator it;
             for(it = clusterList.begin(); it != clusterList.end(); ++it){
                 QColor color = clusterColors->color(*it);
-                sessionFile.setItemColor(EventDescription(QString("%1").arg(*it)),color.name());
+                sessionFile.setItemColor(EventDescription(QString::fromLatin1("%1").arg(*it)),color.name());
             }
         }
         else if(provider->isA("EventsProvider")){
@@ -1867,8 +1867,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     QList<int> clusterList = clustersProvider->clusterIdList();
     QList<int>::iterator it;
     for(it = clusterList.begin(); it != clusterList.end(); ++it){
-        if(itemColors.contains(QString("%1").arg(*it))){
-            clusterColors->append(static_cast<int>(*it),itemColors[QString("%1").arg(*it)]);
+        if(itemColors.contains(QString::fromLatin1("%1").arg(*it))){
+            clusterColors->append(static_cast<int>(*it),itemColors[QString::fromLatin1("%1").arg(*it)]);
         }
         else{
             modified = true;

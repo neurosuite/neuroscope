@@ -28,6 +28,7 @@
 #include <QLayout>
 #include <QToolTip>
 
+#include <QVector>
 #include <QPixmap>
 #include <QBitmap>
 #include <q3scrollview.h>
@@ -36,7 +37,7 @@
 #include <QStyle>
 #include <QColorDialog>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QVector>
 #include <QResizeEvent>
 #include <QList>
 #include <QLabel>
@@ -337,7 +338,7 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
                     bool hasChanged = false;
                     Q3IconViewItem* item;
                     for(int i = 0;i<2;++i){
-                        item = iconView->findItem(QString("%1").arg(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                        item = iconView->findItem(QString::fromLatin1("%1").arg(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
                         if(item != 0){
                             item->setSelected(false);
                             int currentIndex = item->index();
@@ -534,7 +535,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int i
         painter.fillRect(0,0,12,12,color);
     }
     else{
-        Q3PointArray polygon(3);
+        QPolygon polygon(4);
         polygon.putPoints(0,3,0,0,14,0,7,14);
         painter.setBrush(color);
         painter.drawPolygon(polygon);
@@ -842,7 +843,7 @@ void ItemPalette::removeGroup(QString groupName){
     if(selected == groupName){
         if(type == CLUSTER && clusterGroupList.count() > 0){
             qSort(clusterGroupList);
-            selectGroupLabel(QString("%1").arg(clusterGroupList[0]));
+            selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList[0]));
         }
         else if(type == EVENT && itemGroupList.count() > 0){
             qSort(itemGroupList);
@@ -934,13 +935,13 @@ void ItemPalette::orderTheGroups(){
         qSort(clusterGroupList);
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
-            verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);
+            verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
     }
     else{
         qSort(itemGroupList);
         QList<QString>::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
-            verticalContainer->insertChild(itemGroupViewDict[QString("%1").arg(*iterator)]);
+            verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
     }
 
     delete spaceWidget;

@@ -97,8 +97,8 @@ void ChannelPalette::setGreyScale(bool grey){
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
         //Get the channelColor associated with the item
         QColor color = channelColors->color(iterator.key());
@@ -157,7 +157,7 @@ void ChannelPalette::setChannelLists(){
 
     QMap<int, QList<int> >::Iterator iterator;
     for(iterator = groupsChannels->begin(); iterator != groupsChannels->end(); ++iterator){
-        QString groupId = QString("%1").arg(iterator.key());
+        QString groupId = QString::fromLatin1("%1").arg(iterator.key());
         QList<int> channelList = iterator.data();
         for(uint i = 0; i<channelList.size(); ++i){
             //The default show/hide status is hide
@@ -167,7 +167,7 @@ void ChannelPalette::setChannelLists(){
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(channelList[i]);
             drawItem(painter,&pixmap,color,false,false);
-            (void)new ChannelIconItem(iconviewDict[groupId],(QString("%1").arg(channelList[i])),pixmap);
+            (void)new ChannelIconItem(iconviewDict[groupId],(QString::fromLatin1("%1").arg(channelList[i])),pixmap);
         }
     }
 }
@@ -356,15 +356,15 @@ void ChannelPalette::hideUnselectAllChannels(){
 
         //Update the pixmap
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
         //Add an item to the target group with the same text but an update icon.
         QPixmap pixmap(14,14);
         //Get the channelColor associated with the item
         QColor color = channelColors->color(iterator.key());
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[iterator.key()]);
-        (void)new ChannelIconItem(iconView,item,QString("%1").arg(iterator.key()),pixmap);
+        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
 
         //Delete the old item
         delete item;
@@ -404,8 +404,8 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         //Update the pixmap
         int groupId = (*channelsGroups)[*channelIterator];
 
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
         bool selected;
         if(!edit && showStatus) selected = true;
@@ -416,7 +416,7 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         //Get the channelColor associated with the item
         QColor color = channelColors->color(*channelIterator);
         drawItem(painter,&pixmap,color,showStatus,channelsSkipStatus[*channelIterator]);
-        (void)new ChannelIconItem(iconView,item,QString("%1").arg(*channelIterator),pixmap);
+        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
 
         if(selected) selectedIds.append(*channelIterator);
 
@@ -467,8 +467,8 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
         //Update the pixmap
         int groupId = (*channelsGroups)[channelId];
 
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(channelId),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(channelId),Q3ListBox::ExactMatch);
 
         bool selected = item->isSelected();
 
@@ -488,7 +488,7 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
 
         channelColors->setColor(channelId,color);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],status);
-        (void)new ChannelIconItem(iconView,item,QString("%1").arg(channelId),pixmap);
+        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(channelId),pixmap);
 
         if(selected) selectedIds.append(channelId);
 
@@ -525,8 +525,8 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
         //Update the pixmap
         int groupId = (*channelsGroups)[*channelIterator];
 
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
         bool selected = item->isSelected();
 
@@ -548,7 +548,7 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
         channelColors->setColor(*channelIterator,color);
 
         drawItem(painter,&pixmap,color,channelsShowHideStatus[*channelIterator],skipStatus);
-        (void)new ChannelIconItem(iconView,item,QString("%1").arg(*channelIterator),pixmap);
+        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
 
 
         if(selected) selectedIds.append(*channelIterator);
@@ -572,8 +572,8 @@ void ChannelPalette::updateColor(const QList<int>& channelIds){
 
     for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
         //Get the channelColor associated with the item
         QColor color = channelColors->color(*channelIterator);
@@ -592,8 +592,8 @@ void ChannelPalette::updateColor(int channelId){
     QPainter painter;
 
     int groupId = (*channelsGroups)[channelId];
-    iconView = iconviewDict[QString("%1").arg(groupId)];
-    item =  iconView->findItem(QString("%1").arg(channelId),Q3ListBox::ExactMatch);
+    iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+    item =  iconView->findItem(QString::fromLatin1("%1").arg(channelId),Q3ListBox::ExactMatch);
 
     //Get the channelColor associated with the item
     QColor color = channelColors->color(channelId);
@@ -615,7 +615,7 @@ void ChannelPalette::updateGroupColor(int channelId){
 
     //Find the group to which channelId belongs
     int groupId = (*channelsGroups)[channelId];
-    iconView = iconviewDict[QString("%1").arg(groupId)];
+    iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
 
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
         //Update the icon
@@ -633,8 +633,8 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
         //Get the channelColor associated with the item
         QColor color;
@@ -659,8 +659,8 @@ void ChannelPalette::applyCustomColor(){
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
         //Get the channelColor associated with the item
         QColor color = channelColors->color(iterator.key());
@@ -710,8 +710,8 @@ void ChannelPalette::changeBackgroundColor(QColor color){
 
     for(groupIterator = channelsGroups->begin(); groupIterator != channelsGroups->end(); ++groupIterator){
         int groupId = (*channelsGroups)[groupIterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(groupIterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(groupIterator.key()),Q3ListBox::ExactMatch);
 
         //update the color of the skip channels
         if(channelsSkipStatus[groupIterator.key()]) channelColors->setColor(groupIterator.key(),backgroundColor);
@@ -793,8 +793,8 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     ChannelIconView* iconView = 0L;
     for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        currentIcon =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
         currentIcon->setSelected(true,true);
     }
 
@@ -817,8 +817,8 @@ void ChannelPalette::reset(){
 }
 
 void ChannelPalette::createGroup(int id){  
-    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer,QString("%1").arg(id));
-    GroupLabel* label = new GroupLabel(QString("%1").arg(id),group,"label");
+    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer,QString::fromLatin1("%1").arg(id));
+    GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group,"label");
     if(id == -1){
         label->setText("?");
     }
@@ -835,7 +835,7 @@ void ChannelPalette::createGroup(int id){
     label->setFont(f);
     label->adjustSize();
 
-    ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize,15,edit,group,QString("%1").arg(id));
+    ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize,15,edit,group,QString::fromLatin1("%1").arg(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     if(iconviewDict.count() >= 1){
@@ -854,9 +854,9 @@ void ChannelPalette::createGroup(int id){
     group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
 
-    iconviewDict.insert(QString("%1").arg(id),iconView);
-    channelGroupViewDict.insert(QString("%1").arg(id),group);
-    selectionStatus.insert(QString("%1").arg(id),false);
+    iconviewDict.insert(QString::fromLatin1("%1").arg(id),iconView);
+    channelGroupViewDict.insert(QString::fromLatin1("%1").arg(id),group);
+    selectionStatus.insert(QString::fromLatin1("%1").arg(id),false);
 
     group->adjustSize();
     iconView->show();
@@ -911,7 +911,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             if(iconviewDict.find("-1") != 0) targetId--;
         }
         else{
-            ChannelGroupView* group = channelGroupViewDict[QString("%1").arg(targetId)];
+            ChannelGroupView* group = channelGroupViewDict[QString::fromLatin1("%1").arg(targetId)];
             int gpPosition = QWidget::mapToGlobal(group->pos()).y();
             if(gpPosition + (group->height() / 2) > destination) targetId--;
 
@@ -927,22 +927,22 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
 
         //insert after targetId
         //Rename the groups
-        sourceIconView = iconviewDict.take(QString("%1").arg(sourceId));
-        sourceGroup = channelGroupViewDict.take(QString("%1").arg(sourceId));
+        sourceIconView = iconviewDict.take(QString::fromLatin1("%1").arg(sourceId));
+        sourceGroup = channelGroupViewDict.take(QString::fromLatin1("%1").arg(sourceId));
         sourceChannelsIds = (*groupsChannels)[sourceId];
         groupsChannels->remove(sourceId);
 
         for(int i = sourceId + 1; i <= targetId; i++){
             //Rename the iconView
-            ChannelIconView* iconView = iconviewDict.take(QString("%1").arg(i));
-            iconView->setName(QString("%1").arg(i - 1));
-            iconviewDict.insert(QString("%1").arg(i - 1),iconView);
+            ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(i));
+            iconView->setName(QString::fromLatin1("%1").arg(i - 1));
+            iconviewDict.insert(QString::fromLatin1("%1").arg(i - 1),iconView);
             //Rename the ChannelGroupView and the label
-            ChannelGroupView* group = channelGroupViewDict.take(QString("%1").arg(i));
-            group->setName(QString("%1").arg(i - 1));
+            ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(i));
+            group->setName(QString::fromLatin1("%1").arg(i - 1));
             QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
-            label->setText(QString("%1").arg(i - 1));
-            channelGroupViewDict.insert(QString("%1").arg(i - 1),group);
+            label->setText(QString::fromLatin1("%1").arg(i - 1));
+            channelGroupViewDict.insert(QString::fromLatin1("%1").arg(i - 1),group);
 
             //Update the groups-channels variables
             QList<int> channelIds = (*groupsChannels)[i];
@@ -956,7 +956,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     }
     else{
         //Moving upwards
-        ChannelGroupView* group = channelGroupViewDict[QString("%1").arg(targetId)];
+        ChannelGroupView* group = channelGroupViewDict[QString::fromLatin1("%1").arg(targetId)];
         int gpPosition = QWidget::mapToGlobal(group->pos()).y();
         if((gpPosition + (group->height() / 2)) < destination) targetId++;
 
@@ -964,22 +964,22 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
 
         //insert before targetId
         //Rename the groups
-        sourceIconView = iconviewDict.take(QString("%1").arg(sourceId));
-        sourceGroup = channelGroupViewDict.take(QString("%1").arg(sourceId));
+        sourceIconView = iconviewDict.take(QString::fromLatin1("%1").arg(sourceId));
+        sourceGroup = channelGroupViewDict.take(QString::fromLatin1("%1").arg(sourceId));
         sourceChannelsIds = (*groupsChannels)[sourceId];
         groupsChannels->remove(sourceId);
 
         for(int i = sourceId - 1; i >= targetId; i--){
             //Rename the iconView
-            ChannelIconView* iconView = iconviewDict.take(QString("%1").arg(i));
-            iconView->setName(QString("%1").arg(i + 1));
-            iconviewDict.insert(QString("%1").arg(i + 1),iconView);
+            ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(i));
+            iconView->setName(QString::fromLatin1("%1").arg(i + 1));
+            iconviewDict.insert(QString::fromLatin1("%1").arg(i + 1),iconView);
             //Rename the ChannelGroupView and the label
-            ChannelGroupView* group = channelGroupViewDict.take(QString("%1").arg(i));
-            group->setName(QString("%1").arg(i + 1));
+            ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(i));
+            group->setName(QString::fromLatin1("%1").arg(i + 1));
             QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
-            label->setText(QString("%1").arg(i + 1));
-            channelGroupViewDict.insert(QString("%1").arg(i + 1),group);
+            label->setText(QString::fromLatin1("%1").arg(i + 1));
+            channelGroupViewDict.insert(QString::fromLatin1("%1").arg(i + 1),group);
 
             //Update the groups-channels variables
             QList<int> channelIds = (*groupsChannels)[i];
@@ -993,13 +993,13 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     }
 
     //Rename the moved group.
-    sourceIconView->setName(QString("%1").arg(targetId));
-    iconviewDict.insert(QString("%1").arg(targetId),sourceIconView);
+    sourceIconView->setName(QString::fromLatin1("%1").arg(targetId));
+    iconviewDict.insert(QString::fromLatin1("%1").arg(targetId),sourceIconView);
     //Rename the ChannelGroupView and the label
-    sourceGroup->setName(QString("%1").arg(targetId));
+    sourceGroup->setName(QString::fromLatin1("%1").arg(targetId));
     QLabel* label = dynamic_cast<QLabel*>(sourceGroup->child("label"));
-    label->setText(QString("%1").arg(targetId));
-    channelGroupViewDict.insert(QString("%1").arg(targetId),sourceGroup);
+    label->setText(QString::fromLatin1("%1").arg(targetId));
+    channelGroupViewDict.insert(QString::fromLatin1("%1").arg(targetId),sourceGroup);
 
     //Update the groups-channels variables
     groupsChannels->insert(targetId,sourceChannelsIds);
@@ -1020,7 +1020,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     if(iconviewDict.find("0") != 0) nbGroups--;
     if(iconviewDict.find("-1") != 0) nbGroups--;
     for(int i = 1;i <= nbGroups;++i)
-        verticalContainer->insertChild(channelGroupViewDict[QString("%1").arg(i)]);
+        verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
     if(iconviewDict.find("-1") != 0) verticalContainer->insertChild(channelGroupViewDict["-1"]);
     if(iconviewDict.find("0") != 0) verticalContainer->insertChild(channelGroupViewDict["0"]);
@@ -1071,7 +1071,7 @@ int ChannelPalette::createEmptyGroup(){
 }
 
 void ChannelPalette::moveChannels(int targetGroup){
-    ChannelIconView* iconView = iconviewDict[QString("%1").arg(targetGroup)];
+    ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(targetGroup)];
 
     //Get the destination group color to later update the group color of the moved channels, for a new group blue is the default
     QList<int> destinationChannels = (*groupsChannels)[targetGroup];
@@ -1104,7 +1104,7 @@ void ChannelPalette::moveChannels(int targetGroup){
                 QPixmap pixmap(14,14);
                 QColor color = channelColors->color(channelId);
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-                (void)new ChannelIconItem(iconView,QString("%1").arg(channelId),pixmap);
+                (void)new ChannelIconItem(iconView,QString::fromLatin1("%1").arg(channelId),pixmap);
 
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,targetGroup);
@@ -1114,7 +1114,7 @@ void ChannelPalette::moveChannels(int targetGroup){
         //Delete the entries in the source group
         QList<int>::iterator it;
         for(it = currentMovedChannels.begin(); it != currentMovedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
+            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
@@ -1176,9 +1176,9 @@ void ChannelPalette::deleteEmptyGroups(){
         for(int j = 0;j < nbGp; ++j){
             if(deletedGroups.contains(gpId)){
                 deletedGroups.append(gpId);
-                iconviewDict.remove(QString("%1").arg(gpId));
-                channelGroupViewDict.remove(QString("%1").arg(gpId));
-                selectionStatus.remove(QString("%1").arg(gpId));
+                iconviewDict.remove(QString::fromLatin1("%1").arg(gpId));
+                channelGroupViewDict.remove(QString::fromLatin1("%1").arg(gpId));
+                selectionStatus.remove(QString::fromLatin1("%1").arg(gpId));
                 //-1 and 0 are the trash groups, they are not renamed
                 if(gpId == 0 || gpId == -1) minId++;
 
@@ -1192,15 +1192,15 @@ void ChannelPalette::deleteEmptyGroups(){
             else{
                 if(gpId != minId){
                     //Rename the iconview
-                    ChannelIconView* iconView = iconviewDict.take(QString("%1").arg(gpId));
-                    iconView->setName(QString("%1").arg(minId));
-                    iconviewDict.insert(QString("%1").arg(minId),iconView);
+                    ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(gpId));
+                    iconView->setName(QString::fromLatin1("%1").arg(minId));
+                    iconviewDict.insert(QString::fromLatin1("%1").arg(minId),iconView);
                     //Rename the ChannelGroupView and the label
-                    ChannelGroupView* group = channelGroupViewDict.take(QString("%1").arg(gpId));
-                    group->setName(QString("%1").arg(minId));
+                    ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(gpId));
+                    group->setName(QString::fromLatin1("%1").arg(minId));
                     QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
-                    label->setText(QString("%1").arg(minId));
-                    channelGroupViewDict.insert(QString("%1").arg(minId),group);
+                    label->setText(QString::fromLatin1("%1").arg(minId));
+                    channelGroupViewDict.insert(QString::fromLatin1("%1").arg(minId),group);
 
                     //Update the groups-channels variables
                     QList<int> channelIds = (*groupsChannels)[gpId];
@@ -1261,7 +1261,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
     //Put the channels removed from the trash in a new group.
     if(type == DISPLAY){
         int targetGroup = createEmptyGroup();
-        moveChannels(channelIds,"0",QString("%1").arg(targetGroup));
+        moveChannels(channelIds,"0",QString::fromLatin1("%1").arg(targetGroup));
     }
     //Put the channels removed into the spikeGroupTrash (create it if need it).
     else{
@@ -1295,14 +1295,14 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
 
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
         //Delete the item from the sourceGroup
-        Q3IconViewItem* currentIcon = sourceIconView->findItem(QString("%1").arg(*iterator),Q3ListBox::ExactMatch);
+        Q3IconViewItem* currentIcon = sourceIconView->findItem(QString::fromLatin1("%1").arg(*iterator),Q3ListBox::ExactMatch);
         delete currentIcon;
 
         //Add an item to the target group.
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(*iterator);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-        (void)new ChannelIconItem(targetIconView,QString("%1").arg(*iterator),pixmap);
+        (void)new ChannelIconItem(targetIconView,QString::fromLatin1("%1").arg(*iterator),pixmap);
 
         //Update the group color
         if(type == DISPLAY) channelColors->setGroupColor(*iterator,groupColor);
@@ -1396,7 +1396,7 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
 
         QList<int> currentMovedChannels;
         QList<int> channelIds;
-        ChannelIconView* iconView = iconviewDict[QString("%1").arg(gpId)];
+        ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(gpId)];
         for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
             int channelId = item->text().toInt();
 
@@ -1409,7 +1409,7 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
                 QColor color = channelColors->color(channelId);
                 if(targetGroup == "0") channelsShowHideStatus[channelId] = false;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-                after = new ChannelIconItem(targetIconView,after,QString("%1").arg(channelId),pixmap);
+                after = new ChannelIconItem(targetIconView,after,QString::fromLatin1("%1").arg(channelId),pixmap);
 
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,targetGroup.toInt());
@@ -1420,7 +1420,7 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
         //Delete the entries in the source group
         QList<int>::iterator it;
         for(it = currentMovedChannels.begin(); it != currentMovedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
+            Q3IconViewItem* currentIcon = iconView->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
@@ -1504,14 +1504,14 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
     }
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
         //Delete the item corresponding to the channel Id
-        Q3IconViewItem* currentIcon = iconView->findItem(QString("%1").arg(*iterator),Q3ListBox::ExactMatch);
+        Q3IconViewItem* currentIcon = iconView->findItem(QString::fromLatin1("%1").arg(*iterator),Q3ListBox::ExactMatch);
         delete currentIcon;
 
         //Add a new item corresponding to the channel Id.
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(*iterator);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-        after = new ChannelIconItem(iconView,after,QString("%1").arg(*iterator),pixmap);
+        after = new ChannelIconItem(iconView,after,QString::fromLatin1("%1").arg(*iterator),pixmap);
     }
     if(moveFirst){
         Q3IconViewItem* first = iconView->firstItem();
@@ -1620,7 +1620,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
         //Delete the entries in the source group
         QList<int>::iterator it;
         for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
+            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
@@ -1638,7 +1638,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
             QColor color = channelColors->color(*channelIterator);
             channelsShowHideStatus[*channelIterator] = false;
             drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-            (void)new ChannelIconItem(trash,QString("%1").arg(*channelIterator),pixmap);
+            (void)new ChannelIconItem(trash,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
 
             //Update the group color
             if(type == DISPLAY) channelColors->setGroupColor(*channelIterator,groupColor);
@@ -1689,8 +1689,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
     for(channelIterator = channelsToDiscard.begin(); channelIterator != channelsToDiscard.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
         QList<int> sourceChannels = (*groupsChannels)[groupId];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        currentIcon =  iconView->findItem(QString("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        currentIcon =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
         delete currentIcon;
 
         //Add a new item corresponding to the channel Id. The channel is hidden.
@@ -1698,7 +1698,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
         QColor color = channelColors->color(*channelIterator);
         channelsShowHideStatus[*channelIterator] = false;
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-        after = new ChannelIconItem(trash,after,QString("%1").arg(*channelIterator),pixmap);
+        after = new ChannelIconItem(trash,after,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
         sourceChannels.remove(*channelIterator);
         channelsGroups->replace(*channelIterator,0);
 
@@ -1759,8 +1759,8 @@ void ChannelPalette::setEditMode(bool edition){
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString("%1").arg(groupId)];
-        item =  iconView->findItem(QString("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
 
         bool selected = false;
         if(edition){
@@ -1776,7 +1776,7 @@ void ChannelPalette::setEditMode(bool edition){
         //Get the channelColor associated with the item
         QColor color = channelColors->color(iterator.key());
         drawItem(painter,&pixmap,color,selected,channelsSkipStatus[iterator.key()]);
-        (void)new ChannelIconItem(iconView,QString("%1").arg(iterator.key()),pixmap);
+        (void)new ChannelIconItem(iconView,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
 
         if(selected) selectedIds.append(iterator.key());
     }
@@ -1825,7 +1825,7 @@ void ChannelPalette::moveTrashesToBottom(){
     if(iconviewDict.find("-1") != 0) nbGroup--;
 
     for(int i = 1;i <= nbGroup;++i)
-        verticalContainer->insertChild(channelGroupViewDict[QString("%1").arg(i)]);
+        verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
     //Insert the trashes
     if(iconviewDict.find("-1") != 0) verticalContainer->insertChild(channelGroupViewDict["-1"]);
@@ -1924,7 +1924,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
                 QColor color = channelColors->color(channelId);
                 if(destinationGroup == 0) channelsShowHideStatus[channelId] = false;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-                (void)new ChannelIconItem(trash,QString("%1").arg(channelId),pixmap);
+                (void)new ChannelIconItem(trash,QString::fromLatin1("%1").arg(channelId),pixmap);
 
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,destinationGroup);
@@ -1934,7 +1934,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
         //Delete the entries in the source group
         QList<int>::iterator it;
         for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString("%1").arg(*it),Q3ListBox::ExactMatch);
+            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels

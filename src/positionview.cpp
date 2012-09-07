@@ -18,7 +18,7 @@
 // include files for QT
 #include "qapplication.h"
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QVector>
 #include <QList>
 #include <QPixmap>
 
@@ -222,7 +222,7 @@ void PositionView::drawPositions(QPainter& painter){
         QColor lineColor = QColor(60,60,60);
         int nbCoordinates = nbSpots*2;
         for(int i = 1;i<nbPoints;++i){
-            Q3PointArray polygon(nbSpots);
+            QPolygon polygon(nbSpots);
             int index = 1;
             int nbPointsInPolygon = 0;
             for(int j = 0;j<nbSpots;++j){
@@ -245,7 +245,7 @@ void PositionView::drawPositions(QPainter& painter){
             }
         }
         //The last position is emphasized, white line and bigger points with white in the center.
-        Q3PointArray polygon(nbSpots);
+        QPolygon polygon(nbSpots);
         int index = 1;
         int nbPointsInPolygon = 0;
         for(int j = 0;j<nbSpots;++j){

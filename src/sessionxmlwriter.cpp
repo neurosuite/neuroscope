@@ -81,7 +81,7 @@ void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
         QString backgroundPath = static_cast<SessionFile>(*iterator).getBackgroundPath();
 
         QDomElement typeElement = doc.createElement(TYPE);
-        QDomText typeValue = doc.createTextNode(QString("%1").arg(fileType));
+        QDomText typeValue = doc.createTextNode(QString::fromLatin1("%1").arg(fileType));
         typeElement.appendChild(typeValue);
 
         QDomElement urlElement = doc.createElement(URL);
@@ -108,7 +108,7 @@ void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
                 QColor color = iterator.data();
 
                 QDomElement idElement = doc.createElement(ITEM);
-                QDomText idValue = doc.createTextNode(QString("%1").arg(id));
+                QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(id));
                 idElement.appendChild(idValue);
 
                 QDomElement colorElement = doc.createElement(COLOR);
@@ -164,42 +164,42 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
 
         //info to know if the labels next to the traces have to be shown
         QDomElement showLabelsElement = doc.createElement(SHOW_LABELS);
-        QDomText showLabelsValue = doc.createTextNode(QString("%1").arg(showLabels));
+        QDomText showLabelsValue = doc.createTextNode(QString::fromLatin1("%1").arg(showLabels));
         showLabelsElement.appendChild(showLabelsValue);
         displayElement.appendChild(showLabelsElement);
 
         //info concering the portion of the document presented
         QDomElement startTimeElement = doc.createElement(START_TIME);
-        QDomText startTimeValue = doc.createTextNode(QString("%1").arg(startTime));
+        QDomText startTimeValue = doc.createTextNode(QString::fromLatin1("%1").arg(startTime));
         startTimeElement.appendChild(startTimeValue);
         displayElement.appendChild(startTimeElement);
 
         QDomElement durationElement = doc.createElement(DURATION);
-        QDomText durationValue = doc.createTextNode(QString("%1").arg(duration));
+        QDomText durationValue = doc.createTextNode(QString::fromLatin1("%1").arg(duration));
         durationElement.appendChild(durationValue);
         displayElement.appendChild(durationElement);
 
         //info on the trace presentation (single or multiple columns)
         QDomElement presentationElement = doc.createElement(MULTIPLE_COLUMNS);
-        QDomText presentationValue = doc.createTextNode(QString("%1").arg(presentationMode));
+        QDomText presentationValue = doc.createTextNode(QString::fromLatin1("%1").arg(presentationMode));
         presentationElement.appendChild(presentationValue);
         displayElement.appendChild(presentationElement);
 
         //info on the grey-scale
         QDomElement greyScaleElement = doc.createElement(GREYSCALE);
-        QDomText greyScaleValue = doc.createTextNode(QString("%1").arg(greyScale));
+        QDomText greyScaleValue = doc.createTextNode(QString::fromLatin1("%1").arg(greyScale));
         greyScaleElement.appendChild(greyScaleValue);
         displayElement.appendChild(greyScaleElement);
 
         //info on the PositionView
         QDomElement positionViewElement = doc.createElement(POSITIONVIEW);
-        QDomText positionViewValue = doc.createTextNode(QString("%1").arg(positionView));
+        QDomText positionViewValue = doc.createTextNode(QString::fromLatin1("%1").arg(positionView));
         positionViewElement.appendChild(positionViewValue);
         displayElement.appendChild(positionViewElement);
 
         //info on the display of events in the PositionView
         QDomElement showEventsElement = doc.createElement(SHOWEVENTS);
-        QDomText showEventsValue = doc.createTextNode(QString("%1").arg(showEvents));
+        QDomText showEventsValue = doc.createTextNode(QString::fromLatin1("%1").arg(showEvents));
         showEventsElement.appendChild(showEventsValue);
         displayElement.appendChild(showEventsElement);
 
@@ -207,14 +207,14 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
         QList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
         for(typeIterator = spikeDisplayTypes.begin(); typeIterator != spikeDisplayTypes.end(); ++typeIterator){
             QDomElement typeElement = doc.createElement(SPIKE_PRESENTATION);
-            QDomText typeValue = doc.createTextNode(QString("%1").arg(*typeIterator));
+            QDomText typeValue = doc.createTextNode(QString::fromLatin1("%1").arg(*typeIterator));
             typeElement.appendChild(typeValue);
             displayElement.appendChild(typeElement);
         }
 
         //Info on the raster height
         QDomElement rasterHeightElement = doc.createElement(RASTER_HEIGHT);
-        QDomText rasterHeightValue = doc.createTextNode(QString("%1").arg(rasterHeight));
+        QDomText rasterHeightValue = doc.createTextNode(QString::fromLatin1("%1").arg(rasterHeight));
         rasterHeightElement.appendChild(rasterHeightValue);
         displayElement.appendChild(rasterHeightElement);
 
@@ -235,7 +235,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
-                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*idIterator));
                 idElement.appendChild(idValue);
                 clustersElement.appendChild(idElement);
             }
@@ -260,7 +260,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);
-                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*idIterator));
                 idElement.appendChild(idValue);
                 eventsElement.appendChild(idElement);
             }
@@ -295,7 +295,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
-                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*idIterator));
                 idElement.appendChild(idValue);
                 clustersElement.appendChild(idElement);
             }
@@ -318,7 +318,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);
-                QDomText idValue = doc.createTextNode(QString("%1").arg(*idIterator));
+                QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*idIterator));
                 idElement.appendChild(idValue);
                 eventsElement.appendChild(idElement);
             }
@@ -334,15 +334,15 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             int offset = static_cast<TracePosition>(*positionIterator).getOffset();
 
             QDomElement idElement = doc.createElement(CHANNEL);
-            QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
+            QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(channelId));
             idElement.appendChild(idValue);
 
             QDomElement gainsetElement = doc.createElement(GAIN);
-            QDomText gainsetValue = doc.createTextNode(QString("%1").arg(gain));
+            QDomText gainsetValue = doc.createTextNode(QString::fromLatin1("%1").arg(gain));
             gainsetElement.appendChild(gainsetValue);
 
             QDomElement offsetElement = doc.createElement(OFFSET);
-            QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
+            QDomText offsetValue = doc.createTextNode(QString::fromLatin1("%1").arg(offset));
             offsetElement.appendChild(offsetValue);
 
             QDomElement channelPositionElement = doc.createElement(CHANNEL_POSITION);
@@ -359,7 +359,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
         QList<int>::iterator channelSelectedIterator;
         for(channelSelectedIterator = selectedChannelIds.begin(); channelSelectedIterator != selectedChannelIds.end(); ++channelSelectedIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
-            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelSelectedIterator));
+            QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*channelSelectedIterator));
             idElement.appendChild(idValue);
             channelSelectedElement.appendChild(idElement);
         }
@@ -370,7 +370,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
         QList<int>::iterator channelIterator;
         for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
-            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*channelIterator));
             idElement.appendChild(idValue);
             channelsElement.appendChild(idElement);
         }

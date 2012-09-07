@@ -54,7 +54,7 @@ private:
             itemId = id;
             color = c;
             isChanged = false;
-            if(l == "") label = QString("%1").arg(id);
+            if(l == "") label = QString::fromLatin1("%1").arg(id);
             else label = l;
         }
         ItemColor(const ItemColor& origin):itemId(origin.itemId),

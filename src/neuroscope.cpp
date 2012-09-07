@@ -214,7 +214,7 @@ void NeuroscopeApp::initActions()
     editMode->setChecked(true);
 
     //Tools menu
-    QMenu *toolMenu = menuBar()->addMenu(tr("Edit"));
+    QMenu *toolMenu = menuBar()->addMenu(tr("Tool"));
     mZoomTool = toolMenu->addAction(tr("Zoom"));
     mZoomTool->setIcon(QIcon(":/icons/zoom_tool"));
     mZoomTool->setShortcut(Qt::Key_Z);

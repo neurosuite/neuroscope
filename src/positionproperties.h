@@ -53,13 +53,13 @@ public:
     ~PositionProperties();
 
     /**Sets the video acquisition sampling rate.*/
-    inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString("%1").arg(rate,0,'g',14));}
+    inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
     /**Sets the video image width.*/
-    inline void setWidth(int width){widthLineEdit->setText(QString("%1").arg(width));}
+    inline void setWidth(int width){widthLineEdit->setText(QString::fromLatin1("%1").arg(width));}
 
     /**Sets the video image height.*/
-    inline void setHeight(int height){heightLineEdit->setText(QString("%1").arg(height));}
+    inline void setHeight(int height){heightLineEdit->setText(QString::fromLatin1("%1").arg(height));}
 
     /**Sets the background image.*/
     inline void setBackgroundImage(const QString& image){

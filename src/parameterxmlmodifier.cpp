@@ -179,7 +179,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode resolutionNode = findDirectChild(BITS,acquisitionSystem);
     if(!resolutionNode.isNull()){
         QDomText resolutionTextChild = resolutionNode.firstChild().toText();
-        if(!resolutionTextChild.isNull()) resolutionTextChild.setNodeValue(QString("%1").arg(resolution));
+        if(!resolutionTextChild.isNull()) resolutionTextChild.setNodeValue(QString::fromLatin1("%1").arg(resolution));
         else return false;
     }
     else return false;
@@ -187,7 +187,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode nbChannelsNode = findDirectChild(NB_CHANNELS,acquisitionSystem);
     if(!nbChannelsNode.isNull()){
         QDomText nbChannelsTextChild = nbChannelsNode.firstChild().toText();
-        if(!nbChannelsTextChild.isNull()) nbChannelsTextChild.setNodeValue(QString("%1").arg(nbChannels));
+        if(!nbChannelsTextChild.isNull()) nbChannelsTextChild.setNodeValue(QString::fromLatin1("%1").arg(nbChannels));
         else return false;
     }
     else return false;
@@ -195,7 +195,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode samplingRateNode = findDirectChild(SAMPLING_RATE,acquisitionSystem);
     if(!samplingRateNode.isNull()){
         QDomText samplingRateTextChild = samplingRateNode.firstChild().toText();
-        if(!samplingRateTextChild.isNull()) samplingRateTextChild.setNodeValue(QString("%1").arg(samplingRate,0,'g',14));
+        if(!samplingRateTextChild.isNull()) samplingRateTextChild.setNodeValue(QString::fromLatin1("%1").arg(samplingRate,0,'g',14));
         else return false;
     }
     else return false;
@@ -203,7 +203,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode voltageRangeNode = findDirectChild(VOLTAGE_RANGE,acquisitionSystem);
     if(!voltageRangeNode.isNull()){
         QDomText voltageRangeTextChild = voltageRangeNode.firstChild().toText();
-        if(!voltageRangeTextChild.isNull()) voltageRangeTextChild.setNodeValue(QString("%1").arg(voltageRange));
+        if(!voltageRangeTextChild.isNull()) voltageRangeTextChild.setNodeValue(QString::fromLatin1("%1").arg(voltageRange));
         else return false;
     }
     else return false;
@@ -211,7 +211,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode amplificationNode = findDirectChild(AMPLIFICATION,acquisitionSystem);
     if(!amplificationNode.isNull()){
         QDomText amplificationTextChild = amplificationNode.firstChild().toText();
-        if(!amplificationTextChild.isNull()) amplificationTextChild.setNodeValue(QString("%1").arg(amplification));
+        if(!amplificationTextChild.isNull()) amplificationTextChild.setNodeValue(QString::fromLatin1("%1").arg(amplification));
         else return false;
     }
     else return false;
@@ -219,7 +219,7 @@ bool ParameterXmlModifier::setAcquisitionSystemInformation(int resolution,int nb
     QDomNode offsetNode = findDirectChild(OFFSET,acquisitionSystem);
     if(!offsetNode.isNull()){
         QDomText offsetTextChild = offsetNode.firstChild().toText();
-        if(!offsetTextChild.isNull()) offsetTextChild.setNodeValue(QString("%1").arg(offset));
+        if(!offsetTextChild.isNull()) offsetTextChild.setNodeValue(QString::fromLatin1("%1").arg(offset));
         else return false;
     }
     else return false;
@@ -234,7 +234,7 @@ bool ParameterXmlModifier::setLfpInformation(double lfpSamplingRate){
     QDomNode lfpSamplingRateNode = findDirectChild(LFP_SAMPLING_RATE,lfp);
     if(!lfpSamplingRateNode.isNull()){
         QDomText lfpSamplingRateTextChild = lfpSamplingRateNode.firstChild().toText();
-        if(!lfpSamplingRateTextChild.isNull()) lfpSamplingRateTextChild.setNodeValue(QString("%1").arg(lfpSamplingRate,0,'g',14));
+        if(!lfpSamplingRateTextChild.isNull()) lfpSamplingRateTextChild.setNodeValue(QString::fromLatin1("%1").arg(lfpSamplingRate,0,'g',14));
         else return false;
     }
     else return false;
@@ -247,11 +247,11 @@ void ParameterXmlModifier::setMiscellaneousInformation(float screenGain,QString 
     //AS part of the NEUROSCOPE tag, this tag is overwritten: the current MISCELLANEOUS tag will be replace by this new one
     miscellaneous = doc.createElement(MISCELLANEOUS);
     QDomElement gainElement = doc.createElement(SCREENGAIN);
-    QDomText gainValue = doc.createTextNode(QString("%1").arg(screenGain));
+    QDomText gainValue = doc.createTextNode(QString::fromLatin1("%1").arg(screenGain));
     gainElement.appendChild(gainValue);
 
     QDomElement imageElement = doc.createElement(TRACE_BACKGROUND_IMAGE);
-    QDomText imageValue = doc.createTextNode(QString("%1").arg(traceBackgroungImage));
+    QDomText imageValue = doc.createTextNode(QString::fromLatin1("%1").arg(traceBackgroungImage));
     imageElement.appendChild(imageValue);
 
     miscellaneous.appendChild(gainElement);
@@ -264,11 +264,11 @@ void ParameterXmlModifier::setNeuroscopeVideoInformation(int rotation,int flip,Q
     neuroscopeVideo = doc.createElement(VIDEO);
 
     QDomElement rotationElement = doc.createElement(ROTATE);
-    QDomText rotationValue = doc.createTextNode(QString("%1").arg(rotation));
+    QDomText rotationValue = doc.createTextNode(QString::fromLatin1("%1").arg(rotation));
     rotationElement.appendChild(rotationValue);
 
     QDomElement flipElement = doc.createElement(FLIP);
-    QDomText flipValue = doc.createTextNode(QString("%1").arg(flip));
+    QDomText flipValue = doc.createTextNode(QString::fromLatin1("%1").arg(flip));
     flipElement.appendChild(flipValue);
 
     QDomElement pathElement = doc.createElement(VIDEO_IMAGE);
@@ -276,7 +276,7 @@ void ParameterXmlModifier::setNeuroscopeVideoInformation(int rotation,int flip,Q
     pathElement.appendChild(pathValue);
 
     QDomElement drawTrajectoryElement = doc.createElement(POSITIONS_BACKGROUND);
-    QDomText drawTrajectoryValue = doc.createTextNode(QString("%1").arg(drawTrajectory));
+    QDomText drawTrajectoryValue = doc.createTextNode(QString::fromLatin1("%1").arg(drawTrajectory));
     drawTrajectoryElement.appendChild(drawTrajectoryValue);
 
     neuroscopeVideo.appendChild(rotationElement);
@@ -293,11 +293,11 @@ bool ParameterXmlModifier::setVideoInformation(int width,int height){
         video = doc.createElement(VIDEO);
 
         QDomElement widthElement = doc.createElement(WIDTH);
-        QDomText widthValue = doc.createTextNode(QString("%1").arg(width));
+        QDomText widthValue = doc.createTextNode(QString::fromLatin1("%1").arg(width));
         widthElement.appendChild(widthValue);
 
         QDomElement heightElement = doc.createElement(HEIGHT);
-        QDomText heightValue = doc.createTextNode(QString("%1").arg(height));
+        QDomText heightValue = doc.createTextNode(QString::fromLatin1("%1").arg(height));
         heightElement.appendChild(heightValue);
 
         //  video.appendChild(samplingRateElement);
@@ -309,7 +309,7 @@ bool ParameterXmlModifier::setVideoInformation(int width,int height){
         QDomNode widthNode = findDirectChild(WIDTH,video);
         if(!widthNode.isNull()){
             QDomText widthTextChild = widthNode.firstChild().toText();
-            if(!widthTextChild.isNull()) widthTextChild.setNodeValue(QString("%1").arg(width));
+            if(!widthTextChild.isNull()) widthTextChild.setNodeValue(QString::fromLatin1("%1").arg(width));
             else return false;
         }
         else return false;
@@ -317,7 +317,7 @@ bool ParameterXmlModifier::setVideoInformation(int width,int height){
         QDomNode heightNode = findDirectChild(HEIGHT,video);
         if(!heightNode.isNull()){
             QDomText heightTextChild = heightNode.firstChild().toText();
-            if(!heightTextChild.isNull()) heightTextChild.setNodeValue(QString("%1").arg(height));
+            if(!heightTextChild.isNull()) heightTextChild.setNodeValue(QString::fromLatin1("%1").arg(height));
             else return false;
         }
         else return false;
@@ -341,7 +341,7 @@ bool ParameterXmlModifier::setChannelDisplayInformation(ChannelColors* channelCo
         int offset = channelDefaultOffsets[channelId];
 
         QDomElement idElement = doc.createElement(CHANNEL);
-        QDomText idValue = doc.createTextNode(QString("%1").arg(channelId));
+        QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(channelId));
         idElement.appendChild(idValue);
 
         QDomElement colorElement = doc.createElement(COLOR);
@@ -363,11 +363,11 @@ bool ParameterXmlModifier::setChannelDisplayInformation(ChannelColors* channelCo
         channelDisplay.appendChild(spikeColorElement);
 
         QDomElement idElement2 = doc.createElement(CHANNEL);
-        QDomText idValue2 = doc.createTextNode(QString("%1").arg(channelId));
+        QDomText idValue2 = doc.createTextNode(QString::fromLatin1("%1").arg(channelId));
         idElement2.appendChild(idValue2);
 
         QDomElement offsetElement = doc.createElement(DEFAULT_OFFSET);
-        QDomText offsetValue = doc.createTextNode(QString("%1").arg(offset));
+        QDomText offsetValue = doc.createTextNode(QString::fromLatin1("%1").arg(offset));
         offsetElement.appendChild(offsetValue);
 
         QDomElement channelOffset = doc.createElement(CHANNEL_OFFSET);
@@ -402,7 +402,7 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QList<int> >& anat
 
         for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
-            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*channelIterator));
             idElement.appendChild(idValue);
             idElement.setAttribute(SKIP,skipStatus[*channelIterator]);
             groupElement.appendChild(idElement);
@@ -434,11 +434,11 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(int nbSamples,int peakSa
     spikes = doc.createElement(SPIKES);
 
     QDomElement nbSamplesElement = doc.createElement(NB_SAMPLES);
-    QDomText nbSamplesValue = doc.createTextNode(QString("%1").arg(nbSamples));
+    QDomText nbSamplesValue = doc.createTextNode(QString::fromLatin1("%1").arg(nbSamples));
     nbSamplesElement.appendChild(nbSamplesValue);
 
     QDomElement peakElement = doc.createElement(PEAK_SAMPLE_INDEX);
-    QDomText peakValue = doc.createTextNode(QString("%1").arg(peakSampleIndex));
+    QDomText peakValue = doc.createTextNode(QString::fromLatin1("%1").arg(peakSampleIndex));
     peakElement.appendChild(peakValue);
 
     spikes.appendChild(nbSamplesElement);
@@ -518,7 +518,7 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QList<int> >& 
 
         for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
             QDomElement idElement = doc.createElement(CHANNEL);
-            QDomText idValue = doc.createTextNode(QString("%1").arg(*channelIterator));
+            QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(*channelIterator));
             idElement.appendChild(idValue);
             channelListElement.appendChild(idElement);
         }
@@ -563,7 +563,7 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
             extensionElement.appendChild(extensionValue);
 
             QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
-            QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate,0,'g',14));
+            QDomText samplingRateValue = doc.createTextNode(QString::fromLatin1("%1").arg(samplingRate,0,'g',14));
             samplingRateElement.appendChild(samplingRateValue);
 
             QDomElement file = doc.createElement(neuroscope::FILE);
@@ -585,7 +585,7 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
             if(!file.isNull()){
                 QDomNode samplingRateNode = findDirectChild(SAMPLING_RATE,file);
                 QDomText samplingRateTextChild = samplingRateNode.firstChild().toText();
-                if(!samplingRateTextChild.isNull()) samplingRateTextChild.setNodeValue(QString("%1").arg(samplingRate,0,'g',14));
+                if(!samplingRateTextChild.isNull()) samplingRateTextChild.setNodeValue(QString::fromLatin1("%1").arg(samplingRate,0,'g',14));
                 else return false;
             }
             //else create a new one
@@ -595,7 +595,7 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
                 extensionElement.appendChild(extensionValue);
 
                 QDomElement samplingRateElement = doc.createElement(SAMPLING_RATE);
-                QDomText samplingRateValue = doc.createTextNode(QString("%1").arg(samplingRate,0,'g',14));
+                QDomText samplingRateValue = doc.createTextNode(QString::fromLatin1("%1").arg(samplingRate,0,'g',14));
                 samplingRateElement.appendChild(samplingRateValue);
 
                 QDomElement file = doc.createElement(neuroscope::FILE);

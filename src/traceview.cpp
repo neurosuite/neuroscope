@@ -33,7 +33,7 @@
 #include <q3paintdevicemetrics.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QApplication>
 #include <QMessageBox>
 
@@ -347,7 +347,7 @@ void TraceView::updateClusterData(bool active){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString("%1").arg(*toRemoveIterator));
+            clustersData.remove(QString::fromLatin1("%1").arg(*toRemoveIterator));
         }
 
         if(clustersData.count() != 0) setCursor(Qt::WaitCursor);
@@ -392,7 +392,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString("%1").arg(*toRemoveIterator));
+            clustersData.remove(QString::fromLatin1("%1").arg(*toRemoveIterator));
         }
 
         Q3DictIterator<ClusterData> iterator(clustersData);
@@ -990,7 +990,7 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
     QString providerName = "";
     if(!clusterProviders.isEmpty()){
         clusterFileId = (*channelClusterFiles)[channelId];
-        providerName = QString("%1").arg(clusterFileId);
+        providerName = QString::fromLatin1("%1").arg(clusterFileId);
         if(clustersData.find(providerName) != 0) areClustersToDraw = true;
     }
 
@@ -1221,12 +1221,12 @@ void TraceView::drawTraces(QList<int> channels,bool highlight){
             if(!clusterProviders.isEmpty()){
                 areClustersToDraw = true;
                 clusterFileId = (*channelClusterFiles)[*iterator];
-                providerName = QString("%1").arg(clusterFileId);
+                providerName = QString::fromLatin1("%1").arg(clusterFileId);
                 if(clustersData.find(providerName) != 0) areClustersToDraw = true;
             }
 
             if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-                Q3PointArray trace(nbSamples);
+                QPolygon trace(nbSamples);
                 for(int i = 0; i < nbSamples;++i){
                     int y = basePosition - static_cast<long>(data(i + 1,*iterator + 1) * channelFactors[*iterator]);
                     trace.setPoint(i,X,y);
@@ -1250,7 +1250,7 @@ void TraceView::drawTraces(QList<int> channels,bool highlight){
             else{
                 //Array containing 3 lines: sample index, abscissa and ordinate
                 Array<dataType> traceInfo(3,nbSamples);
-                Q3PointArray trace(nbSamples);
+                QPolygon trace(nbSamples);
                 for(int i = 1; i <= nbSamples;++i){
                     int y = basePosition - static_cast<long>(data(i,*iterator + 1) * channelFactors[*iterator]);
                     trace.setPoint(i - 1,X,y);
@@ -1293,7 +1293,7 @@ void TraceView::drawTraces(QList<int> channels,bool highlight){
                         for(int j = currentIndex; j <= nbSamples;++j){
                             if(firstIndex > traceInfo(1,j)) continue;//case 1
                             else if(firstIndex == traceInfo(1,j)){//case 2
-                                Q3PointArray trace(nbWaveformSamples);
+                                QPolygon trace(nbWaveformSamples);
                                 int pos = 0;
                                 for(int k = firstIndex;k<= lastIndex;++k){
                                     trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1428,7 +1428,7 @@ void TraceView::drawTraces(QPainter& painter){
                 for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
                     //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
                     if(!clusterFileList.contains(selectedIterator.key())) continue;
-                    QString providerName = QString("%1").arg(selectedIterator.key());
+                    QString providerName = QString::fromLatin1("%1").arg(selectedIterator.key());
                     if(clustersData[providerName] == 0) continue;
 
                     ItemColors* colors = providerItemColors[providerName];
@@ -1493,12 +1493,12 @@ void TraceView::drawTraces(QPainter& painter){
                     if(!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
                         clusterFileId = (*channelClusterFiles)[channelId];
-                        providerName = QString("%1").arg(clusterFileId);
+                        providerName = QString::fromLatin1("%1").arg(clusterFileId);
                         if(clustersData.find(providerName) != 0) areClustersToDraw = true;
                     }
 
                     if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-                        Q3PointArray trace(nbSamples);
+                        QPolygon trace(nbSamples);
                         for(int i = 0; i < nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
                             trace.setPoint(i,X + x,y);
@@ -1509,7 +1509,7 @@ void TraceView::drawTraces(QPainter& painter){
                     else{
                         //Array containing 3 lines: sample index, abscissa and ordinate
                         Array<dataType> traceInfo(3,nbSamples);
-                        Q3PointArray trace(nbSamples);
+                        QPolygon trace(nbSamples);
                         for(int i = 1; i <= nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
                             trace.setPoint(i - 1,X + x,y);
@@ -1543,7 +1543,7 @@ void TraceView::drawTraces(QPainter& painter){
                                 for(int j = currentIndex; j <= nbSamples;++j){
                                     if(firstIndex > traceInfo(1,j)) continue;//case 1
                                     else if(firstIndex == traceInfo(1,j)){//case 2
-                                        Q3PointArray trace(nbWaveformSamples);
+                                        QPolygon trace(nbWaveformSamples);
                                         int pos = 0;
                                         for(int k = firstIndex;k<= lastIndex;++k){
                                             trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1572,7 +1572,7 @@ void TraceView::drawTraces(QPainter& painter){
                     if(!clusterFileList.contains(selectedIterator.key())) continue;
                     QList<int> clusterList = selectedIterator.data();
                     if(clusterList.size() == 0) continue;
-                    QString providerName = QString("%1").arg(selectedIterator.key());
+                    QString providerName = QString::fromLatin1("%1").arg(selectedIterator.key());
                     ItemColors* colors = providerItemColors[providerName];
                     Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
                     int nbSpikes = currentData.nbOfColumns();
@@ -1715,12 +1715,12 @@ void TraceView::drawTraces(QPainter& painter){
                     if(!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
                         clusterFileId = (*channelClusterFiles)[channelId];
-                        providerName = QString("%1").arg(clusterFileId);
+                        providerName = QString::fromLatin1("%1").arg(clusterFileId);
                         if(clustersData.find(providerName) != 0) areClustersToDraw = true;
                     }
 
                     if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-                        Q3PointArray trace(nbSamples);
+                        QPolygon trace(nbSamples);
                         for(int i = 0; i < nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
                             trace.setPoint(i,X,y);
@@ -1731,7 +1731,7 @@ void TraceView::drawTraces(QPainter& painter){
                     else{
                         //Array containing 3 lines: sample index, abscissa and ordinate
                         Array<dataType> traceInfo(3,nbSamples);
-                        Q3PointArray trace(nbSamples);
+                        QPolygon trace(nbSamples);
                         for(int i = 1; i <= nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
                             trace.setPoint(i - 1,X,y);
@@ -1766,7 +1766,7 @@ void TraceView::drawTraces(QPainter& painter){
                                 for(int j = currentIndex; j <= nbSamples;++j){
                                     if(firstIndex > traceInfo(1,j)) continue;//case 1
                                     else if(firstIndex == traceInfo(1,j)){//case 2
-                                        Q3PointArray trace(nbWaveformSamples);
+                                        QPolygon trace(nbWaveformSamples);
                                         int pos = 0;
                                         for(int k = firstIndex;k<= lastIndex;++k){
                                             trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
@@ -1800,7 +1800,7 @@ void TraceView::drawTraces(QPainter& painter){
             for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
                 QList<int> clusterList = iterator.data();
                 if(clusterList.size() == 0) continue;
-                QString providerName = QString("%1").arg(iterator.key());
+                QString providerName = QString::fromLatin1("%1").arg(iterator.key());
                 ItemColors* colors = providerItemColors[providerName];
                 Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
                 int nbSpikes = currentData.nbOfColumns();
@@ -2158,7 +2158,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                     drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
                 }
                 else{
-                    Q3PointArray trace(nbSamples);
+                    QPolygon trace(nbSamples);
                     for(int i = 0; i < nbSamples;++i){
                         int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
                         trace.setPoint(i,X,y);
@@ -2177,7 +2177,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
             }
             else{
-                Q3PointArray trace(nbSamples);
+                QPolygon trace(nbSamples);
                 for(int i = 0; i < nbSamples;++i){
                     int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
                     trace.setPoint(i,X,y);
@@ -4057,14 +4057,14 @@ void TraceView::showNextCluster(){
             //check if there are clusters to browse through taking the skip list
             else{
                 QList<int> selectedIds = selectedClusters[providersIterator.key()];
-                QList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
+                QList<int> idsToNotUse = clustersNotUsedForBrowsing[QString::fromLatin1("%1").arg(providersIterator.key())];
                 QList<int> ids;
                 QList<int>::iterator shownClustersIterator;
                 for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator)
                     if(!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
                 if(ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
-                    static_cast<ClusterData*>(clustersData[QString("%1").arg(providersIterator.key())])->setStatus(false);
+                    static_cast<ClusterData*>(clustersData[QString::fromLatin1("%1").arg(providersIterator.key())])->setStatus(false);
                 }
             }
         }
@@ -4072,7 +4072,7 @@ void TraceView::showNextCluster(){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString("%1").arg(*toRemoveIterator));
+            clustersData.remove(QString::fromLatin1("%1").arg(*toRemoveIterator));
         }
 
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
@@ -4106,7 +4106,7 @@ void TraceView::showPreviousCluster(){
             //check if there are clusters to browse through taking the skip list
             else{
                 QList<int> selectedIds = selectedClusters[providersIterator.key()];
-                QList<int> idsToNotUse = clustersNotUsedForBrowsing[QString("%1").arg(providersIterator.key())];
+                QList<int> idsToNotUse = clustersNotUsedForBrowsing[QString::fromLatin1("%1").arg(providersIterator.key())];
                 QList<int> ids;
                 QList<int>::iterator shownClustersIterator;
                 for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator){
@@ -4114,7 +4114,7 @@ void TraceView::showPreviousCluster(){
                 }
                 if(ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
-                    static_cast<ClusterData*>(clustersData[QString("%1").arg(providersIterator.key())])->setStatus(false);
+                    static_cast<ClusterData*>(clustersData[QString::fromLatin1("%1").arg(providersIterator.key())])->setStatus(false);
                 }
             }
         }
@@ -4122,7 +4122,7 @@ void TraceView::showPreviousCluster(){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString("%1").arg(*toRemoveIterator));
+            clustersData.remove(QString::fromLatin1("%1").arg(*toRemoveIterator));
         }
 
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
