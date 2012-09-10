@@ -24,7 +24,6 @@
 #include <types.h>
 
 // include files for QT
-#include <q3ptrlist.h>
 #include <QObject>
 //Added by qt3to4:
 #include <QList>

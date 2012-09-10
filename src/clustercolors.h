@@ -19,7 +19,6 @@
 #define CLUSTERCOLORS_H
 
 // include files for Qt
-#include <q3ptrlist.h>
 #include <QColor>
 #include <QList>
 
