@@ -3505,8 +3505,15 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("editState")) {
     } else if(state == QLatin1String("noEditState")) {
     } else if(state == QLatin1String("enableEditState")) {
+/*
+        <Enable>
+         <Action name="edit_mode" />
+        </Enable>
+  */
     } else if(state == QLatin1String("tabState")) {
+        mRenameActiveDisplay->setEnabled(true);
     } else if(state == QLatin1String("noTabState")) {
+        mRenameActiveDisplay->setEnabled(false);
     } else if(state == QLatin1String("datState")) {
     } else if(state == QLatin1String("noDatState")) {
     } else if(state == QLatin1String("clusterTabState")) {
@@ -3521,12 +3528,54 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("noEventBrowsingState")) {
     } else if(state == QLatin1String("eventBrowsingState")) {
     } else if(state == QLatin1String("positionState")) {
+        /*
+  <Enable>
+    <Action name="close_position_file" />
+    <Action name="position_view"/>
+  </Enable>
+  <Disable>
+   <Action name="load_position_file" />
+  </Disable>
+
+  */
     } else if(state == QLatin1String("noPositionState")) {
+        /*
+  <Enable>
+    <Action name="load_position_file" />
+  </Enable>
+  <Disable>
+   <Action name="close_position_file" />
+   <Action name="position_view"/>
+   <Action name="show_events"/>
+  </Disable>
+*/
     } else if(state == QLatin1String("eventsInPositionViewEnableState")) {
+/*
+        <Enable>
+         <Action name="show_events"/>
+        </Enable>
+  */
     } else if(state == QLatin1String("eventTabState")) {
+        /*
+  <Enable>
+   <Action name="close_event_file" />
+   <Action name="add_event" />
+   <Action name="add_event_toolbarAction" />
+  </Enable>
+  <Disable>
+   <Action name="edit_select_all_except01"/>
+   <Action name="close_cluster_file" />
+  </Disable>
+ </State>
+*/
     } else if(state == QLatin1String("undoState")) {
+        mRedo->setEnabled(true);
+        mUndo->setEnabled(true);
     } else if(state == QLatin1String("emptyRedoState")) {
+        mRedo->setEnabled(false);
     } else if(state == QLatin1String("emptyUndoState")) {
+        mUndo->setEnabled(false);
+        mRedo->setEnabled(true);
 
     } else {
         qDebug()<<" unknown state "<<state;

@@ -34,8 +34,11 @@ using namespace std;
 
 using namespace neuroscope;
 
-NeuroscopeXmlReader::NeuroscopeXmlReader():readVersion(""){
+NeuroscopeXmlReader::NeuroscopeXmlReader()
+    :readVersion("")
+{
 }
+
 NeuroscopeXmlReader::~NeuroscopeXmlReader(){
 }
 
