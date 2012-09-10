@@ -34,7 +34,7 @@
 class ClusterProperties : public ClusterPropertiesLayout  {
     Q_OBJECT
 public: 
-    ClusterProperties(QWidget *parent=0, const char *name=0);
+    ClusterProperties(QWidget *parent=0);
     ~ClusterProperties();
 
 
