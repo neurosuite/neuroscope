@@ -293,7 +293,7 @@ protected:
     virtual bool queryExit();
     
     
-    void customEvent (QCustomEvent* event);
+    void customEvent (QEvent* event);
     
 private slots:
 

@@ -2812,7 +2812,7 @@ void NeuroscopeApp::slotSessionSaveAs(){
     }
 }
 
-void NeuroscopeApp::customEvent (QCustomEvent* event){
+void NeuroscopeApp::customEvent (QEvent* event){
     //Event sent by NeuroscopeDoc to advice that there is some threads still running.
     if(event->type() == QEvent::User + 200){
         NeuroscopeDoc::CloseDocumentEvent* closeEvent = (NeuroscopeDoc::CloseDocumentEvent*) event;
