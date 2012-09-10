@@ -26,7 +26,7 @@
 #include <QPair>
 //Added by qt3to4:
 #include <QList>
-#include <QCustomEvent>
+
 #include <QEvent>
 
 // include files for KDE
@@ -1044,7 +1044,7 @@ public:
     * Internal class use to send information to the main window to inform it that
     * the document could not be closed has there still have thread running.
     */
-    class CloseDocumentEvent : public QCustomEvent{
+    class CloseDocumentEvent : public QEvent{
         //Only the method getCloseDocumentEvent of NeuroscopeDoc has access to the private part of CloseDocumentEvent,
         //the constructor of CloseDocumentEvent being private, only this method con create a new CloseDocumentEvent
         friend CloseDocumentEvent* NeuroscopeDoc::getCloseDocumentEvent(QString origin);
@@ -1054,7 +1054,7 @@ public:
         inline ~CloseDocumentEvent(){}
 
     private:
-        CloseDocumentEvent(QString origin):QCustomEvent(QEvent::User + 200),origin(origin){}
+        CloseDocumentEvent(QString origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
 
         QString origin;
     };

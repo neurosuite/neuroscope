@@ -29,7 +29,7 @@
 #include <QCheckBox>
 //Added by qt3to4:
 #include <QList>
-#include <QCustomEvent>
+
 #include <QTabWidget>
 #include <QMainWindow>
 //application specific include files

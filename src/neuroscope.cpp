@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QList>
 #include <QEvent>
-#include <QCustomEvent>
+
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMenu>
