@@ -40,14 +40,7 @@
 #include <QDebug>
 
 
-//Unix include file
-#include <unistd.h>
 
-//General C++ include files
-#include <iostream>
-#include <iomanip> // Required for formated I/O.
-#include <stdlib.h>
-using namespace std;
 
 const int TraceView::XMARGIN = 50;
 const int TraceView::YMARGIN = 0;

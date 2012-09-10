@@ -19,13 +19,9 @@
 #include "tags.h"
 #include "channelcolors.h"
 
-//General C++ include files
-#include <iostream>
-#include <fstream>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QList>
-using namespace std;
 
 //include files for QT
 #include <QFile> 

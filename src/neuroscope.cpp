@@ -51,10 +51,6 @@
 #include "itempalette.h"
 #include "eventsprovider.h"
 
-//General C++ include files
-#include <iostream>
-#include <exception>
-using namespace std;
 
 
 NeuroscopeApp::NeuroscopeApp()

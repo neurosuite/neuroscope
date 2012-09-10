@@ -49,13 +49,6 @@
 #include "utilities.h"
 
 
-//C, C++ include files
-//#define _LARGEFILE_SOURCE already defined in /usr/include/features.h
-#define _FILE_OFFSET_BITS 64
-#include <stdio.h>
-#include <iostream>
-using namespace std;
-
 extern QString version;
 
 NeuroscopeDoc::NeuroscopeDoc(QWidget* parent,ChannelPalette& displayChannelPalette,ChannelPalette& spikeChannelPalette,int channelNbDefault,double datSamplingRateDefault,

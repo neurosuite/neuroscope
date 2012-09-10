@@ -24,12 +24,6 @@
 #include <QFileInfo>
 
 
-//General C++ include files
-#include <iostream>
-#include <fstream>
-#include <iomanip> // Required for formated I/O.
-#include <stdlib.h>
-using namespace std;
 
 PositionsProvider::PositionsProvider(QString fileUrl,double samplingRate,int width,int height,int rotation,int flip):
     DataProvider(fileUrl),samplingRate(samplingRate),width(width),height(height),rotation(rotation),flip(flip) {
