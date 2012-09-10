@@ -23,9 +23,6 @@
 #include <Q3PtrList>
 #include <QDebug>
 
-
-using namespace std;
-
 ChannelColors::ChannelColors():channelList(){
     //The list owns the objects, it will delete the channels that are removed.
     channelList.setAutoDelete(true);

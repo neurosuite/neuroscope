@@ -775,7 +775,7 @@ void ItemPalette::createGroup(QString id){
     ItemGroupView* group = new ItemGroupView(backgroundColor,verticalContainer);
 
     group->setObjectName(id);
-    GroupNameLabel* label = new GroupNameLabel(id,group,"label");
+    GroupNameLabel* label = new GroupNameLabel(id,group);
 
     //Set the size to 2 digits, max 99 groups
     label->setFixedWidth(labelSize);

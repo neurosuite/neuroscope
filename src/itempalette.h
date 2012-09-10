@@ -243,8 +243,8 @@ private:
 class GroupNameLabel : public QLabel{
     Q_OBJECT
 public:
-    inline GroupNameLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
-        QLabel(text,parent,name,f){}
+    inline GroupNameLabel(const QString& text,QWidget* parent):
+        QLabel(text,parent){}
 
 signals:
     void leftClickOnLabel(QString sourceId,bool shiftKey,bool ctrlAlt);

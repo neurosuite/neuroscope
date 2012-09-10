@@ -353,8 +353,8 @@ private:
 class GroupLabel : public QLabel{
     Q_OBJECT
 public:
-    inline GroupLabel(const QString& text,QWidget* parent,const char* name = 0,Qt::WFlags f = 0):
-        QLabel(text,parent,name,f){}
+    inline GroupLabel(const QString& text,QWidget* parent):
+        QLabel(text,parent){}
 
 signals:
     void middleClickOnLabel(QString sourceId);

@@ -816,7 +816,7 @@ void ChannelPalette::reset(){
 void ChannelPalette::createGroup(int id){  
     ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer);
     group->setObjectName(QString::fromLatin1("%1").arg(id));
-    GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group,"label");
+    GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group);
     if(id == -1){
         label->setText("?");
     }
