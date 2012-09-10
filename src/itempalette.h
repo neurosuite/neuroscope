@@ -38,9 +38,6 @@
 #include "itemgroupview.h"
 #include "itemiconview.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 // forward declaration
 class Q3IconView;

@@ -28,9 +28,6 @@
 #include "array.h"
 #include "types.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 
 /**Class representing the data of an event file for a given starting time and timeframe.

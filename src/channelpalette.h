@@ -40,9 +40,6 @@
 #include "channelgroupview.h"
 #include "channeliconview.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 // forward declaration
 class Q3IconView;

@@ -26,10 +26,6 @@
 #include <QFile>
 #include <QFileInfo>
 
-//General C++ include files
-#include <iostream>
-#include <fstream>
-using namespace std;
 
 /**
 @author Lynn Hazan

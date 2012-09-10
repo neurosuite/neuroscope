@@ -17,13 +17,9 @@
 // application specific includes
 #include "itemcolors.h"
 
-//C, C++ include files
-#include <iostream>
 //Added by qt3to4:
 #include <QList>
 #include <Q3PtrList>
-
-using namespace std;
 
 ItemColors::ItemColors():itemList(),colorChanged(false){
     //The list owns the objects, it will delete the items that are removed.

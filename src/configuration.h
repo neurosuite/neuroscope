@@ -23,10 +23,6 @@
 #include <qfont.h>
 #include <QColor>
 
-//General C++ include files
-#include <iostream>
-using namespace std;
-
 /**
   * This is the one and only configuration object.
   * The member functions read() and write() can be used to load and save

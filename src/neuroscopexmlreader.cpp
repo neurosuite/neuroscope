@@ -17,16 +17,8 @@
 //application specific include files.
 #include "neuroscopexmlreader.h"
 #include "tags.h"
-
-// include files for KDE
-
-
-
-//General C++ include files
-#include <iostream>
 //Added by qt3to4:
 #include <QList>
-using namespace std;
 
 //include files for QT
 #include <QFileInfo> 

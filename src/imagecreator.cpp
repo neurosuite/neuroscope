@@ -19,15 +19,12 @@
  ***************************************************************************/
 #include "imagecreator.h"
 
-
-//General C++ include files
-#include <iostream>
 //Added by qt3to4:
 #include <QPixmap>
-using namespace std;
 
 
-ImageCreator::ImageCreator(PositionsProvider& provider, int width, int height, QString backgroundImage, QColor backgroundColor, const QColor &foregroundColor):positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
+ImageCreator::ImageCreator(PositionsProvider& provider, int width, int height, QString backgroundImage, QColor backgroundColor, const QColor &foregroundColor)
+    :positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
     nbSpots = positionsProvider.getNbSpots();
 
     //Set Connection.

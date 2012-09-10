@@ -26,13 +26,6 @@
 #include <QFrame>
 #include <QMouseEvent>
 
-// include files for kde
-
-
-//General C++ include files
-#include <iostream>
-#include <stdlib.h>
-using namespace std;
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):

@@ -47,9 +47,6 @@ class PositionsProvider;
 class ItemColors;
 class TraceWidget;
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 
 /** The NeuroscopeView class provides the view widgets for the document instance (NeuroscopeDoc instance) and is displayed

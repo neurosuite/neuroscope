@@ -27,9 +27,6 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 /**Utilitary class used to build the cluster and event palettes.
   *@author Lynn Hazan

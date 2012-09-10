@@ -30,9 +30,6 @@
 //include files for the application
 #include "zoomwindow.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 /**
   * Frame base class containing the following features:

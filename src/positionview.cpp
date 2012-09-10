@@ -28,9 +28,6 @@
 #include "timer.h"
 #include "itemcolors.h"
 
-//General C++ include files
-#include <iostream>
-using namespace std;
 
 
 PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& globalEventProvider,QImage backgroundImage,long start,long timeFrameWidth,bool showEvents,int windowTopLeft,

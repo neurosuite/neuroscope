@@ -32,15 +32,9 @@
 #include <QCheckBox> 
 #include <QFileDialog>
 
-//includes files for KDE
-
-
 
 //include files for the application
 #include <positionpropertieslayout.h>
-
-#include <iostream>
-using namespace std;
 
 /**Class representing the NeuroScope position preferences tab contained in the preferences or properties dialogs.
   *@author Lynn Hazan
