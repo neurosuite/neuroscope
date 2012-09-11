@@ -361,7 +361,7 @@ public slots:
   * @param filePath path of the opened document.
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   */
-    inline void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,QString filePath,bool whiteBackground){
+    inline void print(QPainter& printPainter,int width,int height,QString filePath,bool whiteBackground){
 
         QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
         QFont f("Helvetica",8);
@@ -374,7 +374,7 @@ public slots:
         QRect newViewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
         newViewport.setBottom(printPainter.viewport().bottom() - 20);
         printPainter.setViewport(newViewport);
-        view.print(printPainter,metrics,whiteBackground);
+        view.print(printPainter,width,height,whiteBackground);
         printPainter.resetXForm();
     }
 

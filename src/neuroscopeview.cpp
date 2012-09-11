@@ -17,7 +17,7 @@
 
 // include files for Qt
 #include <QPainter>
-#include <q3paintdevicemetrics.h> 
+ 
 //Added by qt3to4:
 #include <QList>
 #include <QPixmap>
@@ -119,7 +119,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
     connect(this,SIGNAL(showClusters(QString,QList<int>&)),traceWidget,SLOT(showClusters(QString,QList<int>&)));
     connect(this,SIGNAL(clusterColorUpdated(QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QString,int,bool)));
-    connect(this,SIGNAL(print(QPainter&,Q3PaintDeviceMetrics&,QString,bool)),traceWidget,SLOT(print(QPainter&,Q3PaintDeviceMetrics&,QString,bool)));
+    connect(this,SIGNAL(print(QPainter&,int,int,QString,bool)),traceWidget,SLOT(print(QPainter&,int,int,QString,bool)));
     connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,const QList<int>&)),traceWidget,
             SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,const QList<int>&)));
     connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
@@ -162,19 +162,20 @@ NeuroscopeView::~NeuroscopeView()
 void NeuroscopeView::print(QPrinter* printer,QString filePath,bool whiteBackground)
 {
     QPainter printPainter;
-    Q3PaintDeviceMetrics metrics(printer);
+    const int width = printer->width();
+    const int height = printer->height();
     printPainter.begin(printer);
 
     //For the moment there is no list of contained views, therefore the signal is the only way to trigger the print of
     //the traceWidget
     //Print the TraceView
-    emit print(printPainter,metrics,filePath,whiteBackground);
+    emit print(printPainter,width,height,filePath,whiteBackground);
 
     //Print the positionView.
     if(isPositionFileShown){
         printer->newPage();
         NeuroscopeDoc* doc = mainWindow.getDocument();
-        positionView->print(printPainter,metrics,whiteBackground,doc->getWhiteTrajectoryBackground());
+        positionView->print(printPainter,width,height,whiteBackground,doc->getWhiteTrajectoryBackground());
     }
 
     printPainter.end();

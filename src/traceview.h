@@ -36,7 +36,7 @@
 
 //Inclused files for KDE
 #include <QStatusBar>
-#include <Q3PaintDeviceMetrics>
+
 //include files for c/c++ libraries
 #include <math.h>
 
@@ -367,7 +367,7 @@ public:
   * @param metrics object providing informatin about the printer.
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   */
-    void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground);
+    void print(QPainter& printPainter,int width, int height,bool whiteBackground);
 
     /**Retrieves the next event.*/
     void showNextEvent();

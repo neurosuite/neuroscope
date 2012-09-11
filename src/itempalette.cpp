@@ -42,7 +42,7 @@
 #include <QLabel>
 #include <Q3ListBox>
 
-ItemPalette::ItemPalette(PaletteType type,QColor backgroundColor,QWidget* parent,const char* name,Qt::WFlags fl)
+ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name, Qt::WFlags fl)
     : Q3ScrollView(parent,name,fl),backgroundColor(backgroundColor),isInSelectItems(false),
       spaceWidget(0L),type(type),selected(""),updateIconPixmap(false)
 {

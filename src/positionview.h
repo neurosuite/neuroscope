@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QList>
-#include <Q3PaintDeviceMetrics>
+
 
 // application specific includes
 #include <baseframe.h>
@@ -98,7 +98,7 @@ public slots:
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   * @param backgroundForPrinting special background to be used for printing.
   */
-    void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground,QImage backgroundForPrinting = QImage());
+    void print(QPainter& printPainter,int width, int height,bool whiteBackground,QImage backgroundForPrinting = QImage());
 
     /***Changes the color of the background.*/
     void changeBackgroundColor(QColor color);

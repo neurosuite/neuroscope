@@ -30,7 +30,7 @@
 #include <QList>
 #include <QPainter>
 #include <QPrinter>
-#include <q3paintdevicemetrics.h>
+
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPolygon>
@@ -3500,7 +3500,7 @@ void TraceView::updateWaveformInformation(int nbSamplesBefore, int nbSamplesAfte
     }
 }
 
-void TraceView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool whiteBackground){
+void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBackground){
     //Draw the double buffer (pixmap) by copying it into the printer device throught the painter.
     QRect viewportOld = QRect(viewport.left(),viewport.top(),viewport.width(),viewport.height());
 
@@ -3526,7 +3526,7 @@ void TraceView::print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,bool 
 
     //Fill the background with the background color and ensure we draw the same portion of the world than on the screen
     QRect back = QRect(r.left(),r.top(),r.width(),r.height());
-    float widthRatio = (static_cast<float>(back.width())/static_cast<float>(metrics.width()));
+    float widthRatio = (static_cast<float>(back.width())/static_cast<float>(width));
     if(r.left() == 0) back.setLeft(r.left() - static_cast<long>(xMargin * widthRatio));
 
     QColor colorLegendTmp = colorLegend;

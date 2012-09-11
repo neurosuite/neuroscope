@@ -754,7 +754,7 @@ signals:
     void clusterColorUpdated(QString name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();
-    void print(QPainter& printPainter,Q3PaintDeviceMetrics& metrics,QString filePath,bool whiteBackground);
+    void print(QPainter& printPainter,int width, int height,QString filePath,bool whiteBackground);
     void newEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
                           QList<int>& eventsToShow,const QList<int>& eventsToSkip);
     void eventProviderRemoved(QString name,bool active,bool lastFile);
