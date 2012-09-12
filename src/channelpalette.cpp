@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QLayout>
 #include <QToolTip>
+#include <QDebug>
 
 #include <QPixmap>
 #include <QBitmap>
@@ -1811,6 +1812,8 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
 }
 
 void ChannelPalette::moveTrashesToBottom(){
+    qDebug()<<" spaceWidget"<<spaceWidget;
+#if KDAB_PORTING
     //Remove all the children of the verticalContainer (spaceWidget and groups)
     verticalContainer->removeChild(spaceWidget);
 
@@ -1835,6 +1838,7 @@ void ChannelPalette::moveTrashesToBottom(){
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
+#endif
 }
 
 

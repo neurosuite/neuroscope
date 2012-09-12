@@ -892,6 +892,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
+    qDebug()<<"displayChannelPalette "<<displayChannelPalette;
     displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups());
     displayChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
     spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
