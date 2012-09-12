@@ -291,6 +291,10 @@ public:
     */
     inline bool getPositionsBackgroundDefault()const{return drawPositionsOnBackgroundDefault;}
 
+    bool getUseWhiteColorDuringPrinting() const { return useWhiteColorDuringPrinting; }
+
+    void setUseWhiteColorDuringPrinting(bool b) { useWhiteColorDuringPrinting = b; }
+
 private:
     /**Screen gain in milivolts by centimeters used to display the field potentiels.*/
     float screenGain;
@@ -337,6 +341,7 @@ private:
     /**Background image for the trace view*/
     QString traceBackgroundImage;
 
+    bool useWhiteColorDuringPrinting;
     static const float  screenGainDefault;
     static const int  voltageRangeDefault;
     static const int  amplificationDefault;

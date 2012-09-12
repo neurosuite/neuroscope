@@ -75,6 +75,7 @@ void Configuration::read() {
     flip = settings.value("flip",flipDefault).toInt();
     drawPositionsOnBackground = settings.value("drawPositionsOnBackground",drawPositionsOnBackgroundDefault).toBool();
     traceBackgroundImage = settings.value("traceBackgroundImage",traceBackgroundImageDefault).toString();
+    useWhiteColorDuringPrinting = settings.value("useWhiteColorDuringPrinting",true).toBool();
     settings.endGroup();
 }
 
@@ -104,6 +105,7 @@ void Configuration::write() const {
     settings.setValue("flip",flip);
     settings.setValue("drawPositionsOnBackground",drawPositionsOnBackground);
     settings.setValue("traceBackgroundImage",traceBackgroundImage);
+    settings.setValue("useWhiteColorDuringPrinting",useWhiteColorDuringPrinting);
     settings.endGroup();
 }
 

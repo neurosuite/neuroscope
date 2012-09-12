@@ -818,6 +818,9 @@ void NeuroscopeApp::applyPreferences() {
         doc->setDefaultGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
         if(!mainDock)doc->setGains(voltageRangeDefault,amplificationDefault,screenGainDefault);
     }
+
+    useWhiteColorDuringPrinting = configuration().getUseWhiteColorDuringPrinting();
+
 }
 
 void NeuroscopeApp::initializePreferences(){
@@ -843,6 +846,7 @@ void NeuroscopeApp::initializePreferences(){
     rotationDefault = configuration().getRotation();
     flipDefault = configuration().getFlip();
     drawPositionsOnBackgroundDefault = configuration().getPositionsBackground();
+    useWhiteColorDuringPrinting = configuration().getUseWhiteColorDuringPrinting();
 }
 
 void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
@@ -1528,16 +1532,17 @@ void NeuroscopeApp::slotFilePrint()
     if (printer->setup(this))
     {
         //retrieve the backgroundColor setting from KPrinter object, //1 <=> white background
-        int whiteBackground = -1; //KDAB verify
         NeuroscopeView* view = activeView();
-        if(whiteBackground == 1){
+        doc->updateSkippedChannelColors(true,backgroundColor);
+        if(useWhiteColorDuringPrinting) {
             //update the color of the skipped channels to white
             doc->updateSkippedChannelColors(true,backgroundColor);
             view->print(printer,filePath,true);
             //update the color of the skipped channels to the background color
             doc->updateSkippedChannelColors(false,backgroundColor);
+        } else {
+            view->print(printer,filePath,false);
         }
-        else view->print(printer,filePath,false);
     }
 
     slotStatusMsg(tr("Ready."));

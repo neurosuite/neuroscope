@@ -948,6 +948,8 @@ private:
 
     /**Updates the spike and event browsing status.*/
     void updateBrowsingStatus();
+
+    bool useWhiteColorDuringPrinting;
 };
 
 #endif // NEUROSCOPE_H
