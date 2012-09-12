@@ -86,6 +86,9 @@ ChannelPalette::~ChannelPalette()
 }
 
 void ChannelPalette::setGreyScale(bool grey){
+    if(greyScale == grey) {
+        return;
+    }
     greyScale = grey;
 
     Q3IconViewItem* item = 0L;
