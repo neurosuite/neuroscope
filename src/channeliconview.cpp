@@ -74,8 +74,8 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gri
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-    connect(this,SIGNAL(dropped(QDropEvent *,const QList<Q3IconDragItem> &)),
-            this,SLOT(slotDropped(QDropEvent *,const QList<Q3IconDragItem> &)));
+    connect(this,SIGNAL(dropped(QDropEvent*,QList<Q3IconDragItem>)),
+            this,SLOT(slotDropped(QDropEvent*,QList<Q3IconDragItem>)));
 }
 
 Q3DragObject* ChannelIconView::dragObject(){

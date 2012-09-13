@@ -89,39 +89,39 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
     connect(this,SIGNAL(changeBackgroundColor(QColor)),traceWidget, SLOT(changeBackgroundColor(QColor)));
     connect(this,SIGNAL(greyScale(bool)),traceWidget, SLOT(setGreyScale(bool)));
-    connect(traceWidget,SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
+    connect(traceWidget,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
     connect(this,SIGNAL(modeToSet(BaseFrame::Mode,bool)),traceWidget,SLOT(setMode(BaseFrame::Mode,bool)));
     connect(this,SIGNAL(multiColumnsDisplay(bool)),traceWidget,SLOT(setMultiColumns(bool)));
     connect(this,SIGNAL(clusterVerticalLinesDisplay(bool)),traceWidget,SLOT(setClusterVerticalLines(bool)));
     connect(this,SIGNAL(clusterRasterDisplay(bool)),traceWidget,SLOT(setClusterRaster(bool)));
     connect(this,SIGNAL(clusterWaveformsDisplay(bool)),traceWidget,SLOT(setClusterWaveforms(bool)));
-    connect(this,SIGNAL(showChannels(const QList<int>&)),traceWidget,SLOT(showChannels(const QList<int>&)));
+    connect(this,SIGNAL(showChannels(QList<int>)),traceWidget,SLOT(showChannels(QList<int>)));
     connect(this,SIGNAL(channelColorUpdate(int,bool)),traceWidget,SLOT(channelColorUpdate(int,bool)));
     connect(this,SIGNAL(groupColorUpdate(int,bool)),traceWidget,SLOT(groupColorUpdate(int,bool)));
     connect(this,SIGNAL(increaseAllAmplitude()),traceWidget,SLOT(increaseAllChannelsAmplitude()));
     connect(this,SIGNAL(decreaseAllAmplitude()),traceWidget,SLOT(decreaseAllChannelsAmplitude()));
-    connect(this,SIGNAL(increaseAmplitude(const QList<int>&)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(const QList<int>&)));
-    connect(this,SIGNAL(decreaseAmplitude(const QList<int>&)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(const QList<int>&)));
+    connect(this,SIGNAL(increaseAmplitude(QList<int>)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(QList<int>)));
+    connect(this,SIGNAL(decreaseAmplitude(QList<int>)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(QList<int>)));
     connect(this,SIGNAL(updateGains(int,int)),traceWidget,SLOT(setGains(int,int)));
     connect(this,SIGNAL(updateDrawing()),traceWidget, SLOT(updateDrawing()));
     connect(this,SIGNAL(groupsHaveBeenModified(bool)),traceWidget, SLOT(groupsModified(bool)));
-    connect(this,SIGNAL(channelsToBeSelected(const QList<int>&)),traceWidget,SLOT(selectChannels(const QList<int>&)));
-    connect(this,SIGNAL(resetChannelOffsets(const QMap<int,int>&)),traceWidget,SLOT(resetOffsets(const QMap<int,int>&)));
-    connect(this,SIGNAL(resetChannelGains(const QList<int>&)),traceWidget,SLOT(resetGains(const QList<int>&)));
+    connect(this,SIGNAL(channelsToBeSelected(QList<int>)),traceWidget,SLOT(selectChannels(QList<int>)));
+    connect(this,SIGNAL(resetChannelOffsets(QMap<int,int>)),traceWidget,SLOT(resetOffsets(QMap<int,int>)));
+    connect(this,SIGNAL(resetChannelGains(QList<int>)),traceWidget,SLOT(resetGains(QList<int>)));
     connect(this,SIGNAL(drawTraces()),traceWidget,SLOT(drawTraces()));
     connect(this,SIGNAL(reset()),traceWidget,SLOT(reset()));
     connect(traceWidget,SIGNAL(updateStartAndDuration(long,long)),this, SLOT(setStartAndDuration(long,long)));
     connect(this,SIGNAL(showLabels(bool)),traceWidget, SLOT(showLabels(bool)));
     connect(this,SIGNAL(displayCalibration(bool,bool)),traceWidget, SLOT(showCalibration(bool,bool)));
     connect(this,SIGNAL(newSamplingRate(long long)),traceWidget,SLOT(samplingRateModified(long long)));
-    connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int, QList<int> >*,QMap<int,int>*,int,int,const QList<int>&)),traceWidget,
-            SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int, QList<int> >*,QMap<int,int>*,int,int,const QList<int>&)));
+    connect(this,SIGNAL(newClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)),traceWidget,
+            SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)));
     connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
     connect(this,SIGNAL(showClusters(QString,QList<int>&)),traceWidget,SLOT(showClusters(QString,QList<int>&)));
     connect(this,SIGNAL(clusterColorUpdated(QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QString,int,bool)));
     connect(this,SIGNAL(print(QPainter&,int,int,QString,bool)),traceWidget,SLOT(print(QPainter&,int,int,QString,bool)));
-    connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,const QList<int>&)),traceWidget,
-            SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,const QList<int>&)));
+    connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),traceWidget,
+            SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)));
     connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
     connect(this,SIGNAL(showEvents(QString,QList<int>&)),traceWidget,SLOT(showEvents(QString,QList<int>&)));
     connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QString,int,bool)));
@@ -139,9 +139,9 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     connect(this,SIGNAL(previousCluster()),traceWidget,SLOT(showPreviousCluster()));
     connect(this,SIGNAL(waveformInformationUpdated(int,int,bool)),traceWidget,SLOT(updateWaveformInformation(int,int,bool)));
     connect(this,SIGNAL(clusterProviderUpdated(bool)),traceWidget,SLOT(updateClusterData(bool)));
-    connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,const QList<int>&)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,const QList<int>&)));
-    connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,const QList<int>&)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,const QList<int>&)));
-    connect(this,SIGNAL(skipStatusChanged(const QList<int>&)),traceWidget,SLOT(updateSkipStatus(const QList<int>&)));
+    connect(this,SIGNAL(noneBrowsingClusterListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingClusterList(QString,QList<int>)));
+    connect(this,SIGNAL(noneBrowsingEventListUpdated(QString,QList<int>)),traceWidget,SLOT(updateNoneBrowsingEventList(QString,QList<int>)));
+    connect(this,SIGNAL(skipStatusChanged(QList<int>)),traceWidget,SLOT(updateSkipStatus(QList<int>)));
     connect(this,SIGNAL(decreaseTheRasterHeight()),traceWidget,SLOT(decreaseRasterHeight()));
     connect(this,SIGNAL(increaseTheRasterHeight()),traceWidget,SLOT(increaseRasterHeight()));
     connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
@@ -455,11 +455,11 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
     connect(this,SIGNAL(timeChanged(long,long)),positionView,SLOT(displayTimeFrame(long,long)));
     connect(this,SIGNAL(changeBackgroundColor(QColor)),positionView, SLOT(changeBackgroundColor(QColor)));
     connect(traceWidget,SIGNAL(eventsAvailable(Q3Dict<EventData>&,QMap<QString, QList<int> >&,
-                                               Q3Dict<ItemColors>&,QObject*,double)),positionView,SLOT(dataAvailable(Q3Dict<EventData>&,QMap<QString, QList<int> >&,Q3Dict<ItemColors>&,QObject*,double)));
+                                               Q3Dict<ItemColors>&,QObject*,double)),positionView,SLOT(dataAvailable(Q3Dict<EventData>&,QMap<QString,QList<int> >&,Q3Dict<ItemColors>&,QObject*,double)));
     connect(this,SIGNAL(updateEventDisplay()),positionView,SLOT(updateEventDisplay()));
     connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),positionView,SLOT(eventColorUpdate(QString,int,bool)));
     connect(this,SIGNAL(updateDrawing()),positionView, SLOT(updateDrawing()));
-    connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,const QList<int>&)),positionView,SLOT(addEventProvider()));
+    connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),positionView,SLOT(addEventProvider()));
     connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),positionView,SLOT(removeEventProvider(QString,bool,bool)));
     connect(this,SIGNAL(eventsShownInPositionView(bool)),positionView,SLOT(setEventsInPositionView(bool)));
 

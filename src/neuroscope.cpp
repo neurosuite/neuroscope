@@ -255,7 +255,7 @@ void NeuroscopeApp::initActions()
     addEventToolBarAction->setMenu(addEventPopup);
     addEventPopup->setCheckable(true);
     connect(addEventPopup, SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
-    connect(addEventPopup, SIGNAL(triggered(QAction *)), this, SLOT(slotAddEventButtonActivated(QAction *)));
+    connect(addEventPopup, SIGNAL(triggered(QAction*)), this, SLOT(slotAddEventButtonActivated(QAction*)));
 
     //Channels Menu
     QMenu *channelsMenu = menuBar()->addMenu(tr("&Channels"));
@@ -533,28 +533,28 @@ void NeuroscopeApp::initActions()
   connect(displayChannelPalette, SIGNAL(channelsChangeColor(QValueList<int>)),spikeChannelPalette, SLOT(updateColor(QValueList<int>)));
   connect(spikeChannelPalette, SIGNAL(channelsChangeColor(QValueList<int>)),displayChannelPalette, SLOT(updateColor(QValueList<int>)));
   */
-    connect(displayChannelPalette, SIGNAL(updateShownChannels(const QList<int>&)),this, SLOT(slotUpdateShownChannels(const QList<int>&)));
-    connect(spikeChannelPalette, SIGNAL(updateShownChannels(const QList<int>&)),this, SLOT(slotUpdateShownChannels(const QList<int>&)));
+    connect(displayChannelPalette, SIGNAL(updateShownChannels(QList<int>)),this, SLOT(slotUpdateShownChannels(QList<int>)));
+    connect(spikeChannelPalette, SIGNAL(updateShownChannels(QList<int>)),this, SLOT(slotUpdateShownChannels(QList<int>)));
 
-    connect(displayChannelPalette, SIGNAL(updateHideChannels(const QList<int>&)),this, SLOT(slotUpdateHiddenChannels(const QList<int>&)));
-    connect(spikeChannelPalette, SIGNAL(updateHideChannels(const QList<int>&)),this, SLOT(slotUpdateHiddenChannels(const QList<int>&)));
+    connect(displayChannelPalette, SIGNAL(updateHideChannels(QList<int>)),this, SLOT(slotUpdateHiddenChannels(QList<int>)));
+    connect(spikeChannelPalette, SIGNAL(updateHideChannels(QList<int>)),this, SLOT(slotUpdateHiddenChannels(QList<int>)));
 
-    connect(displayChannelPalette, SIGNAL(channelsDiscarded(const QList<int>&)),this, SLOT(slotChannelsDiscarded(const QList<int>&)));
-    connect(spikeChannelPalette, SIGNAL(channelsDiscarded(const QList<int>&)),this, SLOT(slotChannelsDiscarded(const QList<int>&)));
-    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(const QList<int>&,QString,bool)),spikeChannelPalette, SLOT(discardChannels(const QList<int>&,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(const QList<int>&,QString,bool)),displayChannelPalette, SLOT(discardChannels(const QList<int>&,QString,bool)));
-    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(const QList<int>&,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(const QList<int>&,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(const QList<int>&,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(const QList<int>&,QString,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
+    connect(spikeChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
 
-    connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(const QList<int>&)),spikeChannelPalette, SLOT(removeChannelsFromTrash(const QList<int>&)));
-    connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(const QList<int>&)),displayChannelPalette, SLOT(removeChannelsFromTrash(const QList<int>&)));
+    connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),spikeChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
+    connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),displayChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
 
     connect(displayChannelPalette, SIGNAL(groupModified()),this, SLOT(slotGroupsModified()));
     connect(spikeChannelPalette, SIGNAL(groupModified()),this, SLOT(slotGroupsModified()));
 
 
-    connect(displayChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
-    connect(spikeChannelPalette, SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotChannelsSelected(const QList<int>&)));
+    connect(displayChannelPalette, SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
+    connect(spikeChannelPalette, SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
 
     //TODO
     mParameterToolBar = new QToolBar;
@@ -872,7 +872,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     view->installEventFilter(this);
 
-    connect(view,SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotSelectChannelsInPalette(const QList<int>&)));
+    connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
     connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
     connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
     connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
@@ -2615,7 +2615,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
 
         view->installEventFilter(this);
 
-        connect(view,SIGNAL(channelsSelected(const QList<int>&)),this, SLOT(slotSelectChannelsInPalette(const QList<int>&)));
+        connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
         connect(view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
         connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
         connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
@@ -2953,8 +2953,8 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
 
     //Palette connections
     connect(clusterPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotClusterColorUpdate(int,QString)));
-    connect(clusterPalette, SIGNAL(updateShownItems(const QMap<QString,QList<int> >&)), this, SLOT(slotUpdateShownClusters(const QMap<QString,QList<int> >&)));
-    connect(clusterPalette, SIGNAL(updateItemsToSkip(QString,const QList<int>&)), this, SLOT(slotUpdateClustersToSkip(QString,const QList<int>&)));
+    connect(clusterPalette, SIGNAL(updateShownItems(QMap<QString,QList<int> >)), this, SLOT(slotUpdateShownClusters(QMap<QString,QList<int> >)));
+    connect(clusterPalette, SIGNAL(updateItemsToSkip(QString,QList<int>)), this, SLOT(slotUpdateClustersToSkip(QString,QList<int>)));
     connect(clusterPalette,SIGNAL(noClustersToBrowse()),this, SLOT(slotNoClustersToBrowse()));
     connect(clusterPalette,SIGNAL(clustersToBrowse()),this, SLOT(slotClustersToBrowse()));
 
@@ -3154,9 +3154,9 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
 
     //Palette connections
     connect(eventPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotEventColorUpdate(int,QString)));
-    connect(eventPalette, SIGNAL(updateShownItems(const QMap<QString,QList<int> >&)), this, SLOT(slotUpdateShownEvents(const QMap<QString,QList<int> >&)));
+    connect(eventPalette, SIGNAL(updateShownItems(QMap<QString,QList<int> >)), this, SLOT(slotUpdateShownEvents(QMap<QString,QList<int> >)));
     connect(eventPalette, SIGNAL(selectedGroupChanged(QString)), this, SLOT(slotEventGroupSelected(QString)));
-    connect(eventPalette, SIGNAL(updateItemsToSkip(QString,const QList<int>&)), this, SLOT(slotUpdateEventsToSkip(QString,const QList<int>&)));
+    connect(eventPalette, SIGNAL(updateItemsToSkip(QString,QList<int>)), this, SLOT(slotUpdateEventsToSkip(QString,QList<int>)));
     connect(eventPalette,SIGNAL(noEventsToBrowse()),this, SLOT(slotNoEventsToBrowse()));
     connect(eventPalette,SIGNAL(eventsToBrowse()),this, SLOT(slotEventsToBrowse()));
 

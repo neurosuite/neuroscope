@@ -31,7 +31,7 @@ PositionProperties::PositionProperties(QWidget *parent, const char *name ) : Pos
     heightLineEdit->setValidator(&intValidator);
 
     connect(backgroundButton,SIGNAL(clicked()),this,SLOT(updateBackgroundImage()));
-    connect(backgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(updateBackgroundImage(const QString&)));
+    connect(backgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(updateBackgroundImage(QString)));
     connect(rotateComboBox,SIGNAL(activated(int)),this,SLOT(updateDisplayedImage()));
     connect(filpComboBox,SIGNAL(activated(int)),this,SLOT(updateDisplayedImage()));
 

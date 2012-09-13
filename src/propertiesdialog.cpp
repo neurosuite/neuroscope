@@ -55,22 +55,22 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     mPositionPageIndex = addPage(positionProperties,tr("Positions"));
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
-    connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(channelNbModified()));
-    connect(properties->screenGainLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(properties->voltageRangeLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(properties->amplificationLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(properties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(properties->asSamplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(properties->offsetLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(QString)),this,SLOT(channelNbModified()));
+    connect(properties->screenGainLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(properties->voltageRangeLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(properties->amplificationLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(properties->samplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(properties->asSamplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(properties->offsetLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(properties->resolutionComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
-    connect(properties->traceBackgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(properties->traceBackgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(this,SIGNAL(okClicked()),this,SLOT(slotVerify()));
-    connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(positionProperties->widthLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(positionProperties->heightLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
-    connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(propertyModified()));
+    connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(positionProperties->widthLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(positionProperties->heightLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
+    connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(positionProperties->rotateComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(propertyModified()));

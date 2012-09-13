@@ -67,7 +67,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
 
-    connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,const QPoint&)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
+    connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
 }
 
 void ItemIconView::contentsMousePressEvent(QMouseEvent* event){  

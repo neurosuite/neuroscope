@@ -872,12 +872,12 @@ void ChannelPalette::createGroup(int id){
     verticalContainer->setStretchFactor(spaceWidget,2);
 
     //Signal and slot connection
-    // connect(iconView,SIGNAL(contextMenuRequested(QIconViewItem* ,const QPoint&)),this, SLOT(slotRightPressed(QIconViewItem*)));
+    // connect(iconView,SIGNAL(contextMenuRequested(QIconViewItem*,QPoint)),this, SLOT(slotRightPressed(QIconViewItem*)));
     connect(iconView,SIGNAL(selectionChanged()),this, SLOT(slotClickRedraw()));
-    connect(iconView,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,const QPoint&)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
+    connect(iconView,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(channelsMoved(QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QString,Q3IconViewItem*)));
-    connect(iconView,SIGNAL(channelsMoved(const QList<int>&,QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(const QList<int>&,QString,Q3IconViewItem*)));
+    connect(iconView,SIGNAL(channelsMoved(QList<int>,QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QList<int>,QString,Q3IconViewItem*)));
     connect(iconView,SIGNAL(moussePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
 
     connect(label,SIGNAL(middleClickOnLabel(QString)),this, SLOT(slotMidButtonPressed(QString)));

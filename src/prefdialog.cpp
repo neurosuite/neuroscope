@@ -63,7 +63,7 @@ PrefDialog::PrefDialog(QWidget *parent)
     //adding "Channels" tab
     prefDefaults = new PrefDefaults();
     tabWidget->addTab(prefDefaults,tr("Channels"));
-    //connect(prefDefaults,SIGNAL(changed( bool )),this, SIGNAL(changed( bool )) );
+    //connect(prefDefaults,SIGNAL(changed(bool)),this, SIGNAL(changed(bool)) );
     //adding "Units" tab
     clusterProperties = new ClusterProperties();
     tabWidget->addTab(clusterProperties,tr("Units"));
@@ -81,24 +81,24 @@ PrefDialog::PrefDialog(QWidget *parent)
 
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(prefGeneral->headerCheckBox,SIGNAL(clicked()),this,SLOT(enableApply()));
-    connect(prefGeneral->backgroundColorButton,SIGNAL(colorChanged(const QColor&)),this,SLOT(enableApply()));
+    connect(prefGeneral->backgroundColorButton,SIGNAL(colorChanged(QColor)),this,SLOT(enableApply()));
     connect(prefGeneral->eventPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
     connect(prefGeneral->clusterPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
-    connect(prefDefaults->screenGainLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->voltageRangeLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->amplificationLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->nbChannelsLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->datSamplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->eegSamplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(prefDefaults->offsetLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
+    connect(prefDefaults->screenGainLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->voltageRangeLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->amplificationLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->nbChannelsLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->datSamplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->eegSamplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(prefDefaults->offsetLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
     connect(prefDefaults->resolutionComboBox,SIGNAL(activated(int)),this,SLOT(enableApply()));
-    connect(prefDefaults->traceBackgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(positionProperties->widthLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(positionProperties->heightLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
-    connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableApply()));
+    connect(prefDefaults->traceBackgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(positionProperties->widthLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(positionProperties->heightLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
+    connect(positionProperties->backgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
     connect(positionProperties->rotateComboBox,SIGNAL(activated(int)),this,SLOT(enableApply()));
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(enableApply()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(enableApply()));
