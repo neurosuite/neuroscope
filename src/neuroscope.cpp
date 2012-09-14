@@ -837,8 +837,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     //Create the mainDock (first view)
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
-    //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
-    //KDAB_PENDING mainDock->setDockWindowTransient(this,true);
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
 
@@ -1268,21 +1266,20 @@ void NeuroscopeApp::slotLoadPositionFile(){
 
 void NeuroscopeApp::slotCreateEventFile(){
     slotStatusMsg(tr("Creating an event file..."));
-#if KDAB_PENDING
     const QString& docUrl = doc->url();
-    QString eventUrl(docUrl);
     QString baseName = doc->documentBaseName();
-    eventUrl.setFileName(baseName);
+    QString eventUrl = docUrl  +QDir::separator() + baseName;
 
-    QFileDialog dialog(this,tr("CreateEvent"),eventUrl.path(),tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
+    QFileDialog dialog(this,tr("CreateEvent"),eventUrl,tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
     dialog.setCaption(tr("Create Event File as..."));
     if(!dialog.exec())
         return;
+
     QString url = dialog.selectedFiles().first();
 
     if(!url.isEmpty()){
         //Check if the file already exist
-        QFileInfo fileInfo = QFileInfo(url.path());
+        QFileInfo fileInfo(url);
         if(fileInfo.exists()){
             QMessageBox::critical(this, tr("Error!"),tr("The selected file already exist."));
             return;
@@ -1308,7 +1305,6 @@ void NeuroscopeApp::slotCreateEventFile(){
             QApplication::restoreOverrideCursor();
         }
     }
-#endif
     slotStatusMsg(tr("Ready."));
 }
 
