@@ -626,32 +626,16 @@ void NeuroscopeApp::initItemPanel(){
     displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,this,"DisplaylPalette");
     spikeChannelPalette = new ChannelPalette(ChannelPalette::SPIKE,backgroundColor,true,this,"SpikePalette");
 
-    /*
-    //Creation of the left panel containing the channels.
-    if(displayPaletteHeaders){
-        displayPanel = new QDockWidget(tr("Anatomy"));
-        displayPanel->setWindowIcon(QPixmap(":/icons/anatomy"));
-
-        //createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
-        spikePanel = new QDockWidget(tr("Spikes"));
-        spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
-
-        //createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
+    if(displayPaletteHeaders) {
+        paletteTabsParent->addTab(displayChannelPalette,QIcon(":/icons/anatomy"),tr("Anatomy"));
+        paletteTabsParent->addTab(spikeChannelPalette,QIcon(":/icons/spikes"),tr("Spikes"));
+    } else {
+        int index = paletteTabsParent->addTab(displayChannelPalette,QString());
+        paletteTabsParent->setTabIcon(index,QIcon(":/icons/anatomy"));
+        index = paletteTabsParent->addTab(spikeChannelPalette,QString());
+        paletteTabsParent->setTabIcon(index,QIcon(":/icons/spikes"));
     }
-    else{
-        displayPanel = new QDockWidget(tr("Anatomy"));
-        displayPanel->setWindowIcon(QPixmap(":/icons/anatomy"));
-        //displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L,"");
-        //spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L,"");
-        spikePanel = new QDockWidget(tr("Spikes"));
-        spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
-
-    }
-    */
-    paletteTabsParent->addTab(displayChannelPalette,QIcon(":/icons/anatomy"),tr("Anatomy"));
-    paletteTabsParent->addTab(spikeChannelPalette,QIcon(":/icons/spikes"),tr("Spikes"));
 }
-
 void NeuroscopeApp::executePreferencesDlg(){
     if(prefDialog == 0L){
         prefDialog = new PrefDialog(this);
@@ -1970,7 +1954,7 @@ void NeuroscopeApp::resetState(){
 
     //Disable some actions when no document is open (see the klustersui.rc file)
     slotStateChanged("initState");
-    setCaption("");
+    setCaption(QString());
 }
 
 void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<int,bool>& skipStatus){
