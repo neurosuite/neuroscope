@@ -881,7 +881,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     displayChannelPalette->updateSkipStatus(skipStatus);
 
     //update the channel palettes selection
-    if(selectedChannels.size() > 0){
+    if(!selectedChannels.isEmpty()){
         spikeChannelPalette->selectChannels(selectedChannels);
         displayChannelPalette->selectChannels(selectedChannels);
     }
@@ -1607,9 +1607,10 @@ void NeuroscopeApp::slotSelect(){
     NeuroscopeView* view = activeView();
     view->setMode(TraceView::SELECT,true);
 
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->widget())->isA("ChannelPalette")){
+    QWidget *current = paletteTabsParent->currentWidget();
+
+    if(qobject_cast<ChannelPalette*>(current)){
         //the 2 palettes have the same selected channels
         displayChannelPalette->selectionTool();
     }
@@ -1680,8 +1681,10 @@ void NeuroscopeApp::slotChannelGroupColorUpdate(int groupId){
 }
 
 void NeuroscopeApp::slotUpdateShownChannels(const QList<int>& shownChannels){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+
+    QWidget *current = paletteTabsParent->currentWidget();
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
+
 
     NeuroscopeView* view = activeView();
     view->shownChannelsUpdate(shownChannels);
@@ -1701,8 +1704,8 @@ void NeuroscopeApp::slotUpdateShownChannels(const QList<int>& shownChannels){
 
 void NeuroscopeApp::slotUpdateHiddenChannels(const QList<int>& hiddenChannels){
     //Update the show/hide status of the inactive palette
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
 
     if(channelPalette == displayChannelPalette)
         spikeChannelPalette->updateShowHideStatus(hiddenChannels,false);
@@ -1988,9 +1991,8 @@ void NeuroscopeApp::slotResetGains(){
 }
 
 void NeuroscopeApp::slotSelectAll(){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-
-    if((current->widget())->isA("ChannelPalette")){
+    QWidget *current = paletteTabsParent->currentWidget();
+    if(qobject_cast<ChannelPalette*>(current)){
         //update the 2 palettes
         spikeChannelPalette->selectAllChannels();
         displayChannelPalette->selectAllChannels();
@@ -2000,18 +2002,18 @@ void NeuroscopeApp::slotSelectAll(){
     }
     else{
         //Update the selected items of the current palette
-        if((current->widget())->isA("ItemPalette")){
+        if(qobject_cast<ItemPalette*>(current)){
             QString name = current->name();
             //update the cluster palette
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 QList<int> clustersToHide;
                 doc->showAllClustersExcept(clusterPalette,view,clustersToHide);
             }
             //update the event palette
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 doc->showAllEvents(eventPalette,view);
             }
@@ -2022,9 +2024,10 @@ void NeuroscopeApp::slotSelectAll(){
 }
 
 void NeuroscopeApp::slotDeselectAll(){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
 
-    if((current->widget())->isA("ChannelPalette")){
+    QWidget *current = paletteTabsParent->currentWidget();
+
+    if(qobject_cast<ChannelPalette*>(current)){
         //update the 2 palettes
         spikeChannelPalette->deselectAllChannels();
         displayChannelPalette->deselectAllChannels();
@@ -2034,18 +2037,18 @@ void NeuroscopeApp::slotDeselectAll(){
     }
     else{
         //Update the selected items of the current palette
-        if((current->widget())->isA("ItemPalette")){
+        if(qobject_cast<ItemPalette*>(current)){
             QString name = current->name();
             //update the cluster palette
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 doc->deselectAllClusters(clusterPalette,view);
                 slotStateChanged("noClusterBrowsingState");
             }
             //update the event palette
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 doc->deselectAllEvents(eventPalette,view);
                 slotStateChanged("noEventBrowsingState");
@@ -2057,14 +2060,12 @@ void NeuroscopeApp::slotDeselectAll(){
 }
 
 void NeuroscopeApp::slotSelectAllWO01(){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-
-    //Update the selected items of the current palette
-    if((current->widget())->isA("ItemPalette")){
+    QWidget *current = paletteTabsParent->currentWidget();
+    if(qobject_cast<ItemPalette*>(current)){
         QString name = current->name();
         //update the cluster palette
         if(name.contains("clusterPanel")){
-            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
             NeuroscopeView* view = activeView();
             QList<int> clustersToHide;
             clustersToHide.append(0);
@@ -2107,8 +2108,8 @@ void NeuroscopeApp::slotClustersWaveforms(){
 
 void NeuroscopeApp::slotDiscardChannels(){
     //Get the active palette.
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
     channelPalette->discardChannels();
 }
 
@@ -2123,8 +2124,8 @@ void NeuroscopeApp::slotKeepChannels(){
 
     //The order in which the palettes are updated matters. The first one will give the new color for the
     //channels which change status
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if((current->widget()) == displayChannelPalette){
+    QWidget *current = paletteTabsParent->currentWidget();
+    if(current == displayChannelPalette){
         displayChannelPalette->updateSkipStatus(selectedChannels,false);
         spikeChannelPalette->updateSkipStatus(selectedChannels,false);
     }
@@ -2164,11 +2165,14 @@ void NeuroscopeApp::slotChannelsDiscarded(const QList<int>& discarded){
     groupsModified = true;
 
     //Update the inactive palette
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
 
-    if(channelPalette == displayChannelPalette) spikeChannelPalette->discardChannels(discarded);
-    else displayChannelPalette->discardChannels(discarded);
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
+
+    if(channelPalette == displayChannelPalette)
+        spikeChannelPalette->discardChannels(discarded);
+    else
+        displayChannelPalette->discardChannels(discarded);
 
     NeuroscopeView* view = activeView();
     doc->groupsModified(view);
@@ -2176,15 +2180,17 @@ void NeuroscopeApp::slotChannelsDiscarded(const QList<int>& discarded){
 
 void NeuroscopeApp::slotShowChannels(){
     //Get the active palette if there are 2 or the displayChannelPalette otherwise.
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
     channelPalette->showChannels();
 }
 
 void NeuroscopeApp::slotHideChannels(){
     //Get the active palette if there are 2 or the displayChannelPalette otherwise.
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+
+    QWidget *current = paletteTabsParent->currentWidget();
+
+    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
     channelPalette->hideChannels();
 }
 
@@ -2216,9 +2222,9 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
     select = activeView->isSelectionTool();
     const QList<int> selectedChannels = activeView->getSelectedChannels();
 
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget *channelPalette = paletteTabsParent->currentWidget();
 
-    if((current->widget())->isA("ChannelPalette")){
+    if(qobject_cast<ChannelPalette*>(channelPalette)){
         //update the channel palettes
         displayChannelPalette->hideUnselectAllChannels();
         spikeChannelPalette->hideUnselectAllChannels();
@@ -2613,11 +2619,11 @@ void NeuroscopeApp::slotEditMode(){
     spikeChannelPalette->setEditMode(editMode->isChecked());
     displayChannelPalette->setEditMode(editMode->isChecked());
 
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget *channelPalette = paletteTabsParent->currentWidget();
 
     if(editMode->isChecked()){
         slotStateChanged("editState");
-        if((current->widget()) == displayChannelPalette){
+        if(channelPalette == displayChannelPalette){
             slotStateChanged("displayChannelState");
         }
         else{
@@ -2630,7 +2636,7 @@ void NeuroscopeApp::slotEditMode(){
         doc->setNoneEditMode(view);
         select = false;
 
-        if((current->widget())->isA("ChannelPalette")){
+        if(qobject_cast<ChannelPalette*>(channelPalette)){
             //the 2 palettes have the same selected channels
             displayChannelPalette->selectionTool();
         }
