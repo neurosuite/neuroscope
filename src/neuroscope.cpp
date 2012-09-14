@@ -1292,8 +1292,10 @@ void NeuroscopeApp::slotCreateEventFile(){
         }
         else{
             QString eventFileId = doc->lastLoadedProviderName();
-            if(eventFileList.isEmpty()) createEventPalette(eventFileId);
-            else addEventFile(eventFileId);
+            if(eventFileList.isEmpty())
+                createEventPalette(eventFileId);
+            else
+                addEventFile(eventFileId);
             eventsModified = true;
             QApplication::restoreOverrideCursor();
         }
@@ -2514,7 +2516,6 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         if(tabLabel.isEmpty())
             tabLabel = tr("Field Potentials Display");
         QDockWidget* display = new QDockWidget(doc->url());
-        //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
@@ -2536,32 +2537,15 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         //install the new view in the display so it can be see in the future tab.
         display->setWidget(view);
 
-        //Temporarily allow addition of a new dockWidget in the center
-        //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockCenter);
-        //Add the new display as a tab and get a new DockWidget, grandParent of the target (mainDock)
-        //and the new display.
-        //KDAB_PENDING QDockWidget* grandParent = display->manualDock(mainDock,QDockWidget::DockCenter);
-
         //Disconnect the previous connection
         if(tabsParent != NULL)
             disconnect(tabsParent,0,0,0);
-
-        //The grandParent's widget is the QTabWidget regrouping all the tabs
-        //KDAB_PENDING tabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
         connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
 
         slotStateChanged("tabState");
-
-        //Back to enable dock to the left side only
-        //KDAB_PENDING  mainDock->setDockSite(QDockWidget::DockLeft);
-
-        // forbit docking abilities of display itself
-        //KDAB_PENDING display->setEnableDocking(Qt::NoDockWidgetArea);
-        // allow others to dock to the left side only
-        //KDAB_PENDING display->setDockSite(QDockWidget::DockLeft);
 
         //Keep track of the number of displays
         displayCount ++;
@@ -2625,8 +2609,8 @@ void NeuroscopeApp::slotSynchronize(){
 void NeuroscopeApp::resizePalettePanel(){
 #if KDAB_PENDING
     static_cast<QWidget*>(displayPanel)->resize(static_cast<QWidget*>(displayPanel->parent())->size());
-    displayChannelPalette->update();
 #endif
+    displayChannelPalette->update();
 }
 
 void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){
@@ -3016,8 +3000,10 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
         //Create the event palette if need it
         counter++;
         QString eventFileId = doc->lastLoadedProviderName();
-        if(eventFileList.isEmpty() && counter == 1) createEventPalette(eventFileId);
-        else addEventFile(eventFileId);
+        if(eventFileList.isEmpty() && counter == 1)
+            createEventPalette(eventFileId);
+        else
+            addEventFile(eventFileId);
     }
     QApplication::restoreOverrideCursor();
 }
@@ -3025,20 +3011,17 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
 
 void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
-    QDockWidget* eventDock;
-    if(displayPaletteHeaders) {
-        eventDock = new QDockWidget(tr("Events"));
-        eventDock->setWindowIcon(QIcon(":/icons/events"));
-        //createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
-    }
-    else {
-        eventDock = new QDockWidget();
-        eventDock->setWindowIcon(QIcon(":/icons/events"));
-        //createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
-    }
-    ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
-    eventDock->setWidget(eventPalette);
+    ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,this,"events");
     eventFileList.append(eventFileId);
+
+    if(displayPaletteHeaders) {
+        paletteTabsParent->addTab(eventPalette,QIcon(":/icons/events"),tr("Events"));
+    } else {
+        int index = paletteTabsParent->addTab(eventPalette,QString());
+        paletteTabsParent->setTabIcon(index,QIcon(":/icons/events"));
+    }
+
+
 
     //Palette connections
     connect(eventPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotEventColorUpdate(int,QString)));
