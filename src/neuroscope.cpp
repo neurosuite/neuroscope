@@ -2247,12 +2247,12 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 
 void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     //Update the show/hide status of the inactive palette
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
 
     //Disable some actions when no document is open (see the klustersui.rc file)
-    if((current->widget())->isA("ChannelPalette")){
+    if(current->isA("ChannelPalette")){
         if(editMode->isChecked()){
-            if((current->widget()) == displayChannelPalette){
+            if((current) == displayChannelPalette){
                 slotStateChanged("displayChannelState");
             }
             else{
@@ -2278,10 +2278,10 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     else{
         slotStateChanged("noChannelState");
         //Update the selected items of the current palette
-        if((current->widget())->isA("ItemPalette")){
+        if(current->isA("ItemPalette")){
             QString name = current->name();
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 QList<QString>::iterator iterator;
                 for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
@@ -2300,7 +2300,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
             }
             //update the event palettes
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 QList<QString>::iterator iterator;
                 for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
@@ -3124,26 +3124,10 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
     //KDAB_PENDING QDockWidget* grandParent = eventDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
 
     //Disconnect the previous connection
-    //KDAB_PENDING if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
+    if(paletteTabsParent != NULL)
+        disconnect(paletteTabsParent,0,0,0);
 
-    //The grandParent's widget is the QTabWidget regrouping all the tabs
-    //KDAB_PENDING paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
-
-    //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
-    //the active palette changes.
-    //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
-
-    //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
-    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
-
-    //allow dock on the right side only (the displays will be on the rigth side)
-    //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
-
-    // forbit docking abilities of the clusterDock itself
-    //KDAB_PENDING eventDock->setEnableDocking(Qt::NoDockWidgetArea);
-    // allow others to dock to the left side only
-    //KDAB_PENDING eventDock->setDockSite(QDockWidget::DockRight);
+    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     slotStateChanged("eventState");
     if(isPositionFileLoaded) {
@@ -3459,11 +3443,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("editState")) {
     } else if(state == QLatin1String("noEditState")) {
     } else if(state == QLatin1String("enableEditState")) {
-        /*
-        <Enable>
-         <Action name="edit_mode" />
-        </Enable>
-  */
+        editMode->setEnabled(true);
     } else if(state == QLatin1String("tabState")) {
         mRenameActiveDisplay->setEnabled(true);
     } else if(state == QLatin1String("noTabState")) {
