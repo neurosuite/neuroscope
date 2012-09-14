@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 
 
-BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,QColor backgroundColor,
+BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,const QColor& backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
     QFrame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
     MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),

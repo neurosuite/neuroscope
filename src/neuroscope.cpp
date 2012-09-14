@@ -56,10 +56,10 @@
 NeuroscopeApp::NeuroscopeApp()
     :QMainWindow(0, "NeuroScope")
     ,prefDialog(0L),displayCount(0),mainDock(0),
-    displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
-    palettePanel(0L),isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
-    select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
-    eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
+      displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
+      palettePanel(0L),isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
+      select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
+      eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
 {
     //Prepare the actions
     printer = new QPrinter();
@@ -80,7 +80,6 @@ NeuroscopeApp::NeuroscopeApp()
 
 
     initActions();
-    createToolBar();
 
 
     //Disable some actions at startup (see the neuroscope.rc file)
@@ -94,10 +93,6 @@ NeuroscopeApp::~NeuroscopeApp()
     delete printer;
 }
 
-void NeuroscopeApp::createToolBar()
-{
-
-}
 
 void NeuroscopeApp::initActions()
 {
@@ -191,7 +186,7 @@ void NeuroscopeApp::initActions()
     mSelectAll->setShortcut(Qt::CTRL + Qt::Key_A);
     connect(mSelectAll,SIGNAL(triggered()), this,SLOT(slotSelectAll()));
 
-        editMenu->addSeparator();
+    editMenu->addSeparator();
 
     mSelectAllExcept0And1 = editMenu->addAction(tr("Select All e&xcept 0 and 1"));
     mSelectAllExcept0And1->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
@@ -619,11 +614,11 @@ void NeuroscopeApp::initItemPanel(){
         displayPanel = new QDockWidget(tr("Anatomy"));
         displayPanel->setWindowIcon(QPixmap(":/icons/spikes"));
 
-                //createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
+        //createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
         spikePanel = new QDockWidget(tr("Spikes"));
         spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
 
-                //createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
+        //createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L, tr("Spikes"), tr("Spikes"));
     }
     else{
         displayPanel = new QDockWidget(tr("Anatomy"));
@@ -649,7 +644,7 @@ void NeuroscopeApp::initItemPanel(){
     //Create the QDockWidget which will contain the paletteArea and be dock to the mainDock.
     palettePanel = new QDockWidget(tr("Palettes"));
 
-            //createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
+    //createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
     palettePanel->setWidget(mainDock);
 }
 
@@ -859,7 +854,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
     mainDock = new QDockWidget(doc->url());
-            //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
+    //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
     //KDAB_PENDING mainDock->setDockWindowTransient(this,true);
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
@@ -1178,7 +1173,7 @@ bool NeuroscopeApp::queryClose()
                         QApplication::restoreOverrideCursor();
                         if(eventSaveStatus != IO_Ok){
                             switch(QMessageBox::warning(0, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
-                                                                  "Close anyway ?"),QMessageBox::Close|QMessageBox::Discard)){
+                                                                                "Close anyway ?"),QMessageBox::Close|QMessageBox::Discard)){
                             case QMessageBox::Close:
                                 break;
                             case QMessageBox::Discard:
@@ -1192,8 +1187,8 @@ bool NeuroscopeApp::queryClose()
                     if(saveStatus != NeuroscopeDoc::OK){
                         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                             message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                    " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                    "Close anyway ?");
+                                         " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                         "Close anyway ?");
                             title = tr("I/O Error !");
                         }
                         else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -1227,8 +1222,8 @@ bool NeuroscopeApp::queryClose()
                 if(saveStatus != NeuroscopeDoc::OK){
                     if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                         message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                "Close anyway ?");
+                                     " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                     "Close anyway ?");
                         title = tr("I/O Error !");
                     }
                     else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -1408,7 +1403,7 @@ void NeuroscopeApp::slotFileClose(){
                         QApplication::restoreOverrideCursor();
                         if(eventSaveStatus != IO_Ok){
                             switch(QMessageBox::question(this, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
-                                                                  "Close anyway ?"),QMessageBox::Yes|QMessageBox::No)){
+                                                                                    "Close anyway ?"),QMessageBox::Yes|QMessageBox::No)){
                             case QMessageBox::Yes:
                                 break;
                             case QMessageBox::No:
@@ -1457,8 +1452,8 @@ void NeuroscopeApp::slotFileClose(){
                 if(saveStatus != NeuroscopeDoc::OK){
                     if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                         message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                "Close anyway ?");
+                                     " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                     "Close anyway ?");
                         title = tr("I/O Error !");
                     }
                     else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -2472,8 +2467,8 @@ void NeuroscopeApp::slotDisplayClose(){
                     if(saveStatus != NeuroscopeDoc::OK){
                         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                             message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                    " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                    "Close anyway ?");
+                                         " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                         "Close anyway ?");
                             title = tr("I/O Error !");
                         }
                         else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -2507,8 +2502,8 @@ void NeuroscopeApp::slotDisplayClose(){
                 if(saveStatus != NeuroscopeDoc::OK){
                     if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                         message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                "Close anyway ?");
+                                     " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                     "Close anyway ?");
                         title = tr("I/O Error !");
                     }
                     else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -2606,7 +2601,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         if(tabLabel.isEmpty())
             tabLabel = tr("Field Potentials Display");
         QDockWidget* display = new QDockWidget(doc->url());
-                //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
+        //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
@@ -2647,7 +2642,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         slotStateChanged("tabState");
 
         //Back to enable dock to the left side only
-       //KDAB_PENDING  mainDock->setDockSite(QDockWidget::DockLeft);
+        //KDAB_PENDING  mainDock->setDockSite(QDockWidget::DockLeft);
 
         // forbit docking abilities of display itself
         //KDAB_PENDING display->setEnableDocking(Qt::NoDockWidgetArea);
@@ -2693,7 +2688,7 @@ void NeuroscopeApp::slotEditMode(){
 
 void NeuroscopeApp::slotSynchronize(){
     if(QMessageBox::warning(this,tr("Synchronize anatomic and spike groups"),tr("This will overwrite all your spike groups by your anatomical groups. Do you wish to continue?"), QMessageBox::Ok|QMessageBox::Cancel
-                                          ) == QMessageBox::Cancel)
+                            ) == QMessageBox::Cancel)
         return;
 
     groupsModified = true;
@@ -2774,7 +2769,7 @@ void NeuroscopeApp::saveSession(){
     int saveStatus = doc->saveSession();
     if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
         QMessageBox::critical(0, tr("I/O Error !"),tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                " You may consider saving your session file to another location using the Save As entry in the File menu."));
+                                                      " You may consider saving your session file to another location using the Save As entry in the File menu."));
     }
     else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
         QMessageBox::critical(0, tr("Parsing error !"),tr("The current session could not be saved because the parameter file is incorrect."));
@@ -2794,7 +2789,7 @@ void NeuroscopeApp::slotSessionSaveAs(){
         int eventSaveStatus = doc->saveEventFiles();
         if(eventSaveStatus != IO_Ok)
             QMessageBox::critical(0,tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions.")
-                               );
+                                  );
         else eventsModified = false;
     }
     //Save the session
@@ -2906,12 +2901,12 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     if(displayPaletteHeaders) {
         clusterDock = new QDockWidget(tr("Units"));
         clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
-                //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
+        //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
     }
     else{
         clusterDock = new QDockWidget;
         clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
-                //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
+        //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
     }
     ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
     clusterDock->setWidget(clusterPalette);
@@ -3141,13 +3136,13 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     if(displayPaletteHeaders) {
         eventDock = new QDockWidget(tr("Events"));
         eventDock->setWindowIcon(QIcon(":/icons/events"));
-                //createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
+        //createDockWidget("eventPanel",QPixmap(":/icons/events"), 0L,tr("Events"), tr("Events"));
     }
     else {
         eventDock = new QDockWidget();
         eventDock->setWindowIcon(QIcon(":/icons/events"));
-                //createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
-       }
+        //createDockWidget("eventPanel",QIcon(":/icons/events"), 0L,"");
+    }
     ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,eventDock,"events");
     eventDock->setWidget(eventPalette);
     eventFileList.append(eventFileId);
@@ -3507,7 +3502,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("editState")) {
     } else if(state == QLatin1String("noEditState")) {
     } else if(state == QLatin1String("enableEditState")) {
-/*
+        /*
         <Enable>
          <Action name="edit_mode" />
         </Enable>
@@ -3552,7 +3547,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   </Disable>
 */
     } else if(state == QLatin1String("eventsInPositionViewEnableState")) {
-/*
+        /*
         <Enable>
          <Action name="show_events"/>
         </Enable>

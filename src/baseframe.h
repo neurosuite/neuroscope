@@ -77,7 +77,7 @@ public:
    * to the part of the drawing which will actually be drawn onto the widget).
    * @param border size of the border between the frame and the contents.
    */
-    BaseFrame(int Xborder,int Yborder,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,
+    BaseFrame(int Xborder,int Yborder,QWidget* parent=0, const char* name=0,const QColor& backgroundColor = Qt::black,
               int minSize = 500, int maxSize = 4000, int windowTopLeft = -500,int windowBottomRight = 1001, int border = 0);
     ~BaseFrame();
 
