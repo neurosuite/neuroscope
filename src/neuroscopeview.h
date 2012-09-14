@@ -109,7 +109,7 @@ public:
     * @param filePath path of the opened document.
     * @param whiteBackground true if the printed background has to be white, false otherwise.
     */
-    void print(QPrinter* pPrinter,QString filePath,bool whiteBackground);
+    void print(QPrinter* pPrinter,const QString& filePath,bool whiteBackground);
 
     /**Sets the unit gain and the acquisition system gain.
     * @param gain initial gain use to draw the traces in the TraceView.
@@ -370,22 +370,22 @@ public:
     /** Sets the label for the display when in tab page mode.
    * @param newLabel the new label for the display.
    */
-    inline void setTabName(QString newLabel){tabLabel = newLabel;}
+    inline void setTabName(const QString& newLabel){tabLabel = newLabel;}
 
     /** Gets the label for the display when in tab page mode.
    * @return newLabel the new label for the display.
    */
-    inline QString getTabName(){return tabLabel;}
+    inline QString getTabName()const {return tabLabel;}
 
     /**Gets the starting time in miliseconds.
   * @return starting time.
   */
-    inline long getStartTime(){return startTime;}
+    inline long getStartTime() const {return startTime;}
 
     /**Gets the time window in miliseconds.
   * @return duration time window.
   */
-    inline long getTimeWindow(){return timeWindow;}
+    inline long getTimeWindow()const {return timeWindow;}
 
     /**Displays or hides the labels next to the traces.
   * @param status true if the labels have to be drawn, false otherwise.

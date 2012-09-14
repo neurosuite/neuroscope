@@ -48,12 +48,12 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     recordingLength = tracesProvider.recordingLength();
 
     selectionWidgets = new QWidget(this);
+    lay->addWidget(&view);
     lay->addWidget(selectionWidgets);
     lay->setMargin(0);
     lay->setSpacing(0);
     lay->setStretchFactor(selectionWidgets,0);
     lay->setStretchFactor(&view,200);
-    lay->addWidget(&view);
 
     setFocusPolicy(Qt::StrongFocus);
 

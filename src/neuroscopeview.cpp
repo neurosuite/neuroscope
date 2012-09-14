@@ -153,7 +153,7 @@ NeuroscopeView::~NeuroscopeView()
 }
 
 
-void NeuroscopeView::print(QPrinter* printer,QString filePath,bool whiteBackground)
+void NeuroscopeView::print(QPrinter* printer,const QString& filePath,bool whiteBackground)
 {
     QPainter printPainter;
     const int width = printer->width();

@@ -1679,9 +1679,11 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
     QColor groupColor;
     groupColor.setHsv(210,255,255);
     QList<int> destinationChannels = (*groupsChannels)[0];
-    if(destinationChannels.size() != 0){
-        if(type == DISPLAY) groupColor = channelColors->groupColor(destinationChannels[0]);
-        else groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+    if(!destinationChannels.isEmpty()){
+        if(type == DISPLAY)
+            groupColor = channelColors->groupColor(destinationChannels[0]);
+        else
+            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
     }
 
     QList<int>::const_iterator channelIterator;
@@ -1789,7 +1791,7 @@ void ChannelPalette::setEditMode(bool edition){
     isInSelectItems = false;
 }
 
-void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
+void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,const QColor& color,bool show,bool skip){
     pixmap->fill(backgroundColor);
     painter.begin(pixmap);
     if(greyScale){
@@ -1810,7 +1812,8 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
             painter.drawEllipse(QRect(3,3,6,6));
         }
     }
-    else painter.fillRect(0,0,12,12,color);
+    else
+        painter.fillRect(0,0,12,12,color);
     painter.end();
 }
 
