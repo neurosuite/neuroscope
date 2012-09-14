@@ -2587,14 +2587,15 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         //KDAB_PENDING QDockWidget* grandParent = display->manualDock(mainDock,QDockWidget::DockCenter);
 
         //Disconnect the previous connection
-        //KDAB_PENDING if(tabsParent != NULL) disconnect(tabsParent,0,0,0);
+        if(tabsParent != NULL)
+            disconnect(tabsParent,0,0,0);
 
         //The grandParent's widget is the QTabWidget regrouping all the tabs
         //KDAB_PENDING tabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
-        //KDAB_PENDING connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
+        connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
 
         slotStateChanged("tabState");
 
@@ -2861,54 +2862,26 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
 
 void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
 
-    QDockWidget* clusterDock;
+    ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,this,"units");
     if(displayPaletteHeaders) {
-        clusterDock = new QDockWidget(tr("Units"));
-        clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
-        //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,tr("Units"), tr("Units"));
+        int index = paletteTabsParent->addTab(clusterPalette,tr("Units"));
+        paletteTabsParent->setTabIcon(index,QIcon(":/icons/clusters"));
+    } else {
+        int index = paletteTabsParent->addTab(clusterPalette,QString());
+        paletteTabsParent->setTabIcon(index,QIcon(":/icons/clusters"));
+
     }
-    else{
-        clusterDock = new QDockWidget;
-        clusterDock->setWindowIcon(QIcon(":/icons/clusters"));
-        //createDockWidget("clusterPanel",QPixmap(":/icons/clusters"), 0L,"");
-    }
-    ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,clusterDock,"units");
-    clusterDock->setWidget(clusterPalette);
     clusterFileList.append(clusterFileId);
 
     //Create the list
     clusterPalette->createItemList(doc->providerColorList(clusterFileId),clusterFileId,0);
 
-    //KDAB_PENDING clusterDock->setEnableDocking(QDockWidget::DockFullSite);
-
-    //Temporarily allow addition of a new dockWidget in the center
-    //KDAB_PENDING displayPanel->setDockSite(QDockWidget::DockCenter);
-    
-    //Add the new palette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
-    //and the new palette.
-    //KDAB_PENDING QDockWidget* grandParent = clusterDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
-
     //Disconnect the previous connection
-    //KDAB_PENDING if(paletteTabsParent != NULL) disconnect(paletteTabsParent,0,0,0);
-
-    //The grandParent's widget is the QTabWidget regrouping all the tabs
-    //KDAB_PENDING paletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
-
+    if(paletteTabsParent != NULL)
+        disconnect(paletteTabsParent,0,0,0);
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    //KDAB_PENDING connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
-
-    //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
-    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
-
-    //allow dock on the right side only (the displays will be on the rigth side)
-    //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
-
-    // forbit docking abilities of the clusterDock itself
-    //KDAB_PENDING clusterDock->setEnableDocking(Qt::NoDockWidgetArea);
-    // allow others to dock to the left side only
-    //KDAB_PENDING clusterDock->setDockSite(QDockWidget::DockRight);
+    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
     //Palette connections
     connect(clusterPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotClusterColorUpdate(int,QString)));
@@ -2932,10 +2905,10 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
     clusterFileList.append(clusterFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
-        QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
+        QWidget* current = paletteTabsParent->page(i);
         QString name = current->name();
-        if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
-            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+        if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
+            ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
             //Create the list
             clusterPalette->createItemList(doc->providerColorList(clusterFileId),clusterFileId,0);
             break;
@@ -2945,9 +2918,9 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
 
 
 void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){  
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
+    if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         NeuroscopeView* view = activeView();
         doc->clusterColorUpdate(providerName,clusterId,view);
     }
@@ -2955,9 +2928,9 @@ void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
 }
 
 void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& selection){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
+    if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -2969,10 +2942,10 @@ void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& sel
 }
 
 void NeuroscopeApp::slotCloseClusterFile(){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("clusterPanel")){
-        ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
+    if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
+        ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
         QString providerName = clusterPalette->selectedGroup();
 
         if(!providerName.isEmpty()){
