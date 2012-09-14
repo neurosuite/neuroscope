@@ -42,6 +42,7 @@ class PropertiesDialog;
 class ChannelPalette;
 class ItemPalette;
 class QRecentFileAction;
+class QExtendTabWidget;
 
 /**
   * The Neuroscope main window and central class. It sets up the main
@@ -145,25 +146,25 @@ public:
    * @param clusterFileId identifier of the cluster file providing the data accessible through
    * the future palette.
    */
-    void createClusterPalette(QString clusterFileId);
+    void createClusterPalette(const QString &clusterFileId);
 
     /**Adds a group corresponding to the cluster file identified by @p clusterFileId to the existing cluster palette.
    * @param clusterFileId identifier of the cluster file providing the data accessible through
    * the future palette.
    */
-    void addClusterFile(QString clusterFileId);
+    void addClusterFile(const QString &clusterFileId);
 
     /**Creates a event palette and adds a group corresponding to the event file identified by @p eventFileId.
    * @param eventFileId identifier of the event file providing the data accessible through
    * the future palette.
    */
-    void createEventPalette(QString eventFileId);
+    void createEventPalette(const QString &eventFileId);
 
     /**Adds a group corresponding to the event file identified by @p eventFileId to the existing event palette.
    * @param eventFileId identifier of the event file providing the data accessible through
    * the future palette.
    */
-    void addEventFile(QString eventFileId);
+    void addEventFile(const QString &eventFileId);
 
     /**Returns the event palette.
    * @return pointer on the event palette.*/
@@ -667,6 +668,7 @@ private slots:
 
 private:
 
+    void initView();
     /** Doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
      */
@@ -791,7 +793,7 @@ private:
     /**tabsParent groups all the display tabs, it is updated eache time a display is added.
     * It is null when there is only one display open. It enables to get the active tab.
     */
-    QTabWidget* tabsParent;
+    QExtendTabWidget* tabsParent;
 
     /**paletteTabsParent groups all the palettes tabs, it is updated eache time a palette is added or removed.
     * It enables to get the active palette.
@@ -801,7 +803,7 @@ private:
     /**Panel container (contains a KDockArea) for all the palettes of the application (ClusterPalette,EventPalette,channelsPalette).
     * The main Palette is the channel palette
     * use to specify the display order of the field potentials.*/
-    QDockWidget* palettePanel;
+    //QDockWidget* palettePanel;
 
     /**Boolean used to prevent the trigger of changes during initialization.*/
     bool isInit;

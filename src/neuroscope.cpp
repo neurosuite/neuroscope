@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QList>
 #include <QEvent>
+#include <qextendtabwidget.h>
 
 #include <QInputDialog>
 #include <QFileDialog>
@@ -39,6 +40,7 @@
 
 
 #include <QProcess>
+#include <QSplitter>
 
 // application specific includes
 #include "neuroscope.h"
@@ -57,10 +59,11 @@ NeuroscopeApp::NeuroscopeApp()
     :QMainWindow(0, "NeuroScope")
     ,prefDialog(0L),displayCount(0),mainDock(0),
       displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
-      palettePanel(0L),isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
+      isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
       select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
       eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
 {
+    initView();
     //Prepare the actions
     printer = new QPrinter();
 
@@ -91,6 +94,17 @@ NeuroscopeApp::~NeuroscopeApp()
     //Clear the memory by deleting all the pointers
     delete doc;
     delete printer;
+}
+
+
+void NeuroscopeApp::initView()
+{
+    QSplitter *splitter = new QSplitter;
+    paletteTabsParent = new QTabWidget();
+    splitter->addWidget(paletteTabsParent);
+    tabsParent = new QExtendTabWidget(this);
+    splitter->addWidget(tabsParent);
+    setCentralWidget(splitter);
 }
 
 
@@ -609,10 +623,14 @@ void NeuroscopeApp::initStatusBar()
 
 void NeuroscopeApp::initItemPanel(){
 
+    displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,this,"DisplaylPalette");
+    spikeChannelPalette = new ChannelPalette(ChannelPalette::SPIKE,backgroundColor,true,this,"SpikePalette");
+
+    /*
     //Creation of the left panel containing the channels.
     if(displayPaletteHeaders){
         displayPanel = new QDockWidget(tr("Anatomy"));
-        displayPanel->setWindowIcon(QPixmap(":/icons/spikes"));
+        displayPanel->setWindowIcon(QPixmap(":/icons/anatomy"));
 
         //createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L, tr("Anatomy"), tr("Anatomy"));
         spikePanel = new QDockWidget(tr("Spikes"));
@@ -622,30 +640,16 @@ void NeuroscopeApp::initItemPanel(){
     }
     else{
         displayPanel = new QDockWidget(tr("Anatomy"));
-        displayPanel->setWindowIcon(QPixmap(":/icons/spikes"));
+        displayPanel->setWindowIcon(QPixmap(":/icons/anatomy"));
         //displayPanel = createDockWidget("displayPanel",QPixmap(":/icons/anatomy"), 0L,"");
         //spikePanel = createDockWidget("spikePanel",QPixmap(":/icons/spikes"), 0L,"");
         spikePanel = new QDockWidget(tr("Spikes"));
         spikePanel->setWindowIcon(QPixmap(":/icons/spikes"));
 
     }
-    //Initialisation of the channel palettes containing the channel list
-    displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,displayPanel,"DisplaylPalette");
-    spikeChannelPalette = new ChannelPalette(ChannelPalette::SPIKE,backgroundColor,true,spikePanel,"SpikePalette");
-    //Place the displayChannelPalette and  spikeChannelPalette in the QDockWidgets (the view)
-    displayPanel->setWidget(displayChannelPalette);
-    spikePanel->setWidget(spikeChannelPalette);
-
-#if KDAB_REMOVE
-    //Create the paletteArea which will contain all the palettes.
-    KDockArea* paletteArea = new KDockArea(mainDock,"PanelArea");
-    paletteArea->setMainDockWidget(displayPanel);
-#endif
-    //Create the QDockWidget which will contain the paletteArea and be dock to the mainDock.
-    palettePanel = new QDockWidget(tr("Palettes"));
-
-    //createDockWidget("Palettes", QPixmap(), 0L, tr("Palettes"), tr("Palettes"));
-    palettePanel->setWidget(mainDock);
+    */
+    paletteTabsParent->addTab(displayChannelPalette,QIcon(":/icons/anatomy"),tr("Anatomy"));
+    paletteTabsParent->addTab(spikeChannelPalette,QIcon(":/icons/spikes"),tr("Spikes"));
 }
 
 void NeuroscopeApp::executePreferencesDlg(){
@@ -1504,7 +1508,7 @@ void NeuroscopeApp::slotFileClose(){
             //reset the channel palettes and hide the channel panels
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
-            palettePanel->hide();
+            //palettePanel->hide();
             //KDAD_PENDING palettePanel->undock();
 
             //Delete the view
@@ -2539,7 +2543,7 @@ void NeuroscopeApp::slotDisplayClose(){
             //reset the channel palettes and hide the channel panels
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
-            palettePanel->hide();
+            //palettePanel->hide();
             //KDAB_PENDING palettePanel->undock();
 
             doc->closeDocument();
@@ -2895,7 +2899,7 @@ void NeuroscopeApp::loadClusterFiles(QStringList urls){
     QApplication::restoreOverrideCursor();
 }
 
-void NeuroscopeApp::createClusterPalette(QString clusterFileId){  
+void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
 
     QDockWidget* clusterDock;
     if(displayPaletteHeaders) {
@@ -2964,7 +2968,7 @@ void NeuroscopeApp::createClusterPalette(QString clusterFileId){
     }
 }
 
-void NeuroscopeApp::addClusterFile(QString clusterFileId){
+void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
     clusterFileList.append(clusterFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
@@ -3011,7 +3015,7 @@ void NeuroscopeApp::slotCloseClusterFile(){
         ItemPalette* clusterPalette = static_cast<ItemPalette*>(current->widget());
         QString providerName = clusterPalette->selectedGroup();
 
-        if(providerName != ""){
+        if(!providerName.isEmpty()){
             NeuroscopeView* view = activeView();
             doc->removeClusterFile(providerName,view);
 
@@ -3130,7 +3134,7 @@ void NeuroscopeApp::loadEventFiles(QStringList urls){
 }
 
 
-void NeuroscopeApp::createEventPalette(QString eventFileId){
+void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
     QDockWidget* eventDock;
     if(displayPaletteHeaders) {
@@ -3194,7 +3198,7 @@ void NeuroscopeApp::createEventPalette(QString eventFileId){
     }
 }
 
-void NeuroscopeApp::addEventFile(QString eventFileId){
+void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
