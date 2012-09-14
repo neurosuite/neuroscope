@@ -1154,8 +1154,7 @@ bool NeuroscopeApp::queryClose()
                 case QMessageBox::Cancel:
                     return false;
                 }
-            }
-            else{
+            } else {
                 //If neither groups, colors or events have been modified, save the session without asking
                 saveStatus = doc->saveSession();
                 QString message;
@@ -1207,7 +1206,7 @@ void NeuroscopeApp::slotFileOpen()
 {
     slotStatusMsg(tr("Opening file..."));
 
-    QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
+    const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
                                              tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files") );
     if(!url.isEmpty())
     {
@@ -1220,9 +1219,9 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
-    QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
+    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
                                                    tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"));
-    if(urls.size() != 0)
+    if(!urls.isEmpty())
     {
         loadClusterFiles(urls);
     }
@@ -1234,9 +1233,9 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
-    QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
+    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
                                                    tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"));
-    if(urls.size() != 0)
+    if(!urls.isEmpty())
     {
         loadEventFiles(urls);
     }
@@ -1269,7 +1268,7 @@ void NeuroscopeApp::slotCreateEventFile(){
     if(!dialog.exec())
         return;
 
-    QString url = dialog.selectedFiles().first();
+    const QString url = dialog.selectedFiles().first();
 
     if(!url.isEmpty()){
         //Check if the file already exist
@@ -1357,18 +1356,18 @@ void NeuroscopeApp::slotFileClose(){
                     QApplication::restoreOverrideCursor();
                     if(saveStatus != NeuroscopeDoc::OK){
                         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
-                            message = "The current session could not be saved possibly because of insufficient file access permissions."
+                            message = tr("The current session could not be saved possibly because of insufficient file access permissions."
                                     " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                    "Close anyway ?";
-                            title = "I/O Error !";
+                                    "Close anyway ?");
+                            title = tr("I/O Error !");
                         }
                         else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
-                            message = "The current session could not be saved because the parameter file is incorrect.\nClose anyway ?";
-                            title = "Parsing error !";
+                            message = tr("The current session could not be saved because the parameter file is incorrect.\nClose anyway ?");
+                            title = tr("Parsing error !");
                         }
                         else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
-                            message = "The current session could not be saved because the parameter file is not writable.\nClose anyway ?";
-                            title = "Writing error !";
+                            message = tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?");
+                            title = tr("Writing error !");
                         }
                         switch(QMessageBox::question(0,title,message,QMessageBox::Close|QMessageBox::Discard)){
                         case QMessageBox::Close:
@@ -1497,15 +1496,7 @@ void NeuroscopeApp::slotViewMainToolBar()
 {
     slotStatusMsg(tr("Toggle the main toolbar..."));
 
-    // turn Toolbar on or off
-    if(!viewMainToolBar->isChecked())
-    {
-        mMainToolBar->hide();
-    }
-    else
-    {
-        mMainToolBar->show();
-    }
+    mMainToolBar->setVisible(viewMainToolBar->isChecked());
 
     slotStatusMsg(tr("Ready."));
 }
@@ -1514,16 +1505,7 @@ void NeuroscopeApp::slotViewToolBar()
 {
     slotStatusMsg(tr("Toggle the tools..."));
 
-    // turn Toolbar on or off
-    if(!viewToolBar->isChecked())
-    {
-        mToolBar->hide();
-    }
-    else
-    {
-        mToolBar->show();
-    }
-
+    mToolBar->setVisible(viewToolBar->isChecked());
     slotStatusMsg(tr("Ready."));
 }
 
@@ -1543,14 +1525,13 @@ void NeuroscopeApp::slotShowCalibration(){
 
 
 void NeuroscopeApp::slotShowPositionView(){
+    NeuroscopeView* view = activeView();
     if(!positionViewToggle->isChecked())
     {
-        NeuroscopeView* view = activeView();
         view->removePositionView();
     }
     else
     {
-        NeuroscopeView* view = activeView();
         doc->addPositionView(view,backgroundColor);
     }
 }
