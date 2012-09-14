@@ -2794,15 +2794,15 @@ void NeuroscopeApp::customEvent (QEvent* event){
     }
 }
 
-void NeuroscopeApp::loadClusterFiles(QStringList urls){
+void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
 
     NeuroscopeView* view = activeView();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
     int counter = 0;
-    QStringList::iterator iterator;
-    for(iterator = urls.begin();iterator != urls.end();++iterator){
+    QStringList::const_iterator iterator;
+    for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
         int returnStatus = doc->loadClusterFile(*iterator,view);
         if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
@@ -3035,15 +3035,15 @@ void NeuroscopeApp::loadPositionFile(QString url){
     QApplication::restoreOverrideCursor();
 }
 
-void NeuroscopeApp::loadEventFiles(QStringList urls){
+void NeuroscopeApp::loadEventFiles(const QStringList& urls){
 
     NeuroscopeView* view = activeView();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
     int counter = 0;
-    QStringList::iterator iterator;
-    for(iterator = urls.begin();iterator != urls.end();++iterator){
+    QStringList::const_iterator iterator;
+    for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
         int returnStatus = doc->loadEventFile(*iterator,view);
         if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
@@ -3139,13 +3139,14 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
-        QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
+        QWidget* current = paletteTabsParent->page(i);
         QString name = current->name();
-        if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
-            ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
+        if(current->isA("ItemPalette") && name.contains("eventPanel")){
+            ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
             //Create the list
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
-            break;
+            break; // ??????????????
+
             if(isPositionFileLoaded) {
                 slotStateChanged("eventsInPositionViewEnableState");
             }
@@ -3153,10 +3154,10 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     }
 }
 
-void NeuroscopeApp::slotEventColorUpdate(int eventId,QString providerName){  
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName){
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+    if(current->isA("ItemPalette") && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
         doc->eventColorUpdate(providerName,eventId,view);
     }

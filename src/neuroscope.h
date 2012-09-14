@@ -591,7 +591,7 @@ private slots:
    * @param eventId id of the event which has had its color changed.
    * @param groupName identifier of the file containing the event to update.
    */
-    void slotEventColorUpdate(int eventId,QString groupName);
+    void slotEventColorUpdate(int eventId, const QString &groupName);
 
     /**Updates the active display with the events selected in the event palette.
    *@param selection map given the list of the selected events by event file identified.
@@ -934,12 +934,12 @@ private:
     /**Loads the cluster files and creates the corresponding groups in the cluster palette.
    * @param urls file list to be opened.
    */
-    void loadClusterFiles(QStringList urls);
+    void loadClusterFiles(const QStringList& urls);
 
     /**Loads the event files and creates the corresponding groups in the cluseventer palette.
    * @param urls file list to be opened.
    */
-    void loadEventFiles(QStringList urls);
+    void loadEventFiles(const QStringList& urls);
 
     /**Loads the position file and creates the position view in the current display.
    * @param url file to be opened.
