@@ -501,6 +501,7 @@ void NeuroscopeApp::initActions()
 
     mViewStatusBar = settingsMenu->addAction(tr("Show StatusBar"));
     mViewStatusBar->setCheckable(true);
+    mViewStatusBar->setChecked(true);
     connect(mViewStatusBar,SIGNAL(triggered()), this,SLOT(slotViewStatusBar()));
 
     settingsMenu->addSeparator();
@@ -842,7 +843,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     //Create the mainDock (first view)
     if(tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
-    mainDock = new QDockWidget(doc->url());
     //createDockWidget( "1", QPixmap(), 0L, tr(doc->url().path()),tabLabel);
     //KDAB_PENDING mainDock->setDockWindowTransient(this,true);
 
@@ -867,19 +867,11 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     //Update the document's list of view
     doc->addView(view);
-    mainDock->setWidget(view);
+    mainDock = view;
 
 
     tabsParent->addDockArea(view,tabLabel);
 
-    //allow dock on the left side only
-    //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockLeft);
-
-    //setCentralWidget(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
-    //KDAB_PENDING setMainDockWidget(mainDock);
-
-    //disable docking abilities of mainDock itself
-    mainDock->setAllowedAreas(Qt::NoDockWidgetArea);
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
@@ -901,35 +893,11 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     }
 
 
-    //Add spikeChannelPalette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
-    //and spikeChannelPalette.
-    //KDAB_PENDING QDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
-
-    //KDAB_PENDING displayPanel->setEnableDocking(Qt::NoDockWidgetArea);
-    //KDAB_PENDING spikePanel->setEnableDocking(Qt::NoDockWidgetArea);
-    //KDAB_PENDING displayPanel->setDockSite(Qt::NoDockWidgetArea);
-    //KDAB_PENDING spikePanel->setDockSite(Qt::NoDockWidgetArea);
-
-    //The grandParent's widget is the QTabWidget regrouping all the tabs
-    //KDAB_PENDINGpaletteTabsParent = static_cast<QTabWidget*>(grandParent->widget());
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    //KDAB_PENDINGconnect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
 
-    //Disable the possibility to dock the palette or to dock into it.
-    //KDAB_PENDING grandParent->setEnableDocking(Qt::NoDockWidgetArea);
-    //KDAB_PENDING grandParent->setDockSite(Qt::NoDockWidgetArea);
-
-    //allow dock on the right side only (the displays will be on the rigth side)
-    //KDAB_PENDING palettePanel->setDockSite(QDockWidget::DockRight);
-
-    //Dock the palettePanel on the left
-    //KDAB_PENDING palettePanel->setEnableDocking(QDockWidget::DockFullSite);
-    //KDAB_PENDING palettePanel->manualDock(mainDock,QDockWidget::DockLeft,20);  // relation target/this (in percent)
-
-    //forbit docking abilities of palettePanel itself
-    //KDAB_PENDING palettePanel->setEnableDocking(Qt::NoDockWidgetArea);
 
     //Enable some actions now that a document is open (see the klustersui.rc file)
     slotStateChanged("documentState");
@@ -1359,6 +1327,7 @@ void NeuroscopeApp::slotFileOpenRecent(const QString& url){
 }
 
 void NeuroscopeApp::slotFileClose(){ 
+#if KDAB_PENDING
     if(doc != 0){
         QApplication::restoreOverrideCursor();
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -1503,6 +1472,7 @@ void NeuroscopeApp::slotFileClose(){
             QApplication::restoreOverrideCursor();
         }
     }
+#endif
 }
 
 void NeuroscopeApp::slotFilePrint()
@@ -1578,15 +1548,7 @@ void NeuroscopeApp::slotViewStatusBar()
     slotStatusMsg(tr("Toggle the statusbar..."));
     ///////////////////////////////////////////////////////////////////
     //turn Statusbar on or off
-    if(!viewStatusBar->isChecked())
-    {
-        statusBar()->hide();
-    }
-    else
-    {
-        statusBar()->show();
-    }
-
+    statusBar()->setVisible(mViewStatusBar->isChecked());
     slotStatusMsg(tr("Ready."));
 }
 
@@ -1705,14 +1667,10 @@ void NeuroscopeApp::slotDrawTimeLine(){
 }
 
 NeuroscopeView* NeuroscopeApp::activeView(){
-    QDockWidget* current;
 
-    //Get the active tab
-    if(tabsParent) current = static_cast<QDockWidget*>(tabsParent->currentPage());
-    //or the active window if there is only one display (which can only be the mainDock)
-    else current = mainDock;
-
-    return static_cast<NeuroscopeView*>(current->widget());
+    DockArea* area = tabsParent->currentDockArea();
+    NeuroscopeView *view = static_cast<NeuroscopeView*>(area);
+    return view;
 }
 
 void NeuroscopeApp::slotSingleChannelColorUpdate(int channelId){
@@ -1735,12 +1693,16 @@ void NeuroscopeApp::slotUpdateShownChannels(const QList<int>& shownChannels){
     view->shownChannelsUpdate(shownChannels);
 
     //if the view is in selection mode, highlight the selected channels
-    if(view->isSelectionTool()) view->selectChannels(channelPalette->selectedChannels());
-    else view->setSelectedChannels(channelPalette->selectedChannels());
+    if(view->isSelectionTool())
+        view->selectChannels(channelPalette->selectedChannels());
+    else
+        view->setSelectedChannels(channelPalette->selectedChannels());
 
     //Update the show/hide status of the inactive palette.
-    if(channelPalette == displayChannelPalette) spikeChannelPalette->updateShowHideStatus(shownChannels,true);
-    else displayChannelPalette->updateShowHideStatus(shownChannels,true);
+    if(channelPalette == displayChannelPalette)
+        spikeChannelPalette->updateShowHideStatus(shownChannels,true);
+    else
+        displayChannelPalette->updateShowHideStatus(shownChannels,true);
 }
 
 void NeuroscopeApp::slotUpdateHiddenChannels(const QList<int>& hiddenChannels){
@@ -1748,12 +1710,15 @@ void NeuroscopeApp::slotUpdateHiddenChannels(const QList<int>& hiddenChannels){
     QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
     ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
 
-    if(channelPalette == displayChannelPalette) spikeChannelPalette->updateShowHideStatus(hiddenChannels,false);
-    else displayChannelPalette->updateShowHideStatus(hiddenChannels,false);
+    if(channelPalette == displayChannelPalette)
+        spikeChannelPalette->updateShowHideStatus(hiddenChannels,false);
+    else
+        displayChannelPalette->updateShowHideStatus(hiddenChannels,false);
 }
 
 void NeuroscopeApp::slotFileProperties(){
-    if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
+    if(propertiesDialog == 0L)
+        propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
     if(isPositionFileLoaded) propertiesDialog->setEnabledPosition(true);
@@ -1827,14 +1792,19 @@ void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution
                                           float screenGain,int currentNbSamples,int currentPeakIndex,double videoSamplingRate,int width,
                                           int height, QString backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool isaDatFile,bool positionsBackground,QString traceBackgroundImage){
     QApplication::restoreOverrideCursor();
-    if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
+    if(propertiesDialog == 0L)
+        propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
-    if(isPositionFileLoaded) propertiesDialog->setEnabledPosition(true);
-    else propertiesDialog->setEnabledPosition(false);
+    if(isPositionFileLoaded)
+        propertiesDialog->setEnabledPosition(true);
+    else
+        propertiesDialog->setEnabledPosition(false);
 
-    if(clusterFileList.isEmpty() || !doc->isCurrentFileAdatFile()) propertiesDialog->setEnabledCluster(false);
-    else propertiesDialog->setEnabledCluster(true);
+    if(clusterFileList.isEmpty() || !doc->isCurrentFileAdatFile())
+        propertiesDialog->setEnabledCluster(false);
+    else
+        propertiesDialog->setEnabledCluster(true);
 
     //If the current opened file is a dat file, the sampling rate in provided in the Acquisition System section
     //and the line edit for the current file sampling rate is not necessary.
@@ -2374,7 +2344,7 @@ void NeuroscopeApp::slotDisplayClose(){
     QDockWidget* current;
 
     slotStatusMsg(tr("Closing display..."));
-
+#if KDAB_PENDING
     //Get the active tab
     if(tabsParent){
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -2536,6 +2506,7 @@ void NeuroscopeApp::slotDisplayClose(){
             QApplication::restoreOverrideCursor();
         }
     }
+#endif
     slotStatusMsg(tr("Ready."));
 }
 

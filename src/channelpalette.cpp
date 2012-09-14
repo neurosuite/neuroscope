@@ -1791,7 +1791,7 @@ void ChannelPalette::setEditMode(bool edition){
     isInSelectItems = false;
 }
 
-void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,const QColor& color,bool show,bool skip){
+void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
     pixmap->fill(backgroundColor);
     painter.begin(pixmap);
     if(greyScale){

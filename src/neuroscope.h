@@ -681,7 +681,6 @@ private:
     QAction* fileOpenRecent;
     QAction* viewMainToolBar;
     QAction* viewToolBar;
-    QAction* viewStatusBar;
     QAction* viewParameterBar;
     QAction* greyScale;
     QAction* displayMode;
@@ -770,7 +769,7 @@ private:
     /** mainDock is the main DockWidget to which all other dockWidget will be dock. Inititalized in
      * initDisplay()
      */
-    QDockWidget* mainDock;
+    DockArea* mainDock;
 
     /**displayPanel is the DockWidget containing the channel palette used to specify the traces display.
      */
