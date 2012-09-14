@@ -2674,22 +2674,26 @@ void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){
 
 void NeuroscopeApp::slotChannelsSelected(const QList<int>& selectedIds){
     //if the selection tool is selected  warn the active display
-    if(select) activeView()->selectChannels(selectedIds);
-    else activeView()->setSelectedChannels(selectedIds);
+    if(select)
+        activeView()->selectChannels(selectedIds);
+    else
+        activeView()->setSelectedChannels(selectedIds);
 
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *channelPalette = paletteTabsParent->currentWidget();
 
     //Update the selection of the inactive palette.
-    if(channelPalette == displayChannelPalette) spikeChannelPalette->selectChannels(selectedIds);
-    else displayChannelPalette->selectChannels(selectedIds);
+    if(channelPalette == displayChannelPalette)
+        spikeChannelPalette->selectChannels(selectedIds);
+    else
+        displayChannelPalette->selectChannels(selectedIds);
 }
 
 void NeuroscopeApp::slotIncreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if(current->widget()->isA("ChannelPalette")){
-        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
+
+    ChannelPalette* channelPalette = 0;
+    if( channelPalette = qobject_cast<ChannelPalette*>(current)){
         activeView()->increaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else
@@ -2700,9 +2704,10 @@ void NeuroscopeApp::slotIncreaseSelectedChannelsAmplitude(){
 
 void NeuroscopeApp::slotDecreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
-    if(current->widget()->isA("ChannelPalette")){
-        ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current->widget());
+    QWidget *current = paletteTabsParent->currentWidget();
+
+    ChannelPalette* channelPalette = 0;
+    if( channelPalette = qobject_cast<ChannelPalette*>(current)){
         activeView()->decreaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else
