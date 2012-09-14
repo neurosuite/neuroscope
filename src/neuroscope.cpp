@@ -485,6 +485,7 @@ void NeuroscopeApp::initActions()
     viewMainToolBar = settingsMenu->addAction(tr("Show Main Toolbar"));
 
     viewMainToolBar->setCheckable(true);
+    viewMainToolBar->setChecked(true);
     connect(viewMainToolBar,SIGNAL(triggered()), this,SLOT(slotViewMainToolBar()));
 
 
