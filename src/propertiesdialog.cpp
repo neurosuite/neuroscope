@@ -47,7 +47,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     //adding "Units" page
     w = new QWidget(this);
     clusterProperties = new ClusterProperties(w);
-    addPage(properties,tr("Units"));
+    addPage(clusterProperties,tr("Units"));
 
     //adding "Positions" page
     w = new QWidget(this);
