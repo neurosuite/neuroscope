@@ -56,7 +56,7 @@ public slots:
     inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 protected slots:
-    void slotDropped(QDropEvent* event,const QList<Q3IconDragItem>& draggedList);
+    void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);
 
 private:
     /**Return 0 if it has to be before the first one.*/

@@ -74,8 +74,8 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gri
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
-    connect(this,SIGNAL(dropped(QDropEvent*,QList<Q3IconDragItem>)),
-            this,SLOT(slotDropped(QDropEvent*,QList<Q3IconDragItem>)));
+    connect(this,SIGNAL(dropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)),
+            this,SLOT(slotDropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)));
 }
 
 Q3DragObject* ChannelIconView::dragObject(){
@@ -105,7 +105,8 @@ Q3DragObject* ChannelIconView::dragObject(){
     return drag;
 }
 
-void ChannelIconView::slotDropped(QDropEvent* event,const QList<Q3IconDragItem>& draggedList){
+void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
+#if KDAB_PENDING
     //The source of the drag is not a widget of the application
     if(event->source() == 0 || !drag){
         event->ignore();
@@ -152,6 +153,7 @@ void ChannelIconView::slotDropped(QDropEvent* event,const QList<Q3IconDragItem>&
         Q3IconViewItem* after = findItemToInsertAfter(event->pos());
         emit channelsMoved(this->name(),after);
     }
+#endif
 }
 
 void ChannelIconView::contentsDropEvent(QDropEvent* event){

@@ -351,7 +351,9 @@ class GroupLabel : public QLabel{
     Q_OBJECT
 public:
     inline GroupLabel(const QString& text,QWidget* parent):
-        QLabel(text,parent){}
+        QLabel(text,parent){
+        setAutoFillBackground(true);
+    }
 
 signals:
     void middleClickOnLabel(QString sourceId);
