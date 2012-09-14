@@ -835,6 +835,7 @@ void NeuroscopeApp::initializePreferences(){
 void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
                                 QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
 { 
+    qDebug()<<" void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,";
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
 
@@ -871,7 +872,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     //allow dock on the left side only
     //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockLeft);
 
-    setCentralWidget(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
+    //setCentralWidget(mainDock); // central widget in a KDE mainwindow <=> setMainWidget
     //KDAB_PENDING setMainDockWidget(mainDock);
 
     //disable docking abilities of mainDock itself
@@ -896,14 +897,10 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
         displayChannelPalette->selectChannels(selectedChannels);
     }
 
-    //KDAB_PENDING displayPanel->setEnableDocking(QDockWidget::DockFullSite);
-    //KDAB_PENDING spikePanel->setEnableDocking(QDockWidget::DockFullSite);
-    //KDAB_PENDING displayPanel->setDockSite(QDockWidget::DockFullSite);
-    //KDAB_PENDING spikePanel->setDockSite(QDockWidget::DockFullSite);
 
     //Add spikeChannelPalette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
     //and spikeChannelPalette.
-    //KDAB_PENDINGQDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
+    //KDAB_PENDING QDockWidget* grandParent = spikePanel->manualDock(displayPanel,QDockWidget::DockCenter);
 
     //KDAB_PENDING displayPanel->setEnableDocking(Qt::NoDockWidgetArea);
     //KDAB_PENDING spikePanel->setEnableDocking(Qt::NoDockWidgetArea);
@@ -1968,8 +1965,10 @@ void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<i
     QList<int> offsets = channelDefaultOffsets.values();
     QList<int> channelGains;
     QList<int> selectedChannels;
-    if(initialTimeWindow != 0) initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus,initialTimeWindow);
-    else initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus);
+    if(initialTimeWindow != 0)
+        initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus,initialTimeWindow);
+    else
+        initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus);
 
 }
 

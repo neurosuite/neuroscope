@@ -22,7 +22,7 @@
 //Include files for KDE
 #include <QDockWidget>
 #include <QStatusBar>
-
+#include <dockarea.h>
 
 // include files for Qt
 #include <qwidget.h>
@@ -56,7 +56,7 @@ class TraceWidget;
  * The NeuroscopeView class inherits QWidget as a KDockArea to give it the ability to contains dockWidgets.
  * @author Lynn Hazan
  */
-class NeuroscopeView : public QWidget
+class NeuroscopeView : public DockArea
 {
     Q_OBJECT
 public:
