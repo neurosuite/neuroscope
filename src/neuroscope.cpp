@@ -494,11 +494,6 @@ void NeuroscopeApp::initActions()
     connect(viewToolBar,SIGNAL(triggered()), this,SLOT(slotViewToolBar()));
 
     viewToolBar->setChecked(true);
-    viewParameterBar = settingsMenu->addAction(tr("Show &Parameters"));
-    viewParameterBar->setCheckable(true);
-    connect(viewParameterBar,SIGNAL(triggered()), this,SLOT(slotViewParameterBar()));
-
-    viewParameterBar->setChecked(true);
 
     mViewStatusBar = settingsMenu->addAction(tr("Show StatusBar"));
     mViewStatusBar->setCheckable(true);
@@ -567,8 +562,6 @@ void NeuroscopeApp::initActions()
     connect(displayChannelPalette, SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
     connect(spikeChannelPalette, SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotChannelsSelected(QList<int>)));
 
-    //TODO
-    mParameterToolBar = new QToolBar;
 
     mMainToolBar = new QToolBar;
     mMainToolBar->addAction(mOpenAction);
@@ -1540,21 +1533,6 @@ void NeuroscopeApp::slotViewStatusBar()
     ///////////////////////////////////////////////////////////////////
     //turn Statusbar on or off
     statusBar()->setVisible(mViewStatusBar->isChecked());
-    slotStatusMsg(tr("Ready."));
-}
-
-void NeuroscopeApp::slotViewParameterBar(){
-    slotStatusMsg(tr("Toggle the parameters..."));
-
-    // turn Toolbar on or off
-    if(!viewParameterBar->isChecked())
-    {
-        mParameterToolBar->hide();
-    }
-    else
-    {
-        mParameterToolBar->show();
-    }
     slotStatusMsg(tr("Ready."));
 }
 

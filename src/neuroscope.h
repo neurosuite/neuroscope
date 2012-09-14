@@ -354,8 +354,6 @@ private slots:
      */
     void slotViewStatusBar();
 
-    /** Toggles the bar for the parameters.*/
-    void slotViewParameterBar();
 
     /** Toggles the calibration bar. This bar is meaningful only when all the channels
     *  have the same amplification.
@@ -681,7 +679,6 @@ private:
     QAction* fileOpenRecent;
     QAction* viewMainToolBar;
     QAction* viewToolBar;
-    QAction* viewParameterBar;
     QAction* greyScale;
     QAction* displayMode;
     QAction* clusterVerticalLines;
@@ -760,7 +757,6 @@ private:
     QToolBar *mChannelToolBar;
     QToolBar *mEventToolBar;
     QToolBar *mClusterToolBar;
-    QToolBar *mParameterToolBar;
 
     QRecentFileAction *mFileOpenRecent;
     /** A counter that gets increased each time the user creates a new display of the document with "Displays"->"New ...".*/
