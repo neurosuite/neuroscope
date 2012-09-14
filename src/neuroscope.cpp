@@ -3001,7 +3001,7 @@ void NeuroscopeApp::slotShowPreviousCluster(){
 }
 
 
-void NeuroscopeApp::loadPositionFile(QString url){
+void NeuroscopeApp::loadPositionFile(const QString& url){
     NeuroscopeView* view = activeView();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -3110,14 +3110,6 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
     //Create the list
     eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
-
-    //KDAB_PENDING eventDock->setEnableDocking(QDockWidget::DockFullSite);
-
-    //Temporarily allow addition of a new dockWidget in the center
-    //KDAB_PENDING displayPanel->setDockSite(QDockWidget::DockCenter);
-    //Add the new palette as a tab and get a new DockWidget, grandParent of the target (displayPanel)
-    //and the new palette.
-    //KDAB_PENDING QDockWidget* grandParent = eventDock->manualDock(displayPanel,QDockWidget::DockCenter,50,QPoint(0, 0),false,paletteTabsParent->count()-1);
 
     //Disconnect the previous connection
     if(paletteTabsParent != NULL)

@@ -146,7 +146,8 @@ void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int de
     updateItemList(groupName);
 
     //always select a group
-    if(selected == "") selectGroupLabel(groupName);
+    if(selected.isEmpty())
+        selectGroupLabel(groupName);
 
     emit paletteResized(viewport()->width(),labelSize);
     update();
@@ -186,7 +187,8 @@ void ItemPalette::updateItemList(QString groupName){
 }
 
 void ItemPalette::slotRightPressed(Q3IconViewItem* item){
-    if(!item) return; // right pressed on viewport
+    if(!item)
+        return; // right pressed on viewport
     else{
         //Create a popmenu if need it.
     }
@@ -201,21 +203,22 @@ void ItemPalette::slotMousePressed(int button,Q3IconViewItem* item,QString sourc
 }
 
 void ItemPalette::selectGroupLabel(QString sourceGroupName){
-    if(selected != ""){
+    if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
             GroupNameLabel* previousLabel = dynamic_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
-    if(sourceGroupName != ""){
+    if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
         QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
         label->setPaletteBackgroundColor(colorGroup().highlight());
     }
 
     selected = sourceGroupName;
-    if(type == EVENT) emit selectedGroupChanged(selected);
+    if(type == EVENT)
+        emit selectedGroupChanged(selected);
 }
 
 void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ctrlAlt){
@@ -365,7 +368,8 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
     }
 
     selected = sourceGroupName;
-    if(type == EVENT) emit selectedGroupChanged(selected);
+    if(type == EVENT)
+        emit selectedGroupChanged(selected);
 }
 
 

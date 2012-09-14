@@ -708,11 +708,13 @@ public:
    */
     inline void updateFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
                                      float screenGain,int newNbSamples,int newPeakSampleIndex,double videoSamplingRate,
-                                     int width, int height, QString backgroundImage, QString traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
+                                     int width, int height, const QString& backgroundImage, const QString& traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
                                      bool positionsBackground){
         this->channelNb = channelNb;
-        if(extension != "dat") samplingRate = SR;
-        else samplingRate = acquisitionSystemSamplingRate;
+        if(extension != "dat")
+            samplingRate = SR;
+        else
+            samplingRate = acquisitionSystemSamplingRate;
         datSamplingRate = acquisitionSystemSamplingRate;
         this->voltageRange = voltageRange;
         this->amplification = amplification;
@@ -740,12 +742,14 @@ public:
 
     /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
     inline bool isCurrentFileAdatFile(){
-        if(extension == "dat") return true;
-        else return false;
+        if(extension == "dat")
+            return true;
+        else
+            return false;
     }
 
     /**Returns the base name of the document (common name for all the files). */
-    inline QString documentBaseName(){return baseName;}
+    inline QString documentBaseName() const {return baseName;}
 
     /**Returns the session file path.*/
     QString sessionPath() const;
@@ -1050,11 +1054,11 @@ public:
         friend CloseDocumentEvent* NeuroscopeDoc::getCloseDocumentEvent(QString origin);
 
     public:
-        inline QString methodOfOrigin(){return origin;}
+        inline QString methodOfOrigin() const {return origin;}
         inline ~CloseDocumentEvent(){}
 
     private:
-        CloseDocumentEvent(QString origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
+       CloseDocumentEvent(const QString& origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
 
         QString origin;
     };
@@ -1066,7 +1070,8 @@ public:
    * is not currently set.
    */
     inline QImage getWhiteTrajectoryBackground(){
-        if(!drawPositionsOnBackground) return QImage();
+        if(!drawPositionsOnBackground)
+            return QImage();
         return transformBackgroundImage(true);
     }
     

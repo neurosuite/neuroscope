@@ -936,7 +936,7 @@ private:
     /**Loads the position file and creates the position view in the current display.
    * @param url file to be opened.
    */
-    void loadPositionFile(QString url);
+    void loadPositionFile(const QString& url);
 
     /**Updates the spike and event browsing status.*/
     void updateBrowsingStatus();
