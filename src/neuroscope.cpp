@@ -3164,9 +3164,9 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerNam
 }
 
 void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selection){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
+    if(current->isA("ItemPalette") && name.contains("eventPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -3178,14 +3178,16 @@ void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selec
 }
 
 void NeuroscopeApp::slotCloseEventFile(){
-    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->currentPage());
+    QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if((current->widget())->isA("ItemPalette") && name.contains("eventPanel")){
-        ItemPalette* eventPalette = static_cast<ItemPalette*>(current->widget());
+    if(current->isA("ItemPalette") && name.contains("eventPanel")){
+        ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
 
         NeuroscopeView* view = activeView();
-        if(eventFileList.count() == 1) doc->removeEventFile(eventProvider,view,true);
-        else doc->removeEventFile(eventProvider,view,false);
+        if(eventFileList.count() == 1)
+            doc->removeEventFile(eventProvider,view,true);
+        else
+            doc->removeEventFile(eventProvider,view,false);
         eventFileList.remove(eventProvider);
         eventPalette->removeGroup(eventProvider);
 
