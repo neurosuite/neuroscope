@@ -1769,7 +1769,6 @@ void NeuroscopeApp::slotUpdateHiddenChannels(const QList<int>& hiddenChannels){
 }
 
 void NeuroscopeApp::slotFileProperties(){
-#if KDAB_PENDING
     if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
@@ -1838,14 +1837,12 @@ void NeuroscopeApp::slotFileProperties(){
                                             propertiesDialog->getBackgroundImage(),propertiesDialog->getRotation(),propertiesDialog->getFlip(),propertiesDialog->getPositionsBackground(),activeView());
         }
     }
-#endif
 }
 
 void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
                                           float screenGain,int currentNbSamples,int currentPeakIndex,double videoSamplingRate,int width,
                                           int height, QString backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool isaDatFile,bool positionsBackground,QString traceBackgroundImage){
     QApplication::restoreOverrideCursor();
-#if 0
     if(propertiesDialog == 0L) propertiesDialog = new PropertiesDialog(this);
 
     //enable the tabs for cluster and positions if a corresponding file is open, otherwise disable them.
@@ -1877,7 +1874,6 @@ void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution
     }
 
     propertiesDialog->openState(false);
-#endif
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
