@@ -58,7 +58,7 @@
 NeuroscopeApp::NeuroscopeApp()
     :QMainWindow(0, "NeuroScope")
     ,prefDialog(0L),displayCount(0),mainDock(0),
-      displayPanel(0),displayChannelPalette(0),spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
+      spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
       isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
       select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
       eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
@@ -677,33 +677,26 @@ void NeuroscopeApp::applyPreferences() {
     if(displayPaletteHeaders != configuration().isPaletteHeadersDisplayed()){
         displayPaletteHeaders = configuration().isPaletteHeadersDisplayed();
         if(mainDock){
-            if(displayPaletteHeaders){
-                for(int i = 0; i < paletteTabsParent->count();++i){
-                    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
+            for(int i = 0; i < paletteTabsParent->count();++i){
+                QWidget *current = paletteTabsParent->widget(i);
+                if(displayPaletteHeaders) {
                     QString name = current->name();
                     QString label;
                     if(name.contains("displayPanel"))
-                        label = "Anatomy";
+                        label = tr("Anatomy");
                     else if(name.contains("spikePanel"))
-                        label = "Spikes";
+                        label = tr("Spikes");
                     else if(name.contains("clusterPanel"))
-                        label = "Units";
+                        label = tr("Units");
                     else if(name.contains("eventPanel"))
-                        label = "Events";
-
+                        label = tr("Events");
                     paletteTabsParent->setTabLabel(current,label);
-                    current->setWindowTitle(label);
-                }
-            }
-            else{
-                for(int i = 0; i< paletteTabsParent->count();i++){
-                    QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(i));
+                } else {
                     paletteTabsParent->setTabLabel(current,"");
-                    current->setWindowTitle("");
                 }
             }
-        }
-        else{
+        } else {
+#if KDAB_PENDING
             if(displayPaletteHeaders){
                 displayPanel->setWindowTitle("Anatomy");
                 spikePanel->setWindowTitle("Spikes");
@@ -712,6 +705,7 @@ void NeuroscopeApp::applyPreferences() {
                 displayPanel->setWindowTitle("");
                 spikePanel->setWindowTitle("");
             }
+#endif
         }
     }
 
@@ -2666,8 +2660,10 @@ void NeuroscopeApp::slotSynchronize(){
 }
 
 void NeuroscopeApp::resizePalettePanel(){
+#if KDAB_PENDING
     static_cast<QWidget*>(displayPanel)->resize(static_cast<QWidget*>(displayPanel->parent())->size());
     displayChannelPalette->update();
+#endif
 }
 
 void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){

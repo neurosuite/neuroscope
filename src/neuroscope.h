@@ -771,14 +771,6 @@ private:
      */
     DockArea* mainDock;
 
-    /**displayPanel is the DockWidget containing the channel palette used to specify the traces display.
-     */
-    QDockWidget* displayPanel;
-
-    /**spikePanel is the DockWidget containing the channel palette used to create the spike groups.
-     */
-    QDockWidget* spikePanel;
-
     /**displayChannelPalette is the Widget containing the channel list used to specify the traces display.
     * Inititalized in initItemPanel().
     */
