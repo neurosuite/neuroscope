@@ -74,16 +74,14 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
 
     //Create the mainDock
     mainDock = new QDockWidget(tr("field potentials"));
-            //createDockWidget("Main", QPixmap(), 0L, tr("field potentials"), tr("field potentials"));
+
+    addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
 
     mainDock->setWidget(traceWidget);
-    //KDAB_PENDING mainDock->setEnableDocking(QDockWidget::DockCorner);
-    //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockCorner);
-    //KDAB_PENDING setMainDockWidget(mainDock);
 
     //Set Connection(s) common to all widgets.
     connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
@@ -147,10 +145,6 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     connect(this,SIGNAL(traceBackgroundImageUpdate(QImage,bool)),traceWidget,SLOT(traceBackgroundImageUpdate(QImage,bool)));
     
     connect(&globalEventProvider,SIGNAL(getCurrentEventInformation(long,long,QObject*)),traceWidget,SLOT(getCurrentEventInformation(long,long,QObject*)));
-
-
-
-    //KDAB_PENDING mainDock->setEnableDocking(Qt::NoDockWidgetArea);
 }
 
 NeuroscopeView::~NeuroscopeView()
@@ -440,6 +434,7 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
     positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positions,"PositionView",backgroundColor);
     positions->setWidget(positionView);//assign the widget
 
+    addDockWidget(Qt::TopDockWidgetArea,positions);
     //KDAB_PENDING positions->manualDock(mainDock,QDockWidget::DockTop,25);
     //KDAB_PENDING positions->setEnableDocking(QDockWidget::DockCorner);
     //KDAB_PENDING positions->setDockSite(QDockWidget::DockCorner);

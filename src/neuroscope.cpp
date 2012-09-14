@@ -869,6 +869,9 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     doc->addView(view);
     mainDock->setWidget(view);
 
+
+    tabsParent->addDockArea(view,tabLabel);
+
     //allow dock on the left side only
     //KDAB_PENDING mainDock->setDockSite(QDockWidget::DockLeft);
 
