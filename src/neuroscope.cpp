@@ -2153,8 +2153,7 @@ void NeuroscopeApp::slotHideChannels(){
 }
 
 void NeuroscopeApp::slotTabChange(QWidget* widget){
-    QDockWidget* display = dynamic_cast<QDockWidget*>(widget);
-    NeuroscopeView* activeView = dynamic_cast<NeuroscopeView*>(display->widget());
+    NeuroscopeView* activeView = dynamic_cast<NeuroscopeView*>(widget);
 
     isInit = true; //prevent the KToggleAction to trigger during initialisation
 
@@ -2470,17 +2469,13 @@ void NeuroscopeApp::slotDisplayClose(){
 
 void NeuroscopeApp::slotRenameActiveDisplay(){
     if(tabsParent){
-        QDockWidget* current;
-
-        //Get the active tab
-        current = static_cast<QDockWidget*>(tabsParent->currentPage());
+        const int index = tabsParent->currentIndex();
 
         bool ok;
-        QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
-                                                 current->windowTitle(),&ok,this);
+        const QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
+                                                 tabsParent->tabText(index),&ok,this);
         if(ok&& !newLabel.isEmpty()){
-            tabsParent->setTabLabel(current,newLabel);
-            current->setWindowTitle(newLabel);
+            tabsParent->setTabText(index,newLabel);
             activeView()->setTabName(newLabel);
         }
     }
@@ -2515,13 +2510,14 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
     if(mainDock){
         if(tabLabel.isEmpty())
             tabLabel = tr("Field Potentials Display");
-        QDockWidget* display = new QDockWidget(doc->url());
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
                                                   doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),
-                                                  offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay");
+                                                  offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),mainDock,
+                                                  "TracesDisplay");
 
+        tabsParent->addDockArea(view,tabLabel);
         view->installEventFilter(this);
 
         connect(view,SIGNAL(channelsSelected(QList<int>)),this, SLOT(slotSelectChannelsInPalette(QList<int>)));
@@ -2534,12 +2530,8 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
 
         //Update the document's list of view
         doc->addView(view);
-        //install the new view in the display so it can be see in the future tab.
-        display->setWidget(view);
 
-        //Disconnect the previous connection
-        if(tabsParent != NULL)
-            disconnect(tabsParent,0,0,0);
+        disconnect(tabsParent,0,0,0);
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
