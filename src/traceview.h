@@ -1135,6 +1135,9 @@ private:
     void scaleBackgroundImage();
 
     void changeCursor();
+
+    QList<int> mDeselectedChannels;
+    QList<int> mSelectedChannels;
 };
 
 #endif
