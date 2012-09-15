@@ -3385,15 +3385,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   <Disable>
    <Action name="close_position_file" />
    <Action name="position_view"/>
-   <Action name="show_events"/>
   </Disable>
 */
+        showEventsInPositionView->setEnabled(false);
     } else if(state == QLatin1String("eventsInPositionViewEnableState")) {
-        /*
-        <Enable>
-         <Action name="show_events"/>
-        </Enable>
-  */
+        showEventsInPositionView->setEnabled(true);
     } else if(state == QLatin1String("eventTabState")) {
         /*
   <Enable>
@@ -3403,10 +3399,10 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   </Enable>
   <Disable>
    <Action name="edit_select_all_except01"/>
-   <Action name="close_cluster_file" />
   </Disable>
  </State>
 */
+        mCloseCluster->setEnabled(false);
     } else if(state == QLatin1String("undoState")) {
         mRedo->setEnabled(true);
         mUndo->setEnabled(true);
