@@ -105,6 +105,9 @@ void NeuroscopeApp::initView()
     tabsParent = new QExtendTabWidget(this);
     splitter->addWidget(tabsParent);
     setCentralWidget(splitter);
+    QList<int> size;
+    size <<10<<90;
+    splitter->setSizes(size);
 }
 
 
