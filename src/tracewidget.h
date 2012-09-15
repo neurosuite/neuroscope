@@ -118,7 +118,7 @@ public:
     void accelerate();
     void decelerate();
 
-public slots:
+public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
     void advance();
@@ -440,7 +440,7 @@ public slots:
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-    inline void eventToAddProperties(QString providerName,QString eventDescription){
+    inline void eventToAddProperties(const QString& providerName,const QString& eventDescription){
         view.eventToAddProperties(providerName,eventDescription);
     }
 
@@ -518,12 +518,12 @@ public slots:
     inline void increaseRasterHeight(){view.increaseRatio();}
 
     /**Decreases the height of the rasters.*/
-    inline void decreaseRasterHeight(){view.decreaseRatio();}
+    inline void decreaseRasterHeight() {view.decreaseRatio();}
 
     /**Returns the height of the rasters.
   *@return raster height.
   */
-    inline int getRasterHeight(){return view.getRasterHeight();}
+    inline int getRasterHeight() {return view.getRasterHeight();}
 
     /**Informs that data of the selected events providers corresponding to current time frame are available.
   * @param eventsData dictionary between the event provider names and the event data and status.
@@ -551,7 +551,7 @@ public slots:
         view.traceBackgroundImageUpdate(traceBackgroundImage,active);
     }
 
-signals:
+Q_SIGNALS:
     void channelsSelected(const QList<int>& selectedIds);
 
     /**Informs that the starting time and/or the timeWindow have changed.
@@ -609,7 +609,7 @@ private:
     /**Initializes the different time selection widgets.*/
     void initSelectionWidgets();
 
-private slots:
+private Q_SLOTS:
     /**Informs the view to present the traces for an updated time frame.*/
     void slotStartMinuteTimeUpdated(int start);
 

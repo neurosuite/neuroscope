@@ -38,7 +38,7 @@ public:
     ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
     inline ~ItemIconView(){}
 
-private slots:
+private Q_SLOTS:
     inline void slotMousePressed(int button,Q3IconViewItem* item){
         emit mouseButtonPressed(button,item,this->name());
     }
@@ -52,7 +52,7 @@ protected:
     void contentsMousePressEvent(QMouseEvent* event);
     inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
-signals:
+Q_SIGNALS:
     void mousePressWoModificators(QString sourceGroup);
     void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
     void mousePressWAltButton(QString sourceGroup,int index);

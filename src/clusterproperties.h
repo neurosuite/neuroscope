@@ -50,7 +50,7 @@ public:
     /**Returns the index of the peak sample in the spike waveform.*/
     inline int getPeakIndex()const{return peakIndexLineEdit->text().toInt();}
 
-public slots:
+public Q_SLOTS:
     /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */

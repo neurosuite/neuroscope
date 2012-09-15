@@ -171,7 +171,7 @@ void TraceWidget::initSelectionWidgets(){
     startSecond->setValue(nbSeconds);
     startMilisecond = new QSpinBox(0,recordingLength,1,selectionWidgets,"msStart");
     lay->addWidget(startMilisecond);
-    startMilisecond->setSuffix( " ms" );
+    startMilisecond->setSuffix( tr(" ms") );
     startMilisecond->setValue(remainingMiliseconds);
 
 

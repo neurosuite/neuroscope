@@ -463,7 +463,7 @@ public:
   */
     void traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active);
 
-public slots:
+public Q_SLOTS:
     /**Displays the data that has been retrieved.
   * @param data array of data (number of channels X number of samples).
   * @param initiator instance requesting the data.
@@ -548,7 +548,7 @@ public slots:
     inline int getRasterHeight(){return rasterHeight;}
 
 
-signals:
+Q_SIGNALS:
     void channelsSelected(const QList<int>& selectedIds);
     void setStartAndDuration(long time,long duration);
     void eventModified(QString providerName,int selectedEventId,double time,double newTime);

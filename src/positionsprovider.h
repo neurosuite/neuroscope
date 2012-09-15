@@ -96,7 +96,7 @@ public:
   */
     inline double getSamplingRate() const {return samplingRate;}
 
-signals:
+Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param data n column array containing the position of the animal. The two first columns contain
   * the position of the first spot and the following optional pair of columns contain the position of optional spots.

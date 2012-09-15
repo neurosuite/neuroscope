@@ -47,7 +47,7 @@ public:
     /** */
     inline bool isApplyEnable(){return applyEnable;}
     
-public slots:
+public Q_SLOTS:
     /**Will be called when the "Default" button has been clicked.*/
     void slotDefault();
     /**Will be called when the "Apply" button has been clicked.*/
@@ -55,7 +55,7 @@ public slots:
     /**Will be called whenever a setting was changed.*/
     void enableApply();
 
-signals:
+Q_SIGNALS:
     /// Will be emitted when the new settings should be applied.
     void settingsChanged();
 

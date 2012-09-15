@@ -285,7 +285,8 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
 void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if(initiator != this)
+        return;
 
 
     qDebug()<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() ;
@@ -383,7 +384,8 @@ void TraceView::updateClusterData(bool active){
             if(iterator.currentKey() != clusterProviderToSkip){
                 static_cast<ClustersProvider*>(clusterProviders[iterator.currentKey()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
-            else clusterProviderToSkip.clear();
+            else
+                clusterProviderToSkip.clear();
         }
     }
 
@@ -562,7 +564,8 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.begin(&doublebuffer);
 
             //if need it, draw the background image before applying any transformation to the painter.
-            if(!background.isNull()) painter.drawPixmap(0,0,scaledBackground);
+            if(!background.isNull())
+                painter.drawPixmap(0,0,scaledBackground);
 
             //Correct the window after the user zoomed if need it.
             correctZoom(r);
@@ -576,7 +579,8 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.setViewport(viewport);
 
             //Fill the double buffer with the background color if no image has been set.
-            if(background.isNull()) doublebuffer.fill(paletteBackgroundColor());
+            if(background.isNull())
+                doublebuffer.fill(paletteBackgroundColor());
 
             //Paint all the traces in the shownChannels list (in the double buffer,on top of the background image or the background color )
             drawTraces(painter);
@@ -585,7 +589,8 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.resetXForm() ;
 
             //Draw channel ids and amplitude on the left side.
-            if(showLabels) drawChannelIdsAndGain(painter);
+            if(showLabels)
+                drawChannelIdsAndGain(painter);
 
             //Draw the calibration scale
             if(showCalibrationScale)
@@ -2326,7 +2331,8 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
     //Paint the line while dragging
     if(mode == DRAW_LINE && (event->state() == Qt::LeftButton)){
-        if(linePositions.size() != 0) drawTimeLine(x,false);
+        if(!linePositions.isEmpty())
+            drawTimeLine(x,false);
     }
 
     //The parent implementation takes care of the rubber band
@@ -3024,7 +3030,8 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
     }
     if(mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
         //erase the line
-        if(linePositions.size() != 0) drawTimeLine(0,false,true);
+        if(!linePositions.isEmpty())
+            drawTimeLine(0,false,true);
         linePositions.clear();
         previousDragAbscissa = 0;
     }

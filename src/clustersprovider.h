@@ -135,7 +135,7 @@ public:
         fileMaxTime = previousEndTime;
     }
     
-signals:
+Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
   * corresponding cluster id. The first line contains the sample index and the second line the cluster id.

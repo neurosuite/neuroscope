@@ -65,7 +65,7 @@ public:
         mLayout->addWidget(iconView);
     }
 
-public slots:
+public Q_SLOTS:
     inline void reAdjustSize(int parentWidth,int labelSize){
         if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
             init = false;

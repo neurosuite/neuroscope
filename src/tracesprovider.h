@@ -115,7 +115,7 @@ public:
     /**Returns the total number of samples in recorded contained in the file identified by fileUrl.*/
     long getTotalNbSamples();
 
-signals:
+Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param data array of data (number of channels X number of samples).
   * @param initiator instance requesting the data.

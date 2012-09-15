@@ -160,7 +160,7 @@ public:
         setCurrentPage(mPositionPageIndex);
     }
 
-public slots:
+public Q_SLOTS:
     /** Will be called when any properties except the number of channels has been modified.*/
     inline void propertyModified(){modified = true;}
 
@@ -176,7 +176,7 @@ protected:
             QDialog::accept();
     }
 
-private slots:
+private Q_SLOTS:
     /** Will be called when the number of channels has been modified.*/
     inline  void channelNbModified(){nbChannelsModified = true;}
 

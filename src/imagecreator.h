@@ -61,7 +61,7 @@ public:
    */
     void saveImage(QString fileName,const QString& format = "PNG");
     
-public slots:     
+public Q_SLOTS:     
 
     /**Receive the data requested and actually creates the image containg all the positions.
    * @param data n column array containing the position of the animal. The two first columns contain

@@ -65,11 +65,11 @@ public:
         mLayout->addWidget(iconView);
     }
 
-signals:
+Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start, int destination);
     void dragObjectMoved(QPoint position);
     
-public slots:
+public Q_SLOTS:
     inline void reAdjustSize(int parentWidth,int labelSize){
         if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
             init = false;

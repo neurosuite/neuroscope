@@ -188,7 +188,7 @@ public:
   */
     void renameEvent(int selectedEventId,QString newEventDescription,double time);
 
-signals:
+Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param times 1 line array containing the time (in recording samples) of each event existing in the requested time frame.
   * @param ids 1 line array containing the identifiers of each event existing in the requested time frame.

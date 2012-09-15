@@ -139,8 +139,10 @@ void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int de
     itemColorsDict.insert(groupName,itemColors);
     //In the case of cluster files, the groupName (<=> electrode id) correspond to a number and the groups are
     //order numerically
-    if(type == CLUSTER) clusterGroupList.append(groupName.toInt());
-    else itemGroupList.append(groupName);
+    if(type == CLUSTER)
+        clusterGroupList.append(groupName.toInt());
+    else
+        itemGroupList.append(groupName);
     createGroup(groupName);
 
     updateItemList(groupName);
@@ -186,19 +188,15 @@ void ItemPalette::updateItemList(QString groupName){
     else iconView->adjustSize();
 }
 
-void ItemPalette::slotRightPressed(Q3IconViewItem* item){
-    if(!item)
-        return; // right pressed on viewport
-    else{
-        //Create a popmenu if need it.
-    }
-}
 
 void ItemPalette::slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName){ 
-    if (!item) return; //pressed on viewport
-    else{
+    if (!item) {
+        return; //pressed on viewport
+    } else {
         // middle pressed on item
-        if(button == Qt::MidButton) changeColor(item,sourceGroupName);
+        if(button == Qt::MidButton) {
+            changeColor(item,sourceGroupName);
+        }
     }
 }
 
@@ -223,14 +221,14 @@ void ItemPalette::selectGroupLabel(QString sourceGroupName){
 
 void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ctrlAlt){
 
-    if(selected != ""){
+    if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
             GroupNameLabel* previousLabel = dynamic_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
-    if(sourceGroupName != ""){
+    if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
         QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
         label->setPaletteBackgroundColor(colorGroup().highlight());
@@ -282,12 +280,16 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
             emit updateItemsToSkip(sourceGroupName,itemsToSkip);
 
             if(!isBrowsingEnable()){
-                if(type == CLUSTER) emit noClustersToBrowse();
-                else emit noEventsToBrowse();
+                if(type == CLUSTER)
+                    emit noClustersToBrowse();
+                else
+                    emit noEventsToBrowse();
             }
             else{
-                if(type == CLUSTER) emit clustersToBrowse();
-                else emit eventsToBrowse();
+                if(type == CLUSTER)
+                    emit clustersToBrowse();
+                else
+                    emit eventsToBrowse();
             }
         }
         else{

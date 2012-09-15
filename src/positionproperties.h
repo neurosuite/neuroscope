@@ -164,7 +164,7 @@ public:
         }
     }
 
-public slots:
+public Q_SLOTS:
     /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */
@@ -194,7 +194,7 @@ public slots:
     }
 
 
-private slots:
+private Q_SLOTS:
     inline void updateBackgroundImage(){
         QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
         if(!image.isEmpty())

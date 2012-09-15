@@ -46,16 +46,16 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent* event);
     inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
-signals:
+Q_SIGNALS:
     void channelsMoved(QString targetGroup,Q3IconViewItem* after);
     void channelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
     void dropLabel(int sourceId,int targetId,int start,int destination);
     void moussePressWoModificators(QString sourceGroup);
 
-public slots:
+public Q_SLOTS:
     inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
-protected slots:
+protected Q_SLOTS:
     void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);
 
 private:

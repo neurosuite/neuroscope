@@ -27,7 +27,6 @@
 using namespace neuroscope;
 
 NeuroscopeXmlReader::NeuroscopeXmlReader()
-    :readVersion("")
 {
 }
 
@@ -243,7 +242,7 @@ int NeuroscopeXmlReader::getAmplification() const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion == "") searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + AMPLIFICATION);
+    if(type == SESSION && readVersion.isEmpty()) searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + AMPLIFICATION);
     else searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + AMPLIFICATION);
 
     //Evaluate xpath expression
@@ -269,8 +268,10 @@ int NeuroscopeXmlReader::getOffset()const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion == "") searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + OFFSET);
-    else searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + OFFSET);
+    if(type == SESSION && readVersion.isEmpty())
+        searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + OFFSET);
+    else
+        searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + OFFSET);
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);

@@ -191,7 +191,7 @@ public:
    */
     inline bool isApositionFileLoaded()const{return isPositionFileLoaded;}
 
-public slots:
+public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
     inline void page() {	activeView()->page(); }
@@ -296,7 +296,7 @@ protected:
     
     void customEvent (QEvent* event);
     
-private slots:
+private Q_SLOTS:
 
     void slotAbout();
 

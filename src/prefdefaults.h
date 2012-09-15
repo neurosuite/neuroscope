@@ -118,7 +118,7 @@ public:
     /**Returns the background image.*/
     inline QString getTraceBackgroundImage()const{return traceBackgroundLineEdit->text();}
     
-private slots:
+private Q_SLOTS:
     inline void updateTraceBackgroundImage(){
         QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
 

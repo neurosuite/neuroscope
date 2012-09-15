@@ -121,12 +121,11 @@ public:
     */
     bool isBrowsingEnable();
     
-public slots:
+public Q_SLOTS:
     void slotMousePressWoModificators(QString sourceGroup);
     void slotMousePressWAltButton(QString sourceGroup,int index);
     
-protected slots:
-    void slotRightPressed(Q3IconViewItem* item);
+protected Q_SLOTS:
     void slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
     void slotMidButtonPressed(QString sourceGroupName);
@@ -136,7 +135,7 @@ protected slots:
     void paintEvent ( QPaintEvent*ainter);
     void slotMouseReleased(QString sourceGroupName);
 
-signals:
+Q_SIGNALS:
     void colorChanged(int item,QString groupName);
     void updateShownItems(const QMap<QString,QList<int> >& selectedItems);
     void paletteResized(int parentWidth,int labelSize);
@@ -243,7 +242,7 @@ public:
     inline GroupNameLabel(const QString& text,QWidget* parent):
         QLabel(text,parent){}
 
-signals:
+Q_SIGNALS:
     void leftClickOnLabel(QString sourceId,bool shiftKey,bool ctrlAlt);
     void middleClickOnLabel(QString sourceId);
 

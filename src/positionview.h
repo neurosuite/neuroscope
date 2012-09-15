@@ -68,7 +68,7 @@ public:
                  QColor backgroundColor = Qt::black, int minSize = 100, int maxSize = 4000, int border = 0);
     ~PositionView();
 
-public slots:  
+public Q_SLOTS:  
     /**Updates the information needed to draw the position of the animal.
   * @param width video image width.
   * @param height video image height.

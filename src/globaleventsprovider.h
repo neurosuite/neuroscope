@@ -54,7 +54,7 @@ public:
         emit getCurrentEventInformation(startTime,endTime,initiator);
     }
 
-signals:
+Q_SIGNALS:
     void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
 
     /**Informs that data of the selected events providers corresponding to current time frame are available.
@@ -65,7 +65,7 @@ signals:
     void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
 
 
-public slots:
+public Q_SLOTS:
     /**Informs that data of the selected events providers corresponding to current time frame are available.
   * @param eventsData dictionary between the event provider names and the event data and status.
   * @param selectedEvents map between the event provider names and the list of currently selected events.

@@ -158,7 +158,7 @@ public:
   inline void setCurrentSamplingRateEnabled(bool state){samplingRateLineEdit->setEnabled(state);}
 
   
-private slots:
+private Q_SLOTS:
   inline void updateTraceBackgroundImage(){
       QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
       if(!image.isEmpty()) setTraceBackgroundImage(image);

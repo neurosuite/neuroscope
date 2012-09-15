@@ -625,7 +625,7 @@ public:
   */
     inline int isEventsInPositionView()const{return eventsInPositionView;}
 
-public slots:
+public Q_SLOTS:
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
@@ -718,7 +718,7 @@ public slots:
 
 
 
-signals:
+Q_SIGNALS:
     void changeBackgroundColor(QColor color);
     void updateContents();
     void greyScale(bool geyScale);

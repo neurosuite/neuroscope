@@ -129,7 +129,7 @@ public:
     };
 
     
-public slots:
+public Q_SLOTS:
     virtual void changeColor(Q3IconViewItem* item,bool single = true);
     /**Creates a new group and fill it with the selected channels.
     */
@@ -171,7 +171,7 @@ public slots:
         emit channelsSelected(selectedChannels());
     }
     
-protected slots:
+protected Q_SLOTS:
     virtual void slotRightPressed(Q3IconViewItem* item);
     virtual void slotMousePressed(int button,Q3IconViewItem* item);
     void slotMousePressed(QString sourceGroupName);
@@ -184,7 +184,7 @@ protected slots:
     void paintEvent (QPaintEvent*);
     inline void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
     
-signals:
+Q_SIGNALS:
     void singleChangeColor(int selectedChannel);
     void groupChangeColor(int groupId);
     //void channelsChangeColor(QValueList<int> selectedChannels);
@@ -331,10 +331,10 @@ public:
         event->accept(Q3TextDrag::canDecode(event));
     }
 
-public slots:
+public Q_SLOTS:
     inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
-signals:
+Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start, int destination);
 
 private:
@@ -355,7 +355,7 @@ public:
         setAutoFillBackground(true);
     }
 
-signals:
+Q_SIGNALS:
     void middleClickOnLabel(QString sourceId);
     void leftClickOnLabel(QString sourceId);
 

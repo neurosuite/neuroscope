@@ -1096,7 +1096,7 @@ public:
     /**Returns a reference on the the map given the of channels default offsets.*/
     inline  const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;}
 
-public slots:
+public Q_SLOTS:
 
     /**Updates the event palette and the views after the creation of a new event description.
    * @param providerName provider identifier.
@@ -1115,7 +1115,7 @@ public slots:
    */
     void slotEventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
 
-signals:
+Q_SIGNALS:
     /**Informs the application that there is no session file available.
     * @param channelDefaultOffsets map given the channel default offsets.
     * @param skipStatus map given the skip status of the channels.

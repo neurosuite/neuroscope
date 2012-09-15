@@ -12,7 +12,7 @@ public:
     PrefDefaultsLayout( QWidget* parent = 0 );
     
 
-public slots:
+public Q_SLOTS:
    // TODO copy 0 functions, 0 signals, and 0 slots (not init and destroy!) from prefdefaultslayout.h.old here
 
 private:
