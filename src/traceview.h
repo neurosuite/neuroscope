@@ -1076,7 +1076,7 @@ private:
  * @param channels list of channels to draw.
  * @param highlight true if the channels have to be highlighted, false otherwise.
  */
-    void drawTraces(QList<int> channels,bool highlight);
+    void drawTraces(const QList<int>& channels,bool highlight);
 
     /**
  * Draws the trace for the channel @p channelId.
@@ -1122,7 +1122,7 @@ private:
  * @param selectedEventIndex index of the event to draw.
  * @param highlight true if the event has to be highlighted, false otherwise.
  */
-    void drawEvent(QString providerName,int selectedEventId,dataType selectedEventIndex,bool highlight);
+    void drawEvent(const QString &providerName, int selectedEventId, dataType selectedEventIndex, bool highlight);
 
     /** Draws a vertical line at the cursor position. If the traces are displayed on multiple columns, a line is drawn in each column.
  * @param x abscissa of the cursor.
