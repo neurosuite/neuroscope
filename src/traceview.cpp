@@ -48,17 +48,55 @@ const int TraceView::YMARGIN = 0;
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
                      bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
                      ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,QStatusBar* statusBar,
+                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,QStatusBar* statusBar,
                      int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
     BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
-    greyScaleMode(greyScale),statusBar(statusBar),tracesProvider(tracesProvider),
-    multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),dataReady(false),data(),
-    channelOffsets(channelOffsets),gains(gains),channelColors(channelColors),groupsChannels(groupsChannels),channelsGroups(channelsGroups),doublebuffer(),background(backgroundImage),
-    acquisitionGain(acquisitionGain),unitGain(unitGain),xMargin(10),yMargin(0),columnDisplayChanged(false),resized(false),groupsChanged(false),previousDragOrdinate(0),lastClickOrdinate(0),
-    nbSamplesModified(false),alreadySelected(false),isInit(true),channelforVoltageComputation(0),startingIndex(0),
-    showLabels(labelsDisplay),showCalibrationScale(false),downSampling(1),zoomed(false),firstZoom(true),
-    doubleClick(false),zoomFactor(0),maxZoomReached(false),zoomOut(false),printState(false),
-    startTimeInRecordingUnits(0),previousStartTimeInRecordingUnits(0),spikeBrowsing(false),newEventPosition(-1),eventBeingModified(false),retrieveClusterData(false){
+    greyScaleMode(greyScale),
+    statusBar(statusBar),
+    tracesProvider(tracesProvider),
+    multiColumns(multiColumns),
+    verticalLines(verticalLines),
+    raster(raster),
+    waveforms(waveforms),
+    dataReady(false),data(),
+    channelOffsets(channelOffsets),
+    gains(gains),
+    channelColors(channelColors),
+    groupsChannels(groupsChannels),
+    channelsGroups(channelsGroups),
+    doublebuffer(),
+    background(backgroundImage),
+    acquisitionGain(acquisitionGain),
+    unitGain(unitGain),
+    xMargin(10),
+    yMargin(0),
+    columnDisplayChanged(false),
+    resized(false),
+    groupsChanged(false),
+    previousDragOrdinate(0),
+    lastClickOrdinate(0),
+    nbSamplesModified(false),
+    alreadySelected(false),
+    isInit(true),
+    channelforVoltageComputation(0),
+    startingIndex(0),
+    showLabels(labelsDisplay),
+    showCalibrationScale(false),
+    downSampling(1),
+    zoomed(false),
+    firstZoom(true),
+    doubleClick(false),
+    zoomFactor(0),
+    maxZoomReached(false),
+    zoomOut(false),
+    printState(false),
+    startTimeInRecordingUnits(0),
+    previousStartTimeInRecordingUnits(0),
+    spikeBrowsing(false),
+    newEventPosition(-1),
+    eventBeingModified(false),
+    retrieveClusterData(false)
+{
 
 
     QList<int>::iterator channelsToShowIterator;
@@ -95,8 +133,10 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     updateShownGroupsChannels(shownChannels);
 
     //rasterHeight is equals to -1 if no value is available.
-    if(rasterHeight == -1) this->rasterHeight = 33;
-    else this->rasterHeight = rasterHeight;
+    if(rasterHeight == -1)
+        this->rasterHeight = 33;
+    else
+        this->rasterHeight = rasterHeight;
 
     borderX = 0;
     Xstep = 1;
@@ -116,11 +156,13 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
 
     //The initial offset for each channel is set to zero.
-    if(channelOffsets.size() == 0)
-        for(int i = 0; i < nbChannels; ++i) channelOffsets.append(0);
+    if(channelOffsets.isEmpty())
+        for(int i = 0; i < nbChannels; ++i)
+            channelOffsets.append(0);
 
     //The initial amplitude and factor for each channel.
-    if(gains.size() == 0) setGains(unitGain,acquisitionGain);
+    if(gains.size() == 0)
+        setGains(unitGain,acquisitionGain);
     else{
         //Compute alpha: (3.traceVspace) / (Utheta . acquisitionGain)
         //Utheta: amplitude maximal of theta in milivolts, 0.4 mv
@@ -173,6 +215,25 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
 TraceView::~TraceView(){}
 
+void TraceView::changeCursor()
+{
+    if(mode == SELECT)
+        setCursor(selectCursor);
+    else if(mode == ZOOM)
+        setCursor(zoomCursor);
+    else if(mode == MEASURE)
+        setCursor(measureCursor);
+    else if(mode == SELECT_TIME)
+        setCursor(selectTimeCursor);
+    else if(mode == SELECT_EVENT)
+        setCursor(selectEventCursor);
+    else if(mode == ADD_EVENT)
+        setCursor(addEventCursor);
+    else if(mode == DRAW_LINE)
+        setCursor(drawLineCursor);
+
+}
+
 void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
 
@@ -183,13 +244,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
         QApplication::restoreOverrideCursor();
 
         QMessageBox::critical(this, tr("IO Error"),tr("An error has occured, the data file could not be opened or the file size is incorrect."));
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
         return;
     }
 
@@ -201,14 +256,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
     //The following code was done in case of threads, without thread the trace data arrive always last
     //No clusters or events selected
     if(clustersData.count() == 0 && eventsData.count() == 0){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
-
+        changeCursor();
         //Everything has to be redraw
         repaint(false);
     }
@@ -226,13 +274,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
             if(!ready) break;
         }
         if(ready){
-            if(mode == SELECT) setCursor(selectCursor);
-            if(mode == ZOOM) setCursor(zoomCursor);
-            if(mode == MEASURE) setCursor(measureCursor);
-            if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-            if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-            if(mode == ADD_EVENT) setCursor(addEventCursor);
-            if(mode == DRAW_LINE) setCursor(drawLineCursor);
+            changeCursor();
 
             //Everything has to be redraw
             repaint(false);
@@ -265,13 +307,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
         if(!ready) break;
     }
     if(dataReady && ready){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
 
         //Everything has to be redraw
         drawContentsMode = REDRAW;
@@ -303,13 +339,7 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
         if(!ready) break;
     }
     if(dataReady && ready){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
 
         //Everything has to be redraw
         drawContentsMode = REDRAW;
@@ -3808,13 +3838,7 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
         }
     }
     else if(ready && (nextEventProvider.second == startTime || nextEventProvider.second > length)){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
     }
 }
 
@@ -3862,13 +3886,8 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
     }
     //if the new start time is equals to the current one or superior to the recording lenght do not do anything
     else if(ready && previousEventProvider.second == startTime){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
+
     }
     else if(ready && previousEventProvider.second > length){
         long timeFrameWidth = endTime - startTime;
@@ -4187,13 +4206,7 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
     }
     else if(ready && (startTimeInRecordingUnits == previousStartTimeInRecordingUnits || nextClusterProvider.second > length)){
         startTimeInRecordingUnits = 0;
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
     }
 }
 
@@ -4243,13 +4256,8 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     }
     //if the new start time (in recording unit) is equals to the current one do not do anything
     else if(ready && startTimeInRecordingUnits == previousStartTimeInRecordingUnits){
-        if(mode == SELECT) setCursor(selectCursor);
-        if(mode == ZOOM) setCursor(zoomCursor);
-        if(mode == MEASURE) setCursor(measureCursor);
-        if(mode == SELECT_TIME) setCursor(selectTimeCursor);
-        if(mode == SELECT_EVENT) setCursor(selectEventCursor);
-        if(mode == ADD_EVENT) setCursor(addEventCursor);
-        if(mode == DRAW_LINE) setCursor(drawLineCursor);
+        changeCursor();
+
     }
     //if the new start time is superior to the recording lenght, look up in all the files at the last timeFrameWidth of the data file
     else if(ready && previousClusterProvider.second > length){

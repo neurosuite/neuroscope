@@ -87,11 +87,11 @@ public:
   * to the part of the drawing which will actually be drawn onto the widget).
   * @param border size of the border between the frame and the contents.
   */
-    TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
-              bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
-              ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-              QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels, int rasterHeight,QImage backgroundImage,QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,QStatusBar* statusBar = 0L,
-              int minSize = 500, int maxSize = 4000, int windowTopLeft = -500,int windowBottomRight = 1001, int border = 0);
+    TraceView(TracesProvider& tracesProvider, bool greyScale, bool multiColumns, bool verticalLines,
+              bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int unitGain, int acquisitionGain, long start, long timeFrameWidth,
+              ChannelColors* channelColors, QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
+              QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, QColor backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
+              int minSize = 500, int maxSize = 4000, int windowTopLeft = -500, int windowBottomRight = 1001, int border = 0);
 
 
 
@@ -1134,6 +1134,7 @@ private:
     /**Scale the background image to fit it in the widget.*/
     void scaleBackgroundImage();
 
+    void changeCursor();
 };
 
 #endif

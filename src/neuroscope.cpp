@@ -254,6 +254,8 @@ void NeuroscopeApp::initActions()
     mEventTool->setIcon(QIcon(":/icons/event_tool"));
     mEventTool->setShortcut(Qt::Key_E);
     connect(mEventTool,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
+    //KDAB_PORTING!
+    addEventMenu = 0;
 #if KDAB_PENDING
     addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
     connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
