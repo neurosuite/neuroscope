@@ -1082,8 +1082,9 @@ bool NeuroscopeApp::queryClose()
 {
 
     //call when the kDockMainWindow will be close
-    if(doc == 0 || !doc->isADocumentToClose()) return true;
-    else{
+    if(doc == 0 || !doc->isADocumentToClose())  {
+        return true;
+    } else {
         QApplication::restoreOverrideCursor();
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         //try to close the document
@@ -1187,8 +1188,9 @@ bool NeuroscopeApp::queryClose()
             doc->closeDocument();
             QApplication::restoreOverrideCursor();
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 }
 
@@ -1312,7 +1314,6 @@ void NeuroscopeApp::slotFileOpenRecent(const QString& url){
 }
 
 void NeuroscopeApp::slotFileClose(){ 
-#if KDAB_PENDING
     if(doc != 0){
         QApplication::restoreOverrideCursor();
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -1384,8 +1385,7 @@ void NeuroscopeApp::slotFileClose(){
                 case QMessageBox::Cancel:
                     return;
                 }
-            }
-            else{
+            } else {
                 //If neither groups, colors or events have been modified, save the session without asking
                 saveStatus = doc->saveSession();
                 QString message;
@@ -1420,24 +1420,24 @@ void NeuroscopeApp::slotFileClose(){
                 //Remove the display from the group of tabs
                 while(true){
                     int nbOfTabs = tabsParent->count();
-                    QDockWidget* current = static_cast<QDockWidget*>(tabsParent->page(0));
+                    DockArea* current = static_cast<DockArea*>(tabsParent->page(0));
                     if(current == mainDock){
-                        current = static_cast<QDockWidget*>(tabsParent->page(1));
+                        current = static_cast<DockArea*>(tabsParent->page(1));
                     }
                     tabsParent->removePage(current);
                     delete current;
-                    if(nbOfTabs == 2) break; //the reminding one is the mainDock
+                    if(nbOfTabs == 2)
+                        break; //the reminding one is the mainDock
                 }
-                tabsParent = 0L;
             }
 
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
-                QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(0));
-                if((current->widget())->isA("ChannelPalette")){
-                    current = static_cast<QDockWidget*>(paletteTabsParent->page(1));
-                    if((current->widget())->isA("ChannelPalette"))
-                        current = static_cast<QDockWidget*>(paletteTabsParent->page(2));
+                QWidget* current = paletteTabsParent->page(0);
+                if(qobject_cast<ChannelPalette*>(current)){
+                    current = paletteTabsParent->page(1);
+                    if(qobject_cast<ChannelPalette*>(current))
+                        current = paletteTabsParent->page(2);
                 }
                 paletteTabsParent->removePage(current);
                 delete current;
@@ -1457,7 +1457,6 @@ void NeuroscopeApp::slotFileClose(){
             QApplication::restoreOverrideCursor();
         }
     }
-#endif
 }
 
 void NeuroscopeApp::slotFilePrint()
