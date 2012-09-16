@@ -21,7 +21,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <QList>
-
+#include <QDebug>
 
 
 //Unix include file
@@ -53,7 +53,7 @@ EventsProvider::EventsProvider(QString fileUrl,double currentSamplingRate,int po
 }
 
 EventsProvider::~EventsProvider(){
-    cout<<"in ~EventsProvider "<<endl;
+    qDebug()<<"in ~EventsProvider "<<endl;
 }
 
 int EventsProvider::loadData(){
@@ -62,7 +62,7 @@ int EventsProvider::loadData(){
     //Get the number of events
     nbEvents = Utilities::getNbLines(fileName);
 
-    cout<<"nbEvents "<<nbEvents<<endl;
+    qDebug()<<"nbEvents "<<nbEvents<<endl;
 
     if(nbEvents == -1){
         events.setSize(0,0);
@@ -109,7 +109,7 @@ int EventsProvider::loadData(){
     }
 
     eventFile.close();
-    cout << "Loading evt file into memory: "<<Timer() << endl;
+    qDebug()<< "Loading evt file into memory: "<<Timer() << endl;
 
 
     //The number of events read has to be coherent with the number of events read.

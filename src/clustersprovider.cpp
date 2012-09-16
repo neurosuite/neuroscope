@@ -21,7 +21,7 @@
 //Added by qt3to4:
 #include <QList>
 #include <QMap> 
-
+#include <QDebug>
 
 //Unix include file
 #include <unistd.h>
@@ -70,7 +70,7 @@ int ClustersProvider::loadData(){
     //Get the number of spikes
     nbSpikes = Utilities::getNbLines(timeFilePath);
 
-    cout<<"nbSpikes "<<nbSpikes<<endl;
+    qDebug()<<"nbSpikes "<<nbSpikes;
 
     if(nbSpikes == -1){
         clusters.setSize(0,0);
@@ -182,7 +182,7 @@ int ClustersProvider::loadData(){
         return INCORRECT_CONTENT;
     }
 
-    cout << "Loading clu file into memory: "<<Timer() << endl;
+    qDebug() << "Loading clu file into memory: "<<Timer() << endl;
 
     //Initialize the variables
     previousStartTime = 0;
@@ -202,9 +202,9 @@ void ClustersProvider::requestData(long startTime,long endTime,QObject* initiato
 void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits){
     Array<dataType> data;
 
-    cout<<" in retrieveData, startTime " <<startTime<<" endTime " <<endTime<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<endl;
+    qDebug()<<" in retrieveData, startTime " <<startTime<<" endTime " <<endTime<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits;
 
-    cout<<" in retrieveData, fileMaxTime " <<fileMaxTime<<" samplingRate " <<samplingRate<<endl;
+    qDebug()<<" in retrieveData, fileMaxTime " <<fileMaxTime<<" samplingRate " <<samplingRate;
 
 
     if(startTime > fileMaxTime){
@@ -349,7 +349,7 @@ void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiat
             data(1,count + 1) = static_cast<dataType>(floor(0.5 + currentTime));
             data(2,count + 1) = clusters(1,startIndex);
 
-            //if(data(2,count + 1) ==9 || data(2,count + 1) == 8)cout<<" in retrieveData, data(1,count + 1) " <<data(1,count + 1)<<" data(2,count + 1) " <<data(2,count + 1)<<endl;
+            //if(data(2,count + 1) ==9 || data(2,count + 1) == 8)qDebug()<<" in retrieveData, data(1,count + 1) " <<data(1,count + 1)<<" data(2,count + 1) " <<data(2,count + 1)<<endl;
 
 
             count++;
@@ -369,7 +369,7 @@ void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiat
     }
 
 
-    cout<<" in retrieveData, count " <<count<<" startInRecordingUnits " <<startInRecordingUnits<<" endInRecordingUnits " <<endInRecordingUnits<<" endTime " <<endTime<<endl;
+    qDebug()<<" in retrieveData, count " <<count<<" startInRecordingUnits " <<startInRecordingUnits<<" endInRecordingUnits " <<endInRecordingUnits<<" endTime " <<endTime<<endl;
 
 
     //Store the data in a array of the good size
@@ -390,7 +390,7 @@ void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QLis
     //Compute the start time for the spike look up
     startTime = initialStartTime + static_cast<long>(timeFrame * clusterPosition);
 
-    cout<<"timeFrame " <<timeFrame<<" clusterPosition " <<clusterPosition<<" initialStartTime " <<initialStartTime<<" startTime " <<startTime<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits <<endl;
+    qDebug()<<"timeFrame " <<timeFrame<<" clusterPosition " <<clusterPosition<<" initialStartTime " <<initialStartTime<<" startTime " <<startTime<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits;
 
     //first look up for the index corresponding to the startTime and then for the first valid spike (contained in selectedIds)
     //after that time
@@ -469,7 +469,7 @@ void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QLis
         //look up for the startIndex index by index
         time = clusters(2,newStartIndex);
 
-        cout<<"newStartIndex " <<newStartIndex<<" time " <<time<<" nbSpikes " <<nbSpikes <<endl;
+        qDebug()<<"newStartIndex " <<newStartIndex<<" time " <<time<<" nbSpikes " <<nbSpikes <<endl;
 
         if(time < startInRecordingUnits && (newStartIndex < nbSpikes)){
             while(time < startInRecordingUnits){
@@ -621,7 +621,7 @@ void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QLis
     }
 
 
-    cout<<" count " <<count <<endl;
+    qDebug()<<" count " <<count <<endl;
 
 
     //Store the data in a array of the good size

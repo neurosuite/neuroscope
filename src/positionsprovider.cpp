@@ -22,6 +22,7 @@
 // include files for QT
 #include <QStringList>
 #include <QFileInfo>
+#include <QDebug>
 
 
 
@@ -104,7 +105,7 @@ int PositionsProvider::loadData(){
     }
 
     positionFile.close();
-    cout << "Loading pos file into memory: "<<Timer() << endl;
+    qDebug() << "Loading pos file into memory: "<<Timer() << endl;
 
 
     //The number of positions read has to be coherent with the number of positions read.
