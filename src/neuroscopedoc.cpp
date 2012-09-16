@@ -700,7 +700,7 @@ void NeuroscopeDoc::channelGroupColorUpdate(int groupId,NeuroscopeView* activeVi
 }
 
 /*void NeuroscopeDoc::channelsColorUpdate(QValueList<int>selectedChannels,NeuroscopeView& view){
-cout<<"in NeuroscopeDoc::channelsColorUpdate"<<endl;
+qDebug()<<"in NeuroscopeDoc::channelsColorUpdate"<<endl;
 }*/
 
 void NeuroscopeDoc::showCalibration(bool show,NeuroscopeView* activeView){
