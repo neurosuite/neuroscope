@@ -18,7 +18,7 @@
     </property>
     <layout class="QGridLayout">
       <item row="0" column="0">
-        <widget class="Q3GroupBox" name="groupBox2_2">
+        <widget class="QGroupBox" name="groupBox2_2">
           <property name="sizePolicy">
             <sizepolicy>
               <hsizetype>7</hsizetype>
@@ -365,7 +365,7 @@
         </spacer>
       </item>
       <item row="1" column="0">
-        <widget class="Q3GroupBox" name="groupBox1">
+        <widget class="QGroupBox" name="groupBox1">
           <property name="sizePolicy">
             <sizepolicy>
               <hsizetype>5</hsizetype>

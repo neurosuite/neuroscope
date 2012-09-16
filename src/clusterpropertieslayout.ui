@@ -34,7 +34,7 @@
         </spacer>
       </item>
       <item row="0" column="0">
-        <widget class="Q3GroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBox">
           <property name="sizePolicy">
             <sizepolicy>
               <hsizetype>5</hsizetype>
