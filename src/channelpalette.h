@@ -23,7 +23,6 @@
 #include <q3vbox.h> 
 #include <q3iconview.h>
 #include <q3dict.h>
-#include <q3ptrlist.h>
 #include <qmap.h>
 #include <q3dragobject.h>
 #include <QLabel>
