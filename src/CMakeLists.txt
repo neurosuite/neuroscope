@@ -13,7 +13,6 @@ set(neuroscope_SRCS
 	configuration.cpp 
 	dataprovider.cpp 
 	eventsprovider.cpp 
-	itemcolors.cpp 
 	itemgroupview.cpp 
 	itemiconview.cpp 
 	itempalette.cpp 
