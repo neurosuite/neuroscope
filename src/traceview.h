@@ -992,7 +992,7 @@ private:
     /**Dictionary between the event provider names and the event data and status.*/
     Q3Dict<EventData> eventsData;
 
-    /** Dictionary between the event provider names and the providers.*/
+    /**Dictionary between the event provider names and the providers.*/
     Q3Dict<EventsProvider> eventProviders;
 
     /**Pair storing the event provider having a selected event the closer in time to the current endTime,

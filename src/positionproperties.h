@@ -28,7 +28,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QFileDialog>
-#include <q3groupbox.h>
 #include <QCheckBox> 
 #include <QFileDialog>
 
