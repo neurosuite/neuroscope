@@ -4,7 +4,6 @@ set(neuroscope_SRCS
 	neuroscope.cpp 
 	neuroscopeview.cpp 
 	baseframe.cpp 
-	channelcolors.cpp 
 	channelgroupview.cpp 
 	channeliconview.cpp 
 	channelpalette.cpp 
