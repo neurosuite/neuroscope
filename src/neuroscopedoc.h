@@ -201,7 +201,7 @@ private:
     float indexLengthDefault;
 
     /** Dictionary between the provider names and the provider except the TracesProvider.*/
-    Q3Dict<DataProvider> providers;
+      Q3Dict<DataProvider> providers;
 
     /**Map between the provider's name display at the top of the palette and the paths to the provider's file.*/
     QMap<QString,QString> providerUrls;
