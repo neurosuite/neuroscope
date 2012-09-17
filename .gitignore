@@ -1,6 +1,3 @@
 *.o
 *.moc*
 Makefile
-autom4te.cache
-src/.deps/
-src/neuroscope
