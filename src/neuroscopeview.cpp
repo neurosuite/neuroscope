@@ -435,10 +435,6 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
     positions->setWidget(positionView);//assign the widget
 
     addDockWidget(Qt::TopDockWidgetArea,positions);
-    //KDAB_PENDING positions->manualDock(mainDock,QDockWidget::DockTop,25);
-    //KDAB_PENDING positions->setEnableDocking(QDockWidget::DockCorner);
-    //KDAB_PENDING positions->setDockSite(QDockWidget::DockCorner);
-
     //Enable the View to be inform that the positions dockWidget is being close.
     //To do so, connect the positions dockwidget close button to the dockBeingClosed slot of is contained widget
     //and connect this widget parentDockBeingClosed signal to the view positionDockClosed slot.
@@ -472,9 +468,6 @@ void  NeuroscopeView::positionDockClosed(QWidget* view){
 }
 
 void NeuroscopeView::removePositionView(){
-    //KDAB_PENDING QDockWidget* dock = dockManager->findWidgetParentDock(positionView);
-    //KDAB_PENDING dock->undock();
-    //KDAB_PENDING delete dock;
     positionView = 0L;
     isPositionFileShown = false;
 }
