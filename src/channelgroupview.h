@@ -97,8 +97,9 @@ protected:
             return;
         }
 
-        QString information;
-        if(Q3TextDrag::decode(event,information)){
+
+        if(event->mimeData()->hasText()){
+            QString information = event->mimeData()->text();
             int groupSource = information.section("-",0,0).toInt();
             int start = information.section("-",1,1).toInt();
             QString groupTarget = this->name();
@@ -111,7 +112,8 @@ protected:
             event->ignore();
             return;
         }
-        event->accept(Q3TextDrag::canDecode(event));
+        if (event->mimeData()->hasText())
+            event->acceptProposedAction();
         //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
         emit dragObjectMoved(QWidget::mapToParent(event->pos()));
     }

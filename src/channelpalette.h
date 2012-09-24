@@ -24,7 +24,6 @@
 #include <q3iconview.h>
 #include <q3dict.h>
 #include <qmap.h>
-#include <q3dragobject.h>
 #include <QLabel>
 #include <QCursor>
 //Added by qt3to4:
@@ -313,8 +312,9 @@ public:
             return;
         }
 
-        QString information;
-        if(Q3TextDrag::decode(event,information)){
+
+        if(event->mimeData()->hasText()){
+            QString information = event->mimeData()->text();
             int groupSource = information.section("-",0,0).toInt();
             int start = information.section("-",1,1).toInt();
             //to inform that the target is the SpaceWidget, put -2 as the target group.
@@ -327,7 +327,8 @@ public:
             event->ignore();
             return;
         }
-        event->accept(Q3TextDrag::canDecode(event));
+        if (event->mimeData()->hasText())
+            event->acceptProposedAction();
     }
 
 public Q_SLOTS:
@@ -365,8 +366,14 @@ protected:
             QPoint firstClick = QWidget::mapToGlobal(e->pos());
             QString information = parent()->name();
             information.append(QString("-%1").arg(firstClick.y()));
-            Q3DragObject* drag = new Q3TextDrag(information,this);
-            drag->dragMove();
+
+            QDrag *drag = new QDrag(this);
+            QMimeData *mimeData = new QMimeData;
+
+            mimeData->setText(information);
+            drag->setMimeData(mimeData);
+            Qt::DropAction dropAction = drag->exec();
+            e->accept();
 
             emit leftClickOnLabel(parent()->name());
         }
