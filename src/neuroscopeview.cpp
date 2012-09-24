@@ -17,7 +17,7 @@
 
 // include files for Qt
 #include <QPainter>
- 
+
 //Added by qt3to4:
 #include <QList>
 #include <QPixmap>
@@ -430,7 +430,7 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
 
     //Create and add the position view
     QDockWidget* positions = new QDockWidget();
-            //createDockWidget( "Positions", QPixmap());
+    //createDockWidget( "Positions", QPixmap());
     positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positions,"PositionView",backgroundColor);
     positions->setWidget(positionView);//assign the widget
 

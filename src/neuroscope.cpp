@@ -119,6 +119,7 @@ void NeuroscopeApp::initActions()
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     mOpenAction = fileMenu->addAction(tr("&Open..."));
     mOpenAction->setShortcut(QKeySequence::Open);
+    mOpenAction->setIcon(QPixmap(":/shared-icons/document-open"));
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
 
     mFileOpenRecent = new QRecentFileAction(this);
@@ -141,10 +142,12 @@ void NeuroscopeApp::initActions()
 
 
     mSaveAction = fileMenu->addAction(tr("Save..."));
+    mSaveAction->setIcon(QPixmap(":/shared-icons/document-save"));
     mSaveAction->setShortcut(QKeySequence::Save);
     connect(mSaveAction, SIGNAL(triggered()), this, SLOT(saveSession()));
 
     mSaveAsAction = fileMenu->addAction(tr("&Save As..."));
+    mSaveAsAction->setIcon(QPixmap(":/shared-icons/document-save-as"));
     mSaveAsAction->setShortcut(QKeySequence::SaveAs);
     connect(mSaveAsAction, SIGNAL(triggered()), this, SLOT(slotSessionSaveAs()));
 
@@ -154,6 +157,7 @@ void NeuroscopeApp::initActions()
 
 
     mPrintAction = fileMenu->addAction(tr("Print"));
+    mPrintAction->setIcon(QPixmap(":/shared-icons/document-print"));
     mPrintAction->setShortcut(QKeySequence::Print);
     connect(mPrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
 
@@ -164,6 +168,7 @@ void NeuroscopeApp::initActions()
 
 
     mCloseAction = fileMenu->addAction(tr("Close"));
+    mCloseAction->setIcon(QPixmap(":/shared-icons/document-close"));
     mCloseAction->setShortcut(QKeySequence::Close);
     connect(mCloseAction, SIGNAL(triggered()), this, SLOT(slotFileClose()));
 
@@ -190,10 +195,12 @@ void NeuroscopeApp::initActions()
     QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
 
     mUndo = editMenu->addAction(tr("Undo"));
+    mUndo->setIcon(QPixmap(":/shared-icons/edit-undo"));
     mUndo->setShortcut(QKeySequence::Undo);
     connect(mUndo, SIGNAL(triggered()), this, SLOT(slotUndo()));
 
     mRedo = editMenu->addAction(tr("Redo"));
+    mRedo->setIcon(QPixmap(":/shared-icons/edit-redo"));
     mRedo->setShortcut(QKeySequence::Redo);
     connect(mRedo, SIGNAL(triggered()), this, SLOT(slotRedo()));
 
