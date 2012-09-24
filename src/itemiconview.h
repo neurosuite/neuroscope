@@ -21,7 +21,6 @@
 //QT include files
 #include <qwidget.h>
 #include <q3iconview.h>
-#include <q3dragobject.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QMouseEvent>

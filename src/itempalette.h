@@ -24,7 +24,6 @@
 #include <q3iconview.h>
 #include <q3dict.h>
 #include <qmap.h>
-#include <q3dragobject.h>
 #include <QLabel>
 #include <QCursor>
 #include <QPainter>
