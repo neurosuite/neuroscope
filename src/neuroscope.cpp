@@ -2457,7 +2457,6 @@ void NeuroscopeApp::slotDisplayClose(){
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
             //palettePanel->hide();
-            //KDAB_PENDING palettePanel->undock();
 
             doc->closeDocument();
             //Delete the view
