@@ -29,7 +29,7 @@
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,const QColor& backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
-    QFrame(parent,name,Qt::WRepaintNoErase|Qt::WResizeNoErase),
+    QFrame(parent),
     MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
     viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
     firstClick(0,0),isDoubleClick(false),rubber(0),
@@ -45,7 +45,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,c
     int h;
     int s;
     int v;
-    backgroundColor.hsv(&h,&s,&v);
+    backgroundColor.getHsv(&h,&s,&v);
     if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = Qt::black;
     else colorLegend = Qt::white;
 
@@ -67,7 +67,7 @@ void BaseFrame::changeBackgroundColor(QColor color){
     int h;
     int s;
     int v;
-    color.hsv(&h,&s,&v);
+    color.getHsv(&h,&s,&v);
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = Qt::black;
     else colorLegend = Qt::white;
     drawContentsMode = REDRAW;

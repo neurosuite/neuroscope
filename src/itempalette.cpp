@@ -55,7 +55,7 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     int h;
     int s;
     int v;
-    backgroundColor.hsv(&h,&s,&v);
+    backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
@@ -618,7 +618,7 @@ void ItemPalette::changeBackgroundColor(QColor color){
     int h;
     int s;
     int v;
-    color.hsv(&h,&s,&v);
+    color.getHsv(&h,&s,&v);
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;

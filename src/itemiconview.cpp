@@ -49,7 +49,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
     int h;
     int s;
     int v;
-    backgroundColor.hsv(&h,&s,&v);
+    backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
