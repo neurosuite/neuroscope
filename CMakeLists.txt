@@ -120,7 +120,6 @@ if (MSVC)
    set (KDE4_ENABLE_EXCEPTIONS -EHsc)
 endif()   
 
-#FIXME
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 add_definitions(-DQT3_SUPPORT)
 
