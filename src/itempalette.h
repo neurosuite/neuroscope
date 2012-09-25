@@ -246,10 +246,10 @@ Q_SIGNALS:
 
 protected:
     virtual inline void mousePressEvent(QMouseEvent* e){
-        if(e->button() == Qt::LeftButton && !(e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+        if(e->button() == Qt::LeftButton && !(e->modifiers() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
             emit leftClickOnLabel(parent()->name(),false,false);
         }
-        if(e->button() == Qt::LeftButton && (e->state() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
+        if(e->button() == Qt::LeftButton && (e->modifiers() & Qt::ShiftModifier) && !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::AltModifier)){
             emit leftClickOnLabel(parent()->name(),true,false);
         }
         if(e->button() == Qt::LeftButton && (e->state() & Qt::ControlModifier) && (e->state() & Qt::AltModifier)){

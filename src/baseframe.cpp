@@ -148,7 +148,7 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
                 float factor;
 
                 //Shrink asked
-                if(e->state() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
+                if(e->modifiers() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
                 //Enlarge asked
                 else factor = static_cast<float>(2);
 
@@ -165,7 +165,7 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
 
 void BaseFrame::mouseMoveEvent(QMouseEvent* e){
     //We do not consider the other button events
-    if(e->state() == Qt::LeftButton){
+    if(e->buttons() == Qt::LeftButton){
         //Test if a selected rectangle exist, if so draw to erase the previous one,
         if(mRubberBand) {
             mRubberBand->setGeometry(QRect(firstClick, e->pos()).normalized());
@@ -175,7 +175,7 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e){
 
 void BaseFrame::mouseDoubleClickEvent(QMouseEvent* e){
     if(mode == ZOOM){
-        if ((e->button() == Qt::LeftButton) && !(e->state() & Qt::ShiftModifier)){
+        if ((e->button() == Qt::LeftButton) && !(e->modifiers() & Qt::ShiftModifier)){
             //Reset to the initial window
             window.reset();
             drawContentsMode = REDRAW;
