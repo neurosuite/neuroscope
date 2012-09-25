@@ -716,7 +716,7 @@ void ItemPalette::slotMidButtonPressed(QString groupName){
  */
 void ItemPalette::languageChange()
 {
-    setCaption( tr( "Item palette" ) );
+    setWindowTitle( tr( "Item palette" ) );
 }
 
 void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<int> itemsToSkip){

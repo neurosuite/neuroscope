@@ -995,7 +995,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             slotStateChanged("eventsInPositionViewEnableState");
         }
 
-        setCaption(url);
+        setWindowTitle(url);
         QApplication::restoreOverrideCursor();
     }
     // check, if this document is already open. If yes, do not do anything
@@ -1278,7 +1278,7 @@ void NeuroscopeApp::slotCreateEventFile(){
     QString eventUrl = docUrl  +QDir::separator() + baseName;
 
     QFileDialog dialog(this,tr("CreateEvent"),eventUrl,tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
-    dialog.setCaption(tr("Create Event File as..."));
+    dialog.setWindowTitle(tr("Create Event File as..."));
     if(!dialog.exec())
         return;
 
@@ -1890,7 +1890,7 @@ void NeuroscopeApp::resetState(){
 
     //Disable some actions when no document is open (see the klustersui.rc file)
     slotStateChanged("initState");
-    setCaption(QString());
+    setWindowTitle(QString());
 }
 
 void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<int,bool>& skipStatus){

@@ -63,7 +63,7 @@ BaseFrame::~BaseFrame(){
 }
 
 void BaseFrame::changeBackgroundColor(QColor color){
-    setPaletteBackgroundColor(color);
+    QPalette palette; palette.setColor(backgroundRole(), color); setPalette(palette);
     int h;
     int s;
     int v;

@@ -42,7 +42,7 @@ PrefDialog::PrefDialog(QWidget *parent)
     setButtons(Help | Default | Ok | Apply | Cancel);
     setDefaultButton(Ok);
     setFaceType(List);
-    setCaption(tr("Preferences"));
+    setWindowTitle(tr("Preferences"));
 
 
     setHelp("settings","neuroscope");

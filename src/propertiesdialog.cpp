@@ -33,7 +33,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     setButtons(Help | Default | Ok | Apply | Cancel);
     setDefaultButton(Ok);
     setFaceType(Tabbed);
-    setCaption(tr("File Properties"));
+    setWindowTitle(tr("File Properties"));
 
 
     setHelp("properties","neuroscope");

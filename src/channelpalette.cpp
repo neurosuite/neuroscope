@@ -775,7 +775,7 @@ void ChannelPalette::changeColor(Q3IconViewItem* item,bool single){
  */
 void ChannelPalette::languageChange()
 {
-    setCaption( tr( "Channel palette" ) );
+    setWindowTitle( tr( "Channel palette" ) );
 }
 
 void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
