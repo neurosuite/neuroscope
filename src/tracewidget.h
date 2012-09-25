@@ -375,7 +375,7 @@ public Q_SLOTS:
         newViewport.setBottom(printPainter.viewport().bottom() - 20);
         printPainter.setViewport(newViewport);
         view.print(printPainter,width,height,whiteBackground);
-        printPainter.resetXForm();
+        printPainter.resetMatrix();
     }
 
     /**Retrieves the next cluster.*/

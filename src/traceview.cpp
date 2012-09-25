@@ -586,7 +586,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             drawTraces(painter);
 
             //reset transformation due to setWindow and setViewport
-            painter.resetXForm() ;
+            painter.resetMatrix() ;
 
             //Draw channel ids and amplitude on the left side.
             if(showLabels)
@@ -1360,7 +1360,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     }
 
     //reset transformation due to setWindow and setViewport
-    painter.resetXForm() ;
+    painter.resetMatrix() ;
 
     //Draw channel ids and amplitude on the left side.
     if(showLabels){
@@ -3598,7 +3598,7 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     drawTraces(printPainter);
 
     //reset transformation due to setWindow and setViewport
-    printPainter.resetXForm() ;
+    printPainter.resetMatrix() ;
 
     //Draw channel ids and amplitude on the left side.
     if(showLabels) drawChannelIdsAndGain(printPainter);
@@ -4016,7 +4016,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
     }
 
     //reset transformation due to setWindow and setViewport
-    painter.resetXForm() ;
+    painter.resetMatrix() ;
 
     //Closes the painter on the double buffer
     painter.end();
