@@ -50,7 +50,7 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
 
     setAutoFillBackground(true);
     //Set the palette color
-    setPaletteBackgroundColor(backgroundColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
     //Set the palette color, the foreground color depends on the background color
     int h;
     int s;
@@ -671,7 +671,7 @@ void ItemPalette::changeBackgroundColor(QColor color){
         iterator2.current()->setPaletteForegroundColor(legendColor);
     }
 
-    setPaletteBackgroundColor(backgroundColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
     setPaletteForegroundColor(legendColor);
     viewport()->setPaletteBackgroundColor(backgroundColor);
     viewport()->setPaletteForegroundColor(legendColor);

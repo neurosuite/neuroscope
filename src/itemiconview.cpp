@@ -45,7 +45,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
     setDragAutoScroll(false);
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    setPaletteBackgroundColor(backgroundColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
     int h;
     int s;
     int v;

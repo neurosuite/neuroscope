@@ -39,7 +39,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,c
 
     //Setting of the frame
     setLineWidth (BORDER);
-    setPaletteBackgroundColor(backgroundColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
     setFrameStyle(QFrame::Box|QFrame::Plain);
 
     int h;

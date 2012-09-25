@@ -48,7 +48,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gri
 
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    setPaletteBackgroundColor(backgroundColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
     int h;
     int s;
     int v;
