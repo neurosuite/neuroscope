@@ -56,8 +56,10 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
     setAutoFillBackground(true);
     QPalette palette; 
     palette.setColor(backgroundRole(), backgroundColor);
@@ -67,6 +69,7 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
 
     setResizePolicy(Q3ScrollView::AutoOneFit);
     verticalContainer = new Q3VBox(viewport(),"verticalContainer");
+    viewport()->setAutoFillBackground(true);
     addChild(verticalContainer);
     verticalContainer->setSpacing(5);
 
@@ -1048,8 +1051,10 @@ void ChannelPalette::createGroup(){
     if(selectedIds.size() == 0) return;
 
     int groupNb = iconviewDict.count() + 1;
-    if(iconviewDict.find("0") != 0) groupNb--;
-    if(iconviewDict.find("-1") != 0) groupNb--;
+    if(iconviewDict.find("0") != 0)
+        groupNb--;
+    if(iconviewDict.find("-1") != 0)
+        groupNb--;
 
     createGroup(groupNb);
 
@@ -1061,8 +1066,10 @@ void ChannelPalette::createGroup(){
 
 int ChannelPalette::createEmptyGroup(){
     int groupNb = iconviewDict.count() + 1;
-    if(iconviewDict.find("0") != 0) groupNb--;
-    if(iconviewDict.find("-1") != 0) groupNb--;
+    if(iconviewDict.find("0") != 0)
+        groupNb--;
+    if(iconviewDict.find("-1") != 0)
+        groupNb--;
 
     createGroup(groupNb);
 

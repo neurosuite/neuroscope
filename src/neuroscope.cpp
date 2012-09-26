@@ -17,7 +17,6 @@
 
 // include files for QT
 #include <QDir>
-#include <QPainter>
 #include <QCursor>
 #include <qinputdialog.h>
 //Added by qt3to4:
