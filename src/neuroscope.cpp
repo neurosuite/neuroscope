@@ -846,7 +846,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     isInit = false; //now a change in a spine box or the lineedit will trigger an update of the display
 
-    NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
+    NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
                                               doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
                                               clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
                                               doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),
@@ -2218,7 +2218,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     QWidget* current = paletteTabsParent->currentPage();
 
     //Disable some actions when no document is open (see the klustersui.rc file)
-    if(current->isA("ChannelPalette")){
+    if(current->metaObject()->className() == ("ChannelPalette")){
         if(editMode->isChecked()){
             if((current) == displayChannelPalette){
                 slotStateChanged("displayChannelState");
@@ -2246,7 +2246,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     else{
         slotStateChanged("noChannelState");
         //Update the selected items of the current palette
-        if(current->isA("ItemPalette")){
+        if(current->metaObject()->className() == ("ItemPalette")){
             QString name = current->name();
             if(name.contains("clusterPanel")){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
@@ -2451,9 +2451,9 @@ void NeuroscopeApp::slotDisplayClose(){
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(0));
-                if((current->widget())->isA("ChannelPalette")){
+                if((current->widget())->metaObject()->className() == ("ChannelPalette")){
                     current = static_cast<QDockWidget*>(paletteTabsParent->page(1));
-                    if((current->widget())->isA("ChannelPalette"))
+                    if((current->widget())->metaObject()->className() == ("ChannelPalette"))
                         current = static_cast<QDockWidget*>(paletteTabsParent->page(2));
                 }
                 paletteTabsParent->removePage(current);
@@ -2521,7 +2521,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         if(tabLabel.isEmpty())
             tabLabel = tr("Field Potentials Display");
 
-        NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WDestructiveClose,statusBar(),channelsToDisplay,
+        NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
                                                   doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),
                                                   offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),mainDock,
@@ -3054,7 +3054,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     for(int i = 0; i<paletteTabsParent->count();i++){
         QWidget* current = paletteTabsParent->page(i);
         QString name = current->name();
-        if(current->isA("ItemPalette") && name.contains("eventPanel")){
+        if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
             ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
             //Create the list
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
@@ -3070,7 +3070,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
 void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName){
     QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if(current->isA("ItemPalette") && name.contains("eventPanel")){
+    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
         doc->eventColorUpdate(providerName,eventId,view);
     }
@@ -3079,7 +3079,7 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerNam
 void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selection){
     QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if(current->isA("ItemPalette") && name.contains("eventPanel")){
+    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -3093,7 +3093,7 @@ void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selec
 void NeuroscopeApp::slotCloseEventFile(){
     QWidget* current = paletteTabsParent->currentPage();
     QString name = current->name();
-    if(current->isA("ItemPalette") && name.contains("eventPanel")){
+    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
 
         NeuroscopeView* view = activeView();
