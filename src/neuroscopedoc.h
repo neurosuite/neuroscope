@@ -1149,7 +1149,7 @@ Q_SIGNALS:
 
 public:
     /** The list of the views currently connected to the document */
-    Q3PtrList<NeuroscopeView>* viewList;
+    QList<NeuroscopeView*>* viewList;
 
     
 };
