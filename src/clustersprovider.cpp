@@ -41,13 +41,13 @@ ClustersProvider::ClustersProvider(QString fileUrl,double samplingRate,double cu
     //Find the cluster file number and use it as the name for the provider
     //the file name can be X.clu.n or X.n.clu
     QString fileName = fileUrl;
-    int startingIndex = fileName.findRev("clu");
+    int startingIndex = fileName.lastIndexOf("clu");
     if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.n.clu
-        int nBStartingIndex = fileName.findRev(".",startingIndex - 2);
+        int nBStartingIndex = fileName.lastIndexOf(".",startingIndex - 2);
         name = fileName.mid(nBStartingIndex + 1,(startingIndex - 1) - (nBStartingIndex + 1));
     }
     else{//X.clu.n
-        int nBStartingIndex = fileName.findRev(".");
+        int nBStartingIndex = fileName.lastIndexOf(".");
         name = fileName.right(static_cast<int>(fileName.length()) - (nBStartingIndex + 1));
     }
 

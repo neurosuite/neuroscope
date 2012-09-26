@@ -113,7 +113,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         off_t nbValues = nbSamples * nbChannels;
 
         // Is this a Neuralynx file?
-        int p = fileName.findRev(".ncs");
+        int p = fileName.lastIndexOf(".ncs");
         if ( p != -1 )
         {
             /// Modified by M.Zugaro to read Neuralynx ncs format
@@ -137,10 +137,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             int		inLastRecord = nbSamples-nRecords*nSamplesPerRecord-inFirstRecord-1;
             off_t		nRead;
 
-            int p = fileName.findRev(".");
+            int p = fileName.lastIndexOf(".");
             QString baseName = fileName;
             baseName.truncate(p-1);
-            p = baseName.findRev(QRegExp("[^0-9]"));
+            p = baseName.lastIndexOf(QRegExp("[^0-9]"));
             baseName.truncate(p+1);
 
             for ( int channel = 1 ; channel <= nbChannels ; ++channel )
@@ -344,7 +344,7 @@ void TracesProvider::computeRecordingLength(){
     else if(resolution == 32) dataSize = 4;
 
     // Is this a Neuralynx file?
-    int p = fileName.findRev(".ncs");
+    int p = fileName.lastIndexOf(".ncs");
     if ( p != -1 )
     {
         /// Modified by M.Zugaro to read Neuralynx ncs format

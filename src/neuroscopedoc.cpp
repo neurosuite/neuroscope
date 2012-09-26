@@ -23,7 +23,6 @@
 #include <QRegExp>
 //Added by qt3to4:
 #include <QList>
-#include <Q3PtrList>
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QApplication>
@@ -1721,7 +1720,7 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,NeuroscopeView* activeView){
     //Check that the selected file is a cluster file
     QString fileName = clusterUrl;
-    if(fileName.find(".clu") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".clu") == -1) return INCORRECT_FILE;
 
     ClustersProvider* clustersProvider = new ClustersProvider(clusterUrl,datSamplingRate,samplingRate,tracesProvider->getTotalNbSamples(),clusterPosition);
     QString name = clustersProvider->getName();
@@ -1795,7 +1794,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     //Check that the selected file is a cluster file (should always be the case as the file has
     //already be loaded once).
     QString fileName = clusterUrl;
-    if(fileName.find(".clu") == -1){
+    if(fileName.indexOf(".clu") == -1){
         QApplication::restoreOverrideCursor();
         QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file %1 has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
                                                  "Therefore will not be loaded.").arg(clusterUrl));
@@ -1941,7 +1940,7 @@ void NeuroscopeDoc::setClusterPosition(int position){
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file
     QString fileName = eventUrl;
-    if(fileName.find(".evt") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".evt") == -1) return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
     QString name = eventsProvider->getName();
@@ -2011,7 +2010,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     //Check that the selected file is a event file (should always be the case as the file has
     //already be loaded once).
     QString fileName = eventUrl;
-    if(fileName.find(".evt") == -1){
+    if(fileName.indexOf(".evt") == -1){
         QApplication::restoreOverrideCursor();
         QMessageBox::critical (0, tr("Error!"),tr("The requested event file " + eventUrl/*.path()*/ + " has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded."));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -2412,7 +2411,7 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,in
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QString eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file name
     QString fileName = eventUrl;
-    if(fileName.find(".evt") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".evt") == -1) return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
     QString name = eventsProvider->getName();

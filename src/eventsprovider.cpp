@@ -41,13 +41,13 @@ EventsProvider::EventsProvider(QString fileUrl,double currentSamplingRate,int po
     //Find the event file identifier and use it as the name for the provider
     //the file name is X.id.evt (id is a 3 character identifier)
     QString fileName = fileUrl;
-    int startingIndex = fileName.findRev("evt");
+    int startingIndex = fileName.lastIndexOf("evt");
     if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.id.evt
-        int nBStartingIndex = fileName.findRev(".",startingIndex - 2);
+        int nBStartingIndex = fileName.lastIndexOf(".",startingIndex - 2);
         name = fileName.mid(nBStartingIndex + 1,(startingIndex - 1) - (nBStartingIndex + 1));
     }
     else{//X.evt.id
-        int nBStartingIndex = fileName.findRev(".");
+        int nBStartingIndex = fileName.lastIndexOf(".");
         name = fileName.right(static_cast<int>(fileName.length()) - (nBStartingIndex + 1));
     }
 }
@@ -95,8 +95,8 @@ int EventsProvider::loadData(){
     for(line = fileStream.readLine(); !line.isNull() && lineCounter< nbEvents;line = fileStream.readLine()){
         line = line.trimmed();
 
-        int index1 = line.find(QRegExp("\\s"));
-        int index2 = line.find(QRegExp("\\S"),index1);
+        int index1 = line.indexOf(QRegExp("\\s"));
+        int index2 = line.indexOf(QRegExp("\\S"),index1);
 
         timeStamps[lineCounter] = line.left(index1).toDouble();
         EventDescription label = line.right(line.length() - index2);
