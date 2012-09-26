@@ -3351,12 +3351,216 @@ void NeuroscopeApp::slotShowEventsInPositionView(){
 void NeuroscopeApp::slotStateChanged(const QString& state)
 {
     if(state == QLatin1String("initState")) {
+        /*
+<State name="initState" >
+  <Disable>
+   <Action name="file_save" />
+   <Action name="file_save_as" />
+   <Action name="file_print" />
+   <Action name="file_close" />
+   <Action name="close_cluster_file" />
+   <Action name="close_event_file" />
+   <Action name="file_properties" />
+   <Action name="load_cluster_files" />
+   <Action name="load_event_files" />
+   <Action name="load_position_file" />
+   <Action name="close_position_file" />
+   <Action name="create_event_file" />
+   <Action name="zoom" />
+   <Action name="select" />
+   <Action name="measure" />
+   <Action name="time" />
+   <Action name="select_event" />
+   <Action name="draw_time_line" />
+   <Action name="grey_scale"/>
+   <Action name="create_group"/>
+   <Action name="edit_undo" />
+   <Action name="edit_redo" />
+   <Action name="edit_select_all"/>
+   <Action name="edit_select_all_except01"/>
+   <Action name="edit_deselect_all"/>
+   <Action name="display_mode"/>
+   <Action name="increase_all_channels"/>
+   <Action name="decrease_all_channels"/>
+   <Action name="increase_selected_channels"/>
+   <Action name="decrease_selected_channels"/>
+   <Action name="vertical_lines"/>
+   <Action name="raster"/>
+   <Action name="waveforms"/>
+   <Action name="increase_raster_height"/>
+   <Action name="decrease_raster_height"/>
+   <Action name="show_next_cluster" />
+   <Action name="show_previous_cluster" />
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="show_labels"/>
+   <Action name="apply_display_color"/>
+   <Action name="apply_spike_color"/>
+   <Action name="edit_mode" />
+   <Action name="reset_offsets" />
+   <Action name="reset_gains" />
+   <Action name="synchronize" />
+   <Action name="new_display" />
+   <Action name="rename_display" />
+   <Action name="close_display" />
+   <Action name="show_calibration" />
+   <Action name="show_next_event" />
+   <Action name="show_previous_event" />
+   <Action name="remove_event" />
+   <Action name="add_event" />
+   <Action name="add_event_toolbarAction" />
+   <Action name="position_view"/>
+   <Action name="show_events"/>
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+   <Action name="set_default_offsets" />
+   <Action name="set_default_offsets_0" />
+  </Disable>
+  <Enable>
+    <Action name="file_open" />
+    <Action name="file_open_recent" />
+  </Enable>
+ </State>
+ */
     } else if(state == QLatin1String("documentState")) {
+        /*
+  <Enable>
+   <Action name="file_save" />
+   <Action name="file_save_as" />
+   <Action name="file_print" />
+   <Action name="file_properties" />
+   <Action name="load_cluster_files" />
+   <Action name="load_event_files" />
+   <Action name="create_event_file" />
+   <Action name="file_close" />
+   <Action name="close_cluster_file" />
+   <Action name="close_event_file" />
+   <Action name="load_position_file" />
+   <Action name="zoom" />
+   <Action name="select" />
+   <Action name="measure" />
+   <Action name="time" />
+   <Action name="draw_time_line" />
+   <Action name="grey_scale"/>
+   <Action name="create_group"/>
+   <Action name="edit_select_all"/>
+   <Action name="edit_deselect_all"/>
+   <Action name="display_mode"/>
+   <Action name="increase_all_channels"/>
+   <Action name="decrease_all_channels"/>
+   <Action name="increase_selected_channels"/>
+   <Action name="decrease_selected_channels"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="show_labels"/>
+   <Action name="apply_display_color"/>
+   <Action name="apply_spike_color"/>
+   <Action name="edit_mode" />
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+    <Action name="reset_gains" />
+   <Action name="new_display" />
+   <Action name="close_display" />
+   <Action name="show_calibration" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+   <Action name="set_default_offsets" />
+   <Action name="set_default_offsets_0" />
+  </Enable>*/
+
     } else if(state == QLatin1String("noChannelState")) {
+        /*
+  <Disable>
+   <Action name="create_group"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="apply_display_color"/>
+   <Action name="apply_spike_color"/>
+   <Action name="edit_mode" />
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+   <Action name="reset_gains" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+  </Disable>
+  */
     } else if(state == QLatin1String("displayChannelState")) {
+        /*
+  <Disable>
+   <Action name="create_group"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="apply_display_color"/>
+   <Action name="apply_spike_color"/>
+   <Action name="edit_mode" />
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+   <Action name="reset_gains" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+  </Disable>
+  */
     } else if(state == QLatin1String("spikeChannelState")) {
+        /*
+  <Enable>
+   <Action name="create_group"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="apply_display_color"/>
+   <Action name="apply_spike_color"/>
+   <Action name="edit_mode" />
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+   <Action name="reset_gains" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+  </Enable>
+  <Disable>
+   <Action name="edit_select_all_except01"/>
+   <Action name="close_cluster_file" />
+   <Action name="close_event_file" />
+  </Disable>
+  */
     } else if(state == QLatin1String("editState")) {
+        /*
+  <Enable>
+   <Action name="create_group"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+   <Action name="select" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+  </Enable>
+  */
     } else if(state == QLatin1String("noEditState")) {
+        /*
+  <Disable>
+   <Action name="create_group"/>
+   <Action name="discard_channels"/>
+   <Action name="discard_spike_channels"/>
+   <Action name="show_channels"/>
+   <Action name="hide_channels"/>
+   <Action name="synchronize" />
+   <Action name="reset_offsets" />
+   <Action name="select" />
+   <Action name="keep_channels" />
+   <Action name="skip_channels" />
+  </Disable>
+  */
     } else if(state == QLatin1String("enableEditState")) {
         editMode->setEnabled(true);
     } else if(state == QLatin1String("tabState")) {
@@ -3364,18 +3568,113 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("noTabState")) {
         mRenameActiveDisplay->setEnabled(false);
     } else if(state == QLatin1String("datState")) {
+        /*
+  <Enable>
+   <Action name="waveforms"/>
+  </Enable>
+  */
     } else if(state == QLatin1String("noDatState")) {
+        /*
+  <Disable>
+   <Action name="waveforms"/>
+  </Disable>
+ <
+ */
     } else if(state == QLatin1String("clusterTabState")) {
+/*
+  <Enable>
+   <Action name="edit_select_all_except01"/>
+   <Action name="close_cluster_file" />
+  </Enable>
+  <Disable>
+   <Action name="close_event_file" />
+  </Disable>
+  */
     } else if(state == QLatin1String("clusterState")) {
+        /*
+  <Enable>
+   <Action name="vertical_lines"/>
+   <Action name="raster"/>
+   <Action name="waveforms"/>
+  </Enable>
+  */
     } else if(state == QLatin1String("noClusterState")) {
+        /*
+  <Disable>
+   <Action name="vertical_lines"/>
+   <Action name="raster"/>
+   <Action name="waveforms"/>
+   <Action name="increase_raster_height"/>
+   <Action name="decrease_raster_height"/>
+   <Action name="show_next_cluster" />
+   <Action name="show_previous_cluster" />
+  </Disable>
+  */
     } else if(state == QLatin1String("noClusterBrowsingState")) {
+        /*
+  <Disable>
+   <Action name="show_next_cluster" />
+   <Action name="show_previous_cluster" />
+  </Disable>
+  */
     } else if(state == QLatin1String("clusterBrowsingState")) {
+        /*
+ <Enable>
+   <Action name="show_next_cluster" />
+   <Action name="show_previous_cluster" />
+  </Enable>
+  */
     } else if(state == QLatin1String("noClusterRasterState")) {
+        /*
+ <Enable>
+   <Action name="show_next_cluster" />
+   <Action name="show_previous_cluster" />
+  </Enable>
+  */
     } else if(state == QLatin1String("clusterRasterState")) {
+        /*
+  <Enable>
+   <Action name="increase_raster_height"/>
+   <Action name="decrease_raster_height"/>
+  </Enable>
+  */
     } else if(state == QLatin1String("eventState")) {
+        /*
+  <Enable>
+   <Action name="select_event" />
+   <Action name="remove_event" />
+   <Action name="add_event" />
+   <Action name="add_event_toolbarAction" />
+  </Enable>
+  */
     } else if(state == QLatin1String("noEventState")) {
+        /*
+  <Disable>
+   <Action name="show_next_event" />
+   <Action name="show_previous_event" />
+   <Action name="select_event" />
+   <Action name="remove_event" />
+   <Action name="add_event" />
+   <Action name="add_event_toolbarAction" />
+   <Action name="edit_undo" />
+   <Action name="edit_redo" />
+   <Action name="show_events"/>
+  </Disable>
+  */
     } else if(state == QLatin1String("noEventBrowsingState")) {
+        /*
+  <Disable>
+   <Action name="show_next_event" />
+   <Action name="show_previous_event" />
+  </Disable>
+  */
     } else if(state == QLatin1String("eventBrowsingState")) {
+        /*
+  <Enable>
+   <Action name="show_next_event" />
+   <Action name="show_previous_event" />
+  </Enable>
+  */
     } else if(state == QLatin1String("positionState")) {
         /*
   <Enable>
