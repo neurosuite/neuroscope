@@ -257,8 +257,8 @@ void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
     Q3IconViewItem* item = findItem(event->pos());
     if(item == 0L) return;
 
-    //  if(event->button() == Qt::LeftButton && !(event->state() & Qt::ShiftModifier) &&
-    //   !(event->state() & Qt::ControlModifier)){
+    //  if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
+    //   !(event->modifiers() & Qt::ControlModifier)){
     //    emit moussePressWoModificators(this->name());
     //  }
 

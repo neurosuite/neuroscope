@@ -77,13 +77,13 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
     Q3IconViewItem* item = findItem(event->pos());
     if(item == 0L) return;
 
-    /*if(event->button() == Qt::LeftButton && !(event->state() & Qt::ShiftModifier) &&
-   !(event->state() & Qt::ControlModifier) && !(event->state() & Qt::AltModifier)){
+    /*if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
+   !(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::AltModifier)){
   emit mousePressWoModificators(this->name());
  }*/
 
     //ask for mark an item skip
-    if(event->button() == Qt::LeftButton && (event->state() & Qt::AltModifier) && (event->state() & Qt::ControlModifier)){
+    if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
 
         Q3IconViewItem* item = findItem(event->pos());
         if(item != 0L){
