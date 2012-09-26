@@ -3205,8 +3205,8 @@ void NeuroscopeApp::slotAddEventAboutToShow(){
     }
 
     //Add at the bottom an entry to create a new event description
-    addEventPopup->insertItem("New Event ...");
-    list.append("New Event ...");
+    addEventPopup->insertItem(tr("New Event ...");
+    list.append(tr("New Event ...");
 
     addEventMenu->setItems(list);
     //If eventLabelToCreate exists in this event file, select it
@@ -3241,7 +3241,8 @@ void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
 }
 
 void NeuroscopeApp::slotAddEventActivated(int index){
-    if(eventProvider.isEmpty()) return;
+    if(eventProvider.isEmpty())
+        return;
     QMenu* menu = addEventMenu->menu();
     eventIndex = index;
 
@@ -3333,13 +3334,18 @@ void NeuroscopeApp::slotShowEventsInPositionView(){
 void NeuroscopeApp::slotStateChanged(const QString& state)
 {
     if(state == QLatin1String("initState")) {
+        mOpenAction->setEnabled(true);
+        mFileOpenRecent->setEnabled(true);
+        mSaveAction->setEnabled(false);
+        mSaveAsAction->setEnabled(false);
+        mPrintAction->setEnabled(false);
+        mCloseAction->setEnabled(false);
+        mUndo->setEnabled(false);
+        mRedo->setEnabled(false);
+
         /*
 <State name="initState" >
   <Disable>
-   <Action name="file_save" />
-   <Action name="file_save_as" />
-   <Action name="file_print" />
-   <Action name="file_close" />
    <Action name="close_cluster_file" />
    <Action name="close_event_file" />
    <Action name="file_properties" />
@@ -3356,8 +3362,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="draw_time_line" />
    <Action name="grey_scale"/>
    <Action name="create_group"/>
-   <Action name="edit_undo" />
-   <Action name="edit_redo" />
    <Action name="edit_select_all"/>
    <Action name="edit_select_all_except01"/>
    <Action name="edit_deselect_all"/>
@@ -3400,23 +3404,21 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Disable>
-  <Enable>
-    <Action name="file_open" />
-    <Action name="file_open_recent" />
-  </Enable>
  </State>
  */
     } else if(state == QLatin1String("documentState")) {
+        mOpenAction->setEnabled(true);
+        mFileOpenRecent->setEnabled(true);
+        mSaveAction->setEnabled(true);
+        mSaveAsAction->setEnabled(true);
+        mPrintAction->setEnabled(true);
+        mCloseAction->setEnabled(true);
         /*
   <Enable>
-   <Action name="file_save" />
-   <Action name="file_save_as" />
-   <Action name="file_print" />
    <Action name="file_properties" />
    <Action name="load_cluster_files" />
    <Action name="load_event_files" />
    <Action name="create_event_file" />
-   <Action name="file_close" />
    <Action name="close_cluster_file" />
    <Action name="close_event_file" />
    <Action name="load_position_file" />
@@ -3628,6 +3630,8 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   </Enable>
   */
     } else if(state == QLatin1String("noEventState")) {
+        mUndo->setEnabled(false);
+        mRedo->setEnabled(false);
         /*
   <Disable>
    <Action name="show_next_event" />
@@ -3636,8 +3640,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="remove_event" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
-   <Action name="edit_undo" />
-   <Action name="edit_redo" />
    <Action name="show_events"/>
   </Disable>
   */
