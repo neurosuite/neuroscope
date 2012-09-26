@@ -53,7 +53,8 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
-    setPaletteForegroundColor(legendColor);
+    palette.setColor(foregroundRole(), legendColor); 
+    setPalette(palette);
     setSelectionMode(Q3IconView::Extended);
     setItemsMovable(false);
 

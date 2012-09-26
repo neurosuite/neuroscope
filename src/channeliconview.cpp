@@ -48,7 +48,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gri
 
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); 
     int h;
     int s;
     int v;
@@ -56,7 +56,8 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gri
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
-    setPaletteForegroundColor(legendColor);
+    palette.setColor(foregroundRole(), legendColor); 
+    setPalette(palette);
 
     setSelectionMode(Q3IconView::Extended);
     if(edit){

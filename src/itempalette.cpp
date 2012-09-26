@@ -50,7 +50,8 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
 
     setAutoFillBackground(true);
     //Set the palette color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
+    QPalette palette; 
+    palette.setColor(backgroundRole(), backgroundColor);
     //Set the palette color, the foreground color depends on the background color
     int h;
     int s;
@@ -59,7 +60,8 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
-    setPaletteForegroundColor(legendColor);
+    palette.setColor(foregroundRole(), legendColor);
+    setPalette(palette);
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
 
     setResizePolicy(Q3ScrollView::AutoOneFit);
@@ -671,8 +673,9 @@ void ItemPalette::changeBackgroundColor(QColor color){
         iterator2.current()->setPaletteForegroundColor(legendColor);
     }
 
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
-    setPaletteForegroundColor(legendColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    palette.setColor(foregroundRole(), legendColor); 
+    setPalette(palette);
     viewport()->setPaletteBackgroundColor(backgroundColor);
     viewport()->setPaletteForegroundColor(legendColor);
     verticalContainer->setPaletteBackgroundColor(backgroundColor);

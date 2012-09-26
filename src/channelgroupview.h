@@ -43,7 +43,7 @@ public:
         setLayout(mLayout);
 
         //Set the groupview color, the foreground color depends on the background color
-        QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
+        QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
         int h;
         int s;
         int v;
@@ -52,7 +52,8 @@ public:
         if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
             legendColor = Qt::black;
         else legendColor = Qt::white;
-        setPaletteForegroundColor(legendColor);
+        palette.setColor(foregroundRole(), legendColor); 
+	setPalette(palette);
         adjustSize();
 
         setAcceptDrops(TRUE);

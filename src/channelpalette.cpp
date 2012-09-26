@@ -59,8 +59,10 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
     setAutoFillBackground(true);
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
-    setPaletteForegroundColor(legendColor);
+    QPalette palette; 
+    palette.setColor(backgroundRole(), backgroundColor);
+    palette.setColor(foregroundRole(), legendColor); 
+    setPalette(palette);
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
 
     setResizePolicy(Q3ScrollView::AutoOneFit);
@@ -684,8 +686,9 @@ void ChannelPalette::changeBackgroundColor(QColor color){
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
     else legendColor = Qt::white;
 
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
-    setPaletteForegroundColor(legendColor);
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); 
+    palette.setColor(foregroundRole(), legendColor); 
+    setPalette(palette);
 
     viewport()->setPaletteBackgroundColor(backgroundColor);
     viewport()->setPaletteForegroundColor(legendColor);
