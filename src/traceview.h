@@ -311,7 +311,7 @@ public:
   * @param name name use to identified the cluster provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    void removeClusterProvider(QString name,bool active);
+    void removeClusterProvider(const QString& name,bool active);
 
     /**
   * Updates the list of clusters shown with @p clustersToShow for the cluster provider identified
@@ -344,7 +344,7 @@ public:
   * @param name name use to identified the event provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    void removeEventProvider(QString name,bool active);
+    void removeEventProvider(const QString &name, bool active);
 
     /**
   * Updates the list of events shown with @p eventsToShow for the event provider identified

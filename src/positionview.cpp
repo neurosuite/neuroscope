@@ -425,7 +425,7 @@ void PositionView::eventColorUpdate(QString name,int eventId,bool active){
     }
 }
 
-void PositionView::removeEventProvider(QString name,bool active,bool lastFile){
+void PositionView::removeEventProvider(const QString& name,bool active,bool lastFile){
     selectedEvents.remove(name);
     providerItemColors.remove(name);
     eventsData.remove(name);

@@ -426,7 +426,7 @@ public:
   * @param name name use to identified the cluster provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    void removeClusterProvider(QString name,bool active);
+    void removeClusterProvider(const QString& name,bool active);
 
     /**Changes the color of a cluster.
   * @param name name use to identified the cluster provider containing the updated cluster.
@@ -460,7 +460,7 @@ public:
   * @param active true if the view is the active one, false otherwise.
   * @param lastFile true if the event file removed is the last event provider, false otherwise.
   */
-    void removeEventProvider(QString name,bool active,bool lastFile);
+    void removeEventProvider(const QString& name,bool active,bool lastFile);
 
     /**Changes the color of a event.
   * @param name name use to identified the event provider containing the updated event.

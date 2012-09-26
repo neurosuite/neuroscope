@@ -241,7 +241,7 @@ void NeuroscopeView::setClusterProvider(ClustersProvider* clustersProvider,QStri
                             channelsSpikeGroups,nbSamplesBefore,nbSamplesAfter,clustersToSkip);
 }
 
-void NeuroscopeView::removeClusterProvider(QString name,bool active){
+void NeuroscopeView::removeClusterProvider(const QString &name, bool active){
     selectedClusters.remove(name);
     clustersNotUsedForBrowsing.remove(name);
     emit clusterProviderRemoved(name,active);
@@ -298,7 +298,7 @@ void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,QString nam
     emit newEventProvider(eventsProvider,name,eventColors,active,eventsToShow,eventsToSkip);
 }
 
-void NeuroscopeView::removeEventProvider(QString name,bool active,bool lastFile){
+void NeuroscopeView::removeEventProvider(const QString &name, bool active, bool lastFile){
     selectedEvents.remove(name);
     eventsNotUsedForBrowsing.remove(name);
     if(lastFile) eventsInPositionView = false;

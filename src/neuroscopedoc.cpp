@@ -1892,8 +1892,10 @@ void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activ
     //Informs the views than the cluster provider will be removed.
     NeuroscopeView* view;
     for(view = viewList->first(); view!=0; view = viewList->next()){
-        if(view != activeView) view->removeClusterProvider(providerName,false);
-        else view->removeClusterProvider(providerName,true);
+        if(view != activeView)
+            view->removeClusterProvider(providerName,false);
+        else
+            view->removeClusterProvider(providerName,true);
     }
 
     providers.remove(providerName);
@@ -2099,8 +2101,10 @@ void NeuroscopeDoc::removeEventFile(QString providerName,NeuroscopeView* activeV
     //Informs the views than the event provider will be removed.
     NeuroscopeView* view;
     for(view = viewList->first(); view!=0; view = viewList->next()){
-        if(view != activeView) view->removeEventProvider(providerName,false,lastFile);
-        else view->removeEventProvider(providerName,true,lastFile);
+        if(view != activeView)
+            view->removeEventProvider(providerName,false,lastFile);
+        else
+            view->removeEventProvider(providerName,true,lastFile);
     }
 
     providers.remove(providerName);

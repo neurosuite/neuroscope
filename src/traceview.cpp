@@ -3475,7 +3475,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
     this->nbSamplesAfter = nbSamplesAfter;
 }
 
-void TraceView::removeClusterProvider(QString name,bool active){
+void TraceView::removeClusterProvider(const QString &name, bool active){
     selectedClusters.remove(name.toInt());
     clustersNotUsedForBrowsing.remove(name);
     clusterProviders.remove(name);
@@ -3654,7 +3654,7 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,Ite
     providerItemColors.insert(name,eventColors);
 }
 
-void TraceView::removeEventProvider(QString name,bool active){
+void TraceView::removeEventProvider(const QString& name,bool active){
     selectedEvents.remove(name);
     eventsNotUsedForBrowsing.remove(name);
     eventProviders.remove(name);

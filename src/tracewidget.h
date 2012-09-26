@@ -329,7 +329,7 @@ public Q_SLOTS:
   * @param name name use to identified the cluster provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void removeClusterProvider(QString name,bool active){
+    inline void removeClusterProvider(const QString& name,bool active){
         view.removeClusterProvider(name,active);
     }
 
@@ -351,7 +351,7 @@ public Q_SLOTS:
   * @param name name use to identified the event provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void removeEventProvider(QString name,bool active){
+    inline void removeEventProvider(const QString& name,bool active){
         view.removeEventProvider(name,active);
     }
 
@@ -368,7 +368,7 @@ public Q_SLOTS:
         printPainter.setFont(f);
         printPainter.setPen(Qt::black);
         printPainter.drawText(textRec,Qt::AlignLeft | Qt::AlignVCenter,
-                              QString("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(filePath).arg(startMinute->value()).arg(startSecond->value()).arg(startMilisecond->value()).arg(duration->displayText()));
+                              tr("File: %1     Start time: %2 min %3 s %4 ms, Duration: %5 ms").arg(filePath).arg(startMinute->value()).arg(startSecond->value()).arg(startMilisecond->value()).arg(duration->displayText()));
 
         //Modify the viewport so the view will not draw on the legend
         QRect newViewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());

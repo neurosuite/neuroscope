@@ -136,7 +136,7 @@ public Q_SLOTS:
   * @param active true if the view is the active one, false otherwise.
   * @param lastFile true if the event file removed is the last event provider, false otherwise.
   */
-    void removeEventProvider(QString name,bool active,bool lastFile);
+    void removeEventProvider(const QString &name, bool active, bool lastFile);
 
     /**Sets if events are displayed in the view.
   * @param shown 1 if events are displayed in the view, 0 otherwise.
