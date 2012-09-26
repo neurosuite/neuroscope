@@ -111,6 +111,9 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
                 delete rubber;
                 rubber = 0;
             }
+            if(mRubberBand) {
+                mRubberBand->hide();
+            }
         }
 
         if(mode == ZOOM){
