@@ -1038,7 +1038,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
         }
 
         NeuroscopeView* view = activeView();
-        QList<QString>::iterator iterator;
+        QStringList::iterator iterator;
         for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
             const QList<int>* selectedClusters = view->getSelectedClusters(*iterator);
             const QList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
@@ -1064,7 +1064,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
         }
 
         NeuroscopeView* view = activeView();
-        QList<QString>::iterator iterator;
+        QStringList::iterator iterator;
         for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
             const QList<int>* selectedEvents = view->getSelectedEvents(*iterator);
             const QList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
@@ -2251,7 +2251,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
             if(name.contains("clusterPanel")){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
-                QList<QString>::iterator iterator;
+                QStringList::iterator iterator;
                 for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
                     const QList<int>* selectedClusters = view->getSelectedClusters(*iterator);
                     const QList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
@@ -2270,7 +2270,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
             if(name.contains("eventPanel")){
                 ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
-                QList<QString>::iterator iterator;
+                QStringList::iterator iterator;
                 for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
                     const QList<int>* selectedEvents = view->getSelectedEvents(*iterator);
                     const QList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);

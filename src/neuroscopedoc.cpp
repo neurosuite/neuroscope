@@ -1164,8 +1164,8 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     if(reader.getFlip() != 0) flip = reader.getFlip();
 
     QList<SessionFile> filesToLoad = reader.getFilesToLoad();
-    QList<QString> loadedClusterFiles;
-    QList<QString> loadedEventFiles;
+    QStringList loadedClusterFiles;
+    QStringList loadedEventFiles;
     QString loadedPositionFile;
     QMap< QString, QMap<EventDescription,int> > loadedEventItems;
 
@@ -1202,7 +1202,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         QMap<QString, QList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
         //An id has been assigned to each event, this id will be used internally in NeuroScope and in the session file.
         QMap<QString, QList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
-        QList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
+        QStringList shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
         QMap<QString, QList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
         QMap<QString, QList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
         QList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
@@ -1228,7 +1228,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
 
         /*****************TO FINISH***************************/
         //Get the information concerning the spike files
-        QList<QString>::iterator spikeFileIterator;
+        QStringList::iterator spikeFileIterator;
         for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
             QString fileUrl = *spikeFileIterator;
         }
@@ -1366,7 +1366,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         if(extension != "dat") view->ignoreWaveformInformation();
 
         //Inform the view of the available providers
-        QList<QString>::iterator providerIterator;
+        QStringList::iterator providerIterator;
         //Cluster files
         for(providerIterator = loadedClusterFiles.begin(); providerIterator != loadedClusterFiles.end(); ++providerIterator){
             QString name = *providerIterator;

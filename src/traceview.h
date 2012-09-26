@@ -935,7 +935,7 @@ private:
     /**Stores the cluster order used when they are presented in raster. Each cluster is identified
   * by a string build as the ClusterProvider name plus a dash plus the cluster id.
   */
-    QList<QString> clustersOrder;
+    QStringList clustersOrder;
 
     /**Stores the cluster raster ordinate position.*/
     QList<int> rasterOrdinates;
@@ -1026,7 +1026,7 @@ private:
 
     /**Stores the event providers containing events which have been modified and thus
  * needing to be update.*/
-    QList<QString> eventProvidersToUpdate;
+    QStringList eventProvidersToUpdate;
 
     /**Index of the new event to create.*/
     int newEventPosition;

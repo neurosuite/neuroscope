@@ -178,7 +178,7 @@ private:
     QList<int> clusterGroupList;
     
     /**List used to order the event groups.*/
-    QList<QString> itemGroupList;
+    QStringList itemGroupList;
 
     /**The width for the columns of the event iconviews.*/
     int gridX;

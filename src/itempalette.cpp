@@ -948,7 +948,7 @@ void ItemPalette::orderTheGroups(){
     }
     else{
         qSort(itemGroupList);
-        QList<QString>::iterator iterator;
+        QStringList::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
             verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
     }

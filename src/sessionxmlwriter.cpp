@@ -148,7 +148,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
         QList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
         QMap<QString, QList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
         QMap<QString, QList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
-        QList<QString> shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
+        QStringList shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
         QMap<QString, QList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
         QMap<QString, QList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
         QList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
@@ -267,7 +267,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
         }
 
         //Create the information concerning the spike files
-        QList<QString>::iterator spikeFileIterator;
+        QStringList::iterator spikeFileIterator;
         for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
             QDomElement selectedSpikesElement = doc.createElement(SPIKES_SELECTED);
 

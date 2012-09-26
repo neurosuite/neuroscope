@@ -963,7 +963,7 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                     }
 
                     if(QString((char*)child->name) == SPIKES_SELECTED){
-                        QList<QString> files;
+                        QStringList files;
                         //loop on the urls of the files
                         xmlNodePtr spikes;
                         for(spikes = child->children;spikes != NULL;spikes = spikes->next){

@@ -847,10 +847,10 @@ private:
     QPrinter* printer;
 
     /**List storing the identifiers of the opened cluster files.*/
-    QList<QString> clusterFileList;
+    QStringList clusterFileList;
     
     /**List storing the identifiers of the opened event files.*/
-    QList<QString> eventFileList;
+    QStringList eventFileList;
 
     /**Boolean indicating if the headers of the palettes have to be diplayed.*/
     bool displayPaletteHeaders;
