@@ -97,7 +97,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     eventBeingModified(false),
     retrieveClusterData(false)
 {
-
+initialDragLine = false;
 
     QList<int>::iterator channelsToShowIterator;
     for(channelsToShowIterator = channelsToDisplay.begin(); channelsToShowIterator != channelsToDisplay.end(); ++channelsToShowIterator)
@@ -612,6 +612,10 @@ void TraceView::paintEvent ( QPaintEvent*){
 
     //Draw the double buffer (pixmap) by copying it into the widget device.
     p.drawPixmap(0, 0, doublebuffer);
+
+    if(mode == DRAW_LINE ){
+        drawTimeLine(&p);
+    }
 
     if(resized){
         resized = false;
@@ -1931,24 +1935,22 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
     }
 }
 
-void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
+void TraceView::drawTimeLine(QPainter *painter){
 
-    QPainter painter;
-    painter.begin(this);
     //set the window (part of the world I want to show)
     QRect r((QRect)window);
 
-    painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
-    painter.setViewport(viewport);
+    painter->setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
+    painter->setViewport(viewport);
 
     //KDAB_PENDING painter.setRasterOp(NotROP);
-    painter.setPen(QPen(Qt::color0,1));
-    painter.setBrush(Qt::NoBrush);
+    painter->setPen(QPen(Qt::color0,1));
+    painter->setBrush(Qt::NoBrush);
     int top = r.top();
     int bottom = r.bottom();
     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
-    int delta = x - lastClickAbscissa;
+    int delta = previousDragAbscissa - lastClickAbscissa;
     QList<int> currentAbscissae;
 
     int nbColumns;
@@ -1989,70 +1991,59 @@ void TraceView::drawTimeLine(int x,bool initialLine,bool eraseLine){
 
     //If the user went to far on the left, draw a line at the minimum min
     if(currentAbscissae[groupIndex] < min[groupIndex]){
-        if(!initialLine){
+        if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
             if(previousAbscissae[groupIndex] >= min[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
-                    painter.drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom); //erase the previous line
-                    if(!eraseLine) painter.drawLine(min[i],top,min[i],bottom);//draw a line at min
+                    painter->drawLine(min[i],top,min[i],bottom);//draw a line at min
                 }
-                if(x > min[groupIndex]) previousDragAbscissa = x;
+                if(previousDragAbscissa > min[groupIndex])
+                    previousDragAbscissa = previousDragAbscissa;
                 else{
                     previousDragAbscissa = min[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
                 }
             }
         }
-        else{
-            previousDragAbscissa = x;
-        }
-        painter.end();
     }
     //If the user went to far on the right, draw a line at the last sample position (max)
     else if(currentAbscissae[groupIndex] > max[groupIndex]){
-        if(!initialLine){
+        if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
             if(previousAbscissae[groupIndex] < max[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
-                    painter.drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);//erase the previous line
-                    if(!eraseLine) painter.drawLine(max[i],top,max[i],bottom);//draw a line at max
+                    painter->drawLine(max[i],top,max[i],bottom);//draw a line at max
                 }
                 //compute previousDragAbscissa in order to have the line drawn at the far rigth of the trace
-                if(x <= max[groupIndex]){
-                    previousDragAbscissa = x;
-                    if(linePositions[groupIndex] + (previousDragAbscissa - lastClickAbscissa) > max[groupIndex]) previousDragAbscissa = max[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
+                if(previousDragAbscissa <= max[groupIndex]){
+                    previousDragAbscissa = previousDragAbscissa;
+                    if(linePositions[groupIndex] + (previousDragAbscissa - lastClickAbscissa) > max[groupIndex])
+                        previousDragAbscissa = max[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
                 }
                 else{
                     previousDragAbscissa = max[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
                 }
             }
         }
-        else{
-            previousDragAbscissa = x;
-        }
-        painter.end();
     }
     else{
         //erase the previous line
-        if(!initialLine){
+        if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
             for(int i = 0; i<nbColumns;++i){
-                if(previousAbscissae[i] >= min[i]) painter.drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
-                if(previousAbscissae[i] < min[i]) painter.drawLine(min[i],top,min[i],bottom);//the line has been drawn at min
+                if(previousAbscissae[i] >= min[i])
+                    painter->drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
+                if(previousAbscissae[i] < min[i])
+                    painter->drawLine(min[i],top,min[i],bottom);//the line has been drawn at min
             }
         }
-        else{
-            previousDragAbscissa = x;
-        }
-        //draw the new line
-        if(!eraseLine) for(int i = 0; i<nbColumns;++i)  painter.drawLine(currentAbscissae[i],top,currentAbscissae[i],bottom);
-        previousDragAbscissa = x;
-        painter.end();
+        for(int i = 0; i<nbColumns;++i)
+            painter->drawLine(currentAbscissae[i],top,currentAbscissae[i],bottom);
     }
 }
 
@@ -2331,8 +2322,11 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
     //Paint the line while dragging
     if(mode == DRAW_LINE && (event->buttons() == Qt::LeftButton)){
-        if(!linePositions.isEmpty())
-            drawTimeLine(x,false);
+        if(!linePositions.isEmpty()) {
+            initialDragLine = x;
+            initialDragLine = false;
+            update();
+        }
     }
 
     //The parent implementation takes care of the rubber band
@@ -2771,8 +2765,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     drawEvent(selectedEvent.first,selectedEvent.second,selectedEventPosition[0],true);
             }
             else if(mode == DRAW_LINE){
-                if(!linePositions.isEmpty())
-                    drawTimeLine(lastClickAbscissa,true);
+                if(!linePositions.isEmpty()) {
+                   previousDragAbscissa = lastClickAbscissa;
+                   initialDragLine = true;
+                   update();
+                }
             }
             previousDragOrdinate = 0;
         }//mode == SELECT && shownChannels.size() != 0 || mode == MEASURE || mode == SELECT_TIME || mode == SELECT_EVENT || mode == ADD_EVENT || mode == DRAW_LINE
@@ -3030,10 +3027,12 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
     }
     if(mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
         //erase the line
-        if(!linePositions.isEmpty())
-            drawTimeLine(0,false,true);
-        linePositions.clear();
-        previousDragAbscissa = 0;
+        if(!linePositions.isEmpty()) {
+            initialDragLine = false;
+            previousDragAbscissa = 0;
+            linePositions.clear();
+            update();
+        }
     }
 }
 

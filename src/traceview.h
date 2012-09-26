@@ -1015,6 +1015,7 @@ private:
     /**Abscissa of the previous position while dragging channels.*/
     int previousDragAbscissa;
 
+    bool initialDragLine;
     /**Abscissa of the last click before dragging an event.*/
     int lastClickAbscissa;
 
@@ -1129,7 +1130,7 @@ private:
  * @param initialLine true if the line is drawn for the first time, false otherwise.
  * @param eraseLine true if the line has to be erase and not redraw.
  */
-    void drawTimeLine(int x,bool initialLine,bool eraseLine = false);
+    void drawTimeLine(QPainter *painter);
 
     /**Scale the background image to fit it in the widget.*/
     void scaleBackgroundImage();
