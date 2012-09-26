@@ -2308,33 +2308,16 @@ void NeuroscopeApp::slotApplySpikeColor(){
 
 
 void NeuroscopeApp::slotDisplayClose(){   
-    QDockWidget* current;
+    DockArea* current;
 
     slotStatusMsg(tr("Closing display..."));
-#if KDAB_PENDING
     //Get the active tab
-    if(tabsParent){
+    if(tabsParent->count()>1){
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        int nbOfTabs = tabsParent->count();
-        current = static_cast<QDockWidget*>(tabsParent->currentPage());
-        //If the active display is the mainDock, assign the mainDock status to an other display (take the first one available)
-        if(current == mainDock){
-            if(tabsParent->currentPageIndex() == 0){
-                mainDock = static_cast<QDockWidget*>(tabsParent->page(1));
-                setCentralWidget(mainDock);
-            }
-            else {
-                setCentralWidget(static_cast<QDockWidget*>(tabsParent->page(0)));
-            }
-        }
+        current = static_cast<DockArea*>(tabsParent->currentPage());
         //Remove the display from the group of tabs
-        tabsParent->removePage(current);
+        tabsParent->removeTab(tabsParent->indexOf(current));
         displayCount --;
-        //If there is only one display left, the group of tabs will be deleted so we set tabsParent to null
-        if(nbOfTabs == 2){
-            slotStateChanged("noTabState");
-            tabsParent = 0L;
-        }
         //Remove the view from the document list
         NeuroscopeView* view = dynamic_cast<NeuroscopeView*>(current->widget());
         doc->removeView(view);
@@ -2472,7 +2455,6 @@ void NeuroscopeApp::slotDisplayClose(){
             QApplication::restoreOverrideCursor();
         }
     }
-#endif
     slotStatusMsg(tr("Ready."));
 }
 
@@ -3565,8 +3547,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         editMode->setEnabled(true);
     } else if(state == QLatin1String("tabState")) {
         mRenameActiveDisplay->setEnabled(true);
-    } else if(state == QLatin1String("noTabState")) {
-        mRenameActiveDisplay->setEnabled(false);
     } else if(state == QLatin1String("datState")) {
         /*
   <Enable>
