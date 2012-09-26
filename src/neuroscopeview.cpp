@@ -70,7 +70,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
 
     QList<int> skippedChannels;
     QMap<int,bool>::Iterator iterator;
-    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.data()) skippedChannels.append(iterator.key());
+    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.value()) skippedChannels.append(iterator.key());
 
     //Create the mainDock
     mainDock = new QDockWidget(tr("field potentials"));

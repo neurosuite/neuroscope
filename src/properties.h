@@ -80,19 +80,19 @@ public:
   inline void setResolution(int res){
    switch(res){
       case 12:
-        resolutionComboBox->setCurrentItem(0);
+        resolutionComboBox->setCurrentIndex(0);
         break;
       case 14:
-        resolutionComboBox->setCurrentItem(1);
+        resolutionComboBox->setCurrentIndex(1);
         break;
       case 16:
-        resolutionComboBox->setCurrentItem(2);
+        resolutionComboBox->setCurrentIndex(2);
         break;
       case 32:
-        resolutionComboBox->setCurrentItem(3);
+        resolutionComboBox->setCurrentIndex(3);
         break;
       default:
-        resolutionComboBox->setCurrentItem(2);
+        resolutionComboBox->setCurrentIndex(2);
         break;
    }
   }
@@ -134,7 +134,7 @@ public:
 
   /**Returns the resolution of the acquisition system.*/
   inline int getResolution()const{
-   switch(resolutionComboBox->currentItem()){
+   switch(resolutionComboBox->currentIndex()){
       case 0:
         return 12;
       case 1:

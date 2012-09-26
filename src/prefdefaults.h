@@ -75,7 +75,7 @@ public:
     inline void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));}
 
     /**Sets the resolution of the acquisition system.*/
-    inline void setResolutionIndex(int index){resolutionComboBox->setCurrentItem(index);}
+    inline void setResolutionIndex(int index){resolutionComboBox->setCurrentIndex(index);}
 
     /**Sets the background image.*/
     inline void setTraceBackgroundImage(QString image){
@@ -113,7 +113,7 @@ public:
     inline int getOffset() const{return offsetLineEdit->text().toInt();}
 
     /**Returns the resolution of the acquisition system.*/
-    inline int getResolutionIndex()const{return resolutionComboBox->currentItem();}
+    inline int getResolutionIndex()const{return resolutionComboBox->currentIndex();}
 
     /**Returns the background image.*/
     inline QString getTraceBackgroundImage()const{return traceBackgroundLineEdit->text();}

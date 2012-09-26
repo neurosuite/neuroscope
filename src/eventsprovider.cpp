@@ -1222,7 +1222,7 @@ void EventsProvider::addEventDescription(QString eventDescriptionToAdd){
     eventIds.clear();
     QMap<EventDescription,int>::Iterator it;
     for(it = eventIdsTmp.begin(); it != eventIdsTmp.end(); ++it){
-        eventIds.insert(it.key(),it.data());
+        eventIds.insert(it.key(),it.value());
     }
 
 
@@ -1275,7 +1275,7 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
     eventIds.clear();
     QMap<EventDescription,int>::Iterator it;
     for(it = eventIdsTmp.begin(); it != eventIdsTmp.end(); ++it){
-        eventIds.insert(it.key(),it.data());
+        eventIds.insert(it.key(),it.value());
     }
 
     //the default length is 2 digits

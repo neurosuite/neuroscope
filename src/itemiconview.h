@@ -39,11 +39,11 @@ public:
 
 private Q_SLOTS:
     inline void slotMousePressed(int button,Q3IconViewItem* item){
-        emit mouseButtonPressed(button,item,this->name());
+        emit mouseButtonPressed(button,item,this->objectName());
     }
     inline void contentsMouseReleaseEvent(QMouseEvent* event){
         Q3IconView::contentsMouseReleaseEvent(event);
-        emit mouseReleased(this->name());
+        emit mouseReleased(this->objectName());
     }
 
 

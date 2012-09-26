@@ -91,7 +91,7 @@ Q3DragObject* ChannelIconView::dragObject(){
     for(Q3IconViewItem* item = firstItem();item; item = item->nextItem()){
         if(item->isSelected()){
             Q3IconDragItem id;
-            id.setData(item->text().local8Bit());
+            id.setData(item->text().toLocal8Bit());
             drag->append(id,
                          QRect(item->pixmapRect(FALSE).x() - orig.x(),
                                item->pixmapRect(FALSE).y() - orig.y(),
@@ -162,7 +162,7 @@ void ChannelIconView::contentsDropEvent(QDropEvent* event){
         event->ignore();
         return;
     }
-    if((event->source())->parent()->name() != name()){
+    if((event->source())->parent()->objectName() != objectName()){
         Q3IconView::contentsDropEvent(event);
         return;
     }
@@ -184,7 +184,7 @@ void ChannelIconView::contentsDropEvent(QDropEvent* event){
         Q3IconViewItem* after = findItemToInsertAfter(event->pos());
 
         Q3IconView::contentsDropEvent(event);
-        emit channelsMoved(selectedChannels,this->name(),after);
+        emit channelsMoved(selectedChannels,this->objectName(),after);
     }
     else{
         Q3IconView::contentsDropEvent(event);

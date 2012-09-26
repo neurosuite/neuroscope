@@ -103,7 +103,7 @@ protected:
             QString information = event->mimeData()->text();
             int groupSource = information.section("-",0,0).toInt();
             int start = information.section("-",1,1).toInt();
-            QString groupTarget = this->name();
+            QString groupTarget = this->objectName();
             emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
         }
     }
