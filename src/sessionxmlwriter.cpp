@@ -104,7 +104,7 @@ void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
             for(iterator = colors.begin(); iterator != colors.end(); ++iterator){
                 //Get the item information (id and color)
                 QString id = iterator.key();
-                QColor color = iterator.data();
+                QColor color = iterator.value();
 
                 QDomElement idElement = doc.createElement(ITEM);
                 QDomText idValue = doc.createTextNode(QString::fromLatin1("%1").arg(id));
@@ -230,7 +230,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             clustersElement.appendChild(fileElement);
 
             //list of cluster ids
-            QList<int> clustersIds = clustersIterator.data();
+            QList<int> clustersIds = clustersIterator.value();
             QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
@@ -255,7 +255,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             eventsElement.appendChild(fileElement);
 
             //list of event ids
-            QList<int> eventIds = eventsIterator.data();
+            QList<int> eventIds = eventsIterator.value();
             QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);
@@ -290,7 +290,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             clustersElement.appendChild(fileElement);
 
             //list of cluster ids
-            QList<int> clustersIds = clustersIterator.data();
+            QList<int> clustersIds = clustersIterator.value();
             QList<int>::iterator idIterator;
             for(idIterator = clustersIds.begin(); idIterator != clustersIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(CLUSTER);
@@ -313,7 +313,7 @@ void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayLi
             eventsElement.appendChild(fileElement);
 
             //list of event ids
-            QList<int> eventIds = eventsIterator.data();
+            QList<int> eventIds = eventsIterator.value();
             QList<int>::iterator idIterator;
             for(idIterator = eventIds.begin(); idIterator != eventIds.end(); ++idIterator){
                 QDomElement idElement = doc.createElement(EVENT);

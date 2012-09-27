@@ -396,7 +396,7 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QList<int> >& anat
     for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
         //the trash groups are not stored
         if(iterator.key() == 0) continue;
-        QList<int> channelIds = iterator.data();
+        QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
@@ -475,7 +475,7 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QList<int> >& 
         for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
             //the trashs groups are not stored
             if(iterator.key() == -1 || iterator.key() == 0) continue;
-            QList<int> channelIds = iterator.data();
+            QList<int> channelIds = iterator.value();
             int nbChannels = channelIds.size();
             QDomNode channelList = findDirectChild(CHANNELS,groupNode);
 
@@ -511,7 +511,7 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QList<int> >& 
     for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
         //the trashs groups are not stored
         if(iterator.key() == -1 || iterator.key() == 0) continue;
-        QList<int> channelIds = iterator.data();
+        QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
@@ -557,7 +557,7 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
         for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
             //Get the extension information (extension and sampling rate)
             QString extension = iterator.key();
-            double samplingRate = iterator.data();
+            double samplingRate = iterator.value();
 
             QDomElement extensionElement = doc.createElement(EXTENSION);
             QDomText extensionValue = doc.createTextNode(extension);
@@ -580,7 +580,7 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
         for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
             //Get the extension information (extension and sampling rate)
             QString extension = iterator.key();
-            double samplingRate = iterator.data();
+            double samplingRate = iterator.value();
             QDomNode file = findDirectChild(neuroscope::FILE,EXTENSION,extension,files);
             //if a node with the given criteria exists modify it
             if(!file.isNull()){

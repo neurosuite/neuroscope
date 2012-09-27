@@ -140,7 +140,7 @@ void PositionView::updatePositionInformation(int width, int height,QImage backgr
 void PositionView::scaleBackgroundImage(){
     if(!background.isNull()){
         QRect contentsRec = contentsRect();
-        scaledBackground.convertFromImage(background.smoothScale(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
+        scaledBackground.convertFromImage(background.scaled(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
     }
 }
 
@@ -303,14 +303,14 @@ void PositionView::print(QPainter& printPainter,int width, int height,bool white
 
     if(!whiteBackground && !background.isNull()){
         QPixmap printPixmap;
-        printPixmap.convertFromImage(background.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
+        printPixmap.convertFromImage(background.scaled(viewport.width(),viewport.height()),Qt::PreferDither);
         printPainter.drawPixmap(0,0,printPixmap);
     }
 
     //use the image dedicated for printing
     if(whiteBackground && !backgroundForPrinting.isNull()){
         QPixmap printPixmap;
-        printPixmap.convertFromImage(backgroundForPrinting.smoothScale(viewport.width(),viewport.height()),Qt::PreferDither);
+        printPixmap.convertFromImage(backgroundForPrinting.scaled(viewport.width(),viewport.height()),Qt::PreferDither);
         printPainter.drawPixmap(0,0,printPixmap);
     }
 

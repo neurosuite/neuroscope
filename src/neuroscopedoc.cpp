@@ -490,7 +490,7 @@ int NeuroscopeDoc::saveEventFiles(){
         if(provider->metaObject()->className() == ("EventsProvider")){
             EventsProvider* eventProvider = static_cast<EventsProvider*>(provider);
             if(eventProvider->isModified()){
-                QFile eventFile(iterator.data());
+                QFile eventFile(iterator.value());
                 bool status = eventFile.open(QIODevice::WriteOnly);
                 if(!status) return SAVE_ERROR;
                 int saveStatus;
@@ -564,8 +564,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
     QMap<QString,QString>::Iterator iterator;
     for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
         SessionFile sessionFile;
-        sessionFile.setUrl(iterator.data());
-        QFileInfo fileInfo = QFileInfo(iterator.data());
+        sessionFile.setUrl(iterator.value());
+        QFileInfo fileInfo = QFileInfo(iterator.value());
         sessionFile.setModification(fileInfo.lastModified());
         DataProvider* provider = providers[iterator.key()];
 
@@ -585,7 +585,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
             QMap<EventDescription,int> eventMap = static_cast<EventsProvider*>(provider)->eventDescriptionIdMap();
             QMap<EventDescription,int>::Iterator it;
             for(it = eventMap.begin(); it != eventMap.end(); ++it){
-                QColor color = eventColors->color(it.data());
+                QColor color = eventColors->color(it.value());
                 sessionFile.setItemColor(it.key(),color.name());
             }
         }
@@ -1146,10 +1146,10 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
     QMap<int, QList<int> >::Iterator iterator;
     for(iterator = displayGroupsChannels.begin(); iterator != displayGroupsChannels.end(); ++iterator){
         QList<int> clusterFileList;
-        QList<int> anatomicalList = iterator.data();
+        QList<int> anatomicalList = iterator.value();
         QMap<int, QList<int> >::Iterator spikeGroupIterator;
         for(spikeGroupIterator = spikeGroupsChannels.begin(); spikeGroupIterator != spikeGroupsChannels.end(); ++spikeGroupIterator){
-            QList<int> channels = spikeGroupIterator.data();
+            QList<int> channels = spikeGroupIterator.value();
             QList<int>::iterator channelIterator;
             for(channelIterator = channels.begin(); channelIterator != channels.end(); ++channelIterator){
                 if(anatomicalList.contains(*channelIterator)){
@@ -1590,7 +1590,7 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
                 horizontal = true;
                 vertical = false;
             }
-            flippedImage = rotatedImage.mirror(horizontal,vertical);
+            flippedImage = rotatedImage.mirrored(horizontal,vertical);
         }
         return flippedImage;
     }
@@ -1693,12 +1693,12 @@ void NeuroscopeDoc::synchronize(){
         //set the color for the spike group to the one for the display group.
         QColor color = channelColorList->groupColor(iterator.key());
         channelColorList->setSpikeGroupColor(iterator.key(),color);
-        channelsSpikeGroups.insert(iterator.key(),iterator.data());
+        channelsSpikeGroups.insert(iterator.key(),iterator.value());
     }
 
     QMap<int, QList<int> >::Iterator iterator2;
     for(iterator2 = displayGroupsChannels.begin(); iterator2 != displayGroupsChannels.end(); ++iterator2){
-        spikeGroupsChannels.insert(iterator2.key(),iterator2.data());
+        spikeGroupsChannels.insert(iterator2.key(),iterator2.value());
     }
 }
 
@@ -1989,9 +1989,9 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     QMap<EventDescription,int>::Iterator it;
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
         QColor color;
-        color.setHsv(static_cast<int>(fmod(static_cast<double>(it.data())*7,36))*10,255,255);
-        eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
-        eventsToSkip.append(static_cast<int>(it.data()));
+        color.setHsv(static_cast<int>(fmod(static_cast<double>(it.value())*7,36))*10,255,255);
+        eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
+        eventsToSkip.append(static_cast<int>(it.value()));
     }
 
     providerItemColors.insert(name,eventColors);
@@ -2088,13 +2088,13 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     QMap<EventDescription,int>::Iterator it;
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
         if(itemColors.contains(it.key())){
-            eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),itemColors[it.key()]);
+            eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),itemColors[it.key()]);
         }
         else{
             modified = true;
             QColor color;
-            color.setHsv(static_cast<int>(fmod(static_cast<double>(it.data())*7,36))*10,255,255);
-            eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+            color.setHsv(static_cast<int>(fmod(static_cast<double>(it.value())*7,36))*10,255,255);
+            eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
         }
     }
 
@@ -2328,23 +2328,23 @@ void NeuroscopeDoc::slotNewEventDescriptionCreated(QString providerName,QMap<int
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
         //use the current color
         if(it.key() != eventDescriptionAdded){
-            QColor color = currentEventColors->color(newOldEventIds[static_cast<int>(it.data())]);
-            eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+            QColor color = currentEventColors->color(newOldEventIds[static_cast<int>(it.value())]);
+            eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
         }
         else{
             QColor color;
             if(eventDescriptionAdded == removedDescription.first){
                 color = QColor(removedDescription.second);
             }
-            else color.setHsv(static_cast<int>(fmod(static_cast<double>(it.data())*7,36))*10,255,255);
-            eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+            else color.setHsv(static_cast<int>(fmod(static_cast<double>(it.value())*7,36))*10,255,255);
+            eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
         }
     }
 
     currentEventColors->removeAll();
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
-        QColor color = eventColors->color(static_cast<int>(it.data()));
-        currentEventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+        QColor color = eventColors->color(static_cast<int>(it.value()));
+        currentEventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
     }
 
 
@@ -2384,14 +2384,14 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,in
     QMap<EventDescription,int>::Iterator it;
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
         //use the current color
-        QColor color = currentEventColors->color(newOldEventIds[static_cast<int>(it.data())]);
-        eventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+        QColor color = currentEventColors->color(newOldEventIds[static_cast<int>(it.value())]);
+        eventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
     }
 
     currentEventColors->removeAll();
     for(it = eventMap.begin(); it != eventMap.end(); ++it){
-        QColor color = eventColors->color(static_cast<int>(it.data()));
-        currentEventColors->append(static_cast<int>(it.data()),static_cast<QString>(it.key()),color);
+        QColor color = eventColors->color(static_cast<int>(it.value()));
+        currentEventColors->append(static_cast<int>(it.value()),static_cast<QString>(it.key()),color);
     }
 
 
@@ -2620,7 +2620,7 @@ void NeuroscopeDoc::updateSkipStatus(){
     QList<int> skippedChannels;
     skipStatus = displayChannelPalette.getSkipStatus();
     QMap<int,bool>::const_iterator iterator;
-    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.data()) skippedChannels.append(iterator.key());
+    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.value()) skippedChannels.append(iterator.key());
 
     //Informs the views than the Skip Status has changed.
     for(int i = 0; i<viewList->count(); ++i) {

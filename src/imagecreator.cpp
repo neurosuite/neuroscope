@@ -55,7 +55,7 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     if(!backgroundImage.isEmpty()){
         QImage image(backgroundImage);
         QPixmap scaledBackground;
-        scaledBackground.convertFromImage(image.smoothScale(width,height),Qt::PreferDither);
+        scaledBackground.convertFromImage(image.scaled(width,height),Qt::PreferDither);
         painter.drawPixmap(0,0,scaledBackground);
     }
 
@@ -72,7 +72,7 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     //Closes the painter on the pixmap
     painter.end();
 
-    image = pixmap.convertToImage();
+    image = pixmap.toImage();
 }
 
 void ImageCreator::saveImage(const QString &fileName, const QString &format){

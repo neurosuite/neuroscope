@@ -669,7 +669,7 @@ void NeuroscopeApp::applyPreferences() {
         if(mainDock){
             //loop on the palettes (if their are any skipped channels, their color are going to be updated to the new background color)
             for(int i = 0; i < paletteTabsParent->count();++i){
-                QWidget* current = paletteTabsParent->page(i);
+                QWidget* current = paletteTabsParent->widget(i);
                 if(qobject_cast<ChannelPalette*>(current))
                     static_cast<ChannelPalette*>(current)->changeBackgroundColor(backgroundColor);
                 else if(qobject_cast<ItemPalette*>(current))
@@ -1028,7 +1028,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette;
         for(int i = 0; i<paletteTabsParent->count();i++){
-            QWidget* current = paletteTabsParent->page(i);
+            QWidget* current = paletteTabsParent->widget(i);
             QString name = current->name();
             if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
                 palette = static_cast<ItemPalette*>(current);
@@ -1054,7 +1054,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
     if(!eventFileList.isEmpty()){
         ItemPalette* palette;
         for(int i = 0; i<paletteTabsParent->count();i++){
-            QWidget* current = paletteTabsParent->page(i);
+            QWidget* current = paletteTabsParent->widget(i);
             QString name = current->name();
             if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
                 palette = static_cast<ItemPalette*>(current);
@@ -1431,9 +1431,9 @@ void NeuroscopeApp::slotFileClose(){
                 //Remove the display from the group of tabs
                 while(true){
                     int nbOfTabs = tabsParent->count();
-                    DockArea* current = static_cast<DockArea*>(tabsParent->page(0));
+                    DockArea* current = static_cast<DockArea*>(tabsParent->widget(0));
                     if(current == mainDock){
-                        current = static_cast<DockArea*>(tabsParent->page(1));
+                        current = static_cast<DockArea*>(tabsParent->widget(1));
                     }
                     tabsParent->removePage(current);
                     delete current;
@@ -1444,11 +1444,11 @@ void NeuroscopeApp::slotFileClose(){
 
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
-                QWidget* current = paletteTabsParent->page(0);
+                QWidget* current = paletteTabsParent->widget(0);
                 if(qobject_cast<ChannelPalette*>(current)){
-                    current = paletteTabsParent->page(1);
+                    current = paletteTabsParent->widget(1);
                     if(qobject_cast<ChannelPalette*>(current))
-                        current = paletteTabsParent->page(2);
+                        current = paletteTabsParent->widget(2);
                 }
                 paletteTabsParent->removePage(current);
                 delete current;
@@ -1941,7 +1941,7 @@ void NeuroscopeApp::slotSetGreyScale(){
 
 void NeuroscopeApp::slotCreateGroup(){
     //Get the active palette
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     ChannelPalette* channelPalette = static_cast<ChannelPalette*>(current);
     channelPalette->createGroup();
 }
@@ -2214,7 +2214,7 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 
 void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     //Update the show/hide status of the inactive palette
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
 
     //Disable some actions when no document is open (see the klustersui.rc file)
     if(current->metaObject()->className() == ("ChannelPalette")){
@@ -2314,7 +2314,7 @@ void NeuroscopeApp::slotDisplayClose(){
     //Get the active tab
     if(tabsParent->count()>1){
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        current = static_cast<DockArea*>(tabsParent->currentPage());
+        current = static_cast<DockArea*>(tabsParent->currentWidget());
         //Remove the display from the group of tabs
         tabsParent->removeTab(tabsParent->indexOf(current));
         displayCount --;
@@ -2432,11 +2432,11 @@ void NeuroscopeApp::slotDisplayClose(){
 
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
-                QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->page(0));
+                QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->widget(0));
                 if((current->widget())->metaObject()->className() == ("ChannelPalette")){
-                    current = static_cast<QDockWidget*>(paletteTabsParent->page(1));
+                    current = static_cast<QDockWidget*>(paletteTabsParent->widget(1));
                     if((current->widget())->metaObject()->className() == ("ChannelPalette"))
-                        current = static_cast<QDockWidget*>(paletteTabsParent->page(2));
+                        current = static_cast<QDockWidget*>(paletteTabsParent->widget(2));
                 }
                 paletteTabsParent->removePage(current);
                 delete current;
@@ -2828,7 +2828,7 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
     clusterFileList.append(clusterFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
-        QWidget* current = paletteTabsParent->page(i);
+        QWidget* current = paletteTabsParent->widget(i);
         QString name = current->name();
         if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
             ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
@@ -2841,7 +2841,7 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
 
 
 void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){  
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         NeuroscopeView* view = activeView();
@@ -2851,7 +2851,7 @@ void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
 }
 
 void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& selection){
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
@@ -2865,7 +2865,7 @@ void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& sel
 }
 
 void NeuroscopeApp::slotCloseClusterFile(){
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
@@ -3033,7 +3033,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
 
     for(int i = 0; i<paletteTabsParent->count();i++){
-        QWidget* current = paletteTabsParent->page(i);
+        QWidget* current = paletteTabsParent->widget(i);
         QString name = current->name();
         if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
             ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
@@ -3049,7 +3049,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
 }
 
 void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName){
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
@@ -3058,7 +3058,7 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerNam
 }
 
 void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selection){
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
@@ -3072,7 +3072,7 @@ void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selec
 }
 
 void NeuroscopeApp::slotCloseEventFile(){
-    QWidget* current = paletteTabsParent->currentPage();
+    QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
         ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
@@ -3263,7 +3263,7 @@ ItemPalette* NeuroscopeApp::getEventPalette(){
     ItemPalette* eventPalette = 0L;
 
     for(int i = 0; i< paletteTabsParent->count();++i){
-        QWidget* current = paletteTabsParent->page(i);
+        QWidget* current = paletteTabsParent->widget(i);
         QString name = current->name();
         if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
             eventPalette = static_cast<ItemPalette*>(current);

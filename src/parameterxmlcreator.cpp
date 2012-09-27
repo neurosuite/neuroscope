@@ -199,7 +199,7 @@ void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QList<int> >& anato
     for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
         //the trash group is not stored
         if(iterator.key() == 0) continue;
-        QList<int> channelIds = iterator.data();
+        QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
@@ -244,7 +244,7 @@ void ParameterXmlCreator::setSpikeDetectionInformation(int nbSamples,int peakSam
     for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
         //the trashs groups are not stored
         if(iterator.key() == -1 || iterator.key() == 0) continue;
-        QList<int> channelIds = iterator.data();
+        QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
@@ -277,7 +277,7 @@ void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, QList<int> >& s
     for(iterator = spikeGroups.begin(); iterator != spikeGroups.end(); ++iterator){
         //the trashs groups are not stored
         if(iterator.key() == -1 || iterator.key() == 0) continue;
-        QList<int> channelIds = iterator.data();
+        QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
         QDomElement groupElement = doc.createElement(GROUP);
@@ -349,7 +349,7 @@ void ParameterXmlCreator::setSampleRateByExtension(QMap<QString,double> extensio
     for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
         //Get the extension information (extension and sampling rate)
         QString extension = iterator.key();
-        double samplingRate = iterator.data();
+        double samplingRate = iterator.value();
 
         QDomElement extensionElement = doc.createElement(EXTENSION);
         QDomText extensionValue = doc.createTextNode(extension);

@@ -364,7 +364,7 @@ protected:
         if(e->button() == Qt::LeftButton){
 
             QPoint firstClick = QWidget::mapToGlobal(e->pos());
-            QString information = parent()->name();
+            QString information = parent()->objectName();
             information.append(QString("-%1").arg(firstClick.y()));
 
             QDrag *drag = new QDrag(this);
@@ -375,10 +375,10 @@ protected:
             Qt::DropAction dropAction = drag->exec();
             e->accept();
 
-            emit leftClickOnLabel(parent()->name());
+            emit leftClickOnLabel(parent()->objectName());
         }
         if(e->button() == Qt::MidButton){
-            emit middleClickOnLabel(parent()->name());
+            emit middleClickOnLabel(parent()->objectName());
         }
     }
 };

@@ -280,7 +280,7 @@ void TraceWidget::slotDurationUpdated(){
         pageStep = timeWindow;
 
         scrollBar->setMaximum(recordingLength - timeWindow);
-        scrollBar->setLineStep(lineStep);
+        scrollBar->setSingleStep(lineStep);
         scrollBar->setPageStep(pageStep);
 
         updateView = true;
@@ -574,7 +574,7 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
         pageStep = timeWindow;
 
         scrollBar->setMaximum(recordingLength - timeWindow);
-        scrollBar->setLineStep(lineStep);
+        scrollBar->setSingleStep(lineStep);
         scrollBar->setPageStep(pageStep);
 
         //Start time
