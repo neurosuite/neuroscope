@@ -29,8 +29,8 @@
 #include <QFrame>
 
 
-ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name,Qt::WFlags f):
-    Q3IconView(parent,name,f){
+ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name):
+    Q3IconView(parent,name){
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);

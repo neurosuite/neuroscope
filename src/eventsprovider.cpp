@@ -1063,10 +1063,12 @@ int EventsProvider::save(QFile* eventFile){
     QTextStream fileStream(eventFile);
     fileStream.setRealNumberPrecision(12);
 
-    for(int i = 1;i<=nbEvents;++i) fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n";
+    for(int i = 1;i<=nbEvents;++i)
+        fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n";
 
     int status = eventFile->status();
-    if(status == IO_Ok) modified = false;
+    if(status == IO_Ok)
+        modified = false;
     return status;
 }
 

@@ -52,8 +52,8 @@ public:
         if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
             legendColor = Qt::black;
         else legendColor = Qt::white;
-        palette.setColor(foregroundRole(), legendColor); 
-	setPalette(palette);
+        palette.setColor(foregroundRole(), legendColor);
+        setPalette(palette);
         adjustSize();
 
         setAcceptDrops(TRUE);

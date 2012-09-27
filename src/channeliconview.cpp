@@ -32,8 +32,8 @@
 
 
 
-ChannelIconView::ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent,const char* name,Qt::WFlags f):
-    Q3IconView(parent,name,f){
+ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const char* name):
+    Q3IconView(parent,name){
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);

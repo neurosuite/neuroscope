@@ -34,7 +34,7 @@
 class ItemIconView : public Q3IconView  {
     Q_OBJECT
 public:
-    ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
+    ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
     inline ~ItemIconView(){}
 
 private Q_SLOTS:
