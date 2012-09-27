@@ -37,7 +37,7 @@ int Utilities::getNbLines(QString path){
 
 
 
-void Utilities::createBackup(QString path){
+void Utilities::createBackup(const QString &path){
     QFile original(path);
     QFile backup(path+"~");
     original.open(QIODevice::ReadOnly);
