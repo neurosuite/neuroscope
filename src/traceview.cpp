@@ -4363,7 +4363,8 @@ void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* 
         }
     }
 
-    if(selectedEvents.size() != 0) emit eventsAvailable(eventsData,selectedEvents,providerItemColors,initiator,tracesProvider.getSamplingRate());
+    if(!selectedEvents.isEmpty())
+        emit eventsAvailable(eventsData,selectedEvents,providerItemColors,initiator,tracesProvider.getSamplingRate());
 }
 
 void TraceView::traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active){

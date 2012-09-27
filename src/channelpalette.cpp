@@ -43,11 +43,20 @@
 
 
 
-ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name,Qt::WFlags fl)
-    : Q3ScrollView(parent,name,fl),channelColors(0L),backgroundColor(backgroundColor),isInSelectItems(false),
-      spaceWidget(0L),channelsGroups(0L),groupsChannels(0L),greyScale(false),isGroupToRemove(false),
-      type(type),edit(edition),selected("")
+ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name)
+    : Q3ScrollView(parent)
+    ,channelColors(0L)
+    ,backgroundColor(backgroundColor)
+    ,isInSelectItems(false),
+      spaceWidget(0L)
+    ,channelsGroups(0L)
+    ,groupsChannels(0L)
+    ,greyScale(false)
+    ,isGroupToRemove(false),
+      type(type)
+    ,edit(edition)
 {
+    setObjectName(name);
     channelGroupViewDict.setAutoDelete(true);
 
     //Set the palette color, the foreground color depends on the background color

@@ -42,10 +42,11 @@
 #include <QLabel>
 #include <Q3ListBox>
 
-ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name, Qt::WFlags fl)
-    : Q3ScrollView(parent,name,fl),backgroundColor(backgroundColor),isInSelectItems(false),
+ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name)
+    : Q3ScrollView(parent),backgroundColor(backgroundColor),isInSelectItems(false),
       spaceWidget(0L),type(type),selected(""),updateIconPixmap(false)
 {
+    setObjectName(name);
     itemGroupViewDict.setAutoDelete(true);
 
     setAutoFillBackground(true);

@@ -62,7 +62,7 @@ public:
                      * @param name internal name of the palette.
                      * @param fl widget flags.
                      */
-    ItemPalette(PaletteType type,const QColor& backgroundColor,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    ItemPalette(PaletteType type,const QColor& backgroundColor,QWidget* parent = 0, const char* name = 0 );
     /*
    *  Destroys the object and frees any allocated resources.
    */
