@@ -74,7 +74,7 @@ int PositionsProvider::loadData(){
 
     //Set the size of the Arrays containing the positions using the first line.
     firstLine = firstLine.simplified();
-    QStringList lineParts = QStringList::split(" ", firstLine);
+    QStringList lineParts = firstLine.split(" ", QString::SkipEmptyParts);
     nbCoordinates = lineParts.count();
     dataType k = nbCoordinates;
     positions.setSize(nbPositions,nbCoordinates);
