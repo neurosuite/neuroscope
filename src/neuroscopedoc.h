@@ -22,7 +22,6 @@
 // include files for QT
 #include <QObject>
 #include <QString>
-#include <q3ptrlist.h>
 #include <QPair>
 //Added by qt3to4:
 #include <QList>
