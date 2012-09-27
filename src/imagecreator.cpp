@@ -75,7 +75,7 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     image = pixmap.convertToImage();
 }
 
-void ImageCreator::saveImage(QString fileName, const QString &format){
+void ImageCreator::saveImage(const QString &fileName, const QString &format){
     //Save the image
     image.save(fileName,format,80);
 }

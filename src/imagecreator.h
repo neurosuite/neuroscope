@@ -59,7 +59,7 @@ public:
    * @param fileName path to save the image under.
    * @param format image format to use when saving the image.
    */
-    void saveImage(QString fileName,const QString& format = "PNG");
+    void saveImage(const QString& fileName,const QString& format = "PNG");
     
 public Q_SLOTS:     
 

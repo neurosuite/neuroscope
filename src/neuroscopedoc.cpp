@@ -50,9 +50,9 @@
 
 extern QString version;
 
-NeuroscopeDoc::NeuroscopeDoc(QWidget* parent,ChannelPalette& displayChannelPalette,ChannelPalette& spikeChannelPalette,int channelNbDefault,double datSamplingRateDefault,
-                             double eegSamplingRateDefault,int initialOffset,int voltageRangeDefault,int amplificationDefault,float screenGainDefault,int resolutionDefault,int eventPosition,int clusterPosition,
-                             int nbSamples, int peakSampleIndex,double videoSamplingRate, int width, int height, QString backgroundImage,QString traceBackgroundImage,int rotation,int flip,bool positionsBackground) :
+NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPalette, ChannelPalette& spikeChannelPalette, int channelNbDefault, double datSamplingRateDefault,
+                             double eegSamplingRateDefault, int initialOffset, int voltageRangeDefault, int amplificationDefault, float screenGainDefault, int resolutionDefault, int eventPosition, int clusterPosition,
+                             int nbSamples, int peakSampleIndex, double videoSamplingRate, int width, int height, const QString& backgroundImage, const QString &traceBackgroundImage, int rotation, int flip, bool positionsBackground) :
     docUrl(),sessionUrl(),displayChannelPalette(displayChannelPalette),spikeChannelPalette(spikeChannelPalette),resolutionDefault(resolutionDefault),channelNbDefault(channelNbDefault),datSamplingRateDefault(datSamplingRateDefault),
     eegSamplingRateDefault(eegSamplingRateDefault),videoSamplingRateDefault(videoSamplingRate),initialOffsetDefault(initialOffset),screenGainDefault(screenGainDefault),voltageRangeDefault(voltageRangeDefault),amplificationDefault(amplificationDefault),isCommandLineProperties(false),
     channelColorList(0L),tracesProvider(0L),parent(parent),baseName(""),nbSamplesDefault(nbSamples),peakSampleIndexDefault(peakSampleIndex),extension(""),eventPosition(eventPosition),clusterPosition(clusterPosition),
@@ -432,7 +432,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
             if(extension != "dat")
                 isaDatFile = false;
             //Show a dialog to inform the user what are the parameters which will be used.
-            dynamic_cast<NeuroscopeApp*>(parent)->displayFileProperties(channelNb,samplingRate,resolution,initialOffset,voltageRange,
+            static_cast<NeuroscopeApp*>(parent)->displayFileProperties(channelNb,samplingRate,resolution,initialOffset,voltageRange,
                                                                         amplification,screenGain,nbSamples,peakSampleIndex,videoSamplingRate,videoWidth,videoHeight,backgroundImage,
                                                                         rotation,flip,datSamplingRate,isaDatFile,drawPositionsOnBackground,traceBackgroundImage);
 
@@ -678,8 +678,10 @@ void NeuroscopeDoc::singleChannelColorUpdate(int channelId,NeuroscopeView* activ
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
-        if(view != activeView) view->singleChannelColorUpdate(channelId,false);
-        else view->singleChannelColorUpdate(channelId,true);
+        if(view != activeView)
+            view->singleChannelColorUpdate(channelId,false);
+        else
+            view->singleChannelColorUpdate(channelId,true);
     }
 
     //Ask the active view to take the modification into account immediately
@@ -690,8 +692,10 @@ void NeuroscopeDoc::channelGroupColorUpdate(int groupId,NeuroscopeView* activeVi
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
-        if(view != activeView) view->channelGroupColorUpdate(groupId,false);
-        else view->channelGroupColorUpdate(groupId,true);
+        if(view != activeView)
+            view->channelGroupColorUpdate(groupId,false);
+        else
+            view->channelGroupColorUpdate(groupId,true);
     }
 
     //Ask the active view to take the modification into account immediately
@@ -706,8 +710,10 @@ void NeuroscopeDoc::showCalibration(bool show,NeuroscopeView* activeView){
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
-        if(view != activeView) view->showCalibration(show,false);
-        else view->showCalibration(show,true);
+        if(view != activeView)
+            view->showCalibration(show,false);
+        else
+            view->showCalibration(show,true);
     }
 
     //Ask the active view to take the modification into account immediately

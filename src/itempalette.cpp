@@ -206,13 +206,13 @@ void ItemPalette::selectGroupLabel(QString sourceGroupName){
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
-            GroupNameLabel* previousLabel = dynamic_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
+            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
-        QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
+        QLabel* label = static_cast<QLabel*>(group->child("label"));
         label->setPaletteBackgroundColor(colorGroup().highlight());
     }
 
@@ -226,13 +226,13 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
-            GroupNameLabel* previousLabel = dynamic_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
+            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
-        QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
+        QLabel* label = static_cast<QLabel*>(group->child("label"));
         label->setPaletteBackgroundColor(colorGroup().highlight());
 
         ItemIconView* iconView = iconviewDict[sourceGroupName];

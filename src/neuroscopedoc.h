@@ -366,7 +366,8 @@ public:
    */
     NeuroscopeDoc(QWidget* parent,ChannelPalette& displayChannelPalette,ChannelPalette& spikeChannelPalette,int channelNbDefault,double datSamplingRateDefault,
                   double eegSamplingRateDefault, int initialOffset,int voltageRangeDefault,int amplificationDefault,float screenGainDefault,int resolutionDefault,
-                  int eventPosition,int clusterPosition,int nbSamples, int peakSampleIndex,double videoSamplingRate, int width, int height, QString backgroundImage, QString traceBackgroundImage,
+                  int eventPosition,int clusterPosition,int nbSamples, int peakSampleIndex,double videoSamplingRate, int width, int height, const QString& backgroundImage,
+                  const QString& traceBackgroundImage,
                   int rotation,int flip,bool positionsBackground);
     /** Destructor for the fileclass of the application. */
     ~NeuroscopeDoc();

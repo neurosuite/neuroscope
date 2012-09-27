@@ -42,8 +42,8 @@ class GlobalEventsProvider : public DataProvider
 {
     Q_OBJECT
 public:
-    inline GlobalEventsProvider():DataProvider(QString()){}
-    inline ~GlobalEventsProvider(){}
+    GlobalEventsProvider():DataProvider(QString()){}
+    ~GlobalEventsProvider(){}
 
     /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.
   * @param startTime begining of the time interval from which to retrieve the data in miliseconds.
