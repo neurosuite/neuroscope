@@ -247,7 +247,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     bool sessionFileExist = false;
     QFileInfo urlFileInfo(url);
     QString fileName = urlFileInfo.fileName();
-    QStringList fileParts = QStringList::split(".", fileName);
+    QStringList fileParts = fileName.split(".", QString::SkipEmptyParts);
     if(fileParts.count() < 2)
         return INCORRECT_FILE;
     //QString extension;
@@ -281,7 +281,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     }
 
     fileName = QFileInfo(docUrl).fileName();
-    fileParts = QStringList::split(".", fileName);
+    fileParts = fileName.split(".", QString::SkipEmptyParts);
     baseName = fileParts[0];
     for(uint i = 1;i < fileParts.count() - 1; ++i)
         baseName += "." + fileParts[i];
@@ -2463,7 +2463,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QStrin
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString url,NeuroscopeView* activeView){
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionFileName = url;
-    QStringList fileParts = QStringList::split(".", positionFileName);
+    QStringList fileParts = positionFileName.split(".", QString::SkipEmptyParts);
     if(fileParts.count() < 2) return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];
 
@@ -2507,7 +2507,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionUrl = fileUrl;
     QString positionFileName = positionUrl;
-    QStringList fileParts = QStringList::split(".", positionFileName);
+    QStringList fileParts = positionFileName.split(".", QString::SkipEmptyParts);
     if(fileParts.count() < 2) return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];
 

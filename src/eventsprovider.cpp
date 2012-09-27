@@ -1061,7 +1061,7 @@ void EventsProvider::clearUndoRedoData(){
 
 int EventsProvider::save(QFile* eventFile){
     QTextStream fileStream(eventFile);
-    fileStream.precision(12);
+    fileStream.setRealNumberPrecision(12);
 
     for(int i = 1;i<=nbEvents;++i) fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n";
 
