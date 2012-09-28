@@ -56,7 +56,7 @@ public:
     * @param path file path.
     * @return the number of lines in the file.
     */
-    static int getNbLines(QString path);
+    static int getNbLines(const QString &path);
     
     /**Creates a backup of the file @p path. The backup file name is the original
     * file name with an additional ~.
