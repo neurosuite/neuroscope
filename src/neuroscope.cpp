@@ -71,8 +71,6 @@ NeuroscopeApp::NeuroscopeApp()
       select(false)
     ,filePath("")
     ,initialTimeWindow(0)
-    ,eventIndex(0)
-    ,buttonEventIndex(0)
     ,eventLabelToCreate(""),
       eventProvider("")
     ,undoRedoInprocess(false)
@@ -276,13 +274,7 @@ void NeuroscopeApp::initActions()
     mEventTool->setIcon(QIcon(":/icons/event_tool"));
     mEventTool->setShortcut(Qt::Key_E);
     connect(mEventTool,SIGNAL(triggered()), this,SLOT(slotSelectEvent()));
-    //KDAB_PORTING!
-    addEventMenu = 0;
-#if KDAB_PENDING
-    addEventMenu = new KSelectAction(tr("Add Event"),QIcon(":/icons/add_event_tool"),Qt::Key_N,this, SLOT(addEvent()),actionCollection(), "add_event");
-    connect(addEventMenu->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAddEventAboutToShow()));
-    connect(addEventMenu->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotAddEventActivated(int)));
-#endif
+
     addEventToolBarAction = toolMenu->addAction(tr("Add Event"));
     addEventToolBarAction->setIcon(QIcon(":icons/add_event_tool"));
     connect(addEventToolBarAction,SIGNAL(triggered()), this,SLOT(addEvent()));
@@ -3190,47 +3182,32 @@ void NeuroscopeApp::slotAddEventAboutToShow(){
     addEventPopup->clear();
     addEventPopup->resize(0,0);
     addEventPopup->adjustSize();
-    addEventMenu->menu()->clear();
-#if KDAB_PENDING
-    eventIndex = -1;
-    QStringList list;
     QList<EventDescription> eventList = doc->eventIds(eventProvider);
 
-    QList<EventDescription>::iterator it;
-    for(it = eventList.begin(); it != eventList.end(); ++it){
-        QString label = *it;
-        int index = addEventPopup->insertItem(label);
-        list.append(label);
+    bool found = false;
+    for(int i = 0; i <eventList.count();++i) {
+        QString label = eventList.at(i);
+        QAction *act = addEventPopup->addAction(label);
+        act->setCheckable(true);
         if(eventLabelToCreate == label){
-            buttonEventIndex = index;
-            eventIndex = list.size() - 1;
+            act->setChecked(true);
+            found = true;
         }
     }
 
     //Add at the bottom an entry to create a new event description
-    addEventPopup->insertItem(tr("New Event ...");
-    list.append(tr("New Event ...");
+    actNewEvent = addEventPopup->addAction(tr("New Event ..."));
 
-    addEventMenu->setItems(list);
-    //If eventLabelToCreate exists in this event file, select it
-    if(eventIndex != -1){
-        addEventMenu->setCurrentItem(eventIndex);
-        addEventPopup->setItemChecked(buttonEventIndex,true);
-    }
-    else
+    if(!found)
         eventLabelToCreate.clear();
-#endif
 }
 
 void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
     if(!act)
         return;
-#if KDAB_PENDING
-    buttonEventIndex = index;
+    const QString description = act->text();
 
-    QString description = act->text();
-
-    if(index == (addEventPopup->idAt(addEventPopup->count() - 1))) {
+    if(act  == actNewEvent) {
         bool ok;
         QString result = QInputDialog::getText(this,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString(),&ok);
         if(ok) {
@@ -3239,26 +3216,6 @@ void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
     }
     else
         eventLabelToCreate = description;
-#endif
-    addEvent();
-}
-
-void NeuroscopeApp::slotAddEventActivated(int index){
-    if(eventProvider.isEmpty())
-        return;
-    QMenu* menu = addEventMenu->menu();
-    eventIndex = index;
-
-    QString description = menu->text(index);
-    if(index == static_cast<int>(menu->count() - 1)) {
-        bool ok;
-        QString result = QInputDialog::getText(0,tr("New Event Description"),tr("Type in the new event description"),QLineEdit::Normal,QString(),&ok);
-        if(ok) {
-            eventLabelToCreate = result;
-        }
-    }
-    else eventLabelToCreate = description;
-
     addEvent();
 }
 

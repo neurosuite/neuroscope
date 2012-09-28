@@ -2229,7 +2229,6 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
         painter.setViewport(viewport);
 
-        //KDAB_PENDING painter.setRasterOp(NotROP);
         painter.setPen(QPen(Qt::color0,1));
         painter.setBrush(Qt::NoBrush);
         int top = r.top();
@@ -2800,7 +2799,6 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                     selectedChannels.remove(channelId);
 
                     mDeselectedChannels.clear();
-                    QList<int> deselectedChannels;
                     QList<int>::iterator it;
                     for(it = selectedChannels.begin();it != selectedChannels.end();++it)
                         mDeselectedChannels.append(*it);

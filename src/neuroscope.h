@@ -611,11 +611,6 @@ private Q_SLOTS:
     /**Creates the list of available events to used in order to create a new event.*/
     void slotAddEventAboutToShow();
 
-    /**Stores which type of event to use for the new creation of events.
-   * Called by a selection in the menu tool.
-   * @param index currently checked item in the addEvent submenu.
-   */
-    void slotAddEventActivated(int index);
 
     /** Stores which type of event to use for the new creation of events.
    * Called after a click on the actionbar.
@@ -867,12 +862,6 @@ private:
     /**The current number of redo used to enable/disable the the redo action.*/
     int currentNbRedo;
 
-    /**Index in the Add Event menu corresponding to the type of event to create at the next addEvent.*/
-    int eventIndex;
-    
-    /**Index of the add event button list corresponding to the type of event to create at the next addEvent.*/
-    int buttonEventIndex;
-
     /**Label corresponding to the type of event to create at the next addEvent.*/
     QString eventLabelToCreate;
 
@@ -938,6 +927,8 @@ private:
     void updateBrowsingStatus();
 
     bool useWhiteColorDuringPrinting;
+
+    QAction *actNewEvent;
 };
 
 #endif // NEUROSCOPE_H
