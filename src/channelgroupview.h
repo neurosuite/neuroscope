@@ -41,6 +41,7 @@ public:
         mLayout->setMargin(0);
         mLayout->setSpacing(0);
         setLayout(mLayout);
+        setAutoFillBackground(true);
 
         //Set the groupview color, the foreground color depends on the background color
         QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
