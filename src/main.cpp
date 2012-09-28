@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         }
 
         bool handled = true;
-         if (i < n - 1) {
+         if (i <= n - 1) {
              if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
                  resolution = args.at(++i);
              else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels")

@@ -49,7 +49,7 @@ public:
   * @param fileMaxTime maximum time of the current file in recording units.
   * @param position represents the percentage from the begining of the window where the clusters are display when browsing.
   */
-    ClustersProvider(QString fileUrl,double samplingRate,double currentSamplingRate,dataType fileMaxTime,int position = 25);
+    ClustersProvider(const QString& fileUrl,double samplingRate,double currentSamplingRate,dataType fileMaxTime,int position = 25);
     ~ClustersProvider();
 
     /**Triggers the retrieve of the cluster information included in the time interval given by @p startTime and @p endTime.

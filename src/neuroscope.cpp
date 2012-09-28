@@ -56,11 +56,27 @@
 
 NeuroscopeApp::NeuroscopeApp()
     :QMainWindow(0, "NeuroScope")
-    ,prefDialog(0L),displayCount(0),mainDock(0),
-      spikeChannelPalette(0),tabsParent(0L),paletteTabsParent(0L),
-      isInit(true),groupsModified(false),colorModified(false),eventsModified(false),initialOffsetDefault(0),propertiesDialog(0L),
-      select(false),filePath(""),initialTimeWindow(0),eventIndex(0),buttonEventIndex(0),eventLabelToCreate(""),
-      eventProvider(""),undoRedoInprocess(false),isPositionFileLoaded(false)
+    ,prefDialog(0L)
+    ,displayCount(0)
+    ,mainDock(0)
+    ,spikeChannelPalette(0)
+    ,tabsParent(0L)
+    ,paletteTabsParent(0L),
+      isInit(true)
+    ,groupsModified(false)
+    ,colorModified(false)
+    ,eventsModified(false)
+    ,initialOffsetDefault(0)
+    ,propertiesDialog(0L),
+      select(false)
+    ,filePath("")
+    ,initialTimeWindow(0)
+    ,eventIndex(0)
+    ,buttonEventIndex(0)
+    ,eventLabelToCreate(""),
+      eventProvider("")
+    ,undoRedoInprocess(false)
+    ,isPositionFileLoaded(false)
 {
     initView();
     //Prepare the actions
@@ -835,7 +851,6 @@ void NeuroscopeApp::initializePreferences(){
 void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
                                 QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
 { 
-    qDebug()<<" void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,";
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
 
@@ -872,7 +887,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
-    qDebug()<<"displayChannelPalette "<<displayChannelPalette;
     displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups());
     displayChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
     spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
