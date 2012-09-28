@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         }
 
         bool handled = true;
-         if (i <= n - 1) {
+         if (i < n - 1) {
              if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
                  resolution = args.at(++i);
              else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels")
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
          }
          // Nothing know. Treat it as path.
-         if (!handled)
+         if (!handled || (n == 1) )
              file = args.at(i);
     }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
