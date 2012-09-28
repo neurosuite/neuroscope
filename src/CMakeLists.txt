@@ -34,7 +34,6 @@ set(neuroscope_SRCS
 	parameterxmlcreator.cpp 
 	parameterxmlmodifier.cpp 
 	imagecreator.cpp 
-	utilities.cpp 
 	globaleventsprovider.cpp
 	eventdata.cpp 
 	clusterpropertieslayout.cpp 
