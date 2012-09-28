@@ -3311,17 +3311,20 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mLoadPositionFile->setEnabled(false);
         mClosePositionFile->setEnabled(false);
         mZoomTool->setEnabled(false);
+        mLoadClusterFiles->setEnabled(false);
+        mLoadEventFiles->setEnabled(false);
+        greyScale->setEnabled(false);
+    mNewDisplay->setEnabled(false);
+    mRenameActiveDisplay->setEnabled(false);
+    mCloseActiveDisplay->setEnabled(false);
         /*
 <State name="initState" >
   <Disable>
-   <Action name="load_cluster_files" />
-   <Action name="load_event_files" />
    <Action name="select" />
    <Action name="measure" />
    <Action name="time" />
    <Action name="select_event" />
    <Action name="draw_time_line" />
-   <Action name="grey_scale"/>
    <Action name="create_group"/>
    <Action name="edit_select_all"/>
    <Action name="edit_deselect_all"/>
@@ -3346,10 +3349,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="edit_mode" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
-   <Action name="synchronize" />
-   <Action name="new_display" />
-   <Action name="rename_display" />
-   <Action name="close_display" />
    <Action name="show_calibration" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
@@ -3360,6 +3359,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   </Disable>
  </State>
  */
+        mSynchronizeGroups->setEnabled(false);
         mHideChannel->setEnabled(false);
         mSkipChannels->setEnabled(false);
         mRemoveEvent->setEnabled(false);
@@ -3382,16 +3382,16 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mLoadPositionFile->setEnabled(true);
         mZoomTool->setEnabled(true);
         mHideChannel->setEnabled(true);
-
-        /*
+mLoadClusterFiles->setEnabled(true);
+mLoadEventFiles->setEnabled(true);
+greyScale->setEnabled(true);
+mCloseActiveDisplay->setEnabled(true);
+/*
   <Enable>
-   <Action name="load_cluster_files" />
-   <Action name="load_event_files" />
    <Action name="select" />
    <Action name="measure" />
    <Action name="time" />
    <Action name="draw_time_line" />
-   <Action name="grey_scale"/>
    <Action name="create_group"/>
    <Action name="edit_select_all"/>
    <Action name="edit_deselect_all"/>
@@ -3407,15 +3407,14 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
     <Action name="reset_gains" />
-   <Action name="new_display" />
-   <Action name="close_display" />
    <Action name="show_calibration" />
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Enable>*/
+        mSynchronizeGroups->setEnabled(true);
+mNewDisplay->setEnabled(true);
         mSkipChannels->setEnabled(true);
         mKeepChannels->setEnabled(true);
 
@@ -3432,11 +3431,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Disable>
   */
+        mSynchronizeGroups->setEnabled(false);
         mSkipChannels->setEnabled(false);
 
     } else if(state == QLatin1String("displayChannelState")) {
@@ -3452,11 +3451,12 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Disable>
   */
+
+        mSynchronizeGroups->setEnabled(false);
 
         mSkipChannels->setEnabled(false);
     } else if(state == QLatin1String("spikeChannelState")) {
@@ -3470,11 +3470,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Enable>
   */
+        mSynchronizeGroups->setEnabled(true);
         mKeepChannels->setEnabled(true);
         mSkipChannels->setEnabled(true);
 
@@ -3489,24 +3489,24 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="select" />
   </Enable>
   */
+        mSynchronizeGroups->setEnabled(true);
         mHideChannel->setEnabled(true);
         mSkipChannels->setEnabled(true);
         mKeepChannels->setEnabled(true);
 
     } else if(state == QLatin1String("noEditState")) {
         mKeepChannels->setEnabled(false);
+        mSynchronizeGroups->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="select" />
   </Disable>
