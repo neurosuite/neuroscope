@@ -199,6 +199,7 @@ void NeuroscopeApp::initActions()
     fileMenu->addSeparator();
 
     mQuitAction = fileMenu->addAction(tr("Quit"));
+    mQuitAction->setIcon(QPixmap(":/shared-icons/window-close"));
     mQuitAction->setShortcut(QKeySequence::Print);
     connect(mQuitAction, SIGNAL(triggered()), this, SLOT(close()));
 
