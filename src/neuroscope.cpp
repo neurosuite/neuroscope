@@ -1440,20 +1440,13 @@ void NeuroscopeApp::slotFileClose(){
                 }
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-            //remove all the displays
-            if(tabsParent){
-                //Remove the display from the group of tabs
-                while(true){
-                    int nbOfTabs = tabsParent->count();
-                    DockArea* current = static_cast<DockArea*>(tabsParent->widget(0));
-                    if(current == mainDock){
-                        current = static_cast<DockArea*>(tabsParent->widget(1));
-                    }
-                    tabsParent->removePage(current);
-                    delete current;
-                    if(nbOfTabs == 2)
-                        break; //the reminding one is the mainDock
-                }
+            //Remove the display from the group of tabs
+            while(true){
+                DockArea* current = static_cast<DockArea*>(tabsParent->widget(0));
+                tabsParent->removePage(current);
+                delete current;
+                if(tabsParent->count()==0)
+                    break;
             }
 
             //remove the cluster and event palettes if any
@@ -1471,11 +1464,7 @@ void NeuroscopeApp::slotFileClose(){
             //reset the channel palettes and hide the channel panels
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
-            //palettePanel->hide();
-            //KDAD_PENDING palettePanel->undock();
 
-            //Delete the view
-            delete mainDock;
             mainDock = 0L;
             doc->closeDocument();
             resetState();
