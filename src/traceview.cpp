@@ -97,7 +97,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     eventBeingModified(false),
     retrieveClusterData(false)
 {
-initialDragLine = false;
+    initialDragLine = false;
 
     QList<int>::iterator channelsToShowIterator;
     for(channelsToShowIterator = channelsToDisplay.begin(); channelsToShowIterator != channelsToDisplay.end(); ++channelsToShowIterator)
@@ -1943,7 +1943,6 @@ void TraceView::drawTimeLine(QPainter *painter){
     painter->setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
     painter->setViewport(viewport);
 
-    //KDAB_PENDING painter.setRasterOp(NotROP);
     painter->setPen(QPen(Qt::color0,1));
     painter->setBrush(Qt::NoBrush);
     int top = r.top();
@@ -2066,8 +2065,10 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
     //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport and included in the
     //values return par the event.
-    if(r.left() != 0) current = viewportToWorld(event->x(),event->y());
-    else current = viewportToWorld(event->x() - xMargin,event->y());
+    if(r.left() != 0)
+        current = viewportToWorld(event->x(),event->y());
+    else
+        current = viewportToWorld(event->x() - xMargin,event->y());
 
     int x = (current.x() - static_cast<int>(borderX));
 
@@ -2085,7 +2086,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             nbMiliseconds = 0;
             nbSeconds++;
         }
-        message = "Duration: "+ QString("%1 min %2 s %3 ms ").arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds);
+        message = tr("Duration: %1 min %2 s %3 ms ").arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds);
 
 
         int delta = current.y() - lastClickOrdinate;
@@ -2143,7 +2144,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                     nbSeconds++;
                 }
                 double totalNbSeconds = static_cast<double>(time /1000.000);
-                message = "Time : "+ QString("%1 min %2 s %3 ms (%4 s)").arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(totalNbSeconds,0,'f',3);
+                message = tr("Time : %1 min %2 s %3 ms (%4 s)").arg(nbMinutes).arg(nbSeconds).arg(nbMiliseconds).arg(totalNbSeconds,0,'f',3);
             }
         }
     }
@@ -2323,7 +2324,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     //Paint the line while dragging
     if(mode == DRAW_LINE && (event->buttons() == Qt::LeftButton)){
         if(!linePositions.isEmpty()) {
-            initialDragLine = x;
+            previousDragAbscissa = x;
             initialDragLine = false;
             update();
         }
