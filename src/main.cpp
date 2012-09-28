@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
 
          }
          // Nothing know. Treat it as path.
-         if (!handled || (n == 1) )
+         qDebug()<<" n "<<n;
+         if (!handled || (n == 2) )
              file = args.at(i);
     }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
