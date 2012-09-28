@@ -842,7 +842,7 @@ void NeuroscopeApp::initializePreferences(){
 
 void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
                                 QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
-{ 
+{
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
 
@@ -989,7 +989,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             resetState();
             return;
         }
-        
+
 
 
         //update the spike and event browsing status
@@ -1226,7 +1226,7 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Opening file..."));
 
     const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
-                                             tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files") );
+                                                   tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files") );
     if(!url.isEmpty())
     {
         openDocumentFile(url);
@@ -1239,7 +1239,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
-                                                   tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"));
+                                                         tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"));
     if(!urls.isEmpty())
     {
         loadClusterFiles(urls);
@@ -1253,7 +1253,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
-                                                   tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"));
+                                                         tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"));
     if(!urls.isEmpty())
     {
         loadEventFiles(urls);
@@ -1330,7 +1330,7 @@ void NeuroscopeApp::slotFileOpenRecent(const QString& url){
     slotStatusMsg(tr("Ready."));
 }
 
-void NeuroscopeApp::slotFileClose(){ 
+void NeuroscopeApp::slotFileClose(){
     if(doc != 0){
         QApplication::restoreOverrideCursor();
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -1377,8 +1377,8 @@ void NeuroscopeApp::slotFileClose(){
                     if(saveStatus != NeuroscopeDoc::OK){
                         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
                             message = tr("The current session could not be saved possibly because of insufficient file access permissions."
-                                    " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
-                                    "Close anyway ?");
+                                         " You may consider saving your session file to another location using the Save As entry in the File menu.\n"
+                                         "Close anyway ?");
                             title = tr("I/O Error !");
                         }
                         else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
@@ -2302,7 +2302,7 @@ void NeuroscopeApp::slotApplySpikeColor(){
 }
 
 
-void NeuroscopeApp::slotDisplayClose(){   
+void NeuroscopeApp::slotDisplayClose(){
     DockArea* current;
 
     slotStatusMsg(tr("Closing display..."));
@@ -2459,7 +2459,7 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
 
         bool ok;
         const QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
-                                                 tabsParent->tabText(index),&ok,this);
+                                                       tabsParent->tabText(index),&ok,this);
         if(ok&& !newLabel.isEmpty()){
             tabsParent->setTabText(index,newLabel);
             activeView()->setTabName(newLabel);
@@ -2640,7 +2640,7 @@ void NeuroscopeApp::slotDecreaseSelectedChannelsAmplitude(){
         activeView()->decreaseSelectedChannelsAmplitude(displayChannelPalette->selectedChannels());
 }
 
-void NeuroscopeApp::saveSession(){  
+void NeuroscopeApp::saveSession(){
     //Save the event files if need it
     if(eventsModified){
         int eventSaveStatus = doc->saveEventFiles();
@@ -2835,7 +2835,7 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
 }
 
 
-void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){  
+void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->name();
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
@@ -3244,7 +3244,7 @@ void NeuroscopeApp::slotEventGroupSelected(QString eventGroupName){
     view->eventToAddProperties(eventProvider,eventLabelToCreate);
 }
 
-void NeuroscopeApp::slotEventAdded(QString providerName,QString addEventDescription,double time){  
+void NeuroscopeApp::slotEventAdded(QString providerName,QString addEventDescription,double time){
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;
@@ -3303,18 +3303,19 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mUndo->setEnabled(false);
         mRedo->setEnabled(false);
 
+        mCloseCluster->setEnabled(false);
+        mSelectAllExcept0And1->setEnabled(false);
+        mCreateEventFile->setEnabled(false);
+        mCloseEvent->setEnabled(false);
+        mProperties->setEnabled(false);
+        mLoadPositionFile->setEnabled(false);
+        mClosePositionFile->setEnabled(false);
+        mZoomTool->setEnabled(false);
         /*
 <State name="initState" >
   <Disable>
-   <Action name="close_cluster_file" />
-   <Action name="close_event_file" />
-   <Action name="file_properties" />
    <Action name="load_cluster_files" />
    <Action name="load_event_files" />
-   <Action name="load_position_file" />
-   <Action name="close_position_file" />
-   <Action name="create_event_file" />
-   <Action name="zoom" />
    <Action name="select" />
    <Action name="measure" />
    <Action name="time" />
@@ -3323,7 +3324,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="grey_scale"/>
    <Action name="create_group"/>
    <Action name="edit_select_all"/>
-   <Action name="edit_select_all_except01"/>
    <Action name="edit_deselect_all"/>
    <Action name="display_mode"/>
    <Action name="increase_all_channels"/>
@@ -3340,7 +3340,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="show_labels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
@@ -3352,20 +3351,23 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="rename_display" />
    <Action name="close_display" />
    <Action name="show_calibration" />
-   <Action name="show_next_event" />
-   <Action name="show_previous_event" />
-   <Action name="remove_event" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
    <Action name="position_view"/>
    <Action name="show_events"/>
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Disable>
  </State>
  */
+        mHideChannel->setEnabled(false);
+        mSkipChannels->setEnabled(false);
+        mRemoveEvent->setEnabled(false);
+        mKeepChannels->setEnabled(false);
+        mPreviousEvent->setEnabled(false);
+
+        mNextEvent->setEnabled(false);
+
     } else if(state == QLatin1String("documentState")) {
         mOpenAction->setEnabled(true);
         mFileOpenRecent->setEnabled(true);
@@ -3373,16 +3375,18 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mSaveAsAction->setEnabled(true);
         mPrintAction->setEnabled(true);
         mCloseAction->setEnabled(true);
+        mCloseCluster->setEnabled(true);
+        mCreateEventFile->setEnabled(true);
+        mCloseEvent->setEnabled(true);
+        mProperties->setEnabled(true);
+        mLoadPositionFile->setEnabled(true);
+        mZoomTool->setEnabled(true);
+        mHideChannel->setEnabled(true);
+
         /*
   <Enable>
-   <Action name="file_properties" />
    <Action name="load_cluster_files" />
    <Action name="load_event_files" />
-   <Action name="create_event_file" />
-   <Action name="close_cluster_file" />
-   <Action name="close_event_file" />
-   <Action name="load_position_file" />
-   <Action name="zoom" />
    <Action name="select" />
    <Action name="measure" />
    <Action name="time" />
@@ -3399,7 +3403,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="show_labels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
@@ -3410,71 +3413,75 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="new_display" />
    <Action name="close_display" />
    <Action name="show_calibration" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Enable>*/
+        mSkipChannels->setEnabled(true);
+        mKeepChannels->setEnabled(true);
 
     } else if(state == QLatin1String("noChannelState")) {
+        mKeepChannels->setEnabled(false);
+        mHideChannel->setEnabled(false);
+
         /*
   <Disable>
    <Action name="create_group"/>
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
   </Disable>
   */
+        mSkipChannels->setEnabled(false);
+
     } else if(state == QLatin1String("displayChannelState")) {
+        mKeepChannels->setEnabled(false);
+        mHideChannel->setEnabled(false);
+
         /*
   <Disable>
    <Action name="create_group"/>
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
   </Disable>
   */
+
+        mSkipChannels->setEnabled(false);
     } else if(state == QLatin1String("spikeChannelState")) {
+        mHideChannel->setEnabled(true);
         /*
   <Enable>
    <Action name="create_group"/>
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="reset_gains" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
   </Enable>
-  <Disable>
-   <Action name="edit_select_all_except01"/>
-   <Action name="close_cluster_file" />
-   <Action name="close_event_file" />
-  </Disable>
   */
+        mKeepChannels->setEnabled(true);
+        mSkipChannels->setEnabled(true);
+
+        mCloseEvent->setEnabled(false);
+        mSelectAllExcept0And1->setEnabled(false);
+
+        mCloseCluster->setEnabled(false);
     } else if(state == QLatin1String("editState")) {
         /*
   <Enable>
@@ -3482,29 +3489,31 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="select" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
   </Enable>
   */
+        mHideChannel->setEnabled(true);
+        mSkipChannels->setEnabled(true);
+        mKeepChannels->setEnabled(true);
+
     } else if(state == QLatin1String("noEditState")) {
+        mKeepChannels->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
    <Action name="discard_channels"/>
    <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="hide_channels"/>
    <Action name="synchronize" />
    <Action name="reset_offsets" />
    <Action name="select" />
-   <Action name="keep_channels" />
-   <Action name="skip_channels" />
   </Disable>
   */
+        mHideChannel->setEnabled(false);
+        mSkipChannels->setEnabled(false);
+
     } else if(state == QLatin1String("enableEditState")) {
         editMode->setEnabled(true);
     } else if(state == QLatin1String("tabState")) {
@@ -3523,15 +3532,9 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
  <
  */
     } else if(state == QLatin1String("clusterTabState")) {
-/*
-  <Enable>
-   <Action name="edit_select_all_except01"/>
-   <Action name="close_cluster_file" />
-  </Enable>
-  <Disable>
-   <Action name="close_event_file" />
-  </Disable>
-  */
+        mCloseCluster->setEnabled(true);
+        mSelectAllExcept0And1->setEnabled(true);
+        mCloseEvent->setEnabled(false);
     } else if(state == QLatin1String("clusterState")) {
         /*
   <Enable>
@@ -3581,10 +3584,10 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
   </Enable>
   */
     } else if(state == QLatin1String("eventState")) {
+        mRemoveEvent->setEnabled(true);
         /*
   <Enable>
    <Action name="select_event" />
-   <Action name="remove_event" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
   </Enable>
@@ -3592,49 +3595,41 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("noEventState")) {
         mUndo->setEnabled(false);
         mRedo->setEnabled(false);
+        mNextEvent->setEnabled(false);
+        mPreviousEvent->setEnabled(false);
+
+
         /*
   <Disable>
-   <Action name="show_next_event" />
-   <Action name="show_previous_event" />
    <Action name="select_event" />
-   <Action name="remove_event" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
    <Action name="show_events"/>
   </Disable>
   */
+        mRemoveEvent->setEnabled(false);
     } else if(state == QLatin1String("noEventBrowsingState")) {
-        /*
-  <Disable>
-   <Action name="show_next_event" />
-   <Action name="show_previous_event" />
-  </Disable>
-  */
+        mNextEvent->setEnabled(false);
+        mPreviousEvent->setEnabled(false);
     } else if(state == QLatin1String("eventBrowsingState")) {
-        /*
-  <Enable>
-   <Action name="show_next_event" />
-   <Action name="show_previous_event" />
-  </Enable>
-  */
+        mNextEvent->setEnabled(true);
+        mPreviousEvent->setEnabled(true);
     } else if(state == QLatin1String("positionState")) {
+        mClosePositionFile->setEnabled(true);
+
         /*
   <Enable>
-    <Action name="close_position_file" />
     <Action name="position_view"/>
   </Enable>
-  <Disable>
-   <Action name="load_position_file" />
-  </Disable>
 
   */
+        mLoadPositionFile->setEnabled(false);
+
     } else if(state == QLatin1String("noPositionState")) {
+        mLoadPositionFile->setEnabled(true);
+        mClosePositionFile->setEnabled(false);
         /*
-  <Enable>
-    <Action name="load_position_file" />
-  </Enable>
   <Disable>
-   <Action name="close_position_file" />
    <Action name="position_view"/>
   </Disable>
 */
@@ -3642,15 +3637,13 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("eventsInPositionViewEnableState")) {
         showEventsInPositionView->setEnabled(true);
     } else if(state == QLatin1String("eventTabState")) {
+        mSelectAllExcept0And1->setEnabled(false);
+        mCloseEvent->setEnabled(true);
         /*
   <Enable>
-   <Action name="close_event_file" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
   </Enable>
-  <Disable>
-   <Action name="edit_select_all_except01"/>
-  </Disable>
  </State>
 */
         mCloseCluster->setEnabled(false);
