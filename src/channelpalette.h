@@ -173,7 +173,7 @@ protected Q_SLOTS:
     virtual void slotRightPressed(Q3IconViewItem* item);
     virtual void slotMousePressed(int button,Q3IconViewItem* item);
     void slotMousePressed(QString sourceGroupName);
-    virtual void slotMidButtonPressed(QString sourceGroupId);
+    virtual void slotMidButtonPressed(const QString &sourceGroupId);
     virtual void slotClickRedraw();
     virtual void languageChange();
     virtual void createGroup(int id);

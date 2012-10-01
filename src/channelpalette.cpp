@@ -274,7 +274,7 @@ void ChannelPalette::slotMousePressed(QString sourceGroupName){
     }
 }
 
-void ChannelPalette::slotMidButtonPressed(QString sourceGroupId){
+void ChannelPalette::slotMidButtonPressed(const QString &sourceGroupId){
     //Change the color of the group, take the first channel of the group.
     ChannelIconView* iconView = iconviewDict[sourceGroupId];
     Q3IconViewItem* item = iconView->firstItem();

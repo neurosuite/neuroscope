@@ -126,7 +126,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
-    void slotMidButtonPressed(QString sourceGroupName);
+    void slotMidButtonPressed(const QString& sourceGroupName);
     void slotClickRedraw();
     void languageChange();
     void resizeEvent(QResizeEvent* event);
@@ -241,8 +241,8 @@ public:
         QLabel(text,parent){}
 
 Q_SIGNALS:
-    void leftClickOnLabel(QString sourceId,bool shiftKey,bool ctrlAlt);
-    void middleClickOnLabel(QString sourceId);
+    void leftClickOnLabel(const QString& sourceId,bool shiftKey,bool ctrlAlt);
+    void middleClickOnLabel(const QString& sourceId);
 
 protected:
     virtual inline void mousePressEvent(QMouseEvent* e){

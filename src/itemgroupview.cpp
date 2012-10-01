@@ -17,4 +17,62 @@
 
 #include "itemgroupview.h"
 
+ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
+    :QWidget(parent),
+      iconView(0L),
+      init(true)
+{
+    mLayout = new QHBoxLayout;
+    mLayout->setMargin(0);
+    mLayout->setSpacing(0);
+
+    setAutoFillBackground(true);
+    setLayout(mLayout);
+    //Set the groupview color, the foreground color depends on the background color
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    int h;
+    int s;
+    int v;
+    backgroundColor.getHsv(&h,&s,&v);
+    QColor legendColor;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
+    palette.setColor(foregroundRole(), legendColor);
+    setPalette(palette);
+
+    adjustSize();
+
+    setAcceptDrops(TRUE);
+}
+
+ItemGroupView::~ItemGroupView()
+{
+    qDebug()<<"in ~ItemGroupView()";
+}
+
+void ItemGroupView::setIconView(Q3IconView* view){
+    iconView = view;
+    mLayout->addWidget(iconView);
+}
+
+void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
+    if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
+        init = false;
+        int futurWidth = parentWidth ;
+
+        setFixedWidth(futurWidth);
+        int viewfuturWidth = width() - labelSize - 6;//give so space on the right
+        iconView->setFixedWidth(viewfuturWidth);
+
+        if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+            setFixedHeight(iconView->contentsHeight());
+    }
+    //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate
+    if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+        setFixedHeight(iconView->contentsHeight());
+}
+
+
 #include "itemgroupview.moc"

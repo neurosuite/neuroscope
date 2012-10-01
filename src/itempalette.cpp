@@ -709,7 +709,7 @@ void ItemPalette::changeColor(Q3IconViewItem* item,QString groupName){
     }
 }
 
-void ItemPalette::slotMidButtonPressed(QString groupName){
+void ItemPalette::slotMidButtonPressed(const QString& groupName){
 
 }
 

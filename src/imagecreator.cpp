@@ -23,8 +23,14 @@
 #include <QPixmap>
 
 
-ImageCreator::ImageCreator(PositionsProvider& provider, int width, int height, QString backgroundImage, QColor backgroundColor, const QColor &foregroundColor)
-    :positionsProvider(provider),width(width),height(height),backgroundImage(backgroundImage),backgroundColor(backgroundColor),foregroundColor(foregroundColor){
+ImageCreator::ImageCreator(PositionsProvider& provider, int width, int height, const QString& backgroundImage, const QColor& backgroundColor, const QColor &foregroundColor)
+    :positionsProvider(provider),
+      width(width),
+      height(height),
+      backgroundImage(backgroundImage),
+      backgroundColor(backgroundColor),
+      foregroundColor(foregroundColor)
+{
     nbSpots = positionsProvider.getNbSpots();
 
     //Set Connection.

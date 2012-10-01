@@ -49,7 +49,7 @@ public:
    * @param backgroundColor color used as the image background if no image has been set.
    * @param foregroundColor color used as the image foreground.
    */
-    ImageCreator(PositionsProvider& provider,int width,int height,QString backgroundImage=QString(),QColor backgroundColor = Qt::black,const QColor& foregroundColor = "#BFBFBF");
+    explicit ImageCreator(PositionsProvider& provider,int width,int height,const QString& backgroundImage=QString(),const QColor& backgroundColor = Qt::black,const QColor& foregroundColor = "#BFBFBF");
     ~ImageCreator();
 
     /**Creates an image containg all the positions of a given position file.*/

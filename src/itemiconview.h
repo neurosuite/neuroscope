@@ -34,17 +34,12 @@
 class ItemIconView : public Q3IconView  {
     Q_OBJECT
 public:
-    ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
-    inline ~ItemIconView(){}
+    explicit ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
+    ~ItemIconView(){}
 
 private Q_SLOTS:
-    inline void slotMousePressed(int button,Q3IconViewItem* item){
-        emit mouseButtonPressed(button,item,this->objectName());
-    }
-    inline void contentsMouseReleaseEvent(QMouseEvent* event){
-        Q3IconView::contentsMouseReleaseEvent(event);
-        emit mouseReleased(this->objectName());
-    }
+    void slotMousePressed(int button,Q3IconViewItem* item);
+    void contentsMouseReleaseEvent(QMouseEvent* event);
 
 
 protected:

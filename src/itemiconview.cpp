@@ -97,5 +97,14 @@ void ItemIconView::contentsMousePressEvent(QMouseEvent* event){
 }
 
 
+void ItemIconView::slotMousePressed(int button,Q3IconViewItem* item){
+    emit mouseButtonPressed(button,item,this->objectName());
+}
+
+void ItemIconView::contentsMouseReleaseEvent(QMouseEvent* event){
+    Q3IconView::contentsMouseReleaseEvent(event);
+    emit mouseReleased(this->objectName());
+}
+
 
 #include "itemiconview.moc"
