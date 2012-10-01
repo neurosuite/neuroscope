@@ -85,11 +85,11 @@ public:
   * to the part of the drawing which will actually be drawn onto the widget).
   * @param border size of the border between the frame and the contents.
   */
-    TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
-                bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int gain,int acquisitionGain,ChannelColors* channelColors,
-                QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,QList<int>& channelOffsets,
-                QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,QImage backgroundImage, QWidget* parent=0, const char* name=0,QColor backgroundColor = Qt::black,
-                QStatusBar* statusBar = 0L,int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
+    TraceWidget(long startTime, long duration, bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
+                bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int gain, int acquisitionGain, ChannelColors* channelColors,
+                QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups, QList<int>& channelOffsets,
+                QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor &backgroundColor = Qt::black,
+                QStatusBar* statusBar = 0L, int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
                 int windowBottomRight = 1001, int border = 0);
 
     ~TraceWidget();
@@ -184,7 +184,7 @@ public Q_SLOTS:
   * @param name name use to identified the cluster provider containing the clusters to show.
   * @param clustersToShow new list of clusters to be shown.
   */
-    inline void showClusters(QString name,QList<int>& clustersToShow){
+    inline void showClusters(const QString& name, const QList<int>& clustersToShow){
         view.showClusters(name,clustersToShow);
     }
 

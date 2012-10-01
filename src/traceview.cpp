@@ -48,7 +48,7 @@ const int TraceView::YMARGIN = 0;
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
                      bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
                      ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent, const char* name,QColor backgroundColor,QStatusBar* statusBar,
+                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent, const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                      int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
     BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
     greyScaleMode(greyScale),
@@ -2152,7 +2152,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     statusBar->showMessage(message);
 
     //Paint the channels selected while dragging
-    if(mode == SELECT && selectedChannels.size() != 0 && (event->buttons() == Qt::LeftButton)){
+    if(mode == SELECT && !selectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
         QPainter painter;
         painter.begin(this);
         //set the window (part of the world I want to show)
@@ -2345,7 +2345,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
 
         QPair<QString,int> deselectedEvent(selectedEvent.first,selectedEvent.second);
         int deselectedEventIndex = 0;
-        if(!selectedEventPosition.isEmpty()) deselectedEventIndex = selectedEventPosition[0];
+        if(!selectedEventPosition.isEmpty())
+            deselectedEventIndex = selectedEventPosition[0];
 
         if(mode == SELECT && !shownChannels.isEmpty() || mode == MEASURE || mode == SELECT_TIME || mode == SELECT_EVENT || mode == ADD_EVENT || mode == DRAW_LINE){
             QRect r((QRect)window);
@@ -2500,7 +2501,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
-                                for(it = selectedChannels.begin();it != selectedChannels.end();++it) deselectedChannels.append(*it);
+                                for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+                                    deselectedChannels.append(*it);
                                 selectedChannels.clear();
                             }
                             else{
@@ -2523,7 +2525,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 }
                             }
                         }
-                        else if((event->modifiers() & Qt::ShiftModifier) && selectedChannels.size() != 0){
+                        else if((event->modifiers() & Qt::ShiftModifier) && !selectedChannels.isEmpty()){
                             //take all the channels, not skipped of groupId with a label ordinate in the range defined by the label ordinate of the last
                             //selected channel and the one of the currently selected channel.
                             if(labelSelected){
@@ -3113,7 +3115,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     QPoint p2(viewport.right() - labelSize,viewport.bottom() - 30 - worldToViewportHeight(nbRU));
     painter.drawLine(p1,p2);
     QPoint pTextVoltage(viewport.right() - fontInfo.pixelSize() * 11,viewport.bottom() - 30);
-    painter.drawText(pTextVoltage,QString("%1 mV (x%2)").arg(screenGain,0,'f',1).arg(gain,0,'f',2));
+    painter.drawText(pTextVoltage,tr("%1 mV (x%2)").arg(screenGain,0,'f',1).arg(gain,0,'f',2));
 
     //draw the time calibration bar (a 20iest of the timeframe)
     long timeFrameWidth = endTime - startTime;
@@ -3129,7 +3131,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     QPoint p4(viewport.right() - labelSize - barLengthInpx,viewport.bottom() - 30);
     painter.drawLine(p3,p4);
     QPoint pTextTime(viewport.right() - labelSize - barLengthInpx + 8,viewport.bottom() - 15);
-    painter.drawText(pTextTime,QString("%1 ms").arg(barLengthInMs));
+    painter.drawText(pTextTime,tr("%1 ms").arg(barLengthInMs));
 }
 
 void TraceView::correctZoom(QRect& r){
@@ -3486,13 +3488,13 @@ void TraceView::removeClusterProvider(const QString &name, bool active){
 }
 
 
-void TraceView::showClusters(QString name,QList<int>& clustersToShow){
+void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){
     ClusterData* clusterData;
     clusterData = clustersData[name];
 
     QList<int> clusters;
     if(clustersToShow.size() != 0){
-        QList<int>::iterator shownClustersIterator;
+        QList<int>::ConstIterator shownClustersIterator;
         for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
             clusters.append(*shownClustersIterator);
         }

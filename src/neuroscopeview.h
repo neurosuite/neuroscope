@@ -750,7 +750,7 @@ Q_SIGNALS:
                             QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip);
     void newSamplingRate(long long recordingLength);
     void clusterProviderRemoved(QString name,bool active);
-    void showClusters(QString name,QList<int>& clustersToShow);
+    void showClusters(const QString& name,const QList<int>& clustersToShow);
     void clusterColorUpdated(QString name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();

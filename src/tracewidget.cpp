@@ -34,8 +34,8 @@
 TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                          bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int gain,int acquisitionGain,
                          ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,
-                         QMap<int,int>* channelsGroups,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,QImage backgroundImage,QWidget* parent,
-                         const char* name,QColor backgroundColor,QStatusBar* statusBar,
+                         QMap<int,int>* channelsGroups,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
+                         const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                          int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
    QWidget(parent),timeWindow(duration),
     view(tracesProvider,greyScale,multiColumns,verticalLines,raster,waveforms,labelsDisplay,channelsToDisplay,gain,acquisitionGain,
@@ -162,12 +162,12 @@ void TraceWidget::initSelectionWidgets(){
 
     startMinute = new QSpinBox(0,minutePart,1,selectionWidgets,"minStart");
     lay->addWidget(startMinute);
-    startMinute->setSuffix( " min" );
+    startMinute->setSuffix( tr(" min") );
     startMinute->setWrapping(true);
     startMinute->setValue(nbMinutes);
     startSecond = new QSpinBox(0,recordingLength/1000,1,selectionWidgets,"sStart");
     lay->addWidget(startSecond);
-    startSecond->setSuffix( " s" );
+    startSecond->setSuffix( tr(" s") );
     startSecond->setValue(nbSeconds);
     startMilisecond = new QSpinBox(0,recordingLength,1,selectionWidgets,"msStart");
     lay->addWidget(startMilisecond);
@@ -175,7 +175,7 @@ void TraceWidget::initSelectionWidgets(){
     startMilisecond->setValue(remainingMiliseconds);
 
 
-    durationLabel = new QLabel("  Duration (ms)",selectionWidgets);
+    durationLabel = new QLabel(tr("  Duration (ms)"),selectionWidgets);
     lay->addWidget(durationLabel);
     durationLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     durationLabel->setFont(font);

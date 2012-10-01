@@ -24,6 +24,7 @@
 #include <q3dict.h>
 #include <QPair>
 #include <QImage>
+#include <QDebug>
 //Added by qt3to4:
 #include <QList>
 #include <QResizeEvent>
@@ -90,7 +91,7 @@ public:
     TraceView(TracesProvider& tracesProvider, bool greyScale, bool multiColumns, bool verticalLines,
               bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int unitGain, int acquisitionGain, long start, long timeFrameWidth,
               ChannelColors* channelColors, QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
-              QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, QColor backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
+              QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor& backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
               int minSize = 500, int maxSize = 4000, int windowTopLeft = -500, int windowBottomRight = 1001, int border = 0);
 
 
@@ -319,7 +320,7 @@ public:
   * @param name name use to identified the cluster provider containing the clusters to show.
   * @param clustersToShow new list of clusters to be shown.
   */
-    void showClusters(QString name,QList<int>& clustersToShow);
+    void showClusters(const QString& name,const QList<int>& clustersToShow);
 
     /**Changes the color of a cluster.
   * @param name name use to identified the cluster provider containing the updated cluster.
@@ -529,6 +530,7 @@ public Q_SLOTS:
   * @param eventDescription description of the next event to be created.
   */
     inline void eventToAddProperties(QString providerName,QString eventDescription){
+	    qDebug()<<" eventToAddProperties***********************"<<providerName;
         //If an event is being modified, this function can be called with eventDescription set to empty,
         //this should not be taken into account.
         if(!eventBeingModified){
