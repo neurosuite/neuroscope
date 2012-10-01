@@ -1792,8 +1792,8 @@ void NeuroscopeApp::displayFileProperties(int channelNb,double SR,int resolution
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
-void NeuroscopeApp::setFileProperties(QString channelNb,QString SR,QString resolution,QString offset,QString voltageRange,
-                                      QString amplification,QString screenGain,QString timeWindow){
+void NeuroscopeApp::setFileProperties(const QString& channelNb,const QString& SR,const QString& resolution,const QString& offset,const QString& voltageRange,
+                                      const QString& amplification,const QString& screenGain,const QString& timeWindow){
     //If the the number of channels has not been provided, the parameter equals 0.
     if(channelNb.toInt() != 0){
         doc->setChannelNb(channelNb.toInt());

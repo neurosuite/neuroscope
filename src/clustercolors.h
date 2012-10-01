@@ -38,7 +38,7 @@ public:
 
     ClusterColors();
     virtual ~ClusterColors();
-    ClusterColors(const ClusterColors& clustercolors);
+    explicit ClusterColors(const ClusterColors& clustercolors);
 
 public:
 

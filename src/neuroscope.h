@@ -59,13 +59,13 @@ class NeuroscopeApp : public QMainWindow
 public:
     /** Construtor of NeuroscopeApp, calls all init functions to create the application.
      */
-    NeuroscopeApp();
+    explicit NeuroscopeApp();
     ~NeuroscopeApp();
 
     /**Opens a file, only one document at the time is allowed.
     * Asking for a new one will open a new instance of the application with it.
     */
-    void openDocumentFile(const QString& url=0);
+    void openDocumentFile(const QString& url=QString());
     
     /** Returns a pointer to the current document connected to the NeuroscopeApp instance and is used by
      * the View class to access the document object's methods
@@ -88,8 +88,8 @@ public:
     * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
     * @param timeWindow initial time window in miliseconds.
     */
-    void setFileProperties(QString channelNb,QString SR,QString resolution,QString offset,QString voltageRange,
-                           QString amplification,QString screenGain,QString timeWindow);
+    void setFileProperties(const QString& channelNb,const QString& SR,const QString& resolution,const QString& offset,const QString& voltageRange,
+                           const QString& amplification,const QString& screenGain,const QString& timeWindow);
 
     /**Displays the properties which will be used for the current file
     * (number of channels, sampling rate of the dat file and eeg file). This dialog is only presented at the opening
