@@ -67,10 +67,10 @@ bool SessionXmlWriter::writeTofile(const QString& url){
     return true;
 }
 
-void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
+void SessionXmlWriter::setLoadedFilesInformation(const QList<SessionFile>& fileList){
     loadedFiles = doc.createElement(FILES);
 
-    QList<SessionFile>::iterator iterator;
+    QList<SessionFile>::ConstIterator iterator;
     for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
         //Get the file information
         QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
@@ -127,11 +127,11 @@ void SessionXmlWriter::setLoadedFilesInformation(QList<SessionFile> fileList){
     }
 }
 
-void SessionXmlWriter::setDisplayInformation(QList<DisplayInformation> displayList){
+void SessionXmlWriter::setDisplayInformation(const QList<DisplayInformation>& displayList){
     displays = doc.createElement(DISPLAYS);
 
-    QList<DisplayInformation>::iterator iterator;
-    for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator){
+    QList<DisplayInformation>::ConstIterator iterator;
+    for(iterator = displayList.constBegin(); iterator != displayList.constEnd(); ++iterator){
 
         QDomElement displayElement = doc.createElement(neuroscope::DISPLAY);
 

@@ -26,7 +26,7 @@
 
 
 
-PositionsProvider::PositionsProvider(QString fileUrl,double samplingRate,int width,int height,int rotation,int flip):
+PositionsProvider::PositionsProvider(const QString &fileUrl, double samplingRate, int width, int height, int rotation, int flip):
     DataProvider(fileUrl),samplingRate(samplingRate),width(width),height(height),rotation(rotation),flip(flip) {
 
     name = fileUrl;

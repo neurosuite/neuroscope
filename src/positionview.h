@@ -64,8 +64,8 @@ public:
   * @param maxSize maximum size of the view.
   * @param border size of the border between the frame and the contents.
   */
-    PositionView(PositionsProvider& provider,GlobalEventsProvider& globalEventProvider,QImage backgroundImage,long start,long timeFrameWidth,bool showEvents,int windowTopLeft = -500,int windowBottomRight = 1001,QWidget *parent=0, const char *name=0,
-                 QColor backgroundColor = Qt::black, int minSize = 100, int maxSize = 4000, int border = 0);
+    explicit PositionView(PositionsProvider& provider, GlobalEventsProvider& globalEventProvider, const QImage &backgroundImage, long start, long timeFrameWidth, bool showEvents, int windowTopLeft = -500, int windowBottomRight = 1001, QWidget *parent=0, const char *name=0,
+                 const QColor &backgroundColor = Qt::black, int minSize = 100, int maxSize = 4000, int border = 0);
     ~PositionView();
 
 public Q_SLOTS:  

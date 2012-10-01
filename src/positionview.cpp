@@ -30,8 +30,8 @@
 
 
 
-PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& globalEventProvider,QImage backgroundImage,long start,long timeFrameWidth,bool showEvents,int windowTopLeft,
-                           int windowBottomRight,QWidget* parent,const char* name,QColor backgroundColor,int minSize,int maxSize,
+PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& globalEventProvider,const QImage& backgroundImage,long start,long timeFrameWidth,bool showEvents,int windowTopLeft,
+                           int windowBottomRight,QWidget* parent,const char* name,const QColor &backgroundColor,int minSize,int maxSize,
                            int border) :
     BaseFrame(0,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
     background(backgroundImage),dataReady(false),isInit(true),resized(false),positionsProvider(provider),globalEventProvider(globalEventProvider),showEvents(showEvents) {

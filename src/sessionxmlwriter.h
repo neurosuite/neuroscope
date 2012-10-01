@@ -57,13 +57,13 @@ public:
   * cluster, spike or event files.
   * @param fileList list of files loaded during the session.
   */
-    void setLoadedFilesInformation(QList<SessionFile> fileList);
+    void setLoadedFilesInformation(const QList<SessionFile> &fileList);
 
     /**
   * Creates the elements related to the displays.
   * @param displayList list of DisplayInformation given the information on each display.
   */
-    void setDisplayInformation(QList<DisplayInformation> displayList);
+    void setDisplayInformation(const QList<DisplayInformation> &displayList);
 
 private:
 
