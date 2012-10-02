@@ -3315,9 +3315,9 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mLoadClusterFiles->setEnabled(false);
         mLoadEventFiles->setEnabled(false);
         greyScale->setEnabled(false);
-    mNewDisplay->setEnabled(false);
-    mRenameActiveDisplay->setEnabled(false);
-    mCloseActiveDisplay->setEnabled(false);
+        mNewDisplay->setEnabled(false);
+        mRenameActiveDisplay->setEnabled(false);
+        mCloseActiveDisplay->setEnabled(false);
         /*
 <State name="initState" >
   <Disable>
@@ -3334,32 +3334,34 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="decrease_all_channels"/>
    <Action name="increase_selected_channels"/>
    <Action name="decrease_selected_channels"/>
-   <Action name="vertical_lines"/>
    <Action name="raster"/>
-   <Action name="waveforms"/>
-   <Action name="increase_raster_height"/>
-   <Action name="decrease_raster_height"/>
-   <Action name="show_next_cluster" />
-   <Action name="show_previous_cluster" />
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
    <Action name="show_labels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="reset_offsets" />
    <Action name="reset_gains" />
    <Action name="show_calibration" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
-   <Action name="position_view"/>
    <Action name="show_events"/>
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Disable>
  </State>
  */
+        mDiscardChannels->setEnabled(false);
+        mResetSelectedChannel->setEnabled(false);
+        mRemoveChannelFromGroup->setEnabled(false);
+
+        clusterWaveforms->setEnabled(false);
+        clusterVerticalLines->setEnabled(false);
+        mNextSpike->setEnabled(false);
+
+        mPreviousSpike->setEnabled(false);
+        mDecreaseHeight->setEnabled(false);
+        mIncreaseHeight->setEnabled(false);
+        positionViewToggle->setEnabled(false);
         mSynchronizeGroups->setEnabled(false);
         mHideChannel->setEnabled(false);
         mSkipChannels->setEnabled(false);
@@ -3383,11 +3385,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mLoadPositionFile->setEnabled(true);
         mZoomTool->setEnabled(true);
         mHideChannel->setEnabled(true);
-mLoadClusterFiles->setEnabled(true);
-mLoadEventFiles->setEnabled(true);
-greyScale->setEnabled(true);
-mCloseActiveDisplay->setEnabled(true);
-/*
+        mLoadClusterFiles->setEnabled(true);
+        mLoadEventFiles->setEnabled(true);
+        greyScale->setEnabled(true);
+        mCloseActiveDisplay->setEnabled(true);
+        /*
   <Enable>
    <Action name="select" />
    <Action name="measure" />
@@ -3401,80 +3403,79 @@ mCloseActiveDisplay->setEnabled(true);
    <Action name="decrease_all_channels"/>
    <Action name="increase_selected_channels"/>
    <Action name="decrease_selected_channels"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
    <Action name="show_labels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="reset_offsets" />
     <Action name="reset_gains" />
    <Action name="show_calibration" />
    <Action name="set_default_offsets" />
    <Action name="set_default_offsets_0" />
   </Enable>*/
+        mDiscardChannels->setEnabled(true);
+        mResetSelectedChannel->setEnabled(true);
+        mRemoveChannelFromGroup->setEnabled(true);
         mSynchronizeGroups->setEnabled(true);
-mNewDisplay->setEnabled(true);
+        mNewDisplay->setEnabled(true);
         mSkipChannels->setEnabled(true);
         mKeepChannels->setEnabled(true);
 
     } else if(state == QLatin1String("noChannelState")) {
         mKeepChannels->setEnabled(false);
         mHideChannel->setEnabled(false);
-
+mDiscardChannels->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Disable>
   */
+mResetSelectedChannel->setEnabled(false);
+mRemoveChannelFromGroup->setEnabled(false);
+
         mSynchronizeGroups->setEnabled(false);
         mSkipChannels->setEnabled(false);
 
     } else if(state == QLatin1String("displayChannelState")) {
         mKeepChannels->setEnabled(false);
         mHideChannel->setEnabled(false);
+        mRemoveChannelFromGroup->setEnabled(false);
 
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Disable>
   */
-
+mDiscardChannels->setEnabled(false);
+mResetSelectedChannel->setEnabled(false);
         mSynchronizeGroups->setEnabled(false);
 
         mSkipChannels->setEnabled(false);
     } else if(state == QLatin1String("spikeChannelState")) {
         mHideChannel->setEnabled(true);
+        mRemoveChannelFromGroup->setEnabled(true);
+        mDiscardChannels->setEnabled(true);
         /*
   <Enable>
    <Action name="create_group"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
    <Action name="apply_display_color"/>
    <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
-   <Action name="reset_offsets" />
    <Action name="reset_gains" />
   </Enable>
   */
+mResetSelectedChannel->setEnabled(true);
         mSynchronizeGroups->setEnabled(true);
         mKeepChannels->setEnabled(true);
         mSkipChannels->setEnabled(true);
@@ -3484,17 +3485,17 @@ mNewDisplay->setEnabled(true);
 
         mCloseCluster->setEnabled(false);
     } else if(state == QLatin1String("editState")) {
+        mRemoveChannelFromGroup->setEnabled(true);
         /*
   <Enable>
    <Action name="create_group"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="reset_offsets" />
    <Action name="select" />
   </Enable>
   */
-        mSynchronizeGroups->setEnabled(true);
+mDiscardChannels->setEnabled(true);
+        mResetSelectedChannel->setEnabled(true);
+mSynchronizeGroups->setEnabled(true);
         mHideChannel->setEnabled(true);
         mSkipChannels->setEnabled(true);
         mKeepChannels->setEnabled(true);
@@ -3505,13 +3506,14 @@ mNewDisplay->setEnabled(true);
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="discard_channels"/>
-   <Action name="discard_spike_channels"/>
    <Action name="show_channels"/>
-   <Action name="reset_offsets" />
    <Action name="select" />
   </Disable>
   */
+
+        mDiscardChannels->setEnabled(false);
+        mResetSelectedChannel->setEnabled(false);
+        mRemoveChannelFromGroup->setEnabled(false);
         mHideChannel->setEnabled(false);
         mSkipChannels->setEnabled(false);
 
@@ -3520,70 +3522,46 @@ mNewDisplay->setEnabled(true);
     } else if(state == QLatin1String("tabState")) {
         mRenameActiveDisplay->setEnabled(true);
     } else if(state == QLatin1String("datState")) {
-        /*
-  <Enable>
-   <Action name="waveforms"/>
-  </Enable>
-  */
+        clusterWaveforms->setEnabled(true);
     } else if(state == QLatin1String("noDatState")) {
-        /*
-  <Disable>
-   <Action name="waveforms"/>
-  </Disable>
- <
- */
+        clusterWaveforms->setEnabled(false);
     } else if(state == QLatin1String("clusterTabState")) {
         mCloseCluster->setEnabled(true);
         mSelectAllExcept0And1->setEnabled(true);
         mCloseEvent->setEnabled(false);
     } else if(state == QLatin1String("clusterState")) {
-        /*
+clusterVerticalLines->setEnabled(true);
+/*
   <Enable>
-   <Action name="vertical_lines"/>
    <Action name="raster"/>
-   <Action name="waveforms"/>
   </Enable>
   */
+clusterWaveforms->setEnabled(true);
     } else if(state == QLatin1String("noClusterState")) {
         /*
   <Disable>
-   <Action name="vertical_lines"/>
    <Action name="raster"/>
-   <Action name="waveforms"/>
-   <Action name="increase_raster_height"/>
-   <Action name="decrease_raster_height"/>
-   <Action name="show_next_cluster" />
-   <Action name="show_previous_cluster" />
-  </Disable>
+   /Disable>
   */
+        clusterWaveforms->setEnabled(false);
+        clusterVerticalLines->setEnabled(false);
+        mNextSpike->setEnabled(false);
+
+mPreviousSpike->setEnabled(false);
+mDecreaseHeight->setEnabled(false);
+        mIncreaseHeight->setEnabled(false);
     } else if(state == QLatin1String("noClusterBrowsingState")) {
-        /*
-  <Disable>
-   <Action name="show_next_cluster" />
-   <Action name="show_previous_cluster" />
-  </Disable>
-  */
+        mNextSpike->setEnabled(false);
+        mPreviousSpike->setEnabled(false);
     } else if(state == QLatin1String("clusterBrowsingState")) {
-        /*
- <Enable>
-   <Action name="show_next_cluster" />
-   <Action name="show_previous_cluster" />
-  </Enable>
-  */
+        mNextSpike->setEnabled(true);
+        mPreviousSpike->setEnabled(true);
     } else if(state == QLatin1String("noClusterRasterState")) {
-        /*
- <Enable>
-   <Action name="show_next_cluster" />
-   <Action name="show_previous_cluster" />
-  </Enable>
-  */
+        mPreviousSpike->setEnabled(true);
+        mNextSpike->setEnabled(true);
     } else if(state == QLatin1String("clusterRasterState")) {
-        /*
-  <Enable>
-   <Action name="increase_raster_height"/>
-   <Action name="decrease_raster_height"/>
-  </Enable>
-  */
+        mDecreaseHeight->setEnabled(true);
+        mIncreaseHeight->setEnabled(true);
     } else if(state == QLatin1String("eventState")) {
         mRemoveEvent->setEnabled(true);
         /*
@@ -3618,22 +3596,12 @@ mNewDisplay->setEnabled(true);
     } else if(state == QLatin1String("positionState")) {
         mClosePositionFile->setEnabled(true);
 
-        /*
-  <Enable>
-    <Action name="position_view"/>
-  </Enable>
-
-  */
         mLoadPositionFile->setEnabled(false);
-
+        positionViewToggle->setEnabled(true);
     } else if(state == QLatin1String("noPositionState")) {
         mLoadPositionFile->setEnabled(true);
         mClosePositionFile->setEnabled(false);
-        /*
-  <Disable>
-   <Action name="position_view"/>
-  </Disable>
-*/
+        positionViewToggle->setEnabled(false);
         showEventsInPositionView->setEnabled(false);
     } else if(state == QLatin1String("eventsInPositionViewEnableState")) {
         showEventsInPositionView->setEnabled(true);
