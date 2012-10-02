@@ -1961,7 +1961,7 @@ void TraceView::drawTimeLine(QPainter *painter){
         nbColumns = shownGroupsChannels.count();
         //Compute the current abscissae in each group
         for(int i = 0; i<nbColumns;++i){
-            currentAbscissae.append(linePositions[i] + delta);
+            currentAbscissae.append(linePositions.at(i) + delta);
         }
 
         //left margin is visible
@@ -1983,7 +1983,8 @@ void TraceView::drawTimeLine(QPainter *painter){
     }
     else{
         nbColumns = 1;
-        currentAbscissae.append(linePositions[0] + delta);
+        if(!linePositions.isEmpty())
+            currentAbscissae.append(linePositions.at(0) + delta);
         max.append(nbSamplesToDraw - 1);//points draw from 0 to (nbSamplesToDraw - 1)
         min.append(borderX);
     }
@@ -1993,7 +1994,7 @@ void TraceView::drawTimeLine(QPainter *painter){
         if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
+            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             if(previousAbscissae[groupIndex] >= min[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(min[i],top,min[i],bottom);//draw a line at min
@@ -2011,7 +2012,7 @@ void TraceView::drawTimeLine(QPainter *painter){
         if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
+            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             if(previousAbscissae[groupIndex] < max[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(max[i],top,max[i],bottom);//draw a line at max
@@ -2033,7 +2034,7 @@ void TraceView::drawTimeLine(QPainter *painter){
         if(!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions[i] + previousDelta);
+            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             for(int i = 0; i<nbColumns;++i){
                 if(previousAbscissae[i] >= min[i])
                     painter->drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
