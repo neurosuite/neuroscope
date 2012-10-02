@@ -2680,14 +2680,11 @@ void NeuroscopeApp::slotSessionSaveAs(){
         int saveStatus = doc->saveSession(url);
         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
             QMessageBox::critical(0, tr("I/O Error !"),tr("The current session could not be saved possibly because of insufficient file access permissions."));
-        }
-        else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
+        } else if(saveStatus == NeuroscopeDoc::PARSE_ERROR){
             QMessageBox::critical(0, tr("Parsing error !"),tr("The current session could not be saved because the parameter file is incorrect."));
-        }
-        else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
+        } else if(saveStatus == NeuroscopeDoc::NOT_WRITABLE){
             QMessageBox::critical(0, tr("Writing error !"),tr("The current session could not be saved because the parameter file is not writable.\nClose anyway ?"));
-        }
-        else{
+        } else{
             groupsModified = false;
             colorModified = false;
         }
