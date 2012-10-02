@@ -3335,21 +3335,14 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         displayMode->setEnabled(false);
         showEventsInPositionView->setEnabled(false);
         mMoveToNewGroup->setEnabled(false);
-showHideLabels->setEnabled(false);
-        /*
-<State name="initState" >
-  <Disable>
-   <Action name="select" />
-   <Action name="measure" />
-   <Action name="time" />
-   <Action name="select_event" />
-   <Action name="edit_mode" />
-   <Action name="add_event" />
-   <Action name="add_event_toolbarAction" />
-  </Disable>
- </State>
- */
-mResetSelectedChannelAmplitudes->setEnabled(false);
+        showHideLabels->setEnabled(false);
+        editMode->setEnabled(false);
+        mMeasureTool->setEnabled(false);
+        mSelectTool->setEnabled(false);
+        mTimeTool->setEnabled(false);
+        mEventTool->setEnabled(false);
+        addEventToolBarAction->setEnabled(false);
+        mResetSelectedChannelAmplitudes->setEnabled(false);
         mDiscardChannels->setEnabled(false);
         mResetSelectedChannel->setEnabled(false);
         mRemoveChannelFromGroup->setEnabled(false);
@@ -3402,13 +3395,10 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         displayMode->setEnabled(true);
         mMoveToNewGroup->setEnabled(true);
         showHideLabels->setEnabled(true);
-        /*
-  <Enable>
-   <Action name="select" />
-   <Action name="measure" />
-   <Action name="time" />
-   <Action name="edit_mode" />
-  </Enable>*/
+        editMode->setEnabled(true);
+        mMeasureTool->setEnabled(true);
+        mSelectTool->setEnabled(true);
+        mTimeTool->setEnabled(true);
         mResetSelectedChannelAmplitudes->setEnabled(true);
         mColorSpikeGroups->setEnabled(true);
         mIncreaseSelectedChannelAmplitude->setEnabled(true);
@@ -3429,12 +3419,8 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mColorSpikeGroups->setEnabled(false);
         mColorAnatomicalGroups->setEnabled(false);
         mMoveToNewGroup->setEnabled(false);
-mResetSelectedChannelAmplitudes->setEnabled(false);
-        /*
-  <Disable>
-   <Action name="edit_mode" />
-  </Disable>
-  */
+        mResetSelectedChannelAmplitudes->setEnabled(false);
+        editMode->setEnabled(false);
         mResetSelectedChannel->setEnabled(false);
         mRemoveChannelFromGroup->setEnabled(false);
 
@@ -3448,13 +3434,9 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mShowChannel->setEnabled(false);
         mColorSpikeGroups->setEnabled(false);
         mColorAnatomicalGroups->setEnabled(false);
-mMoveToNewGroup->setEnabled(false);
-mResetSelectedChannelAmplitudes->setEnabled(false);
-/*
-  <Disable>
-   <Action name="edit_mode" />
-  </Disable>
-  */
+        mMoveToNewGroup->setEnabled(false);
+        mResetSelectedChannelAmplitudes->setEnabled(false);
+        editMode->setEnabled(false);
         mDiscardChannels->setEnabled(false);
         mResetSelectedChannel->setEnabled(false);
         mSynchronizeGroups->setEnabled(false);
@@ -3468,11 +3450,7 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mColorSpikeGroups->setEnabled(true);
         mColorAnatomicalGroups->setEnabled(true);
         mMoveToNewGroup->setEnabled(true);
-        /*
-  <Enable>
-   <Action name="edit_mode" />
-  </Enable>
-  */
+        editMode->setEnabled(true);
         mResetSelectedChannelAmplitudes->setEnabled(true);
         mResetSelectedChannel->setEnabled(true);
         mSynchronizeGroups->setEnabled(true);
@@ -3487,11 +3465,7 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mRemoveChannelFromGroup->setEnabled(true);
         mShowChannel->setEnabled(true);
         mMoveToNewGroup->setEnabled(true);
-        /*
-  <Enable>
-   <Action name="select" />
-  </Enable>
-  */
+        mSelectTool->setEnabled(true);
         mDiscardChannels->setEnabled(true);
         mResetSelectedChannel->setEnabled(true);
         mSynchronizeGroups->setEnabled(true);
@@ -3504,12 +3478,7 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mSynchronizeGroups->setEnabled(false);
         mShowChannel->setEnabled(false);
         mMoveToNewGroup->setEnabled(false);
-        /*
-  <Disable>
-   <Action name="select" />
-  </Disable>
-  */
-
+        mSelectTool->setEnabled(false);
         mDiscardChannels->setEnabled(false);
         mResetSelectedChannel->setEnabled(false);
         mRemoveChannelFromGroup->setEnabled(false);
@@ -3555,27 +3524,15 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
         mIncreaseHeight->setEnabled(true);
     } else if(state == QLatin1String("eventState")) {
         mRemoveEvent->setEnabled(true);
-        /*
-  <Enable>
-   <Action name="select_event" />
-   <Action name="add_event" />
-   <Action name="add_event_toolbarAction" />
-  </Enable>
-  */
+        mEventTool->setEnabled(true);
+        addEventToolBarAction->setEnabled(true);
     } else if(state == QLatin1String("noEventState")) {
         mUndo->setEnabled(false);
         mRedo->setEnabled(false);
         mNextEvent->setEnabled(false);
         mPreviousEvent->setEnabled(false);
-
-
-        /*
-  <Disable>
-   <Action name="select_event" />
-   <Action name="add_event" />
-   <Action name="add_event_toolbarAction" />
-  </Disable>
-  */
+        mEventTool->setEnabled(false);
+        addEventToolBarAction->setEnabled(false);
         showEventsInPositionView->setEnabled(false);
 
         mRemoveEvent->setEnabled(false);
@@ -3600,13 +3557,7 @@ mResetSelectedChannelAmplitudes->setEnabled(false);
     } else if(state == QLatin1String("eventTabState")) {
         mSelectAllExcept0And1->setEnabled(false);
         mCloseEvent->setEnabled(true);
-        /*
-  <Enable>
-   <Action name="add_event" />
-   <Action name="add_event_toolbarAction" />
-  </Enable>
- </State>
-*/
+        addEventToolBarAction->setEnabled(true);
         mCloseCluster->setEnabled(false);
     } else if(state == QLatin1String("undoState")) {
         mRedo->setEnabled(true);

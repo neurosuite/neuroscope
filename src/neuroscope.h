@@ -683,7 +683,6 @@ private:
     QAction* showHideLabels;
     QAction* calibrationBar;
     QMenu* addEventPopup;
-    QAction* addEventMenu;
     QAction* addEventToolBarAction;
     QAction* positionViewToggle;
     QAction* showEventsInPositionView;
