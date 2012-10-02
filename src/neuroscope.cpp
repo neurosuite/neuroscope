@@ -2315,11 +2315,8 @@ void NeuroscopeApp::slotDisplayClose(){
         tabsParent->removeTab(tabsParent->indexOf(current));
         displayCount --;
         //Remove the view from the document list
-        NeuroscopeView* view = dynamic_cast<NeuroscopeView*>(current->widget());
+        NeuroscopeView* view = static_cast<NeuroscopeView*>(current);
         doc->removeView(view);
-
-        //Delete the view
-        delete current;
 
         QApplication::restoreOverrideCursor();
     }
