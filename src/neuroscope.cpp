@@ -3318,6 +3318,19 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mNewDisplay->setEnabled(false);
         mRenameActiveDisplay->setEnabled(false);
         mCloseActiveDisplay->setEnabled(false);
+        clusterRaster->setEnabled(false);
+        mDecreaseSelectedChannelAmplitude->setEnabled(false);
+        mIncreaseSelectedChannelAmplitude->setEnabled(false);
+        mDecreaseAllChannelAmplitudes->setEnabled(false);
+        mIncreaseAllChannelAmplitudes->setEnabled(false);
+       mShowChannel->setEnabled(false);
+       mDrawTimeLine->setEnabled(false);
+       mColorSpikeGroups->setEnabled(false);
+       mColorAnatomicalGroups->setEnabled(false);
+       mSelectAll->setEnabled(false);
+       mDeselectAll->setEnabled(false);
+       mSetCurrentOffsetsAsDefault->setEnabled(false);
+       mSetDefaultOffsetToZero->setEnabled(false);
         /*
 <State name="initState" >
   <Disable>
@@ -3325,28 +3338,15 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
    <Action name="measure" />
    <Action name="time" />
    <Action name="select_event" />
-   <Action name="draw_time_line" />
    <Action name="create_group"/>
-   <Action name="edit_select_all"/>
-   <Action name="edit_deselect_all"/>
    <Action name="display_mode"/>
-   <Action name="increase_all_channels"/>
-   <Action name="decrease_all_channels"/>
-   <Action name="increase_selected_channels"/>
-   <Action name="decrease_selected_channels"/>
-   <Action name="raster"/>
-   <Action name="show_channels"/>
    <Action name="show_labels"/>
-   <Action name="apply_display_color"/>
-   <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="reset_gains" />
    <Action name="show_calibration" />
    <Action name="add_event" />
    <Action name="add_event_toolbarAction" />
    <Action name="show_events"/>
-   <Action name="set_default_offsets" />
-   <Action name="set_default_offsets_0" />
   </Disable>
  </State>
  */
@@ -3389,31 +3389,31 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mLoadEventFiles->setEnabled(true);
         greyScale->setEnabled(true);
         mCloseActiveDisplay->setEnabled(true);
-        /*
+        mDecreaseAllChannelAmplitudes->setEnabled(true);
+        mIncreaseAllChannelAmplitudes->setEnabled(true);
+mShowChannel->setEnabled(true);
+mDrawTimeLine->setEnabled(true);
+mColorAnatomicalGroups->setEnabled(true);
+mSelectAll->setEnabled(true);
+       mDeselectAll->setEnabled(true);
+       mSetCurrentOffsetsAsDefault->setEnabled(true);
+       mSetDefaultOffsetToZero->setEnabled(true);
+/*
   <Enable>
    <Action name="select" />
    <Action name="measure" />
    <Action name="time" />
-   <Action name="draw_time_line" />
    <Action name="create_group"/>
-   <Action name="edit_select_all"/>
-   <Action name="edit_deselect_all"/>
    <Action name="display_mode"/>
-   <Action name="increase_all_channels"/>
-   <Action name="decrease_all_channels"/>
-   <Action name="increase_selected_channels"/>
-   <Action name="decrease_selected_channels"/>
-   <Action name="show_channels"/>
    <Action name="show_labels"/>
-   <Action name="apply_display_color"/>
-   <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
     <Action name="reset_gains" />
    <Action name="show_calibration" />
-   <Action name="set_default_offsets" />
-   <Action name="set_default_offsets_0" />
   </Enable>*/
-        mDiscardChannels->setEnabled(true);
+mColorSpikeGroups->setEnabled(true);
+mIncreaseSelectedChannelAmplitude->setEnabled(true);
+mDecreaseSelectedChannelAmplitude->setEnabled(true);
+mDiscardChannels->setEnabled(true);
         mResetSelectedChannel->setEnabled(true);
         mRemoveChannelFromGroup->setEnabled(true);
         mSynchronizeGroups->setEnabled(true);
@@ -3425,12 +3425,12 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mKeepChannels->setEnabled(false);
         mHideChannel->setEnabled(false);
 mDiscardChannels->setEnabled(false);
+mShowChannel->setEnabled(false);
+mColorSpikeGroups->setEnabled(false);
+mColorAnatomicalGroups->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="show_channels"/>
-   <Action name="apply_display_color"/>
-   <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="reset_gains" />
   </Disable>
@@ -3445,13 +3445,12 @@ mRemoveChannelFromGroup->setEnabled(false);
         mKeepChannels->setEnabled(false);
         mHideChannel->setEnabled(false);
         mRemoveChannelFromGroup->setEnabled(false);
-
+mShowChannel->setEnabled(false);
+mColorSpikeGroups->setEnabled(false);
+mColorAnatomicalGroups->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="show_channels"/>
-   <Action name="apply_display_color"/>
-   <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="reset_gains" />
   </Disable>
@@ -3465,12 +3464,12 @@ mResetSelectedChannel->setEnabled(false);
         mHideChannel->setEnabled(true);
         mRemoveChannelFromGroup->setEnabled(true);
         mDiscardChannels->setEnabled(true);
+        mShowChannel->setEnabled(true);
+        mColorSpikeGroups->setEnabled(true);
+        mColorAnatomicalGroups->setEnabled(false);
         /*
   <Enable>
    <Action name="create_group"/>
-   <Action name="show_channels"/>
-   <Action name="apply_display_color"/>
-   <Action name="apply_spike_color"/>
    <Action name="edit_mode" />
    <Action name="reset_gains" />
   </Enable>
@@ -3486,10 +3485,10 @@ mResetSelectedChannel->setEnabled(true);
         mCloseCluster->setEnabled(false);
     } else if(state == QLatin1String("editState")) {
         mRemoveChannelFromGroup->setEnabled(true);
+        mShowChannel->setEnabled(true);
         /*
   <Enable>
    <Action name="create_group"/>
-   <Action name="show_channels"/>
    <Action name="select" />
   </Enable>
   */
@@ -3503,10 +3502,10 @@ mSynchronizeGroups->setEnabled(true);
     } else if(state == QLatin1String("noEditState")) {
         mKeepChannels->setEnabled(false);
         mSynchronizeGroups->setEnabled(false);
+        mShowChannel->setEnabled(false);
         /*
   <Disable>
    <Action name="create_group"/>
-   <Action name="show_channels"/>
    <Action name="select" />
   </Disable>
   */
@@ -3531,18 +3530,10 @@ mSynchronizeGroups->setEnabled(true);
         mCloseEvent->setEnabled(false);
     } else if(state == QLatin1String("clusterState")) {
 clusterVerticalLines->setEnabled(true);
-/*
-  <Enable>
-   <Action name="raster"/>
-  </Enable>
-  */
+clusterRaster->setEnabled(true);
 clusterWaveforms->setEnabled(true);
     } else if(state == QLatin1String("noClusterState")) {
-        /*
-  <Disable>
-   <Action name="raster"/>
-   /Disable>
-  */
+        clusterRaster->setEnabled(false);
         clusterWaveforms->setEnabled(false);
         clusterVerticalLines->setEnabled(false);
         mNextSpike->setEnabled(false);
