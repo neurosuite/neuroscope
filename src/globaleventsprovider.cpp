@@ -20,4 +20,15 @@
 
 #include "globaleventsprovider.h"
 
+void GlobalEventsProvider::requestData(long startTime,long endTime,QObject* initiator){
+    emit getCurrentEventInformation(startTime,endTime,initiator);
+}
+
+void GlobalEventsProvider::eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator)
+{
+    emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
+}
+
+
 #include "globaleventsprovider.moc"
+

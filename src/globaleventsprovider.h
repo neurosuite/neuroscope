@@ -50,9 +50,7 @@ public:
   * @param endTime end of the time interval from which to retrieve the data.
   * @param initiator instance requesting the data.
   */
-    inline void requestData(long startTime,long endTime,QObject* initiator){
-        emit getCurrentEventInformation(startTime,endTime,initiator);
-    }
+    void requestData(long startTime,long endTime,QObject* initiator);
 
 Q_SIGNALS:
     void getCurrentEventInformation(long startTime,long endTime,QObject* initiator);
@@ -72,9 +70,7 @@ public Q_SLOTS:
   * @param providerItemColors dictionary between the provider names and the item color lists.
   * @param initiator instance requesting the data.
   */
-    inline void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator){
-        emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
-    }
+    void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator);
     
 };
 
