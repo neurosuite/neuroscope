@@ -63,7 +63,7 @@ public:
   * @param childName name of the child node tag to look up.
   * @return the first node starting from root having @p tagName as tag name.
   */
-    QDomNode findDirectChild(QString childName);
+    QDomNode findDirectChild(const QString& childName);
 
     /**
   * Finds the first child node with the tag name @p childName direct child of the @p ancestor node.
@@ -71,7 +71,7 @@ public:
   * @param ancestor starting node from which to look up for the node.
   * @return the first node starting from @p ancestor having @p tagName as tag name.
   */
-    QDomNode findDirectChild(QString childName,QDomNode ancestor);
+    QDomNode findDirectChild(const QString& childName,const QDomNode& ancestor);
 
     /**
   * Finds the first child node with the tag name @p childName direct child of the @p ancestor node.
@@ -109,7 +109,7 @@ public:
   * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
   * @param traceBackgroungImage image used as background for the trace view.
   */
-    void setMiscellaneousInformation(float screenGain,QString traceBackgroungImage);
+    void setMiscellaneousInformation(float screenGain,const QString& traceBackgroungImage);
 
 
     /**
@@ -120,7 +120,7 @@ public:
   * @param drawTrajectory all the positions contained in a position file can be used to create a background image for the PositionView.
   * This value tells if such background has to be created.
   */
-    void setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory);
+    void setNeuroscopeVideoInformation(int rotation,int flip,const QString& backgroundPath,int drawTrajectory);
 
     /**
   * Modifies the elements containing the video information.

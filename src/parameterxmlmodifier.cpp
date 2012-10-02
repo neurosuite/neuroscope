@@ -119,7 +119,7 @@ bool ParameterXmlModifier::writeTofile(const QString& url){
     return true;
 }
 
-QDomNode ParameterXmlModifier::findDirectChild(QString childName){
+QDomNode ParameterXmlModifier::findDirectChild(const QString &childName){
     QDomNode child = root.firstChild();
     while(!child.isNull()){
         // the node really is an element and has the right tag.
@@ -131,7 +131,7 @@ QDomNode ParameterXmlModifier::findDirectChild(QString childName){
     return QDomNode();
 }
 
-QDomNode ParameterXmlModifier::findDirectChild(QString childName,QDomNode ancestor){
+QDomNode ParameterXmlModifier::findDirectChild(const QString& childName,const QDomNode& ancestor){
     if(ancestor.isNull()) return QDomNode();
     QDomNode child = ancestor.firstChild();
     while(!child.isNull()){
@@ -244,7 +244,7 @@ bool ParameterXmlModifier::setLfpInformation(double lfpSamplingRate){
 }
 
 
-void ParameterXmlModifier::setMiscellaneousInformation(float screenGain,QString traceBackgroungImage){
+void ParameterXmlModifier::setMiscellaneousInformation(float screenGain,const QString& traceBackgroungImage){
     //AS part of the NEUROSCOPE tag, this tag is overwritten: the current MISCELLANEOUS tag will be replace by this new one
     miscellaneous = doc.createElement(MISCELLANEOUS);
     QDomElement gainElement = doc.createElement(SCREENGAIN);
@@ -259,7 +259,7 @@ void ParameterXmlModifier::setMiscellaneousInformation(float screenGain,QString 
     miscellaneous.appendChild(imageElement);
 }
 
-void ParameterXmlModifier::setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory){
+void ParameterXmlModifier::setNeuroscopeVideoInformation(int rotation,int flip,const QString& backgroundPath,int drawTrajectory){
 
     //AS part of the NEUROSCOPE tag, this tag is overwritten: the current NEUROSCOPE/VIDEO tag will be replace by this new one
     neuroscopeVideo = doc.createElement(VIDEO);

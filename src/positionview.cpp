@@ -101,13 +101,15 @@ QPainter p(this);
         painter.setViewport(viewport);
 
         //Fill the double buffer with the background color if no image has been set.
-        if(background.isNull()) doublebuffer.fill(paletteBackgroundColor());
+        if(background.isNull())
+            doublebuffer.fill(paletteBackgroundColor());
 
         //Paint all the positions in the double buffer on top of the background image or the background color.
         drawPositions(painter);
 
         //Paint the event if any
-        if(showEvents && selectedEvents.size() != 0) drawEvents(painter);
+        if(showEvents && !selectedEvents.isEmpty())
+            drawEvents(painter);
 
         //Closes the painter on the double buffer
         painter.end();

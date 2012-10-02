@@ -121,7 +121,7 @@ void ParameterXmlCreator::setLfpInformation(double lfpSamplingRate){
 }
 
 
-void ParameterXmlCreator::setMiscellaneousInformation(float screenGain,QString traceBackgroundImage){
+void ParameterXmlCreator::setMiscellaneousInformation(float screenGain,const QString& traceBackgroundImage){
     miscellaneous = doc.createElement(MISCELLANEOUS);
 
     QDomElement gainElement = doc.createElement(SCREENGAIN);

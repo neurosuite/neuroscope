@@ -97,7 +97,7 @@ void SessionXmlWriter::setLoadedFilesInformation(const QList<SessionFile>& fileL
         fileElement.appendChild(dateElement);
 
         //If there is no color, the file correspond to a position file with no items.
-        if(colors.count() != 0){
+        if(!colors.isEmpty()){
             QDomElement itemsElement = doc.createElement(neuroscope::ITEMS);
 
             QMap<EventDescription,QColor>::Iterator iterator;

@@ -74,7 +74,7 @@ public:
   * @param screenGain screen gain in milivolts by centimeters used to display the field potentiels.
   * @param traceBackgroundImage image used as background for the trace view.
   */
-    void setMiscellaneousInformation(float screenGain,QString traceBackgroundImage);
+    void setMiscellaneousInformation(float screenGain, const QString &traceBackgroundImage);
 
     /**
   * Creates the elements related to the channels colors.

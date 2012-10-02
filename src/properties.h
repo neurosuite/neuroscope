@@ -43,7 +43,7 @@
 class Properties : public PropertiesLayout  {
    Q_OBJECT
 public: 
-    Properties(QWidget *parent=0);
+    explicit Properties(QWidget *parent=0);
 	~Properties();
 
   /**Sets the screen gain in milivolts by centimeters used to display the field potentiels..
