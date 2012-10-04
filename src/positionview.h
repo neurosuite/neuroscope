@@ -24,7 +24,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QPrinter>
-#include <q3dict.h> 
+#include <QHash>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QList>
@@ -110,7 +110,7 @@ public Q_SLOTS:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file in Hz.
   */
-    void dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+    void dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate);
 
     /**Updates the event display if any event are available.*/
     void updateEventDisplay();
@@ -202,13 +202,13 @@ private:
     int nbSpots;
 
     /**Dictionary between the event provider names and the event data and status.*/
-    Q3Dict<EventData> eventsData;
+    QHash<QString, EventData*> eventsData;
 
     /**Map between the event provider names and the list of selected events.*/
     QMap<QString, QList<int> > selectedEvents;
     
     /**Dictionary between the provider names and the item color lists.*/
-    Q3Dict<ItemColors> providerItemColors;
+    QHash<QString, ItemColors*> providerItemColors;
 
     /**Provider for whole set of event files.*/
     GlobalEventsProvider& globalEventProvider;

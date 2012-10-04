@@ -21,7 +21,7 @@
 #define GLOBALEVENTSPROVIDER_H
 
 // include files for QT
-#include <q3dict.h> 
+#include <QHash>
 //Added by qt3to4:
 #include <QList>
 #include <QMap>
@@ -60,7 +60,7 @@ Q_SIGNALS:
   * @param selectedEvents map between the event provider names and the list of currently selected events.
   * @param providerItemColors dictionary between the provider names and the item color lists.
   */
-    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors);
+    void eventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors);
 
 
 public Q_SLOTS:
@@ -70,7 +70,7 @@ public Q_SLOTS:
   * @param providerItemColors dictionary between the provider names and the item color lists.
   * @param initiator instance requesting the data.
   */
-    void eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator);
+    void eventInformationAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator);
     
 };
 

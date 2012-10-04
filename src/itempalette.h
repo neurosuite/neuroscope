@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <q3vbox.h> 
 #include <q3iconview.h>
-#include <q3dict.h>
+#include <QHash>
 #include <qmap.h>
 #include <QLabel>
 #include <QCursor>
@@ -146,7 +146,7 @@ Q_SIGNALS:
     
 private:    
     /**Dictionnary of the itemColors storing the color information for the items.*/
-    Q3Dict<ItemColors> itemColorsDict;
+    QHash<QString, ItemColors*> itemColorsDict;
 
     /**Background color.*/
     QColor backgroundColor;
@@ -157,10 +157,10 @@ private:
     Q3VBox* verticalContainer;
 
     /**Dictionnary of the iconviews representing the group of items.*/
-    Q3Dict<ItemIconView> iconviewDict;
+    QHash<QString, ItemIconView*> iconviewDict;
 
     /**Dictionnary of layout containing the iconviews.*/
-    Q3Dict<ItemGroupView> itemGroupViewDict;
+    QHash<QString, ItemGroupView*> itemGroupViewDict;
 
     /**Dummy widget used to keep the iconviews nicely display in the pannel.*/
     QWidget* spaceWidget;

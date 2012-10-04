@@ -65,7 +65,7 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     connect(&view,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
     connect(&view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
     connect(&view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
-    connect(&view,SIGNAL(eventsAvailable(Q3Dict<EventData>&,QMap<QString,QList<int> >&,Q3Dict<ItemColors>&,QObject*,double)),this, SLOT(slotEventsAvailable(Q3Dict<EventData>&,QMap<QString,QList<int> >&,Q3Dict<ItemColors>&,QObject*,double)));
+    connect(&view,SIGNAL(eventsAvailable(QHash<QString, EventData*>&,QMap<QString,QList<int> >&,QHash<QString, ItemColors*>&,QObject*,double)),this, SLOT(slotEventsAvailable(QHash<QString, EventData*>&,QMap<QString,QList<int> >&,QHash<QString, ItemColors*>&,QObject*,double)));
 
     isInit = false;
     /// Added by M.Zugaro to enable automatic forward paging

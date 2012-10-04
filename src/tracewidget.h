@@ -532,7 +532,7 @@ public Q_SLOTS:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file in Hz.
   */
-    void slotEventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate) {
+    void slotEventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate) {
         emit eventsAvailable(eventsData,selectedEvents,providerItemColors,initiator,samplingRate);
     }
 
@@ -594,7 +594,7 @@ Q_SIGNALS:
   * @param initiator instance requesting the data.
   * @param samplingRate sampling rate of the current open data file  in Hz.
   */
-    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+    void eventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate);
 
 protected:
 

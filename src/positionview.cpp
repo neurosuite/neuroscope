@@ -44,8 +44,6 @@ PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& glo
     this->timeFrameWidth = timeFrameWidth;
     nbSpots = positionsProvider.getNbSpots();
     
-    eventsData.setAutoDelete(true);
-
     //Set Connection.
     connect(&positionsProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
 
@@ -57,6 +55,8 @@ PositionView::PositionView(PositionsProvider& provider,GlobalEventsProvider& glo
 
 
 PositionView::~PositionView(){
+    qDeleteAll(eventsData);
+    eventsData.clear();
 }
 
 void PositionView::paintEvent ( QPaintEvent*){
@@ -339,7 +339,7 @@ void PositionView::changeBackgroundColor(QColor color){
     BaseFrame::changeBackgroundColor(color);
 }
 
-void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate){
+void PositionView::dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate){
     //Update the list of selected events.
     this->selectedEvents.clear();
     QMap<QString, QList<int> >::Iterator providersIterator;
@@ -355,19 +355,25 @@ void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QLi
 
     //Update the event data
     this->eventsData.clear();
-    Q3DictIterator<EventData> iterator(eventsData);
-    for(;iterator.current();++iterator){
-        EventData* eventData = static_cast<EventData*>(iterator.current());
+
+    //unselect all the items first
+    QHashIterator<QString, EventData*> iterator(eventsData);
+    while (iterator.hasNext()) {
+        iterator.next();
+        EventData* eventData = static_cast<EventData*>(iterator.value());
         EventData* eventDataCopy = new EventData();
         *eventDataCopy = *eventData;
-        this->eventsData.insert(iterator.currentKey(),eventDataCopy);
+        this->eventsData.insert(iterator.key(),eventDataCopy);
     }
+
+
 
     //Update the color list
     this->providerItemColors.clear();
-    Q3DictIterator<ItemColors> colorIterator(providerItemColors);
-    for(;colorIterator.current();++colorIterator){
-        this->providerItemColors.insert(colorIterator.currentKey(),colorIterator.current());
+    QHashIterator<QString, ItemColors*> colorIterator(providerItemColors);
+    while (colorIterator.hasNext()) {
+        colorIterator.next();
+        this->providerItemColors.insert(colorIterator.key(),colorIterator.value());
     }
 
     if(selectedEvents.size() !=0) computeEventPositions(samplingRate);
@@ -380,14 +386,17 @@ void PositionView::dataAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QLi
 void PositionView::computeEventPositions(double samplingRate){
     float samplingRateInMs = static_cast<float>(static_cast<float>(samplingRate) / 1000.0);
     double positionSamplingInterval = 1000.0 / positionsProvider.getSamplingRate();
-    Q3DictIterator<EventData> iterator(eventsData);
-    for(;iterator.current();++iterator){
-        EventData* eventData = static_cast<EventData*>(iterator.current());
+
+    QHashIterator<QString, EventData*> iterator(eventsData);
+    while (iterator.hasNext()) {
+        iterator.next();
+        EventData* eventData = static_cast<EventData*>(iterator.value());
         int nbEvents = eventData->getTimes().nbOfColumns();
 
         eventData->computePositions(samplingRate,positionsProvider.getSamplingRate(),startTime);
         Array<dataType>& currentPositions =  eventData->getPositions();
     }
+
 }
 
 void PositionView::updateEventDisplay(){;

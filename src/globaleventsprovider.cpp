@@ -24,7 +24,7 @@ void GlobalEventsProvider::requestData(long startTime,long endTime,QObject* init
     emit getCurrentEventInformation(startTime,endTime,initiator);
 }
 
-void GlobalEventsProvider::eventInformationAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator)
+void GlobalEventsProvider::eventInformationAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator)
 {
     emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 }

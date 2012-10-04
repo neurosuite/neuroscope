@@ -21,7 +21,7 @@
 // include files for QT
 #include <qwidget.h>
 #include <QPixmap>
-#include <q3dict.h>
+#include <QHash>
 #include <QPair>
 #include <QImage>
 #include <QDebug>
@@ -556,7 +556,7 @@ Q_SIGNALS:
     void eventModified(QString providerName,int selectedEventId,double time,double newTime);
     void eventRemoved(QString providerName,int selectedEventId,double time);
     void eventAdded(QString providerName,QString addedEventDescription,double time);
-    void eventsAvailable(Q3Dict<EventData>& eventsData,QMap<QString, QList<int> >& selectedEvents,Q3Dict<ItemColors>& providerItemColors,QObject* initiator,double samplingRate);
+    void eventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate);
 
 protected:
     /**
@@ -926,13 +926,13 @@ private:
     };
 
     /**Dictionary between the cluster provider names and the cluster data and status.*/
-    Q3Dict<ClusterData> clustersData;
+    QHash<QString, ClusterData*> clustersData;
 
     /** Dictionary between the cluster provider names and the providers.*/
-    Q3Dict<ClustersProvider> clusterProviders;
+    QHash<QString, ClustersProvider*> clusterProviders;
 
     /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
-    Q3Dict<ItemColors> providerItemColors;
+    QHash<QString, ItemColors*> providerItemColors;
 
     /**Stores the cluster order used when they are presented in raster. Each cluster is identified
   * by a string build as the ClusterProvider name plus a dash plus the cluster id.
@@ -992,10 +992,10 @@ private:
     bool spikeBrowsing;
 
     /**Dictionary between the event provider names and the event data and status.*/
-    Q3Dict<EventData> eventsData;
+    QHash<QString, EventData*> eventsData;
 
     /**Dictionary between the event provider names and the providers.*/
-    Q3Dict<EventsProvider> eventProviders;
+    QHash<QString, EventsProvider*> eventProviders;
 
     /**Pair storing the event provider having a selected event the closer in time to the current endTime,
   * the pair stores also the starting time of the retrieve data.*/

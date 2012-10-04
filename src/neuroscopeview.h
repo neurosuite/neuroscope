@@ -26,7 +26,7 @@
 
 // include files for Qt
 #include <qwidget.h>
-#include <q3dict.h>
+#include <QHash>
 #include <QImage>
 #include <QPrinter>
 //Added by qt3to4:
@@ -838,16 +838,16 @@ private:
     bool labelsDisplay;
 
     /**Dictionary given the list of selected clusters of each cluster provider.*/
-    Q3Dict< QList<int> > selectedClusters;
+    QHash<QString, QList<int>* > selectedClusters;
 
     /**Dictionary given the list of selected events of each event provider.*/
-    Q3Dict< QList<int> > selectedEvents;
+    QHash<QString, QList<int>* > selectedEvents;
 
     /**Dictionary given the list of clusters to not be used for browsing for each cluster provider.*/
-    Q3Dict<QList<int> > clustersNotUsedForBrowsing;
+    QHash<QString, QList<int>* > clustersNotUsedForBrowsing;
 
     /**Dictionary given the list of events to be not used for browsing for each event provider.*/
-    Q3Dict<QList<int> > eventsNotUsedForBrowsing;
+    QHash<QString, QList<int>* > eventsNotUsedForBrowsing;
 
     /**Boolean indicating whether a position file is been shown.*/
     bool isPositionFileShown;

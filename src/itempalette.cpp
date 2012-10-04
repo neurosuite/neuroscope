@@ -47,7 +47,6 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
       spaceWidget(0L),type(type),selected(""),updateIconPixmap(false)
 {
     setObjectName(name);
-    itemGroupViewDict.setAutoDelete(true);
 
     setAutoFillBackground(true);
     //Set the palette color
@@ -86,6 +85,8 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
 ItemPalette::~ItemPalette()
 {
     // no need to delete child widgets, Qt does it all for us
+    qDeleteAll(itemGroupViewDict);
+    itemGroupViewDict.clear();
 }
 
 
@@ -381,12 +382,13 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
 const QMap<QString,QList<int> > ItemPalette::selectedItems(){
     QMap<QString,QList<int> > selection;
 
-    Q3DictIterator<ItemIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        QString groupName = iterator.currentKey();
+    QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        QString groupName = iterator.key();
         ItemColors* itemColors = itemColorsDict[groupName];
         QList<int> selectedItems;
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+        for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
             if(item->isSelected()){
                 selectedItems.append(itemColors->itemId(item->index()));
             }
@@ -402,15 +404,16 @@ void ItemPalette::slotClickRedraw(){
         bool browsingEnable = false;
         bool needToBeUpdated = false;
         QMap<QString,QList<int> > selection;
-        Q3DictIterator<ItemIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator){
-            QString groupName = iterator.currentKey();
+        QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+        while (iterator.hasNext()) {
+            iterator.next();
+            QString groupName = iterator.key();
             QMap<int,bool> browsingMap = browsingStatus[groupName];
             ItemColors* itemColors = itemColorsDict[groupName];
             QList<int> selectedItems;
             QList<int> itemsToSkip;
             QList<int> itemsToRedraw;
-            for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+            for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
                 int index = item->index();
                 if(item->isSelected()){
                     selectedItems.append(itemColors->itemId(index));
@@ -464,10 +467,11 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
         //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
         isInSelectItems = true;
 
-        Q3DictIterator<ItemIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator){
-            if(iterator.currentKey() != sourceGroup)
-                iterator.current()->selectAll(false);
+        QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+        while (iterator.hasNext()) {
+            iterator.next();
+            if(iterator.key() != sourceGroup)
+                iterator.value()->selectAll(false);
         }
 
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
@@ -477,25 +481,26 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
         //The updateShownItems signal has to be emitted.
         if(count == 0){
             QMap<QString,QList<int> > selection;
-            Q3DictIterator<ItemIconView> iterator(iconviewDict);
-            for(;iterator.current();++iterator){
+            QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+            while (iterator.hasNext()) {
+                iterator.next();
                 QList<int> selectedItems;
 
-                selection.insert(iterator.currentKey(),selectedItems);
+                selection.insert(iterator.key(),selectedItems);
 
                 //update the browsing status, it is set to false for all the elements
-                QString groupName = iterator.currentKey();
+                QString groupName = iterator.key();
                 ItemColors* itemColors = itemColorsDict[groupName];
                 QMap<int,bool> browsingMap = browsingStatus[groupName];
                 QList<int> itemsToSkip;
-                for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+                for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
                     int currentIndex = item->index();
                     if(browsingMap[currentIndex]){
                         browsingMap[currentIndex] = false;
                         QString label = item->text();
-                        redrawItem(iterator.current(),itemColors,currentIndex,browsingMap);
+                        redrawItem(iterator.value(),itemColors,currentIndex,browsingMap);
                         isInSelectItems = true;////redrawItem sets it back to false
-                        item = iterator.current()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                        item = iterator.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
                         itemsToSkip.append(itemColors->itemId(currentIndex));
                     }
                     else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -506,8 +511,10 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
 
             emit updateShownItems(selection);
 
-            if(type == CLUSTER) emit noClustersToBrowse();
-            else emit noEventsToBrowse();
+            if(type == CLUSTER)
+                emit noClustersToBrowse();
+            else
+                emit noEventsToBrowse();
         }
     }
 }
@@ -629,22 +636,23 @@ void ItemPalette::changeBackgroundColor(QColor color){
 
     QMap<QString,QList<int> > selected = selectedItems();
 
-    Q3DictIterator<ItemIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        iterator.current()->setPaletteBackgroundColor(color);
-        iterator.current()->setPaletteForegroundColor(legendColor);
+    QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->setPaletteBackgroundColor(color);
+        iterator.value()->setPaletteForegroundColor(legendColor);
         //Redraw the icons
-        QList<int> selectedItems = selected[iterator.currentKey()];
+        QList<int> selectedItems = selected[iterator.key()];
 
 
         //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
         isInSelectItems = true;
 
-        ItemIconView* iconView = iconviewDict[iterator.currentKey()];
+        ItemIconView* iconView = iconviewDict[iterator.key()];
         iconView->clear();
 
         //Get the list of items with their color
-        ItemColors* itemColors = itemColorsDict[iterator.currentKey()];
+        ItemColors* itemColors = itemColorsDict[iterator.key()];
         int nbItems = itemColors->numberOfItems();
 
         //Construct one icon for each item
@@ -660,18 +668,21 @@ void ItemPalette::changeBackgroundColor(QColor color){
         }
 
         //reselect the item which were selected.
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
-            if(selectedItems.contains(itemColors->itemId(item->index()))) item->setSelected(true,true);
+        for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
+            if(selectedItems.contains(itemColors->itemId(item->index())))
+                item->setSelected(true,true);
         }
 
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
         isInSelectItems = false;
     }
 
-    Q3DictIterator<ItemGroupView> iterator2(itemGroupViewDict);
-    for(;iterator2.current();++iterator2){
-        iterator2.current()->setPaletteBackgroundColor(color);
-        iterator2.current()->setPaletteForegroundColor(legendColor);
+    QHashIterator<QString, ItemGroupView*> iterator2(itemGroupViewDict);
+    while (iterator2.hasNext()) {
+        iterator2.next();
+        iterator2.value()->setPaletteBackgroundColor(color);
+        iterator2.value()->setPaletteForegroundColor(legendColor);
+
     }
 
     QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
@@ -800,8 +811,11 @@ void ItemPalette::createGroup(QString id){
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     if(iconviewDict.count() >= 1){
-        Q3DictIterator<ItemIconView> iterator(iconviewDict);
-        iconView->resizeContents((iconviewDict[iterator.currentKey()])->contentsWidth(),2);
+        QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+        while (iterator.hasNext()) {
+            iterator.next();
+            iconView->resizeContents((iconviewDict[iterator.key()])->contentsWidth(),2);
+        }
     }
     else
         iconView->adjustSize();
@@ -882,9 +896,11 @@ void ItemPalette::selectAllItems(){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-    Q3DictIterator<ItemIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator)
-        iterator.current()->selectAll(true);
+    QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->selectAll(true);
+    }
 
     QMap<QString,QList<int> > selection = selectedItems();
     emit updateShownItems(selection);
@@ -898,29 +914,32 @@ void ItemPalette::deselectAllItems(){
     isInSelectItems = true;
 
     QMap<QString,QList<int> > selection;
-    Q3DictIterator<ItemIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        iterator.current()->selectAll(false);
+    QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->selectAll(false);
         QList<int> selectedItems;
-        selection.insert(iterator.currentKey(),selectedItems);
+        selection.insert(iterator.key(),selectedItems);
     }
 
     emit updateShownItems(selection);
 
     //update the browsing status, it is set to false for all the elements
-    for(iterator.toFirst();iterator.current();++iterator){
-        QString groupName = iterator.currentKey();
+    QHashIterator<QString, ItemIconView*> iterator2(iconviewDict);
+    while (iterator2.hasNext()) {
+        iterator2.next();
+        QString groupName = iterator2.key();
         ItemColors* itemColors = itemColorsDict[groupName];
         QMap<int,bool> browsingMap = browsingStatus[groupName];
         QList<int> itemsToSkip;
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+        for(Q3IconViewItem* item = iterator2.value()->firstItem(); item; item = item->nextItem()){
             int currentIndex = item->index();
             if(browsingMap[currentIndex]){
                 browsingMap[currentIndex] = false;
                 QString label = item->text();
-                redrawItem(iterator.current(),itemColors,currentIndex,browsingMap);
+                redrawItem(iterator2.value(),itemColors,currentIndex,browsingMap);
                 isInSelectItems = true;//redrawItem sets it back to false
-                item = iterator.current()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                item = iterator2.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
                 itemsToSkip.append(itemColors->itemId(currentIndex));
             }
             else itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -938,8 +957,11 @@ void ItemPalette::orderTheGroups(){
     //Remove all the children of the verticalContainer (spaceWidget and groups)
     verticalContainer->removeChild(spaceWidget);
 
-    Q3DictIterator<ItemGroupView> it(itemGroupViewDict);
-    for(;it.current();++it) verticalContainer->removeChild(it.current());
+    QHashIterator<QString, ItemGroupView*> iterator(itemGroupViewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        verticalContainer->removeChild(iterator.value());
+    }
 
     if(type == CLUSTER){
         qSort(clusterGroupList);

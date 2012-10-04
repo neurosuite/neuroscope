@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <q3vbox.h> 
 #include <q3iconview.h>
-#include <q3dict.h>
+#include <QHash>
 #include <qmap.h>
 #include <QLabel>
 #include <QCursor>
@@ -210,10 +210,10 @@ private:
     Q3VBox* verticalContainer;
 
     /**Dictionnary of the iconviews representing the group of channels.*/
-    Q3Dict<ChannelIconView> iconviewDict;
+    QHash<QString, ChannelIconView*> iconviewDict;
 
     /**Dictionnary of layout containing the iconviews.*/
-    Q3Dict<ChannelGroupView> channelGroupViewDict;
+    QHash<QString, ChannelGroupView*> channelGroupViewDict;
 
     /**Dummy widget used to keep the iconviews nicely display in the pannel.*/
     SpaceWidget* spaceWidget;

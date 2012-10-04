@@ -57,7 +57,6 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     ,edit(edition)
 {
     setObjectName(name);
-    channelGroupViewDict.setAutoDelete(true);
 
     //Set the palette color, the foreground color depends on the background color
     int h;
@@ -96,6 +95,8 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
 
 ChannelPalette::~ChannelPalette()
 {
+    qDeleteAll(channelGroupViewDict);
+    channelGroupViewDict.clear();
     // no need to delete child widgets, Qt does it all for us
 }
 
@@ -162,9 +163,11 @@ void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, Q
 }
 
 void ChannelPalette::setChannelLists(){  
-    Q3DictIterator<ChannelIconView> iconviewIterator(iconviewDict);
-    for(;iconviewIterator.current();++iconviewIterator)
-        iconviewIterator.current()->clear();
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        iteratordict.value()->clear();
+    }
 
 
     //Construct one icon for each channel and set the show/hide status to false
@@ -284,13 +287,15 @@ void ChannelPalette::slotMidButtonPressed(const QString &sourceGroupId){
 const QList<int> ChannelPalette::selectedChannels(){
     QList<int> selectedChannels;
 
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        for(Q3IconViewItem* item = iteratordict.value()->firstItem(); item; item = item->nextItem()){
             if(item->isSelected()){
                 selectedChannels.append(item->text().toInt());
             }
         }
+
     }
 
     return selectedChannels;
@@ -319,10 +324,13 @@ void ChannelPalette::slotMousePressWoModificators(QString sourceGroup){
         //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
         isInSelectItems = true;
 
-        Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator){
-            if(iterator.currentKey() != sourceGroup)
-                iterator.current()->selectAll(false);
+
+        QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+        while (iteratordict.hasNext()) {
+            iteratordict.next();
+
+            if(iteratordict.key() != sourceGroup)
+                iteratordict.value()->selectAll(false);
         }
 
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
@@ -402,9 +410,11 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
     isInSelectItems = true;
 
     if(!edit){
-        Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator)
-            iterator.current()->selectAll(false);
+        QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+        while (iteratordict.hasNext()) {
+            iteratordict.next();
+            iteratordict.value()->selectAll(false);
+        }
     }
     
     QList<int>::const_iterator channelIterator;
@@ -461,9 +471,11 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
     isInSelectItems = true;
 
     if(!edit){
-        Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator)
-            iterator.current()->selectAll(false);
+        QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+        while (iteratordict.hasNext()) {
+            iteratordict.next();
+            iteratordict.value()->selectAll(false);
+        }
     }
     
     QMap<int,bool>::const_iterator channelIterator;
@@ -523,9 +535,11 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
     isInSelectItems = true;
 
     if(!edit){
-        Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-        for(;iterator.current();++iterator)
-            iterator.current()->selectAll(false);
+        QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+        while (iteratordict.hasNext()) {
+            iteratordict.next();
+            iteratordict.value()->selectAll(false);
+        }
     }
     
     QList<int>::const_iterator channelIterator;
@@ -707,16 +721,18 @@ void ChannelPalette::changeBackgroundColor(QColor color){
     verticalContainer->setPaletteBackgroundColor(backgroundColor);
     verticalContainer->setPaletteForegroundColor(legendColor);
 
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        iterator.current()->setPaletteBackgroundColor(backgroundColor);
-        iterator.current()->setPaletteForegroundColor(legendColor);
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        iteratordict.value()->setPaletteBackgroundColor(backgroundColor);
+        iteratordict.value()->setPaletteForegroundColor(legendColor);
     }
 
-    Q3DictIterator<ChannelGroupView> iterator2(channelGroupViewDict);
-    for(;iterator2.current();++iterator2){
-        iterator2.current()->setPaletteBackgroundColor(backgroundColor);
-        iterator2.current()->setPaletteForegroundColor(legendColor);
+    QHashIterator<QString, ChannelGroupView*> iterator(channelGroupViewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->setPaletteBackgroundColor(backgroundColor);
+        iterator.value()->setPaletteForegroundColor(legendColor);
     }
 
     Q3IconViewItem* item = 0L;
@@ -798,9 +814,11 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     isInSelectItems = true;
 
     //unselect all the items first
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator)
-        iterator.current()->selectAll(false);
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        iteratordict.value()->selectAll(false);
+    }
 
     //Loop on the channels to be selected
     QList<int>::const_iterator channelIterator;
@@ -856,10 +874,10 @@ void ChannelPalette::createGroup(int id){
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     if(iconviewDict.count() >= 1){
-        if(iconviewDict.find("1") != 0)
+        if(iconviewDict.contains("1") )
             iconView->resizeContents((iconviewDict["1"])->contentsWidth(),labelSize);
         //Everything is in the trash group
-        else if(iconviewDict.find("0") != 0)
+        else if(iconviewDict.contains("0"))
             iconView->resizeContents((iconviewDict["0"])->contentsWidth(),labelSize);
         //In the spike palette at the begining only the spikeTrashGroup (gpId-1) exists.
         else
@@ -907,7 +925,8 @@ void ChannelPalette::createGroup(int id){
     connect(group,SIGNAL(dragObjectMoved(QPoint)),this, SLOT(slotDragLabeltMoved(QPoint)));
 
 
-    if(id != 0 && id != -1 && (iconviewDict.find("0") != 0 || iconviewDict.find("-1") != 0)) moveTrashesToBottom();
+    if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
+        moveTrashesToBottom();
 }
 
 void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destination){  
@@ -924,8 +943,8 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
         if(targetId == -2){
             targetId = channelGroupViewDict.count();
             //Insert after the biggest group id (before the trash groups)
-            if(iconviewDict.find("0") != 0) targetId--;
-            if(iconviewDict.find("-1") != 0) targetId--;
+            if(iconviewDict.contains("0")) targetId--;
+            if(iconviewDict.contains("-1")) targetId--;
         }
         else{
             ChannelGroupView* group = channelGroupViewDict[QString::fromLatin1("%1").arg(targetId)];
@@ -935,8 +954,8 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             //Insert after the biggest group id (before the trash group)
             if(targetId == 0 || targetId == -1 || targetId == -2){
                 targetId = channelGroupViewDict.count();
-                if(iconviewDict.find("0") != 0) targetId--;
-                if(iconviewDict.find("-1") != 0) targetId--;
+                if(iconviewDict.contains("0")) targetId--;
+                if(iconviewDict.contains("-1")) targetId--;
             }
         }
 
@@ -1029,18 +1048,21 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     //Move the groups
     verticalContainer->removeChild(spaceWidget);
 
-    Q3DictIterator<ChannelGroupView> it(channelGroupViewDict);
-    for(;it.current();++it)
-        verticalContainer->removeChild(it.current());
+    QHashIterator<QString, ChannelGroupView*> it(channelGroupViewDict);
+    while (it.hasNext()) {
+        it.next();
+
+        verticalContainer->removeChild(it.value());
+    }
 
     int nbGroups = channelGroupViewDict.count();
-    if(iconviewDict.find("0") != 0) nbGroups--;
-    if(iconviewDict.find("-1") != 0) nbGroups--;
+    if(iconviewDict.contains("0")) nbGroups--;
+    if(iconviewDict.contains("-1") ) nbGroups--;
     for(int i = 1;i <= nbGroups;++i)
         verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
-    if(iconviewDict.find("-1") != 0) verticalContainer->insertChild(channelGroupViewDict["-1"]);
-    if(iconviewDict.find("0") != 0) verticalContainer->insertChild(channelGroupViewDict["0"]);
+    if(iconviewDict.contains("-1")) verticalContainer->insertChild(channelGroupViewDict["-1"]);
+    if(iconviewDict.contains("0")) verticalContainer->insertChild(channelGroupViewDict["0"]);
 
     delete spaceWidget;
     spaceWidget = new SpaceWidget(verticalContainer,edit);
@@ -1060,9 +1082,9 @@ void ChannelPalette::createGroup(){
     if(selectedIds.size() == 0) return;
 
     int groupNb = iconviewDict.count() + 1;
-    if(iconviewDict.find("0") != 0)
+    if(iconviewDict.contains("0"))
         groupNb--;
-    if(iconviewDict.find("-1") != 0)
+    if(iconviewDict.contains("-1"))
         groupNb--;
 
     createGroup(groupNb);
@@ -1075,9 +1097,9 @@ void ChannelPalette::createGroup(){
 
 int ChannelPalette::createEmptyGroup(){
     int groupNb = iconviewDict.count() + 1;
-    if(iconviewDict.find("0") != 0)
+    if(iconviewDict.contains("0"))
         groupNb--;
-    if(iconviewDict.find("-1") != 0)
+    if(iconviewDict.contains("-1"))
         groupNb--;
 
     createGroup(groupNb);
@@ -1107,17 +1129,20 @@ void ChannelPalette::moveChannels(int targetGroup){
     QList<int> movedChannels;
     QList<int> movedFromTrashChannels;
     QPainter painter;
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
+    QHashIterator<QString, ChannelIconView*> it(iconviewDict);
+    while (it.hasNext()) {
+        it.next();
 
-    for(;iterator.current();++iterator){
-        if(iterator.currentKey().toInt() == targetGroup) continue;
+        if(it.key().toInt() == targetGroup)
+            continue;
         QList<int> currentMovedChannels;
         QList<int> channelIds;
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+        for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
             int channelId = item->text().toInt();
             if(item->isSelected()){
                 //if the source is the trash group, keep track of it to inform the other palette
-                if(iterator.currentKey() == "0") movedFromTrashChannels.append(channelId);
+                if(it.key() == "0")
+                    movedFromTrashChannels.append(channelId);
                 movedChannels.append(channelId);
                 currentMovedChannels.append(channelId);
 
@@ -1130,18 +1155,19 @@ void ChannelPalette::moveChannels(int targetGroup){
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,targetGroup);
             }
-            else channelIds.append(channelId);
+            else
+                channelIds.append(channelId);
         }
         //Delete the entries in the source group
-        QList<int>::iterator it;
-        for(it = currentMovedChannels.begin(); it != currentMovedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
+        QList<int>::iterator it2;
+        for(it2 = currentMovedChannels.begin(); it2 != currentMovedChannels.end(); ++it2){
+            Q3IconViewItem* currentIcon = it.value()->findItem(QString::fromLatin1("%1").arg(*it2),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
-        groupsChannels->insert(iterator.currentKey().toInt(),channelIds);
+        groupsChannels->insert(it.key().toInt(),channelIds);
 
-        iterator.current()->arrangeItemsInGrid();
+        it.value()->arrangeItemsInGrid();
     }
 
     //Add/update the group entry in the map group-channel list
@@ -1178,22 +1204,23 @@ void ChannelPalette::moveChannels(int targetGroup){
 void ChannelPalette::deleteEmptyGroups(){  
     QList<int> deletedGroups;
     //First store the group to delete
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator){
-        int groupId = iterator.currentKey().toInt();
-        if(iterator.current()->count() == 0)
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        int groupId = iteratordict.key().toInt();
+        if(iteratordict.value()->count() == 0)
             deletedGroups.append(groupId);
     }
 
     if(deletedGroups.size() > 0){
         int nbGp = iconviewDict.count();
         int gpId;
-        if(iconviewDict.find("-1") != 0) gpId = -1;
-        else if(iconviewDict.find("0") != 0) gpId = 0;
+        if(iconviewDict.contains("-1")) gpId = -1;
+        else if(iconviewDict.contains("0")) gpId = 0;
         else gpId = 1;
         int minId = gpId;
 
-        bool skipIdZero = !iconviewDict.find("0");
+        bool skipIdZero = !iconviewDict.contains("0");
         for(int j = 0;j < nbGp; ++j){
             if(deletedGroups.contains(gpId)){
                 deletedGroups.append(gpId);
@@ -1244,7 +1271,7 @@ void ChannelPalette::deleteEmptyGroups(){
             }
         }
 
-        if(iconviewDict.find("0") != 0 || iconviewDict.find("-1") != 0) moveTrashesToBottom();
+        if(iconviewDict.contains("0") || iconviewDict.contains("-1")) moveTrashesToBottom();
     }
 }
 
@@ -1252,9 +1279,14 @@ void ChannelPalette::selectAllChannels(){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator)
-        iterator.current()->selectAll(true);
+
+    //unselect all the items first
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        iteratordict.value()->selectAll(true);
+    }
+
 
     QList<int> selected = selectedChannels();
     emit channelsSelected(selected);
@@ -1267,10 +1299,12 @@ void ChannelPalette::deselectAllChannels(){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-    for(;iterator.current();++iterator)
-        iterator.current()->selectAll(false);
-
+    //unselect all the items first
+    QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
+    while (iteratordict.hasNext()) {
+        iteratordict.next();
+        iteratordict.value()->selectAll(false);
+    }
     QList<int> selected;
     emit channelsSelected(selected);
 
@@ -1286,7 +1320,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
     }
     //Put the channels removed into the spikeGroupTrash (create it if need it).
     else{
-        if(iconviewDict.find("-1") == 0){
+        if(!iconviewDict.contains("-1")){
             createGroup(-1);
             emit paletteResized(viewport()->width(),labelSize);
 
@@ -1357,7 +1391,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
         emit groupModified();
     }
 
-    if(iconviewDict.find("0") != 0 || iconviewDict.find("-1") != 0) moveTrashesToBottom();
+    if(iconviewDict.contains("0") || iconviewDict.contains("-1")) moveTrashesToBottom();
 
     update();
 }
@@ -1403,11 +1437,11 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
 
     int nbGp = iconviewDict.count();
     int gpId;
-    if(iconviewDict.find("-1") != 0) gpId = -1;
-    else if(iconviewDict.find("0") != 0) gpId = 0;
+    if(iconviewDict.contains("-1")) gpId = -1;
+    else if(iconviewDict.contains("0")) gpId = 0;
     else gpId = 1;
 
-    bool skipIdZero = !iconviewDict.find("0");
+    bool skipIdZero = !iconviewDict.contains("0");
     for(int j = 0;j < nbGp; ++j){
         if(gpId == targetGroup.toInt()){
             if(gpId == -1 && skipIdZero) gpId += 2;//from -1 to 1 directly
@@ -1590,7 +1624,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     groupColor.setHsv(210,255,255);
 
     //Check if a trash group exists, if not create it.
-    if(iconviewDict.find("0") == 0){
+    if(!iconviewDict.contains("0")){
         createGroup(0);
         moveTrashesToBottom();
     }
@@ -1609,11 +1643,12 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     isInSelectItems = true;
 
     QPainter painter;
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
 
-    for(;iterator.current();++iterator){
-        if(iterator.currentKey() == "0"){
-            for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+    QHashIterator<QString, ChannelIconView*> it(iconviewDict);
+    while (it.hasNext()) {
+        it.next();
+        if(it.key() == "0"){
+            for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
                 int channelId = item->text().toInt();
                 if(channelsToDiscard.contains(channelId)){
                     channelsShowHideStatus[channelId] = false;
@@ -1628,7 +1663,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
         }
         QList<int> currentDiscardedChannels;
         QList<int> channelIds;
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+        for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
             int channelId = item->text().toInt();
             if(channelsToDiscard.contains(channelId)){
                 currentDiscardedChannels.append(channelId);
@@ -1639,15 +1674,15 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
             else channelIds.append(channelId);
         }
         //Delete the entries in the source group
-        QList<int>::iterator it;
-        for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
+        QList<int>::iterator it2;
+        for(it2 = currentDiscardedChannels.begin(); it2 != currentDiscardedChannels.end(); ++it2){
+            Q3IconViewItem* currentIcon = it.value()->findItem(QString::fromLatin1("%1").arg(*it2),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
-        groupsChannels->insert(iterator.currentKey().toInt(),channelIds);
+        groupsChannels->insert(it.key().toInt(),channelIds);
 
-        iterator.current()->arrangeItemsInGrid();
+        it.value()->arrangeItemsInGrid();
     }
 
     QList<int> trashChannels = (*groupsChannels)[0];
@@ -1847,15 +1882,15 @@ void ChannelPalette::moveTrashesToBottom(){
 
     //Insert all the groups except the trashes which go at the bottom
     int nbGroup = channelGroupViewDict.count();
-    if(iconviewDict.find("0") != 0) nbGroup--;
-    if(iconviewDict.find("-1") != 0) nbGroup--;
+    if(iconviewDict.contains("0")) nbGroup--;
+    if(iconviewDict.contains("-1")) nbGroup--;
 
     for(int i = 1;i <= nbGroup;++i)
         verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
     //Insert the trashes
-    if(iconviewDict.find("-1") != 0) verticalContainer->insertChild(channelGroupViewDict["-1"]);
-    if(iconviewDict.find("0") != 0) verticalContainer->insertChild(channelGroupViewDict["0"]);
+    if(iconviewDict.contains("-1")) verticalContainer->insertChild(channelGroupViewDict["-1"]);
+    if(iconviewDict.contains("0")) verticalContainer->insertChild(channelGroupViewDict["0"]);
 
     delete spaceWidget;
     spaceWidget = new SpaceWidget(verticalContainer,edit);
@@ -1883,14 +1918,14 @@ void ChannelPalette::trashChannels(int destinationGroup){
     //Check if the destination group exists, if not create it.
     ChannelIconView* trash;
     if(destinationGroup == 0){
-        if(iconviewDict.find("0") == 0){
+        if(!iconviewDict.contains("0")){
             createGroup(0);
             moveTrashesToBottom();
         }
         trash = iconviewDict["0"];
     }
     else{
-        if(iconviewDict.find("-1") == 0){
+        if(!iconviewDict.contains("-1")){
             createGroup(-1);
             moveTrashesToBottom();
         }
@@ -1913,12 +1948,12 @@ void ChannelPalette::trashChannels(int destinationGroup){
     //Get the channels which are part of the trash group.
     QList<int> trashChannels;
     QPainter painter;
-    Q3DictIterator<ChannelIconView> iterator(iconviewDict);
-
-    for(;iterator.current();++iterator){
-        if((iterator.currentKey() == "0" && destinationGroup == 0) ||
-                (iterator.currentKey() == "-1" && destinationGroup == -1)){
-            for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+    QHashIterator<QString, ChannelIconView*> it(iconviewDict);
+    while (it.hasNext()) {
+        it.next();
+        if((it.key() == "0" && destinationGroup == 0) ||
+                (it.key() == "-1" && destinationGroup == -1)){
+            for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
                 int channelId = item->text().toInt();
                 if(trashChannels.contains(channelId)) continue;
                 if(item->isSelected() && destinationGroup == 0){
@@ -1940,7 +1975,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
         QList<int> currentDiscardedChannels;
         QList<int> channelIds;
-        for(Q3IconViewItem* item = iterator.current()->firstItem(); item; item = item->nextItem()){
+        for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
             int channelId = item->text().toInt();
             if(item->isSelected()){
                 discardedChannels.append(channelId);
@@ -1959,16 +1994,16 @@ void ChannelPalette::trashChannels(int destinationGroup){
             else channelIds.append(channelId);
         }
         //Delete the entries in the source group
-        QList<int>::iterator it;
-        for(it = currentDiscardedChannels.begin(); it != currentDiscardedChannels.end(); ++it){
-            Q3IconViewItem* currentIcon = iterator.current()->findItem(QString::fromLatin1("%1").arg(*it),Q3ListBox::ExactMatch);
+        QList<int>::iterator it2;
+        for(it2 = currentDiscardedChannels.begin(); it2 != currentDiscardedChannels.end(); ++it2){
+            Q3IconViewItem* currentIcon = it.value()->findItem(QString::fromLatin1("%1").arg(*it2),Q3ListBox::ExactMatch);
             delete currentIcon;
         }
         //Update groupsChannels
-        groupsChannels->insert(iterator.currentKey().toInt(),channelIds);
+        groupsChannels->insert(it.key().toInt(),channelIds);
 
-        iterator.current()->arrangeItemsInGrid();
-        if(destinationGroup == -1 && iterator.currentKey() == "0" && currentDiscardedChannels.size() != 0){
+        it.value()->arrangeItemsInGrid();
+        if(destinationGroup == -1 && it.key() == "0" && currentDiscardedChannels.size() != 0){
             emit channelsRemovedFromTrash(currentDiscardedChannels);
         }
     }

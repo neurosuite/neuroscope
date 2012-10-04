@@ -48,12 +48,6 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long star
     channelOffsets(),gains(),selectedChannels(),tabLabel(label),startTime(startTime),timeWindow(duration),
     labelsDisplay(labelsDisplay),isPositionFileShown(false),positionView(0L),eventsInPositionView(false){
 
-    //Will automatically delete the list of selected clusters while deleting the view.
-    selectedClusters.setAutoDelete(false);
-
-    //Will automatically delete the list of selected events while deleting the view.
-    selectedEvents.setAutoDelete(false);
-
     //Duplicate the offset,gain and channelSelected lists
     QList<int>::iterator offsetIterator;
     for(offsetIterator = offsets.begin(); offsetIterator != offsets.end(); ++offsetIterator)
@@ -361,7 +355,7 @@ void NeuroscopeView::updateEventsAfterAddition(QString providerName,int eventId,
 
 void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>& oldNewEventIds,int modifiedEventId,bool active,bool added){
 
-    if(eventsNotUsedForBrowsing.find(providerName) != 0){
+    if(eventsNotUsedForBrowsing.contains(providerName)){
         QList<int>* currentSkippedEvents = eventsNotUsedForBrowsing.take(providerName);
         QList<int>* newSkippedEventsIds = new QList<int>();
         QList<int>::iterator iterator;
@@ -386,7 +380,7 @@ void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>&
         emit noneBrowsingEventListUpdated(providerName,*newSkippedEventsIds);
     }
 
-    if(selectedEvents.find(providerName) != 0){
+    if(selectedEvents.contains(providerName)){
         QList<int>* currentSelectedEvents = selectedEvents.take(providerName);
         QList<int>* newSelectedEventsIds = new QList<int>();
         QList<int>::iterator iterator;
@@ -445,8 +439,8 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
     connect(this,SIGNAL(positionInformationUpdated(int,int,QImage,bool,bool)),positionView,SLOT(updatePositionInformation(int,int,QImage,bool,bool)));
     connect(this,SIGNAL(timeChanged(long,long)),positionView,SLOT(displayTimeFrame(long,long)));
     connect(this,SIGNAL(changeBackgroundColor(QColor)),positionView, SLOT(changeBackgroundColor(QColor)));
-    connect(traceWidget,SIGNAL(eventsAvailable(Q3Dict<EventData>&,QMap<QString, QList<int> >&,
-                                               Q3Dict<ItemColors>&,QObject*,double)),positionView,SLOT(dataAvailable(Q3Dict<EventData>&,QMap<QString,QList<int> >&,Q3Dict<ItemColors>&,QObject*,double)));
+    connect(traceWidget,SIGNAL(eventsAvailable(QHash<QString, EventData*>&,QMap<QString, QList<int> >&,
+                                               QHash<QString, ItemColors*>&,QObject*,double)),positionView,SLOT(dataAvailable(QHash<QString, EventData*>&,QMap<QString,QList<int> >&,QHash<QString, ItemColors*>&,QObject*,double)));
     connect(this,SIGNAL(updateEventDisplay()),positionView,SLOT(updateEventDisplay()));
     connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),positionView,SLOT(eventColorUpdate(QString,int,bool)));
     connect(this,SIGNAL(updateDrawing()),positionView, SLOT(updateDrawing()));
