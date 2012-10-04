@@ -78,7 +78,7 @@ void NeuroscopeXmlReader::closeFile(){
 int NeuroscopeXmlReader::getResolution()const{
     int resolution = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + BITS);
+    xmlChar* searchPath = xmlCharStrdup(QString(QLatin1String("//") + ACQUISITION + QLatin1String("/") + BITS));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -100,7 +100,7 @@ int NeuroscopeXmlReader::getResolution()const{
 int NeuroscopeXmlReader::getNbChannels()const{
     int nbChannels = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + NB_CHANNELS);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + NB_CHANNELS));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -122,7 +122,7 @@ int NeuroscopeXmlReader::getNbChannels()const{
 double NeuroscopeXmlReader::getSamplingRate()const{
     double samplingRate = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + SAMPLING_RATE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + SAMPLING_RATE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -144,7 +144,7 @@ double NeuroscopeXmlReader::getSamplingRate()const{
 double NeuroscopeXmlReader::getUpsamplingRate()const{
     double upsamplingRate = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + NEUROSCOPE + "/" + SPIKES + "/" + UPSAMPLING_RATE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + UPSAMPLING_RATE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -167,7 +167,7 @@ double NeuroscopeXmlReader::getUpsamplingRate()const{
 double NeuroscopeXmlReader::getLfpInformation()const{
     double lfpSamplingRate = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + FIELD_POTENTIALS + "/" + LFP_SAMPLING_RATE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + FIELD_POTENTIALS + "/" + LFP_SAMPLING_RATE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -191,7 +191,7 @@ double NeuroscopeXmlReader::getLfpInformation()const{
 float NeuroscopeXmlReader::getScreenGain() const{
     float gain = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + SCREENGAIN);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + SCREENGAIN));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -216,8 +216,9 @@ int NeuroscopeXmlReader::getVoltageRange() const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion == "" ) searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + VOLTAGE_RANGE);
-    else searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + VOLTAGE_RANGE);
+    if(type == SESSION && readVersion.isEmpty() ) searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + VOLTAGE_RANGE));
+    else
+        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + VOLTAGE_RANGE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -242,8 +243,10 @@ int NeuroscopeXmlReader::getAmplification() const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion.isEmpty()) searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + AMPLIFICATION);
-    else searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + AMPLIFICATION);
+    if(type == SESSION && readVersion.isEmpty())
+        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + AMPLIFICATION));
+    else
+        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + AMPLIFICATION));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -269,9 +272,9 @@ int NeuroscopeXmlReader::getOffset()const{
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
     if(type == SESSION && readVersion.isEmpty())
-        searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + OFFSET);
+        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + OFFSET));
     else
-        searchPath = xmlCharStrdup("//" + ACQUISITION + "/" + OFFSET);
+        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + OFFSET));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -296,7 +299,7 @@ QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
     QList<ChannelDescription> list;
 
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + CHANNELS + "/" + CHANNEL_COLORS);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + CHANNELS + "/" + CHANNEL_COLORS));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -349,7 +352,7 @@ QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
 
 void NeuroscopeXmlReader::getChannelDefaultOffset(QMap<int,int>& channelDefaultOffsets){
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + CHANNELS + "/" + CHANNEL_OFFSET);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + CHANNELS + "/" + CHANNEL_OFFSET));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -405,8 +408,10 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside CHANNEL_GROUPS/GROUP tag, it is now inside CHANNEL_GROUPS/GROUP/CHANNELS.
-    if(readVersion == "" || readVersion == "1.2.2") searchPath = xmlCharStrdup("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP);
-    else searchPath = xmlCharStrdup("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP + "/" + CHANNELS);
+    if(readVersion.isEmpty() || readVersion == "1.2.2")
+        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP));
+    else
+        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP + "/" + CHANNELS));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -454,7 +459,7 @@ void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>&
     }
 
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + ANATOMY + "/" + CHANNEL_GROUPS + "/" + GROUP);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + ANATOMY + "/" + CHANNEL_GROUPS + "/" + GROUP));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -505,8 +510,10 @@ int NeuroscopeXmlReader::getNbSamples()const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the SPIKE element, it is now inside the NEUROSCOPE/SPIKES element.
-    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2")) searchPath = xmlCharStrdup("//" + SPIKE + "/" + NB_SAMPLES);
-    else searchPath = xmlCharStrdup("//" + NEUROSCOPE + "/" + SPIKES + "/" + NB_SAMPLES);
+    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2"))
+        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + NB_SAMPLES));
+    else
+        searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + NB_SAMPLES));
 
 
     //Evaluate xpath expression
@@ -529,7 +536,7 @@ int NeuroscopeXmlReader::getNbSamples()const{
 float NeuroscopeXmlReader::getWaveformLength()const{
     float waveformLength = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + NEUROSCOPE + "/" + SPIKES + "/" + WAVEFORM_LENGTH);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + WAVEFORM_LENGTH));
 
 
     //Evaluate xpath expression
@@ -556,8 +563,8 @@ int NeuroscopeXmlReader::getPeakSampleIndex()const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the SPIKE element, it is now inside the NEUROSCOPE/SPIKES element.
-    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2")) searchPath = xmlCharStrdup("//" + SPIKE + "/" + PEAK_SAMPLE_INDEX);
-    else searchPath = xmlCharStrdup("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_INDEX);
+    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2")) searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + PEAK_SAMPLE_INDEX));
+    else searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_INDEX));
 
 
     //Evaluate xpath expression
@@ -580,7 +587,7 @@ int NeuroscopeXmlReader::getPeakSampleIndex()const{
 float NeuroscopeXmlReader::getPeakSampleLength()const{
     float indexLength = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_LENGTH);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_LENGTH));
 
 
     //Evaluate xpath expression
@@ -605,7 +612,7 @@ float NeuroscopeXmlReader::getPeakSampleLength()const{
 int NeuroscopeXmlReader::getVideoWidth()const{
     int width = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + WIDTH);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + WIDTH));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -628,7 +635,7 @@ int NeuroscopeXmlReader::getVideoWidth()const{
 int NeuroscopeXmlReader::getVideoHeight()const{
     int height = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + HEIGHT);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + HEIGHT));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -651,7 +658,7 @@ int NeuroscopeXmlReader::getVideoHeight()const{
 int NeuroscopeXmlReader::getRotation()const{
     int angle = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + ROTATE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + ROTATE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -674,7 +681,7 @@ int NeuroscopeXmlReader::getRotation()const{
 int NeuroscopeXmlReader::getFlip()const{
     int orientation = 0;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + FLIP);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + FLIP));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -696,7 +703,7 @@ int NeuroscopeXmlReader::getFlip()const{
 int NeuroscopeXmlReader::getTrajectory()const{
     int drawTrajectory = false;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + POSITIONS_BACKGROUND);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + POSITIONS_BACKGROUND));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -718,7 +725,7 @@ int NeuroscopeXmlReader::getTrajectory()const{
 QString NeuroscopeXmlReader::getBackgroundImage()const{
     QString backgroundPath = "-";
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + VIDEO + "/" + VIDEO_IMAGE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + VIDEO_IMAGE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -741,7 +748,7 @@ QString NeuroscopeXmlReader::getBackgroundImage()const{
 QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
     QString traceBackgroundPath = "-";
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("//" + MISCELLANEOUS + "/" + TRACE_BACKGROUND_IMAGE);
+    xmlChar* searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + TRACE_BACKGROUND_IMAGE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -764,7 +771,7 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
     QList<SessionFile> list;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("/" + NEUROSCOPE + "/" + FILES + "/" + neuroscope::FILE);
+    xmlChar* searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + FILES + "/" + neuroscope::FILE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -850,7 +857,7 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
 QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
     QList<DisplayInformation> list;
     xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup("/" + NEUROSCOPE + "/" + DISPLAYS + "/" + DISPLAY);
+    xmlChar* searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + DISPLAYS + "/" + DISPLAY));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);
@@ -1148,8 +1155,8 @@ QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
     //The tag has change of location, it was inside the session file (at SAMPLING_RATES/EXTENSION_SAMPLING_RATE),
     //it is now inside the the parameter file (at FILES/FILE).
     if(type == SESSION && (readVersion == "" || readVersion == "1.2.2"))
-        searchPath = xmlCharStrdup("/" + NEUROSCOPE + "/" + SAMPLING_RATES + "/" + EXTENSION_SAMPLING_RATE);
-    else if(type == PARAMETER) searchPath = xmlCharStrdup("//" + FILES + "/" + neuroscope::FILE);
+        searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + SAMPLING_RATES + "/" + EXTENSION_SAMPLING_RATE));
+    else if(type == PARAMETER) searchPath = xmlCharStrdup(QString("//" + FILES + "/" + neuroscope::FILE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);

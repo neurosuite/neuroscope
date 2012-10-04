@@ -1832,8 +1832,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     if(name.contains(QRegExp("\\D")) != 0){
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file " + clusterUrl + " has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier."
-                                                 + "Therefore will not be loaded."));
+        QMessageBox::critical(0, tr("Error!"),tr("The requested cluster file %1 has an incorrect name, it has to be of the form baseName.n.clu or baseName.clu.n, with n a number identifier. Therefore will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_FILE;
     }
@@ -2019,7 +2018,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     QString fileName = eventUrl;
     if(fileName.indexOf(".evt") == -1){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The requested event file " + eventUrl/*.path()*/ + " has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The requested event file %1 has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_FILE;
     }
@@ -2029,7 +2028,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
 
     if(!fileInfo.exists()){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The file " + eventUrl/*.path()*/ + " does not exist anymore."));
+        QMessageBox::critical (0, tr("Error!"),tr("The file %1 does not exist anymore.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return OPEN_ERROR;
     }
@@ -2044,7 +2043,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     if(name.length() != 3 || name.contains(QRegExp("\\d{3}"))){
         delete eventsProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The requested event file " + eventUrl/*.path()*/ + " has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The requested event file %1 has an incorrect name, it has to be of the form baseName.id.evt or baseName.evt.id (with id a 3 character identifier). Therefore it will not be loaded.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_FILE;
     }
@@ -2054,23 +2053,21 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     if(returnStatus == EventsProvider::OPEN_ERROR){
         delete eventsProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("Could not load the file " + eventUrl/*.path()*/));
+        QMessageBox::critical (0, tr("Error!"),tr("Could not load the file %1").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return OPEN_ERROR;
     }
     else if(returnStatus == EventsProvider::COUNT_ERROR){
         delete eventsProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The number of events of the requested file " + eventUrl/*.path()*/ + " could not be determined."
-                                                  " Therefore this file will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The number of events of the requested file %1 could not be determined. Therefore this file will not be loaded.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return CREATION_ERROR;
     }
     else if(returnStatus == EventsProvider::INCORRECT_CONTENT){
         delete eventsProvider;
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The content of the requested file " + eventUrl/*.path()*/ + " is incorrect." +
-                                                  " Therefore this file will not be loaded."));
+        QMessageBox::critical (0, tr("Error!"),tr("The content of the requested file %1 is incorrect. Therefore this file will not be loaded.").arg(eventUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return INCORRECT_CONTENT;
     }
@@ -2517,7 +2514,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
 
     if(!fileInfo.exists()){
         QApplication::restoreOverrideCursor();
-        QMessageBox::critical (0, tr("Error!"),tr("The file " + fileUrl + " does not exist anymore."));
+        QMessageBox::critical (0, tr("Error!"),tr("The file %1 does not exist anymore.").arg(fileUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return OPEN_ERROR;
     }
