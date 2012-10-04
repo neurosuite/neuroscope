@@ -46,16 +46,16 @@ public:
     ~PositionProperties();
 
     /**Sets the video acquisition sampling rate.*/
-    inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
+    void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
     /**Sets the video image width.*/
-    inline void setWidth(int width){widthLineEdit->setText(QString::fromLatin1("%1").arg(width));}
+    void setWidth(int width){widthLineEdit->setText(QString::fromLatin1("%1").arg(width));}
 
     /**Sets the video image height.*/
-    inline void setHeight(int height){heightLineEdit->setText(QString::fromLatin1("%1").arg(height));}
+    void setHeight(int height){heightLineEdit->setText(QString::fromLatin1("%1").arg(height));}
 
     /**Sets the background image.*/
-    inline void setBackgroundImage(const QString& image){
+    void setBackgroundImage(const QString& image){
         backgroundLineEdit->setText(image);
         if(!image.isEmpty()){
            backgroungImage.load(image);
@@ -69,10 +69,10 @@ public:
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
   * This function sets if such background has to be created.
   */
-    inline void setPositionsBackground(bool draw){checkBoxBackground->setChecked(draw);}
+    void setPositionsBackground(bool draw){checkBoxBackground->setChecked(draw);}
 
     /**Sets the video image rotation angle.*/
-    inline void setRotation(int angle){
+    void setRotation(int angle){
         switch(angle){
         case 0:
             rotateComboBox->setCurrentIndex(0);
@@ -95,7 +95,7 @@ public:
     /**Sets the video image flip orientation.
   * 0 stands for none, 1 for vertical and 2 for horizontal.
   */
-    inline void setFlip(int orientation){
+    void setFlip(int orientation){
         switch(orientation){
         case 0:
             filpComboBox->setCurrentIndex(0);
@@ -167,7 +167,7 @@ public Q_SLOTS:
     /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */
-    inline void setEnabled (bool state){
+    void setEnabled (bool state){
         groupBox1->setEnabled(state);
         groupBox2->setEnabled(state);
         samplingRateLineEdit->setEnabled(state);
@@ -194,13 +194,13 @@ public Q_SLOTS:
 
 
 private Q_SLOTS:
-    inline void updateBackgroundImage(){
+    void updateBackgroundImage(){
         QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
         if(!image.isEmpty())
             setBackgroundImage(image);
     }
 
-    inline void updateBackgroundImage(const QString& image){
+    void updateBackgroundImage(const QString& image){
         if(!image.isEmpty())  setBackgroundImage(image);
         else{
             QPixmap pixmap;

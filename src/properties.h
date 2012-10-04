@@ -48,36 +48,36 @@ public:
 
   /**Sets the screen gain in milivolts by centimeters used to display the field potentiels..
   */
-  inline void setScreenGain(float gain){
+  void setScreenGain(float gain){
    screenGainLineEdit->setText(QString::fromLatin1("%1").arg(gain));
   }
 
   /**Sets the voltage range of the acquisition system in milivolts.
   */
-  inline void setVoltageRange(int value){
+  void setVoltageRange(int value){
    voltageRangeLineEdit->setText(QString::fromLatin1("%1").arg(value));
   }
 
   /**Sets the amplification of the acquisition system.
   */
-  inline void setAmplification(int value){
+  void setAmplification(int value){
    amplificationLineEdit->setText(QString::fromLatin1("%1").arg(value));
   }
 
   /**Sets the number of channels.*/
-  inline void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
+  void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
 
   /**Sets the sampling rate for the current file.*/
-  inline void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
+  void setSamplingRate(double rate){samplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
   /**Sets the sampling rate of the acquisition system.*/
-  inline void setAcquisitionSystemSamplingRate(double rate){asSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
+  void setAcquisitionSystemSamplingRate(double rate){asSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
   /**Sets the initial offset for all the field potentials.*/
-  inline void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));}
+  void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));}
 
   /**Sets the resolution of the acquisition system.*/
-  inline void setResolution(int res){
+  void setResolution(int res){
    switch(res){
       case 12:
         resolutionComboBox->setCurrentIndex(0);
@@ -98,7 +98,7 @@ public:
   }
   
   /**Sets the background image.*/
-  inline void setTraceBackgroundImage(QString image){  
+  void setTraceBackgroundImage(QString image){  
    traceBackgroundLineEdit->setText(image);
   }
   
@@ -155,11 +155,11 @@ public:
   /**Sets whether the sampling rate for the current file is enabled.
   * @param state true enable, false otherwise.
   */
-  inline void setCurrentSamplingRateEnabled(bool state){samplingRateLineEdit->setEnabled(state);}
+  void setCurrentSamplingRateEnabled(bool state){samplingRateLineEdit->setEnabled(state);}
 
   
 private Q_SLOTS:
-  inline void updateTraceBackgroundImage(){
+  void updateTraceBackgroundImage(){
       QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
       if(!image.isEmpty()) setTraceBackgroundImage(image);
   }

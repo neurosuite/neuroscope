@@ -115,7 +115,7 @@ public:
     * @param gain initial gain use to draw the traces in the TraceView.
     * @param acquisitionGain acquisition gain.
     */
-    inline void setGains(int gain,int acquisitionGain ){
+    void setGains(int gain,int acquisitionGain ){
         emit updateGains(gain,acquisitionGain);
         emit drawTraces();
     }
@@ -123,19 +123,19 @@ public:
     /**Updates the background color used in the views.
     * @param color color of the new background.
     */
-    inline void updateBackgroundColor(QColor color){emit changeBackgroundColor(color);}
+    void updateBackgroundColor(QColor color){emit changeBackgroundColor(color);}
 
     /**
     * Informs all the child widgets that one of the features for the document have changed.
     * The features are: the initial offset or the acquisition system resolution.
     */
-    inline void documentFeaturesModified(){emit drawTraces();}
+    void documentFeaturesModified(){emit drawTraces();}
 
     /**
     * Informs all the child widgets that the sampling rate for the document has changed.
     * @param recordingLength the newly computed length of the document.
     */
-    inline void samplingRateModified(long long recordingLength){
+    void samplingRateModified(long long recordingLength){
         emit newSamplingRate(recordingLength);
     }
 
@@ -145,14 +145,14 @@ public:
     void setChannelNb(int nb);
 
     /**Show all the encapsulated widgets contain in the view. The widgets know how to draw themselves.*/
-    inline void showAllWidgets(){
+    void showAllWidgets(){
         emit updateContents();
     }
 
     /**All the channels of the display are now display either in a gradation of grey or in color.
     * @param grey true if the channels have to be displayed in grey false otherwise.
     */
-    inline void setGreyScale(bool grey){
+    void setGreyScale(bool grey){
         greyScaleMode = grey;
         emit greyScale(grey);
     }
@@ -243,7 +243,7 @@ public:
    * @param selectedMode the new mode.
    * @param active true if the view is the active one, false otherwise.
    */
-    inline void setMode(BaseFrame::Mode selectedMode,bool active){
+    void setMode(BaseFrame::Mode selectedMode,bool active){
         if(selectedMode == 2) selectMode = true;
         else selectMode = false;
         emit modeToSet(selectedMode,active);
@@ -258,25 +258,25 @@ public:
    * @param channelId id of the channel to redraw.
    * @param active true if the view is the active one, false otherwise.
    */
-    inline void singleChannelColorUpdate(int channelId,bool active){emit channelColorUpdate(channelId,active);}
+    void singleChannelColorUpdate(int channelId,bool active){emit channelColorUpdate(channelId,active);}
 
     /**Changes the color of a group of channels.
    * @param groupId id of the group for which the color have been changed.
    * @param active true if the view is the active one, false otherwise.
    */
-    inline void channelGroupColorUpdate(int groupId,bool active){emit groupColorUpdate(groupId,active);}
+    void channelGroupColorUpdate(int groupId,bool active){emit groupColorUpdate(groupId,active);}
 
     /**Triggers the increase of the amplitude of all the channels.
    */
-    inline void increaseAllChannelsAmplitude(){emit increaseAllAmplitude();}
+    void increaseAllChannelsAmplitude(){emit increaseAllAmplitude();}
 
     /**Triggers the decrease of the amplitude of all the channels.
    */
-    inline void decreaseAllChannelsAmplitude(){emit decreaseAllAmplitude();}
+    void decreaseAllChannelsAmplitude(){emit decreaseAllAmplitude();}
 
     /**Triggers the increase of the amplitude of the selected channels.
    */
-    inline void increaseSelectedChannelsAmplitude(const QList<int> selectedIds){
+    void increaseSelectedChannelsAmplitude(const QList<int> selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
@@ -288,7 +288,7 @@ public:
 
     /**Triggers the decrease of the amplitude of the selected channels.
    */
-    inline void decreaseSelectedChannelsAmplitude(const QList<int> selectedIds){
+    void decreaseSelectedChannelsAmplitude(const QList<int> selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
@@ -299,19 +299,19 @@ public:
     }
 
     /**Update all the encapsulated widgets contain in the view. The widgets know how to draw themselves.*/
-    inline void updateViewContents(){
+    void updateViewContents(){
         emit updateDrawing();
     }
 
     /**Triggers the update of the display due to a change in the display groups.
     * @param active true if the view is the active one, false otherwise.
     */
-    inline void groupsModified(bool active){emit groupsHaveBeenModified(active);}
+    void groupsModified(bool active){emit groupsHaveBeenModified(active);}
 
     /**Selects the channels in the TraceView.
    *@param selectedIds ids of the selected channels.
    */
-    inline void selectChannels(const QList<int>& selectedIds){
+    void selectChannels(const QList<int>& selectedIds){
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
@@ -358,7 +358,7 @@ public:
     /** Sets the channels selected in the channel palettes.
    *@param selectedIds ids of the selected channels.
    */
-    inline void setSelectedChannels(const QList<int>& selectedIds){
+    void setSelectedChannels(const QList<int>& selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
@@ -370,7 +370,7 @@ public:
     /** Sets the label for the display when in tab page mode.
    * @param newLabel the new label for the display.
    */
-    inline void setTabName(const QString& newLabel){tabLabel = newLabel;}
+    void setTabName(const QString& newLabel){tabLabel = newLabel;}
 
     /** Gets the label for the display when in tab page mode.
    * @return newLabel the new label for the display.
@@ -390,7 +390,7 @@ public:
     /**Displays or hides the labels next to the traces.
   * @param status true if the labels have to be drawn, false otherwise.
   */
-    inline void showLabelsUpdate(bool status){
+    void showLabelsUpdate(bool status){
         labelsDisplay = status;
         emit showLabels(status);
     }
@@ -404,7 +404,7 @@ public:
   * @param show true if the bar has to be shown false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void showCalibration(bool show,bool active){emit displayCalibration(show,active);}
+    void showCalibration(bool show,bool active){emit displayCalibration(show,active);}
 
     /**Adds a new provider of cluster data.
   * @param clustersProvider provider of cluster data.
@@ -433,16 +433,16 @@ public:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void  clusterColorUpdate(QString name,int clusterId,bool active){emit clusterColorUpdated(name,clusterId,active);}
+    void  clusterColorUpdate(QString name,int clusterId,bool active){emit clusterColorUpdated(name,clusterId,active);}
 
     /**Hides the cluster waveforms on top of the traces but keep the setting of displaying or hidding them.*/
-    inline void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false);}
+    void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false);}
 
     /**Retrieves the next cluster.*/
-    inline void showNextCluster(){emit nextCluster();}
+    void showNextCluster(){emit nextCluster();}
 
     /**Retrieves the previous cluster.*/
-    inline void showPreviousCluster(){emit previousCluster();}
+    void showPreviousCluster(){emit previousCluster();}
 
     /**Adds a new provider of event data.
   * @param eventsProvider provider of event data.
@@ -467,15 +467,15 @@ public:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void  eventColorUpdate(QString name,int eventId,bool active){emit eventColorUpdated(name,eventId,active);}
+    void  eventColorUpdate(QString name,int eventId,bool active){emit eventColorUpdated(name,eventId,active);}
 
     /**Retrieves the next event.*/
-    inline void showNextEvent(){
+    void showNextEvent(){
         emit nextEvent();
     }
 
     /**Retrieves the previous event.*/
-    inline void showPreviousEvent(){
+    void showPreviousEvent(){
         emit previousEvent();
     }
 
@@ -490,7 +490,7 @@ public:
 
     /**Deletes the selected event.
   */
-    inline void removeEvent(){
+    void removeEvent(){
         emit eventToRemove();
         emit updateEventDisplay();
     }
@@ -517,7 +517,7 @@ public:
   * @param time initial time of the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updateEvents(QString providerName,int eventId,float time,bool active){
+    void updateEvents(QString providerName,int eventId,float time,bool active){
         emit updateEvents(active,providerName,time);
         emit updateEventDisplay();
     }
@@ -526,7 +526,7 @@ public:
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-    inline void eventToAddProperties(QString providerName,QString eventDescription){emit newEventProperties(providerName,eventDescription);}
+    void eventToAddProperties(QString providerName,QString eventDescription){emit newEventProperties(providerName,eventDescription);}
 
     /**Updates the ids of the selected events due to the modification of event ids due to the addition or suppression of an
   * event description.
@@ -568,7 +568,7 @@ public:
   * @param width video image width.
   * @param height video image height.
   */
-    inline void addPositionView(PositionsProvider* positionsProvider,QImage backgroundImage,QColor backgroundColor,int width,int height){
+    void addPositionView(PositionsProvider* positionsProvider,QImage backgroundImage,QColor backgroundColor,int width,int height){
         addPositionView(positionsProvider,backgroundImage,backgroundColor,startTime,timeWindow,width,height,eventsInPositionView);
     }
 
@@ -578,7 +578,7 @@ public:
     /**Updates the cluster information presented on the display.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updateClusterData(bool active){emit clusterProviderUpdated(active);}
+    void updateClusterData(bool active){emit clusterProviderUpdated(active);}
 
     /** Returns the list of clusters to not be used for browsing for the given cluster provider @p identified by name.
   * @param name name use to identified the cluster provider containing the clusters to skip.
@@ -607,13 +607,13 @@ public:
     /**Updates the list of skipped channels.
   * @param skippedChannels list of skipped channels
   **/
-    inline void updateSkipStatus(const QList<int>& skippedChannels){emit skipStatusChanged(skippedChannels);}
+    void updateSkipStatus(const QList<int>& skippedChannels){emit skipStatusChanged(skippedChannels);}
 
     /**Increases the height of the rasters.*/
-    inline void increaseRasterHeight(){emit increaseTheRasterHeight();}
+    void increaseRasterHeight(){emit increaseTheRasterHeight();}
 
     /**Decreases the height of the rasters.*/
-    inline void decreaseRasterHeight(){emit decreaseTheRasterHeight();}
+    void decreaseRasterHeight(){emit decreaseTheRasterHeight();}
 
     /**Returns the height of the rasters.
   *@return raster height.
@@ -629,7 +629,7 @@ public Q_SLOTS:
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
-    inline void slotChannelsSelected(const QList<int>& selectedIds){
+    void slotChannelsSelected(const QList<int>& selectedIds){
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
         for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
@@ -642,7 +642,7 @@ public Q_SLOTS:
    * @param start starting time.
    * @param duration time window.
    */
-    inline void setStartAndDuration(long start,long duration){
+    void setStartAndDuration(long start,long duration){
         startTime = start;
         timeWindow = duration;
         emit timeChanged(start,duration);
@@ -654,7 +654,7 @@ public Q_SLOTS:
   * @param time initial time of the modified event.
   * @param newTime new time of the modified event.
   */
-    inline void slotEventModified(QString providerName,int selectedEventId,double time,double newTime){
+    void slotEventModified(QString providerName,int selectedEventId,double time,double newTime){
         emit eventModified(providerName,selectedEventId,time,newTime);
         emit updateEventDisplay();
     }
@@ -664,7 +664,7 @@ public Q_SLOTS:
   * @param selectedEventId id of the removed event.
   * @param time initial time of the removed event.
   */
-    inline void slotEventRemoved(QString providerName,int selectedEventId,double time){
+    void slotEventRemoved(QString providerName,int selectedEventId,double time){
         emit eventRemoved(providerName,selectedEventId,time);
         emit updateEventDisplay();
     }
@@ -674,7 +674,7 @@ public Q_SLOTS:
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    inline void slotEventAdded(QString providerName,QString addedEventDescription,double time){
+    void slotEventAdded(QString providerName,QString addedEventDescription,double time){
         emit eventAdded(providerName,addedEventDescription,time);
     }
 
@@ -683,7 +683,7 @@ public Q_SLOTS:
   * @param nbSamplesAfter number of samples contained in the waveform of a spike after the sample of the peak.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updateWaveformInformation(int nbSamplesBefore, int nbSamplesAfter,bool active){
+    void updateWaveformInformation(int nbSamplesBefore, int nbSamplesAfter,bool active){
         emit waveformInformationUpdated(nbSamplesBefore,nbSamplesAfter,active);
     }
 
@@ -695,7 +695,7 @@ public Q_SLOTS:
   * @param newOrientation true if the image has been transformed (rotate and or flip), false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){
+    void updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){
         emit positionInformationUpdated(width,height,backgroundImage,newOrientation,active);
     }
 
@@ -714,7 +714,7 @@ public Q_SLOTS:
   * @param traceBackgroundImage image to be used as background.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updateTraceBackgroundImage(QImage traceBackgroundImage,bool active){emit traceBackgroundImageUpdate(traceBackgroundImage,active);}
+    void updateTraceBackgroundImage(QImage traceBackgroundImage,bool active){emit traceBackgroundImageUpdate(traceBackgroundImage,active);}
 
 
 

@@ -44,7 +44,7 @@ private Q_SLOTS:
 
 protected:
     void contentsMousePressEvent(QMouseEvent* event);
-    inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
+    void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
 Q_SIGNALS:
     void mousePressWoModificators(QString sourceGroup);

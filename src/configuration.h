@@ -41,80 +41,80 @@ public:
 
     /**Sets the screen gain in milivolts by centimeters used to display the field potentiels.
     */
-    inline void setScreenGain(float gain){
+    void setScreenGain(float gain){
         screenGain = gain;
     }
 
     /**Sets the voltage range of the acquisition system in milivolts.
     */
-    inline void setVoltageRange(int value){
+    void setVoltageRange(int value){
         voltageRange = value;
     }
 
     /**Sets the amplification of the acquisition system.
     */
-    inline void setAmplification(int value){
+    void setAmplification(int value){
         amplification = value;
     }
 
     /**Sets the background color.*/
-    inline void setBackgroundColor(QColor color) {backgroundColor = color;}
+    void setBackgroundColor(QColor color) {backgroundColor = color;}
 
     /**Sets the display of the palette headers.*/
-    inline void setPaletteHeaders(bool show){displayPaletteHeaders = show;}
+    void setPaletteHeaders(bool show){displayPaletteHeaders = show;}
     
     /**Sets the number of channels.*/
-    inline void setNbChannels(int nb){nbChannels = nb;}
+    void setNbChannels(int nb){nbChannels = nb;}
 
     /**Sets the sampling rate for the dat file.*/
-    inline void setDatSamplingRate(double rate){datSamplingRate = rate;}
+    void setDatSamplingRate(double rate){datSamplingRate = rate;}
 
     /**Sets the sampling rate for the eeg file.*/
-    inline void setEegSamplingRate(double rate){eegSamplingRate = rate;}
+    void setEegSamplingRate(double rate){eegSamplingRate = rate;}
 
     /**Sets the initial offset for all the field potentials.*/
-    inline void setOffset(int offset){this->offset = offset;}
+    void setOffset(int offset){this->offset = offset;}
 
     /**Sets the resolution of the acquisition system.*/
-    inline void setResolutionIndex(int index){resolutionIndex = index;}
+    void setResolutionIndex(int index){resolutionIndex = index;}
 
     /**Sets the event position, in percentage from the begining of the window, where the events are display when browsing.*/
-    inline void setEventPosition(int position){eventPosition = position;}
+    void setEventPosition(int position){eventPosition = position;}
 
     /**Sets the cluster position, in percentage from the begining of the window, where the clusters are display when browsing.*/
-    inline void setClusterPosition(int position){clusterPosition = position;}
+    void setClusterPosition(int position){clusterPosition = position;}
 
     /**Sets the number of samples per spike waveform.*/
-    inline void setNbSamples(int nb){nbSamples = nb;}
+    void setNbSamples(int nb){nbSamples = nb;}
 
     /**Sets the index of the peak sample in the spike waveform.*/
-    inline void setPeakIndex(int index){peakIndex = index;}
+    void setPeakIndex(int index){peakIndex = index;}
 
     /**Sets the video acquisition sampling rate.*/
-    inline void setSamplingRate(double rate){videoSamplingRate = rate;}
+    void setSamplingRate(double rate){videoSamplingRate = rate;}
 
     /**Sets the video image width.*/
-    inline void setWidth(int width){this->width = width;}
+    void setWidth(int width){this->width = width;}
 
     /**Sets the video image height.*/
-    inline void setHeight(int height){this->height = height;}
+    void setHeight(int height){this->height = height;}
 
     /**Sets the background image for the position view.*/
-    inline void setBackgroundImage(QString image){backgroundImage = image;}
+    void setBackgroundImage(QString image){backgroundImage = image;}
 
     /**Sets the video image rotation angle.*/
-    inline void setRotation(int angle){rotation = angle;}
+    void setRotation(int angle){rotation = angle;}
 
     /**Sets the  video image flip orientation.*/
-    inline void setFlip(int index){flip = index;}
+    void setFlip(int index){flip = index;}
     
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
     * This function sets if such background has to be created.
     */
-    inline void setPositionsBackground(int drawPositions){drawPositionsOnBackground = drawPositions;}
+    void setPositionsBackground(int drawPositions){drawPositionsOnBackground = drawPositions;}
     
     /**Sets the background image for the trace view.*/
-    inline void setTraceBackgroundImage(QString image){traceBackgroundImage = image;}
+    void setTraceBackgroundImage(QString image){traceBackgroundImage = image;}
     
     /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
     */

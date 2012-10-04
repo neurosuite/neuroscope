@@ -106,7 +106,7 @@ public:
     /**True if at least one property has been modified, false otherwise.*/
     inline bool isModified()const{return modified;}
 
-    inline void openState(bool init){atStartUp = init;}
+    void openState(bool init){atStartUp = init;}
 
     /**Returns the number of samples per spike waveform.*/
     inline int getNbSamples()const{return clusterProperties->getNbSamples();}
@@ -143,32 +143,32 @@ public:
     /**Sets whether the widgets of the cluster tab are enabled.
   * @param state true if enable, false otherwise.
   */
-    inline void setEnabledCluster(bool state){clusterProperties->setEnabled(state);}
+    void setEnabledCluster(bool state){clusterProperties->setEnabled(state);}
 
     /**Sets whether the widgets of the position tab are enabled.
   * @param state true enable, false otherwise.
   */
-    inline void setEnabledPosition(bool state){positionProperties->setEnabled(state);}
+    void setEnabledPosition(bool state){positionProperties->setEnabled(state);}
 
     /**Sets whether the sampling rate for the current file is enabled.
   * @param state true enable, false otherwise.
   */
-    inline void setEnabledCurrentSamplingRate(bool state){properties->setCurrentSamplingRateEnabled(state);}
+    void setEnabledCurrentSamplingRate(bool state){properties->setCurrentSamplingRateEnabled(state);}
 
     /**Shows the page containing the position information in front.*/
-    inline void showPositionPage(){
+    void showPositionPage(){
         setCurrentPage(mPositionPageIndex);
     }
 
 public Q_SLOTS:
     /** Will be called when any properties except the number of channels has been modified.*/
-    inline void propertyModified(){modified = true;}
+    void propertyModified(){modified = true;}
 
     /**Makes the verifications before returning from the dialog.*/
     void slotVerify();
 
 protected:
-    virtual inline void accept(){
+    virtual void accept(){
         if(oops){
             oops = false;
         }

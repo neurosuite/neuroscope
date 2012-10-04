@@ -200,7 +200,7 @@ private:
     float indexLengthDefault;
 
     /** Dictionary between the provider names and the provider except the TracesProvider.*/
-      Q3Dict<DataProvider> providers;
+    QHash<QString,DataProvider*> providers;
 
     /**Map between the provider's name display at the top of the palette and the paths to the provider's file.*/
     QMap<QString,QString> providerUrls;
@@ -209,7 +209,7 @@ private:
     QString lastLoadedProvider;
 
     /**Dictionary between the provider names and the item color lists except for the TracesProvider.*/
-    Q3Dict<ItemColors> providerItemColors;
+    QHash<QString,ItemColors*> providerItemColors;
 
     /**A base file name can be used for different kind of files corresponding to the same data and having
     * different sampling rates. Each file is identified by its extension. This map contains the correspondance
@@ -556,7 +556,7 @@ public:
    * @param amplificationDefault default amplification of the acquisition system.
    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels.
    */
-    inline void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
+    void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
         acquisitionGainDefault = static_cast<int>(0.5 +
                                                   static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolutionDefault))
                                                                      / static_cast<float>(voltageRangeDefault * 1000))
@@ -571,7 +571,7 @@ public:
     /**Sets the voltage range of the acquisition system in volts for the current document.
    * @param range current voltage range.
    */
-    inline void setVoltageRange(int range){
+    void setVoltageRange(int range){
         voltageRange = range;
         acquisitionGain = static_cast<int>(0.5 +
                                            static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
@@ -584,7 +584,7 @@ public:
     /**Sets the amplification of the acquisition system for the current document.
    * @param amplification current amplification.
    */
-    inline void setAmplification(int amplification){
+    void setAmplification(int amplification){
         this->amplification = amplification;
         acquisitionGain = static_cast<int>(0.5 +
                                            static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
@@ -597,7 +597,7 @@ public:
     /**Sets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
    * @param gain current screen gain.
    */
-    inline void setScreenGain(float gain){
+    void setScreenGain(float gain){
         screenGain = gain;
         acquisitionGain = static_cast<int>(0.5 +
                                            static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
@@ -610,37 +610,37 @@ public:
     /**Sets the default initial offset for all the traces.
    * @param offset initial offset.
    */
-    inline void setDefaultInitialOffset(int offset){initialOffsetDefault = offset;}
+    void setDefaultInitialOffset(int offset){initialOffsetDefault = offset;}
 
     /**Sets the default resolution of the acquisition system.
    * @param resolution default resolution.
    */
-    inline void setDefaultResolution(int resolution){resolutionDefault = resolution;}
+    void setDefaultResolution(int resolution){resolutionDefault = resolution;}
 
     /**Sets the default sampling rate of the EEG file.
    * @param rate default sampling rate.
    */
-    inline void setDefaultEegSamplingRate(double rate){eegSamplingRateDefault = rate;}
+    void setDefaultEegSamplingRate(double rate){eegSamplingRateDefault = rate;}
 
     /**Sets the default sampling rate of the dat file.
    * @param rate default sampling rate.
    */
-    inline void setDefaultDatSamplingRate(double rate){datSamplingRateDefault = rate;}
+    void setDefaultDatSamplingRate(double rate){datSamplingRateDefault = rate;}
 
     /**Sets the default number of channels.
    * @param nb default number of channels.
    */
-    inline void setDefaultChannelNb(int nb){channelNbDefault = nb;}
+    void setDefaultChannelNb(int nb){channelNbDefault = nb;}
 
     /**Sets the default background image for the trace view.
    * @param traceBackgroundImagePath background image.
    */
-    inline void setDefaultTraceBackgroundImage(QString traceBackgroundImagePath){
+    void setDefaultTraceBackgroundImage(QString traceBackgroundImagePath){
         traceBackgroundImageDefault = traceBackgroundImagePath;
     }
 
     /**Sets that some of the properties of the current document were provided on the command line.*/
-    inline void propertiesFromCommandLine(){isCommandLineProperties = true;}
+    void propertiesFromCommandLine(){isCommandLineProperties = true;}
 
     /**Returns a pointer on the list of ItemColor objects used to represent the channel colors.
    * @return ChannelColors containing the information on the channels and their associated color.
@@ -706,10 +706,10 @@ public:
    * @param acquisitionSystemSamplingRate acquisition system sampling.
    * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
-    inline void updateFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
-                                     float screenGain,int newNbSamples,int newPeakSampleIndex,double videoSamplingRate,
-                                     int width, int height, const QString& backgroundImage, const QString& traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
-                                     bool positionsBackground){
+    void updateFileProperties(int channelNb,double SR,int resolution,int offset,int voltageRange,int amplification,
+                              float screenGain,int newNbSamples,int newPeakSampleIndex,double videoSamplingRate,
+                              int width, int height, const QString& backgroundImage, const QString& traceBackgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,
+                              bool positionsBackground){
         this->channelNb = channelNb;
         if(extension != "dat")
             samplingRate = SR;
@@ -948,7 +948,7 @@ public:
     * @param nb number of samples per spike waveform.
     * @param index sample index corresponding to the peak of a spike waveform.
     */
-    inline void setDefaultWaveformInformation(int nb,int index){
+    void setDefaultWaveformInformation(int nb,int index){
         nbSamplesDefault = nb;
         peakSampleIndexDefault = index;
     }
@@ -1058,7 +1058,7 @@ public:
         inline ~CloseDocumentEvent(){}
 
     private:
-       CloseDocumentEvent(const QString& origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
+        CloseDocumentEvent(const QString& origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
 
         QString origin;
     };

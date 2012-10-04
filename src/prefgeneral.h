@@ -48,19 +48,19 @@ public:
 
 
   /**Sets the background color.*/
-  inline void setBackgroundColor(const QColor& color)
+  void setBackgroundColor(const QColor& color)
   {
       backgroundColorButton->setColor(color);
   }
 
   /**Sets the display of the palette headers.*/
-  inline void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);}
+  void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);}
 
   /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
-  inline void setEventPosition(int position){eventPositionSpinBox->setValue(position);}
+  void setEventPosition(int position){eventPositionSpinBox->setValue(position);}
 
   /**Sets the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  inline void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
+  void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
 
   /**Returns the background color.*/
   inline QColor getBackgroundColor() const{

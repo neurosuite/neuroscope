@@ -44,7 +44,7 @@ protected:
     virtual Q3DragObject* dragObject();
     virtual void contentsDropEvent(QDropEvent* event);
     virtual void contentsMousePressEvent(QMouseEvent* event);
-    inline void contentsWheelEvent(QWheelEvent* event){event->accept();}
+    void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
 Q_SIGNALS:
     void channelsMoved(QString targetGroup,Q3IconViewItem* after);
@@ -53,7 +53,7 @@ Q_SIGNALS:
     void moussePressWoModificators(QString sourceGroup);
 
 public Q_SLOTS:
-    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
+    void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 protected Q_SLOTS:
     void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);

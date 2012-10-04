@@ -62,7 +62,7 @@ public:
 
     inline ~ChannelGroupView(){}
 
-    inline void setIconView(Q3IconView* view){
+    void setIconView(Q3IconView* view){
         iconView = view;
         mLayout->addWidget(iconView);
     }
@@ -72,7 +72,7 @@ Q_SIGNALS:
     void dragObjectMoved(QPoint position);
     
 public Q_SLOTS:
-    inline void reAdjustSize(int parentWidth,int labelSize){
+    void reAdjustSize(int parentWidth,int labelSize){
         if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
             init = false;
             int futurWidth = parentWidth ;
@@ -90,7 +90,7 @@ public Q_SLOTS:
             setFixedHeight(iconView->contentsHeight());
     }
 
-    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
+    void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 protected:
     inline virtual void dropEvent(QDropEvent* event){

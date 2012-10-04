@@ -101,12 +101,12 @@ public:
     /** Sets the position where the clusters are display when browsing.
   * @param position percentage from the begining of the window.
   */
-    inline void setClusterPosition(int position){clusterPosition = static_cast<float>(position) / 100.0;}
+    void setClusterPosition(int position){clusterPosition = static_cast<float>(position) / 100.0;}
 
     /**Updates the sampling rate for the current document.
   * @param rate sampling rate.
   */
-    inline void updateSamplingRate(double rate){
+    void updateSamplingRate(double rate){
         dataCurrentRatio = static_cast<float>(samplingRate / rate);
 
         //Initialize the variables
@@ -122,7 +122,7 @@ public:
   * @param rate acquisition system sampling rate.
   * @param currentSamplingRate sampling rate for the current document.
   */
-    inline void updateAcquisitionSystemSamplingRate(double rate,double currentSamplingRate){
+    void updateAcquisitionSystemSamplingRate(double rate,double currentSamplingRate){
         samplingRate = rate;
         dataCurrentRatio = static_cast<float>(samplingRate / currentSamplingRate);
 

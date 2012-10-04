@@ -46,7 +46,7 @@ public:
     ~TracesProvider();
 
     /// Added by M.Zugaro to enable automatic forward paging
-    inline void updateRecordingLength() { computeRecordingLength(); }
+    void updateRecordingLength() { computeRecordingLength(); }
 
     /**Triggers the retrieve of the traces included in the time rate given by @p startTime and @p endTime.
   * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.
@@ -59,7 +59,7 @@ public:
     /**Sets the number of channels corresponding to the file identified by fileUrl.
   * @param nb the number of channels.
   */
-    inline void setNbChannels(int nb){
+    void setNbChannels(int nb){
         nbChannels = nb;
         computeRecordingLength();
     }
@@ -67,7 +67,7 @@ public:
     /**Sets the resolution used to record the data contained in the file identified by fileUrl.
   * @param res resolution.
   */
-    inline void setResolution(int res){
+    void setResolution(int res){
         resolution = res;
         computeRecordingLength();
     }
@@ -75,7 +75,7 @@ public:
     /**Sets the sampling rate used to record the data contained in the file identified by fileUrl.
   * @param rate the sampling rate.
   */
-    inline void setSamplingRate(double rate){
+    void setSamplingRate(double rate){
         samplingRate = rate;
         computeRecordingLength();
     }
@@ -83,7 +83,7 @@ public:
     /**Sets the offset to apply to the data contained in the file identified by fileUrl.
   * @param newOffset offset.
   */
-    inline void setOffset(int newOffset){offset =  newOffset;}
+    void setOffset(int newOffset){offset =  newOffset;}
 
     /**Returns the number of channels corresponding to the file identified by fileUrl.
   */

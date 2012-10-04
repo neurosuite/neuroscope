@@ -123,13 +123,13 @@ public Q_SLOTS:
     void eventColorUpdate(QString name,int eventId,bool active);
 
     /**Update the information presented in the view.*/
-    inline void updateDrawing(){
+    void updateDrawing(){
         //Everything has to be redraw
         drawContentsMode = REDRAW ;
         update();
     }
     
-    inline void addEventProvider(){updateEventDisplay();}
+    void addEventProvider(){updateEventDisplay();}
 
     /**Removes a provider of event data.
   * @param name name use to identified the event provider.
@@ -154,7 +154,7 @@ protected:
   * The bachground image is recomputed.
   * @param event resize event.
   */
-    inline void resizeEvent(QResizeEvent* event){
+    void resizeEvent(QResizeEvent* event){
         drawContentsMode = REDRAW;
         resized = true;
     }

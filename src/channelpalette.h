@@ -165,7 +165,7 @@ public Q_SLOTS:
     void groupToMove(int sourceId,int targetId,int start, int destination);
     void removeChannelsFromTrash(const QList<int>& channelIds);
     void slotMousePressWoModificators(QString sourceGroup);
-    inline void selectionTool(){
+    void selectionTool(){
         emit channelsSelected(selectedChannels());
     }
     
@@ -180,7 +180,7 @@ protected Q_SLOTS:
     virtual void setChannelLists();
     virtual void resizeEvent(QResizeEvent* event);
     void paintEvent (QPaintEvent*);
-    inline void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
+    void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
     
 Q_SIGNALS:
     void singleChangeColor(int selectedChannel);
@@ -332,7 +332,7 @@ public:
     }
 
 public Q_SLOTS:
-    inline void setDragAndDrop(bool dragDrop){drag = dragDrop;}
+    void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start, int destination);
@@ -360,7 +360,7 @@ Q_SIGNALS:
     void leftClickOnLabel(QString sourceId);
 
 protected:
-    virtual inline void mousePressEvent(QMouseEvent* e){
+    virtual void mousePressEvent(QMouseEvent* e){
         if(e->button() == Qt::LeftButton){
 
             QPoint firstClick = QWidget::mapToGlobal(e->pos());

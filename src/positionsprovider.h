@@ -79,7 +79,7 @@ public:
   */
     inline QString getFilePath() const {return fileName;}
 
-    inline void updateVideoInformation(double videoSamplingRate,int rotation,int flip,int videoWidth,int videoHeight){
+    void updateVideoInformation(double videoSamplingRate,int rotation,int flip,int videoWidth,int videoHeight){
         samplingRate = videoSamplingRate;
         width = videoWidth;
         height= videoHeight;

@@ -56,7 +56,7 @@ public:
   * @param mode the way of looking up for the cluster
   * @param color color to attribute to the cluster
   */
-    virtual inline void setColor(int identifier, QColor color, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){ItemColors::setColor(identifier,color,mode);}
+    virtual void setColor(int identifier, QColor color, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){ItemColors::setColor(identifier,color,mode);}
 
 
     /**
@@ -89,7 +89,7 @@ public:
   * @param mode the way of looking up for the color
   * @param changed color status.
   */
-    virtual inline void setColorChanged(int identifier, bool changed, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){
+    virtual void setColorChanged(int identifier, bool changed, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){
         ItemColors::setColorChanged(identifier,changed,mode);
     }
 
@@ -109,7 +109,7 @@ public:
   * Sets the color status for the entire list of clusters.
   * @param changed color status.
   */
-    virtual inline void setColorChanged(bool changed){ItemColors::setColorChanged(changed);}
+    virtual void setColorChanged(bool changed){ItemColors::setColorChanged(changed);}
 
 
     /**
@@ -128,7 +128,7 @@ public:
   * @param index index position where to insert the cluster.
   * @param color the color of the cluster.
   */
-    virtual inline void insert(int clusterId, QColor color,int index){
+    virtual void insert(int clusterId, QColor color,int index){
         ItemColors::insert(clusterId,color,index);
     }
 
@@ -156,7 +156,7 @@ public:
   * Resets the status color of the object to false
   * and do the same for all the clusters
   */
-    virtual inline void resetAllColorStatus(){
+    virtual void resetAllColorStatus(){
         ItemColors::resetAllColorStatus();
     }
 
@@ -165,7 +165,7 @@ public:
   * @param index position of the cluster in the list.
   * @param newClusterId the new id to assign.
   */
-    virtual inline void changeClusterId(int index, int newClusterId){
+    virtual void changeClusterId(int index, int newClusterId){
         ItemColors::changeItemId(index,newClusterId);
     }
 };

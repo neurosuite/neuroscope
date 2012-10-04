@@ -176,7 +176,7 @@ public:
     inline QColor getBackgroundColor()const{return backgroundColor;}
 
     /**Informs the application that a position file has been loaded from the session file.*/
-    inline void positionFileLoaded(){
+    void positionFileLoaded(){
         isPositionFileLoaded = true;
         slotStateChanged("positionState");
     }
@@ -194,9 +194,9 @@ public:
 public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
-    inline void page() {	activeView()->page(); }
-    inline void accelerate() {	activeView()->accelerate(); }
-    inline void decelerate() {	activeView()->decelerate(); }
+    void page() {	activeView()->page(); }
+    void accelerate() {	activeView()->accelerate(); }
+    void decelerate() {	activeView()->decelerate(); }
 
     /**Called when an event has been modified.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -234,30 +234,30 @@ public Q_SLOTS:
     void slotEventAdded(QString providerName,QString addedEventDescription,double time);
 
     /**Update the positions menu due to the closing of the current position view.*/
-    inline void positionViewClosed(){positionViewToggle->setChecked(false);}
+    void positionViewClosed(){positionViewToggle->setChecked(false);}
 
     /**Disables clusters browsing as no clusters have been selected for browsing.
   */
-    inline void slotNoClustersToBrowse(){
+    void slotNoClustersToBrowse(){
         slotStateChanged("noClusterBrowsingState");
     }
 
     /**Enables clusters browsing as some clusters have been selected for browsing.
   */
-    inline void slotClustersToBrowse(){
+    void slotClustersToBrowse(){
         slotStateChanged("clusterBrowsingState");
     }
 
 
     /**Disables events browsing as no events have been selected for browsing.
   */
-    inline void slotNoEventsToBrowse(){
+    void slotNoEventsToBrowse(){
         slotStateChanged("noEventBrowsingState");
     }
 
     /**Enables events browsing as some events have been selected for browsing.
   */
-    inline void slotEventsToBrowse(){
+    void slotEventsToBrowse(){
         slotStateChanged("eventBrowsingState");
     }
 
@@ -530,11 +530,11 @@ private Q_SLOTS:
 
     /**Triggers the increase of the amplitude of all the channels.
    */
-    inline void slotIncreaseAllChannelsAmplitude(){activeView()->increaseAllChannelsAmplitude();}
+    void slotIncreaseAllChannelsAmplitude(){activeView()->increaseAllChannelsAmplitude();}
 
     /**Triggers the decrease of the amplitude of all the channels.
    */
-    inline void slotDecreaseAllChannelsAmplitude(){activeView()->decreaseAllChannelsAmplitude();}
+    void slotDecreaseAllChannelsAmplitude(){activeView()->decreaseAllChannelsAmplitude();}
 
     /**Triggers the increase of the amplitude of the selected channels.
    */

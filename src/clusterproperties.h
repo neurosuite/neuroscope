@@ -39,10 +39,10 @@ public:
 
 
     /**Sets the number of samples per spike waveform.*/
-    inline void setNbSamples(int nb){nbSamplesLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
+    void setNbSamples(int nb){nbSamplesLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
 
     /**Sets the index of the peak sample in the spike waveform.*/
-    inline void setPeakIndex(int index){peakIndexLineEdit->setText(QString::fromLatin1("%1").arg(index));}
+    void setPeakIndex(int index){peakIndexLineEdit->setText(QString::fromLatin1("%1").arg(index));}
 
     /**Returns the number of samples per spike waveform.*/
     inline int getNbSamples()const{return nbSamplesLineEdit->text().toInt();}
@@ -54,7 +54,7 @@ public Q_SLOTS:
     /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */
-    inline void setEnabled (bool state){
+    void setEnabled (bool state){
         groupBox->setEnabled(state);
         nbSamplesLineEdit->setEnabled(state);
         waveformLabel->setEnabled(state);

@@ -59,8 +59,6 @@ NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPale
     newEventDescriptionCreated(false),videoWidthDefault(width),videoHeightDefault(height),backgroundImageDefault(backgroundImage),traceBackgroundImageDefault(traceBackgroundImage),rotationDefault(rotation),flipDefault(flip),drawPositionsOnBackgroundDefault(positionsBackground),positionFileOpenOnce(false)
 {
     viewList = new QList<NeuroscopeView*>();
-    providers.setAutoDelete(true);
-    providerItemColors.setAutoDelete(true);
 
     //Set the properties to the default values
     channelNb = channelNbDefault;
@@ -104,6 +102,11 @@ NeuroscopeDoc::~NeuroscopeDoc(){
         delete channelColorList;
         delete tracesProvider;
     }
+    qDeleteAll(providers);
+    providers.clear();
+    qDeleteAll(providerItemColors);
+    providerItemColors.clear();
+
 }
 
 bool NeuroscopeDoc::canCloseDocument(NeuroscopeApp* mainWindow,QString callingMethod){
@@ -112,10 +115,12 @@ bool NeuroscopeDoc::canCloseDocument(NeuroscopeApp* mainWindow,QString callingMe
     bool threadRunning = false;
 
     if(!threadRunning){
-        Q3DictIterator<DataProvider> iterator(providers);
-        for(;iterator.current();++iterator){
-            threadRunning = iterator.current()->isThreadsRunning();
-            if(threadRunning) break;
+        QHashIterator<QString, DataProvider*> i(providers);
+        while (i.hasNext()) {
+            i.next();
+            threadRunning = i.value()->isThreadsRunning();
+            if(threadRunning)
+                break;
         }
     }
 
@@ -620,16 +625,17 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         displayInformation.setRasterHeight(view->getRasterHeight());
 
         //loop on all the loaded files and set the clusters,event ids show in the current display
-        Q3DictIterator<DataProvider> it(providers);
-        for( ; it.current(); ++it){
-            QString name = it.currentKey();
-            if(it.current()->metaObject()->className() == ("ClustersProvider")){
+        QHashIterator<QString, DataProvider*> it(providers);
+        while (it.hasNext()) {
+            it.next();
+            const QString name = it.key();
+            if(it.value()->metaObject()->className() == ("ClustersProvider")){
                 QList<int> clusterIds = *(view->getSelectedClusters(name));
                 displayInformation.setSelectedClusters(providerUrls[name],clusterIds);
                 QList<int> skippedClusterIds = *(view->getClustersNotUsedForBrowsing(name));
                 displayInformation.setSkippedClusters(providerUrls[name],skippedClusterIds);
             }
-            if(it.current()->metaObject()->className() == ("EventsProvider")){
+            if(it.value()->metaObject()->className() == ("EventsProvider")){
                 //An id has been assigned to each event, this id is used internally in NeuroScope and in the session file.
                 QList<int> eventIds = *(view->getSelectedEvents(name));
                 displayInformation.setSelectedEvents(providerUrls[name],eventIds);
@@ -876,14 +882,14 @@ void NeuroscopeDoc::setSamplingRate(double rate){
     else extensionSamplingRates.insert(extension,samplingRate);
 
     //update the cluster and event providers
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString name = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("ClustersProvider")){
-            static_cast<ClustersProvider*>(iterator.current())->updateSamplingRate(samplingRate);
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        if(i.value()->metaObject()->className() == ("ClustersProvider")){
+            static_cast<ClustersProvider*>(i.value())->updateSamplingRate(samplingRate);
         }
-        if(iterator.current()->metaObject()->className() == ("EventsProvider")){
-            static_cast<EventsProvider*>(iterator.current())->updateSamplingRate(samplingRate);
+        if(i.value()->metaObject()->className() == ("EventsProvider")){
+            static_cast<EventsProvider*>(i.value())->updateSamplingRate(samplingRate);
         }
     }
 
@@ -910,11 +916,12 @@ void NeuroscopeDoc::setSamplingRate(double rate){
 void NeuroscopeDoc::setAcquisitionSystemSamplingRate(double rate){
     datSamplingRate = rate;
     //update the cluster providers
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString name = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("ClustersProvider")){
-            static_cast<ClustersProvider*>(iterator.current())->updateAcquisitionSystemSamplingRate(datSamplingRate,samplingRate);
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+
+        if(i.value()->metaObject()->className() == ("ClustersProvider")){
+            static_cast<ClustersProvider*>(i.value())->updateAcquisitionSystemSamplingRate(datSamplingRate,samplingRate);
         }
     }
 
@@ -1451,28 +1458,29 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
 void NeuroscopeDoc::setProviders(NeuroscopeView* activeView){  
     //the new view is the last one in the list of view (viewList)
     NeuroscopeView* newView = viewList->last();
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString name = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("ClustersProvider")){
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        const QString name = i.key();
+        if(i.value()->metaObject()->className() == ("ClustersProvider")){
             QList<int> clusterIds = *(activeView->getSelectedClusters(name));
             QList<int> clusterIdsToSkip = *(activeView->getClustersNotUsedForBrowsing(name));
-            newView->setClusterProvider(static_cast<ClustersProvider*>(iterator.current()),name,providerItemColors[name],true
+            newView->setClusterProvider(static_cast<ClustersProvider*>(i.value()),name,providerItemColors[name],true
                                         ,clusterIds,&displayGroupsClusterFile,&channelsSpikeGroups,peakSampleIndex - 1,nbSamples - peakSampleIndex,clusterIdsToSkip);
         }
-        if(iterator.current()->metaObject()->className() == ("EventsProvider")){
+        if(i.value()->metaObject()->className() == ("EventsProvider")){
             QList<int> eventIds = *(activeView->getSelectedEvents(name));
             QList<int> eventIdsToSkip = *(activeView->getEventsNotUsedForBrowsing(name));
-            newView->setEventProvider(static_cast<EventsProvider*>(iterator.current()),name,providerItemColors[name],true,eventIds,eventIdsToSkip);
+            newView->setEventProvider(static_cast<EventsProvider*>(i.value()),name,providerItemColors[name],true,eventIds,eventIdsToSkip);
         }
-        if(iterator.current()->metaObject()->className() == ("PositionsProvider")){
+        if(i.value()->metaObject()->className() == ("PositionsProvider")){
             if(activeView->isPositionView()){
                 if(rotation != 90 && rotation != 270)
-                    newView->addPositionView(static_cast<PositionsProvider*>(iterator.current()),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
+                    newView->addPositionView(static_cast<PositionsProvider*>(i.value()),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
                                              videoWidth,videoHeight);
 
                 //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
-                else newView->addPositionView(static_cast<PositionsProvider*>(iterator.current()),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
+                else newView->addPositionView(static_cast<PositionsProvider*>(i.value()),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
                                               videoHeight,videoWidth);
             }
         }
@@ -1506,10 +1514,11 @@ void NeuroscopeDoc::setPositionInformation(double newVideoSamplingRate, int newW
     drawPositionsOnBackground = positionsBackground;
 
     //Update the position provider
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        if(iterator.current()->metaObject()->className() == ("PositionsProvider")){
-            static_cast<PositionsProvider*>(iterator.current())->updateVideoInformation(videoSamplingRate,rotation,flip,videoWidth,videoHeight);
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        if(i.value()->metaObject()->className() == ("PositionsProvider")){
+            static_cast<PositionsProvider*>(i.value())->updateVideoInformation(videoSamplingRate,rotation,flip,videoWidth,videoHeight);
             break;
         }
     }
@@ -1518,7 +1527,8 @@ void NeuroscopeDoc::setPositionInformation(double newVideoSamplingRate, int newW
     if(extensionSamplingRates.contains(positionFileExtension))
         extensionSamplingRates.insert(positionFileExtension,videoSamplingRate);
 
-    if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground)) transformedBackground = transformBackgroundImage();
+    if(backgroundImage != "" || (backgroundImage.isEmpty() && drawPositionsOnBackground))
+        transformedBackground = transformBackgroundImage();
     else transformedBackground.reset();
 
     //Update the views
@@ -1547,12 +1557,14 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
     if(drawPositionsOnBackground){
         //Get the PositionProvider
         PositionsProvider* positionsProvider;
-        Q3DictIterator<DataProvider> iterator(providers);
-        for(;iterator.current();++iterator)
-            if(iterator.current()->metaObject()->className() == ("PositionsProvider")){
-                positionsProvider = static_cast<PositionsProvider*>(iterator.current());
+        QHashIterator<QString, DataProvider*> i(providers);
+        while (i.hasNext()) {
+            i.next();
+            if(i.value()->metaObject()->className() == ("PositionsProvider")){
+                positionsProvider = static_cast<PositionsProvider*>(i.value());
                 break;
             }
+        }
         //Create the image with the positions
         if(useWhiteBackground){
             ImageCreator creator(*positionsProvider,videoWidth,videoHeight,"",Qt::white);
@@ -1609,11 +1621,12 @@ void NeuroscopeDoc::selectAllChannels(NeuroscopeView& activeView,bool editMode){
 }
 
 void NeuroscopeDoc::showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,QList<int> clustersToHide){
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString providerName = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("ClustersProvider")){
-            QList<int> clusterList = static_cast<ClustersProvider*>(iterator.current())->clusterIdList();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        const QString providerName = i.key();
+        if(i.value()->metaObject()->className() == ("ClustersProvider")){
+            QList<int> clusterList = static_cast<ClustersProvider*>(i.value())->clusterIdList();
             QList<int> clustersToShow;
 
             if(clustersToHide.isEmpty()){
@@ -1637,10 +1650,12 @@ void NeuroscopeDoc::showAllClustersExcept(ItemPalette* clusterPalette,Neuroscope
 }
 
 void NeuroscopeDoc::deselectAllClusters(ItemPalette* clusterPalette,NeuroscopeView* activeView){
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString providerName = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("ClustersProvider")){
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+
+        const QString providerName = i.key();
+        if(i.value()->metaObject()->className() == ("ClustersProvider")){
             QList<int> clustersToShow;
             //The new selection of clusters only means for the active view
             activeView->shownClustersUpdate(providerName,clustersToShow);
@@ -1650,11 +1665,12 @@ void NeuroscopeDoc::deselectAllClusters(ItemPalette* clusterPalette,NeuroscopeVi
 }
 
 void NeuroscopeDoc::showAllEvents(ItemPalette* eventPalette,NeuroscopeView* activeView){
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString providerName = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("EventsProvider")){
-            QMap<EventDescription,int> events = static_cast<EventsProvider*>(iterator.current())->eventDescriptionIdMap();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        const QString providerName = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider")){
+            QMap<EventDescription,int> events = static_cast<EventsProvider*>(i.value())->eventDescriptionIdMap();
             QList<int> eventList = events.values();
             //The new selection of events only means for the active view
             activeView->shownEventsUpdate(providerName,eventList);
@@ -1664,10 +1680,11 @@ void NeuroscopeDoc::showAllEvents(ItemPalette* eventPalette,NeuroscopeView* acti
 }
 
 void NeuroscopeDoc::deselectAllEvents(ItemPalette* eventPalette,NeuroscopeView* activeView){
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        QString providerName = iterator.currentKey();
-        if(iterator.current()->metaObject()->className() == ("EventsProvider")){
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        QString providerName = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider")){
             QList<int> eventsToShow;
             //The new selection of events only means for the active view
             activeView->shownEventsUpdate(providerName,eventsToShow);
@@ -1738,7 +1755,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
         return INCORRECT_FILE;
     }
 
-    if(providers.find(name) != 0 && providers.find(name)->metaObject()->className() == ("ClustersProvider")){
+    if(providers.contains(name) && providers[name]->metaObject()->className() == ("ClustersProvider")){
         delete clustersProvider;
         return ALREADY_OPENED;
     }
@@ -1957,7 +1974,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
         return INCORRECT_FILE;
     }
 
-    if(providers.find(name) != 0 && providers.find(name)->metaObject()->className() == ("EventsProvider")){
+    if(providers.contains(name) && providers[name]->metaObject()->className() == ("EventsProvider")){
         delete eventsProvider;
         return ALREADY_OPENED;
     }
@@ -2155,11 +2172,12 @@ void NeuroscopeDoc::setEventPosition(int position){
 
 void NeuroscopeDoc::eventModified(QString providerName,int selectedEventId,double time,double newTime,NeuroscopeView* activeView){
     //clear the undo/redo data of all the event providers except providerName
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        QString name = it.currentKey();
-        if(it.current()->metaObject()->className() == ("EventsProvider") && name != providerName){
-            static_cast<EventsProvider*>(it.current())->clearUndoRedoData();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        QString name = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider") && name != providerName){
+            static_cast<EventsProvider*>(i.value())->clearUndoRedoData();
         }
     }
 
@@ -2167,7 +2185,8 @@ void NeuroscopeDoc::eventModified(QString providerName,int selectedEventId,doubl
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
 
-        if(view != activeView) view->updateEvents(providerName,selectedEventId,time,newTime,false);
+        if(view != activeView)
+            view->updateEvents(providerName,selectedEventId,time,newTime,false);
     }
 
     //Prepare the undo/redo mechanism
@@ -2180,11 +2199,12 @@ void NeuroscopeDoc::eventModified(QString providerName,int selectedEventId,doubl
 
 void NeuroscopeDoc::eventRemoved(QString providerName,int selectedEventId,double time,NeuroscopeView* activeView){
     //clear the undo/redo data of all the event providers except providerName
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        QString name = it.currentKey();
-        if(it.current()->metaObject()->className() == ("EventsProvider") && name != providerName){
-            static_cast<EventsProvider*>(it.current())->clearUndoRedoData();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        QString name = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider") && name != providerName){
+            static_cast<EventsProvider*>(i.value())->clearUndoRedoData();
         }
     }
 
@@ -2207,14 +2227,15 @@ void NeuroscopeDoc::eventAdded(QString providerName,QString addEventDescription,
     int addedEventId = 0;
 
     //clear the undo/redo data of all the event providers except providerName and lookup for the selectedEventId
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        QString name = it.currentKey();
-        if(it.current()->metaObject()->className() == ("EventsProvider") && name != providerName){
-            static_cast<EventsProvider*>(it.current())->clearUndoRedoData();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        QString name = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider") && name != providerName){
+            static_cast<EventsProvider*>(i.value())->clearUndoRedoData();
         }
-        else if(it.current()->metaObject()->className() == ("EventsProvider") && name == providerName){
-            QMap<EventDescription,int> eventMap = static_cast<EventsProvider*>(it.current())->eventDescriptionIdMap();
+        else if(i.value()->metaObject()->className() == ("EventsProvider") && name == providerName){
+            QMap<EventDescription,int> eventMap = static_cast<EventsProvider*>(i.value())->eventDescriptionIdMap();
             addedEventId = eventMap[addEventDescription];
         }
     }
@@ -2301,11 +2322,13 @@ void NeuroscopeDoc::redo(NeuroscopeView* activeView){
 QList<EventDescription> NeuroscopeDoc::eventIds(QString providerName){
     QMap<EventDescription,int> eventMap;
 
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        QString name = it.currentKey();
-        if(it.current()->metaObject()->className() == ("EventsProvider") && name == providerName){
-            eventMap = static_cast<EventsProvider*>(it.current())->eventDescriptionIdMap();
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+
+        QString name = i.key();
+        if(i.value()->metaObject()->className() == ("EventsProvider") && name == providerName){
+            eventMap = static_cast<EventsProvider*>(i.value())->eventDescriptionIdMap();
             break;
         }
     }
@@ -2426,7 +2449,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QStrin
         return INCORRECT_FILE;
     }
 
-    if(providers.find(name) != 0){
+    if(providers.contains(name)){
         delete eventsProvider;
         return ALREADY_OPENED;
     }
@@ -2470,7 +2493,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
 
     PositionsProvider* positionsProvider = new PositionsProvider(url,videoSamplingRate,videoWidth,videoHeight,rotation,flip);
     QString name = positionsProvider->getName();
-    if(providers.find(name) != 0){
+    if(providers.contains(name)){
         delete positionsProvider;
         return ALREADY_OPENED;
     }
@@ -2540,15 +2563,16 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
 }
 
 void NeuroscopeDoc::addPositionView(NeuroscopeView* activeView,QColor backgroundColor){
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        if(it.current()->metaObject()->className() == ("PositionsProvider")){
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        if(i.value()->metaObject()->className() == ("PositionsProvider")){
             if(rotation != 90 && rotation != 270)
-                activeView->addPositionView(static_cast<PositionsProvider*>(it.current()),transformedBackground,
+                activeView->addPositionView(static_cast<PositionsProvider*>(i.value()),transformedBackground,
                                             backgroundColor,videoWidth,videoHeight);
 
             //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
-            else activeView->addPositionView(static_cast<PositionsProvider*>(it.current()),transformedBackground,
+            else activeView->addPositionView(static_cast<PositionsProvider*>(i.value()),transformedBackground,
                                              backgroundColor,videoHeight,videoWidth);
             break;
         }
@@ -2558,10 +2582,12 @@ void NeuroscopeDoc::addPositionView(NeuroscopeView* activeView,QColor background
 
 void NeuroscopeDoc::removePositionFile(NeuroscopeView* activeView){
     QString name;
-    Q3DictIterator<DataProvider> it(providers);
-    for( ; it.current(); ++it){
-        name = it.currentKey();
-        if(it.current()->metaObject()->className() == ("PositionsProvider")) break;
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        name = i.key();
+        if(i.value()->metaObject()->className() == ("PositionsProvider"))
+            break;
     }
 
     //Informs the views than the position provider will be removed.
@@ -2588,9 +2614,10 @@ void NeuroscopeDoc::setDefaultPositionInformation(double videoSamplingRate, int 
 
     //Update the current values if no position file is currently opened
     bool exists = false;
-    Q3DictIterator<DataProvider> iterator(providers);
-    for(;iterator.current();++iterator){
-        if(iterator.current()->metaObject()->className() == ("PositionsProvider")){
+    QHashIterator<QString, DataProvider*> i(providers);
+    while (i.hasNext()) {
+        i.next();
+        if(i.value()->metaObject()->className() == ("PositionsProvider")){
             exists = true;
             break;
         }
@@ -2630,12 +2657,14 @@ void NeuroscopeDoc::updateSkipStatus(){
 void NeuroscopeDoc::setDefaultOffsets(NeuroscopeView* activeView){
     channelDefaultOffsets.clear();
     const QList<int>& offsets = activeView->getChannelOffset();
-    for(int i = 0; i < channelNb; ++i) channelDefaultOffsets.insert(i,offsets[i]);
+    for(int i = 0; i < channelNb; ++i)
+        channelDefaultOffsets.insert(i,offsets[i]);
 }
 
 void NeuroscopeDoc::resetDefaultOffsets(){
     channelDefaultOffsets.clear();
-    for(int i = 0; i < channelNb; ++i) channelDefaultOffsets.insert(i,0);
+    for(int i = 0; i < channelNb; ++i)
+        channelDefaultOffsets.insert(i,0);
 }
 
 

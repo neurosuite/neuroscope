@@ -100,7 +100,7 @@ public:
 
     /// Added by M.Zugaro to enable automatic forward paging
     inline long long recordingLength() const { return length; }
-    inline void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
+    void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
 
     /**Enum to be use as a Mode.
   * <ul>
@@ -183,14 +183,14 @@ public:
   * @param groupId id of the group for which the color have been changed.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void groupColorUpdate(int groupId,bool active){
+    void groupColorUpdate(int groupId,bool active){
         //Everything has to be redraw
         drawContentsMode = REDRAW ;
         if(active) update();
     }
 
     /**Update the information presented in the view.*/
-    inline void updateDrawing(){
+    void updateDrawing(){
         if(retrieveClusterData) updateClusterData(true);
         else{
             //Everything has to be redraw
@@ -209,7 +209,7 @@ public:
   * @param selectedMode new mode of drawing.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void setMode(BaseFrame::Mode selectedMode,bool active){
+    void setMode(BaseFrame::Mode selectedMode,bool active){
         Mode previousMode = mode;
         mode = selectedMode;
         if(selectedMode == SELECT){
@@ -286,7 +286,7 @@ public:
   * @param show true if the scale has to be shown, false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void showCalibration(bool show,bool active){
+    void showCalibration(bool show,bool active){
         drawContentsMode = REDRAW;
         showCalibrationScale = show;
         if(active) update();
@@ -380,7 +380,7 @@ public:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    inline void updateEvents(QString providerName,bool active){
+    void updateEvents(QString providerName,bool active){
         if(!eventProvidersToUpdate.contains(providerName)) eventProvidersToUpdate.append(providerName);
         if(active) update();
     }
@@ -425,7 +425,7 @@ public:
   * Updates the length of the document due to a modification of the sampling rate.
   * @param length the newly computed length of the document.
   */
-    inline void samplingRateModified(long long length){
+    void samplingRateModified(long long length){
         this->length = length;
         int samplingRate = tracesProvider.getSamplingRate();
         timeStepUnit = timeStep = static_cast<float>(static_cast<float>(1000) / static_cast<float>(samplingRate));
@@ -529,7 +529,7 @@ public Q_SLOTS:
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-    inline void eventToAddProperties(QString providerName,QString eventDescription){
+    void eventToAddProperties(QString providerName,QString eventDescription){
 	    qDebug()<<" eventToAddProperties***********************"<<providerName;
         //If an event is being modified, this function can be called with eventDescription set to empty,
         //this should not be taken into account.
@@ -575,7 +575,7 @@ protected:
   * The window is recomputed.
   * @param event resize event.
   */
-    inline void resizeEvent(QResizeEvent* event){
+    void resizeEvent(QResizeEvent* event){
         drawContentsMode = REDRAW;
         resized = true;
     }

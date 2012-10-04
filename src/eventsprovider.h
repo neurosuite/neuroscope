@@ -123,7 +123,7 @@ public:
     /** Sets the position where the events are display when browsing.
   * @param position percentage from the begining of the window.
   */
-    inline void setEventPosition(int position){eventPosition = static_cast<float>(position) / 100.0;}
+    void setEventPosition(int position){eventPosition = static_cast<float>(position) / 100.0;}
 
     /** Updates the provider data to take into account the modification of an event.
   * @param selectedEventId id of the modified event.
@@ -170,7 +170,7 @@ public:
     /**Updates the sampling rate for the current document.
   * @param rate sampling rate.
   */
-    inline void updateSamplingRate(double rate){
+    void updateSamplingRate(double rate){
         currentSamplingRate = static_cast<double>(rate / 1000.0);
 
         //Initialize the variables

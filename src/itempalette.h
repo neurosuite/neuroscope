@@ -245,7 +245,7 @@ Q_SIGNALS:
     void middleClickOnLabel(const QString& sourceId);
 
 protected:
-    virtual inline void mousePressEvent(QMouseEvent* e){
+    virtual void mousePressEvent(QMouseEvent* e){
         if(e->button() == Qt::LeftButton && !(e->modifiers() & Qt::ShiftModifier) && !(e->modifiers() & Qt::ControlModifier) && !(e->modifiers() & Qt::AltModifier)){
             emit leftClickOnLabel(parent()->name(),false,false);
         }

@@ -59,8 +59,8 @@ public:
         return *this;
     }
 
-    inline void setStatus(bool status){ready = status;}
-    inline void setData(Array<dataType>& t,Array<int>& d){
+    void setStatus(bool status){ready = status;}
+    void setData(Array<dataType>& t,Array<int>& d){
         times = t;
         ids = d;
     }

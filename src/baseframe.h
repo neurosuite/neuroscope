@@ -82,7 +82,7 @@ public:
     ~BaseFrame();
 
     /**Signals that the widget is about to be deleted.*/
-    virtual inline void willBeKilled(){}
+    virtual void willBeKilled(){}
 
     /**Sets the borders of the frame.
    * @param x border on the left and right sides inside the window (QRect corresponding
@@ -90,7 +90,7 @@ public:
    * @param y border on the top and bottom sides inside the window (QRect corresponding
    * to the part of the drawing which will actually be drawn onto the widget).
   */
-    inline void setBorders(int x,int y){
+    void setBorders(int x,int y){
         Xborder = x;
         Yborder = y;
     }
@@ -98,13 +98,13 @@ public:
 public Q_SLOTS:
 
     /**Update the information presented in the view if need it.*/
-    virtual inline void updateDrawing(){}
+    virtual void updateDrawing(){}
 
     /**If the frame is contained in a dockWidget, this slot can be used
   * when the enclosing dockwidget is being closed.
   * Emits the parentDockBeingClosed signal.
   */
-    virtual inline void dockBeingClosed(){emit parentDockBeingClosed(this);}
+    virtual void dockBeingClosed(){emit parentDockBeingClosed(this);}
 
     /**Changes the color of the background.*/
     virtual void changeBackgroundColor(QColor color);
@@ -112,7 +112,7 @@ public Q_SLOTS:
     /**Change the current mode, call by a selection of a tool.
   * @param selectedMode new mode of drawing.
   */
-    virtual inline void setMode(BaseFrame::Mode selectedMode){mode = selectedMode;}
+    virtual void setMode(BaseFrame::Mode selectedMode){mode = selectedMode;}
 
 Q_SIGNALS:
     /*s*Signals that the enclosing dockwidget is being closed
@@ -240,7 +240,7 @@ protected:
   * @param draw true if a rubber band has to be drawn, false otherwise.
   * @param vertical true if the rubber band has to be drawn on whole the height of the window, false otherwise.
   */
-    inline void drawRubberBand(bool draw,bool vertical = false){
+    void drawRubberBand(bool draw,bool vertical = false){
         isRubberBandToBeDrawn = draw;
         wholeHeightRectangle = vertical;
     }
