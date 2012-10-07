@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// include files for KDE
+
 #include "config-neuroscope.h"
 
 // include files for QT

@@ -18,7 +18,7 @@
 #ifndef PARAMETERXMLCREATOR_H
 #define PARAMETERXMLCREATOR_H
 
-// include files for KDE
+
 
 
 //Application specific includes

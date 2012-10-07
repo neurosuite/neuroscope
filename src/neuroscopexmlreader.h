@@ -18,7 +18,7 @@
 #ifndef NEUROSCOPEXMLREADER_H
 #define NEUROSCOPEXMLREADER_H
 
-// include files for KDE
+
 
 
 //Libxml2 include files.

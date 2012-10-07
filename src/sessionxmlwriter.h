@@ -18,7 +18,7 @@
 #ifndef SESSIONXMLWRITER_H
 #define SESSIONXMLWRITER_H
 
-// include files for KDE
+
 
 
 //Application specific includes

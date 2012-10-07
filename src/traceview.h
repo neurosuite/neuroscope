@@ -35,7 +35,6 @@
 #include "tracesprovider.h"
 #include "eventdata.h"
 
-//Inclused files for KDE
 #include <QStatusBar>
 
 //include files for c/c++ libraries

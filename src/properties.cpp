@@ -18,7 +18,7 @@
 //includes files for the application
 #include "properties.h"
 
-// include files for KDE
+
 
 
 Properties::Properties(QWidget *parent)

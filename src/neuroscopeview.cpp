@@ -22,7 +22,7 @@
 #include <QList>
 #include <QPixmap>
 
-// include files for KDE
+
 
 #include <QStatusBar>
 

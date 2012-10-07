@@ -17,7 +17,7 @@
 // application specific includes
 #include "channeliconview.h"
 
-// include files for KDE
+
 
 
 

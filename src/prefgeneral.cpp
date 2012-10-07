@@ -20,7 +20,7 @@
 //QT includes
 #include <QIcon>
 
-// include files for KDE
+
 
 
 PrefGeneral::PrefGeneral(QWidget *parent)

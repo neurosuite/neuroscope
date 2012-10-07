@@ -14,7 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-// include files for KDE
+
 #include <QSettings>
 
 //include files for the application

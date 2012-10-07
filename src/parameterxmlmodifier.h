@@ -18,7 +18,7 @@
 #ifndef PARAMETERXMLMODIFIER_H
 #define PARAMETERXMLMODIFIER_H
 
-// include files for KDE
+
 
 
 //Application specific includes

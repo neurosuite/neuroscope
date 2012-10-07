@@ -19,7 +19,7 @@
 #define NEUROSCOPE_H
 
 
-// include files for KDE 
+ 
 
 
 #include <QDockWidget>

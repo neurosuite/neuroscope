@@ -17,7 +17,7 @@
 //Application specific includes.
 #include "prefdefaults.h"
 
-// include files for KDE
+
 
 
 PrefDefaults::PrefDefaults(QWidget *parent )

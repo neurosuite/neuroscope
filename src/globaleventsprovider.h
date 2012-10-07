@@ -30,7 +30,7 @@
 #include <types.h>
 #include "eventdata.h"
 
-// include files for KDE
+
 
 
 class ItemColors;

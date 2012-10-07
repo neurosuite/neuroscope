@@ -17,7 +17,7 @@
 // application specific includes
 #include "itemiconview.h"
 
-// include files for KDE
+
 
 
 

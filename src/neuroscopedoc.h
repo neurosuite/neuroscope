@@ -28,7 +28,7 @@
 
 #include <QEvent>
 
-// include files for KDE
+
 
 
 //include files for the application
