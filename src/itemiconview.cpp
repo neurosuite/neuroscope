@@ -30,7 +30,8 @@
 
 
 ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name):
-    Q3IconView(parent,name){
+    Q3IconView(parent,name)
+{
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
@@ -51,8 +52,10 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
     setSelectionMode(Q3IconView::Extended);

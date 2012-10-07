@@ -101,12 +101,12 @@ public:
     /** Removes a group from the palette.
     * @param groupName name of the group to be removed.
     */
-    void removeGroup(QString groupName);
+    void removeGroup(const QString& groupName);
 
     /** Selects a group.
     * @param groupName name of the group to be selected.
     */
-    void selectGroup(QString groupName);
+    void selectGroup(const QString &groupName);
     
     /**Selects all the items.*/
     void selectAllItems();

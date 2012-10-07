@@ -854,7 +854,7 @@ void ItemPalette::createGroup(const QString &id){
     update();
 }
 
-void ItemPalette::removeGroup(QString groupName){
+void ItemPalette::removeGroup(const QString &groupName){
     itemColorsDict.remove(groupName);
     itemGroupViewDict.remove(groupName);
     iconviewDict.remove(groupName);
@@ -865,29 +865,29 @@ void ItemPalette::removeGroup(QString groupName){
 
     //a group must always be selected.
     if(selected == groupName){
-        if(type == CLUSTER && clusterGroupList.count() > 0){
+        if(type == CLUSTER && !clusterGroupList.isEmpty()){
             qSort(clusterGroupList);
-            selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList[0]));
+            selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList.at(0)));
         }
-        else if(type == EVENT && itemGroupList.count() > 0){
+        else if(type == EVENT && !itemGroupList.isEmpty()){
             qSort(itemGroupList);
-            selectGroupLabel(itemGroupList[0]);
+            selectGroupLabel(itemGroupList.at(0));
         }
         else  selected.clear();//never reach
     }
 
 }
 
-void ItemPalette::selectGroup(QString groupName){
-    if(type == CLUSTER && clusterGroupList.count() > 0){
+void ItemPalette::selectGroup(const QString& groupName){
+    if(type == CLUSTER && !clusterGroupList.isEmpty()){
         qSort(clusterGroupList);
         if(clusterGroupList.contains(groupName.toInt())) selectGroupLabel(groupName);
-        else selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList[0]));
+        else selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList.at(0)));
     }
-    else if(type == EVENT && itemGroupList.count() > 0){
+    else if(type == EVENT && !itemGroupList.isEmpty()){
         qSort(itemGroupList);
         if(itemGroupList.contains(groupName)) selectGroupLabel(groupName);
-        else selectGroupLabel(itemGroupList[0]);
+        else selectGroupLabel(itemGroupList.at(0));
     }
     else  selected.clear();//never reach
 }
@@ -963,13 +963,12 @@ void ItemPalette::orderTheGroups(){
         verticalContainer->removeChild(iterator.value());
     }
 
-    if(type == CLUSTER){
+    if(type == CLUSTER) {
         qSort(clusterGroupList);
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
             verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
-    }
-    else{
+    } else {
         qSort(itemGroupList);
         QStringList::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
