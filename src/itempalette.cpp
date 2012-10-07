@@ -71,8 +71,10 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
 
     QFont f("Helvetica",8);
     QFontInfo fontInfo = QFontInfo(f);
-    if(type == CLUSTER) labelSize = fontInfo.pixelSize() * 2;
-    else labelSize = fontInfo.pixelSize() * 3;
+    if(type == CLUSTER)
+        labelSize = fontInfo.pixelSize() * 2;
+    else
+        labelSize = fontInfo.pixelSize() * 3;
 
     //Set the legend in the good language
     languageChange();
@@ -187,9 +189,10 @@ void ItemPalette::updateItemList(const QString& groupName){
 
     browsingStatus.insert(groupName,browsingMap);
 
-    if(nbItems == 0) iconView->resizeContents(50,20);
-
-    else iconView->adjustSize();
+    if(nbItems == 0)
+        iconView->resizeContents(50,20);
+    else
+        iconView->adjustSize();
 }
 
 
@@ -323,12 +326,16 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
                 emit updateItemsToSkip(sourceGroupName,itemsToSkip);
 
                 if(!isBrowsingEnable()){
-                    if(type == CLUSTER) emit noClustersToBrowse();
-                    else emit noEventsToBrowse();
+                    if(type == CLUSTER)
+                        emit noClustersToBrowse();
+                    else
+                        emit noEventsToBrowse();
                 }
                 else{
-                    if(type == CLUSTER) emit clustersToBrowse();
-                    else emit eventsToBrowse();
+                    if(type == CLUSTER)
+                        emit clustersToBrowse();
+                    else
+                        emit eventsToBrowse();
                 }
             }
             else{
@@ -361,8 +368,10 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
                     if(hasChanged){
                         browsingStatus.insert(sourceGroupName,browsingMap);
                         emit updateItemsToSkip(sourceGroupName,itemsToSkip);
-                        if(!isBrowsingEnable()) emit noClustersToBrowse();
-                        else emit clustersToBrowse();
+                        if(!isBrowsingEnable())
+                            emit noClustersToBrowse();
+                        else
+                            emit clustersToBrowse();
                     }
                 }
                 QMap<QString,QList<int> > selection = selectedItems();
@@ -437,12 +446,15 @@ void ItemPalette::slotClickRedraw(){
         }
 
         if(!browsingEnable){
-            if(type == CLUSTER) emit noClustersToBrowse();
-            else emit noEventsToBrowse();
-        }
-        else{
-            if(type == CLUSTER) emit clustersToBrowse();
-            else emit eventsToBrowse();
+            if(type == CLUSTER)
+                emit noClustersToBrowse();
+            else
+                emit noEventsToBrowse();
+        } else {
+            if(type == CLUSTER)
+                emit clustersToBrowse();
+            else
+                emit eventsToBrowse();
         }
 
         emit updateShownItems(selection);
@@ -520,7 +532,7 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
 }
 
 void ItemPalette::slotMouseReleased(QString sourceGroupName){
-    if(needRedrawing.count() != 0){
+    if(!needRedrawing.isEmpty()){
         updateIconPixmap = true;
         update();
     }
