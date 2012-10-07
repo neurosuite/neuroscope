@@ -160,7 +160,7 @@ void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int de
 }
 
 
-void ItemPalette::updateItemList(QString groupName){  
+void ItemPalette::updateItemList(const QString& groupName){
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clear();
 
@@ -788,7 +788,7 @@ void ItemPalette::reset(){
     isInSelectItems = false;
 }
 
-void ItemPalette::createGroup(QString id){  
+void ItemPalette::createGroup(const QString &id){
     ItemGroupView* group = new ItemGroupView(backgroundColor,verticalContainer);
 
     group->setObjectName(id);

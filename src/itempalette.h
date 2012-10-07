@@ -206,12 +206,12 @@ private:
     /**Creates a new group for the name @p id
     * @param id name of the group to be created.
     */
-    void createGroup(QString id);
+    void createGroup(const QString& id);
 
     /** Redraws the list corresponding to the group @p groupName.
     * @param groupName name of the list to update.
     */
-    void updateItemList(QString groupName);
+    void updateItemList(const QString& groupName);
 
     /**Reorders the groups to display them in either alphabetic order or numerical order.*/
     void orderTheGroups();
