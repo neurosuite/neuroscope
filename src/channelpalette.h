@@ -113,16 +113,19 @@ public:
     class ChannelIconItem : public Q3IconViewItem{
 
     public:
-        inline ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
+        ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
             Q3IconViewItem(parent,text,icon){}
 
-        inline ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
+        ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
             Q3IconViewItem(parent,after,text,icon){}
 
         virtual inline int compare(Q3IconViewItem* item) const{
-            if(key().toInt() < item->key().toInt()) return -1;
-            else if(key().toInt() == item->key().toInt()) return 0;
-            else return 1;
+            if(key().toInt() < item->key().toInt())
+                return -1;
+            else if(key().toInt() == item->key().toInt())
+                return 0;
+            else
+                return 1;
         }
     };
 

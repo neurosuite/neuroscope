@@ -18,4 +18,82 @@
 #include "channelgroupview.h"
 
 
+ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent)
+    :QWidget(parent),iconView(0L),drag(drag),init(true)
+{
+
+    mLayout = new QHBoxLayout;
+    mLayout->setMargin(0);
+    mLayout->setSpacing(0);
+    setLayout(mLayout);
+    setAutoFillBackground(true);
+
+    //Set the groupview color, the foreground color depends on the background color
+    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    int h;
+    int s;
+    int v;
+    backgroundColor.getHsv(&h,&s,&v);
+    QColor legendColor;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else legendColor = Qt::white;
+    palette.setColor(foregroundRole(), legendColor);
+    setPalette(palette);
+    adjustSize();
+
+    setAcceptDrops(TRUE);
+}
+
+void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
+    if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
+        init = false;
+        int futurWidth = parentWidth ;
+
+        setFixedWidth(futurWidth);
+        int viewfuturWidth = width() - labelSize - 6;//give so space on the right
+        iconView->setFixedWidth(viewfuturWidth);
+
+        if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+            setFixedHeight(iconView->contentsHeight());
+
+    }
+    //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
+    if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
+        setFixedHeight(iconView->contentsHeight());
+}
+
+void ChannelGroupView::dropEvent(QDropEvent* event){
+    if(event->source() == 0 || !drag){
+        event->ignore();
+        return;
+    }
+
+
+    if(event->mimeData()->hasText()){
+        QString information = event->mimeData()->text();
+        int groupSource = information.section("-",0,0).toInt();
+        int start = information.section("-",1,1).toInt();
+        QString groupTarget = this->objectName();
+        emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
+    }
+}
+
+void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
+    if(event->source() == 0 || !drag){
+        event->ignore();
+        return;
+    }
+    if (event->mimeData()->hasText())
+        event->acceptProposedAction();
+    //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
+    emit dragObjectMoved(QWidget::mapToParent(event->pos()));
+}
+
+void ChannelGroupView::setIconView(Q3IconView* view){
+    iconView = view;
+    mLayout->addWidget(iconView);
+}
+
+
 #include "channelgroupview.moc"
