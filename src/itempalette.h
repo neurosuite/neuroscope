@@ -227,7 +227,7 @@ private:
     /**Selects the group identify by @p groupName.
     * @param groupName the group to be selected.
     */
-    void selectGroupLabel(QString groupName);
+    void selectGroupLabel(const QString& groupName);
 };
 
 /**

@@ -207,7 +207,7 @@ void ItemPalette::slotMousePressed(int button,Q3IconViewItem* item,QString sourc
     }
 }
 
-void ItemPalette::selectGroupLabel(QString sourceGroupName){
+void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
