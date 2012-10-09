@@ -441,8 +441,10 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
         else{
             //if the status is false and the item has the background color has color change it to the group color.
             if(color == backgroundColor){
-                if(type == DISPLAY) color = channelColors->groupColor(channelId);
-                else color = channelColors->spikeGroupColor(channelId);
+                if(type == DISPLAY)
+                    color = channelColors->groupColor(channelId);
+                else color =
+                        channelColors->spikeGroupColor(channelId);
             }
         }
 
@@ -530,70 +532,69 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
 
 
 void ChannelPalette::updateColor(const QList<int>& channelIds){
-    #if KDAB_PORTING
     QList<int>::const_iterator channelIterator;
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
 
     for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
-
+        QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(*channelIterator),Qt::MatchExactly);
+        if(lstItem.isEmpty())
+            return;
         //Get the channelColor associated with the item
         QColor color = channelColors->color(*channelIterator);
 
+        QListWidgetItem* item = lstItem.first();
         //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        drawItem(painter,pixmap,color,channelsShowHideStatus[*channelIterator],channelsSkipStatus[*channelIterator]);
-        item->repaint();
+        QPixmap pixmap;
+        drawItem(painter,&pixmap,color,channelsShowHideStatus[*channelIterator],channelsSkipStatus[*channelIterator]);
+        item->setIcon(QIcon(pixmap));
     }
-#endif
 }
 
 
 void ChannelPalette::updateColor(int channelId){
-    #if KDAB_PORTING
-    Q3IconViewItem* item = 0L;
-    ChannelIconView* iconView = 0L;
     QPainter painter;
 
     int groupId = (*channelsGroups)[channelId];
-    iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-    item =  iconView->findItem(QString::fromLatin1("%1").arg(channelId),Q3ListBox::ExactMatch);
+    ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+
+    QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(channelId),Qt::MatchExactly);
+    if(lstItem.isEmpty())
+        return;
 
     //Get the channelColor associated with the item
     QColor color = channelColors->color(channelId);
 
     //Update the icon
-    QPixmap* pixmap = item->pixmap();
-    drawItem(painter,pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-    item->repaint();
-#endif
+    QListWidgetItem* item = lstItem.first();
+    QPixmap pixmap;
+    drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
+    item->setIcon(QIcon(pixmap));
 }
 
 void ChannelPalette::updateGroupColor(int channelId){
-    #if KDAB_PORTING
-    ChannelIconView* iconView = 0L;
     QPainter painter;
     //Get the group Color associated with the item depending on the type. Take the the color associated
     //with the type of the other palette.
     QColor color;
-    if(type == DISPLAY) color = channelColors->spikeGroupColor(channelId);
-    else color = channelColors->groupColor(channelId);
+    if(type == DISPLAY)
+        color = channelColors->spikeGroupColor(channelId);
+    else
+        color = channelColors->groupColor(channelId);
 
     //Find the group to which channelId belongs
     int groupId = (*channelsGroups)[channelId];
-    iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+    ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
 
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
+    for(int i = 0; i<iconView->count();++i) {
+        QListWidgetItem* item = iconView->item(i);
         //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        drawItem(painter,pixmap,color,channelsShowHideStatus[item->text().toInt()],channelsSkipStatus[item->text().toInt()]);
-        item->repaint();
+        QPixmap pixmap;
+        drawItem(painter,&pixmap,color,channelsShowHideStatus[item->text().toInt()],channelsSkipStatus[item->text().toInt()]);
+        item->setIcon(QIcon(pixmap));
     }
-#endif
 }
 
 void ChannelPalette::applyGroupColor(PaletteType paletteType){
@@ -609,8 +610,10 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
 
         //Get the channelColor associated with the item
         QColor color;
-        if(paletteType == SPIKE) color = channelColors->spikeGroupColor(iterator.key());
-        else color = channelColors->groupColor(iterator.key());
+        if(paletteType == SPIKE)
+            color = channelColors->spikeGroupColor(iterator.key());
+        else
+            color = channelColors->groupColor(iterator.key());
 
         //Update the channelColor if the channel is not skipped
         if(!channelsSkipStatus[iterator.key()]) channelColors->setColor(iterator.key(),color);
@@ -638,8 +641,8 @@ void ChannelPalette::applyCustomColor(){
         QColor color = channelColors->color(iterator.key());
 
         //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        drawItem(painter,pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
+        QPixmap pixmap;
+        drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
         item->repaint();
     }
 #endif

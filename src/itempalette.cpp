@@ -927,14 +927,13 @@ void ItemPalette::selectGroup(const QString& groupName){
 }
 
 void ItemPalette::selectAllItems(){
-    #ifdef KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
     QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
     while (iterator.hasNext()) {
         iterator.next();
-        iterator.value()->selectAll(true);
+        iterator.value()->selectAll();
     }
 
     QMap<QString,QList<int> > selection = selectedItems();
@@ -942,7 +941,6 @@ void ItemPalette::selectAllItems(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ItemPalette::deselectAllItems(){
