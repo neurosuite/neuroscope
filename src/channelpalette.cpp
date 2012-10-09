@@ -177,7 +177,6 @@ void ChannelPalette::setChannelLists(){
         iteratordict.value()->clear();
     }
 
-#if KDAB_PORTING
     //Construct one icon for each channel and set the show/hide status to false
     QPainter painter;
 
@@ -193,59 +192,12 @@ void ChannelPalette::setChannelLists(){
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(channelList[i]);
             drawItem(painter,&pixmap,color,false,false);
-            (void)new ChannelIconItem(iconviewDict[groupId],(QString::fromLatin1("%1").arg(channelList[i])),pixmap);
+            QIcon icon(pixmap);
+
+            new QListWidgetItem(icon,(QString::fromLatin1("%1").arg(channelList[i])),iconviewDict[groupId]);
+            //KDAB_PENDING TODO add key
         }
     }
-#endif
-}
-
-void ChannelPalette::slotRightPressed(Q3IconViewItem* item){
-    /*  if(!item) return; // right pressed on viewport
-  else{
-   //Create a popmenu for the traces group related items.
-   QMenu menu(this);
-   menu.insertTitle(tr("Manage channels colors"));
-
-   int changeSelectedColor = menu.insertItem(tr("Change color"));
-   int changeGroupColor = menu.insertItem(tr("Change group color"));
-
-   menu.setMouseTracking(TRUE);
-   int id = menu.exec(QCursor::pos());
-
-   if(id == changeGroupColor){
-    changeColor(item,false);
-   }
-   else if(id == changeSelectedColor){
-    //Get the channelColor associated with the item
-    QColor color = channelColors->color(item->text().toInt());
-
-    int result = QColorDialog::getColor(color,0);
-    if(result == QColorDialog::Accepted){
-     QValueList<int> selected;
-     //Change the color of the selected channels of all the groups.
-     QDictIterator<ChannelIconView> iconviewIterator(iconviewDict);
-     for(;iconviewIterator.current();++iconviewIterator){
-      ChannelIconView* iconViewParent =  iconviewIterator.current();
-      for(QIconViewItem* item = iconViewParent->firstItem(); item; item = item->nextItem()){
-       if(item->isSelected()){
-        int id = item->text().toInt();
-        selected.append(id);
-
-        //Update the channelColor
-        channelColors->setColor(id,color);
-
-        //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        QPainter painter;
-        drawItem(painter,pixmap,color,channelsShowHideStatus[id]);
-        item->repaint();
-       }
-      }
-     }
-     emit channelsChangeColor(selected);
-    }
-   }
-  }*/
 }
 
 void ChannelPalette::slotMousePressMiddleButton(QListWidgetItem*item) {
@@ -257,9 +209,8 @@ void ChannelPalette::slotMousePressMiddleButton(QListWidgetItem*item) {
 }
 
 
-void ChannelPalette::slotMousePressed(QString sourceGroupName){
-    #if KDAB_PORTING
-    if(sourceGroupName != ""){
+void ChannelPalette::slotMousePressed(const QString& sourceGroupName){
+    if(!sourceGroupName.isEmpty()){
         //If shiftKey is false, either select all the items of the group or deselect them all (it is a toggle between the 2 states)
         ChannelIconView* iconView = iconviewDict[sourceGroupName];
         bool unselect = selectionStatus[sourceGroupName];
@@ -269,7 +220,7 @@ void ChannelPalette::slotMousePressed(QString sourceGroupName){
 
         if(unselect){
             selectionStatus[sourceGroupName] = false;
-            iconView->selectAll(false);
+            iconView->clearSelection();
 
             QList<int> selected = selectedChannels();
             if(!edit) emit updateShownChannels(selected);
@@ -277,15 +228,15 @@ void ChannelPalette::slotMousePressed(QString sourceGroupName){
         }
         else{
             selectionStatus[sourceGroupName] = true;
-            iconView->selectAll(true);
+            iconView->selectAll();
             QList<int> selected = selectedChannels();
-            if(!edit) emit updateShownChannels(selected);
+            if(!edit)
+                emit updateShownChannels(selected);
             emit channelsSelected(selected);
         }
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
         isInSelectItems = false;
     }
-#endif
 }
 
 void ChannelPalette::slotMidButtonPressed(const QString &sourceGroupId){
@@ -325,44 +276,6 @@ void ChannelPalette::slotClickRedraw(){
     }
 }
 
-void ChannelPalette::slotMousePressWoModificators(QString sourceGroup){
-    #if KDAB_PORTING
-    ChannelIconView* iconView = iconviewDict[sourceGroup];
-    int count = 0;
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-        if(item->isSelected()) count++;
-        if(count > 1) break;
-    }
-    
-    if(count <= 2){
-        //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
-        isInSelectItems = true;
-
-
-        QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
-        while (iteratordict.hasNext()) {
-            iteratordict.next();
-
-            if(iteratordict.key() != sourceGroup)
-                iteratordict.value()->selectAll(false);
-        }
-
-        //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
-        isInSelectItems = false;
-
-        //Inform the TraceView that all the channels have been deselected.
-        QList<int> selected;
-        emit channelsSelected(selected);
-
-        //If we are not in edit mode (selection/deselection <=> show/hide.
-        //If no channels were selected in the current group,slotClickRedraw won't be call, so to update the view correctly
-        //The updateShownChannels signal has to be emitted.
-        if(count == 0 && !edit){
-            emit updateShownChannels(selected);
-        }
-    }
-#endif
-}
 
 void ChannelPalette::showChannels(){
     //Change the status show/hide of the selected channels
@@ -938,14 +851,11 @@ void ChannelPalette::createGroup(int id){
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
-    //Signal and slot connection
-    // connect(iconView,SIGNAL(contextMenuRequested(QIconViewItem*,QPoint)),this, SLOT(slotRightPressed(QIconViewItem*)));
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QListWidgetItem*)),this, SLOT(slotMousePressMiddleButton(QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(channelsMoved(QString,QListWidgetItem*)),this, SLOT(slotChannelsMoved(QString,QListWidgetItem*)));
     connect(iconView,SIGNAL(channelsMoved(QList<int>,QString,QListWidgetItem*)),this, SLOT(slotChannelsMoved(QList<int>,QString,QListWidgetItem*)));
-    connect(iconView,SIGNAL(moussePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
 
     connect(label,SIGNAL(middleClickOnLabel(QString)),this, SLOT(slotMidButtonPressed(QString)));
     connect(label,SIGNAL(leftClickOnLabel(QString)),this, SLOT(slotMousePressed(QString)));

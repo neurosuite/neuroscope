@@ -107,28 +107,6 @@ public:
     */
     inline const QMap<int,bool>getSkipStatus(){return channelsSkipStatus;}
 
-    /**Interal class to represent an item in the palette. Contains a overloaded compare function to have
-* the items order by alphabetic order.
-*/    
-    class ChannelIconItem : public Q3IconViewItem{
-
-    public:
-        ChannelIconItem(Q3IconView* parent,const QString& text,const QPixmap& icon):
-            Q3IconViewItem(parent,text,icon){}
-
-        ChannelIconItem(Q3IconView* parent,Q3IconViewItem* after,const QString& text,const QPixmap& icon):
-            Q3IconViewItem(parent,after,text,icon){}
-
-        virtual inline int compare(Q3IconViewItem* item) const{
-            if(key().toInt() < item->key().toInt())
-                return -1;
-            else if(key().toInt() == item->key().toInt())
-                return 0;
-            else
-                return 1;
-        }
-    };
-
     
 public Q_SLOTS:
     void changeColor(QListWidgetItem *item, bool single = true);
@@ -167,15 +145,13 @@ public Q_SLOTS:
     void setEditMode(bool edition);
     void groupToMove(int sourceId,int targetId,int start, int destination);
     void removeChannelsFromTrash(const QList<int>& channelIds);
-    void slotMousePressWoModificators(QString sourceGroup);
     void selectionTool(){
         emit channelsSelected(selectedChannels());
     }
     
 protected Q_SLOTS:
-    virtual void slotRightPressed(Q3IconViewItem* item);
     void slotMousePressMiddleButton(QListWidgetItem*item);
-    void slotMousePressed(QString sourceGroupName);
+    void slotMousePressed(const QString &sourceGroupName);
     virtual void slotMidButtonPressed(const QString &sourceGroupId);
     virtual void slotClickRedraw();
     virtual void languageChange();
@@ -353,17 +329,17 @@ private:
 class GroupLabel : public QLabel{
     Q_OBJECT
 public:
-    inline GroupLabel(const QString& text,QWidget* parent):
+    explicit GroupLabel(const QString& text,QWidget* parent):
         QLabel(text,parent){
         setAutoFillBackground(true);
     }
 
 Q_SIGNALS:
-    void middleClickOnLabel(QString sourceId);
-    void leftClickOnLabel(QString sourceId);
+    void middleClickOnLabel(const QString& sourceId);
+    void leftClickOnLabel(const QString& sourceId);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent* e){
+    void mousePressEvent(QMouseEvent* e){
         if(e->button() == Qt::LeftButton){
 
             QPoint firstClick = QWidget::mapToGlobal(e->pos());
