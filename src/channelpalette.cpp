@@ -240,28 +240,28 @@ void ChannelPalette::slotMousePressed(const QString& sourceGroupName){
 }
 
 void ChannelPalette::slotMidButtonPressed(const QString &sourceGroupId){
-    #if KDAB_PORTING
     //Change the color of the group, take the first channel of the group.
     ChannelIconView* iconView = iconviewDict[sourceGroupId];
-    Q3IconViewItem* item = iconView->firstItem();
-    changeColor(item,false);
-#endif
+    if(iconView->count() > 0) {
+        QListWidgetItem* item = iconView->item(0);
+        changeColor(item,false);
+    }
 }
 
 const QList<int> ChannelPalette::selectedChannels(){
     QList<int> selectedChannels;
-#if KDAB_PORTING
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        for(Q3IconViewItem* item = iteratordict.value()->firstItem(); item; item = item->nextItem()){
+        const int count(iteratordict.value()->count());
+        for(int i = 0; i < count; ++i) {
+            QListWidgetItem* item = iteratordict.value()->item(i);
             if(item->isSelected()){
                 selectedChannels.append(item->text().toInt());
             }
         }
 
     }
-#endif
     return selectedChannels;
 }
 
