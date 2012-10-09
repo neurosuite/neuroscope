@@ -392,21 +392,20 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
 
 const QMap<QString,QList<int> > ItemPalette::selectedItems(){
     QMap<QString,QList<int> > selection;
-#ifdef KDAB_PORTING
     QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
     while (iterator.hasNext()) {
         iterator.next();
         QString groupName = iterator.key();
         ItemColors* itemColors = itemColorsDict[groupName];
         QList<int> selectedItems;
-        for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
+        for(int i = 0; i < iterator.value()->count(); ++i) {
+            QListWidgetItem *item = iterator.value()->item(i);
             if(item->isSelected()){
-                selectedItems.append(itemColors->itemId(item->index()));
+                selectedItems.append(itemColors->itemId(item->data(ItemIconView::INDEXICON).toInt()));
             }
         }
         selection.insert(groupName,selectedItems);
     }
-#endif
     return selection;
 }
 
@@ -470,7 +469,7 @@ void ItemPalette::slotClickRedraw(){
 #endif
 }
 
-void ItemPalette::slotMousePressWoModificators(QString sourceGroup){  
+void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
 #ifdef KDAB_PORTING
     ItemIconView* iconView = iconviewDict[sourceGroup];
     int count = 0;

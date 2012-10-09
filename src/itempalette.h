@@ -117,7 +117,7 @@ public:
     bool isBrowsingEnable();
     
 public Q_SLOTS:
-    void slotMousePressWoModificators(QString sourceGroup);
+    void slotMousePressWoModificators(const QString &sourceGroup);
     void slotMousePressWAltButton(QString sourceGroup,int index);
     
 protected Q_SLOTS:

@@ -784,7 +784,8 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     }
 
     //Last item in selection gets focus if it exists
-    if(selectedChannels.size() != 0) iconView->setCurrentItem(currentIcon);
+    if(selectedChannels.size() != 0)
+        iconView->setCurrentItem(currentIcon);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
@@ -1594,7 +1595,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     }
     else{
         QList<int> trashChannels = (*groupsChannels)[0];
-        if(trashChannels.size() != 0){
+        if(!trashChannels.isEmpty()){
             if(type == DISPLAY) groupColor = channelColors->groupColor(trashChannels[0]);
             else groupColor = channelColors->spikeGroupColor(trashChannels[0]);
         }
@@ -1692,7 +1693,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
         after = trash->firstItem();
         moveFirst = true;
     }
-    else after = trash->findItem(afterId,Q3ListBox::ExactMatch);
+    else
+        after = trash->findItem(afterId,Q3ListBox::ExactMatch);
 
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
