@@ -1929,12 +1929,15 @@ void ChannelPalette::moveTrashesToBottom(){
     verticalContainer->removeChild(spaceWidget);
 
     Q3DictIterator<ChannelGroupView> it(channelGroupViewDict);
-    for(;it.current();++it) verticalContainer->removeChild(it.current());
+    for(;it.current();++it)
+        verticalContainer->removeChild(it.current());
 
     //Insert all the groups except the trashes which go at the bottom
     int nbGroup = channelGroupViewDict.count();
-    if(iconviewDict.contains("0")) nbGroup--;
-    if(iconviewDict.contains("-1")) nbGroup--;
+    if(iconviewDict.contains("0"))
+        nbGroup--;
+    if(iconviewDict.contains("-1"))
+        nbGroup--;
 
     for(int i = 1;i <= nbGroup;++i)
         verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);

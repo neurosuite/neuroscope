@@ -49,7 +49,7 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
 }
 
 void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
-#if KDAB_PORTING
+#if KDAB_PENDING
     if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
         init = false;
         int futurWidth = parentWidth ;

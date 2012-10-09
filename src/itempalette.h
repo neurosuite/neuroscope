@@ -21,7 +21,6 @@
 #include <QVariant>
 #include <qwidget.h>
 #include <q3vbox.h> 
-#include <q3iconview.h>
 #include <QHash>
 #include <qmap.h>
 #include <QLabel>
@@ -36,9 +35,8 @@
 #include "itemgroupview.h"
 #include "itemiconview.h"
 
-
+#include <Q3ScrollView>
 // forward declaration
-class Q3IconViewItem;
 class ItemColors;
 
 /**

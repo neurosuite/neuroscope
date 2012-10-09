@@ -41,7 +41,7 @@
 #include <QList>
 #include <QLabel>
 #include <Q3ListBox>
-
+#include <Q3ScrollView>
 ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name)
     : Q3ScrollView(parent),backgroundColor(backgroundColor),isInSelectItems(false),
       spaceWidget(0L),type(type),selected(""),updateIconPixmap(false)
@@ -163,7 +163,6 @@ void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int de
 
 
 void ItemPalette::updateItemList(const QString& groupName){
-    #ifdef KDAB_PORTING
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clear();
 
@@ -185,11 +184,14 @@ void ItemPalette::updateItemList(const QString& groupName){
         painter.begin(&pix);
         painter.fillRect(0,0,12,12,itemColors->color(i,ItemColors::BY_INDEX));
         painter.end();
-        (void)new Q3IconViewItem(iconView,itemColors->itemLabel(i),pix);
+        QIcon icon;
+        icon.addPixmap(pix);
+        QListWidgetItem *item  = new QListWidgetItem(icon,itemColors->itemLabel(i), iconView);
+        item->setData(ItemIconView::INDEXICON,i);
     }
 
     browsingStatus.insert(groupName,browsingMap);
-
+#ifdef KDAB_PENDING
     if(nbItems == 0)
         iconView->resizeContents(50,20);
     else
@@ -680,15 +682,18 @@ void ItemPalette::changeBackgroundColor(QColor color){
 
         //Construct one icon for each item
         QPainter painter;
-#ifdef KDAB_PORTING
         for(int i = 0; i<nbItems; ++i){
             QPixmap pix(14,14);
             pix.fill(backgroundColor);
             painter.begin(&pix);
             painter.fillRect(0,0,12,12,itemColors->color(i,ItemColors::BY_INDEX));
             painter.end();
-            (void)new Q3IconViewItem(iconView,itemColors->itemLabel(i),pix);
+            QIcon icon;
+            icon.addPixmap(pix);
+            QListWidgetItem *item = new QListWidgetItem(icon,itemColors->itemLabel(i), iconView);
+            //TODO item->setData();
         }
+#ifdef KDAB_PORTING
 
         //reselect the item which were selected.
         for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
