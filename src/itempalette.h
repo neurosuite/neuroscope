@@ -78,7 +78,7 @@ public:
     * @param itemsToSelect list of items to be selected.
     * @param itemsToSkip list of items to be marked as skiped while browsing.
     */
-    void selectItems(QString groupName,QList<int> itemsToSelect,QList<int> itemsToSkip);
+    void selectItems(const QString &groupName, const QList<int> &itemsToSelect, const QList<int> &itemsToSkip);
 
     /**Resets the internal variables.*/
     void reset();

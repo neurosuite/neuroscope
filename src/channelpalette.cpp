@@ -682,27 +682,29 @@ void ChannelPalette::changeBackgroundColor(QColor color){
         iterator.value()->setPaletteForegroundColor(legendColor);
     }
 
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator groupIterator;
-#if KDAB_PORTING
     for(groupIterator = channelsGroups->begin(); groupIterator != channelsGroups->end(); ++groupIterator){
         int groupId = (*channelsGroups)[groupIterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(groupIterator.key()),Q3ListBox::ExactMatch);
+        QList<QListWidgetItem*> lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(groupIterator.key()),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
 
-        //update the color of the skip channels
-        if(channelsSkipStatus[groupIterator.key()]) channelColors->setColor(groupIterator.key(),backgroundColor);
+            //update the color of the skip channels
+            if(channelsSkipStatus[groupIterator.key()])
+                channelColors->setColor(groupIterator.key(),backgroundColor);
 
-        //Get the channelColor associated with the item
-        QColor color = channelColors->color(groupIterator.key());
+            //Get the channelColor associated with the item
+            QColor color = channelColors->color(groupIterator.key());
 
-        //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        drawItem(painter,pixmap,color,channelsShowHideStatus[groupIterator.key()],channelsSkipStatus[groupIterator.key()]);
+            //Update the icon
+            QPixmap pixmap;
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[groupIterator.key()],channelsSkipStatus[groupIterator.key()]);
+            QListWidgetItem *item = lstItem.first();
+            item->setIcon(QIcon(pixmap));
+        }
     }
-#endif
     update();
 }
 
@@ -1790,7 +1792,8 @@ void ChannelPalette::setEditMode(bool edition){
             selected = item->isSelected();
             channelsShowHideStatus.insert(iterator.key(),selected);
         }
-        else selected = channelsShowHideStatus[iterator.key()];
+        else
+            selected = channelsShowHideStatus[iterator.key()];
 
         delete item;
 
@@ -1801,7 +1804,8 @@ void ChannelPalette::setEditMode(bool edition){
         drawItem(painter,&pixmap,color,selected,channelsSkipStatus[iterator.key()]);
         (void)new ChannelIconItem(iconView,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
 
-        if(selected) selectedIds.append(iterator.key());
+        if(selected)
+            selectedIds.append(iterator.key());
     }
 
     selectChannels(selectedIds);
@@ -1908,9 +1912,11 @@ void ChannelPalette::trashChannels(int destinationGroup){
     QColor groupColor;
     groupColor.setHsv(210,255,255);
     QList<int> destinationChannels = (*groupsChannels)[0];
-    if(destinationChannels.size() != 0){
-        if(type == DISPLAY) groupColor = channelColors->groupColor(destinationChannels[0]);
-        else groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+    if(!destinationChannels.isEmpty()){
+        if(type == DISPLAY)
+            groupColor = channelColors->groupColor(destinationChannels[0]);
+        else
+            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
     }
 
     //Will store the selected channels which to be discarded.

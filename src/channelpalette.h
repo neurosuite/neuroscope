@@ -21,7 +21,6 @@
 #include <QVariant>
 #include <qwidget.h>
 #include <q3vbox.h> 
-#include <q3iconview.h>
 #include <QHash>
 #include <qmap.h>
 #include <QLabel>
@@ -37,11 +36,9 @@
 // application specific includes
 #include "channelgroupview.h"
 #include "channeliconview.h"
-
+#include <Q3ScrollView>
 
 // forward declaration
-class Q3IconView;
-class Q3IconViewItem;
 class ChannelColors;
 class SpaceWidget;
 

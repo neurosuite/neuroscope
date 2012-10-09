@@ -547,7 +547,6 @@ void ItemPalette::slotMouseReleased(QString sourceGroupName){
 void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int index,QMap<int,bool> browsingMap){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSss";
 #ifdef KDAB_PORTING
     QString label =  itemColors->itemLabel(index);
     Q3IconViewItem* currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
@@ -766,7 +765,7 @@ void ItemPalette::languageChange()
     setWindowTitle( tr( "Item palette" ) );
 }
 
-void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<int> itemsToSkip){
+void ItemPalette::selectItems(const QString& groupName,const QList<int>& itemsToSelect,const QList<int>& itemsToSkip){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
     #ifdef KDAB_PORTING
@@ -979,8 +978,9 @@ void ItemPalette::deselectAllItems(){
                 isInSelectItems = true;//redrawItem sets it back to false
                 item = iterator2.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
                 itemsToSkip.append(itemColors->itemId(currentIndex));
+            } else {
+                itemsToSkip.append(itemColors->itemId(currentIndex));
             }
-            else itemsToSkip.append(itemColors->itemId(currentIndex));
         }
         browsingStatus.insert(groupName,browsingMap);
         emit updateItemsToSkip(groupName,itemsToSkip);
