@@ -248,11 +248,11 @@ void ChannelPalette::slotRightPressed(Q3IconViewItem* item){
   }*/
 }
 
-void ChannelPalette::slotMousePressed(int button,Q3IconViewItem* item){
-    if (!item) return; //pressed on viewport
-    else{
-        // middle pressed on item
-        if(button == Qt::MidButton) changeColor(item);
+void ChannelPalette::slotMousePressMiddleButton(QListWidgetItem*item) {
+    if (!item) {
+        return; //pressed on viewport
+    } else {
+        changeColor(item);
     }
 }
 
@@ -790,7 +790,7 @@ void ChannelPalette::changeBackgroundColor(QColor color){
     update();
 }
 
-void ChannelPalette::changeColor(Q3IconViewItem* item,bool single){
+void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
     #if KDAB_PORTING
     int id = item->text().toInt();
 
@@ -940,8 +940,8 @@ void ChannelPalette::createGroup(int id){
 
     //Signal and slot connection
     // connect(iconView,SIGNAL(contextMenuRequested(QIconViewItem*,QPoint)),this, SLOT(slotRightPressed(QIconViewItem*)));
-    connect(iconView,SIGNAL(selectionChanged()),this, SLOT(slotClickRedraw()));
-    connect(iconView,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
+    connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
+    connect(iconView,SIGNAL(mousePressMiddleButton(QListWidgetItem*)),this, SLOT(slotMousePressMiddleButton(QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(channelsMoved(QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QString,Q3IconViewItem*)));
     connect(iconView,SIGNAL(channelsMoved(QList<int>,QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QList<int>,QString,Q3IconViewItem*)));

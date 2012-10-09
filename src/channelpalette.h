@@ -131,7 +131,7 @@ public:
 
     
 public Q_SLOTS:
-    virtual void changeColor(Q3IconViewItem* item,bool single = true);
+    void changeColor(QListWidgetItem *item, bool single = true);
     /**Creates a new group and fill it with the selected channels.
     */
     void createGroup();
@@ -174,7 +174,7 @@ public Q_SLOTS:
     
 protected Q_SLOTS:
     virtual void slotRightPressed(Q3IconViewItem* item);
-    virtual void slotMousePressed(int button,Q3IconViewItem* item);
+    void slotMousePressMiddleButton(QListWidgetItem*item);
     void slotMousePressed(QString sourceGroupName);
     virtual void slotMidButtonPressed(const QString &sourceGroupId);
     virtual void slotClickRedraw();

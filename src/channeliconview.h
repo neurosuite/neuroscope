@@ -43,6 +43,8 @@ public:
 public Q_SLOTS:
     void setDragAndDrop(bool dragDrop);
 
+Q_SIGNALS:
+    void mousePressMiddleButton(QListWidgetItem* item);
 protected:
     void mousePressEvent(QMouseEvent* event);
     void wheelEvent ( QWheelEvent * e );

@@ -92,6 +92,9 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     //    emit moussePressWoModificators(this->name());
     //  }
 
+    if(event->button() == Qt::MiddleButton) {
+        emit mousePressMiddleButton(item);
+    }
     QListWidget::mousePressEvent(event);
 }
 

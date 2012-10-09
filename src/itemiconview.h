@@ -49,6 +49,7 @@ Q_SIGNALS:
     void mousePressMiddleButton(const QString& sourceGroup,QListWidgetItem*);
     void mousePressWAltButton(QString sourceGroup,int index);
     void mouseReleased(QString sourceGroup);
+    void mousePressMiddleButton(QListWidgetItem*);
 
 };
 
