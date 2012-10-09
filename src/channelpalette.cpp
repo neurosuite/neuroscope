@@ -293,11 +293,9 @@ void ChannelPalette::hideChannels(){
 }
 
 void ChannelPalette::hideUnselectAllChannels(){
-    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
@@ -309,22 +307,23 @@ void ChannelPalette::hideUnselectAllChannels(){
         //Update the pixmap
         int groupId = (*channelsGroups)[iterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        QList<QListWidgetItem*> lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(iterator.key()),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            //Add an item to the target group with the same text but an update icon.
+            QPixmap pixmap(14,14);
+            //Get the channelColor associated with the item
+            const QColor color = channelColors->color(iterator.key());
+            drawItem(painter,&pixmap,color,false,channelsSkipStatus[iterator.key()]);
+            QListWidgetItem *item = new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(iterator.key()),iconView);
+            //KDAB_VERIFY (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
 
-        //Add an item to the target group with the same text but an update icon.
-        QPixmap pixmap(14,14);
-        //Get the channelColor associated with the item
-        QColor color = channelColors->color(iterator.key());
-        drawItem(painter,&pixmap,color,false,channelsSkipStatus[iterator.key()]);
-        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
-
-        //Delete the old item
-        delete item;
+            //Delete the old item
+            delete lstItem.first();
+        }
     }
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ChannelPalette::updateShowHideStatus(bool showStatus){
