@@ -61,7 +61,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setPalette(palette);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    //KDAB_PORTING setItemsMovable(false);
+    setMovement(QListView::Static);
 
     setSpacing(4);
     //KDAB_PORTING setAutoArrange(true);
@@ -72,8 +72,6 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
 
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
-
-    //KDAB PORTING connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
 }
 
 void ItemIconView::wheelEvent ( QWheelEvent * event )
@@ -87,16 +85,12 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
     if(!item)
         return;
     if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
-        //KDAB_PORTING :emit mousePressWAltButton(this->objectName(),item->index());
+        emit mousePressWAltButton(this->objectName(),item->data(INDEXICON).toInt());
+    } else if(event->button() == Qt::MiddleButton) {
+        emit mousePressMiddleButton(this->objectName(),item);
     }
     QListWidget::mousePressEvent(event);
 }
-
-/*
-void ItemIconView::slotMousePressed(int button,Q3IconViewItem* item){
-    emit mouseButtonPressed(button,item,this->objectName());
-}
-*/
 
 void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     QListWidget::mouseReleaseEvent(event);

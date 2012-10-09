@@ -198,14 +198,11 @@ void ItemPalette::updateItemList(const QString& groupName){
 }
 
 
-void ItemPalette::slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName){ 
+void ItemPalette::slotMousePressed(const QString&sourceGroupName,QListWidgetItem*item){
     if (!item) {
         return; //pressed on viewport
     } else {
-        // middle pressed on item
-        if(button == Qt::MidButton) {
-            changeColor(item,sourceGroupName);
-        }
+        changeColor(item,sourceGroupName);
     }
 }
 
@@ -628,17 +625,22 @@ void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
 #ifdef KDAB_PORTING
     QList<int> itemsToSkip;
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem())
-        if(!browsingMap[item->index()]) itemsToSkip.append(itemColors->itemId(item->index()));
+        if(!browsingMap[item->index()])
+            itemsToSkip.append(itemColors->itemId(item->index()));
 #endif
     emit updateItemsToSkip(sourceGroup,itemsToSkip);
 
     if(!browsingEnable){
-        if(type == CLUSTER) emit noClustersToBrowse();
-        else emit noEventsToBrowse();
+        if(type == CLUSTER)
+            emit noClustersToBrowse();
+        else
+            emit noEventsToBrowse();
     }
     else{
-        if(type == CLUSTER) emit clustersToBrowse();
-        else emit eventsToBrowse();
+        if(type == CLUSTER)
+            emit clustersToBrowse();
+        else
+            emit eventsToBrowse();
     }
 #endif
 }
@@ -717,8 +719,8 @@ void ItemPalette::changeBackgroundColor(QColor color){
     update();
 }
 
-void ItemPalette::changeColor(Q3IconViewItem* item,QString groupName){
-    int index = item->index();
+void ItemPalette::changeColor(QListWidgetItem* item,const QString& groupName){
+    int index = item->data(ItemIconView::INDEXICON).toInt();
 
     //Get the itemColor associated with the item
     ItemColors* itemColors = itemColorsDict[groupName];
@@ -730,11 +732,14 @@ void ItemPalette::changeColor(Q3IconViewItem* item,QString groupName){
         itemColors->setColor(index,result,ItemColors::BY_INDEX);
 
         //Update the icon
-        QPixmap* pixmap = item->pixmap();
+        QIcon icon = item->icon();
+        QPixmap pixmap;
         QPainter painter;
-        painter.begin(pixmap);
+        painter.begin(&pixmap);
         painter.fillRect(0,0,12,12,result);
         painter.end();
+        icon.addPixmap(pixmap);
+        item->setIcon(icon);
 
         //As soon a color changes a signal is emitted.
         emit colorChanged(itemColors->itemId(index),groupName);
@@ -863,7 +868,7 @@ void ItemPalette::createGroup(const QString &id){
 
     //Signal and slot connection
     connect(iconView,SIGNAL(selectionChanged()),this, SLOT(slotClickRedraw()));
-    connect(iconView,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QString)),this, SLOT(slotMousePressed(int,Q3IconViewItem*,QString)));
+    connect(iconView,SIGNAL(mousePressMiddleButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressed(QString,QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(mousePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
     connect(iconView,SIGNAL(mousePressWAltButton(QString,int)),this, SLOT(slotMousePressWAltButton(QString,int)));

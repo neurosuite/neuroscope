@@ -123,7 +123,7 @@ public Q_SLOTS:
     void slotMousePressWAltButton(QString sourceGroup,int index);
     
 protected Q_SLOTS:
-    void slotMousePressed(int button,Q3IconViewItem* item,QString sourceGroupName);
+    void slotMousePressed(const QString& sourceGroupName,QListWidgetItem* item);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
     void slotMidButtonPressed(const QString& sourceGroupName);
     void slotClickRedraw();
@@ -200,7 +200,7 @@ private:
     * @param item item for which the color has to be changed.
     * @param groupName name of the group containing the item.
     */
-    void changeColor(Q3IconViewItem* item,QString groupName);
+    void changeColor(QListWidgetItem *item, const QString &groupName);
 
     /**Creates a new group for the name @p id
     * @param id name of the group to be created.

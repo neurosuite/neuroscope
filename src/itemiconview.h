@@ -37,6 +37,8 @@ public:
     explicit ItemIconView(const QColor &backgroundColor, ViewMode mode, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
     ~ItemIconView(){}
 
+    enum IndexItem { INDEXICON = Qt::UserRole + 1 };
+
 protected:
     void mousePressEvent ( QMouseEvent * event );
     void wheelEvent ( QWheelEvent * e );
@@ -44,13 +46,8 @@ protected:
 
 Q_SIGNALS:
     void mousePressWoModificators(QString sourceGroup);
-    #if KDAB_PORTING
-    void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
-#endif
+    void mousePressMiddleButton(const QString& sourceGroup,QListWidgetItem*);
     void mousePressWAltButton(QString sourceGroup,int index);
-    #if KDAB_PORTING
-    void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
-#endif
     void mouseReleased(QString sourceGroup);
 
 };
