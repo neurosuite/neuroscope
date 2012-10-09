@@ -781,8 +781,10 @@ void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<i
     browsingMap.clear();
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
         int id = itemColors->itemId(item->index());
-        if(itemsToSkip.contains(id)) browsingMap.insert(item->index(),false);
-        else browsingMap.insert(item->index(),true);
+        if(itemsToSkip.contains(id))
+            browsingMap.insert(item->index(),false);
+        else
+            browsingMap.insert(item->index(),true);
         QString label = itemColors->itemLabel(item->index());
         redrawItem(iconView,itemColors,item->index(),browsingMap);
         isInSelectItems = true;//redrawItem sets it back to false
@@ -798,7 +800,8 @@ void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<i
     }
 
     //Last item in selection gets focus if it exists
-    if(!itemsToSelect.isEmpty()) iconView->setCurrentItem(currentIcon);
+    if(!itemsToSelect.isEmpty())
+        iconView->setCurrentItem(currentIcon);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;

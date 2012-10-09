@@ -122,7 +122,7 @@ public Q_SLOTS:
     void slotChannelsMoved(const QString& targetGroup, QListWidgetItem *after);
     /**Channels moved around in a group.*/
     void slotChannelsMoved(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after);
-    void trashChannelsMovedAround(const QList<int>& channelIds,QString afterId,bool beforeFirst);
+    void trashChannelsMovedAround(const QList<int>& channelIds,const QString& afterId,bool beforeFirst);
     void discardChannels();
     void discardChannels(const QList<int>& channelsToDiscard);
     void discardChannels(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
