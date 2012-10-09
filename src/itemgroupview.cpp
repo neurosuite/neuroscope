@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "itemgroupview.h"
+#include <QListWidget>
 
 ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
     :QWidget(parent),
@@ -52,12 +53,13 @@ ItemGroupView::~ItemGroupView()
     qDebug()<<"in ~ItemGroupView()";
 }
 
-void ItemGroupView::setIconView(Q3IconView* view){
+void ItemGroupView::setIconView(QListWidget* view){
     iconView = view;
     mLayout->addWidget(iconView);
 }
 
 void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
+    #if KDAB_PORTING
     if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
         init = false;
         int futurWidth = parentWidth ;
@@ -72,6 +74,7 @@ void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
     //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate
     if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
         setFixedHeight(iconView->contentsHeight());
+#endif
 }
 
 

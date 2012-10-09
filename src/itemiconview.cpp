@@ -29,21 +29,22 @@
 #include <QFrame>
 
 
-ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos position,int gridX,int gridY,QWidget* parent,const char* name):
-    Q3IconView(parent,name)
+ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent,const char* name):
+    QListWidget(parent)
 {
+    setObjectName(name);
+
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
     setFrameStyle(QFrame::NoFrame);
-    setArrangement(LeftToRight);
-    setResizeMode(Q3IconView::Adjust);
-    setItemTextPos(position);
-    setGridX(gridX);
-    setGridY(gridY);
-    arrangeItemsInGrid();
-    setWordWrapIconText(false);
-    setDragAutoScroll(false);
+    //setArrangement(LeftToRight);
+    setResizeMode(QListWidget::Adjust);
+    setViewMode(mode);
+    setGridSize(QSize(gridX,gridY));
+    //arrangeItemsInGrid();
+    setWordWrap(false);
+    //setDragAutoScroll(false);
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
     QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
@@ -58,54 +59,47 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,Q3IconView::ItemTextPos
         legendColor = Qt::white;
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
-    setSelectionMode(Q3IconView::Extended);
-    setItemsMovable(false);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    //KDAB_PORTING setItemsMovable(false);
 
     setSpacing(4);
-    setAutoArrange(true);
-    setSorting(false);
+    //KDAB_PORTING setAutoArrange(true);
+    //KDAB_PORTING setSorting(false);
 
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    setVScrollBarMode(Q3ScrollView::AlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
 
-    connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
+    //KDAB PORTING connect(this,SIGNAL(mouseButtonPressed(int,Q3IconViewItem*,QPoint)),this, SLOT(slotMousePressed(int,Q3IconViewItem*)));
 }
 
-void ItemIconView::contentsMousePressEvent(QMouseEvent* event){  
+void ItemIconView::wheelEvent ( QWheelEvent * event )
+{
+    event->accept();
+}
 
-    //If the user did not clicked on an item, ignore the click
-    Q3IconViewItem* item = findItem(event->pos());
-    if(item == 0L) return;
-
-    /*if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
-   !(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::AltModifier)){
-  emit mousePressWoModificators(this->name());
- }*/
-
-    //ask for mark an item skip
-    if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
-
-        Q3IconViewItem* item = findItem(event->pos());
-        if(item != 0L){
-            emit mousePressWAltButton(this->objectName(),item->index());
-        }
+void ItemIconView::mousePressEvent ( QMouseEvent * event )
+{
+    QListWidgetItem *item = itemAt(event->pos());
+    if(!item)
         return;
+    if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
+        //KDAB_PORTING :emit mousePressWAltButton(this->objectName(),item->index());
     }
-
-    //Lets the parent take care of the usual iconview managment
-    Q3IconView::contentsMousePressEvent(event);
+    QListWidget::mousePressEvent(event);
 }
 
-
+/*
 void ItemIconView::slotMousePressed(int button,Q3IconViewItem* item){
     emit mouseButtonPressed(button,item,this->objectName());
 }
+*/
 
-void ItemIconView::contentsMouseReleaseEvent(QMouseEvent* event){
-    Q3IconView::contentsMouseReleaseEvent(event);
+void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
+    QListWidget::mouseReleaseEvent(event);
     emit mouseReleased(this->objectName());
 }
 

@@ -20,10 +20,9 @@
 
 #include <qwidget.h>
 #include <QHBoxLayout>
-#include <q3iconview.h>
 #include <QObject> 
 #include <QDebug>
-
+class QListWidget;
 
 /**Utilitary class used to build the cluster and event palettes.
   *@author Lynn Hazan
@@ -35,13 +34,13 @@ public:
     explicit ItemGroupView(const QColor& backgroundColor,QWidget* parent=0);
     ~ItemGroupView();
 
-    void setIconView(Q3IconView* view);
+    void setIconView(QListWidget *view);
 
 public Q_SLOTS:
     void reAdjustSize(int parentWidth,int labelSize);
 
 private:
-    Q3IconView* iconView;
+    QListWidget* iconView;
     QHBoxLayout *mLayout;
     bool init;
 

@@ -21,7 +21,7 @@
 //QT include files
 #include <qwidget.h>
 #include <QPainter>
-#include <q3iconview.h>
+#include <QListWidget>
 #include <q3dragobject.h>
 #include <qwidget.h>
 //Added by qt3to4:
@@ -34,11 +34,13 @@
   *@author Lynn Hazan
   */
 
-class ChannelIconView : public Q3IconView  {
+class ChannelIconView : public QListWidget  {
     Q_OBJECT
 public:
-    ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0);
-    inline ~ChannelIconView(){}
+    explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0);
+    ~ChannelIconView(){}
+
+#if 0
 
 protected:
     virtual Q3DragObject* dragObject();
@@ -61,7 +63,7 @@ protected Q_SLOTS:
 private:
     /**Return 0 if it has to be before the first one.*/
     Q3IconViewItem* findItemToInsertAfter(QPoint position);
-
+#endif
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;
 

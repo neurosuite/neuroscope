@@ -38,7 +38,6 @@
 
 
 // forward declaration
-class Q3IconView;
 class Q3IconViewItem;
 class ItemColors;
 

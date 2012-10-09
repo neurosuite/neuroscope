@@ -16,11 +16,6 @@
  ***************************************************************************/
 // application specific includes
 #include "channeliconview.h"
-
-
-
-
-
 // include files for Qt
 #include <QCursor>
 #include <QTextCodec>
@@ -33,22 +28,23 @@
 
 
 ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const char* name):
-    Q3IconView(parent,name){
+    QListWidget(parent){
+    setObjectName(name);
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
-    setArrangement(Q3IconView::LeftToRight);
-    setResizeMode(Q3IconView::Adjust);
-    setGridX(gridX);
-    setGridY(gridY);
-    arrangeItemsInGrid();
-    setDragAutoScroll(false);
+    //setArrangement(Q3IconView::LeftToRight);
+    setResizeMode(QListWidget::Adjust);
+    setGridSize(QSize(gridX, gridY));
+    //arrangeItemsInGrid();
+    //KDAB_PORTING setDragAutoScroll(false);
 
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); 
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     int h;
     int s;
     int v;
@@ -59,28 +55,32 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
 
-    setSelectionMode(Q3IconView::Extended);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
     if(edit){
         drag = true;
-        setItemsMovable(true);
+        //KDAB_PORTING setItemsMovable(true);
     }
     else{
         drag = false;
-        setItemsMovable(false);
+        //KDAB_PORTING setItemsMovable(false);
     }
     setSpacing(4);
-    setAutoArrange(true);
-    setSorting(false);
+    //KDAB_PORTING setAutoArrange(true);
+    //KDAB_PORTING setSorting(false);
 
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    setVScrollBarMode(Q3ScrollView::AlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+#if PORTING_KDAB
     connect(this,SIGNAL(dropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)),
             this,SLOT(slotDropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)));
+#endif
 }
+#if PORTING_KDAB
 
 Q3DragObject* ChannelIconView::dragObject(){
-    if(!currentItem() || !drag) return 0;
+    if(!currentItem() || !drag)
+        return 0;
 
     Q3IconDrag* drag = new Q3IconDrag(viewport());
     drag->setPixmap(*currentItem()->pixmap(),
@@ -264,14 +264,5 @@ void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
 
     Q3IconView::contentsMousePressEvent(event);
 }
-
-
-
-
-
-
-
-
-
-
+#endif
 #include "channeliconview.moc"

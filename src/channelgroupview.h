@@ -19,13 +19,14 @@
 #define CHANNELGROUPVIEW_H
 
 #include <qwidget.h>
-#include <q3iconview.h>
 #include <QObject> 
 #include <QPainter>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QHBoxLayout>
+
+class QListWidget;
 
 /**Utilitary class used to build the channel palettes (anatomical and spike).
   *@author Lynn Hazan
@@ -38,7 +39,7 @@ public:
 
     ~ChannelGroupView(){}
 
-    void setIconView(Q3IconView* view);
+    void setIconView(QListWidget *view);
 
 Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start, int destination);
@@ -55,7 +56,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent* event);
 
 private:
-    Q3IconView* iconView;
+    QListWidget* iconView;
 
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;

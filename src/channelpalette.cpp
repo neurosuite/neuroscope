@@ -106,7 +106,6 @@ void ChannelPalette::setGreyScale(bool grey){
     }
     greyScale = grey;
 
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
@@ -114,15 +113,24 @@ void ChannelPalette::setGreyScale(bool grey){
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        QListWidgetItem * item = 0L;
+        QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(iterator.key()),Qt::MatchExactly);
+        if(!lstItem.isEmpty())
+            item = lstItem.first();
+        else
+            continue;
 
         //Get the channelColor associated with the item
         QColor color = channelColors->color(iterator.key());
 
         //Update the icon
-        QPixmap* pixmap = item->pixmap();
-        drawItem(painter,pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
-        item->repaint();
+        QIcon icon = item->icon();
+        QPixmap pixmap;
+        drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
+        //item->repaint();
+        //KDAB_VERIFY
+        icon.addPixmap(pixmap);
+        item->setIcon(icon);
     }
 
 }
@@ -169,7 +177,7 @@ void ChannelPalette::setChannelLists(){
         iteratordict.value()->clear();
     }
 
-
+#if KDAB_PORTING
     //Construct one icon for each channel and set the show/hide status to false
     QPainter painter;
 
@@ -188,6 +196,7 @@ void ChannelPalette::setChannelLists(){
             (void)new ChannelIconItem(iconviewDict[groupId],(QString::fromLatin1("%1").arg(channelList[i])),pixmap);
         }
     }
+#endif
 }
 
 void ChannelPalette::slotRightPressed(Q3IconViewItem* item){
@@ -249,6 +258,7 @@ void ChannelPalette::slotMousePressed(int button,Q3IconViewItem* item){
 
 
 void ChannelPalette::slotMousePressed(QString sourceGroupName){
+    #if KDAB_PORTING
     if(sourceGroupName != ""){
         //If shiftKey is false, either select all the items of the group or deselect them all (it is a toggle between the 2 states)
         ChannelIconView* iconView = iconviewDict[sourceGroupName];
@@ -275,18 +285,21 @@ void ChannelPalette::slotMousePressed(QString sourceGroupName){
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
         isInSelectItems = false;
     }
+#endif
 }
 
 void ChannelPalette::slotMidButtonPressed(const QString &sourceGroupId){
+    #if KDAB_PORTING
     //Change the color of the group, take the first channel of the group.
     ChannelIconView* iconView = iconviewDict[sourceGroupId];
     Q3IconViewItem* item = iconView->firstItem();
     changeColor(item,false);
+#endif
 }
 
 const QList<int> ChannelPalette::selectedChannels(){
     QList<int> selectedChannels;
-
+#if KDAB_PORTING
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
@@ -297,7 +310,7 @@ const QList<int> ChannelPalette::selectedChannels(){
         }
 
     }
-
+#endif
     return selectedChannels;
 }
 
@@ -313,6 +326,7 @@ void ChannelPalette::slotClickRedraw(){
 }
 
 void ChannelPalette::slotMousePressWoModificators(QString sourceGroup){
+    #if KDAB_PORTING
     ChannelIconView* iconView = iconviewDict[sourceGroup];
     int count = 0;
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
@@ -347,6 +361,7 @@ void ChannelPalette::slotMousePressWoModificators(QString sourceGroup){
             emit updateShownChannels(selected);
         }
     }
+#endif
 }
 
 void ChannelPalette::showChannels(){
@@ -365,6 +380,7 @@ void ChannelPalette::hideChannels(){
 }
 
 void ChannelPalette::hideUnselectAllChannels(){
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -395,6 +411,7 @@ void ChannelPalette::hideUnselectAllChannels(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ChannelPalette::updateShowHideStatus(bool showStatus){
@@ -406,6 +423,7 @@ void ChannelPalette::updateShowHideStatus(bool showStatus){
 }
 
 void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool showStatus){  
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -453,6 +471,7 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
@@ -467,6 +486,7 @@ const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
 
 
 void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){  
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -527,10 +547,12 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+   #endif
 }
 
 
 void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatus){
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -590,10 +612,12 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 
 void ChannelPalette::updateColor(const QList<int>& channelIds){
+    #if KDAB_PORTING
     QList<int>::const_iterator channelIterator;
     Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
@@ -612,10 +636,12 @@ void ChannelPalette::updateColor(const QList<int>& channelIds){
         drawItem(painter,pixmap,color,channelsShowHideStatus[*channelIterator],channelsSkipStatus[*channelIterator]);
         item->repaint();
     }
+#endif
 }
 
 
 void ChannelPalette::updateColor(int channelId){
+    #if KDAB_PORTING
     Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
@@ -631,9 +657,11 @@ void ChannelPalette::updateColor(int channelId){
     QPixmap* pixmap = item->pixmap();
     drawItem(painter,pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
     item->repaint();
+#endif
 }
 
 void ChannelPalette::updateGroupColor(int channelId){
+    #if KDAB_PORTING
     ChannelIconView* iconView = 0L;
     QPainter painter;
     //Get the group Color associated with the item depending on the type. Take the the color associated
@@ -652,6 +680,7 @@ void ChannelPalette::updateGroupColor(int channelId){
         drawItem(painter,pixmap,color,channelsShowHideStatus[item->text().toInt()],channelsSkipStatus[item->text().toInt()]);
         item->repaint();
     }
+#endif
 }
 
 void ChannelPalette::applyGroupColor(PaletteType paletteType){
@@ -659,7 +688,7 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
-
+#if KDAB_PORTING
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
@@ -678,6 +707,7 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
         drawItem(painter,pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
         item->repaint();
     }
+#endif
 }
 
 void ChannelPalette::applyCustomColor(){
@@ -685,7 +715,7 @@ void ChannelPalette::applyCustomColor(){
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
-
+#if KDAB_PORTING
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
@@ -699,6 +729,7 @@ void ChannelPalette::applyCustomColor(){
         drawItem(painter,pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
         item->repaint();
     }
+#endif
 }
 
 void ChannelPalette::changeBackgroundColor(QColor color){
@@ -739,7 +770,7 @@ void ChannelPalette::changeBackgroundColor(QColor color){
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator groupIterator;
-
+#if KDAB_PORTING
     for(groupIterator = channelsGroups->begin(); groupIterator != channelsGroups->end(); ++groupIterator){
         int groupId = (*channelsGroups)[groupIterator.key()];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
@@ -755,11 +786,12 @@ void ChannelPalette::changeBackgroundColor(QColor color){
         QPixmap* pixmap = item->pixmap();
         drawItem(painter,pixmap,color,channelsShowHideStatus[groupIterator.key()],channelsSkipStatus[groupIterator.key()]);
     }
-
+#endif
     update();
 }
 
 void ChannelPalette::changeColor(Q3IconViewItem* item,bool single){
+    #if KDAB_PORTING
     int id = item->text().toInt();
 
     //Get the channelColor associated with the item
@@ -798,6 +830,7 @@ void ChannelPalette::changeColor(Q3IconViewItem* item,bool single){
             emit groupChangeColor(groupId.toInt());
         }
     }
+#endif
 }
 
 /*
@@ -812,7 +845,7 @@ void ChannelPalette::languageChange()
 void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-
+#if KDAB_PORTING
     //unselect all the items first
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
@@ -837,6 +870,7 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ChannelPalette::reset(){
@@ -872,7 +906,7 @@ void ChannelPalette::createGroup(int id){
 
     ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize,15,edit,group,QString::fromLatin1("%1").arg(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
+#if KDAB_PORTING
     if(iconviewDict.count() >= 1){
         if(iconviewDict.contains("1") )
             iconView->resizeContents((iconviewDict["1"])->contentsWidth(),labelSize);
@@ -884,7 +918,7 @@ void ChannelPalette::createGroup(int id){
             iconView->resizeContents((iconviewDict["-1"])->contentsWidth(),labelSize);
     }
     else iconView->adjustSize();
-
+#endif
     //group->setStretchFactor(label,0);
     //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
@@ -1114,6 +1148,7 @@ int ChannelPalette::createEmptyGroup(){
 }
 
 void ChannelPalette::moveChannels(int targetGroup){
+    #if KDAB_PORTING
     ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(targetGroup)];
 
     //Get the destination group color to later update the group color of the moved channels, for a new group blue is the default
@@ -1196,7 +1231,7 @@ void ChannelPalette::moveChannels(int targetGroup){
     if(movedFromTrashChannels.size() != 0){
         emit channelsRemovedFromTrash(movedFromTrashChannels);
     }
-
+#endif
     update();
 }
 
@@ -1276,6 +1311,7 @@ void ChannelPalette::deleteEmptyGroups(){
 }
 
 void ChannelPalette::selectAllChannels(){
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1293,9 +1329,11 @@ void ChannelPalette::selectAllChannels(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ChannelPalette::deselectAllChannels(){
+    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1310,6 +1348,7 @@ void ChannelPalette::deselectAllChannels(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
@@ -1332,6 +1371,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
 }
 
 void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup){
+    #if KDAB_PORTING
     QList<int> targetChannels = (*groupsChannels)[targetGroup.toInt()];
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
@@ -1392,13 +1432,14 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
     }
 
     if(iconviewDict.contains("0") || iconviewDict.contains("-1")) moveTrashesToBottom();
-
+#endif
     update();
 }
 
 
 
 void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after){
+    #if KDAB_PORTING
     //If the channels have been moved to the trash inform the other palette.
     QString afterId;
     bool beforeFirst = false;
@@ -1526,12 +1567,13 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
 
     //If the channels have been moved to the trash inform the other palette.
     if(targetGroup == "0") emit channelsMovedToTrash(movedChannels,afterId,beforeFirst);
-
+#endif
     update();
 }
 
 
 void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds,QString afterId,bool beforeFirst){
+    #if KDAB_PORTING
     Q3IconViewItem* after;
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
@@ -1541,11 +1583,12 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds,QStri
 
     //Actually move the channels
     moveChannels(channelIds,"0",after);
-
+#endif
     update();
 }
 
 void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after){
+#if KDAB_PORTING
     QList<int>::const_iterator iterator;
     QPainter painter;
     ChannelIconView* iconView = iconviewDict[sourceGroup];
@@ -1588,6 +1631,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
         sourceChannels.append(item->text().toInt());
 
     groupsChannels->replace(sourceGroup.toInt(),sourceChannels);
+#endif
 }
 
 void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after){
@@ -1619,6 +1663,7 @@ void ChannelPalette::discardChannels(){
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){    
+#if KDAB_PORTING
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
     groupColor.setHsv(210,255,255);
@@ -1713,11 +1758,12 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-
+#endif
     update();
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst){
+#if KDAB_PORTING
     Q3IconViewItem* after;
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
@@ -1797,9 +1843,11 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
 
     //Update the display as the trash channels are hidden
     emit updateShownChannels(getShowHideChannels(true));
+#endif
 }
 
 void ChannelPalette::setEditMode(bool edition){  
+#if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1843,6 +1891,7 @@ void ChannelPalette::setEditMode(bool edition){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
@@ -1908,6 +1957,7 @@ void ChannelPalette::discardSpikeChannels(){
 
 
 void ChannelPalette::trashChannels(int destinationGroup){
+#if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1984,7 +2034,8 @@ void ChannelPalette::trashChannels(int destinationGroup){
                 //Add the channel to the trash group
                 QPixmap pixmap(14,14);
                 QColor color = channelColors->color(channelId);
-                if(destinationGroup == 0) channelsShowHideStatus[channelId] = false;
+                if(destinationGroup == 0)
+                    channelsShowHideStatus[channelId] = false;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
                 (void)new ChannelIconItem(trash,QString::fromLatin1("%1").arg(channelId),pixmap);
 
@@ -1996,13 +2047,15 @@ void ChannelPalette::trashChannels(int destinationGroup){
         //Delete the entries in the source group
         QList<int>::iterator it2;
         for(it2 = currentDiscardedChannels.begin(); it2 != currentDiscardedChannels.end(); ++it2){
+#if KDAB_PORTING
             Q3IconViewItem* currentIcon = it.value()->findItem(QString::fromLatin1("%1").arg(*it2),Q3ListBox::ExactMatch);
             delete currentIcon;
+#endif
         }
         //Update groupsChannels
         groupsChannels->insert(it.key().toInt(),channelIds);
 
-        it.value()->arrangeItemsInGrid();
+        //KDAB_PORTING it.value()->arrangeItemsInGrid();
         if(destinationGroup == -1 && it.key() == "0" && currentDiscardedChannels.size() != 0){
             emit channelsRemovedFromTrash(currentDiscardedChannels);
         }
@@ -2010,7 +2063,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
     //Add/update the 0 entry in the map group-channel list
     groupsChannels->insert(destinationGroup,trashChannels);
-    trash->arrangeItemsInGrid();
+   //KDAB_PORTING trash->arrangeItemsInGrid();
 
     //Update the group color, for a new group blue is the default
     QList<int>::iterator it2;
@@ -2037,6 +2090,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "channelgroupview.h"
-
+#include <QListWidget>
 
 ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent)
     :QWidget(parent),iconView(0L),drag(drag),init(true)
@@ -46,6 +46,7 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
 }
 
 void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
+#if KDAB_PORTING
     if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
         init = false;
         int futurWidth = parentWidth ;
@@ -61,6 +62,7 @@ void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
     //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
     if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
         setFixedHeight(iconView->contentsHeight());
+#endif
 }
 
 void ChannelGroupView::dropEvent(QDropEvent* event){
@@ -90,7 +92,7 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
     emit dragObjectMoved(QWidget::mapToParent(event->pos()));
 }
 
-void ChannelGroupView::setIconView(Q3IconView* view){
+void ChannelGroupView::setIconView(QListWidget* view){
     iconView = view;
     mLayout->addWidget(iconView);
 }

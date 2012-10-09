@@ -20,7 +20,7 @@
 
 //QT include files
 #include <qwidget.h>
-#include <q3iconview.h>
+#include <QListWidget>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -31,26 +31,26 @@
   *@author Lynn Hazan
   */
 
-class ItemIconView : public Q3IconView  {
+class ItemIconView : public QListWidget {
     Q_OBJECT
 public:
-    explicit ItemIconView(const QColor &backgroundColor, Q3IconView::ItemTextPos position, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
+    explicit ItemIconView(const QColor &backgroundColor, ViewMode mode, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
     ~ItemIconView(){}
 
-private Q_SLOTS:
-    void slotMousePressed(int button,Q3IconViewItem* item);
-    void contentsMouseReleaseEvent(QMouseEvent* event);
-
-
 protected:
-    void contentsMousePressEvent(QMouseEvent* event);
-    void contentsWheelEvent(QWheelEvent* event){event->accept();}
+    void mousePressEvent ( QMouseEvent * event );
+    void wheelEvent ( QWheelEvent * e );
+    void mouseReleaseEvent ( QMouseEvent * event );
 
 Q_SIGNALS:
     void mousePressWoModificators(QString sourceGroup);
+    #if KDAB_PORTING
     void mouseButtonPressed(int,Q3IconViewItem*,QString sourceGroup);
+#endif
     void mousePressWAltButton(QString sourceGroup,int index);
+    #if KDAB_PORTING
     void mouseButtonClicked(int,Q3IconViewItem*,QString sourceGroup);
+#endif
     void mouseReleased(QString sourceGroup);
 
 };

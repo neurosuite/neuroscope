@@ -163,6 +163,7 @@ void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int de
 
 
 void ItemPalette::updateItemList(const QString& groupName){
+    #ifdef KDAB_PORTING
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clear();
 
@@ -193,6 +194,7 @@ void ItemPalette::updateItemList(const QString& groupName){
         iconView->resizeContents(50,20);
     else
         iconView->adjustSize();
+#endif
 }
 
 
@@ -227,7 +229,7 @@ void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
 }
 
 void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ctrlAlt){
-
+#ifdef KDAB_PORTING
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
@@ -385,12 +387,13 @@ void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ct
     selected = sourceGroupName;
     if(type == EVENT)
         emit selectedGroupChanged(selected);
+#endif
 }
 
 
 const QMap<QString,QList<int> > ItemPalette::selectedItems(){
     QMap<QString,QList<int> > selection;
-
+#ifdef KDAB_PORTING
     QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
     while (iterator.hasNext()) {
         iterator.next();
@@ -404,11 +407,12 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
         }
         selection.insert(groupName,selectedItems);
     }
-
+#endif
     return selection;
 }
 
 void ItemPalette::slotClickRedraw(){
+    #ifdef KDAB_PORTING
     if(!isInSelectItems){
         bool browsingEnable = false;
         bool needToBeUpdated = false;
@@ -464,10 +468,11 @@ void ItemPalette::slotClickRedraw(){
             update();
         }
     }
+#endif
 }
 
 void ItemPalette::slotMousePressWoModificators(QString sourceGroup){  
-
+#ifdef KDAB_PORTING
     ItemIconView* iconView = iconviewDict[sourceGroup];
     int count = 0;
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
@@ -529,6 +534,7 @@ void ItemPalette::slotMousePressWoModificators(QString sourceGroup){
                 emit noEventsToBrowse();
         }
     }
+#endif
 }
 
 void ItemPalette::slotMouseReleased(QString sourceGroupName){
@@ -542,7 +548,7 @@ void ItemPalette::slotMouseReleased(QString sourceGroupName){
 void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int index,QMap<int,bool> browsingMap){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-
+#ifdef KDAB_PORTING
     QString label =  itemColors->itemLabel(index);
     Q3IconViewItem* currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
     bool selected = currentItem->isSelected();
@@ -573,6 +579,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int i
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 bool ItemPalette::isBrowsingEnable(){
@@ -593,6 +600,7 @@ bool ItemPalette::isBrowsingEnable(){
 }
 
 void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
+    #ifdef KDAB_PORTING
     QMap<int,bool> browsingMap = browsingStatus[sourceGroup];
     Q3IconViewItem* currentItem = 0L;
     ItemIconView* iconView = iconviewDict[sourceGroup];
@@ -617,11 +625,11 @@ void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
 
     itemsToRedraw.append(index);
     needRedrawing.insert(sourceGroup,itemsToRedraw);
-
+#ifdef KDAB_PORTING
     QList<int> itemsToSkip;
     for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem())
         if(!browsingMap[item->index()]) itemsToSkip.append(itemColors->itemId(item->index()));
-
+#endif
     emit updateItemsToSkip(sourceGroup,itemsToSkip);
 
     if(!browsingEnable){
@@ -632,6 +640,7 @@ void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
         if(type == CLUSTER) emit clustersToBrowse();
         else emit eventsToBrowse();
     }
+#endif
 }
 
 void ItemPalette::changeBackgroundColor(QColor color){
@@ -669,7 +678,7 @@ void ItemPalette::changeBackgroundColor(QColor color){
 
         //Construct one icon for each item
         QPainter painter;
-
+#ifdef KDAB_PORTING
         for(int i = 0; i<nbItems; ++i){
             QPixmap pix(14,14);
             pix.fill(backgroundColor);
@@ -684,7 +693,7 @@ void ItemPalette::changeBackgroundColor(QColor color){
             if(selectedItems.contains(itemColors->itemId(item->index())))
                 item->setSelected(true,true);
         }
-
+#endif
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
         isInSelectItems = false;
     }
@@ -749,7 +758,7 @@ void ItemPalette::languageChange()
 void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<int> itemsToSkip){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-    
+    #ifdef KDAB_PORTING
     Q3IconViewItem* currentIcon = 0L;
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->selectAll(false);
@@ -782,6 +791,7 @@ void ItemPalette::selectItems(QString groupName,QList<int> itemsToSelect,QList<i
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+    #endif
 }
 
 
@@ -817,11 +827,12 @@ void ItemPalette::createGroup(const QString &id){
     ItemIconView* iconView;
     QFontInfo fontInfo = QFontInfo(f);
     if(type == CLUSTER)
-        iconView = new ItemIconView(backgroundColor,Q3IconView::Bottom,fontInfo.pixelSize() * 2,5,group,id);
+        iconView = new ItemIconView(backgroundColor,QListView::IconMode,fontInfo.pixelSize() * 2,5,group,id);
     else
-        iconView = new ItemIconView(backgroundColor,Q3IconView::Right,gridX,5,group,id);
+        iconView = new ItemIconView(backgroundColor,QListView::ListMode,gridX,5,group,id);
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
+    #ifdef KDAB_PORTING
     if(iconviewDict.count() >= 1){
         QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
         while (iterator.hasNext()) {
@@ -831,7 +842,7 @@ void ItemPalette::createGroup(const QString &id){
     }
     else
         iconView->adjustSize();
-
+#endif
     //group->setStretchFactor(label,0);
     //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
@@ -905,6 +916,7 @@ void ItemPalette::selectGroup(const QString& groupName){
 }
 
 void ItemPalette::selectAllItems(){
+    #ifdef KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -919,9 +931,11 @@ void ItemPalette::selectAllItems(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 void ItemPalette::deselectAllItems(){
+#ifdef KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -962,6 +976,7 @@ void ItemPalette::deselectAllItems(){
     
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+#endif
 }
 
 
