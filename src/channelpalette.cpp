@@ -1155,9 +1155,11 @@ void ChannelPalette::moveChannels(int targetGroup){
     QList<int> destinationChannels = (*groupsChannels)[targetGroup];
     QColor groupColor;
     groupColor.setHsv(210,255,255);
-    if(destinationChannels.size() != 0){
-        if(type == DISPLAY) groupColor = channelColors->groupColor(destinationChannels[0]);
-        else groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+    if(!destinationChannels.isEmpty()){
+        if(type == DISPLAY)
+            groupColor = channelColors->groupColor(destinationChannels[0]);
+        else
+            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
     }
 
     //will store the selected channels which to be moved.
@@ -1311,7 +1313,6 @@ void ChannelPalette::deleteEmptyGroups(){
 }
 
 void ChannelPalette::selectAllChannels(){
-    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1320,7 +1321,7 @@ void ChannelPalette::selectAllChannels(){
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        iteratordict.value()->selectAll(true);
+        iteratordict.value()->selectAll();
     }
 
 
@@ -1329,11 +1330,9 @@ void ChannelPalette::selectAllChannels(){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ChannelPalette::deselectAllChannels(){
-    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -1341,14 +1340,13 @@ void ChannelPalette::deselectAllChannels(){
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        iteratordict.value()->selectAll(false);
+        iteratordict.value()->clearSelection();
     }
     QList<int> selected;
     emit channelsSelected(selected);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
@@ -1455,9 +1453,11 @@ void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after
     QList<int> destinationChannels = (*groupsChannels)[targetGroup.toInt()];
     QColor groupColor;
     groupColor.setHsv(210,255,255);
-    if(destinationChannels.size() != 0){
-        if(type == DISPLAY) groupColor = channelColors->groupColor(destinationChannels[0]);
-        else groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+    if(!destinationChannels.isEmpty()) {
+        if(type == DISPLAY)
+            groupColor = channelColors->groupColor(destinationChannels[0]);
+        else
+            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
     }
 
     ChannelIconView* targetIconView = iconviewDict[targetGroup];
@@ -1578,8 +1578,10 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds,QStri
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
     //and then move the first item after the others
-    if(beforeFirst) after = 0;
-    else after = trash->findItem(afterId,Q3ListBox::ExactMatch);
+    if(beforeFirst)
+        after = 0;
+    else
+        after = trash->findItem(afterId,Q3ListBox::ExactMatch);
 
     //Actually move the channels
     moveChannels(channelIds,"0",after);
