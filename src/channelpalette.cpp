@@ -363,8 +363,10 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
 
         bool selected;
-        if(!edit && showStatus) selected = true;
-        else selected = item->isSelected();
+        if(!edit && showStatus)
+            selected = true;
+        else
+            selected = item->isSelected();
 
         //Add an item to the target group with the same text but an update icon.
         QPixmap pixmap(14,14);
@@ -505,8 +507,10 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
         else{
             //if the status is false and the item has the background color has color change it to the group color.
             if(color == backgroundColor){
-                if(type == DISPLAY) color = channelColors->groupColor(*channelIterator);
-                else color = channelColors->spikeGroupColor(*channelIterator);
+                if(type == DISPLAY)
+                    color = channelColors->groupColor(*channelIterator);
+                else
+                    color = channelColors->spikeGroupColor(*channelIterator);
             }
         }
 
@@ -718,7 +722,8 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
     if(color.isValid()){
         if(single){
             //Update the channelColor only if the channel is not skipped
-            if(!channelsSkipStatus[id]) channelColors->setColor(id,color);
+            if(!channelsSkipStatus[id])
+                channelColors->setColor(id,color);
 
             //Update the icon
             QPixmap* pixmap = item->pixmap();
@@ -730,7 +735,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
         }
         else{
             //Change the color for all the other channels of the current group, depending on the PaletteType.
-            ChannelIconView* iconViewParent =  dynamic_cast<ChannelIconView*>(item->iconView());
+            ChannelIconView* iconViewParent =  static_cast<ChannelIconView*>(item->iconView());
             for(Q3IconViewItem* current = iconViewParent->firstItem(); current; current = current->nextItem()){
                 //Update the colors for the channel (color and group color)
                 if(type == DISPLAY) channelColors->setGroupColor(current->text().toInt(),color);
@@ -743,7 +748,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                 drawItem(painter,pixmap,color,channelsShowHideStatus[current->text().toInt()],channelsSkipStatus[current->text().toInt()]);
                 current->repaint();
             }
-            QString groupId = QString(iconViewParent->name());
+            QString groupId = iconViewParent->name();
             emit groupChangeColor(groupId.toInt());
         }
     }
@@ -783,7 +788,7 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     }
 
     //Last item in selection gets focus if it exists
-    if(selectedChannels.size() != 0)
+    if(!selectedChannels.isEmpty())
         iconView->setCurrentItem(currentIcon);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
