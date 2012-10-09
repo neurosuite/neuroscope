@@ -29,7 +29,8 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
     setAutoFillBackground(true);
 
     //Set the groupview color, the foreground color depends on the background color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     int h;
     int s;
     int v;
@@ -37,7 +38,9 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
     QColor legendColor;
     if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
         legendColor = Qt::black;
-    else legendColor = Qt::white;
+    else
+        legendColor = Qt::white;
+
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
     adjustSize();

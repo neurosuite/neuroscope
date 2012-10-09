@@ -40,13 +40,19 @@ public:
     explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0);
     ~ChannelIconView(){}
 
+public Q_SLOTS:
+    void setDragAndDrop(bool dragDrop);
+
+protected:
+    void mousePressEvent(QMouseEvent* event);
+    void wheelEvent ( QWheelEvent * e );
+    void contentsWheelEvent(QWheelEvent* event){event->accept();}
+
 #if 0
 
 protected:
     virtual Q3DragObject* dragObject();
     virtual void contentsDropEvent(QDropEvent* event);
-    virtual void contentsMousePressEvent(QMouseEvent* event);
-    void contentsWheelEvent(QWheelEvent* event){event->accept();}
 
 Q_SIGNALS:
     void channelsMoved(QString targetGroup,Q3IconViewItem* after);
@@ -54,8 +60,6 @@ Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start,int destination);
     void moussePressWoModificators(QString sourceGroup);
 
-public Q_SLOTS:
-    void setDragAndDrop(bool dragDrop){drag = dragDrop;}
 
 protected Q_SLOTS:
     void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);

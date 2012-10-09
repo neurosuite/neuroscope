@@ -43,26 +43,29 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
 
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    QPalette palette;
+    QPalette palette = this->palette();
     palette.setColor(backgroundRole(), backgroundColor);
     int h;
     int s;
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
+
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     if(edit){
         drag = true;
-        //KDAB_PORTING setItemsMovable(true);
+        setMovement(QListView::Snap);
     }
     else{
         drag = false;
-        //KDAB_PORTING setItemsMovable(false);
+        setMovement(QListView::Static);
     }
     setSpacing(4);
     //KDAB_PORTING setAutoArrange(true);
@@ -76,6 +79,32 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
             this,SLOT(slotDropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)));
 #endif
 }
+
+void ChannelIconView::mousePressEvent(QMouseEvent* event)
+{
+    //If the user did not clicked on an item, ignore the click
+    QListWidgetItem* item = itemAt(event->pos());
+    if(item == 0L)
+        return;
+
+    //  if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
+    //   !(event->modifiers() & Qt::ControlModifier)){
+    //    emit moussePressWoModificators(this->name());
+    //  }
+
+    QListWidget::mousePressEvent(event);
+}
+
+void ChannelIconView::wheelEvent ( QWheelEvent * event )
+{
+    event->accept();
+}
+
+void ChannelIconView::setDragAndDrop(bool dragDrop)
+{
+    drag = dragDrop;
+}
+
 #if PORTING_KDAB
 
 Q3DragObject* ChannelIconView::dragObject(){
