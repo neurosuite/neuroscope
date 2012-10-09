@@ -141,9 +141,9 @@ public Q_SLOTS:
     void selectAllChannels();
     void deselectAllChannels();
     /**Channels moved to an existing group in a specific location.*/
-    void slotChannelsMoved(QString targetGroup,Q3IconViewItem* after);
+    void slotChannelsMoved(const QString& targetGroup, QListWidgetItem *after);
     /**Channels moved around in a group.*/
-    void slotChannelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void slotChannelsMoved(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after);
     void trashChannelsMovedAround(const QList<int>& channelIds,QString afterId,bool beforeFirst);
     void discardChannels();
     void discardChannels(const QList<int>& channelsToDiscard);
@@ -279,7 +279,7 @@ private:
     void moveTrashesToBottom();
 
     /**Moves channels around in a group.*/
-    void moveChannels(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
+    void moveChannels(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after);
 
     /**Channels moved to an empty group.*/
     void moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup);

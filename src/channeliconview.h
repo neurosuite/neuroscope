@@ -45,6 +45,13 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void mousePressMiddleButton(QListWidgetItem* item);
+    void moussePressWoModificators(const QString& sourceGroup);
+    void channelsMoved(const QString& targetGroup,QListWidgetItem* after);
+    void channelsMoved(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after);
+    void dropLabel(int sourceId,int targetId,int start,int destination);
+
+
+
 protected:
     void mousePressEvent(QMouseEvent* event);
     void wheelEvent ( QWheelEvent * e );
@@ -56,13 +63,6 @@ protected:
     virtual Q3DragObject* dragObject();
     virtual void contentsDropEvent(QDropEvent* event);
 
-Q_SIGNALS:
-    void channelsMoved(QString targetGroup,Q3IconViewItem* after);
-    void channelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after);
-    void dropLabel(int sourceId,int targetId,int start,int destination);
-    void moussePressWoModificators(QString sourceGroup);
-
-
 protected Q_SLOTS:
     void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);
 
@@ -70,6 +70,8 @@ private:
     /**Return 0 if it has to be before the first one.*/
     Q3IconViewItem* findItemToInsertAfter(QPoint position);
 #endif
+
+private:
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;
 

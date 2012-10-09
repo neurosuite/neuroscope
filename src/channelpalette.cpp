@@ -943,8 +943,8 @@ void ChannelPalette::createGroup(int id){
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QListWidgetItem*)),this, SLOT(slotMousePressMiddleButton(QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
-    connect(iconView,SIGNAL(channelsMoved(QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QString,Q3IconViewItem*)));
-    connect(iconView,SIGNAL(channelsMoved(QList<int>,QString,Q3IconViewItem*)),this, SLOT(slotChannelsMoved(QList<int>,QString,Q3IconViewItem*)));
+    connect(iconView,SIGNAL(channelsMoved(QString,QListWidgetItem*)),this, SLOT(slotChannelsMoved(QString,QListWidgetItem*)));
+    connect(iconView,SIGNAL(channelsMoved(QList<int>,QString,QListWidgetItem*)),this, SLOT(slotChannelsMoved(QList<int>,QString,QListWidgetItem*)));
     connect(iconView,SIGNAL(moussePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
 
     connect(label,SIGNAL(middleClickOnLabel(QString)),this, SLOT(slotMidButtonPressed(QString)));
@@ -1436,7 +1436,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
 
 
 
-void ChannelPalette::slotChannelsMoved(QString targetGroup,Q3IconViewItem* after){
+void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetItem* after){
     #if KDAB_PORTING
     //If the channels have been moved to the trash inform the other palette.
     QString afterId;
@@ -1589,7 +1589,7 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds,QStri
     update();
 }
 
-void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after){
+void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after){
 #if KDAB_PORTING
     QList<int>::const_iterator iterator;
     QPainter painter;
@@ -1636,7 +1636,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
 #endif
 }
 
-void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds,QString sourceGroup,Q3IconViewItem* after){
+void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after){
     //If the channels have been moved around in the trash, inform the other palette.
     if(sourceGroup == "0" ){
         QString afterId;
@@ -1645,7 +1645,8 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds,QString sour
             beforeFirst = true;
             afterId.clear();
         }
-        else afterId = after->text();
+        else
+            afterId = after->text();
 
         emit channelsMovedAroundInTrash(channelIds,afterId,beforeFirst);
     }
