@@ -821,9 +821,7 @@ void ChannelPalette::createGroup(int id){
     GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group);
     if(id == -1){
         label->setText("?");
-    }
-    if(id == 0){
-
+    } else if(id == 0){
         label->setPixmap(QPixmap(":/icons/trash"));
     }
 
@@ -838,8 +836,9 @@ void ChannelPalette::createGroup(int id){
     ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize,15,edit,group,QString::fromLatin1("%1").arg(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     if(iconviewDict.count() >= 1){
-        if(iconviewDict.contains("1") )
+        if(iconviewDict.contains("1") ){
             iconView->resize((iconviewDict["1"])->size().width(),labelSize);
+        }
         //Everything is in the trash group
         else if(iconviewDict.contains("0"))
             iconView->resize((iconviewDict["0"])->size().width(),labelSize);
@@ -861,9 +860,7 @@ void ChannelPalette::createGroup(int id){
     iconView->show();
     group->show();
 
-    if(spaceWidget){
-        delete spaceWidget;
-    }
+    delete spaceWidget;
     spaceWidget = new SpaceWidget(verticalContainer,edit);
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);

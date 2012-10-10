@@ -19,7 +19,10 @@
 #include <QListWidget>
 
 ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent)
-    :QWidget(parent),iconView(0L),drag(drag),init(true)
+    :QWidget(parent),
+      iconView(0L),
+      drag(drag),
+      init(true)
 {
 
     mLayout = new QHBoxLayout;
