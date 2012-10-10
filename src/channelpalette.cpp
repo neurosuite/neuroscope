@@ -651,7 +651,7 @@ void ChannelPalette::applyCustomColor(){
     }
 }
 
-void ChannelPalette::changeBackgroundColor(QColor color){
+void ChannelPalette::changeBackgroundColor(const QColor &color){
     backgroundColor = color;
 
     int h;
@@ -659,8 +659,10 @@ void ChannelPalette::changeBackgroundColor(QColor color){
     int v;
     color.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
 
     QPalette palette; palette.setColor(backgroundRole(), backgroundColor); 
     palette.setColor(foregroundRole(), legendColor); 

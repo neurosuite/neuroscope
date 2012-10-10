@@ -90,7 +90,7 @@ public:
     const QList<int> selectedChannels();
 
     /**updates the background color of the palette.*/
-    void changeBackgroundColor(QColor color);
+    void changeBackgroundColor(const QColor &color);
 
     /**
     * Gets the channels with the @p showStatus show/hide status.
