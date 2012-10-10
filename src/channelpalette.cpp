@@ -72,9 +72,10 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     palette.setColor(backgroundRole(), backgroundColor);
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    setVScrollBarMode(Q3ScrollView::AlwaysOff);
 
     setResizePolicy(Q3ScrollView::AutoOneFit);
+
     verticalContainer = new Q3VBox(viewport(),"verticalContainer");
     viewport()->setAutoFillBackground(true);
     addChild(verticalContainer);
@@ -222,7 +223,8 @@ void ChannelPalette::slotMousePressed(const QString& sourceGroupName){
             iconView->clearSelection();
 
             QList<int> selected = selectedChannels();
-            if(!edit) emit updateShownChannels(selected);
+            if(!edit)
+                emit updateShownChannels(selected);
             emit channelsSelected(selected);
         }
         else{
@@ -835,19 +837,18 @@ void ChannelPalette::createGroup(int id){
 
     ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize,15,edit,group,QString::fromLatin1("%1").arg(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-#if KDAB_PORTING
     if(iconviewDict.count() >= 1){
         if(iconviewDict.contains("1") )
-            iconView->resizeContents((iconviewDict["1"])->contentsWidth(),labelSize);
+            iconView->resize((iconviewDict["1"])->size().width(),labelSize);
         //Everything is in the trash group
         else if(iconviewDict.contains("0"))
-            iconView->resizeContents((iconviewDict["0"])->contentsWidth(),labelSize);
+            iconView->resize((iconviewDict["0"])->size().width(),labelSize);
         //In the spike palette at the begining only the spikeTrashGroup (gpId-1) exists.
         else
-            iconView->resizeContents((iconviewDict["-1"])->contentsWidth(),labelSize);
+            iconView->resize((iconviewDict["-1"])->size().width(),labelSize);
     }
-    else iconView->adjustSize();
-#endif
+    else
+        iconView->adjustSize();
     //group->setStretchFactor(label,0);
     //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
@@ -1613,8 +1614,10 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     else{
         QList<int> trashChannels = (*groupsChannels)[0];
         if(!trashChannels.isEmpty()){
-            if(type == DISPLAY) groupColor = channelColors->groupColor(trashChannels[0]);
-            else groupColor = channelColors->spikeGroupColor(trashChannels[0]);
+            if(type == DISPLAY)
+                groupColor = channelColors->groupColor(trashChannels[0]);
+            else
+                groupColor = channelColors->spikeGroupColor(trashChannels[0]);
         }
     }
     ChannelIconView* trash = iconviewDict["0"];
@@ -1679,8 +1682,10 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
             (void)new ChannelIconItem(trash,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
 
             //Update the group color
-            if(type == DISPLAY) channelColors->setGroupColor(*channelIterator,groupColor);
-            else channelColors->setSpikeGroupColor(*channelIterator,groupColor);
+            if(type == DISPLAY)
+                channelColors->setGroupColor(*channelIterator,groupColor);
+            else
+                channelColors->setSpikeGroupColor(*channelIterator,groupColor);
 
             trashChannels.append(*channelIterator);
         }

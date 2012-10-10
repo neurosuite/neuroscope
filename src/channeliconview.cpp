@@ -38,6 +38,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     //setArrangement(Q3IconView::LeftToRight);
     setResizeMode(QListWidget::Adjust);
     setGridSize(QSize(gridX, gridY));
+    setViewMode(QListView::IconMode);
     //arrangeItemsInGrid();
     //KDAB_PORTING setDragAutoScroll(false);
 

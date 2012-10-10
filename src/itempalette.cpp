@@ -191,12 +191,10 @@ void ItemPalette::updateItemList(const QString& groupName){
     }
 
     browsingStatus.insert(groupName,browsingMap);
-#ifdef KDAB_PENDING
     if(nbItems == 0)
-        iconView->resizeContents(50,20);
+        iconView->resize(50,20);
     else
         iconView->adjustSize();
-#endif
 }
 
 
@@ -846,17 +844,15 @@ void ItemPalette::createGroup(const QString &id){
         iconView = new ItemIconView(backgroundColor,QListView::ListMode,gridX,5,group,id);
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-    #ifdef KDAB_PORTING
     if(iconviewDict.count() >= 1){
         QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
         while (iterator.hasNext()) {
             iterator.next();
-            iconView->resizeContents((iconviewDict[iterator.key()])->contentsWidth(),2);
+            iconView->resize((iconviewDict[iterator.key()])->size().width(),2);
         }
     }
     else
         iconView->adjustSize();
-#endif
     //group->setStretchFactor(label,0);
     //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
