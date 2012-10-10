@@ -714,7 +714,6 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
 }
 
 void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
-    #if KDAB_PORTING
     int id = item->text().toInt();
 
     //Get the channelColor associated with the item
@@ -728,33 +727,36 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                 channelColors->setColor(id,color);
 
             //Update the icon
-            QPixmap* pixmap = item->pixmap();
+            QPixmap pixmap;
             QPainter painter;
-            drawItem(painter,pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
-
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
+            item->setIcon(QIcon(pixmap));
             //As soon a color changes a signal is emitted.
             emit singleChangeColor(id);
         }
         else{
             //Change the color for all the other channels of the current group, depending on the PaletteType.
-            ChannelIconView* iconViewParent =  static_cast<ChannelIconView*>(item->iconView());
-            for(Q3IconViewItem* current = iconViewParent->firstItem(); current; current = current->nextItem()){
+            ChannelIconView* iconViewParent =  static_cast<ChannelIconView*>(item->listWidget());
+            for(int i = 0; i<iconViewParent->count();++i) {
+                QListWidgetItem *current = iconViewParent->item(i);
                 //Update the colors for the channel (color and group color)
-                if(type == DISPLAY) channelColors->setGroupColor(current->text().toInt(),color);
-                else channelColors->setSpikeGroupColor(current->text().toInt(),color);
-                if(!channelsSkipStatus[current->text().toInt()]) channelColors->setColor(current->text().toInt(),color);
+                if(type == DISPLAY)
+                    channelColors->setGroupColor(current->text().toInt(),color);
+                else
+                    channelColors->setSpikeGroupColor(current->text().toInt(),color);
+                if(!channelsSkipStatus[current->text().toInt()])
+                    channelColors->setColor(current->text().toInt(),color);
 
                 //Update the icon
-                QPixmap* pixmap = current->pixmap();
+                QPixmap pixmap;
                 QPainter painter;
-                drawItem(painter,pixmap,color,channelsShowHideStatus[current->text().toInt()],channelsSkipStatus[current->text().toInt()]);
-                current->repaint();
+                drawItem(painter,&pixmap,color,channelsShowHideStatus[current->text().toInt()],channelsSkipStatus[current->text().toInt()]);
+                current->setIcon(QIcon(pixmap));
             }
-            QString groupId = iconViewParent->name();
+            const QString groupId = iconViewParent->name();
             emit groupChangeColor(groupId.toInt());
         }
     }
-#endif
 }
 
 /*
