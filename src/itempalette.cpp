@@ -772,7 +772,7 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int>& itemsTo
     #ifdef KDAB_PORTING
     Q3IconViewItem* currentIcon = 0L;
     ItemIconView* iconView = iconviewDict[groupName];
-    iconView->selectAll(false);
+    iconView->clearSelection();
     ItemColors* itemColors = itemColorsDict[groupName];
 
     //update the browsing map and rebuild the icons
@@ -868,9 +868,7 @@ void ItemPalette::createGroup(const QString &id){
     iconView->show();
     group->show();
 
-    if(spaceWidget){
-        delete spaceWidget;
-    }
+    delete spaceWidget;
     spaceWidget = new QWidget(verticalContainer);
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
@@ -946,7 +944,7 @@ void ItemPalette::selectAllItems(){
 }
 
 void ItemPalette::deselectAllItems(){
-#ifdef KDAB_PORTING
+#if KDAB_PENDING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
