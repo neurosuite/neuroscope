@@ -400,7 +400,6 @@ const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
 
 
 void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){  
-    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -408,12 +407,11 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
         QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
         while (iteratordict.hasNext()) {
             iteratordict.next();
-            iteratordict.value()->selectAll(false);
+            iteratordict.value()->clearSelection();
         }
     }
     
     QMap<int,bool>::const_iterator channelIterator;
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QList<int> selectedIds;
@@ -429,41 +427,43 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
         int groupId = (*channelsGroups)[channelId];
 
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(channelId),Q3ListBox::ExactMatch);
+        QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(channelId),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            QListWidgetItem *item = lstItem.first();
+            bool selected = item->isSelected();
 
-        bool selected = item->isSelected();
-
-        //Add an item to the target group with the same text but an update icon.
-        QPixmap pixmap(14,14);
-        //Get the channelColor associated with the item
-        QColor color = channelColors->color(channelId);
-        //set the channelColor associated with the item to the background color if the status is true
-        if(status) color = backgroundColor;
-        else{
-            //if the status is false and the item has the background color has color change it to the group color.
-            if(color == backgroundColor){
-                if(type == DISPLAY)
-                    color = channelColors->groupColor(channelId);
-                else
-                    color = channelColors->spikeGroupColor(channelId);
+            //Add an item to the target group with the same text but an update icon.
+            QPixmap pixmap(14,14);
+            //Get the channelColor associated with the item
+            QColor color = channelColors->color(channelId);
+            //set the channelColor associated with the item to the background color if the status is true
+            if(status) {
+                color = backgroundColor;
+            }else{
+                //if the status is false and the item has the background color has color change it to the group color.
+                if(color == backgroundColor){
+                    if(type == DISPLAY)
+                        color = channelColors->groupColor(channelId);
+                    else
+                        color = channelColors->spikeGroupColor(channelId);
+                }
             }
+
+            channelColors->setColor(channelId,color);
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],status);
+            new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(channelId),iconView);
+            if(selected)
+                selectedIds.append(channelId);
+
+            //Delete the old item
+            delete item;
         }
-
-        channelColors->setColor(channelId,color);
-        drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],status);
-        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(channelId),pixmap);
-
-        if(selected) selectedIds.append(channelId);
-
-        //Delete the old item
-        delete item;
     }
 
     selectChannels(selectedIds);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-   #endif
 }
 
 
