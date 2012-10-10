@@ -32,7 +32,6 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <q3scrollview.h>
-#include <Q3ListBox>
 #include <QLayout>
 #include <QStyle>
 #include <QColorDialog>
@@ -335,7 +334,6 @@ void ChannelPalette::updateShowHideStatus(bool showStatus){
 }
 
 void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool showStatus){  
-    #if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -343,12 +341,11 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
         while (iteratordict.hasNext()) {
             iteratordict.next();
-            iteratordict.value()->selectAll(false);
+            iteratordict.value()->clearSelection();
         }
     }
     
     QList<int>::const_iterator channelIterator;
-    Q3IconViewItem* item = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QList<int> selectedIds;
@@ -360,32 +357,35 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         int groupId = (*channelsGroups)[*channelIterator];
 
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
+        QList<QListWidgetItem*>lstItem = iconView->findItems(QString::fromLatin1("%1").arg(*channelIterator),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            QListWidgetItem *item = lstItem.first();
+            bool selected;
+            if(!edit && showStatus)
+                selected = true;
+            else
+                selected = item->isSelected();
 
-        bool selected;
-        if(!edit && showStatus)
-            selected = true;
-        else
-            selected = item->isSelected();
+            //Add an item to the target group with the same text but an update icon.
+            QPixmap pixmap(14,14);
+            //Get the channelColor associated with the item
+            QColor color = channelColors->color(*channelIterator);
+            drawItem(painter,&pixmap,color,showStatus,channelsSkipStatus[*channelIterator]);
+            (void)new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(*channelIterator),iconView);
 
-        //Add an item to the target group with the same text but an update icon.
-        QPixmap pixmap(14,14);
-        //Get the channelColor associated with the item
-        QColor color = channelColors->color(*channelIterator);
-        drawItem(painter,&pixmap,color,showStatus,channelsSkipStatus[*channelIterator]);
-        (void)new ChannelIconItem(iconView,item,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
+            if(selected)
+                selectedIds.append(*channelIterator);
 
-        if(selected) selectedIds.append(*channelIterator);
-
-        //Delete the old item
-        delete item;
+            //Delete the old item
+            delete item;
+        }
     }
+
 
     selectChannels(selectedIds);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
@@ -1773,53 +1773,52 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
 }
 
 void ChannelPalette::setEditMode(bool edition){  
-#if KDAB_PORTING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
     edit = edition;
     emit setDragAndDrop(edition);
 
-    if(edition) channelsShowHideStatus.clear();
+    if(edition)
+        channelsShowHideStatus.clear();
 
     //Update the item icons
-    Q3IconViewItem* item = 0L;
-    ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
     QList<int> selectedIds;
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         int groupId = (*channelsGroups)[iterator.key()];
-        iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        item =  iconView->findItem(QString::fromLatin1("%1").arg(iterator.key()),Q3ListBox::ExactMatch);
+        ChannelIconView* iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
+        QList<QListWidgetItem*>lstItem = iconView->findItems(QString::fromLatin1("%1").arg(iterator.key()),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            QListWidgetItem *item = lstItem.first();
+            bool selected = false;
+            if(edition){
+                selected = item->isSelected();
+                channelsShowHideStatus.insert(iterator.key(),selected);
+            }
+            else {
+                selected = channelsShowHideStatus[iterator.key()];
+            }
+            delete item;
 
-        bool selected = false;
-        if(edition){
-            selected = item->isSelected();
-            channelsShowHideStatus.insert(iterator.key(),selected);
+            //Add an item to the target group.
+            QPixmap pixmap(14,14);
+            //Get the channelColor associated with the item
+            QColor color = channelColors->color(iterator.key());
+            drawItem(painter,&pixmap,color,selected,channelsSkipStatus[iterator.key()]);
+            (void)new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(iterator.key()),iconView);
+
+            if(selected)
+                selectedIds.append(iterator.key());
         }
-        else
-            selected = channelsShowHideStatus[iterator.key()];
-
-        delete item;
-
-        //Add an item to the target group.
-        QPixmap pixmap(14,14);
-        //Get the channelColor associated with the item
-        QColor color = channelColors->color(iterator.key());
-        drawItem(painter,&pixmap,color,selected,channelsSkipStatus[iterator.key()]);
-        (void)new ChannelIconItem(iconView,QString::fromLatin1("%1").arg(iterator.key()),pixmap);
-
-        if(selected)
-            selectedIds.append(iterator.key());
     }
 
     selectChannels(selectedIds);
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
