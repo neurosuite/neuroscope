@@ -35,7 +35,7 @@
 #include "itemgroupview.h"
 #include "itemiconview.h"
 
-#include <Q3ScrollView>
+#include <QScrollArea>
 // forward declaration
 class ItemColors;
 
@@ -44,7 +44,7 @@ class ItemColors;
   * It receives the user selections and triggers the actions which have to be done.
   *@author Lynn Hazan
   */
-class ItemPalette : public Q3ScrollView
+class ItemPalette : public QScrollArea
 {
     Q_OBJECT
     

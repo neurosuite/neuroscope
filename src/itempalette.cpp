@@ -31,7 +31,6 @@
 #include <QVector>
 #include <QPixmap>
 #include <QBitmap>
-#include <q3scrollview.h>
 #include <QLayout> 
 #include <QStyle>
 #include <QColorDialog>
@@ -41,12 +40,17 @@
 #include <QList>
 #include <QLabel>
 #include <Q3ListBox>
-#include <Q3ScrollView>
 ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name)
-    : Q3ScrollView(parent),backgroundColor(backgroundColor),isInSelectItems(false),
-      spaceWidget(0L),type(type),selected(""),updateIconPixmap(false)
+    : QScrollArea(parent),
+      backgroundColor(backgroundColor),
+      isInSelectItems(false),
+      spaceWidget(0L),
+      type(type),
+      selected(""),
+      updateIconPixmap(false)
 {
     setObjectName(name);
+    setWidgetResizable(true);
 
     setAutoFillBackground(true);
     //Set the palette color
@@ -62,11 +66,9 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     else legendColor = Qt::white;
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
-
-    setResizePolicy(Q3ScrollView::AutoOneFit);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     verticalContainer = new Q3VBox(viewport(),"verticalContainer");
-    addChild(verticalContainer);
+    setWidget(verticalContainer);
     verticalContainer->setSpacing(5);
 
     QFont f("Helvetica",8);
@@ -134,7 +136,7 @@ void ItemPalette::paintEvent ( QPaintEvent*){
 void ItemPalette::resizeEvent(QResizeEvent* event){
     //Make the viewport to have the visible size (size of the scrollview)
     viewport()->resize(event->size());
-    Q3ScrollView::resizeEvent(event);
+    QScrollArea::resizeEvent(event);
 }
 
 void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int descriptionLength){

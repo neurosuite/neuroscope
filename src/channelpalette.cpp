@@ -31,7 +31,6 @@
 
 #include <QPixmap>
 #include <QBitmap>
-#include <q3scrollview.h>
 #include <QLayout>
 #include <QStyle>
 #include <QColorDialog>
