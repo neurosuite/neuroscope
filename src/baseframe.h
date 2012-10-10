@@ -107,7 +107,7 @@ public Q_SLOTS:
     virtual void dockBeingClosed(){emit parentDockBeingClosed(this);}
 
     /**Changes the color of the background.*/
-    virtual void changeBackgroundColor(QColor color);
+    virtual void changeBackgroundColor(const QColor &color);
 
     /**Change the current mode, call by a selection of a tool.
   * @param selectedMode new mode of drawing.

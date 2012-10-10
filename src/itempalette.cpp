@@ -655,7 +655,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,int index)
     }
 }
 
-void ItemPalette::changeBackgroundColor(QColor color){
+void ItemPalette::changeBackgroundColor(const QColor& color){
     backgroundColor = color;
 
     int h;
@@ -663,8 +663,10 @@ void ItemPalette::changeBackgroundColor(QColor color){
     int v;
     color.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
 
 
     QMap<QString,QList<int> > selected = selectedItems();
@@ -744,7 +746,7 @@ void ItemPalette::changeColor(QListWidgetItem* item,const QString& groupName){
 
         //Update the icon
         QIcon icon = item->icon();
-        QPixmap pixmap;
+        QPixmap pixmap(14,14);
         QPainter painter;
         painter.begin(&pixmap);
         painter.fillRect(0,0,12,12,result);

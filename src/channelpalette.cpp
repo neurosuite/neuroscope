@@ -554,7 +554,7 @@ void ChannelPalette::updateColor(const QList<int>& channelIds){
 
         QListWidgetItem* item = lstItem.first();
         //Update the icon
-        QPixmap pixmap;
+        QPixmap pixmap(14,14);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[*channelIterator],channelsSkipStatus[*channelIterator]);
         item->setIcon(QIcon(pixmap));
     }
@@ -576,7 +576,7 @@ void ChannelPalette::updateColor(int channelId){
 
     //Update the icon
     QListWidgetItem* item = lstItem.first();
-    QPixmap pixmap;
+    QPixmap pixmap(14,14);
     drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
     item->setIcon(QIcon(pixmap));
 }
@@ -598,7 +598,7 @@ void ChannelPalette::updateGroupColor(int channelId){
     for(int i = 0; i<iconView->count();++i) {
         QListWidgetItem* item = iconView->item(i);
         //Update the icon
-        QPixmap pixmap;
+        QPixmap pixmap(14,14);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[item->text().toInt()],channelsSkipStatus[item->text().toInt()]);
         item->setIcon(QIcon(pixmap));
     }

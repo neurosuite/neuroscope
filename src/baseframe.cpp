@@ -39,15 +39,19 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,c
 
     //Setting of the frame
     setLineWidth (BORDER);
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
+    setPalette(palette);
     setFrameStyle(QFrame::Box|QFrame::Plain);
 
     int h;
     int s;
     int v;
     backgroundColor.getHsv(&h,&s,&v);
-    if((s <= 80 && v >= 240) || (s <= 40 && v >= 220)) colorLegend = Qt::black;
-    else colorLegend = Qt::white;
+    if((s <= 80 && v >= 240) || (s <= 40 && v >= 220))
+        colorLegend = Qt::black;
+    else
+        colorLegend = Qt::white;
 
 
     //Set the minimum size to ensure that the frame rectangle may never be null or invalid.
@@ -62,14 +66,18 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,c
 BaseFrame::~BaseFrame(){
 }
 
-void BaseFrame::changeBackgroundColor(QColor color){
-    QPalette palette; palette.setColor(backgroundRole(), color); setPalette(palette);
+void BaseFrame::changeBackgroundColor(const QColor& color){
+    QPalette palette;
+    palette.setColor(backgroundRole(), color);
+    setPalette(palette);
     int h;
     int s;
     int v;
     color.getHsv(&h,&s,&v);
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) colorLegend = Qt::black;
-    else colorLegend = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        colorLegend = Qt::black;
+    else
+        colorLegend = Qt::white;
     drawContentsMode = REDRAW;
 }
 

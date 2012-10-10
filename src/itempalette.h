@@ -87,7 +87,7 @@ public:
     const QMap<QString,QList<int> > selectedItems();
 
     /**Updates the background color of the palette.*/
-    void changeBackgroundColor(QColor color);
+    void changeBackgroundColor(const QColor &color);
 
     /**Returns the currently selected group.
     * @return the name of the selected group.
