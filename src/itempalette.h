@@ -123,7 +123,6 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotMousePressed(const QString& sourceGroupName,QListWidgetItem* item);
     void slotMousePressed(QString sourceGroupName,bool shiftKey = false,bool ctrlAlt = false);
-    void slotMidButtonPressed(const QString& sourceGroupName);
     void slotClickRedraw();
     void languageChange();
     void resizeEvent(QResizeEvent* event);

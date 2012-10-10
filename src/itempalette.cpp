@@ -750,15 +750,10 @@ void ItemPalette::changeColor(QListWidgetItem* item,const QString& groupName){
         painter.end();
         icon.addPixmap(pixmap);
         item->setIcon(icon);
-        qDebug()<<" xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
         //As soon a color changes a signal is emitted.
         emit colorChanged(itemColors->itemId(index),groupName);
     }
-}
-
-void ItemPalette::slotMidButtonPressed(const QString& groupName){
-
 }
 
 
@@ -889,7 +884,6 @@ void ItemPalette::createGroup(const QString &id){
     connect(iconView,SIGNAL(mouseReleased(QString)),this, SLOT(slotMouseReleased(QString)));
 
     connect(label,SIGNAL(leftClickOnLabel(QString,bool,bool)),this, SLOT(slotMousePressed(QString,bool,bool)));
-    connect(label,SIGNAL(middleClickOnLabel(QString)),this, SLOT(slotMidButtonPressed(QString)));
 
     orderTheGroups();
     emit paletteResized(viewport()->width(),labelSize);
