@@ -20,7 +20,6 @@
 //QT include files
 #include <QVariant>
 #include <qwidget.h>
-#include <q3vbox.h> 
 #include <QHash>
 #include <qmap.h>
 #include <QLabel>
