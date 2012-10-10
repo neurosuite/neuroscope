@@ -2583,9 +2583,6 @@ void NeuroscopeApp::slotSynchronize(){
 }
 
 void NeuroscopeApp::resizePalettePanel(){
-#if KDAB_PENDING
-    static_cast<QWidget*>(displayPanel)->resize(static_cast<QWidget*>(displayPanel->parent())->size());
-#endif
     displayChannelPalette->update();
 }
 

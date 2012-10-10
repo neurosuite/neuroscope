@@ -35,12 +35,10 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setSpacing(4);
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
-    //setArrangement(Q3IconView::LeftToRight);
     setResizeMode(QListWidget::Adjust);
     setGridSize(QSize(gridX, gridY));
     setViewMode(QListView::IconMode);
     //arrangeItemsInGrid();
-    //KDAB_PORTING setDragAutoScroll(false);
 
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
@@ -69,8 +67,6 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
         setMovement(QListView::Static);
     }
     setSpacing(4);
-    //KDAB_PORTING setAutoArrange(true);
-    //KDAB_PORTING setSorting(false);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

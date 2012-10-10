@@ -1403,7 +1403,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
 
     ChannelIconView* targetIconView = iconviewDict[targetGroup];
     //deselect the item from the target group
-    targetIconView->selectAll(false);
+    targetIconView->clearSelection();
 
     //If the items have to be inserted before the first item, insert them after the first item
     //and then move the first item after the others
@@ -1468,7 +1468,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
         iconView->arrangeItemsInGrid();
 
         //If the channels have been removed from the trash inform the other palette.
-        if(gpId == 0 && currentMovedChannels.size() != 0){
+        if(gpId == 0 && !currentMovedChannels.isEmpty()){
             emit channelsRemovedFromTrash(currentMovedChannels);
         }
 
@@ -1609,7 +1609,6 @@ void ChannelPalette::discardChannels(){
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){    
-#if KDAB_PORTING
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
     groupColor.setHsv(210,255,255);
@@ -1640,22 +1639,24 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     while (it.hasNext()) {
         it.next();
         if(it.key() == "0"){
-            for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
+            for(int i=0; i<it.value()->count();++i) {
+                QListWidgetItem *item = it.value()->item(i);
                 int channelId = item->text().toInt();
                 if(channelsToDiscard.contains(channelId)){
                     channelsShowHideStatus[channelId] = false;
                     //Update the icon
-                    QPixmap* pixmap = item->pixmap();
+                    QPixmap pixmap(14,14);
                     QColor color = channelColors->color(channelId);
-                    drawItem(painter,pixmap,color,false,channelsSkipStatus[channelId]);
-                    item->repaint();
+                    drawItem(painter,&pixmap,color,false,channelsSkipStatus[channelId]);
+                    item->setIcon(QIcon(pixmap));
                 }
             }
             continue;
         }
         QList<int> currentDiscardedChannels;
         QList<int> channelIds;
-        for(Q3IconViewItem* item = it.value()->firstItem(); item; item = item->nextItem()){
+        for(int i=0; i<it.value()->count();++i) {
+            QListWidgetItem *item = it.value()->item(i);
             int channelId = item->text().toInt();
             if(channelsToDiscard.contains(channelId)){
                 currentDiscardedChannels.append(channelId);
@@ -1663,18 +1664,21 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,0);
             }
-            else channelIds.append(channelId);
+            else
+                channelIds.append(channelId);
         }
         //Delete the entries in the source group
         QList<int>::iterator it2;
         for(it2 = currentDiscardedChannels.begin(); it2 != currentDiscardedChannels.end(); ++it2){
-            Q3IconViewItem* currentIcon = it.value()->findItem(QString::fromLatin1("%1").arg(*it2),Q3ListBox::ExactMatch);
-            delete currentIcon;
+            QList<QListWidgetItem*>lstItem = it.value()->findItems(QString::fromLatin1("%1").arg(*it2),Qt::MatchExactly);
+            if(!lstItem.isEmpty()) {
+                delete lstItem.first();
+            }
         }
         //Update groupsChannels
         groupsChannels->insert(it.key().toInt(),channelIds);
 
-        it.value()->arrangeItemsInGrid();
+        //it.value()->arrangeItemsInGrid();
     }
 
     QList<int> trashChannels = (*groupsChannels)[0];
@@ -1686,7 +1690,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
             QColor color = channelColors->color(*channelIterator);
             channelsShowHideStatus[*channelIterator] = false;
             drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-            (void)new ChannelIconItem(trash,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
+            new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(*channelIterator),trash);
 
             //Update the group color
             if(type == DISPLAY)
@@ -1700,14 +1704,13 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
 
     //Add/update the 0 entry in the map group-channel list
     groupsChannels->replace(0,trashChannels);
-    trash->arrangeItemsInGrid();
+    //trash->arrangeItemsInGrid();
 
     //Do not leave empty groups.
     deleteEmptyGroups();
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
     update();
 }
 
