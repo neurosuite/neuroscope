@@ -1537,7 +1537,6 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds, cons
 }
 
 void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after){
-#if KDAB_PORTING
     QList<int>::const_iterator iterator;
     QPainter painter;
     ChannelIconView* iconView = iconviewDict[sourceGroup];
@@ -1546,41 +1545,43 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
     //and then move the first item after the others
     bool moveFirst = false;
     if(after == 0){
-        after = iconView->firstItem();
+        after = iconView->item(0);
         moveFirst = true;
     }
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
         //Delete the item corresponding to the channel Id
-        Q3IconViewItem* currentIcon = iconView->findItem(QString::fromLatin1("%1").arg(*iterator),Q3ListBox::ExactMatch);
-        delete currentIcon;
+        QList<QListWidgetItem*>lstItem = iconView->findItems(QString::fromLatin1("%1").arg(*iterator),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            delete lstItem.first();
 
-        //Add a new item corresponding to the channel Id.
-        QPixmap pixmap(14,14);
-        QColor color = channelColors->color(*iterator);
-        drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-        after = new ChannelIconItem(iconView,after,QString::fromLatin1("%1").arg(*iterator),pixmap);
+            //Add a new item corresponding to the channel Id.
+            QPixmap pixmap(14,14);
+            QColor color = channelColors->color(*iterator);
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
+            //KDAB_PORTING after = new ChannelIconItem(iconView,after,QString::fromLatin1("%1").arg(*iterator),pixmap);
+        }
     }
     if(moveFirst){
-        Q3IconViewItem* first = iconView->firstItem();
-        QString channelId = first->text();
+        QListWidgetItem* first = iconView->item(0);
+        const QString channelId = first->text();
         delete first;
 
         //Add a new item corresponding to the channel Id.
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-        after = new ChannelIconItem(iconView,after,channelId,pixmap);
+       //KDAB_PORTING after = new ChannelIconItem(iconView,after,channelId,pixmap);
     }
 
-    iconView->arrangeItemsInGrid();
+    //iconView->arrangeItemsInGrid();
 
     //Modify the entry in the map group-channel list
     QList<int> sourceChannels;
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem())
-        sourceChannels.append(item->text().toInt());
+    for(int i=0; i<iconView->count();++i) {
+        sourceChannels.append(iconView->item(i)->text().toInt());
+    }
 
     groupsChannels->replace(sourceGroup.toInt(),sourceChannels);
-#endif
 }
 
 void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after){
