@@ -282,13 +282,11 @@ public:
         setAcceptDrops(TRUE);
     }
 
-    inline virtual void dropEvent(QDropEvent* event){
+    void dropEvent(QDropEvent* event){
         if(event->source() == 0 || !drag){
             event->ignore();
             return;
         }
-
-
         if(event->mimeData()->hasText()){
             QString information = event->mimeData()->text();
             int groupSource = information.section("-",0,0).toInt();
@@ -298,7 +296,7 @@ public:
         }
     }
 
-    inline virtual void dragEnterEvent(QDragEnterEvent* event){
+    void dragEnterEvent(QDragEnterEvent* event){
         if(event->source() == 0 || !drag){
             event->ignore();
             return;

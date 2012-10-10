@@ -1618,8 +1618,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     if(!iconviewDict.contains("0")){
         createGroup(0);
         moveTrashesToBottom();
-    }
-    else{
+    }else{
         QList<int> trashChannels = (*groupsChannels)[0];
         if(!trashChannels.isEmpty()){
             if(type == DISPLAY)
@@ -1891,8 +1890,9 @@ void ChannelPalette::moveTrashesToBottom(){
     if(iconviewDict.contains("-1"))
         nbGroup--;
 
-    for(int i = 1;i <= nbGroup;++i)
+    for(int i = 1;i <= nbGroup;++i){
         verticalContainer->addWidget(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
+    }
 
     //Insert the trashes
     if(iconviewDict.contains("-1"))

@@ -62,13 +62,16 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220)) legendColor = Qt::black;
-    else legendColor = Qt::white;
+    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+        legendColor = Qt::black;
+    else
+        legendColor = Qt::white;
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    verticalContainer = new Q3VBox(viewport(),"verticalContainer");
-    setWidget(verticalContainer);
+    QWidget *w = new QWidget;
+    verticalContainer = new QVBoxLayout;
+    setWidget(w);
     verticalContainer->setSpacing(5);
 
     QFont f("Helvetica",8);
@@ -81,7 +84,7 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     //Set the legend in the good language
     languageChange();
 
-    verticalContainer->adjustSize();
+    //verticalContainer->adjustSize();
     adjustSize();
 }    
 
@@ -723,8 +726,6 @@ void ItemPalette::changeBackgroundColor(QColor color){
     setPalette(palette);
     viewport()->setPaletteBackgroundColor(backgroundColor);
     viewport()->setPaletteForegroundColor(legendColor);
-    verticalContainer->setPaletteBackgroundColor(backgroundColor);
-    verticalContainer->setPaletteForegroundColor(legendColor);
 
     update();
 }
@@ -825,8 +826,9 @@ void ItemPalette::reset(){
 }
 
 void ItemPalette::createGroup(const QString &id){
-    ItemGroupView* group = new ItemGroupView(backgroundColor,verticalContainer);
+    ItemGroupView* group = new ItemGroupView(backgroundColor,this);
 
+    verticalContainer->addWidget(group);
     group->setObjectName(id);
     GroupNameLabel* label = new GroupNameLabel(id,group);
 
@@ -867,7 +869,8 @@ void ItemPalette::createGroup(const QString &id){
     group->show();
 
     delete spaceWidget;
-    spaceWidget = new QWidget(verticalContainer);
+    spaceWidget = new QWidget;
+    verticalContainer->addWidget(spaceWidget);
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
@@ -990,28 +993,29 @@ void ItemPalette::deselectAllItems(){
 
 void ItemPalette::orderTheGroups(){
     //Remove all the children of the verticalContainer (spaceWidget and groups)
-    verticalContainer->removeChild(spaceWidget);
+    verticalContainer->removeWidget(spaceWidget);
 
     QHashIterator<QString, ItemGroupView*> iterator(itemGroupViewDict);
     while (iterator.hasNext()) {
         iterator.next();
-        verticalContainer->removeChild(iterator.value());
+        verticalContainer->removeWidget(iterator.value());
     }
 
     if(type == CLUSTER) {
         qSort(clusterGroupList);
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
-            verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
+            verticalContainer->addWidget(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
     } else {
         qSort(itemGroupList);
         QStringList::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
-            verticalContainer->insertChild(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
+            verticalContainer->addWidget(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
     }
 
     delete spaceWidget;
-    spaceWidget = new QWidget(verticalContainer);
+    spaceWidget = new QWidget;
+    verticalContainer->addWidget(spaceWidget);
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 }
