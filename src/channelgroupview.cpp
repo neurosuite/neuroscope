@@ -49,8 +49,7 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
 }
 
 void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
-#if KDAB_PENDING
-    if((iconView->contentsWidth() != 1 && width() != parentWidth) || init){
+    if((iconView->size().width() != 1 && width() != parentWidth) || init){
         init = false;
         int futurWidth = parentWidth ;
 
@@ -58,14 +57,13 @@ void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
         int viewfuturWidth = width() - labelSize - 6;//give so space on the right
         iconView->setFixedWidth(viewfuturWidth);
 
-        if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-            setFixedHeight(iconView->contentsHeight());
+        if(iconView->size().height() != 1 && height() != iconView->size().height())
+            setFixedHeight(iconView->size().height());
 
     }
     //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
-    if(iconView->contentsHeight() != 1 && height() != iconView->contentsHeight())
-        setFixedHeight(iconView->contentsHeight());
-#endif
+    if(iconView->size().height() != 1 && height() != iconView->size().height())
+        setFixedHeight(iconView->size().height());
 }
 
 void ChannelGroupView::dropEvent(QDropEvent* event){
