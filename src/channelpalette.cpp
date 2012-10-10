@@ -626,7 +626,7 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
                channelColors->setColor(iterator.key(),color);
 
            //Update the icon
-           QPixmap pixmap;
+           QPixmap pixmap(14,14);
            drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
            item->setIcon(QIcon(pixmap));
        }
@@ -648,7 +648,7 @@ void ChannelPalette::applyCustomColor(){
             QColor color = channelColors->color(iterator.key());
 
             //Update the icon
-            QPixmap pixmap;
+            QPixmap pixmap(14,14);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
             item->setIcon(QIcon(pixmap));
         }
@@ -708,7 +708,7 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
             QColor color = channelColors->color(groupIterator.key());
 
             //Update the icon
-            QPixmap pixmap;
+            QPixmap pixmap(14,14);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[groupIterator.key()],channelsSkipStatus[groupIterator.key()]);
             QListWidgetItem *item = lstItem.first();
             item->setIcon(QIcon(pixmap));
