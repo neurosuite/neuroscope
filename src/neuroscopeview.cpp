@@ -37,11 +37,11 @@
 
 class EventData;
 
-NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar* statusBar,QList<int>* channelsToDisplay,
-                               bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
-                               bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
-                               QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                               QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,QWidget* parent, const char* name):
+NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, long startTime, long duration, const QColor &backgroundColor, int wflags, QStatusBar* statusBar, QList<int>* channelsToDisplay,
+                               bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
+                               bool raster, bool waveforms, bool labelsDisplay, int unitGain, int acquisitionGain, ChannelColors* channelColors,
+                               QMap<int,QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
+                               QList<int> offsets, QList<int> channelGains, QList<int> selected, QMap<int,bool> skipStatus, int rasterHeight, const QString &backgroundImagePath, QWidget* parent, const char* name):
     DockArea(parent)
   ,shownChannels(channelsToDisplay),mainWindow(mainWindow),greyScaleMode(greyScale),
     multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),

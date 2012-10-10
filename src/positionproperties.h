@@ -55,16 +55,7 @@ public:
     void setHeight(int height){heightLineEdit->setText(QString::fromLatin1("%1").arg(height));}
 
     /**Sets the background image.*/
-    void setBackgroundImage(const QString& image){
-        backgroundLineEdit->setText(image);
-        if(!image.isEmpty()){
-           backgroungImage.load(image);
-            if(!backgroungImage.isNull()){
-                //flip and rotation values should have been set before any call to this function.
-                updateDisplayedImage();
-            }
-        }
-    }
+    void setBackgroundImage(const QString& image);
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
   * This function sets if such background has to be created.
@@ -72,144 +63,51 @@ public:
     void setPositionsBackground(bool draw){checkBoxBackground->setChecked(draw);}
 
     /**Sets the video image rotation angle.*/
-    void setRotation(int angle){
-        switch(angle){
-        case 0:
-            rotateComboBox->setCurrentIndex(0);
-            break;
-        case 90:
-            rotateComboBox->setCurrentIndex(1);
-            break;
-        case 180:
-            rotateComboBox->setCurrentIndex(2);
-            break;
-        case 270:
-            rotateComboBox->setCurrentIndex(3);
-            break;
-        default:
-            rotateComboBox->setCurrentIndex(0);
-            break;
-        }
-    }
+    void setRotation(int angle);
 
     /**Sets the video image flip orientation.
   * 0 stands for none, 1 for vertical and 2 for horizontal.
   */
-    void setFlip(int orientation){
-        switch(orientation){
-        case 0:
-            filpComboBox->setCurrentIndex(0);
-            break;
-        case 1:
-            filpComboBox->setCurrentIndex(1);
-            break;
-        case 2:
-            filpComboBox->setCurrentIndex(2);
-            break;
-        default:
-            filpComboBox->setCurrentIndex(0);
-            break;
-        }
-    }
+    void setFlip(int orientation);
 
     /**Returns the video acquisition sampling rate.*/
-    inline double getSamplingRate()const{return samplingRateLineEdit->text().toDouble();}
+    double getSamplingRate()const{return samplingRateLineEdit->text().toDouble();}
 
     /**Returns the video image width.*/
-    inline int getWidth()const{return widthLineEdit->text().toInt();}
+    int getWidth()const{return widthLineEdit->text().toInt();}
 
     /**Returns the video image height.*/
-    inline int getHeight()const{return heightLineEdit->text().toInt();}
+    int getHeight()const{return heightLineEdit->text().toInt();}
 
     /**Returns the background image.*/
-    inline QString getBackgroundImage()const{return backgroundLineEdit->text();}
+    QString getBackgroundImage()const{return backgroundLineEdit->text();}
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
   * The value return by this function tells if such background has to be created.
   * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
   */
-    inline bool getPositionsBackground()const{return checkBoxBackground->isChecked();}
+    bool getPositionsBackground()const{return checkBoxBackground->isChecked();}
 
     
     /**Returns the video image rotation angle.*/
-    inline int getRotation()const{
-        switch(rotateComboBox->currentIndex()){
-        case 0:
-            return 0;
-        case 1:
-            return 90;
-        case 2:
-            return 180;
-        case 3:
-            return 270;
-        default:
-            return 0;
-        }
-    }
+    int getRotation()const;
 
     /**Returns the video image flip orientation.
   * 0 stands for none, 1 for vertical and 2 for horizontal.
   */
-    inline int getFlip()const{
-        switch(filpComboBox->currentIndex()){
-        case 0:
-            return 0;
-        case 1:
-            return 1;
-        case 2:
-            return 2;
-        default:
-            return 0;
-        }
-    }
+    int getFlip() const;
 
 public Q_SLOTS:
     /**Sets whether the widget is enabled
   * @param state true if the widget is enable, false otherwise.
   */
-    void setEnabled (bool state){
-        groupBox1->setEnabled(state);
-        groupBox2->setEnabled(state);
-        samplingRateLineEdit->setEnabled(state);
-        widthLineEdit->setEnabled(state);
-        heightLineEdit->setEnabled(state);
-        backgroundLineEdit->setEnabled(state);
-        rotateComboBox->setEnabled(state);
-        filpComboBox->setEnabled(state);
-        backgroundButton->setEnabled(state);
-        sampleRateLabel->setEnabled(state);
-        widthLabel->setEnabled(state);
-        heightLabel->setEnabled(state);
-        backgroundLabel->setEnabled(state);
-        rotateLabel->setEnabled(state);
-        flipLabel->setEnabled(state);
-
-        if(!state){
-            QPixmap pixmap;
-            pixmap.resize(getWidth(),getHeight());
-            pixmap.fill(Qt::black);
-            backgroundPixmap2->setPixmap(pixmap);
-        }
-    }
+    void setEnabled (bool state);
 
 
 private Q_SLOTS:
-    void updateBackgroundImage(){
-        QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
-        if(!image.isEmpty())
-            setBackgroundImage(image);
-    }
+    void updateBackgroundImage();
 
-    void updateBackgroundImage(const QString& image){
-        if(!image.isEmpty())  setBackgroundImage(image);
-        else{
-            QPixmap pixmap;
-            pixmap.resize(getWidth(),getHeight());
-            pixmap.fill(Qt::black);
-            backgroundPixmap2->setPixmap(pixmap);
-        }
-    }
-
+    void updateBackgroundImage(const QString& image);
     void updateDisplayedImage();
 
 private:

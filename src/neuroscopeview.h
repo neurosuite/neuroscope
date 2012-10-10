@@ -90,11 +90,11 @@ public:
      * @param parent the parent QWidget.
      * @param name name of the widget (can be used for introspection).
      */
-    NeuroscopeView(NeuroscopeApp& mainWindow,QString label,long startTime,long duration,QColor backgroundColor,int wflags,QStatusBar * statusBar,QList<int>* channelsToDisplay,bool greyScale,
+    NeuroscopeView(NeuroscopeApp& mainWindow,const QString& label,long startTime,long duration,const QColor& backgroundColor,int wflags,QStatusBar * statusBar,QList<int>* channelsToDisplay,bool greyScale,
                    TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                    bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
                    QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                   QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,QString backgroundImagePath,
+                   QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,const QString& backgroundImagePath,
                    QWidget *parent = 0, const char *name=0);
     /** Destructor for the main view. */
     ~NeuroscopeView();
@@ -123,7 +123,7 @@ public:
     /**Updates the background color used in the views.
     * @param color color of the new background.
     */
-    void updateBackgroundColor(QColor color){emit changeBackgroundColor(color);}
+    void updateBackgroundColor(const QColor& color){emit changeBackgroundColor(color);}
 
     /**
     * Informs all the child widgets that one of the features for the document have changed.
@@ -159,7 +159,7 @@ public:
 
     /**Retuns true if the channels of the display are display in a gradation of grey,
     * false if they are display in color.*/
-    inline bool getGreyScale() const {return greyScaleMode;}
+    bool getGreyScale() const {return greyScaleMode;}
 
     /**
     * Updates the list of channels shown with @p channelsToShow.
@@ -171,7 +171,7 @@ public:
     /**Returns the list of the channels presented in the view.
     * @return list of channels ids.
     */
-    inline const QList<int>& channels() const {return *shownChannels;}
+    const QList<int>& channels() const {return *shownChannels;}
 
     /**
     * Updates the list of clusters for the cluster provider @p name shown with @p clustersToShow.
@@ -213,31 +213,31 @@ public:
     /**
     * Returns true if traces are displayed on multiple columns, false otherwise.
     */
-    inline bool getMultiColumns() const {return multiColumns;}
+    bool getMultiColumns() const {return multiColumns;}
 
     /**Returns true if vertical lines are displayed to show the clusters, false otherwise.
     */
-    inline bool getClusterVerticalLines() const {return verticalLines;}
+    bool getClusterVerticalLines() const {return verticalLines;}
 
     /**Returns true if a raster is drawn to show the clusters, false otherwise.
     */
-    inline bool getClusterRaster() const {return raster;}
+    bool getClusterRaster() const {return raster;}
 
     /**Returns true if waveforms are drawn on top of the traces, false otherwise.
     */
-    inline bool getClusterWaveforms() const {return waveforms;}
+    bool getClusterWaveforms() const {return waveforms;}
 
     /** Returns the list containing the selected clusters for the given cluster provider @p identified by name.
    * @param name name use to identified the cluster provider containing selected the clusters.
    * @return the list of selected clusters.
    */
-    inline const QList<int>* getSelectedClusters(QString name) const{return selectedClusters[name];}
+    const QList<int>* getSelectedClusters(const QString& name) const{return selectedClusters[name];}
 
     /** Returns the list containing the selected events for the given event provider @p identified by name.
    * @param name name use to identified the event provider containing selected the events.
    * @return the list of selected events.
    */
-    inline const QList<int>* getSelectedEvents(QString name) const{return selectedEvents[name];}
+    const QList<int>* getSelectedEvents(const QString& name) const{return selectedEvents[name];}
 
     /**Updates the selected tool, methode call after the user selected a tool.
    * @param selectedMode the new mode.
@@ -252,7 +252,7 @@ public:
     /** Tests if the currently selected tool is the selection one.
    * @ return true if the current tool is the selection one, false otherwise.
    */
-    inline bool isSelectionTool(){return selectMode;}
+    bool isSelectionTool(){return selectMode;}
 
     /**Changes the color of a channel.
    * @param channelId id of the channel to redraw.
@@ -343,17 +343,17 @@ public:
     /** Returns the list containing the offset for each channel.
    * @return the list of the offsets.
    */
-    inline const QList<int>& getChannelOffset() const{return channelOffsets;}
+    const QList<int>& getChannelOffset() const{return channelOffsets;}
 
     /** Returns the list containing the exponents used to compute the drawing gain for each channel.
    * @return the list of gains.
    */
-    inline const QList<int>& getGains() const{return gains;}
+    const QList<int>& getGains() const{return gains;}
 
     /** Returns the list containing the selected channels.
    * @return the list of selected channels.
    */
-    inline const QList<int>& getSelectedChannels() const{return selectedChannels;}
+    const QList<int>& getSelectedChannels() const{return selectedChannels;}
 
     /** Sets the channels selected in the channel palettes.
    *@param selectedIds ids of the selected channels.
@@ -375,17 +375,17 @@ public:
     /** Gets the label for the display when in tab page mode.
    * @return newLabel the new label for the display.
    */
-    inline QString getTabName()const {return tabLabel;}
+    QString getTabName()const {return tabLabel;}
 
     /**Gets the starting time in miliseconds.
   * @return starting time.
   */
-    inline long getStartTime() const {return startTime;}
+    long getStartTime() const {return startTime;}
 
     /**Gets the time window in miliseconds.
   * @return duration time window.
   */
-    inline long getTimeWindow()const {return timeWindow;}
+    long getTimeWindow()const {return timeWindow;}
 
     /**Displays or hides the labels next to the traces.
   * @param status true if the labels have to be drawn, false otherwise.
@@ -397,7 +397,7 @@ public:
 
     /**Returns true if labels are drawn next to the traces, false otherwise.
   */
-    inline bool getLabelStatus() const{return labelsDisplay;}
+    bool getLabelStatus() const{return labelsDisplay;}
 
     /** Shows or hides the calibration bar. This bar is meaningful only when all the channels
   *  have the same amplification.
@@ -547,7 +547,7 @@ public:
     /**
   * Returns true if a position view is displayed, false otherwise.
   */
-    inline bool isPositionView()const {return isPositionFileShown;}
+    bool isPositionView()const {return isPositionFileShown;}
 
     /**Adds a PositionView to the display.
   * @param positionsProvider provider of position data.
@@ -584,13 +584,13 @@ public:
   * @param name name use to identified the cluster provider containing the clusters to skip.
   * @return the list of skipped clusters.
   */
-    inline const QList<int>* getClustersNotUsedForBrowsing(QString name) const{return clustersNotUsedForBrowsing[name];}
+    const QList<int>* getClustersNotUsedForBrowsing(QString name) const{return clustersNotUsedForBrowsing[name];}
 
     /** Returns the list of events to be not used for browsing for the given event provider @p identified by name.
   * @param name name use to identified the event provider containing the events to skip.
   * @return the list of skipped events.
   */
-    inline const QList<int>* getEventsNotUsedForBrowsing(QString name) const{return eventsNotUsedForBrowsing[name];}
+    const QList<int>* getEventsNotUsedForBrowsing(QString name) const{return eventsNotUsedForBrowsing[name];}
 
     /**Updates the list of events to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -623,7 +623,7 @@ public:
     /**Returns if events are displayed in the PositionView.
   * @return 1 if events are displayed in the PositionView, 0 otherwise.
   */
-    inline int isEventsInPositionView()const{return eventsInPositionView;}
+    int isEventsInPositionView()const{return eventsInPositionView;}
 
 public Q_SLOTS:
     /** Informs listener that the channels @p selectedIds have been selected.

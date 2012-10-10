@@ -44,7 +44,9 @@ PositionProperties::PositionProperties(QWidget *parent ) : PositionPropertiesLay
 PositionProperties::~PositionProperties(){
 }
 
-void PositionProperties::updateDisplayedImage(){ 
+void PositionProperties::updateDisplayedImage()
+{
+
     if(!backgroungImage.isNull()){
         //apply first the rotation and then the flip
         QImage rotatedImage = backgroungImage;
@@ -81,6 +83,132 @@ void PositionProperties::updateDisplayedImage(){
         }
         if(pixmap.convertFromImage(flippedImage))
             backgroundPixmap2->setPixmap(pixmap);
+    }
+}
+
+void PositionProperties::updateBackgroundImage()
+{
+    const QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
+    if(!image.isEmpty())
+        setBackgroundImage(image);
+}
+
+void PositionProperties::updateBackgroundImage(const QString& image)
+{
+    if(!image.isEmpty()) {
+        setBackgroundImage(image);
+    } else {
+        QPixmap pixmap;
+        pixmap.resize(getWidth(),getHeight());
+        pixmap.fill(Qt::black);
+        backgroundPixmap2->setPixmap(pixmap);
+    }
+}
+
+int PositionProperties::getFlip() const
+{
+    switch(filpComboBox->currentIndex()){
+    case 0:
+        return 0;
+    case 1:
+        return 1;
+    case 2:
+        return 2;
+    default:
+        return 0;
+    }
+}
+
+
+int PositionProperties::getRotation() const {
+    switch(rotateComboBox->currentIndex()){
+    case 0:
+        return 0;
+    case 1:
+        return 90;
+    case 2:
+        return 180;
+    case 3:
+        return 270;
+    default:
+        return 0;
+    }
+}
+
+
+void PositionProperties::setFlip(int orientation){
+    switch(orientation){
+    case 0:
+        filpComboBox->setCurrentIndex(0);
+        break;
+    case 1:
+        filpComboBox->setCurrentIndex(1);
+        break;
+    case 2:
+        filpComboBox->setCurrentIndex(2);
+        break;
+    default:
+        filpComboBox->setCurrentIndex(0);
+        break;
+    }
+}
+
+
+void PositionProperties::setRotation(int angle){
+    switch(angle){
+    case 0:
+        rotateComboBox->setCurrentIndex(0);
+        break;
+    case 90:
+        rotateComboBox->setCurrentIndex(1);
+        break;
+    case 180:
+        rotateComboBox->setCurrentIndex(2);
+        break;
+    case 270:
+        rotateComboBox->setCurrentIndex(3);
+        break;
+    default:
+        rotateComboBox->setCurrentIndex(0);
+        break;
+    }
+}
+
+
+void PositionProperties::setBackgroundImage(const QString& image){
+    backgroundLineEdit->setText(image);
+    if(!image.isEmpty()){
+       backgroungImage.load(image);
+        if(!backgroungImage.isNull()){
+            //flip and rotation values should have been set before any call to this function.
+            updateDisplayedImage();
+        }
+    }
+}
+
+
+void PositionProperties::setEnabled (bool state){
+    groupBox1->setEnabled(state);
+    groupBox2->setEnabled(state);
+    samplingRateLineEdit->setEnabled(state);
+    widthLineEdit->setEnabled(state);
+    heightLineEdit->setEnabled(state);
+    backgroundLineEdit->setEnabled(state);
+    rotateComboBox->setEnabled(state);
+    filpComboBox->setEnabled(state);
+    backgroundButton->setEnabled(state);
+    sampleRateLabel->setEnabled(state);
+    widthLabel->setEnabled(state);
+    heightLabel->setEnabled(state);
+    backgroundLabel->setEnabled(state);
+    rotateLabel->setEnabled(state);
+    flipLabel->setEnabled(state);
+
+    if(!state){
+        QPixmap pixmap;
+        pixmap.resize(getWidth(),getHeight());
+        pixmap.fill(Qt::black);
+        backgroundPixmap2->setPixmap(pixmap);
     }
 }
 
