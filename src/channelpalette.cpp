@@ -1204,14 +1204,16 @@ void ChannelPalette::deleteEmptyGroups(){
                 channelGroupViewDict.remove(QString::fromLatin1("%1").arg(gpId));
                 selectionStatus.remove(QString::fromLatin1("%1").arg(gpId));
                 //-1 and 0 are the trash groups, they are not renamed
-                if(gpId == 0 || gpId == -1) minId++;
+                if(gpId == 0 || gpId == -1)
+                    minId++;
 
                 groupsChannels->remove(gpId);
                 if(gpId == -1 && skipIdZero){
                     gpId += 2;//from -1 to 1 directly
                     minId++;
+                }else {
+                    ++gpId;
                 }
-                else ++gpId;
             }
             else{
                 if(gpId != minId){
@@ -1430,8 +1432,10 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
     bool skipIdZero = !iconviewDict.contains("0");
     for(int j = 0;j < nbGp; ++j){
         if(gpId == targetGroup.toInt()){
-            if(gpId == -1 && skipIdZero) gpId += 2;//from -1 to 1 directly
-            else ++gpId;
+            if(gpId == -1 && skipIdZero)
+                gpId += 2;//from -1 to 1 directly
+            else
+                ++gpId;
             continue;
         }
 
@@ -1455,8 +1459,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
 
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,targetGroup.toInt());
-            }
-            else {
+            } else {
                 channelIds.append(channelId);
             }
         }
@@ -1476,8 +1479,10 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
             emit channelsRemovedFromTrash(currentMovedChannels);
         }
 
-        if(gpId == -1 && skipIdZero) gpId += 2;//from -1 to 1 directly
-        else ++gpId;
+        if(gpId == -1 && skipIdZero)
+            gpId += 2;//from -1 to 1 directly
+        else
+            ++gpId;
     }
 
     if(moveFirst){
