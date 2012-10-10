@@ -1022,8 +1022,10 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     for(int i = 1;i <= nbGroups;++i)
         verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
-    if(iconviewDict.contains("-1")) verticalContainer->insertChild(channelGroupViewDict["-1"]);
-    if(iconviewDict.contains("0")) verticalContainer->insertChild(channelGroupViewDict["0"]);
+    if(iconviewDict.contains("-1"))
+        verticalContainer->insertChild(channelGroupViewDict["-1"]);
+    if(iconviewDict.contains("0"))
+        verticalContainer->insertChild(channelGroupViewDict["0"]);
 
     delete spaceWidget;
     spaceWidget = new SpaceWidget(this,edit);
@@ -1041,7 +1043,8 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
 void ChannelPalette::createGroup(){
     //Check if there is anything to do
     const QList<int> selectedIds = selectedChannels();
-    if(selectedIds.size() == 0) return;
+    if(selectedIds.isEmpty())
+        return;
 
     int groupNb = iconviewDict.count() + 1;
     if(iconviewDict.contains("0"))
@@ -1181,12 +1184,16 @@ void ChannelPalette::deleteEmptyGroups(){
             deletedGroups.append(groupId);
     }
 
-    if(deletedGroups.size() > 0){
+    if(!deletedGroups.isEmpty()){
         int nbGp = iconviewDict.count();
         int gpId;
-        if(iconviewDict.contains("-1")) gpId = -1;
-        else if(iconviewDict.contains("0")) gpId = 0;
-        else gpId = 1;
+        if(iconviewDict.contains("-1"))
+            gpId = -1;
+        else if(iconviewDict.contains("0"))
+            gpId = 0;
+        else
+            gpId = 1;
+
         int minId = gpId;
 
         bool skipIdZero = !iconviewDict.contains("0");
@@ -1751,8 +1758,10 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
         channelsGroups->replace(*channelIterator,0);
 
         //Update the group color
-        if(type == DISPLAY) channelColors->setGroupColor(*channelIterator,groupColor);
-        else channelColors->setSpikeGroupColor(*channelIterator,groupColor);
+        if(type == DISPLAY)
+            channelColors->setGroupColor(*channelIterator,groupColor);
+        else
+            channelColors->setSpikeGroupColor(*channelIterator,groupColor);
 
         //Modify the entries in the map group-channel list
         groupsChannels->replace(groupId,sourceChannels);
@@ -1868,11 +1877,11 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
 void ChannelPalette::moveTrashesToBottom(){
 #if KDAB_PORTING
     //Remove all the children of the verticalContainer (spaceWidget and groups)
-    verticalContainer->removeChild(spaceWidget);
+    verticalContainer->removeWidget(spaceWidget);
 
     Q3DictIterator<ChannelGroupView> it(channelGroupViewDict);
     for(;it.current();++it)
-        verticalContainer->removeChild(it.current());
+        verticalContainer->removeWidget(it.current());
 
     //Insert all the groups except the trashes which go at the bottom
     int nbGroup = channelGroupViewDict.count();
@@ -1882,14 +1891,17 @@ void ChannelPalette::moveTrashesToBottom(){
         nbGroup--;
 
     for(int i = 1;i <= nbGroup;++i)
-        verticalContainer->insertChild(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
+        verticalContainer->addWidget(channelGroupViewDict[QString::fromLatin1("%1").arg(i)]);
 
     //Insert the trashes
-    if(iconviewDict.contains("-1")) verticalContainer->insertChild(channelGroupViewDict["-1"]);
-    if(iconviewDict.contains("0")) verticalContainer->insertChild(channelGroupViewDict["0"]);
+    if(iconviewDict.contains("-1"))
+        verticalContainer->addWidget(channelGroupViewDict["-1"]);
+    if(iconviewDict.contains("0"))
+        verticalContainer->addWidget(channelGroupViewDict["0"]);
 
     delete spaceWidget;
-    spaceWidget = new SpaceWidget(verticalContainer,edit);
+    spaceWidget = new SpaceWidget(this,edit);
+    verticalContainer->addWidget(spaceWidget);
     connect(this,SIGNAL(setDragAndDrop(bool)),spaceWidget, SLOT(setDragAndDrop(bool)));
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     spaceWidget->show();
