@@ -410,7 +410,6 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
 }
 
 void ItemPalette::slotClickRedraw(){
-    #ifdef KDAB_PORTING
     if(!isInSelectItems){
         bool browsingEnable = false;
         bool needToBeUpdated = false;
@@ -424,12 +423,15 @@ void ItemPalette::slotClickRedraw(){
             QList<int> selectedItems;
             QList<int> itemsToSkip;
             QList<int> itemsToRedraw;
-            for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
-                int index = item->index();
+            for(int i = 0 ; i<iterator.value()->count(); ++i ){
+                QListWidgetItem *item = iterator.value()->item(i);
+                int index = item->data(ItemIconView::INDEXICON).toInt();
                 if(item->isSelected()){
                     selectedItems.append(itemColors->itemId(index));
-                    if(!browsingMap[index]) itemsToSkip.append(itemColors->itemId(index));
-                    else browsingEnable = true;
+                    if(!browsingMap[index])
+                        itemsToSkip.append(itemColors->itemId(index));
+                    else
+                        browsingEnable = true;
                 }
                 else{
                     if(browsingMap[index]){
@@ -466,7 +468,6 @@ void ItemPalette::slotClickRedraw(){
             update();
         }
     }
-#endif
 }
 
 void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
@@ -546,38 +547,40 @@ void ItemPalette::slotMouseReleased(QString sourceGroupName){
 void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int index,QMap<int,bool> browsingMap){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-#ifdef KDAB_PORTING
-    QString label =  itemColors->itemLabel(index);
-    Q3IconViewItem* currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
-    bool selected = currentItem->isSelected();
-    bool browsingStatus = browsingMap[index];
+    const QString label =  itemColors->itemLabel(index);
+    QList<QListWidgetItem*>lstItem =  iconView->findItems(label,Qt::MatchExactly);
+    if(!lstItem.isEmpty()) {
+        QListWidgetItem *item = lstItem.first();
+        bool selected = item->isSelected();
+        bool browsingStatus = browsingMap[index];
 
-    //Recreate the item
-    QPixmap pixmap(14,14);
-    pixmap.fill(backgroundColor);
-    QColor color = itemColors->color(index,ItemColors::BY_INDEX);
-    QPainter painter;
-    painter.begin(&pixmap);
-    if(!browsingStatus){
-        painter.fillRect(0,0,12,12,color);
+        //Recreate the item
+        QPixmap pixmap(14,14);
+        pixmap.fill(backgroundColor);
+        QColor color = itemColors->color(index,ItemColors::BY_INDEX);
+        QPainter painter;
+        painter.begin(&pixmap);
+        if(!browsingStatus){
+            painter.fillRect(0,0,12,12,color);
+        }
+        else{
+            QPolygon polygon(4);
+            polygon.putPoints(0,3,0,0,14,0,7,14);
+            painter.setBrush(color);
+            painter.drawPolygon(polygon);
+        }
+        painter.end();
+
+
+        QListWidgetItem *newItem = new QListWidgetItem(QIcon(pixmap),label,iconView);
+        newItem->setSelected(selected);
+
+        //Delete the old item
+        delete item;
+
     }
-    else{
-        QPolygon polygon(4);
-        polygon.putPoints(0,3,0,0,14,0,7,14);
-        painter.setBrush(color);
-        painter.drawPolygon(polygon);
-    }
-    painter.end();
-
-    Q3IconViewItem* newItem = new Q3IconViewItem(iconView,currentItem,label,pixmap);
-    newItem->setSelected(selected,true);
-
-    //Delete the old item
-    delete currentItem;
-
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 bool ItemPalette::isBrowsingEnable(){
@@ -744,6 +747,7 @@ void ItemPalette::changeColor(QListWidgetItem* item,const QString& groupName){
         painter.end();
         icon.addPixmap(pixmap);
         item->setIcon(icon);
+        qDebug()<<" xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
         //As soon a color changes a signal is emitted.
         emit colorChanged(itemColors->itemId(index),groupName);

@@ -124,7 +124,7 @@ void ChannelPalette::setGreyScale(bool grey){
 
         //Update the icon
         QIcon icon = item->icon();
-        QPixmap pixmap;
+        QPixmap pixmap(icon.pixmap().size());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
         //item->repaint();
         //KDAB_VERIFY
@@ -727,7 +727,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                 channelColors->setColor(id,color);
 
             //Update the icon
-            QPixmap pixmap;
+            QPixmap pixmap(item->icon().pixmap().size());
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
             item->setIcon(QIcon(pixmap));
@@ -748,7 +748,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                     channelColors->setColor(current->text().toInt(),color);
 
                 //Update the icon
-                QPixmap pixmap;
+                QPixmap pixmap(14,14);
                 QPainter painter;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[current->text().toInt()],channelsSkipStatus[current->text().toInt()]);
                 current->setIcon(QIcon(pixmap));
