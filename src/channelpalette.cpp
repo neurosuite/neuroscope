@@ -1308,7 +1308,6 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
 }
 
 void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup){
-    #if KDAB_PORTING
     QList<int> targetChannels = (*groupsChannels)[targetGroup.toInt()];
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
@@ -1329,32 +1328,37 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
 
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
         //Delete the item from the sourceGroup
-        Q3IconViewItem* currentIcon = sourceIconView->findItem(QString::fromLatin1("%1").arg(*iterator),Q3ListBox::ExactMatch);
-        delete currentIcon;
+        QList<QListWidgetItem*>lstItem = sourceIconView->findItems(QString::fromLatin1("%1").arg(*iterator),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            delete lstItem.first();
 
-        //Add an item to the target group.
-        QPixmap pixmap(14,14);
-        QColor color = channelColors->color(*iterator);
-        drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-        (void)new ChannelIconItem(targetIconView,QString::fromLatin1("%1").arg(*iterator),pixmap);
+            //Add an item to the target group.
+            QPixmap pixmap(14,14);
+            QColor color = channelColors->color(*iterator);
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
+            new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(*iterator),targetIconView);
 
-        //Update the group color
-        if(type == DISPLAY) channelColors->setGroupColor(*iterator,groupColor);
-        else channelColors->setSpikeGroupColor(*iterator,groupColor);
+            //Update the group color
+            if(type == DISPLAY)
+                channelColors->setGroupColor(*iterator,groupColor);
+            else
+                channelColors->setSpikeGroupColor(*iterator,groupColor);
 
-        sourceChannels.remove(*iterator);
-        targetChannels.append(*iterator);
-        channelsGroups->replace(*iterator,targetGroup.toInt());
+            sourceChannels.remove(*iterator);
+            targetChannels.append(*iterator);
+            channelsGroups->replace(*iterator,targetGroup.toInt());
+        }
     }
 
     //Modify the entry in the map group-channel list
     groupsChannels->replace(targetGroup.toInt(),targetChannels);
-    targetIconView->arrangeItemsInGrid();
+    //targetIconView->arrangeItemsInGrid();
 
 
     //The source is empty now
     if(sourceIconView->count() == 0){
-        if(type == DISPLAY) deleteEmptyGroups();//the drag has been done in the spike palette
+        if(type == DISPLAY)
+            deleteEmptyGroups();//the drag has been done in the spike palette
         else{
             //When all the channels of a group have been remove by a drag-drop it can not be suppress immediately
             //(the mouse is still in the iconView area). To make sure the group is suppress, a pair of variables (isGroupToRemove,groupToRemove)
@@ -1366,12 +1370,12 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
         //Modify the entries in the map group-channel list
         groupsChannels->replace(sourceGroup.toInt(),sourceChannels);
 
-        sourceIconView->arrangeItemsInGrid();
+        //sourceIconView->arrangeItemsInGrid();
         emit groupModified();
     }
 
-    if(iconviewDict.contains("0") || iconviewDict.contains("-1")) moveTrashesToBottom();
-#endif
+    if(iconviewDict.contains("0") || iconviewDict.contains("-1"))
+        moveTrashesToBottom();
     update();
 }
 

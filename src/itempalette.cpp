@@ -521,8 +521,9 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
                         isInSelectItems = true;////redrawItem sets it back to false
                         item = iterator.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
                         itemsToSkip.append(itemColors->itemId(currentIndex));
+                    } else {
+                        itemsToSkip.append(itemColors->itemId(currentIndex));
                     }
-                    else itemsToSkip.append(itemColors->itemId(currentIndex));
                 }
                 browsingStatus.insert(groupName,browsingMap);
                 emit updateItemsToSkip(groupName,itemsToSkip);
