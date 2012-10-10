@@ -600,53 +600,56 @@ bool ItemPalette::isBrowsingEnable(){
     return browsingEnable;
 }
 
-void ItemPalette::slotMousePressWAltButton(QString sourceGroup,int index){
-    #ifdef KDAB_PORTING
+void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,int index){
     QMap<int,bool> browsingMap = browsingStatus[sourceGroup];
-    Q3IconViewItem* currentItem = 0L;
+
     ItemIconView* iconView = iconviewDict[sourceGroup];
     ItemColors* itemColors = itemColorsDict[sourceGroup];
-    QString label =  itemColors->itemLabel(index);
-    currentItem =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
-    QList<int> itemsToRedraw;
-    bool browsingEnable = false;
+    const QString label =  itemColors->itemLabel(index);
 
-    if(!currentItem->isSelected()) return;
+    QList<QListWidgetItem*>lstItem = iconView->findItems(label,Qt::MatchExactly);
+    if(!lstItem.isEmpty()) {
+        QListWidgetItem* currentItem = lstItem.first();
 
-    if(browsingMap[index]){
-        browsingMap[index] = false;
-        browsingStatus.insert(sourceGroup,browsingMap);
-        browsingEnable = isBrowsingEnable();
-    }
-    else{
-        browsingMap[index] = true;
-        browsingStatus.insert(sourceGroup,browsingMap);
-        browsingEnable = true;
-    }
+        QList<int> itemsToRedraw;
+        bool browsingEnable = false;
 
-    itemsToRedraw.append(index);
-    needRedrawing.insert(sourceGroup,itemsToRedraw);
-#ifdef KDAB_PORTING
-    QList<int> itemsToSkip;
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem())
-        if(!browsingMap[item->index()])
-            itemsToSkip.append(itemColors->itemId(item->index()));
-#endif
-    emit updateItemsToSkip(sourceGroup,itemsToSkip);
+        if(!currentItem->isSelected())
+            return;
 
-    if(!browsingEnable){
-        if(type == CLUSTER)
-            emit noClustersToBrowse();
-        else
-            emit noEventsToBrowse();
+        if(browsingMap[index]){
+            browsingMap[index] = false;
+            browsingStatus.insert(sourceGroup,browsingMap);
+            browsingEnable = isBrowsingEnable();
+        } else {
+            browsingMap[index] = true;
+            browsingStatus.insert(sourceGroup,browsingMap);
+            browsingEnable = true;
+        }
+
+        itemsToRedraw.append(index);
+        needRedrawing.insert(sourceGroup,itemsToRedraw);
+        QList<int> itemsToSkip;
+        for(int i = 0; i < iconView->count();++i) {
+            QListWidgetItem *item = iconView->item(i);
+            const int index = item->data(ItemIconView::INDEXICON).toInt();
+            if(!browsingMap[index])
+                itemsToSkip.append(itemColors->itemId(index));
+        }
+        emit updateItemsToSkip(sourceGroup,itemsToSkip);
+
+        if(!browsingEnable){
+            if(type == CLUSTER)
+                emit noClustersToBrowse();
+            else
+                emit noEventsToBrowse();
+        } else {
+            if(type == CLUSTER)
+                emit clustersToBrowse();
+            else
+                emit eventsToBrowse();
+        }
     }
-    else{
-        if(type == CLUSTER)
-            emit clustersToBrowse();
-        else
-            emit eventsToBrowse();
-    }
-#endif
 }
 
 void ItemPalette::changeBackgroundColor(QColor color){

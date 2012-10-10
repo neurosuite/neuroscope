@@ -1430,14 +1430,17 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
                 //Add the channel to the target group
                 QPixmap pixmap(14,14);
                 QColor color = channelColors->color(channelId);
-                if(targetGroup == "0") channelsShowHideStatus[channelId] = false;
+                if(targetGroup == "0")
+                    channelsShowHideStatus[channelId] = false;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
                 after = new ChannelIconItem(targetIconView,after,QString::fromLatin1("%1").arg(channelId),pixmap);
 
                 //Modify the entry in the map channels-group
                 channelsGroups->replace(channelId,targetGroup.toInt());
             }
-            else channelIds.append(channelId);
+            else {
+                channelIds.append(channelId);
+            }
         }
 
         //Delete the entries in the source group
