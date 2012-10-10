@@ -444,8 +444,8 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
             if(color == backgroundColor){
                 if(type == DISPLAY)
                     color = channelColors->groupColor(channelId);
-                else color =
-                        channelColors->spikeGroupColor(channelId);
+                else
+                    color = channelColors->spikeGroupColor(channelId);
             }
         }
 
@@ -767,24 +767,26 @@ void ChannelPalette::languageChange()
 void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-#if KDAB_PORTING
     //unselect all the items first
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        iteratordict.value()->selectAll(false);
+        iteratordict.value()->selectAll();
     }
 
     //Loop on the channels to be selected
     QList<int>::const_iterator channelIterator;
 
-    Q3IconViewItem* currentIcon = 0L;
+    QListWidgetItem* currentIcon = 0L;
     ChannelIconView* iconView = 0L;
     for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        currentIcon =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
-        currentIcon->setSelected(true,true);
+        QList<QListWidgetItem*> lstItem = iconView->findItems(QString::fromLatin1("%1").arg(*channelIterator),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            currentIcon = lstItem.first();
+            currentIcon->setSelected(true);
+        }
     }
 
     //Last item in selection gets focus if it exists
@@ -793,7 +795,6 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 void ChannelPalette::reset(){
