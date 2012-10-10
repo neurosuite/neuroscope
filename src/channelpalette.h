@@ -36,7 +36,7 @@
 // application specific includes
 #include "channelgroupview.h"
 #include "channeliconview.h"
-#include <Q3ScrollView>
+#include <QScrollArea>
 
 // forward declaration
 class ChannelColors;
@@ -49,7 +49,7 @@ class SpaceWidget;
   */
 
 
-class ChannelPalette : public Q3ScrollView
+class ChannelPalette : public QScrollArea
 {
     Q_OBJECT
     

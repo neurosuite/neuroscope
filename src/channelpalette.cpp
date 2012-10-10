@@ -43,7 +43,7 @@
 
 
 ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name)
-    : Q3ScrollView(parent)
+    : QScrollArea(parent)
     ,channelColors(0L)
     ,backgroundColor(backgroundColor)
     ,isInSelectItems(false),
@@ -56,7 +56,7 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     ,edit(edition)
 {
     setObjectName(name);
-
+    setWidgetResizable(true);
     //Set the palette color, the foreground color depends on the background color
     int h;
     int s;
@@ -72,13 +72,11 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     palette.setColor(backgroundRole(), backgroundColor);
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
-    setVScrollBarMode(Q3ScrollView::AlwaysOff);
-
-    setResizePolicy(Q3ScrollView::AutoOneFit);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     verticalContainer = new Q3VBox(viewport(),"verticalContainer");
     viewport()->setAutoFillBackground(true);
-    addChild(verticalContainer);
+    setWidget(verticalContainer);
     verticalContainer->setSpacing(5);
 
     QFont f("Helvetica",8);
@@ -153,7 +151,7 @@ void ChannelPalette::paintEvent ( QPaintEvent*){
 void ChannelPalette::resizeEvent(QResizeEvent* event){
     //Make the viewport to have the visible size (size of the scrollview)
     viewport()->resize(event->size());
-    Q3ScrollView::resizeEvent(event);
+    QScrollArea::resizeEvent(event);
 }
 
 void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups){
