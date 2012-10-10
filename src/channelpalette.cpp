@@ -1875,13 +1875,14 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
 }
 
 void ChannelPalette::moveTrashesToBottom(){
-#if KDAB_PORTING
     //Remove all the children of the verticalContainer (spaceWidget and groups)
     verticalContainer->removeWidget(spaceWidget);
 
-    Q3DictIterator<ChannelGroupView> it(channelGroupViewDict);
-    for(;it.current();++it)
-        verticalContainer->removeWidget(it.current());
+    QHashIterator<QString, ChannelGroupView*> iterator(channelGroupViewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        verticalContainer->removeWidget(iterator.value());
+    }
 
     //Insert all the groups except the trashes which go at the bottom
     int nbGroup = channelGroupViewDict.count();
@@ -1906,7 +1907,6 @@ void ChannelPalette::moveTrashesToBottom(){
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
-#endif
 }
 
 
