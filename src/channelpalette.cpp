@@ -163,8 +163,9 @@ void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, Q
     this->channelsGroups = channelsGroups;
 
     //Create the iconViews
-    QMap<int, QList<int> >::Iterator iterator;
-    for(iterator = groupsChannels->begin(); iterator != groupsChannels->end(); ++iterator)
+    QMap<int, QList<int> >::ConstIterator iterator;
+    QMap<int, QList<int> >::ConstIterator end(groupsChannels->constEnd());
+    for(iterator = groupsChannels->constBegin(); iterator != end; ++iterator)
         createGroup(iterator.key());
 
     setChannelLists();
@@ -186,15 +187,15 @@ void ChannelPalette::setChannelLists(){
         QList<int> channelList = iterator.data();
         for(uint i = 0; i<channelList.size(); ++i){
             //The default show/hide status is hide
-            channelsShowHideStatus.insert(channelList[i],false);
+            channelsShowHideStatus.insert(channelList.at(i),false);
             //The default skip status is not skipped
-            channelsSkipStatus.insert(channelList[i],false);
+            channelsSkipStatus.insert(channelList.at(i),false);
             QPixmap pixmap(14,14);
-            QColor color = channelColors->color(channelList[i]);
+            QColor color = channelColors->color(channelList.at(i));
             drawItem(painter,&pixmap,color,false,false);
             QIcon icon(pixmap);
 
-            new QListWidgetItem(icon,(QString::fromLatin1("%1").arg(channelList[i])),iconviewDict[groupId]);
+            new QListWidgetItem(icon,(QString::fromLatin1("%1").arg(channelList.at(i))),iconviewDict[groupId]);
             //KDAB_PENDING TODO add key
         }
     }
