@@ -183,7 +183,7 @@ private:
     /**Prevent from emitting signal while globaly selecting items*/
     bool isInSelectItems;
 
-    Q3VBox* verticalContainer;
+    QVBoxLayout *verticalContainer;
 
     /**Dictionnary of the iconviews representing the group of channels.*/
     QHash<QString, ChannelIconView*> iconviewDict;

@@ -73,9 +73,11 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     setPalette(palette);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    verticalContainer = new Q3VBox(viewport(),"verticalContainer");
-    viewport()->setAutoFillBackground(true);
-    setWidget(verticalContainer);
+    QWidget *w = new QWidget;
+    verticalContainer = new QVBoxLayout;
+    w->setLayout(verticalContainer);
+
+    setWidget(w);
     verticalContainer->setSpacing(5);
 
     QFont f("Helvetica",8);
@@ -85,7 +87,7 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     //Set the legend in the good language
     languageChange();
 
-    verticalContainer->adjustSize();
+    //verticalContainer->adjustSize();
     adjustSize();
 }    
 
@@ -670,8 +672,8 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
 
     viewport()->setPaletteBackgroundColor(backgroundColor);
     viewport()->setPaletteForegroundColor(legendColor);
-    verticalContainer->setPaletteBackgroundColor(backgroundColor);
-    verticalContainer->setPaletteForegroundColor(legendColor);
+    //verticalContainer->setPaletteBackgroundColor(backgroundColor);
+    //verticalContainer->setPaletteForegroundColor(legendColor);
 
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
@@ -813,7 +815,8 @@ void ChannelPalette::reset(){
 }
 
 void ChannelPalette::createGroup(int id){  
-    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor,verticalContainer);
+    ChannelGroupView* group = new ChannelGroupView(edit,backgroundColor);
+    verticalContainer->addWidget(group);
     group->setObjectName(QString::fromLatin1("%1").arg(id));
     GroupLabel* label = new GroupLabel(QString::fromLatin1("%1").arg(id),group);
     if(id == -1){
@@ -858,7 +861,8 @@ void ChannelPalette::createGroup(int id){
     group->show();
 
     delete spaceWidget;
-    spaceWidget = new SpaceWidget(verticalContainer,edit);
+    spaceWidget = new SpaceWidget(this,edit);
+    verticalContainer->addWidget(spaceWidget);
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
@@ -1001,7 +1005,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
 
 
     //Move the groups
-    verticalContainer->removeChild(spaceWidget);
+    verticalContainer->removeWidget(spaceWidget);
 
     QHashIterator<QString, ChannelGroupView*> it(channelGroupViewDict);
     while (it.hasNext()) {
@@ -1020,7 +1024,8 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     if(iconviewDict.contains("0")) verticalContainer->insertChild(channelGroupViewDict["0"]);
 
     delete spaceWidget;
-    spaceWidget = new SpaceWidget(verticalContainer,edit);
+    spaceWidget = new SpaceWidget(this,edit);
+    verticalContainer->addWidget(spaceWidget);
     connect(this,SIGNAL(setDragAndDrop(bool)),spaceWidget, SLOT(setDragAndDrop(bool)));
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     spaceWidget->show();
