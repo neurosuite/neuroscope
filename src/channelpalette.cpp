@@ -1558,7 +1558,9 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(*iterator);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-            //KDAB_PORTING after = new ChannelIconItem(iconView,after,QString::fromLatin1("%1").arg(*iterator),pixmap);
+            const int afterIndex = iconView->row(after);
+            after = new QListWidgetItem(QIcon(pixmap),QString::fromLatin1("%1").arg(*iterator));
+            iconView->insertItem(afterIndex,after);
         }
     }
     if(moveFirst){
@@ -1570,7 +1572,9 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-       //KDAB_PORTING after = new ChannelIconItem(iconView,after,channelId,pixmap);
+        const int afterIndex = iconView->row(after);
+        after = new QListWidgetItem(QIcon(pixmap),channelId);
+        iconView->insertItem(afterIndex,after);
     }
 
     //iconView->arrangeItemsInGrid();
@@ -1591,10 +1595,9 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QStri
         bool beforeFirst = false;
         if(after == 0){
             beforeFirst = true;
-            afterId.clear();
-        }
-        else
+        } else {
             afterId = after->text();
+        }
 
         emit channelsMovedAroundInTrash(channelIds,afterId,beforeFirst);
     }
