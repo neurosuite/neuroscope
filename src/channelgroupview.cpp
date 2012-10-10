@@ -47,7 +47,7 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
     palette.setColor(foregroundRole(), legendColor);
     adjustSize();
 
-    setAcceptDrops(TRUE);
+    setAcceptDrops(true);
 }
 
 void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){

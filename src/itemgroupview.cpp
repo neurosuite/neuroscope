@@ -45,7 +45,7 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
 
     adjustSize();
 
-    setAcceptDrops(TRUE);
+    setAcceptDrops(true);
 }
 
 ItemGroupView::~ItemGroupView()

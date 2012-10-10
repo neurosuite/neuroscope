@@ -278,7 +278,7 @@ class SpaceWidget : public QWidget{
     Q_OBJECT
 public:
     inline SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
-        setAcceptDrops(TRUE);
+        setAcceptDrops(true);
     }
 
     void dropEvent(QDropEvent* event){

@@ -126,11 +126,11 @@ Q3DragObject* ChannelIconView::dragObject(){
             Q3IconDragItem id;
             id.setData(item->text().toLocal8Bit());
             drag->append(id,
-                         QRect(item->pixmapRect(FALSE).x() - orig.x(),
-                               item->pixmapRect(FALSE).y() - orig.y(),
+                         QRect(item->pixmapRect(false).x() - orig.x(),
+                               item->pixmapRect(false).y() - orig.y(),
                                item->pixmapRect().width(),item->pixmapRect().height()),
-                         QRect(item->textRect(FALSE).x() - orig.x(),
-                               item->textRect(FALSE).y() - orig.y(),
+                         QRect(item->textRect(false).x() - orig.x(),
+                               item->textRect(false).y() - orig.y(),
                                item->textRect().width(),item->textRect().height()));
             break;
         }
