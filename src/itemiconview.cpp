@@ -47,7 +47,8 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     //setDragAutoScroll(false);
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); setPalette(palette);
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     int h;
     int s;
     int v;
