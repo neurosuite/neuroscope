@@ -460,12 +460,12 @@ public:
     /**Updates the background color used in the views.
    * @param backgroundColor color of the new background.
    */
-    void setBackgroundColor(QColor backgroundColor);
+    void setBackgroundColor(const QColor &backgroundColor);
 
     /**Updates the background image used in the trace views.
    * @param backgroundImagePath path of the image for the traces background.
    */
-    void setTraceBackgroundImage(QString traceBackgroundImagePath);
+    void setTraceBackgroundImage(const QString &traceBackgroundImagePath);
 
     /**Sets the initial offset for all the traces for the current document.*/
     void setInitialOffset(int offset);
@@ -819,7 +819,7 @@ public:
     * @param filePath path of the file to be opened.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadPositionFile(QString filePath);
+    OpenSaveCreateReturnMessage loadPositionFile(const QString &filePath);
     
     /**Removes the cluster provider corresponding to the identifier @p providerName
     * from the list of providers.
@@ -1035,7 +1035,7 @@ public:
    * @param activeView the view in which the position view will be added.
    * @param backgroundColor
    */
-    void addPositionView(NeuroscopeView* activeView,QColor backgroundColor);
+    void addPositionView(NeuroscopeView* activeView, const QColor &backgroundColor);
     
     class CloseDocumentEvent;
     friend class CloseDocumentEvent;

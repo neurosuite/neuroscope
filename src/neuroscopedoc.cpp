@@ -321,7 +321,10 @@ int NeuroscopeDoc::openDocument(const QString& url)
             extensionSamplingRates = reader.getSampleRateByExtension();
             reader.closeFile();
         }
-        else return PARSE_ERROR;
+        else{
+
+            return PARSE_ERROR;
+        }
 
         //Is there a session file?
         if(sessionFileInfo.exists()){
@@ -480,7 +483,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
     //if skipStatus is empty, set the default status to 0
     if(skipStatus.size() == 0){
-        for(int i = 0; i < channelNb; ++i) skipStatus.insert(i,false);
+        for(int i = 0; i < channelNb; ++i)
+            skipStatus.insert(i,false);
     }
 
     //Use the channel default offsets
@@ -498,11 +502,13 @@ int NeuroscopeDoc::saveEventFiles(){
             if(eventProvider->isModified()){
                 QFile eventFile(iterator.value());
                 bool status = eventFile.open(QIODevice::WriteOnly);
-                if(!status) return SAVE_ERROR;
+                if(!status)
+                    return SAVE_ERROR;
                 int saveStatus;
                 saveStatus = eventProvider->save(&eventFile);
                 eventFile.close();
-                if(saveStatus != IO_Ok) return saveStatus;
+                if(saveStatus != IO_Ok)
+                    return saveStatus;
             }
         }
     }
@@ -519,28 +525,36 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         bool status;
         ParameterXmlModifier parameterModifier = ParameterXmlModifier();
         status = parameterModifier.parseFile(parameterUrl);
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
         status = parameterModifier.setAcquisitionSystemInformation(resolution,channelNb,datSamplingRate,voltageRange,amplification,initialOffset);
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
         if(positionFileOpenOnce){
             status = parameterModifier.setVideoInformation(videoWidth,videoHeight);
-            if(!status) return PARSE_ERROR;
+            if(!status)
+                return PARSE_ERROR;
         }
         status = parameterModifier.setLfpInformation(eegSamplingRate);
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
         if(!extensionSamplingRates.empty()){
             status = parameterModifier.setSampleRateByExtension(extensionSamplingRates);
-            if(!status) return PARSE_ERROR;
+            if(!status)
+                return PARSE_ERROR;
         }
         status = parameterModifier.setSpikeDetectionInformation(nbSamples,peakSampleIndex,spikeGroupsChannels);
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
         status = parameterModifier.setAnatomicalDescription(displayGroupsChannels,displayChannelPalette.getSkipStatus());
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
 
         parameterModifier.setNeuroscopeVideoInformation(rotation,flip,backgroundImage,drawPositionsOnBackground);
         parameterModifier.setMiscellaneousInformation(screenGain,traceBackgroundImage);
         status = parameterModifier.setChannelDisplayInformation(channelColorList,displayChannelsGroups,channelDefaultOffsets);
-        if(!status) return PARSE_ERROR;
+        if(!status)
+            return PARSE_ERROR;
 
         status = parameterModifier.writeTofile(parameterUrl);
         if(!status) return CREATION_ERROR;
@@ -743,27 +757,31 @@ void NeuroscopeDoc::groupsModified(NeuroscopeView* activeView){
     activeView->showAllWidgets();
 }
 
-void NeuroscopeDoc::setBackgroundColor(QColor backgroundColor){
+void NeuroscopeDoc::setBackgroundColor(const QColor& backgroundColor){
 
     //If a position file is loaded and all the positions are drawn on the background (without using an image as the background)
     //update the background image
     bool isPositionFileLoaded = dynamic_cast<NeuroscopeApp*>(parent)->isApositionFileLoaded();
-    if(isPositionFileLoaded && backgroundImage == "" && drawPositionsOnBackground){
+    if(isPositionFileLoaded && backgroundImage.isEmpty() && drawPositionsOnBackground){
         transformedBackground = transformBackgroundImage();
         NeuroscopeView* view;
         //Get the active view.
         NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
         if(rotation != 90 && rotation != 270){
             for(int i = 0; i<viewList->count(); ++i) {
-                if(view != activeView) view->updatePositionInformation(videoWidth,videoHeight,transformedBackground,false,false);
-                else view->updatePositionInformation(videoWidth,videoHeight,transformedBackground,false,true);
+                if(view != activeView)
+                    view->updatePositionInformation(videoWidth,videoHeight,transformedBackground,false,false);
+                else
+                    view->updatePositionInformation(videoWidth,videoHeight,transformedBackground,false,true);
             }
         }
         //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
         else{
             for(int i = 0; i<viewList->count(); ++i) {
-                if(view != activeView) view->updatePositionInformation(videoHeight,videoWidth,transformedBackground,false,false);
-                else view->updatePositionInformation(videoHeight,videoWidth,transformedBackground,false,true);
+                if(view != activeView)
+                    view->updatePositionInformation(videoHeight,videoWidth,transformedBackground,false,false);
+                else
+                    view->updatePositionInformation(videoHeight,videoWidth,transformedBackground,false,true);
             }
         }
     }
@@ -782,10 +800,10 @@ void NeuroscopeDoc::setBackgroundColor(QColor backgroundColor){
 }
 
 
-void NeuroscopeDoc::setTraceBackgroundImage(QString traceBackgroundImagePath){
+void NeuroscopeDoc::setTraceBackgroundImage(const QString& traceBackgroundImagePath){
     traceBackgroundImage = traceBackgroundImagePath;
     if(tracesProvider){
-        QImage traceBackgroundImage = QImage(traceBackgroundImagePath);
+        QImage traceBackgroundImage(traceBackgroundImagePath);
 
         //The views are updated. If the image is null, the background will be a plain color (no image)
         //Get the active view and make it the first to take the modification into account.
@@ -795,8 +813,10 @@ void NeuroscopeDoc::setTraceBackgroundImage(QString traceBackgroundImagePath){
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
 
-            if(view != activeView)view->updateTraceBackgroundImage(traceBackgroundImage,false);
-            else view->updateTraceBackgroundImage(traceBackgroundImage,true);
+            if(view != activeView)
+                view->updateTraceBackgroundImage(traceBackgroundImage,false);
+            else
+                view->updateTraceBackgroundImage(traceBackgroundImage,true);
         }
     }
 }
@@ -2519,7 +2539,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString fileUrl){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const QString& fileUrl){
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionUrl = fileUrl;
     QString positionFileName = positionUrl;
@@ -2557,7 +2577,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
     return OK;
 }
 
-void NeuroscopeDoc::addPositionView(NeuroscopeView* activeView,QColor backgroundColor){
+void NeuroscopeDoc::addPositionView(NeuroscopeView* activeView,const QColor& backgroundColor){
     QHashIterator<QString, DataProvider*> i(providers);
     while (i.hasNext()) {
         i.next();
@@ -2640,7 +2660,11 @@ void NeuroscopeDoc::updateSkipStatus(){
     QList<int> skippedChannels;
     skipStatus = displayChannelPalette.getSkipStatus();
     QMap<int,bool>::const_iterator iterator;
-    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) if(iterator.value()) skippedChannels.append(iterator.key());
+    for(iterator = skipStatus.begin(); iterator != skipStatus.end(); ++iterator) {
+        if(iterator.value()) {
+            skippedChannels.append(iterator.key());
+        }
+    }
 
     //Informs the views than the Skip Status has changed.
     for(int i = 0; i<viewList->count(); ++i) {
