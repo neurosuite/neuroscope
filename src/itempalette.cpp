@@ -474,12 +474,13 @@ void ItemPalette::slotClickRedraw(){
 }
 
 void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
-#ifdef KDAB_PORTING
     ItemIconView* iconView = iconviewDict[sourceGroup];
     int count = 0;
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-        if(item->isSelected()) count++;
-        if(count > 1) break;
+    for(int i = 0; i <iconView->count();++i) {
+        if(iconView->item(i)->isSelected())
+            count++;
+        if(count > 1)
+            break;
     }
 
     if(count <= 2){
@@ -490,7 +491,7 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
         while (iterator.hasNext()) {
             iterator.next();
             if(iterator.key() != sourceGroup)
-                iterator.value()->selectAll(false);
+                iterator.value()->clearSelection();
         }
 
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
@@ -512,14 +513,18 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
                 ItemColors* itemColors = itemColorsDict[groupName];
                 QMap<int,bool> browsingMap = browsingStatus[groupName];
                 QList<int> itemsToSkip;
-                for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
-                    int currentIndex = item->index();
+                for(int i = 0;i <iterator.value()->count();++i) {
+                    QListWidgetItem *item = iterator.value()->item(i);
+                    int currentIndex = item->data(ItemIconView::INDEXICON).toInt();
                     if(browsingMap[currentIndex]){
                         browsingMap[currentIndex] = false;
-                        QString label = item->text();
+                        const QString label = item->text();
                         redrawItem(iterator.value(),itemColors,currentIndex,browsingMap);
                         isInSelectItems = true;////redrawItem sets it back to false
-                        item = iterator.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                        QList<QListWidgetItem*>lstItem = iterator.value()->findItems(label,Qt::MatchExactly);
+                        if(!lstItem.isEmpty()) {
+                            i = iterator.value()->row(lstItem.first());
+                        }
                         itemsToSkip.append(itemColors->itemId(currentIndex));
                     } else {
                         itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -537,7 +542,6 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
                 emit noEventsToBrowse();
         }
     }
-#endif
 }
 
 void ItemPalette::slotMouseReleased(QString sourceGroupName){
