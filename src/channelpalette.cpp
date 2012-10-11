@@ -184,7 +184,7 @@ void ChannelPalette::setChannelLists(){
     QMap<int, QList<int> >::Iterator iterator;
     for(iterator = groupsChannels->begin(); iterator != groupsChannels->end(); ++iterator){
         QString groupId = QString::fromLatin1("%1").arg(iterator.key());
-        QList<int> channelList = iterator.data();
+        QList<int> channelList = iterator.value();
         for(uint i = 0; i<channelList.size(); ++i){
             //The default show/hide status is hide
             channelsShowHideStatus.insert(channelList.at(i),false);
@@ -421,7 +421,7 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
 
     for(channelIterator = skipStatus.begin(); channelIterator != skipStatus.end(); ++channelIterator){
         int channelId = channelIterator.key();
-        bool status = channelIterator.data();
+        bool status = channelIterator.value();
 
         //update the status
         channelsSkipStatus.replace(channelId,status);
@@ -757,7 +757,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[current->text().toInt()],channelsSkipStatus[current->text().toInt()]);
                 current->setIcon(QIcon(pixmap));
             }
-            const QString groupId = iconViewParent->name();
+            const QString groupId = iconViewParent->objectName();
             emit groupChangeColor(groupId.toInt());
         }
     }
@@ -932,11 +932,11 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
         for(int i = sourceId + 1; i <= targetId; i++){
             //Rename the iconView
             ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(i));
-            iconView->setName(QString::fromLatin1("%1").arg(i - 1));
+            iconView->setObjectName(QString::fromLatin1("%1").arg(i - 1));
             iconviewDict.insert(QString::fromLatin1("%1").arg(i - 1),iconView);
             //Rename the ChannelGroupView and the label
             ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(i));
-            group->setName(QString::fromLatin1("%1").arg(i - 1));
+            group->setObjectName(QString::fromLatin1("%1").arg(i - 1));
             QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
             label->setText(QString::fromLatin1("%1").arg(i - 1));
             channelGroupViewDict.insert(QString::fromLatin1("%1").arg(i - 1),group);
@@ -969,11 +969,11 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
         for(int i = sourceId - 1; i >= targetId; i--){
             //Rename the iconView
             ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(i));
-            iconView->setName(QString::fromLatin1("%1").arg(i + 1));
+            iconView->setObjectName(QString::fromLatin1("%1").arg(i + 1));
             iconviewDict.insert(QString::fromLatin1("%1").arg(i + 1),iconView);
             //Rename the ChannelGroupView and the label
             ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(i));
-            group->setName(QString::fromLatin1("%1").arg(i + 1));
+            group->setObjectName(QString::fromLatin1("%1").arg(i + 1));
             QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
             label->setText(QString::fromLatin1("%1").arg(i + 1));
             channelGroupViewDict.insert(QString::fromLatin1("%1").arg(i + 1),group);
@@ -990,10 +990,10 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     }
 
     //Rename the moved group.
-    sourceIconView->setName(QString::fromLatin1("%1").arg(targetId));
+    sourceIconView->setObjectName(QString::fromLatin1("%1").arg(targetId));
     iconviewDict.insert(QString::fromLatin1("%1").arg(targetId),sourceIconView);
     //Rename the ChannelGroupView and the label
-    sourceGroup->setName(QString::fromLatin1("%1").arg(targetId));
+    sourceGroup->setObjectName(QString::fromLatin1("%1").arg(targetId));
     QLabel* label = dynamic_cast<QLabel*>(sourceGroup->child("label"));
     label->setText(QString::fromLatin1("%1").arg(targetId));
     channelGroupViewDict.insert(QString::fromLatin1("%1").arg(targetId),sourceGroup);
@@ -1219,11 +1219,11 @@ void ChannelPalette::deleteEmptyGroups(){
                 if(gpId != minId){
                     //Rename the iconview
                     ChannelIconView* iconView = iconviewDict.take(QString::fromLatin1("%1").arg(gpId));
-                    iconView->setName(QString::fromLatin1("%1").arg(minId));
+                    iconView->setObjectName(QString::fromLatin1("%1").arg(minId));
                     iconviewDict.insert(QString::fromLatin1("%1").arg(minId),iconView);
                     //Rename the ChannelGroupView and the label
                     ChannelGroupView* group = channelGroupViewDict.take(QString::fromLatin1("%1").arg(gpId));
-                    group->setName(QString::fromLatin1("%1").arg(minId));
+                    group->setObjectName(QString::fromLatin1("%1").arg(minId));
                     QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
                     label->setText(QString::fromLatin1("%1").arg(minId));
                     channelGroupViewDict.insert(QString::fromLatin1("%1").arg(minId),group);

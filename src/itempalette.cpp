@@ -103,7 +103,7 @@ void ItemPalette::paintEvent ( QPaintEvent*){
         //update the icons if need it
         QMap<QString,QList<int> >::Iterator it;
         for(it = needRedrawing.begin(); it != needRedrawing.end(); ++it){
-            QList<int> items = it.data();
+            QList<int> items = it.value();
             QString  groupName = it.key();
             QMap<int,bool> browsingMap = browsingStatus[groupName];
             ItemIconView* iconView = iconviewDict[groupName];
@@ -598,7 +598,7 @@ bool ItemPalette::isBrowsingEnable(){
         QMap<int,bool>  currentMap = it.data();
         QMap<int,bool> ::Iterator it2;
         for(it2 = currentMap.begin(); it2 != currentMap.end(); ++it2){
-            if(it2.data()){
+            if(it2.value()){
                 browsingEnable = true;
                 break;
             }
@@ -905,8 +905,10 @@ void ItemPalette::removeGroup(const QString &groupName){
     iconviewDict.remove(groupName);
     browsingStatus.remove(groupName);
     selectionStatus.remove(groupName);
-    if(type == CLUSTER) clusterGroupList.remove(groupName.toInt());
-    else itemGroupList.remove(groupName);
+    if(type == CLUSTER)
+        clusterGroupList.remove(groupName.toInt());
+    else
+        itemGroupList.remove(groupName);
 
     //a group must always be selected.
     if(selected == groupName){

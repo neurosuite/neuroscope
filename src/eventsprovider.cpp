@@ -1252,10 +1252,8 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
 
     //Remove the description of the list of existing ones and compute the new descriptionLength
     idsDescriptions.clear();
-    QList<EventDescription> descriptions = eventIds.keys();
-
     QList<EventDescription> newDescriptions = eventIds.keys();
-    newDescriptions.remove(EventDescription(eventDescriptionToRemove));
+    newDescriptions.removeAll(EventDescription(eventDescriptionToRemove));
 
     qSort(newDescriptions);
     long maxSize = 0;

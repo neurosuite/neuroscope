@@ -1542,9 +1542,10 @@ void NeuroscopeDoc::setPositionInformation(double newVideoSamplingRate, int newW
     if(extensionSamplingRates.contains(positionFileExtension))
         extensionSamplingRates.insert(positionFileExtension,videoSamplingRate);
 
-    if(backgroundImage != "" || (backgroundImage.isEmpty() && drawPositionsOnBackground))
+    if(!backgroundImage.isEmpty() || (backgroundImage.isEmpty() && drawPositionsOnBackground))
         transformedBackground = transformBackgroundImage();
-    else transformedBackground.reset();
+    else
+        transformedBackground.reset();
 
     //Update the views
     if(rotation != 90 && rotation != 270){
