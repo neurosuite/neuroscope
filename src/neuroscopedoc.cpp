@@ -1241,13 +1241,6 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         isAPositionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
 
         /*****************TO FINISH***************************/
-        //Get the information concerning the spike files
-        QStringList::iterator spikeFileIterator;
-        for(spikeFileIterator = shownSpikeFiles.begin(); spikeFileIterator != shownSpikeFiles.end(); ++spikeFileIterator){
-            QString fileUrl = *spikeFileIterator;
-        }
-
-        /*****************TO FINISH***************************/
 
         //Get the information concerning the channel positions (gain and offset)
         QList<TracePosition>::iterator positionIterator;
@@ -1346,9 +1339,10 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
 
                     //Create the transformedBackground
                     //The background image information is stored in the parameter file starting with the version 1.2.3
-                    if(reader.getVersion() == "" || reader.getVersion() == "1.2.2"){
-                        if(reader.getBackgroundImage() != "-") backgroundImage = sessionFile.getBackgroundPath();
-                        if(backgroundImage != ""){
+                    if(reader.getVersion().isEmpty() || reader.getVersion() == "1.2.2"){
+                        if(reader.getBackgroundImage() != "-")
+                            backgroundImage = sessionFile.getBackgroundPath();
+                        if(!backgroundImage.isEmpty()){
                             fileInfo = QFileInfo(backgroundImage);
                             if(!fileInfo.exists()){
                                 QString imageUrl= backgroundImage;
@@ -1440,14 +1434,15 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
             view->setEventProvider(static_cast<EventsProvider*>(providers[name]),name,providerItemColors[name],true,eventsIds,eventsIdsToSkip);
         }
         //Position file
-        if(loadedPositionFile != ""){
+        if(!loadedPositionFile.isEmpty()){
             if(isAPositionView){
                 if(rotation != 90 && rotation != 270)
                     view->addPositionView(static_cast<PositionsProvider*>(providers[loadedPositionFile]),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
                                           startTime,duration,videoWidth,videoHeight,showEventsInPositionView);
 
                 //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
-                else view->addPositionView(static_cast<PositionsProvider*>(providers[loadedPositionFile]),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
+                else
+                    view->addPositionView(static_cast<PositionsProvider*>(providers[loadedPositionFile]),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
                                            startTime,duration,videoHeight,videoWidth,showEventsInPositionView);
 
             }
