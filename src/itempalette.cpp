@@ -230,7 +230,7 @@ void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
         emit selectedGroupChanged(selected);
 }
 
-void ItemPalette::slotMousePressed(QString sourceGroupName,bool shiftKey,bool ctrlAlt){
+void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,bool ctrlAlt){
 #ifdef KDAB_PORTING
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
@@ -775,34 +775,40 @@ void ItemPalette::languageChange()
 void ItemPalette::selectItems(const QString& groupName,const QList<int>& itemsToSelect,const QList<int>& itemsToSkip){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
-    #ifdef KDAB_PORTING
-    Q3IconViewItem* currentIcon = 0L;
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clearSelection();
     ItemColors* itemColors = itemColorsDict[groupName];
 
     //update the browsing map and rebuild the icons
-    QPainter painter;
     QMap<int,bool> browsingMap = browsingStatus[groupName];
     browsingMap.clear();
-    for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-        int id = itemColors->itemId(item->index());
+    for(int i=0;i<iconView->count();++i) {
+        QListWidgetItem *item = iconView->item(i);
+        const int index = item->data(ItemIconView::INDEXICON).toInt();
+        int id = itemColors->itemId(index);
         if(itemsToSkip.contains(id))
-            browsingMap.insert(item->index(),false);
+            browsingMap.insert(index,false);
         else
-            browsingMap.insert(item->index(),true);
-        QString label = itemColors->itemLabel(item->index());
-        redrawItem(iconView,itemColors,item->index(),browsingMap);
+            browsingMap.insert(index,true);
+        QString label = itemColors->itemLabel(index);
+        redrawItem(iconView,itemColors,index,browsingMap);
         isInSelectItems = true;//redrawItem sets it back to false
-        item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+        QList<QListWidgetItem*>lstItem = iconView->findItems(label,Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            i = iconView->row(lstItem.first());
+        }
     }
     browsingStatus.insert(groupName,browsingMap);
 
-    QList<int>::iterator itemIterator;
-    for(itemIterator = itemsToSelect.begin(); itemIterator != itemsToSelect.end(); ++itemIterator){
+    QListWidgetItem *currentIcon = 0;
+    QList<int>::ConstIterator itemIterator;
+    for(itemIterator = itemsToSelect.constBegin(); itemIterator != itemsToSelect.constEnd(); ++itemIterator){
         QString label =  itemColors->itemLabelById(*itemIterator);
-        currentIcon =  iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
-        currentIcon->setSelected(true,true);
+        QList<QListWidgetItem*>lstItem = iconView->findItems(label,Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            currentIcon = lstItem.first();
+            currentIcon->setSelected(true);
+        }
     }
 
     //Last item in selection gets focus if it exists
@@ -811,7 +817,6 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int>& itemsTo
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-    #endif
 }
 
 
