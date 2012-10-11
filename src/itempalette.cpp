@@ -708,14 +708,12 @@ void ItemPalette::changeBackgroundColor(const QColor& color){
             QListWidgetItem *item = new QListWidgetItem(icon,itemColors->itemLabel(i), iconView);
             //TODO item->setData();
         }
-#ifdef KDAB_PORTING
-
         //reselect the item which were selected.
-        for(Q3IconViewItem* item = iterator.value()->firstItem(); item; item = item->nextItem()){
-            if(selectedItems.contains(itemColors->itemId(item->index())))
-                item->setSelected(true,true);
+        for(int i=0; i<iterator.value()->count(); ++i) {
+            QListWidgetItem *item = iterator.value()->item(i);
+            if(selectedItems.contains(itemColors->itemId(item->data(ItemIconView::INDEXICON).toInt())))
+                item->setSelected(true);
         }
-#endif
         //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
         isInSelectItems = false;
     }
