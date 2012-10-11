@@ -121,7 +121,7 @@ public Q_SLOTS:
     void trashChannelsMovedAround(const QList<int>& channelIds,const QString& afterId,bool beforeFirst);
     void discardChannels();
     void discardChannels(const QList<int>& channelsToDiscard);
-    void discardChannels(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
+    void discardChannels(const QList<int>& channelsToDiscard, const QString &afterId, bool beforeFirst);
     void discardSpikeChannels();
     void showChannels();
     void hideChannels();

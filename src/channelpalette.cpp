@@ -1740,19 +1740,21 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     update();
 }
 
-void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst){
-#if KDAB_PORTING
-    Q3IconViewItem* after;
+void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const QString& afterId,bool beforeFirst){
+    QListWidgetItem* after = 0;
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
     //and then move the first item after the others
     bool moveFirst = false;
     if(beforeFirst){
-        after = trash->firstItem();
+        after = trash->item(0);
         moveFirst = true;
+    } else {
+        QList<QListWidgetItem*> lstItem = trash->findItems(afterId,Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            after = lstItem.first();
+        }
     }
-    else
-        after = trash->findItem(afterId,Q3ListBox::ExactMatch);
 
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
@@ -1766,22 +1768,23 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
     }
 
     QList<int>::const_iterator channelIterator;
-    Q3IconViewItem* currentIcon = 0L;
     ChannelIconView* iconView = 0L;
     QPainter painter;
     for(channelIterator = channelsToDiscard.begin(); channelIterator != channelsToDiscard.end(); ++channelIterator){
         int groupId = (*channelsGroups)[*channelIterator];
         QList<int> sourceChannels = (*groupsChannels)[groupId];
         iconView = iconviewDict[QString::fromLatin1("%1").arg(groupId)];
-        currentIcon =  iconView->findItem(QString::fromLatin1("%1").arg(*channelIterator),Q3ListBox::ExactMatch);
-        delete currentIcon;
+        QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::fromLatin1("%1").arg(*channelIterator),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            delete lstItem.first();
+        }
 
         //Add a new item corresponding to the channel Id. The channel is hidden.
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(*channelIterator);
         channelsShowHideStatus[*channelIterator] = false;
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-        after = new ChannelIconItem(trash,after,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
+        //KDAB_PORITNG after = new ChannelIconItem(trash,after,QString::fromLatin1("%1").arg(*channelIterator),pixmap);
         sourceChannels.remove(*channelIterator);
         channelsGroups->replace(*channelIterator,0);
 
@@ -1794,11 +1797,11 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
         //Modify the entries in the map group-channel list
         groupsChannels->replace(groupId,sourceChannels);
 
-        iconView->arrangeItemsInGrid();
+        //iconView->arrangeItemsInGrid();
     }
 
     if(moveFirst){
-        Q3IconViewItem* first = trash->firstItem();
+        QListWidgetItem* first = trash->item(0);
         QString channelId = first->text();
         delete first;
 
@@ -1806,16 +1809,18 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-        after = new ChannelIconItem(trash,after,channelId,pixmap);
+        //KDAB_PENDING after = new ChannelIconItem(trash,after,channelId,pixmap);
     }
 
     //Modify the entry in the map group-channel list
     QList<int> trashChannels;
-    for(Q3IconViewItem* item = trash->firstItem(); item; item = item->nextItem())
+    for(int i = 0; i <trash->count();++i) {
+        QListWidgetItem *item = trash->item(i);
         trashChannels.append(item->text().toInt());
+    }
     groupsChannels->replace(0,trashChannels);
 
-    trash->arrangeItemsInGrid();
+    //trash->arrangeItemsInGrid();
 
     //Do not leave empty groups.
     deleteEmptyGroups();
@@ -1824,7 +1829,6 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,QString
 
     //Update the display as the trash channels are hidden
     emit updateShownChannels(getShowHideChannels(true));
-#endif
 }
 
 void ChannelPalette::setEditMode(bool edition){  
