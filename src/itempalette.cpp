@@ -853,9 +853,9 @@ void ItemPalette::createGroup(const QString &id){
     ItemIconView* iconView;
     QFontInfo fontInfo = QFontInfo(f);
     if(type == CLUSTER)
-        iconView = new ItemIconView(backgroundColor,QListView::IconMode,fontInfo.pixelSize() * 2,5,group,id);
+        iconView = new ItemIconView(backgroundColor,QListView::IconMode,fontInfo.pixelSize() * 2,15 *2,group,id);
     else
-        iconView = new ItemIconView(backgroundColor,QListView::ListMode,gridX,5,group,id);
+        iconView = new ItemIconView(backgroundColor,QListView::ListMode,gridX,15*2,group,id);
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     if(iconviewDict.count() >= 1){
