@@ -39,7 +39,6 @@
 #include <QResizeEvent>
 #include <QList>
 #include <QLabel>
-#include <Q3ListBox>
 ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name)
     : QScrollArea(parent),
       backgroundColor(backgroundColor),

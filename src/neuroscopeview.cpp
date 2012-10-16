@@ -424,6 +424,7 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage
 
     //Create and add the position view
     QDockWidget* positions = new QDockWidget();
+    positions->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
     //createDockWidget( "Positions", QPixmap());
     positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positions,"PositionView",backgroundColor);
     positions->setWidget(positionView);//assign the widget
