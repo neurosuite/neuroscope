@@ -1999,22 +1999,25 @@ void TraceView::drawTimeLine(QPainter *painter){
 
         //left margin is visible
         if(r.left() == 0){
-            if(lastClickAbscissa <= (Xshift - XGroupSpace)) groupIndex = 0;
-            else groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
+            if(lastClickAbscissa <= (Xshift - XGroupSpace))
+                groupIndex = 0;
+            else
+                groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
         }
         //left margin is invisible
         else{
             int shift = (nbSamplesToDraw - 1) * Xstep;
-            if(lastClickAbscissa < shift + XGroupSpace) groupIndex = 0;
-            else groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
+            if(lastClickAbscissa < shift + XGroupSpace)
+                groupIndex = 0;
+            else
+                groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
         }
         //Compute the min and max abscissae in each group
         for(int i = 0; i<nbColumns;++i){
             min.append(X0 + i * Xshift);
             max.append(X0 + i * Xshift + nbSamplesToDraw - 1);//points draw from 0 to (nbSamplesToDraw - 1)
         }
-    }
-    else{
+    } else {
         nbColumns = 1;
         if(!linePositions.isEmpty())
             currentAbscissae.append(linePositions.at(0) + delta);
@@ -2022,6 +2025,9 @@ void TraceView::drawTimeLine(QPainter *painter){
         min.append(borderX);
     }
 
+    if(currentAbscissae.isEmpty() || min.isEmpty())
+        return;
+    qDebug()<<" currentAbscissae.count "<<currentAbscissae.count()<<" min.count "<<min[groupIndex]<<" groupIndex"<<groupIndex;
     //If the user went to far on the left, draw a line at the minimum min
     if(currentAbscissae[groupIndex] < min[groupIndex]){
         if(!initialDragLine){
