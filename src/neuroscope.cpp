@@ -2515,8 +2515,6 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         //the active display change.
         connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
 
-        slotStateChanged("tabState");
-
         //Keep track of the number of displays
         displayCount ++;
 
@@ -3351,6 +3349,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mNextEvent->setEnabled(false);
 
     } else if(state == QLatin1String("documentState")) {
+        mRenameActiveDisplay->setEnabled(false);
         mOpenAction->setEnabled(true);
         mFileOpenRecent->setEnabled(true);
         mSaveAction->setEnabled(true);
@@ -3476,8 +3475,6 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
 
     } else if(state == QLatin1String("enableEditState")) {
         editMode->setEnabled(true);
-    } else if(state == QLatin1String("tabState")) {
-        mRenameActiveDisplay->setEnabled(true);
     } else if(state == QLatin1String("datState")) {
         clusterWaveforms->setEnabled(true);
     } else if(state == QLatin1String("noDatState")) {
