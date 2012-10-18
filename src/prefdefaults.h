@@ -47,23 +47,23 @@ public:
     /**Sets the screen gain in milivolts by centimeters used to display the field potentiels.
   */
     void setScreenGain(float gain){
-        screenGainLineEdit->setText(QString::fromLatin1("%1").arg(gain));
+        screenGainLineEdit->setText(QString::number(gain));
     }
 
     /**Sets the voltage range of the acquisition system in milivolts.
   */
     void setVoltageRange(int value){
-        voltageRangeLineEdit->setText(QString::fromLatin1("%1").arg(value));
+        voltageRangeLineEdit->setText(QString::number(value));
     }
 
     /**Sets the amplification of the acquisition system.
   */
     void setAmplification(int value){
-        amplificationLineEdit->setText(QString::fromLatin1("%1").arg(value));
+        amplificationLineEdit->setText(QString::number(value));
     }
 
     /**Sets the number of channels.*/
-    void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
+    void setNbChannels(int nb){nbChannelsLineEdit->setText(QString::number(nb));}
 
     /**Sets the sampling rate for the dat file.*/
     void setDatSamplingRate(double rate){datSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
@@ -72,7 +72,7 @@ public:
     void setEegSamplingRate(double rate){eegSamplingRateLineEdit->setText(QString::fromLatin1("%1").arg(rate,0,'g',14));}
 
     /**Sets the initial offset for all the field potentials.*/
-    void setOffset(int offset){offsetLineEdit->setText(QString::fromLatin1("%1").arg(offset));}
+    void setOffset(int offset){offsetLineEdit->setText(QString::number(offset));}
 
     /**Sets the resolution of the acquisition system.*/
     void setResolutionIndex(int index){resolutionComboBox->setCurrentIndex(index);}

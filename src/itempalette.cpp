@@ -352,7 +352,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     bool hasChanged = false;
                     Q3IconViewItem* item;
                     for(int i = 0;i<2;++i){
-                        item = iconView->findItem(QString::fromLatin1("%1").arg(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                        item = iconView->findItem(QString::number(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
                         if(item != 0){
                             item->setSelected(false);
                             int currentIndex = item->index();
@@ -913,7 +913,7 @@ void ItemPalette::removeGroup(const QString &groupName){
     if(selected == groupName){
         if(type == CLUSTER && !clusterGroupList.isEmpty()){
             qSort(clusterGroupList);
-            selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList.at(0)));
+            selectGroupLabel(QString::number(clusterGroupList.at(0)));
         }
         else if(type == EVENT && !itemGroupList.isEmpty()){
             qSort(itemGroupList);
@@ -928,7 +928,7 @@ void ItemPalette::selectGroup(const QString& groupName){
     if(type == CLUSTER && !clusterGroupList.isEmpty()){
         qSort(clusterGroupList);
         if(clusterGroupList.contains(groupName.toInt())) selectGroupLabel(groupName);
-        else selectGroupLabel(QString::fromLatin1("%1").arg(clusterGroupList.at(0)));
+        else selectGroupLabel(QString::number(clusterGroupList.at(0)));
     }
     else if(type == EVENT && !itemGroupList.isEmpty()){
         qSort(itemGroupList);
@@ -1016,12 +1016,12 @@ void ItemPalette::orderTheGroups(){
         qSort(clusterGroupList);
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
-            verticalContainer->addWidget(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
+            verticalContainer->addWidget(itemGroupViewDict[QString::number(*iterator)]);
     } else {
         qSort(itemGroupList);
         QStringList::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
-            verticalContainer->addWidget(itemGroupViewDict[QString::fromLatin1("%1").arg(*iterator)]);
+            verticalContainer->addWidget(itemGroupViewDict[*iterator]);
     }
 
     delete spaceWidget;

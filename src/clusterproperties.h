@@ -39,10 +39,10 @@ public:
 
 
     /**Sets the number of samples per spike waveform.*/
-    void setNbSamples(int nb){nbSamplesLineEdit->setText(QString::fromLatin1("%1").arg(nb));}
+    void setNbSamples(int nb){nbSamplesLineEdit->setText(QString::number(nb));}
 
     /**Sets the index of the peak sample in the spike waveform.*/
-    void setPeakIndex(int index){peakIndexLineEdit->setText(QString::fromLatin1("%1").arg(index));}
+    void setPeakIndex(int index){peakIndexLineEdit->setText(QString::number(index));}
 
     /**Returns the number of samples per spike waveform.*/
     inline int getNbSamples()const{return nbSamplesLineEdit->text().toInt();}

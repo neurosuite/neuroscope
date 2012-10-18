@@ -32,7 +32,7 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <qrecentfileaction.h>
-
+#include <QPrintDialog>
 
 #include <QStatusBar>
 #include <QToolBar>
@@ -1470,7 +1470,8 @@ void NeuroscopeApp::slotFilePrint()
     printer->setOrientation(QPrinter::Landscape);
     printer->setColorMode(QPrinter::Color);
 
-    if (printer->setup(this))
+    QPrintDialog dialog(printer, this);
+    if (dialog.exec())
     {
         //retrieve the backgroundColor setting from KPrinter object, //1 <=> white background
         NeuroscopeView* view = activeView();
@@ -2420,7 +2421,7 @@ void NeuroscopeApp::slotDisplayClose(){
                     if(qobject_cast<ChannelPalette*>(current->widget()))
                         current = static_cast<QDockWidget*>(paletteTabsParent->widget(2));
                 }
-                paletteTabsParent->removePage(current);
+                paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
                 delete current;
             }
 
@@ -2445,8 +2446,8 @@ void NeuroscopeApp::slotRenameActiveDisplay(){
         const int index = tabsParent->currentIndex();
 
         bool ok;
-        const QString newLabel = QInputDialog::getText(tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
-                                                       tabsParent->tabText(index),&ok,this);
+        const QString newLabel = QInputDialog::getText(this,tr("New Display label"),tr("Type in the new display label"),QLineEdit::Normal,
+                                                       tabsParent->tabText(index),&ok);
         if(ok&& !newLabel.isEmpty()){
             tabsParent->setTabText(index,newLabel);
             activeView()->setTabName(newLabel);

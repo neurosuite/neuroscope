@@ -179,7 +179,7 @@ void TraceWidget::initSelectionWidgets(){
     lay->addWidget(durationLabel);
     durationLabel->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     durationLabel->setFont(font);
-    duration = new QLineEdit(QString::fromLatin1("%1").arg(timeWindow),selectionWidgets);
+    duration = new QLineEdit(QString::number(timeWindow),selectionWidgets);
     lay->addWidget(duration);
     duration->setMinimumSize(50,duration->minimumHeight());
     duration->setMaximumSize(50,duration->maximumHeight());
@@ -236,12 +236,12 @@ void TraceWidget::keyPressEvent(QKeyEvent* event){
     switch(event->key()){
     case Qt::Key_Plus:                               // double the duration
         timeWindow = timeWindow * 2;
-        duration->setText(QString::fromLatin1("%1").arg(timeWindow));
+        duration->setText(QString::number(timeWindow));
         slotDurationUpdated();
         break;
     case Qt::Key_Minus:                              // reduce the duration of an half
         timeWindow = timeWindow / 2;
-        duration->setText(QString::fromLatin1("%1").arg(timeWindow));
+        duration->setText(QString::number(timeWindow));
         slotDurationUpdated();
         break;
     }
@@ -257,7 +257,7 @@ void TraceWidget::slotDurationUpdated(){
         //Test if the time window is bigger than the time of the recording, if so fix it to the time of the recording
         if(timeWindow > recordingLength){
             timeWindow = recordingLength;
-            duration->setText(QString::fromLatin1("%1").arg(timeWindow));
+            duration->setText(QString::number(timeWindow));
         }
         //Test if the time window is inferior to 1 ms, if so fix set it to the minimum 1.
         if(timeWindow < 1){
@@ -557,7 +557,7 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
         //Duration
         //Test if the time window is inferior to 1 ms, if so fix set it to the minimum 1.
         if(duration < 1) duration = 1;
-        this->duration->setText(QString::fromLatin1("%1").arg(duration));
+        this->duration->setText(QString::number(duration));
         timeWindow = duration;
 
         //Test if we go over the time of the recording if so keep the time window and move back in time
