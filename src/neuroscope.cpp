@@ -3349,7 +3349,7 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mNextEvent->setEnabled(false);
 
     } else if(state == QLatin1String("documentState")) {
-        mRenameActiveDisplay->setEnabled(false);
+        mRenameActiveDisplay->setEnabled(true);
         mOpenAction->setEnabled(true);
         mFileOpenRecent->setEnabled(true);
         mSaveAction->setEnabled(true);
