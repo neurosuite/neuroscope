@@ -2214,7 +2214,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     QWidget* current = paletteTabsParent->currentWidget();
 
     //Disable some actions when no document is open (see the klustersui.rc file)
-    if(current->metaObject()->className() == ("ChannelPalette")){
+    if(qobject_cast<ChannelPalette*>(current)){
         if(editMode->isChecked()){
             if((current) == displayChannelPalette){
                 slotStateChanged("displayChannelState");
@@ -2242,7 +2242,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     else{
         slotStateChanged("noChannelState");
         //Update the selected items of the current palette
-        if(current->metaObject()->className() == ("ItemPalette")){
+        if(qobject_cast<ItemPalette*>(current)){
             QString name = current->objectName();
             if(name.contains("clusterPanel")){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
@@ -2427,9 +2427,9 @@ void NeuroscopeApp::slotDisplayClose(){
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->widget(0));
-                if((current->widget())->metaObject()->className() == ("ChannelPalette")){
+                if((qobject_cast<ChannelPalette*>(current))){
                     current = static_cast<QDockWidget*>(paletteTabsParent->widget(1));
-                    if((current->widget())->metaObject()->className() == ("ChannelPalette"))
+                    if(qobject_cast<ChannelPalette*>(current->widget()))
                         current = static_cast<QDockWidget*>(paletteTabsParent->widget(2));
                 }
                 paletteTabsParent->removePage(current);
@@ -3023,7 +3023,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     for(int i = 0; i<paletteTabsParent->count();i++){
         QWidget* current = paletteTabsParent->widget(i);
         QString name = current->objectName();
-        if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
+        if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
             ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
             //Create the list
             eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
@@ -3039,7 +3039,7 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
 void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
-    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
+    if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
         doc->eventColorUpdate(providerName,eventId,view);
     }
@@ -3048,7 +3048,7 @@ void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerNam
 void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selection){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
-    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
+    if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
         QMap<QString,QList<int> >::ConstIterator groupIterator;
         for(groupIterator = selection.begin(); groupIterator != selection.end(); ++groupIterator){
             QString providerName = groupIterator.key();
@@ -3062,7 +3062,7 @@ void NeuroscopeApp::slotUpdateShownEvents(const QMap<QString,QList<int> >& selec
 void NeuroscopeApp::slotCloseEventFile(){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
-    if(current->metaObject()->className() == ("ItemPalette") && name.contains("eventPanel")){
+    if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
         ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
 
         NeuroscopeView* view = activeView();
