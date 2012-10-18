@@ -1110,7 +1110,6 @@ bool NeuroscopeApp::queryClose()
         if(doc->canCloseDocument(this,"queryClose")){
             //If either groups, colors or events have been modified, ask if the user wants to save them
             int saveStatus;
-            int eventSaveStatus = 0;
             if(groupsModified || colorModified || eventsModified){
                 QApplication::restoreOverrideCursor();
                 QString message;
@@ -1131,9 +1130,8 @@ bool NeuroscopeApp::queryClose()
                 case QMessageBox::Save://<=> Save
                     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     if(eventsModified){
-                        eventSaveStatus = doc->saveEventFiles();
                         QApplication::restoreOverrideCursor();
-                        if(eventSaveStatus != IO_Ok){
+                        if(!doc->saveEventFiles()){
                             switch(QMessageBox::warning(0, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
                                                                                 "Close anyway ?"),QMessageBox::Close|QMessageBox::Discard)){
                             case QMessageBox::Close:
@@ -1340,7 +1338,6 @@ void NeuroscopeApp::slotFileClose(){
         if(doc->canCloseDocument(this,"fileClose")){
             //If either groups, colors or events have been modified, ask if the user wants to save them
             int saveStatus;
-            int eventSaveStatus = 0;
             if(groupsModified || colorModified || eventsModified){
                 QApplication::restoreOverrideCursor();
                 QString message;
@@ -1361,9 +1358,8 @@ void NeuroscopeApp::slotFileClose(){
                 case QMessageBox::Save://<=> Save
                     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     if(eventsModified){
-                        eventSaveStatus = doc->saveEventFiles();
                         QApplication::restoreOverrideCursor();
-                        if(eventSaveStatus != IO_Ok){
+                        if(!doc->saveEventFiles()){
                             switch(QMessageBox::question(this, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."
                                                                                     "Close anyway ?"),QMessageBox::Yes|QMessageBox::No)){
                             case QMessageBox::Yes:
@@ -2322,7 +2318,6 @@ void NeuroscopeApp::slotDisplayClose(){
         if(doc->canCloseDocument(this,"displayClose")){
             //If either groups, colors or events have been modified, ask if the user wants to save them
             int saveStatus;
-            int eventSaveStatus = 0;
             if(groupsModified || colorModified || eventsModified){
                 QApplication::restoreOverrideCursor();
                 QString message;
@@ -2343,9 +2338,9 @@ void NeuroscopeApp::slotDisplayClose(){
                 case QMessageBox::Save://<=> Save
                     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     if(eventsModified){
-                        eventSaveStatus = doc->saveEventFiles();
+                        bool eventSaveStatus = doc->saveEventFiles();
                         QApplication::restoreOverrideCursor();
-                        if(eventSaveStatus != IO_Ok){
+                        if(!eventSaveStatus){
                             switch(QMessageBox::question(0, tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."	"Close anyway ?"),QMessageBox::Close|QMessageBox::Discard)){
                             case QMessageBox::Close:
                                 break;
@@ -2630,8 +2625,7 @@ void NeuroscopeApp::slotDecreaseSelectedChannelsAmplitude(){
 void NeuroscopeApp::saveSession(){
     //Save the event files if need it
     if(eventsModified){
-        int eventSaveStatus = doc->saveEventFiles();
-        if(eventSaveStatus != IO_Ok)
+        if(!doc->saveEventFiles())
             QMessageBox::critical(0,tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions."));
         else eventsModified = false;
     }
@@ -2656,8 +2650,7 @@ void NeuroscopeApp::saveSession(){
 void NeuroscopeApp::slotSessionSaveAs(){
     //Save the event files if need it
     if(eventsModified){
-        int eventSaveStatus = doc->saveEventFiles();
-        if(eventSaveStatus != IO_Ok)
+        if(!doc->saveEventFiles())
             QMessageBox::critical(0,tr("I/O Error !"),tr("The event file(s) could not be saved possibly because of insufficient file access permissions.")
                                   );
         else eventsModified = false;

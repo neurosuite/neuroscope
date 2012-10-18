@@ -493,7 +493,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     return OK;
 }
 
-int NeuroscopeDoc::saveEventFiles(){
+bool NeuroscopeDoc::saveEventFiles(){
     QMap<QString,QString>::Iterator iterator;
     for(iterator = providerUrls.begin(); iterator != providerUrls.end(); ++iterator){
         DataProvider* provider = providers[iterator.key()];
@@ -501,18 +501,17 @@ int NeuroscopeDoc::saveEventFiles(){
             EventsProvider* eventProvider = static_cast<EventsProvider*>(provider);
             if(eventProvider->isModified()){
                 QFile eventFile(iterator.value());
-                bool status = eventFile.open(QIODevice::WriteOnly);
+                const bool status = eventFile.open(QIODevice::WriteOnly);
                 if(!status)
-                    return SAVE_ERROR;
-                int saveStatus;
-                saveStatus = eventProvider->save(&eventFile);
+                    return false;
+                bool saveStatus = eventProvider->save(&eventFile);
                 eventFile.close();
-                if(saveStatus != IO_Ok)
-                    return saveStatus;
+                if(!saveStatus)
+                    return false;
             }
         }
     }
-    return IO_Ok;
+    return true;
 }
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){

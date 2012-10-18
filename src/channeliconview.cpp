@@ -69,7 +69,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
         //setMovement(QListView::Static);
     }
     setSpacing(4);
-setMovement(QListView::Static);
+    setMovement(QListView::Static);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 

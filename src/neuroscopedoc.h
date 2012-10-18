@@ -395,7 +395,7 @@ public:
     /**Saves the event files.
     * @return an OpenSaveCreateReturnMessage enum giving the save status.
     */
-    int saveEventFiles();
+    bool saveEventFiles();
     
     /**Saves the current session: displays, spike, cluster, event files opened and selected clusters and events.
     * @param newSessionUrl new url where to write the session information to.

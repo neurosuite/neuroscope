@@ -1059,15 +1059,15 @@ void EventsProvider::clearUndoRedoData(){
     eventDescriptionCounterUndo.clear();
 }
 
-int EventsProvider::save(QFile* eventFile){
+bool EventsProvider::save(QFile* eventFile){
     QTextStream fileStream(eventFile);
     fileStream.setRealNumberPrecision(12);
 
     for(int i = 1;i<=nbEvents;++i)
         fileStream<<timeStamps(1,i)<<"\t"<<events(1,i)<< "\n";
 
-    int status = eventFile->status();
-    if(status == IO_Ok)
+    bool status = eventFile->isOpen();
+    if(status)
         modified = false;
     return status;
 }

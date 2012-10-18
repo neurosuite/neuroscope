@@ -157,7 +157,7 @@ public:
   * @param eventFile file where to save the data.
   * @return the output file status.
   */
-    int save(QFile* eventFile);
+    bool save(QFile* eventFile);
 
     /**Tells if the event file has been modified at least since the last save.
   * @return true if the file has been modified, false otherwise.
