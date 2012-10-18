@@ -127,10 +127,7 @@ void ChannelPalette::setGreyScale(bool grey){
         QIcon icon = item->icon();
         QPixmap pixmap(icon.pixmap().size());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
-        //item->repaint();
-        //KDAB_VERIFY
-        icon.addPixmap(pixmap);
-        item->setIcon(icon);
+        item->setIcon(QIcon(pixmap));
     }
 
 }

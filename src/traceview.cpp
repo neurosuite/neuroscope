@@ -696,7 +696,7 @@ void TraceView::setGreyScale(bool grey){
 void TraceView::resetOffsets(const QMap<int,int>& selectedChannelDefaultOffsets){
     QMap<int,int>::const_iterator iterator;
     for(iterator = selectedChannelDefaultOffsets.begin(); iterator != selectedChannelDefaultOffsets.end(); ++iterator)
-        channelOffsets[iterator.key()] = iterator.data();
+        channelOffsets[iterator.key()] = iterator.value();
 
     //Everything has to be redraw
     drawContentsMode = REDRAW;
@@ -1468,7 +1468,7 @@ void TraceView::drawTraces(QPainter& painter){
 
                 QMap<QString, QList<int> >::Iterator iterator;
                 for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-                    QList<int> eventList = iterator.data();
+                    QList<int> eventList = iterator.value();
                     QString providerName = iterator.key();
                     if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
                     ItemColors* colors = providerItemColors[providerName];
@@ -1504,7 +1504,7 @@ void TraceView::drawTraces(QPainter& painter){
                     ItemColors* colors = providerItemColors[providerName];
                     Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
                     int nbSpikes = currentData.nbOfColumns();
-                    QList<int> clusterList = selectedIterator.data();
+                    QList<int> clusterList = selectedIterator.value();
                     QList<int>::iterator clusterIterator;
                     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
                         QColor color = colors->color(*clusterIterator);
@@ -1641,7 +1641,7 @@ void TraceView::drawTraces(QPainter& painter){
                 for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
                     //Only draw rasters for clusters contained in a cluster file containing data for channels of the current group
                     if(!clusterFileList.contains(selectedIterator.key())) continue;
-                    QList<int> clusterList = selectedIterator.data();
+                    QList<int> clusterList = selectedIterator.value();
                     if(clusterList.size() == 0) continue;
                     QString providerName = QString::number(selectedIterator.key());
                     ItemColors* colors = providerItemColors[providerName];
@@ -1685,7 +1685,7 @@ void TraceView::drawTraces(QPainter& painter){
             QPen pen(Qt::DotLine);
             QMap<QString, QList<int> >::Iterator iterator;
             for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-                QList<int> eventList = iterator.data();
+                QList<int> eventList = iterator.value();
                 QString providerName = iterator.key();
 
                 if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
@@ -1871,7 +1871,7 @@ void TraceView::drawTraces(QPainter& painter){
 
             QMap<int,QList<int> >::Iterator iterator;
             for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
-                QList<int> clusterList = iterator.data();
+                QList<int> clusterList = iterator.value();
                 if(clusterList.size() == 0) continue;
                 QString providerName = QString::number(iterator.key());
                 ItemColors* colors = providerItemColors[providerName];
@@ -2472,7 +2472,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
                     QMap<QString, QList<int> >::Iterator iterator;
                     for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-                        QList<int> eventList = iterator.data();
+                        QList<int> eventList = iterator.value();
                         QString providerName = iterator.key();
 
                         if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
@@ -2643,7 +2643,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
                     QMap<QString, QList<int> >::Iterator iterator;
                     for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-                        QList<int> eventList = iterator.data();
+                        QList<int> eventList = iterator.value();
                         QString providerName = iterator.key();
 
                         if(eventList.size() == 0 || eventsData[providerName] == 0) continue;

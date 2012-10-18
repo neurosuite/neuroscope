@@ -344,7 +344,7 @@ void PositionView::dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QSt
     this->selectedEvents.clear();
     QMap<QString, QList<int> >::Iterator providersIterator;
     for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-        QList<int> eventsToShow = static_cast< QList<int> >(providersIterator.data());
+        QList<int> eventsToShow = static_cast< QList<int> >(providersIterator.value());
         QList<int> events;
         QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
@@ -408,9 +408,10 @@ void PositionView::drawEvents(QPainter& painter){
     pen.setWidth(3);
     QMap<QString, QList<int> >::Iterator iterator;
     for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-        QList<int> eventList = iterator.data();
+        QList<int> eventList = iterator.value();
         QString providerName = iterator.key();
-        if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+        if(eventList.size() == 0 || eventsData[providerName] == 0)
+            continue;
         ItemColors* colors = providerItemColors[providerName];
         Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getPositions();
         Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();

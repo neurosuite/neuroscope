@@ -1156,7 +1156,8 @@ QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
     //it is now inside the the parameter file (at FILES/FILE).
     if(type == SESSION && (readVersion == "" || readVersion == "1.2.2"))
         searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + SAMPLING_RATES + "/" + EXTENSION_SAMPLING_RATE));
-    else if(type == PARAMETER) searchPath = xmlCharStrdup(QString("//" + FILES + "/" + neuroscope::FILE));
+    else if(type == PARAMETER)
+        searchPath = xmlCharStrdup(QString("//" + FILES + "/" + neuroscope::FILE));
 
     //Evaluate xpath expression
     result = xmlXPathEvalExpression(searchPath,xpathContex);

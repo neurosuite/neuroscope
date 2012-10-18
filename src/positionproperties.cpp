@@ -98,8 +98,7 @@ void PositionProperties::updateBackgroundImage(const QString& image)
     if(!image.isEmpty()) {
         setBackgroundImage(image);
     } else {
-        QPixmap pixmap;
-        pixmap.resize(getWidth(),getHeight());
+        QPixmap pixmap(getWidth(),getHeight());
         pixmap.fill(Qt::black);
         backgroundPixmap2->setPixmap(pixmap);
     }
@@ -205,8 +204,7 @@ void PositionProperties::setEnabled (bool state){
     flipLabel->setEnabled(state);
 
     if(!state){
-        QPixmap pixmap;
-        pixmap.resize(getWidth(),getHeight());
+        QPixmap pixmap(getWidth(),getHeight());
         pixmap.fill(Qt::black);
         backgroundPixmap2->setPixmap(pixmap);
     }

@@ -594,7 +594,7 @@ bool ItemPalette::isBrowsingEnable(){
     bool browsingEnable = false;
     QMap<QString, QMap<int,bool> > ::Iterator it;
     for(it = browsingStatus.begin(); it != browsingStatus.end(); ++it){
-        QMap<int,bool>  currentMap = it.data();
+        QMap<int,bool>  currentMap = it.value();
         QMap<int,bool> ::Iterator it2;
         for(it2 = currentMap.begin(); it2 != currentMap.end(); ++it2){
             if(it2.value()){
@@ -905,9 +905,9 @@ void ItemPalette::removeGroup(const QString &groupName){
     browsingStatus.remove(groupName);
     selectionStatus.remove(groupName);
     if(type == CLUSTER)
-        clusterGroupList.remove(groupName.toInt());
+        clusterGroupList.removeAll(groupName.toInt());
     else
-        itemGroupList.remove(groupName);
+        itemGroupList.removeAll(groupName);
 
     //a group must always be selected.
     if(selected == groupName){

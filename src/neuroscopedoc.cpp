@@ -187,7 +187,7 @@ void NeuroscopeDoc::closeDocument(){
     videoWidth = videoWidthDefault;
     videoHeight = videoHeightDefault;
     backgroundImage = backgroundImageDefault;
-    transformedBackground.reset();
+    transformedBackground  = QImage();
     drawPositionsOnBackground = drawPositionsOnBackgroundDefault;
     rotation = rotationDefault;
     flip = flipDefault;
@@ -1089,20 +1089,21 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     QList<int> checkColors;
     for(int i = 0; i < channelNb; ++i) checkColors.append(i);
     QList<ChannelDescription> colorsList = reader.getChannelDescription();
-    if(colorsList.size() != 0){
+    if(!colorsList.isEmpty()){
         QList<ChannelDescription>::iterator colorIterator;
         for(colorIterator = colorsList.begin(); colorIterator != colorsList.end(); ++colorIterator){
             int channelId = static_cast<ChannelDescription>(*colorIterator).getId();
-            uint removed = checkColors.remove(channelId);
+            int removed = checkColors.removeAll(channelId);
             //it is a duplicate
-            if(removed ==0) continue;
+            if(removed ==0)
+                continue;
             QColor color = static_cast<ChannelDescription>(*colorIterator).getColor();
             QColor groupColor = static_cast<ChannelDescription>(*colorIterator).getGroupColor();
             QColor spikeGroupColor = static_cast<ChannelDescription>(*colorIterator).getSpikeGroupColor();
             channelColorList->append(channelId,color,groupColor,spikeGroupColor);
         }
         //if a channel does not have color information, set the default (everything to blue)
-        if(checkColors.size() != 0){
+        if(!checkColors.isEmpty()){
             QColor color;
             color.setHsv(210,255,255);
             for(int i = 0; i < channelNb; ++i){
@@ -1124,17 +1125,20 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     //Build the list of channel default offsets
     reader.getChannelDefaultOffset(channelDefaultOffsets);
     //if no default offset are available in the file, set the default offset to 0
-    if(channelDefaultOffsets.size() == 0){
-        for(int i = 0; i < channelNb; ++i) channelDefaultOffsets.insert(i,0);
+    if(channelDefaultOffsets.isEmpty()){
+        for(int i = 0; i < channelNb; ++i)
+            channelDefaultOffsets.insert(i,0);
     }
     //if a channel does not have a default offset, assign it the value 0
     if(channelDefaultOffsets.size() != channelNb){
         for(int i = 0; i < channelNb; ++i){
-            if(!channelDefaultOffsets.contains(i)) channelDefaultOffsets.insert(i,0);
+            if(!channelDefaultOffsets.contains(i))
+                channelDefaultOffsets.insert(i,0);
         }
     }
 
-    if(reader.getScreenGain() != 0) screenGain = reader.getScreenGain();
+    if(reader.getScreenGain() != 0)
+        screenGain = reader.getScreenGain();
     gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
 
     //For the moment Neuroscope stores it own values for the nbSamples and the peakSampleIndex inside the specific neuroscope tag.
@@ -1193,8 +1197,10 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
 
 void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){  
     //Get the file video information
-    if(reader.getRotation() != 0) rotation = reader.getRotation();
-    if(reader.getFlip() != 0) flip = reader.getFlip();
+    if(reader.getRotation() != 0)
+        rotation = reader.getRotation();
+    if(reader.getFlip() != 0)
+        flip = reader.getFlip();
 
     QList<SessionFile> filesToLoad = reader.getFilesToLoad();
     QStringList loadedClusterFiles;
@@ -1295,7 +1301,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
             QList<SessionFile>::iterator sessionIterator;
             for(sessionIterator = filesToLoad.begin(); sessionIterator != filesToLoad.end(); ++sessionIterator){
                 SessionFile sessionFile = static_cast<SessionFile>(*sessionIterator);
-                QString fileUrl = sessionFile.getUrl();
+                QString fileUrl = sessionFile.getUrl().path();
                 SessionFile::type fileType = sessionFile.getType();
                 QDateTime lastModified = sessionFile.getModification();
                 QMap<EventDescription,QColor> itemColors = sessionFile.getItemColors();
@@ -1544,7 +1550,7 @@ void NeuroscopeDoc::setPositionInformation(double newVideoSamplingRate, int newW
     if(!backgroundImage.isEmpty() || (backgroundImage.isEmpty() && drawPositionsOnBackground))
         transformedBackground = transformBackgroundImage();
     else
-        transformedBackground.reset();
+        transformedBackground = QImage();
 
     //Update the views
     if(rotation != 90 && rotation != 270){
