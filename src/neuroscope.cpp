@@ -607,6 +607,7 @@ void NeuroscopeApp::initActions()
 
     mChannelToolBar = new QToolBar(tr("Channels Actions"));
     //mChannelToolBar->addAction(mCreateEventFile);
+    mChannelToolBar->addAction(mMoveToNewGroup);
     mChannelToolBar->addAction(mRemoveChannelFromGroup);
     mChannelToolBar->addAction(mDiscardChannels);
     mChannelToolBar->addAction(mKeepChannels);
