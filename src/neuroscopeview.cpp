@@ -69,6 +69,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     //Create the mainDock
     mainDock = new QDockWidget(tr("field potentials"));
 
+    mainDock->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
     addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
