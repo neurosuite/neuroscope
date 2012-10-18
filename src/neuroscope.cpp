@@ -695,7 +695,7 @@ void NeuroscopeApp::applyPreferences() {
             for(int i = 0; i < paletteTabsParent->count();++i){
                 QWidget *current = paletteTabsParent->widget(i);
                 if(displayPaletteHeaders) {
-                    QString name = current->objectName();
+                    const QString name = current->objectName();
                     QString label;
                     if(name.contains("displayPanel"))
                         label = tr("Anatomy");
@@ -713,8 +713,8 @@ void NeuroscopeApp::applyPreferences() {
         } else {
 #if KDAB_PENDING
             if(displayPaletteHeaders){
-                displayPanel->setWindowTitle("Anatomy");
-                spikePanel->setWindowTitle("Spikes");
+                displayPanel->setWindowTitle(tr("Anatomy");
+                spikePanel->setWindowTitle(tr("Spikes");
             }
             else{
                 displayPanel->setWindowTitle("");
