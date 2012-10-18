@@ -600,13 +600,12 @@ void NeuroscopeApp::initActions()
     mToolBar->addAction(mDrawTimeLine);
     mToolBar->addAction(mSelectTool);
     mToolBar->addAction(mEventTool);
-    //mToolBar->addAction(/*add_event_toolbarAction*/)
-    mToolBar->addAction(mMeasureTool);
+    mToolBar->addAction(addEventToolBarAction);
+        mToolBar->addAction(mMeasureTool);
     mToolBar->addAction(mTimeTool);
     addToolBar(Qt::LeftToolBarArea, mToolBar);
 
     mChannelToolBar = new QToolBar(tr("Channels Actions"));
-    //mChannelToolBar->addAction(mCreateEventFile);
     mChannelToolBar->addAction(mMoveToNewGroup);
     mChannelToolBar->addAction(mRemoveChannelFromGroup);
     mChannelToolBar->addAction(mDiscardChannels);
