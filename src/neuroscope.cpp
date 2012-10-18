@@ -2216,14 +2216,10 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
         if(editMode->isChecked()){
             if(widget == displayChannelPalette){
                 slotStateChanged("displayChannelState");
-            }
-            else{
-
+            } else {
                 slotStateChanged("spikeChannelState");
             }
-        }
-        else{
-
+        } else {
             slotStateChanged("enableEditState");
         }
 
@@ -3418,20 +3414,23 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         mSkipChannels->setEnabled(false);
 
     } else if(state == QLatin1String("displayChannelState")) {
-        mKeepChannels->setEnabled(false);
-        mHideChannel->setEnabled(false);
-        mRemoveChannelFromGroup->setEnabled(false);
-        mShowChannel->setEnabled(false);
-        mColorSpikeGroups->setEnabled(false);
-        mColorAnatomicalGroups->setEnabled(false);
-        mMoveToNewGroup->setEnabled(false);
-        mResetSelectedChannelAmplitudes->setEnabled(false);
-        editMode->setEnabled(false);
-        mDiscardChannels->setEnabled(false);
-        mResetSelectedChannel->setEnabled(false);
-        mSynchronizeGroups->setEnabled(false);
+        mMoveToNewGroup->setEnabled(true);
+        mDiscardChannels->setEnabled(true);
+        mShowChannel->setEnabled(true);
+        mHideChannel->setEnabled(true);
+        mColorAnatomicalGroups->setEnabled(true);
+        mColorSpikeGroups->setEnabled(true);
+        editMode->setEnabled(true);
+        mSynchronizeGroups->setEnabled(true);
+        mResetSelectedChannel->setEnabled(true);
+        mResetSelectedChannelAmplitudes->setEnabled(true);
+        mKeepChannels->setEnabled(true);
+        mSkipChannels->setEnabled(true);
 
-        mSkipChannels->setEnabled(false);
+        mRemoveChannelFromGroup->setEnabled(false);
+        mSelectAllExcept0And1->setEnabled(false);
+        mCloseCluster->setEnabled(false);
+        mCloseEvent->setEnabled(false);
     } else if(state == QLatin1String("spikeChannelState")) {
         mHideChannel->setEnabled(true);
         mRemoveChannelFromGroup->setEnabled(true);
