@@ -101,6 +101,7 @@ NeuroscopeApp::NeuroscopeApp()
 
     //Disable some actions at startup (see the neuroscope.rc file)
     slotStateChanged("initState");
+    resize(800,600);
 }
 
 NeuroscopeApp::~NeuroscopeApp()
