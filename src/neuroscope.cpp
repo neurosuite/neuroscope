@@ -2211,12 +2211,10 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 
 void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
     //Update the show/hide status of the inactive palette
-    QWidget* current = paletteTabsParent->currentWidget();
-
     //Disable some actions when no document is open (see the klustersui.rc file)
-    if(qobject_cast<ChannelPalette*>(current)){
+    if(qobject_cast<ChannelPalette*>(widget)){
         if(editMode->isChecked()){
-            if((current) == displayChannelPalette){
+            if(widget == displayChannelPalette){
                 slotStateChanged("displayChannelState");
             }
             else{
@@ -2238,14 +2236,13 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
         spikeChannelPalette->updateShowHideStatus(view->channels(),true);
         displayChannelPalette->selectChannels(selectedChannels);
         spikeChannelPalette->selectChannels(selectedChannels);
-    }
-    else{
+    } else {
         slotStateChanged("noChannelState");
         //Update the selected items of the current palette
-        if(qobject_cast<ItemPalette*>(current)){
-            QString name = current->objectName();
+        if(qobject_cast<ItemPalette*>(widget)){
+            QString name = widget->objectName();
             if(name.contains("clusterPanel")){
-                ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
+                ItemPalette* clusterPalette = static_cast<ItemPalette*>(widget);
                 NeuroscopeView* view = activeView();
                 QStringList::iterator iterator;
                 for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
@@ -2264,7 +2261,7 @@ void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
             }
             //update the event palettes
             if(name.contains("eventPanel")){
-                ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
+                ItemPalette* eventPalette = static_cast<ItemPalette*>(widget);
                 NeuroscopeView* view = activeView();
                 QStringList::iterator iterator;
                 for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
@@ -3286,6 +3283,7 @@ void NeuroscopeApp::slotShowEventsInPositionView(){
 
 void NeuroscopeApp::slotStateChanged(const QString& state)
 {
+    qDebug()<<" void NeuroscopeApp::slotStateChanged(const QString& state) :"<<state;
     if(state == QLatin1String("initState")) {
         mOpenAction->setEnabled(true);
         mFileOpenRecent->setEnabled(true);
