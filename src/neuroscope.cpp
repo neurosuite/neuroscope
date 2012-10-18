@@ -601,7 +601,7 @@ void NeuroscopeApp::initActions()
     mToolBar->addAction(mSelectTool);
     mToolBar->addAction(mEventTool);
     mToolBar->addAction(addEventToolBarAction);
-        mToolBar->addAction(mMeasureTool);
+    mToolBar->addAction(mMeasureTool);
     mToolBar->addAction(mTimeTool);
     addToolBar(Qt::LeftToolBarArea, mToolBar);
 
