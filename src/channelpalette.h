@@ -245,7 +245,7 @@ private:
     * @param show boolean use to know the type of circle to draw.
     * @param skip boolean use to if the pixmap has to be drawn with the background color.
     */
-    void drawItem(QPainter& painter, QPixmap* pixmap,QColor color, bool show, bool skip);
+    void drawItem(QPainter& painter, QPixmap* pixmap, QColor color, bool show, bool skip);
 
     /**Ensures that the trash group is always at the bottom.*/
     void moveTrashesToBottom();

@@ -1010,20 +1010,19 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     QHashIterator<QString, ChannelGroupView*> it(channelGroupViewDict);
     while (it.hasNext()) {
         it.next();
-
-        verticalContainer->removeChild(it.value());
+        verticalContainer->removeWidget(it.value());
     }
 
     int nbGroups = channelGroupViewDict.count();
     if(iconviewDict.contains("0")) nbGroups--;
     if(iconviewDict.contains("-1") ) nbGroups--;
     for(int i = 1;i <= nbGroups;++i)
-        verticalContainer->insertChild(channelGroupViewDict[QString::number(i)]);
+        verticalContainer->addWidget(channelGroupViewDict[QString::number(i)]);
 
     if(iconviewDict.contains("-1"))
-        verticalContainer->insertChild(channelGroupViewDict["-1"]);
+        verticalContainer->addWidget(channelGroupViewDict["-1"]);
     if(iconviewDict.contains("0"))
-        verticalContainer->insertChild(channelGroupViewDict["0"]);
+        verticalContainer->addWidget(channelGroupViewDict["0"]);
 
     delete spaceWidget;
     spaceWidget = new SpaceWidget(this,edit);
