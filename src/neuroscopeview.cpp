@@ -242,7 +242,7 @@ void NeuroscopeView::removeClusterProvider(const QString &name, bool active){
     emit clusterProviderRemoved(name,active);
 }
 
-void NeuroscopeView::shownClustersUpdate(QString name,QList<int>& clustersToShow){
+void NeuroscopeView::shownClustersUpdate(const QString &name, QList<int>& clustersToShow){
     QList<int>* currentSelectedClusters = selectedClusters[name];
     currentSelectedClusters->clear();
 
@@ -302,13 +302,13 @@ void NeuroscopeView::removeEventProvider(const QString &name, bool active, bool 
     emit eventProviderRemoved(name,active,lastFile);
 }
 
-void NeuroscopeView::shownEventsUpdate(QString name,QList<int>& eventsToShow){
+void NeuroscopeView::shownEventsUpdate(const QString& name,const QList<int>& eventsToShow){
     QList<int>* currentSelectedEvents = selectedEvents[name];
     currentSelectedEvents->clear();
 
     //update the list of shown clusters
-    QList<int>::iterator iterator;
-    for(iterator = eventsToShow.begin(); iterator != eventsToShow.end(); ++iterator){
+    QList<int>::ConstIterator iterator;
+    for(iterator = eventsToShow.constBegin(); iterator != eventsToShow.constEnd(); ++iterator){
         currentSelectedEvents->append(*iterator);
     }
 

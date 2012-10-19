@@ -179,7 +179,7 @@ public:
     * @param name name use to identified the cluster provider containing the clusters to show.
     * @param clustersToShow list of clusters to be shown.
     */
-    void shownClustersUpdate(QString name,QList<int>& clustersToShow);
+    void shownClustersUpdate(const QString& name,QList<int>& clustersToShow);
 
     /**
     * Updates the list of events for the event provider @p name shown with @p eventsToShow.
@@ -187,7 +187,7 @@ public:
     * @param name name use to identified the event provider containing the events to show.
     * @param eventsToShow list of events to be shown.
     */
-    void shownEventsUpdate(QString name,QList<int>& eventsToShow);
+    void shownEventsUpdate(const QString& name, const QList<int> &eventsToShow);
 
     /**
     * Sets the mode of presentation to single or multiple columns.
