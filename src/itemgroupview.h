@@ -20,9 +20,9 @@
 
 #include <qwidget.h>
 #include <QHBoxLayout>
-#include <QObject> 
 #include <QDebug>
 class QListWidget;
+class QLabel;
 
 /**Utilitary class used to build the cluster and event palettes.
   *@author Lynn Hazan
@@ -36,12 +36,16 @@ public:
 
     void setIconView(QListWidget *view);
 
+    void setLabel(QLabel *label);
+    QLabel *label();
+
 public Q_SLOTS:
     void reAdjustSize(int parentWidth,int labelSize);
 
 private:
     QListWidget* iconView;
     QHBoxLayout *mLayout;
+    QLabel *mLabel;
     bool init;
 
 };

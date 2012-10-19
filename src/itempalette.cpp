@@ -214,13 +214,13 @@ void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
-            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
+            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->label());
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
-        QLabel* label = static_cast<QLabel*>(group->child("label"));
+        QLabel* label = group->label();
         label->setPaletteBackgroundColor(colorGroup().highlight());
     }
 
@@ -234,13 +234,13 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
-            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->child("label"));
+            GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->label());
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
-        QLabel* label = static_cast<QLabel*>(group->child("label"));
+        QLabel* label = static_cast<QLabel*>(group->label());
         label->setPaletteBackgroundColor(colorGroup().highlight());
 
         ItemIconView* iconView = iconviewDict[sourceGroupName];
@@ -840,6 +840,7 @@ void ItemPalette::createGroup(const QString &id){
     verticalContainer->addWidget(group);
     group->setObjectName(id);
     GroupNameLabel* label = new GroupNameLabel(id,group);
+    group->setLabel(label);
 
     //Set the size to 2 digits, max 99 groups
     label->setFixedWidth(labelSize);

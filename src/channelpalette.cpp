@@ -992,7 +992,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     iconviewDict.insert(QString::number(targetId),sourceIconView);
     //Rename the ChannelGroupView and the label
     sourceGroup->setObjectName(QString::number(targetId));
-    QLabel* label = dynamic_cast<QLabel*>(sourceGroup->child("label"));
+    QLabel* label = sourceGroup->label();
     label->setText(QString::number(targetId));
     channelGroupViewDict.insert(QString::number(targetId),sourceGroup);
 

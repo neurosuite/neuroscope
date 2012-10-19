@@ -17,10 +17,12 @@
 
 #include "itemgroupview.h"
 #include <QListWidget>
+#include <QLabel>
 
 ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
     :QWidget(parent),
       iconView(0L),
+      mLabel(0),
       init(true)
 {
     mLayout = new QHBoxLayout;
@@ -73,6 +75,15 @@ void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
     //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate
     if(iconView->size().height() != 1 && height() != iconView->size().height())
         setFixedHeight(iconView->size().height());
+}
+
+void ItemGroupView::setLabel(QLabel* label){
+    mLabel = label;
+    mLayout->addWidget(mLabel);
+}
+
+QLabel* ItemGroupView::label(){
+    return mLabel;
 }
 
 
