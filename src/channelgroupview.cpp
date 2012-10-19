@@ -17,11 +17,13 @@
 
 #include "channelgroupview.h"
 #include <QListWidget>
+#include <QLabel>
 
 ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent)
     :QWidget(parent),
       iconView(0L),
       drag(drag),
+      mLabel(0),
       init(true)
 {
 
@@ -98,6 +100,15 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
 void ChannelGroupView::setIconView(QListWidget* view){
     iconView = view;
     mLayout->addWidget(iconView);
+}
+
+void ChannelGroupView::setLabel(QLabel* label){
+    mLabel = label;
+    mLayout->addWidget(mLabel);
+}
+
+QLabel* ChannelGroupView::label(){
+    return mLabel;
 }
 
 

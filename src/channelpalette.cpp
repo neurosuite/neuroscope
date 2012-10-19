@@ -818,6 +818,7 @@ void ChannelPalette::createGroup(int id){
     verticalContainer->addWidget(group);
     group->setObjectName(QString::number(id));
     GroupLabel* label = new GroupLabel(QString::number(id),group);
+    group->setLabel(label);
     if(id == -1){
         label->setText("?");
     } else if(id == 0){
@@ -934,7 +935,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             //Rename the ChannelGroupView and the label
             ChannelGroupView* group = channelGroupViewDict.take(QString::number(i));
             group->setObjectName(QString::number(i - 1));
-            QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
+            QLabel* label = group->label();
             label->setText(QString::number(i - 1));
             channelGroupViewDict.insert(QString::number(i - 1),group);
 
@@ -971,7 +972,7 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             //Rename the ChannelGroupView and the label
             ChannelGroupView* group = channelGroupViewDict.take(QString::number(i));
             group->setObjectName(QString::number(i + 1));
-            QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
+            QLabel* label = group->label();
             label->setText(QString::number(i + 1));
             channelGroupViewDict.insert(QString::number(i + 1),group);
 
@@ -1221,7 +1222,8 @@ void ChannelPalette::deleteEmptyGroups(){
                     //Rename the ChannelGroupView and the label
                     ChannelGroupView* group = channelGroupViewDict.take(QString::number(gpId));
                     group->setObjectName(QString::number(minId));
-                    QLabel* label = dynamic_cast<QLabel*>(group->child("label"));
+
+                    QLabel* label = group->label();
                     label->setText(QString::number(minId));
                     channelGroupViewDict.insert(QString::number(minId),group);
 

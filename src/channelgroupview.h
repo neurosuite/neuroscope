@@ -26,6 +26,7 @@
 #include <QDropEvent>
 #include <QHBoxLayout>
 
+class QLabel;
 class QListWidget;
 
 /**Utilitary class used to build the channel palettes (anatomical and spike).
@@ -39,8 +40,10 @@ public:
 
     ~ChannelGroupView(){}
 
+    void setLabel(QLabel *label);
     void setIconView(QListWidget *view);
 
+    QLabel *label();
 Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start, int destination);
     void dragObjectMoved(QPoint position);
@@ -61,6 +64,7 @@ private:
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;
     QHBoxLayout *mLayout;
+    QLabel *mLabel;
     bool init;
 
 };
