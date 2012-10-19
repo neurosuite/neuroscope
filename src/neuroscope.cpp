@@ -711,16 +711,13 @@ void NeuroscopeApp::applyPreferences() {
                 }
             }
         } else {
-#if KDAB_PENDING
-            if(displayPaletteHeaders){
-                displayPanel->setWindowTitle(tr("Anatomy");
-                spikePanel->setWindowTitle(tr("Spikes");
+            if(displayPaletteHeaders) {
+                paletteTabsParent->setTabText(paletteTabsParent->indexOf(displayChannelPalette),tr("Anatomy"));
+                paletteTabsParent->setTabText(paletteTabsParent->indexOf(spikeChannelPalette),tr("Spikes"));
+            } else {
+                paletteTabsParent->setTabText(paletteTabsParent->indexOf(displayChannelPalette),QString());
+                paletteTabsParent->setTabText(paletteTabsParent->indexOf(spikeChannelPalette),QString());
             }
-            else{
-                displayPanel->setWindowTitle("");
-                spikePanel->setWindowTitle("");
-            }
-#endif
         }
     }
 
