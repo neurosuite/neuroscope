@@ -412,14 +412,14 @@ void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>&
     }
 }
 
-void NeuroscopeView::removePositionProvider(QString name,bool active){ 
+void NeuroscopeView::removePositionProvider(const QString& name,bool active){
     if(positionView != 0L) removePositionView();
 
     //Show all the enclosed widgets of the dockWindows.
     if(active) showAllWidgets();
 }
 
-void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,QImage backgroundImage,QColor backgroundColor,long startTime,long duration,int width,int height,bool showEvents){
+void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,const QImage& backgroundImage,const QColor& backgroundColor,long startTime,long duration,int width,int height,bool showEvents){
     isPositionFileShown = true;
     eventsInPositionView = showEvents;
 
@@ -492,6 +492,15 @@ int NeuroscopeView::getRasterHeight(){
 void NeuroscopeView::setEventsInPositionView(bool shown){
     eventsInPositionView = shown;
     emit eventsShownInPositionView(shown);
+}
+
+void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
+    selectedChannels.clear();
+    QList<int>::const_iterator selectedIterator;
+    for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
+        selectedChannels.append(*selectedIterator);
+
+    emit channelsSelected(selectedIds);
 }
 
 

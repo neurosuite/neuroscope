@@ -542,7 +542,7 @@ public:
   * @param name name use to identified the position provider.
   * @param active true if the view is the active one, false otherwise.
   */
-    void removePositionProvider(QString name,bool active);
+    void removePositionProvider(const QString &name, bool active);
 
     /**
   * Returns true if a position view is displayed, false otherwise.
@@ -559,7 +559,7 @@ public:
   * @param height video image height.
   * @param showEvents 1 if events are displayed in the PositionView, 0 otherwise.
   */
-    void addPositionView(PositionsProvider* positionsProvider,QImage backgroundImage,QColor backgroundColor,long startTime,long duration,int width,int height,bool showEvents);
+    void addPositionView(PositionsProvider* positionsProvider,const QImage& backgroundImage,const QColor& backgroundColor,long startTime,long duration,int width,int height,bool showEvents);
 
     /**Adds a PositionView to the display.
   * @param positionsProvider provider of position data.
@@ -568,7 +568,7 @@ public:
   * @param width video image width.
   * @param height video image height.
   */
-    void addPositionView(PositionsProvider* positionsProvider,QImage backgroundImage,QColor backgroundColor,int width,int height){
+    void addPositionView(PositionsProvider* positionsProvider,const QImage& backgroundImage,const QColor& backgroundColor,int width,int height){
         addPositionView(positionsProvider,backgroundImage,backgroundColor,startTime,timeWindow,width,height,eventsInPositionView);
     }
 
@@ -584,13 +584,13 @@ public:
   * @param name name use to identified the cluster provider containing the clusters to skip.
   * @return the list of skipped clusters.
   */
-    const QList<int>* getClustersNotUsedForBrowsing(QString name) const{return clustersNotUsedForBrowsing[name];}
+    const QList<int>* getClustersNotUsedForBrowsing(const QString& name) const{return clustersNotUsedForBrowsing[name];}
 
     /** Returns the list of events to be not used for browsing for the given event provider @p identified by name.
   * @param name name use to identified the event provider containing the events to skip.
   * @return the list of skipped events.
   */
-    const QList<int>* getEventsNotUsedForBrowsing(QString name) const{return eventsNotUsedForBrowsing[name];}
+    const QList<int>* getEventsNotUsedForBrowsing(const QString& name) const{return eventsNotUsedForBrowsing[name];}
 
     /**Updates the list of events to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -629,14 +629,7 @@ public Q_SLOTS:
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
-    void slotChannelsSelected(const QList<int>& selectedIds){
-        selectedChannels.clear();
-        QList<int>::const_iterator selectedIterator;
-        for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
-            selectedChannels.append(*selectedIterator);
-
-        emit channelsSelected(selectedIds);
-    }
+    void slotChannelsSelected(const QList<int>& selectedIds);
 
     /**Sets the starting time and the time window in miliseconds.
    * @param start starting time.
