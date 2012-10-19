@@ -70,7 +70,7 @@ public:
     * @param groupName name of the group of items.
     * @param descriptionLength value to use as the length for the event descriptions.
     */
-    void createItemList(ItemColors* itemColors,QString groupName,int descriptionLength);
+    void createItemList(ItemColors* itemColors,const QString& groupName,int descriptionLength);
 
     /** Selects the items specified in the map @p selection.
     * @param groupName name of the group containing the items to be selected.

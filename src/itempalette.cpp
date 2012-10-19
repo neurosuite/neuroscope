@@ -141,7 +141,7 @@ void ItemPalette::resizeEvent(QResizeEvent* event){
     QScrollArea::resizeEvent(event);
 }
 
-void ItemPalette::createItemList(ItemColors* itemColors,QString groupName,int descriptionLength){
+void ItemPalette::createItemList(ItemColors* itemColors, const QString &groupName, int descriptionLength){
     //Compute gridX used for the event palette where the text is next to the icon (14px)
     QFontInfo fontInfo = QFontInfo(QFont());
     gridX = descriptionLength * fontInfo.pixelSize() + 15;
