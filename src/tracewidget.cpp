@@ -201,10 +201,7 @@ void TraceWidget::initSelectionWidgets(){
     lay->addWidget(scrollBar);
     scrollBar->setValue(startTime);
     connect(scrollBar,SIGNAL(sliderReleased()),this, SLOT(slotScrollBarUpdated()));
-    connect(scrollBar,SIGNAL(nextLine()),this, SLOT(slotScrollBarUpdated()));
-    connect(scrollBar,SIGNAL(nextPage()),this, SLOT(slotScrollBarUpdated()));
-    connect(scrollBar,SIGNAL(prevLine()),this, SLOT(slotScrollBarUpdated()));
-    connect(scrollBar,SIGNAL(prevPage()),this, SLOT(slotScrollBarUpdated()));
+    connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(slotScrollBarUpdated()));
 
     //enable the user to use the keyboard to interact with the scrollbar.
     scrollBar->setMouseTracking(false);
