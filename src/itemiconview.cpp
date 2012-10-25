@@ -65,8 +65,6 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setMovement(QListView::Static);
 
     setSpacing(4);
-    //KDAB_PORTING setAutoArrange(true);
-    //KDAB_PORTING setSorting(false);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

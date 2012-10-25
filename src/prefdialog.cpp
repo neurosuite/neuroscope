@@ -184,7 +184,6 @@ void PrefDialog::slotDefault() {
         prefDefaults->setDatSamplingRate(configuration().getDatSamplingRateDefault());
         prefDefaults->setEegSamplingRate(configuration().getEegSamplingRateDefault());
         prefDefaults->setOffset(configuration().getOffsetDefault());
-        //KDAB_PORTING prefDefaults->setResolution(configuration().getResolutionIndexDefault());
         prefDefaults->setTraceBackgroundImage(configuration().getTraceBackgroundImage());
         clusterProperties->setNbSamples(configuration().getNbSamplesDefault());
         clusterProperties->setPeakIndex(configuration().getPeakIndexDefault());

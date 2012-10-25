@@ -957,7 +957,6 @@ void ItemPalette::selectAllItems(){
 }
 
 void ItemPalette::deselectAllItems(){
-#if KDAB_PENDING
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -965,12 +964,13 @@ void ItemPalette::deselectAllItems(){
     QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
     while (iterator.hasNext()) {
         iterator.next();
-        iterator.value()->selectAll(false);
+        iterator.value()->clearSelection();
         QList<int> selectedItems;
         selection.insert(iterator.key(),selectedItems);
     }
 
     emit updateShownItems(selection);
+#if KDAB_PENDING
 
     //update the browsing status, it is set to false for all the elements
     QHashIterator<QString, ItemIconView*> iterator2(iconviewDict);
