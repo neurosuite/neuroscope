@@ -3268,7 +3268,6 @@ void NeuroscopeApp::slotShowEventsInPositionView(){
 
 void NeuroscopeApp::slotStateChanged(const QString& state)
 {
-    qDebug()<<" void NeuroscopeApp::slotStateChanged(const QString& state) :"<<state;
     if(state == QLatin1String("initState")) {
         mOpenAction->setEnabled(true);
         mFileOpenRecent->setEnabled(true);
