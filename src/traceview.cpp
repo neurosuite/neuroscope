@@ -2139,7 +2139,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
         int delta = current.y() - lastClickOrdinate;
         float voltage = (delta/channelFactors[channelforVoltageComputation])/acquisitionGain;
-        message.append(" Voltage: "+ QString("%1 mV").arg(fabs(voltage),0,'f',2));
+        message.append(tr(" Voltage: %1").arg(QString("%1 mV").arg(fabs(voltage),0,'f',2)));
     }
     else{
         //Compute the time
