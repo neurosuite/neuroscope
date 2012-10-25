@@ -650,7 +650,6 @@ void TraceView::paintEvent ( QPaintEvent*){
     }
 
     if(mMoveSelectChannel) {
-        mMoveSelectChannel = false;
         QRect r((QRect)window);
 
         p.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
@@ -2810,6 +2809,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
 
 void TraceView::mouseReleaseEvent(QMouseEvent* event){
     if(mode == SELECT){
+        mMoveSelectChannel = false;
         if(event->button() & Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
             //There was a drag of channels
             if(previousDragOrdinate != 0){
