@@ -24,7 +24,7 @@
 #include <QFrame>
 #include <QList>
 #include <QMouseEvent>
-
+#include <QDebug>
 
 
 ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const char* name):
@@ -138,7 +138,6 @@ Q3DragObject* ChannelIconView::dragObject(){
 }
 
 void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
-#if KDAB_PENDING
     //The source of the drag is not a widget of the application
     if(event->source() == 0 || !drag){
         event->ignore();
@@ -185,7 +184,6 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
         Q3IconViewItem* after = findItemToInsertAfter(event->pos());
         emit channelsMoved(this->name(),after);
     }
-#endif
 }
 
 void ChannelIconView::contentsDropEvent(QDropEvent* event){

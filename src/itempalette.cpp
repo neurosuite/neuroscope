@@ -230,7 +230,6 @@ void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
 }
 
 void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,bool ctrlAlt){
-#ifdef KDAB_PORTING
     if(!selected.isEmpty()){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
@@ -238,6 +237,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             previousLabel->setPaletteBackgroundColor(colorGroup().background());
         }
     }
+#ifdef KDAB_PORTING
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
         QLabel* label = static_cast<QLabel*>(group->label());
