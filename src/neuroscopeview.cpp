@@ -496,10 +496,7 @@ void NeuroscopeView::setEventsInPositionView(bool shown){
 
 void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
     selectedChannels.clear();
-    QList<int>::const_iterator selectedIterator;
-    for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator)
-        selectedChannels.append(*selectedIterator);
-
+    selectedChannels = selectedIds;
     emit channelsSelected(selectedIds);
 }
 
