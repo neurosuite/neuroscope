@@ -367,7 +367,8 @@ void TraceView::updateClusterData(bool active){
     }
     else retrieveClusterData = false;
 
-    if(clustersData.isEmpty()) return;
+    if(clustersData.isEmpty())
+        return;
 
     //Request the data
 
@@ -574,8 +575,10 @@ void TraceView::paintEvent ( QPaintEvent*){
 
         //If the left margin is not visible (the user zoomed without taking it in his selection), the viewport and the contentsRec
         //have the same size.
-        if(r.left() != 0) viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
-        else viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
+        if(r.left() != 0)
+            viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
+        else
+            viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
 
         if(resized)
             scaleBackgroundImage();
@@ -759,8 +762,10 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
             int groupId = (*channelsGroups)[i];
             QList<int> channelIds = shownGroupsChannels[groupId];
             channelIds.remove(i);
-            if(channelIds.size() == 0) shownGroupsChannels.remove(groupId);
-            else shownGroupsChannels.replace(groupId,channelIds);
+            if(channelIds.isEmpty())
+                shownGroupsChannels.remove(groupId);
+            else
+                shownGroupsChannels.replace(groupId,channelIds);
         }
     }
 
@@ -772,7 +777,8 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
     }
 
     //If the number of shown groups has changed, update groupsChanged to correctly update the window
-    if(shownGroupsChannels.count() != nbGpsShown) groupsChanged = true;
+    if(shownGroupsChannels.count() != nbGpsShown)
+        groupsChanged = true;
 }
 
 void TraceView::groupsModified(bool active){
@@ -780,7 +786,8 @@ void TraceView::groupsModified(bool active){
 
     groupsChanged = true;
     updateWindow();
-    if(active) update();
+    if(active)
+        update();
 }
 
 void TraceView::setGains(int gain,int acquisitionGain){
@@ -1499,7 +1506,8 @@ void TraceView::drawTraces(QPainter& painter){
                     //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
                     if(!clusterFileList.contains(selectedIterator.key())) continue;
                     QString providerName = QString::number(selectedIterator.key());
-                    if(clustersData[providerName] == 0) continue;
+                    if(clustersData[providerName] == 0)
+                        continue;
 
                     ItemColors* colors = providerItemColors[providerName];
                     Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
