@@ -306,7 +306,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             //If shiftKey is false, either select all the items of the group or deselect them all (it is a toggle between the 2 states)
             if(unselect){
                 selectionStatus[sourceGroupName] = false;
-                iconView->selectAll(false);
+                iconView->clearSelection();
                 QMap<QString,QList<int> > selection = selectedItems();
                 emit updateShownItems(selection);
 
@@ -970,7 +970,6 @@ void ItemPalette::deselectAllItems(){
     }
 
     emit updateShownItems(selection);
-#if KDAB_PENDING
 
     //update the browsing status, it is set to false for all the elements
     QHashIterator<QString, ItemIconView*> iterator2(iconviewDict);
@@ -980,14 +979,18 @@ void ItemPalette::deselectAllItems(){
         ItemColors* itemColors = itemColorsDict[groupName];
         QMap<int,bool> browsingMap = browsingStatus[groupName];
         QList<int> itemsToSkip;
-        for(Q3IconViewItem* item = iterator2.value()->firstItem(); item; item = item->nextItem()){
-            int currentIndex = item->index();
+        for(int i = 0; i<iterator2.value()->count();i++) {
+            QListWidgetItem *item = iterator2.value()->item(i);
+            int currentIndex = item->data(ItemIconView::INDEXICON).toInt();
             if(browsingMap[currentIndex]){
                 browsingMap[currentIndex] = false;
                 QString label = item->text();
                 redrawItem(iterator2.value(),itemColors,currentIndex,browsingMap);
                 isInSelectItems = true;//redrawItem sets it back to false
-                item = iterator2.value()->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                QList<QListWidgetItem*>lstItem = iterator.value()->findItems(label,Qt::MatchExactly);
+                if(!lstItem.isEmpty()) {
+                    i = iterator.value()->row(lstItem.first());
+                }
                 itemsToSkip.append(itemColors->itemId(currentIndex));
             } else {
                 itemsToSkip.append(itemColors->itemId(currentIndex));
@@ -999,7 +1002,6 @@ void ItemPalette::deselectAllItems(){
     
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
-#endif
 }
 
 
