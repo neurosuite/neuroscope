@@ -2382,8 +2382,10 @@ void TraceView::mousePressEvent(QMouseEvent* event){
             //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
             //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport and included in the
             //values return par the event.
-            if(r.left() != 0) current = viewportToWorld(event->x(),event->y());
-            else current = viewportToWorld(event->x() - xMargin,event->y());
+            if(r.left() != 0)
+                current = viewportToWorld(event->x(),event->y());
+            else
+                current = viewportToWorld(event->x() - xMargin,event->y());
             lastClickOrdinate = current.y();
 
             if(multiColumns){
@@ -2712,7 +2714,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
-                                for(it = selectedChannels.begin();it != selectedChannels.end();++it) deselectedChannels.append(*it);
+
+                                for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+                                    deselectedChannels.append(*it);
                                 selectedChannels.clear();
                             }
                             else{

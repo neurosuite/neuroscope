@@ -1956,8 +1956,10 @@ void NeuroscopeApp::slotSelectAll(){
         spikeChannelPalette->selectAllChannels();
         displayChannelPalette->selectAllChannels();
         NeuroscopeView* view = activeView();
-        if(editMode->isChecked()) doc->selectAllChannels(*view,true);
-        else doc->selectAllChannels(*view,false);
+        if(editMode->isChecked())
+            doc->selectAllChannels(*view,true);
+        else
+            doc->selectAllChannels(*view,false);
     }
     else{
         //Update the selected items of the current palette
@@ -2572,6 +2574,7 @@ void NeuroscopeApp::resizePalettePanel(){
 }
 
 void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){
+    qDebug()<<" void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){ :"<<selectedIds;
     spikeChannelPalette->selectChannels(selectedIds);
     displayChannelPalette->selectChannels(selectedIds);
 }

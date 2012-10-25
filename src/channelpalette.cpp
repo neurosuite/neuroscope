@@ -776,7 +776,7 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        iteratordict.value()->selectAll();
+        iteratordict.value()->clearSelection();
     }
 
     //Loop on the channels to be selected
@@ -793,7 +793,6 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
             currentIcon->setSelected(true);
         }
     }
-
     //Last item in selection gets focus if it exists
     if(!selectedChannels.isEmpty())
         iconView->setCurrentItem(currentIcon);
