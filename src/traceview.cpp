@@ -4443,6 +4443,66 @@ void TraceView::scaleBackgroundImage(){
     }
 }
 
+void TraceView::groupColorUpdate(int groupId,bool active){
+    //Everything has to be redraw
+    drawContentsMode = REDRAW ;
+    if(active)
+        update();
+}
+
+/**Update the information presented in the view.*/
+void TraceView::updateDrawing(){
+    if(retrieveClusterData)
+        updateClusterData(true);
+    else{
+        //Everything has to be redraw
+        drawContentsMode = REDRAW ;
+        update();
+    }
+}
+
+void TraceView::setMode(BaseFrame::Mode selectedMode,bool active){
+    Mode previousMode = mode;
+    mode = selectedMode;
+    if(selectedMode == SELECT){
+        setCursor(selectCursor);
+        drawRubberBand(false);
+    } else if(selectedMode == SELECT_EVENT){
+        setCursor(selectEventCursor);
+        drawRubberBand(false);
+    } else if(selectedMode == ADD_EVENT){
+        setCursor(addEventCursor);
+        drawRubberBand(false);
+    } else if(selectedMode == ZOOM){
+        setCursor(zoomCursor);
+        drawRubberBand(false);
+    } else if(selectedMode == MEASURE){
+        drawRubberBand(true);
+        setCursor(measureCursor);
+    } else if(selectedMode == SELECT_TIME){
+        drawRubberBand(true,true);
+        setCursor(selectTimeCursor);
+    } else if(selectedMode == DRAW_LINE){
+        setCursor(drawLineCursor);
+        drawRubberBand(false);
+    }
+
+    if(previousMode == SELECT){
+        selectedChannels.clear();
+        drawContentsMode = REDRAW;
+        if(active) update();
+    } else if(previousMode == SELECT_EVENT){
+        selectedEvent.first.clear();
+        selectedEvent.second = 0;
+        drawContentsMode = REDRAW;
+        if(active) update();
+    } else if(previousMode == ADD_EVENT){
+        newEventPosition = -1;
+    } else if(previousMode == DRAW_LINE){
+        linePositions.clear();
+    }
+}
+
 
 
 

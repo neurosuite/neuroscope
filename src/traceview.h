@@ -182,21 +182,10 @@ public:
   * @param groupId id of the group for which the color have been changed.
   * @param active true if the view is the active one, false otherwise.
   */
-    void groupColorUpdate(int groupId,bool active){
-        //Everything has to be redraw
-        drawContentsMode = REDRAW ;
-        if(active) update();
-    }
+    void groupColorUpdate(int groupId,bool active);
 
     /**Update the information presented in the view.*/
-    void updateDrawing(){
-        if(retrieveClusterData) updateClusterData(true);
-        else{
-            //Everything has to be redraw
-            drawContentsMode = REDRAW ;
-            update();
-        }
-    }
+    void updateDrawing();
 
     /**Updates of the display due to a change in the display groups if @p active is true,
   * otherwise simply updates the internal variables.
@@ -208,55 +197,7 @@ public:
   * @param selectedMode new mode of drawing.
   * @param active true if the view is the active one, false otherwise.
   */
-    void setMode(BaseFrame::Mode selectedMode,bool active){
-        Mode previousMode = mode;
-        mode = selectedMode;
-        if(selectedMode == SELECT){
-            setCursor(selectCursor);
-            drawRubberBand(false);
-        }
-        if(selectedMode == SELECT_EVENT){
-            setCursor(selectEventCursor);
-            drawRubberBand(false);
-        }
-        if(selectedMode == ADD_EVENT){
-            setCursor(addEventCursor);
-            drawRubberBand(false);
-        }
-        if(selectedMode == ZOOM){
-            setCursor(zoomCursor);
-            drawRubberBand(false);
-        }
-        if(selectedMode == MEASURE){
-            drawRubberBand(true);
-            setCursor(measureCursor);
-        }
-        if(selectedMode == SELECT_TIME){
-            drawRubberBand(true,true);
-            setCursor(selectTimeCursor);
-        }
-        if(selectedMode == DRAW_LINE){
-            setCursor(drawLineCursor);
-            drawRubberBand(false);
-        }
-        if(previousMode == SELECT){
-            selectedChannels.clear();
-            drawContentsMode = REDRAW;
-            if(active) update();
-        }
-        if(previousMode == SELECT_EVENT){
-            selectedEvent.first.clear();
-            selectedEvent.second = 0;
-            drawContentsMode = REDRAW;
-            if(active) update();
-        }
-        if(previousMode == ADD_EVENT){
-            newEventPosition = -1;
-        }
-        if(previousMode == DRAW_LINE){
-            linePositions.clear();
-        }
-    }
+    void setMode(BaseFrame::Mode selectedMode,bool active);
 
     /**Selects the channels .
   *@param selectedIds ids of the selected channels.

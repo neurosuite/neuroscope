@@ -80,13 +80,16 @@ TraceWidget::~TraceWidget(){
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::page()
 {
-    if ( timer->isActive() ) timer->stop();
-    else timer->start(pageTime);
+    if ( timer->isActive() )
+        timer->stop();
+    else
+        timer->start(pageTime);
 }
 
 void TraceWidget::accelerate()
 {
-    if ( !timer->isActive() ) return;
+    if ( !timer->isActive() )
+        return;
     pageTime -= 125;
     if ( pageTime < 0 ) pageTime = 0;
     qDebug() << "page time: " << pageTime << endl;
@@ -513,7 +516,8 @@ void TraceWidget::slotScrollBarUpdated(){
 void TraceWidget::moveToTime(long time){
     if(!isInit && updateView){
         //Test if we go over the time of the recording
-        if(time > recordingLength) return;
+        if(time > recordingLength)
+            return;
 
         //Modify updateView to prevent the spinboxes to trigger a changeEvent while been updated.
         updateView = false;
@@ -566,8 +570,10 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
         }
 
         //beyond 10 ms the lineStep is fixe at 1 ms
-        if(timeWindow < 10) lineStep = 1;
-        else lineStep =  static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
+        if(timeWindow < 10)
+            lineStep = 1;
+        else
+            lineStep =  static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
         pageStep = timeWindow;
 
         scrollBar->setMaximum(recordingLength - timeWindow);
