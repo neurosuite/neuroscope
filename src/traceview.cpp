@@ -98,6 +98,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     retrieveClusterData(false)
 {
     initialDragLine = false;
+    mMoveSelectChannel = false;
 
     QList<int>::iterator channelsToShowIterator;
     for(channelsToShowIterator = channelsToDisplay.begin(); channelsToShowIterator != channelsToDisplay.end(); ++channelsToShowIterator)
@@ -646,6 +647,46 @@ void TraceView::paintEvent ( QPaintEvent*){
 
     if(mode == DRAW_LINE ){
         drawTimeLine(&p);
+    }
+
+    if(mMoveSelectChannel) {
+        mMoveSelectChannel = false;
+        QRect r((QRect)window);
+
+        p.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
+        p.setViewport(viewport);
+
+        p.setBrush(Qt::NoBrush);
+        p.setPen(QPen(Qt::color0,1));
+        int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+        int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
+        int limit = viewportToWorldHeight(1);
+
+        QList<int>::iterator channelIterator;
+        for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
+            //if the channel is skipped, do no draw it
+            if(skippedChannels.contains(*channelIterator ))
+                continue;
+
+            int initialBasePosition = channelsStartingOrdinate[*channelIterator] +  static_cast<long>(data(1,*channelIterator + 1) * channelFactors[*channelIterator]);
+            //draw the new trace
+            int X = channelsStartingAbscissa[*channelIterator];
+            int delta = m_currentPoint.y() - lastClickOrdinate;
+
+            int basePosition = initialBasePosition + delta;
+            if(downSampling != 1){
+                drawTrace(p,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
+            }
+            else{
+                QPolygon trace(nbSamples);
+                for(int i = 0; i < nbSamples;++i){
+                    int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
+                    trace.setPoint(i,X,y);
+                    X += Xstep;
+                }
+                p.drawPolyline(trace);
+            }
+        }
     }
 
     if(resized){
@@ -2143,8 +2184,9 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     }
     else{
         //Compute the time
-        if(x < 0) statusBar->clearMessage();//on the left side of the display.
-        else{
+        if(x < 0) {
+            statusBar->clearMessage();//on the left side of the display.
+        } else {
             float relativeTime;
             if(multiColumns){
                 //left margin is visible
@@ -2199,76 +2241,16 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
     statusBar->showMessage(message);
 
+    mMoveSelectChannel = false;
     //Paint the channels selected while dragging
     if(mode == SELECT && !selectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
-        QPainter painter;
-        painter.begin(this);
-        //set the window (part of the world I want to show)
-        QRect r((QRect)window);
-
-        painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
-        painter.setViewport(viewport);
-
-        //KDAB_PENDING painter.setRasterOp(NotROP);
-        painter.setPen(QPen(Qt::color0,1));
-        painter.setBrush(Qt::NoBrush);
-
-        int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
-        int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
-        int limit = viewportToWorldHeight(1);
-
-        QList<int>::iterator channelIterator;
-        for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
-            //if the channel is skipped, do no draw it
-            if(skippedChannels.contains(*channelIterator )) continue;
-
-            int initialBasePosition = channelsStartingOrdinate[*channelIterator] +  static_cast<long>(data(1,*channelIterator + 1) * channelFactors[*channelIterator]);
-
-            //erase the previous trace
-            if(previousDragOrdinate != 0){
-                int X = channelsStartingAbscissa[*channelIterator];
-                int previousDelta = previousDragOrdinate - lastClickOrdinate;
-                int basePosition = initialBasePosition + previousDelta;
-
-                if(downSampling != 1){
-                    drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
-                }
-                else{
-                    QPolygon trace(nbSamples);
-                    for(int i = 0; i < nbSamples;++i){
-                        int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
-                        trace.setPoint(i,X,y);
-                        X += Xstep;
-                    }
-                    painter.drawPolyline(trace);
-                }
-            }
-
-            //draw the new trace
-            int X = channelsStartingAbscissa[*channelIterator];
-            int delta = current.y() - lastClickOrdinate;
-
-            int basePosition = initialBasePosition + delta;
-            if(downSampling != 1){
-                drawTrace(painter,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
-            }
-            else{
-                QPolygon trace(nbSamples);
-                for(int i = 0; i < nbSamples;++i){
-                    int y = basePosition - static_cast<long>(data(i + 1,*channelIterator + 1) * channelFactors[*channelIterator]);
-                    trace.setPoint(i,X,y);
-                    X += Xstep;
-                }
-                painter.drawPolyline(trace);
-            }
-        }
-
-        painter.end();
+        mMoveSelectChannel = true;
+        m_currentPoint = current;
+        update();
         previousDragOrdinate = current.y();
     }
-
     //Paint the event selected while dragging
-    if((mode == SELECT_EVENT && selectedEvent.first != "") && (event->buttons() == Qt::LeftButton)){
+    if((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
         QPainter painter;
         painter.begin(this);
         //set the window (part of the world I want to show)
@@ -2376,7 +2358,6 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             update();
         }
     }
-
     //The parent implementation takes care of the rubber band
     BaseFrame::mouseMoveEvent(event);
 }
@@ -2555,7 +2536,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                             else{
                                 selectedChannels.remove(selectedChannel);
-                                if(selectedChannels.size() != 0) alreadySelected = true;
+                                if(!selectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 

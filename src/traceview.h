@@ -1081,6 +1081,9 @@ private:
 
     QList<int> mDeselectedChannels;
     QList<int> mSelectedChannels;
+
+    QPoint m_currentPoint;
+    bool mMoveSelectChannel;
 };
 
 #endif
