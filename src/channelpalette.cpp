@@ -2051,7 +2051,6 @@ void ChannelPalette::trashChannels(int destinationGroup){
         //Update groupsChannels
         groupsChannels->insert(it.key().toInt(),channelIds);
 
-        //KDAB_PORTING it.value()->arrangeItemsInGrid();
         if(destinationGroup == -1 && it.key() == "0" && !currentDiscardedChannels.isEmpty()){
             emit channelsRemovedFromTrash(currentDiscardedChannels);
         }
@@ -2059,7 +2058,6 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
     //Add/update the 0 entry in the map group-channel list
     groupsChannels->insert(destinationGroup,trashChannels);
-   //KDAB_PORTING trash->arrangeItemsInGrid();
 
     //Update the group color, for a new group blue is the default
     QList<int>::iterator it2;
