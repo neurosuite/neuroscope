@@ -155,7 +155,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                     QString pad;
                     for ( int j = 0 ; j < i ; ++j ) pad += "0";
                     cscFileName = baseName + pad + QString("%1.ncs").arg(channel);
-                    dataFile = fopen(cscFileName,"rb");
+                    dataFile = fopen(cscFileName.toLatin1(),"rb");
                     if (dataFile != NULL) break;
                 }
                 if (dataFile == NULL)
@@ -227,7 +227,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         }
         else
         {
-            FILE* dataFile = fopen(fileName,"rb");
+            FILE* dataFile = fopen(fileName.toLatin1(),"rb");
             if(dataFile == NULL){
                 //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
                 data.setSize(0,0);
@@ -265,7 +265,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     }
     else if(resolution == 32){
         Array<dataType> retrieveData(nbSamples,nbChannels);
-        FILE* dataFile = fopen(fileName,"rb");
+        FILE* dataFile = fopen(fileName.toLatin1(),"rb");
         if(dataFile == NULL){
             //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
             data.setSize(0,0);
@@ -329,7 +329,7 @@ void TracesProvider::computeRecordingLength(){
  off_t fileLength = dataFile.tellg();
  dataFile.close();*/
 
-    FILE* file = fopen(fileName,"rb");
+    FILE* file = fopen(fileName.toLatin1(),"rb");
     if(file == NULL){
         length = 0;
         return;

@@ -778,7 +778,7 @@ void TraceView::showChannels(const QList<int>& channelsToShow){
         if(!shownChannels.contains(*iterator))toRemoved.append(*iterator);
 
     for(iterator = toRemoved.begin(); iterator != toRemoved.end(); ++iterator)
-        selectedChannels.remove(*iterator);
+        selectedChannels.removeAll(*iterator);
 
     updateShownGroupsChannels(channelsToShow);
 
@@ -801,7 +801,7 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
         if(!channelsToShow.contains(i)){
             int groupId = (*channelsGroups)[i];
             QList<int> channelIds = shownGroupsChannels[groupId];
-            channelIds.remove(i);
+            channelIds.removeAll(i);
             if(channelIds.isEmpty())
                 shownGroupsChannels.remove(groupId);
             else
@@ -2536,7 +2536,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 selectedChannels.clear();
                             }
                             else{
-                                selectedChannels.remove(selectedChannel);
+                                selectedChannels.removeAll(selectedChannel);
                                 if(!selectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
@@ -2546,7 +2546,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             //if the channel is skipped, do not do anything
                             if(!skippedChannels.contains(selectedChannel)){
                                 if(selectedChannels.contains(selectedChannel)){
-                                    selectedChannels.remove(selectedChannel);
+                                    selectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
                                 else{
@@ -2720,8 +2720,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 selectedChannels.clear();
                             }
                             else{
-                                selectedChannels.remove(selectedChannel);
-                                if(selectedChannels.size() != 0) alreadySelected = true;
+                                selectedChannels.removeAll(selectedChannel);
+                                if(!selectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 
@@ -2729,7 +2729,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             //if the channel is skipped, do not do anything
                             if(!skippedChannels.contains(selectedChannel)){
                                 if(selectedChannels.contains(selectedChannel)){
-                                    selectedChannels.remove(selectedChannel);
+                                    selectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
                                 else{
@@ -2831,7 +2831,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 //deselect all the channels except the last one.
                 if(alreadySelected){
                     int channelId = selectedChannels[selectedChannels.size() - 1];
-                    selectedChannels.remove(channelId);
+                    selectedChannels.removeAll(channelId);
 
                     mDeselectedChannels.clear();
                     QList<int>::iterator it;
