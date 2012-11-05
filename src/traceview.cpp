@@ -264,7 +264,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
     if(clustersData.count() == 0 && eventsData.count() == 0){
         changeCursor();
         //Everything has to be redraw
-        repaint(false);
+        repaint();
     }
     //Check if the cluster and event data are available
     else{
@@ -285,7 +285,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
             changeCursor();
 
             //Everything has to be redraw
-            repaint(false);
+            repaint();
         }
     }
 
@@ -564,7 +564,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             iterator.next();
             if(eventProvidersToUpdate.contains(iterator.key())){
                 static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestData(startTime,endTime,this);
-                eventProvidersToUpdate.remove(iterator.key());
+                eventProvidersToUpdate.removeAll(iterator.key());
             }
         }
         return;
@@ -4410,7 +4410,7 @@ void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* 
             iterator.next();
             if(eventProvidersToUpdate.contains(iterator.key())){
                 static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestData(startTime,endTime,this);
-                eventProvidersToUpdate.remove(iterator.key());
+                eventProvidersToUpdate.removeAll(iterator.key());
             }
         }
     }
