@@ -301,7 +301,8 @@ void ChannelPalette::hideUnselectAllChannels(){
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
         //update the status
-        channelsShowHideStatus.replace(iterator.key(),false);
+        channelsShowHideStatus.remove(iterator.key());
+        channelsShowHideStatus.insert(iterator.key(),false);
 
         //Update the pixmap
         int groupId = (*channelsGroups)[iterator.key()];
@@ -352,7 +353,8 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
 
     for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
         //update the status
-        channelsShowHideStatus.replace(*channelIterator,showStatus);
+        channelsShowHideStatus.remove(*channelIterator);
+        channelsShowHideStatus.insert(*channelIterator,showStatus);
         //Update the pixmap
         int groupId = (*channelsGroups)[*channelIterator];
 
@@ -393,7 +395,8 @@ const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
     QMap<int,bool>::Iterator iterator;
 
     for(iterator = channelsShowHideStatus.begin(); iterator != channelsShowHideStatus.end(); ++iterator)
-        if(iterator.data() == showStatus) channelIds.append(iterator.key());
+        if(iterator.value() == showStatus)
+            channelIds.append(iterator.key());
 
     return channelIds;
 }
@@ -421,7 +424,8 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
         bool status = channelIterator.value();
 
         //update the status
-        channelsSkipStatus.replace(channelId,status);
+        channelsSkipStatus.remove(channelId);
+        channelsSkipStatus.insert(channelId,status);
 
         //Update the pixmap
         int groupId = (*channelsGroups)[channelId];
@@ -486,7 +490,8 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
 
     for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
         //update the status
-        channelsSkipStatus.replace(*channelIterator,skipStatus);
+        channelsSkipStatus.remove(*channelIterator);
+        channelsSkipStatus.insert(*channelIterator,skipStatus);
         //Update the pixmap
         int groupId = (*channelsGroups)[*channelIterator];
 
@@ -983,8 +988,10 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             groupsChannels->insert(i + 1,channelIds);
 
             QList<int>::iterator iterator;
-            for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator)
-                channelsGroups->replace(*iterator,i + 1);
+            for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator) {
+                channelsGroups->remove(*iterator);
+                channelsGroups->insert(*iterator,i + 1);
+            }
         }
     }
 
@@ -1001,9 +1008,11 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
     groupsChannels->insert(targetId,sourceChannelsIds);
 
     QList<int>::iterator iterator;
-    for(iterator = sourceChannelsIds.begin(); iterator != sourceChannelsIds.end(); ++iterator)
-        channelsGroups->replace(*iterator,targetId);
+    for(iterator = sourceChannelsIds.begin(); iterator != sourceChannelsIds.end(); ++iterator) {
 
+        channelsGroups->remove(*iterator);
+        channelsGroups->insert(*iterator,targetId);
+    }
 
     //Move the groups
     verticalContainer->removeWidget(spaceWidget);
@@ -1119,7 +1128,8 @@ void ChannelPalette::moveChannels(int targetGroup){
                 new QListWidgetItem(QIcon(pixmap),QString::number(channelId),iconView);
 
                 //Modify the entry in the map channels-group
-                channelsGroups->replace(channelId,targetGroup);
+                channelsGroups->remove(channelId);
+                channelsGroups->insert(channelId,targetGroup);
             }
             else
                 channelIds.append(channelId);
@@ -1233,8 +1243,10 @@ void ChannelPalette::deleteEmptyGroups(){
                     groupsChannels->insert(minId,channelIds);
 
                     QList<int>::iterator iterator;
-                    for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator)
-                        channelsGroups->replace(*iterator,minId);
+                    for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator) {
+                        channelsGroups->remove(*iterator);
+                        channelsGroups->insert(*iterator,minId);
+                    }
                 }
 
                 if(gpId == -1 && skipIdZero){
@@ -1345,14 +1357,16 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
             else
                 channelColors->setSpikeGroupColor(*iterator,groupColor);
 
-            sourceChannels.erase(*iterator);
+            //KDAB: verify sourceChannels.erase(iterator);
             targetChannels.append(*iterator);
-            channelsGroups->replace(*iterator,targetGroup.toInt());
+            channelsGroups->remove(*iterator);
+            channelsGroups->insert(*iterator,targetGroup.toInt());
         }
     }
 
     //Modify the entry in the map group-channel list
-    groupsChannels->replace(targetGroup.toInt(),targetChannels);
+    groupsChannels->remove(targetGroup.toInt());
+    groupsChannels->insert(targetGroup.toInt(),targetChannels);
     //targetIconView->arrangeItemsInGrid();
 
 
@@ -1369,7 +1383,8 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
     }
     else{
         //Modify the entries in the map group-channel list
-        groupsChannels->replace(sourceGroup.toInt(),sourceChannels);
+        groupsChannels->remove(sourceGroup.toInt());
+        groupsChannels->insert(sourceGroup.toInt(),sourceChannels);
 
         //sourceIconView->arrangeItemsInGrid();
         emit groupModified();
@@ -1463,7 +1478,8 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
                 i = index + 1;
 
                 //Modify the entry in the map channels-group
-                channelsGroups->replace(channelId,targetGroup.toInt());
+                channelsGroups->remove(channelId);
+                channelsGroups->insert(channelId,targetGroup.toInt());
             } else {
                 channelIds.append(channelId);
             }
@@ -1513,7 +1529,8 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
         targetChannels.append(item->text().toInt());
     }
 
-    groupsChannels->replace(targetGroup.toInt(),targetChannels);
+    groupsChannels->remove(targetGroup.toInt());
+    groupsChannels->insert(targetGroup.toInt(),targetChannels);
 
     //targetIconView->arrangeItemsInGrid();
 
@@ -1602,7 +1619,8 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         sourceChannels.append(iconView->item(i)->text().toInt());
     }
 
-    groupsChannels->replace(sourceGroup.toInt(),sourceChannels);
+    groupsChannels->remove(sourceGroup.toInt());
+    groupsChannels->insert(sourceGroup.toInt(),sourceChannels);
 }
 
 void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after){
@@ -1687,7 +1705,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
                 currentDiscardedChannels.append(channelId);
 
                 //Modify the entry in the map channels-group
-                channelsGroups->replace(channelId,0);
+                channelsGroups->remove(channelId);
+                channelsGroups->insert(channelId,0);
             }
             else
                 channelIds.append(channelId);
@@ -1728,7 +1747,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     }
 
     //Add/update the 0 entry in the map group-channel list
-    groupsChannels->replace(0,trashChannels);
+    groupsChannels->remove(0);
+    groupsChannels->insert(0,trashChannels);
     //trash->arrangeItemsInGrid();
 
     //Do not leave empty groups.
@@ -1784,8 +1804,9 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         channelsShowHideStatus[*channelIterator] = false;
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
         //KDAB_PORITNG after = new ChannelIconItem(trash,after,QString::number(*channelIterator),pixmap);
-        sourceChannels.remove(*channelIterator);
-        channelsGroups->replace(*channelIterator,0);
+        sourceChannels.removeAll(*channelIterator);
+        channelsGroups->remove(*channelIterator);
+        channelsGroups->insert(*channelIterator,0);
 
         //Update the group color
         if(type == DISPLAY)
@@ -1794,7 +1815,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
             channelColors->setSpikeGroupColor(*channelIterator,groupColor);
 
         //Modify the entries in the map group-channel list
-        groupsChannels->replace(groupId,sourceChannels);
+        groupsChannels->remove(groupId);
+        groupsChannels->insert(groupId,sourceChannels);
 
         //iconView->arrangeItemsInGrid();
     }
@@ -1817,7 +1839,8 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         QListWidgetItem *item = trash->item(i);
         trashChannels.append(item->text().toInt());
     }
-    groupsChannels->replace(0,trashChannels);
+    groupsChannels->remove(0);
+    groupsChannels->insert(0,trashChannels);
 
     //trash->arrangeItemsInGrid();
 
