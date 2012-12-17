@@ -3637,7 +3637,9 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     QColor background= backgroundColor();
     if(whiteBackground){
         colorLegend = Qt::black;
-        setPaletteBackgroundColor(Qt::white);
+        QPalette palette;
+        palette.setColor(backgroundRole(), Qt::white);
+        setPalette(palette);
     }
 
     printPainter.fillRect(back,backgroundColor());
@@ -3660,7 +3662,9 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     //Restore the colors.
     if(whiteBackground){
         colorLegend = colorLegendTmp;
-        setPaletteBackgroundColor(background);
+        QPalette palette;
+        palette.setColor(backgroundRole(), background);
+        setPalette(palette);
     }
 
     //Restore the previous state
