@@ -215,13 +215,18 @@ void ItemPalette::selectGroupLabel(const QString &sourceGroupName){
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
             GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->label());
-            previousLabel->setPaletteBackgroundColor(colorGroup().background());
+
+            QPalette palette;
+            palette.setColor(previousLabel->backgroundRole(), palette.window().color());
+            previousLabel->setPalette(palette);
         }
     }
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];
         QLabel* label = group->label();
-        label->setPaletteBackgroundColor(colorGroup().highlight());
+        QPalette palette;
+        palette.setColor(label->backgroundRole(), palette.highlight().color());
+        label->setPalette(palette);
     }
 
     selected = sourceGroupName;

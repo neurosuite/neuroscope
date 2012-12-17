@@ -589,7 +589,21 @@ void TraceView::paintEvent ( QPaintEvent*){
 
         if(!isInitAndResized){
             //Resize the double buffer with the width and the height of the widget(QFrame)
-            doublebuffer.resize(contentsRec.width(),contentsRec.height());
+            //doublebuffer.resize(contentsRec.width(),contentsRec.height());
+
+            if (contentsRec.size() != doublebuffer.size()) {
+                if(!doublebuffer.isNull()) {
+                    QPixmap tmp = QPixmap( contentsRec.width(),contentsRec.height() );
+                    tmp.fill( Qt::white );
+                    QPainter painter2( &tmp );
+                    painter2.drawPixmap( 0,0, doublebuffer );
+                    painter2.end();
+                    doublebuffer = tmp;
+                } else {
+                    doublebuffer = QPixmap(contentsRec.width(),contentsRec.height());
+                }
+            }
+
 
             //Create a painter to paint on the double buffer
             QPainter painter;
@@ -802,10 +816,12 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
             int groupId = (*channelsGroups)[i];
             QList<int> channelIds = shownGroupsChannels[groupId];
             channelIds.removeAll(i);
-            if(channelIds.isEmpty())
+            if(channelIds.isEmpty()) {
                 shownGroupsChannels.remove(groupId);
-            else
-                shownGroupsChannels.replace(groupId,channelIds);
+            } else {
+                shownGroupsChannels.remove(groupId);
+                shownGroupsChannels.insert(groupId,channelIds);
+            }
         }
     }
 

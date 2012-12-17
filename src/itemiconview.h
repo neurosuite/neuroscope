@@ -34,7 +34,7 @@
 class ItemIconView : public QListWidget {
     Q_OBJECT
 public:
-    explicit ItemIconView(const QColor &backgroundColor, ViewMode mode, int gridX, int gridY, QWidget* parent = 0, const char* name = 0);
+    explicit ItemIconView(const QColor &backgroundColor, ViewMode mode, int gridX, int gridY, QWidget* parent = 0, const QString& name = QString());
     ~ItemIconView(){}
 
     enum IndexItem { INDEXICON = Qt::UserRole + 1 };

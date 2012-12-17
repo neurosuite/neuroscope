@@ -76,7 +76,7 @@ void PositionView::paintEvent ( QPaintEvent*){
         drawContentsMode = REDRAW;
         update();
     }
-QPainter p(this);
+    QPainter p(this);
     if(drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
@@ -84,14 +84,28 @@ QPainter p(this);
         viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
 
         //Resize the double buffer with the width and the height of the widget(QFrame)
-        doublebuffer.resize(contentsRec.width(),contentsRec.height());
+        //doublebuffer.resize(contentsRec.width(),contentsRec.height());
+
+        if (contentsRec.size() != doublebuffer.size()) {
+            if(!doublebuffer.isNull()) {
+                QPixmap tmp = QPixmap( contentsRec.width(),contentsRec.height() );
+                tmp.fill( Qt::white );
+                QPainter painter2( &tmp );
+                painter2.drawPixmap( 0,0, doublebuffer );
+                painter2.end();
+                doublebuffer = tmp;
+            } else {
+                doublebuffer = QPixmap(contentsRec.width(),contentsRec.height());
+            }
+        }
 
         //Create a painter to paint on the double buffer
         QPainter painter;
         painter.begin(&doublebuffer);
 
         //if need it, draw the background image before applying any transformation to the painter.
-        if(!background.isNull()) painter.drawPixmap(0,0,scaledBackground);
+        if(!background.isNull())
+            painter.drawPixmap(0,0,scaledBackground);
 
         //Set the window (part of the world I want to show)
         painter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function

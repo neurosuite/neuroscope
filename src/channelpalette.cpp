@@ -944,8 +944,10 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             groupsChannels->insert(i - 1,channelIds);
 
             QList<int>::iterator iterator;
-            for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator)
-                channelsGroups->replace(*iterator,i - 1);
+            for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator) {
+                channelsGroups->remove(*iterator);
+                channelsGroups->insert(*iterator,i - 1);
+            }
         }
     }
     else{
@@ -1343,7 +1345,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGro
             else
                 channelColors->setSpikeGroupColor(*iterator,groupColor);
 
-            sourceChannels.remove(*iterator);
+            sourceChannels.erase(*iterator);
             targetChannels.append(*iterator);
             channelsGroups->replace(*iterator,targetGroup.toInt());
         }
@@ -2035,7 +2037,8 @@ void ChannelPalette::trashChannels(int destinationGroup){
                 new QListWidgetItem(QIcon(pixmap),QString::number(channelId),trash);
 
                 //Modify the entry in the map channels-group
-                channelsGroups->replace(channelId,destinationGroup);
+                channelsGroups->remove(channelId);
+                channelsGroups->insert(channelId,destinationGroup);
             } else {
                 channelIds.append(channelId);
             }

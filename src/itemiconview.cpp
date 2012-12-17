@@ -29,7 +29,7 @@
 #include <QFrame>
 
 
-ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent,const char* name):
+ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent, const QString& name):
     QListWidget(parent)
 {
     setObjectName(name);
