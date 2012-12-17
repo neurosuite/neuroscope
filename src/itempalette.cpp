@@ -239,7 +239,10 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
         ItemGroupView* previousSelectedGroup = itemGroupViewDict[selected];
         if(previousSelectedGroup != 0){
             GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->label());
-            previousLabel->setPaletteBackgroundColor(colorGroup().background());
+
+            QPalette palette;
+            palette.setColor(previousLabel->backgroundRole(), palette.background().color());
+            previousLabel->setPalette(palette);
         }
     }
 #ifdef KDAB_PORTING
@@ -683,8 +686,12 @@ void ItemPalette::changeBackgroundColor(const QColor& color){
     QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
     while (iterator.hasNext()) {
         iterator.next();
-        iterator.value()->setPaletteBackgroundColor(color);
-        iterator.value()->setPaletteForegroundColor(legendColor);
+
+
+        QPalette palette;
+        palette.setColor(iterator.value()->backgroundRole(), color);
+        palette.setColor(iterator.value()->foregroundRole(), legendColor);
+        iterator.value()->setPalette(palette);
         //Redraw the icons
         QList<int> selectedItems = selected[iterator.key()];
 
@@ -725,16 +732,18 @@ void ItemPalette::changeBackgroundColor(const QColor& color){
     QHashIterator<QString, ItemGroupView*> iterator2(itemGroupViewDict);
     while (iterator2.hasNext()) {
         iterator2.next();
-        iterator2.value()->setPaletteBackgroundColor(color);
-        iterator2.value()->setPaletteForegroundColor(legendColor);
 
+        QPalette palette;
+        palette.setColor(iterator2.value()->backgroundRole(), color);
+        palette.setColor(iterator2.value()->foregroundRole(), legendColor);
+        iterator2.value()->setPalette(palette);
     }
 
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
-    viewport()->setPaletteBackgroundColor(backgroundColor);
-    viewport()->setPaletteForegroundColor(legendColor);
+    viewport()->setPalette(palette);
 
     update();
 }
