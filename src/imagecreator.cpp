@@ -81,11 +81,6 @@ void ImageCreator::dataAvailable(Array<dataType>& data,QObject* initiator){
     image = pixmap.toImage();
 }
 
-void ImageCreator::saveImage(const QString &fileName, const QString &format){
-    //Save the image
-    image.save(fileName,format,80);
-}
-
 void ImageCreator::drawPositions(QPainter& painter){
     //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
     if(nbSpots == 0)
