@@ -163,16 +163,27 @@ void TraceWidget::initSelectionWidgets(){
     int nbSeconds = remainingSeconds / 1000;
     int remainingMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000));
 
-    startMinute = new QSpinBox(0,minutePart,1,selectionWidgets,"minStart");
+    startMinute = new QSpinBox(selectionWidgets);
+    startMinute->setMinimum(0);
+    startMinute->setMaximum(minutePart);
+    startMinute->setSingleStep(1);
     lay->addWidget(startMinute);
     startMinute->setSuffix( tr(" min") );
     startMinute->setWrapping(true);
     startMinute->setValue(nbMinutes);
-    startSecond = new QSpinBox(0,recordingLength/1000,1,selectionWidgets,"sStart");
+    startSecond = new QSpinBox(selectionWidgets);
+    startSecond->setMinimum(0);
+    startSecond->setMaximum(recordingLength/1000);
+    startSecond->setSingleStep(1);
     lay->addWidget(startSecond);
     startSecond->setSuffix( tr(" s") );
     startSecond->setValue(nbSeconds);
-    startMilisecond = new QSpinBox(0,recordingLength,1,selectionWidgets,"msStart");
+    startMilisecond = new QSpinBox(selectionWidgets);
+
+    startMilisecond->setMinimum(0);
+    startMilisecond->setMaximum(recordingLength);
+    startMilisecond->setSingleStep(1);
+
     lay->addWidget(startMilisecond);
     startMilisecond->setSuffix( tr(" ms") );
     startMilisecond->setValue(remainingMiliseconds);
@@ -200,7 +211,14 @@ void TraceWidget::initSelectionWidgets(){
     pageStep = timeWindow;
     lineStep = static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
 
-    scrollBar = new QScrollBar(0,recordingLength - timeWindow,lineStep,pageStep,pageStep,Qt::Horizontal,selectionWidgets);
+    scrollBar = new QScrollBar(selectionWidgets);
+    scrollBar->setOrientation(Qt::Horizontal);
+    scrollBar->setMinimum(0);
+    scrollBar->setMaximum(recordingLength - timeWindow);
+    scrollBar->setSingleStep(lineStep);
+    scrollBar->setPageStep(pageStep);
+
+
     lay->addWidget(scrollBar);
     scrollBar->setValue(startTime);
     connect(scrollBar,SIGNAL(sliderReleased()),this, SLOT(slotScrollBarUpdated()));

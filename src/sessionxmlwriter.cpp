@@ -73,7 +73,7 @@ void SessionXmlWriter::setLoadedFilesInformation(const QList<SessionFile>& fileL
     QList<SessionFile>::ConstIterator iterator;
     for(iterator = fileList.begin(); iterator != fileList.end(); ++iterator){
         //Get the file information
-        QString fileUrl = static_cast<SessionFile>(*iterator).getUrl();
+        QString fileUrl = static_cast<SessionFile>(*iterator).getUrl().toString();
         int fileType = static_cast<SessionFile>(*iterator).getType();
         QDateTime dateTime = static_cast<SessionFile>(*iterator).getModification();
         QMap<EventDescription,QColor> colors = static_cast<SessionFile>(*iterator).getItemColors();
