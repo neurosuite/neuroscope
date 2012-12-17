@@ -116,7 +116,7 @@ void PositionView::paintEvent ( QPaintEvent*){
 
         //Fill the double buffer with the background color if no image has been set.
         if(background.isNull())
-            doublebuffer.fill(paletteBackgroundColor());
+            doublebuffer.fill(backgroundRole());
 
         //Paint all the positions in the double buffer on top of the background image or the background color.
         drawPositions(painter);
@@ -247,7 +247,11 @@ void PositionView::drawPositions(QPainter& painter){
             }
             painter.setBrush(Qt::NoBrush);
             painter.setPen(lineColor);
-            painter.drawPolygon(polygon,false,0,nbPointsInPolygon);
+
+            int pointCount = (nbPointsInPolygon == -1) ?  polygon.size() : nbPointsInPolygon;
+
+            painter.drawPolygon( polygon.constData(), pointCount, Qt::OddEvenFill);
+
             painter.setPen(Qt::red);//first point red
             painter.setBrush(Qt::red);
             painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
@@ -270,7 +274,11 @@ void PositionView::drawPositions(QPainter& painter){
         }
         painter.setPen(Qt::white);
         painter.setBrush(Qt::NoBrush);
-        painter.drawPolygon(polygon,false,0,nbPointsInPolygon);
+        int pointCount = (nbPointsInPolygon == -1) ?  polygon.size() : nbPointsInPolygon;
+
+        painter.drawPolygon( polygon.constData(), pointCount, Qt::OddEvenFill);
+
+
         painter.setBrush(Qt::red);
         painter.setPen(Qt::black);
         painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
@@ -336,7 +344,7 @@ void PositionView::print(QPainter& printPainter,int width, int height,bool white
 
     if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,Qt::white);
     if(!whiteBackground && background.isNull()){
-        QColor color = backgroundColor();
+        QColor color = palette().color(backgroundRole());
         printPainter.fillRect(back,color);
     }
 
