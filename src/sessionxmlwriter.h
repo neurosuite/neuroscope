@@ -30,7 +30,6 @@
 #include <qdom.h> 
 
 // forward declaration
-class ChannelColors;
 
 /**
   * Class writting the session xml file.
