@@ -37,7 +37,7 @@
 class ChannelIconView : public QListWidget  {
     Q_OBJECT
 public:
-    explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const char* name = 0);
+    explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const QString& name = QString());
     ~ChannelIconView(){}
 
 public Q_SLOTS:

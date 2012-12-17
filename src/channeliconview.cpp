@@ -27,7 +27,7 @@
 #include <QDebug>
 
 
-ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const char* name):
+ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const QString& name):
     QListWidget(parent){
     setObjectName(name);
     QFont font( "Helvetica",8);

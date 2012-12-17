@@ -122,7 +122,6 @@ endif()
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-add_definitions(-DQT3_SUPPORT)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-neuroscope.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-neuroscope.h )
 

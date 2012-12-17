@@ -125,7 +125,7 @@ void ChannelPalette::setGreyScale(bool grey){
 
         //Update the icon
         QIcon icon = item->icon();
-        QPixmap pixmap(icon.pixmap().size());
+        QPixmap pixmap(icon.pixmap(QSize(22,22)).size());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
         item->setIcon(QIcon(pixmap));
     }
@@ -670,27 +670,31 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
     else
         legendColor = Qt::white;
 
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor); 
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
 
-    viewport()->setPaletteBackgroundColor(backgroundColor);
-    viewport()->setPaletteForegroundColor(legendColor);
+    viewport()->setPalette(palette);
     //verticalContainer->setPaletteBackgroundColor(backgroundColor);
     //verticalContainer->setPaletteForegroundColor(legendColor);
 
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
-        iteratordict.value()->setPaletteBackgroundColor(backgroundColor);
-        iteratordict.value()->setPaletteForegroundColor(legendColor);
+        QPalette palette;
+        palette.setColor(backgroundRole(), backgroundColor);
+        palette.setColor(foregroundRole(), legendColor);
+        iteratordict.value()->setPalette(palette);
     }
 
     QHashIterator<QString, ChannelGroupView*> iterator(channelGroupViewDict);
     while (iterator.hasNext()) {
         iterator.next();
-        iterator.value()->setPaletteBackgroundColor(backgroundColor);
-        iterator.value()->setPaletteForegroundColor(legendColor);
+        QPalette palette;
+        palette.setColor(backgroundRole(), backgroundColor);
+        palette.setColor(foregroundRole(), legendColor);
+        iterator.value()->setPalette(palette);
     }
 
     ChannelIconView* iconView = 0L;
@@ -733,7 +737,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
                 channelColors->setColor(id,color);
 
             //Update the icon
-            QPixmap pixmap(item->icon().pixmap().size());
+            QPixmap pixmap = item->icon().pixmap(QSize(22,22));
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[id],channelsSkipStatus[id]);
             item->setIcon(QIcon(pixmap));
