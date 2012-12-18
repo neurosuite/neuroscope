@@ -2092,7 +2092,6 @@ void TraceView::drawTimeLine(QPainter *painter){
 
     if(currentAbscissae.isEmpty() || min.isEmpty())
         return;
-    qDebug()<<" currentAbscissae.count "<<currentAbscissae.count()<<" min.count "<<min[groupIndex]<<" groupIndex"<<groupIndex;
     //If the user went to far on the left, draw a line at the minimum min
     if(currentAbscissae[groupIndex] < min[groupIndex]){
         if(!initialDragLine){
