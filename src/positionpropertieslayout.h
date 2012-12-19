@@ -9,14 +9,8 @@ class PositionPropertiesLayout : public QWidget, public Ui_PositionPropertiesLay
     Q_OBJECT
 
 public:
-    PositionPropertiesLayout( QWidget* parent = 0 );
-    
+    explicit PositionPropertiesLayout( QWidget* parent = 0 );
 
-public Q_SLOTS:
-   // TODO copy 0 functions, 0 signals, and 0 slots (not init and destroy!) from positionpropertieslayout.h.old here
-
-private:
-   
 };
 
 #endif

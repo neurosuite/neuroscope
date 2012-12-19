@@ -58,7 +58,7 @@ public:
     }
 
     /**Sets the background color.*/
-    void setBackgroundColor(QColor color) {backgroundColor = color;}
+    void setBackgroundColor(const QColor& color) {backgroundColor = color;}
 
     /**Sets the display of the palette headers.*/
     void setPaletteHeaders(bool show){displayPaletteHeaders = show;}

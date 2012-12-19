@@ -38,14 +38,14 @@ class PrefDialog : public QPageDialog {
     Q_OBJECT
 public:
     /**Constructor*/
-    PrefDialog(QWidget *parent);
+    explicit PrefDialog(QWidget *parent);
 
     /** Transfers the settings from the configuration object to the dialog.*/
     void updateDialog();
     /** Transfers the settings from the dialog to the configuration object.*/
     void updateConfiguration();
     /** */
-    inline bool isApplyEnable(){return applyEnable;}
+    bool isApplyEnable(){return applyEnable;}
     
 public Q_SLOTS:
     /**Will be called when the "Default" button has been clicked.*/

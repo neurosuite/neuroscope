@@ -98,7 +98,7 @@ public:
     ~TraceView();
 
     /// Added by M.Zugaro to enable automatic forward paging
-    inline long long recordingLength() const { return length; }
+    long long recordingLength() const { return length; }
     void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
 
     /**Enum to be use as a Mode.
@@ -487,7 +487,7 @@ public Q_SLOTS:
     /**Returns the height of the rasters in the world coordinate system.
   *@return raster height.
   */
-    inline int getRasterHeight(){return rasterHeight;}
+    int getRasterHeight(){return rasterHeight;}
 
 
 Q_SIGNALS:

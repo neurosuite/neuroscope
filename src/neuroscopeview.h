@@ -244,8 +244,10 @@ public:
    * @param active true if the view is the active one, false otherwise.
    */
     void setMode(BaseFrame::Mode selectedMode,bool active){
-        if(selectedMode == 2) selectMode = true;
-        else selectMode = false;
+        if(selectedMode == 2)
+            selectMode = true;
+        else
+            selectMode = false;
         emit modeToSet(selectedMode,active);
     }
 

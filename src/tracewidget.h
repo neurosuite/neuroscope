@@ -97,13 +97,13 @@ public:
 
     /**Returns the time amount, in milisecond, of the time frame used by the TraceView.
  */
-    inline long timeFrameWidth() const {
+    long timeFrameWidth() const {
         return timeWindow;
     }
 
     /**Returns the start time of the time frame used by the TraceView.
  */
-    inline long timeFrameStart() const {
+    long timeFrameStart() const {
         return startTime;
     }
 
@@ -523,7 +523,7 @@ public Q_SLOTS:
     /**Returns the height of the rasters.
   *@return raster height.
   */
-    inline int getRasterHeight() {return view.getRasterHeight();}
+    int getRasterHeight() {return view.getRasterHeight();}
 
     /**Informs that data of the selected events providers corresponding to current time frame are available.
   * @param eventsData dictionary between the event provider names and the event data and status.

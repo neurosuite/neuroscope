@@ -63,18 +63,18 @@ public:
   void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
 
   /**Returns the background color.*/
-  inline QColor getBackgroundColor() const{
+  QColor getBackgroundColor() const{
       return backgroundColorButton->color();
   }
 
   /**Returns true if the palette headers are displayed, false othewise.*/
-  inline bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();}
+  bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();}
 
   /**Returns the event position in percentage from the begining of the window where the events are display when browsing.*/
-  inline int getEventPosition()const{return eventPositionSpinBox->value();}
+  int getEventPosition()const{return eventPositionSpinBox->value();}
 
   /**Returns the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  inline int getClusterPosition()const{return clusterPositionSpinBox->value();}
+  int getClusterPosition()const{return clusterPositionSpinBox->value();}
   
  private:
 

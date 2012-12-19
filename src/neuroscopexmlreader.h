@@ -226,12 +226,12 @@ public:
     /**Returns the version of current file.
   * @return version.
   */
-    inline QString getVersion()const{return readVersion;}
+    QString getVersion()const{return readVersion;}
 
     /**Returns the version of current file.
   * @return version.
   */
-    inline NeuroscopeXmlReader::fileType getType()const{return type;}
+    NeuroscopeXmlReader::fileType getType()const{return type;}
 
 private:
     xmlDocPtr doc;

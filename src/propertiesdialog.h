@@ -69,76 +69,76 @@ public:
 
     /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
   */
-    inline float getScreenGain() const{
+    float getScreenGain() const{
         return properties->getScreenGain();
     }
 
     /**Returns the voltage range of the acquisition system in volts.
   */
-    inline int getVoltageRange() const{
+    int getVoltageRange() const{
         return properties->getVoltageRange();
     }
 
     /**Returns the amplification of the acquisition system.
   */
-    inline int getAmplification() const{
+    int getAmplification() const{
         return properties->getAmplification();
     }
 
     /**Returns the number of channels.*/
-    inline int getNbChannels() const{return properties->getNbChannels();}
+    int getNbChannels() const{return properties->getNbChannels();}
 
     /**Returns the sampling rate for the current file.*/
-    inline double getSamplingRate() const{return properties->getSamplingRate();}
+    double getSamplingRate() const{return properties->getSamplingRate();}
 
     /**Returns the sampling rate of the acquisition system.*/
-    inline double getAcquisitionSystemSamplingRate(){return properties->getAcquisitionSystemSamplingRate();}
+    double getAcquisitionSystemSamplingRate(){return properties->getAcquisitionSystemSamplingRate();}
 
     /**Returns the initial offset for all the field potentials.*/
-    inline int getOffset() const{return properties->getOffset();}
+    int getOffset() const{return properties->getOffset();}
 
     /**Returns the resolution of the acquisition system.*/
-    inline int getResolution()const{return properties->getResolution();}
+    int getResolution()const{return properties->getResolution();}
 
     /**Returns the background image for the TraceView.*/
-    inline QString getTraceBackgroundImage()const{return properties->getTraceBackgroundImage();}
+    QString getTraceBackgroundImage()const{return properties->getTraceBackgroundImage();}
 
     /**True if at least one property has been modified, false otherwise.*/
-    inline bool isModified()const{return modified;}
+    bool isModified()const{return modified;}
 
     void openState(bool init){atStartUp = init;}
 
     /**Returns the number of samples per spike waveform.*/
-    inline int getNbSamples()const{return clusterProperties->getNbSamples();}
+    int getNbSamples()const{return clusterProperties->getNbSamples();}
 
     /**Returns the index of the peak sample in the spike waveform.*/
-    inline int getPeakIndex()const{return clusterProperties->getPeakIndex();}
+    int getPeakIndex()const{return clusterProperties->getPeakIndex();}
 
     /**Returns the video acquisition sampling rate.*/
-    inline double getVideoSamplingRate()const{return positionProperties->getSamplingRate();}
+    double getVideoSamplingRate()const{return positionProperties->getSamplingRate();}
 
     /**Returns the video image width.*/
-    inline int getWidth()const{return positionProperties->getWidth();}
+    int getWidth()const{return positionProperties->getWidth();}
 
     /**Returns the video image height.*/
-    inline int getHeight()const{return positionProperties->getHeight();}
+    int getHeight()const{return positionProperties->getHeight();}
 
     /**Returns the background image for the PositionView.*/
-    inline QString getBackgroundImage()const{return positionProperties->getBackgroundImage();}
+    QString getBackgroundImage()const{return positionProperties->getBackgroundImage();}
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
   * The value return by this function tells if such background has to be created.
   * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
   */
-    inline bool getPositionsBackground()const{return positionProperties->getPositionsBackground();}
+    bool getPositionsBackground()const{return positionProperties->getPositionsBackground();}
 
     /**Returns the video image rotation angle.*/
-    inline int getRotation()const{return positionProperties->getRotation();}
+    int getRotation()const{return positionProperties->getRotation();}
 
     /**Returns the video image flip orientation.
   * 0 stands for none, 1 for vertical and 2 for horizontal.
   */
-    inline int getFlip()const{return positionProperties->getFlip();}
+    int getFlip()const{return positionProperties->getFlip();}
 
     /**Sets whether the widgets of the cluster tab are enabled.
   * @param state true if enable, false otherwise.
@@ -178,7 +178,7 @@ protected:
 
 private Q_SLOTS:
     /** Will be called when the number of channels has been modified.*/
-    inline  void channelNbModified(){nbChannelsModified = true;}
+     void channelNbModified(){nbChannelsModified = true;}
 
 private:
     Properties* properties;

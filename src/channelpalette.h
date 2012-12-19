@@ -64,7 +64,7 @@ public:
     * @param name internal name of the palette.
     * @param fl widget flags.
     */
-    ChannelPalette(PaletteType type, const QColor &backgroundColor, bool edition, QWidget* parent = 0, const char* name = 0);
+    explicit ChannelPalette(PaletteType type, const QColor &backgroundColor, bool edition, QWidget* parent = 0, const char* name = 0);
     /*
    *  Destroys the object and frees any allocated resources.
    */

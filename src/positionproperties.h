@@ -42,7 +42,7 @@
 class PositionProperties : public PositionPropertiesLayout  {
     Q_OBJECT
 public: 
-    PositionProperties(QWidget *parent=0);
+    explicit PositionProperties(QWidget *parent=0);
     ~PositionProperties();
 
     /**Sets the video acquisition sampling rate.*/

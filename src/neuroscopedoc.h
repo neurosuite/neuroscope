@@ -129,7 +129,7 @@ public:
     * @param newSessionUrl new url where to write the session information to.
     @return an OpenSaveCreateReturnMessage enum giving the saving status.
     */
-    inline OpenSaveCreateReturnMessage saveSession(QString newSessionUrl){
+    OpenSaveCreateReturnMessage saveSession(const QString& newSessionUrl){
         sessionUrl = newSessionUrl;
         return saveSession();
     }
@@ -229,54 +229,54 @@ public:
     /**Gets the initial offset for all the traces for the current document.
    * @return initial offset.
    */
-    inline int getInitialOffset()const{return initialOffset;}
+    int getInitialOffset()const{return initialOffset;}
 
     /**Gets the acquisition system gains.
    * @return current acquisition gain.
    */
-    inline int getAcquisitionGain()const{return acquisitionGain;}
+    int getAcquisitionGain()const{return acquisitionGain;}
 
     /**Gets the current gain based on the screen gain and the acquisition system gain.
    * @return current gain.
    */
-    inline int getGain()const{return gain;}
+    int getGain()const{return gain;}
 
     /**Gets the voltage range of the acquisition system in volts for the current document.
    * @return current voltage range.
    */
-    inline int getVoltageRange()const{return voltageRange;}
+    int getVoltageRange()const{return voltageRange;}
 
     /**Gets the amplification of the acquisition system for the current document.
    * @return current amplification.
    */
-    inline int getAmplification()const{return amplification;}
+    int getAmplification()const{return amplification;}
 
     /**Gets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
    * @return current screen gain.
    */
-    inline float getScreenGain()const{return screenGain;}
+    float getScreenGain()const{return screenGain;}
 
     /**Gets the resolution of the acquisition system for the current document.
    * @return current resolution.
    */
-    inline int getResolution()const{return resolution;}
+    int getResolution()const{return resolution;}
 
     /**Gets the sampling rate  for the current document.
    * @return current sampling rate.
    */
-    inline double getSamplingRate()const{return samplingRate;}
+    double getSamplingRate()const{return samplingRate;}
 
 
     /**Gets the acquisition system sampling rate.
    * @return acquisition system  sampling rate.
    */
-    inline double getAcquisitionSystemSamplingRate()const{return datSamplingRate;}
+    double getAcquisitionSystemSamplingRate()const{return datSamplingRate;}
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
    * The value return by this function tells if such background has to be created.
    * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
-    inline bool getPositionsBackground()const{return drawPositionsOnBackground;}
+    bool getPositionsBackground()const{return drawPositionsOnBackground;}
 
 
     /**Sets the various default gains.
@@ -373,28 +373,28 @@ public:
     /**Returns a pointer on the list of ItemColor objects used to represent the channel colors.
    * @return ChannelColors containing the information on the channels and their associated color.
    */
-    inline ChannelColors* channelColors() const {return channelColorList;}
+    ChannelColors* channelColors() const {return channelColorList;}
 
     /**Returns a reference on the DataProvider containing the information on the traces (TracesProvider).
    * @return TracesProvider object.
    */
-    inline TracesProvider& tracesDataProvider() const {return *tracesProvider;}
+    TracesProvider& tracesDataProvider() const {return *tracesProvider;}
 
     /**Returns a reference on the Map given the correspondance between the channel ids and the display group ids.
    */
-    inline QMap<int,int>* getDisplayChannelsGroups() {return &displayChannelsGroups;}
+    QMap<int,int>* getDisplayChannelsGroups() {return &displayChannelsGroups;}
 
     /**Returns a reference on the map given th correspondance between the display group ids and the channel ids.
    */
-    inline QMap<int, QList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;}
+    QMap<int, QList<int> >* getDisplayGroupsChannels() {return &displayGroupsChannels;}
 
     /**Returns a reference on the Map given the correspondance between the channel ids and the spike group ids.
    */
-    inline QMap<int,int>* getChannelsSpikeGroups() {return &channelsSpikeGroups;}
+    QMap<int,int>* getChannelsSpikeGroups() {return &channelsSpikeGroups;}
 
     /**Returns a reference on the map given th correspondance between the spike group ids and the channel ids.
    */
-    inline QMap<int, QList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;}
+    QMap<int, QList<int> >* getSpikeGroupsChannels() {return &spikeGroupsChannels;}
 
     /**Selects all the channels and shows them if the edit mode is not selected.
    * @param activeView the view in which the change has to be immediate.
@@ -469,7 +469,7 @@ public:
     }
 
     /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
-    inline bool isCurrentFileAdatFile(){
+    bool isCurrentFileAdatFile(){
         if(extension == "dat")
             return true;
         else
@@ -477,7 +477,7 @@ public:
     }
 
     /**Returns the base name of the document (common name for all the files). */
-    inline QString documentBaseName() const {return baseName;}
+    QString documentBaseName() const {return baseName;}
 
     /**Returns the session file path.*/
     QString sessionPath() const;
@@ -512,12 +512,12 @@ public:
 
     /**Returns the name used to identified the last loaded provider.
     */
-    inline QString lastLoadedProviderName(){return lastLoadedProvider;}
+    QString lastLoadedProviderName(){return lastLoadedProvider;}
 
     /**Returns the item color list for the given provider.
     * @param fileName name of the file containing the data of the provider.
     */
-    inline ItemColors* providerColorList(QString fileName){return providerItemColors[fileName];}
+    ItemColors* providerColorList(QString fileName){return providerItemColors[fileName];}
 
     /**Loads the cluster file identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.
@@ -613,7 +613,7 @@ public:
     void deselectAllEvents(ItemPalette* eventPalette,NeuroscopeView* activeView);
 
     /**Returns the value to use as the length for the event descriptions in the event palette for the the last loaded event provider.*/
-    inline int getLastEventProviderGridX() const {return lastEventProviderGridX;}
+    int getLastEventProviderGridX() const {return lastEventProviderGridX;}
 
     /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
     void setEventPosition(int position);
@@ -682,10 +682,10 @@ public:
     }
 
     /**Returns the number of samples per spike waveform.*/
-    inline int getNbSamples()const{return nbSamples;}
+    int getNbSamples()const{return nbSamples;}
 
     /**Returns the index of the peak sample in the spike waveform.*/
-    inline int getPeakIndex()const{return peakSampleIndex;}
+    int getPeakIndex()const{return peakSampleIndex;}
 
 
     /**Sets the information used to display the animal position.
@@ -715,43 +715,43 @@ public:
     /**Gets the video sampling rate.
    * @return current video sampling rate.
    */
-    inline double getVideoSamplingRate()const{return videoSamplingRate;}
+    double getVideoSamplingRate()const{return videoSamplingRate;}
 
     /**Gets the number of channels for the current document.
    * @return current number of channels.
    */
-    inline int getChannelNb()const{return channelNb;}
+    int getChannelNb()const{return channelNb;}
 
     /**Returns the video image width.
    * @return current video image width.
    */
-    inline int getWidth()const{return videoWidth;}
+    int getWidth()const{return videoWidth;}
 
     /**Returns the video image height.
    * @return current video image height.
    */
-    inline int getHeight()const{return videoHeight;}
+    int getHeight()const{return videoHeight;}
 
     /**Returns the background image for the PositionView.
    * @return current background image;
    */
-    inline QString getBackgroundImage()const{return backgroundImage;}
+    QString getBackgroundImage()const{return backgroundImage;}
 
     /**Returns the background image for the TraceView.
    * @return current traceBackground image;
    */
-    inline QString getTraceBackgroundImage()const{return traceBackgroundImage;}
+    QString getTraceBackgroundImage()const{return traceBackgroundImage;}
 
     /**Returns the video image rotation angle.
    * @return current rotation angle.
    */
-    inline int getRotation()const{return rotation;}
+    int getRotation()const{return rotation;}
 
     /**Returns the video image flip orientation.
    * 0 stands for none, 1 for vertical and 2 for horizontal.
    * @return current flip orientation.
    */
-    inline int getFlip()const{return flip;}
+    int getFlip()const{return flip;}
 
     /**Removes the positon provider corresponding to the position file
    * from the list of providers.
@@ -768,7 +768,7 @@ public:
     class CloseDocumentEvent;
     friend class CloseDocumentEvent;
 
-    inline CloseDocumentEvent* getCloseDocumentEvent(QString origin){
+    CloseDocumentEvent* getCloseDocumentEvent(QString origin){
         return new CloseDocumentEvent(origin);
     }
 
@@ -782,8 +782,8 @@ public:
         friend CloseDocumentEvent* NeuroscopeDoc::getCloseDocumentEvent(QString origin);
 
     public:
-        inline QString methodOfOrigin() const {return origin;}
-        inline ~CloseDocumentEvent(){}
+        QString methodOfOrigin() const {return origin;}
+        ~CloseDocumentEvent(){}
 
     private:
         CloseDocumentEvent(const QString& origin):QEvent(QEvent::Type(QEvent::User + 200)),origin(origin){}
@@ -797,7 +797,7 @@ public:
    * @return a QImage which is a transform copy of this image (he original QImage is not changed) or an null image if the animal trajectory
    * is not currently set.
    */
-    inline QImage getWhiteTrajectoryBackground(){
+    QImage getWhiteTrajectoryBackground(){
         if(!drawPositionsOnBackground)
             return QImage();
         return transformBackgroundImage(true);
@@ -822,7 +822,7 @@ public:
     void resetDefaultOffsets();
 
     /**Returns a reference on the the map given the of channels default offsets.*/
-    inline  const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;}
+     const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;}
 
 public Q_SLOTS:
 

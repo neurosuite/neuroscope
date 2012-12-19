@@ -72,12 +72,12 @@ public:
     /**Returns the name of the provider which is the position file name.
   * @return provider'name.
   */
-    inline QString getName() const {return name;}
+    QString getName() const {return name;}
 
     /**Returns the path to the position file.
   * @return path.
   */
-    inline QString getFilePath() const {return fileName;}
+    QString getFilePath() const {return fileName;}
 
     void updateVideoInformation(double videoSamplingRate,int rotation,int flip,int videoWidth,int videoHeight){
         samplingRate = videoSamplingRate;
@@ -90,11 +90,11 @@ public:
     /**Returns the number of spots for each animal position recorded. It is either 1 or 2.
   * @return number of spots.
   */
-    inline int getNbSpots()const {return nbCoordinates / 2;}
+    int getNbSpots()const {return nbCoordinates / 2;}
 
     /**Returns the sampling rate used to record the data contained in the file identified by fileUrl.
   */
-    inline double getSamplingRate() const {return samplingRate;}
+    double getSamplingRate() const {return samplingRate;}
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.

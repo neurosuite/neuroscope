@@ -9,13 +9,8 @@ class ClusterPropertiesLayout : public QWidget, public Ui_ClusterPropertiesLayou
     Q_OBJECT
 
 public:
-    ClusterPropertiesLayout( QWidget* parent = 0 );
-    
+    explicit ClusterPropertiesLayout( QWidget* parent = 0 );
 
-public Q_SLOTS:
-   // TODO copy 0 functions, 0 signals, and 0 slots (not init and destroy!) from clusterpropertieslayout.h.old here
-
-private:
    
 };
 

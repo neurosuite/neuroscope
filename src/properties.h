@@ -104,36 +104,36 @@ public:
   
   /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
   */
-  inline float getScreenGain() const{
+  float getScreenGain() const{
    return screenGainLineEdit->text().toFloat();
   }
 
   /**Returns the voltage range of the acquisition system in volts.
   */
-  inline int getVoltageRange() const{
+  int getVoltageRange() const{
    return voltageRangeLineEdit->text().toInt();
   }
 
   /**Returns the amplification of the acquisition system.
   */
-  inline int getAmplification() const{
+  int getAmplification() const{
    return amplificationLineEdit->text().toInt();
   }
 
   /**Returns the number of channels.*/
-  inline int getNbChannels() const{return nbChannelsLineEdit->text().toInt();}
+  int getNbChannels() const{return nbChannelsLineEdit->text().toInt();}
 
   /**Returns the sampling rate  for the current file.*/
-  inline double getSamplingRate() const{return samplingRateLineEdit->text().toDouble();}
+  double getSamplingRate() const{return samplingRateLineEdit->text().toDouble();}
 
   /**Returns the sampling rate of the acquisition system.*/
-  inline double getAcquisitionSystemSamplingRate(){return asSamplingRateLineEdit->text().toDouble();}
+  double getAcquisitionSystemSamplingRate(){return asSamplingRateLineEdit->text().toDouble();}
   
   /**Returns the initial offset for all the field potentials.*/
-  inline int getOffset() const{return offsetLineEdit->text().toInt();}
+  int getOffset() const{return offsetLineEdit->text().toInt();}
 
   /**Returns the resolution of the acquisition system.*/
-  inline int getResolution()const{
+  int getResolution()const{
    switch(resolutionComboBox->currentIndex()){
       case 0:
         return 12;
@@ -149,7 +149,7 @@ public:
   }
 
   /**Returns the background image.*/
-  inline QString getTraceBackgroundImage()const{  
+  QString getTraceBackgroundImage()const{
   return traceBackgroundLineEdit->text();}
 
   /**Sets whether the sampling rate for the current file is enabled.
