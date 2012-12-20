@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "config-neuroscope.h"
+
 // include files for QT
 #include <QDir>
 #include <QCursor>
@@ -51,7 +53,7 @@
 #include "traceview.h"
 #include "itempalette.h"
 #include "eventsprovider.h"
-
+#include "qhelpviewer.h"
 
 
 NeuroscopeApp::NeuroscopeApp()
@@ -536,6 +538,10 @@ void NeuroscopeApp::initActions()
 
     //Help menu
     QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
+    QAction *handbook = helpMenu->addAction(tr("Handbook"));
+    handbook->setShortcut(Qt::Key_F1);
+    connect(handbook,SIGNAL(triggered()), this,SLOT(slotHanbook()));
+
     QAction *about = helpMenu->addAction(tr("About"));
     connect(about,SIGNAL(triggered()), this,SLOT(slotAbout()));
 
@@ -3557,4 +3563,13 @@ void NeuroscopeApp::slotAbout()
     QMessageBox::about(this,tr("Neuroscope"),tr("Viewer for Local Field Potentials, spikes, events and positional data"));
 
 }
+
+void NeuroscopeApp::slotHanbook()
+{
+    QHelpViewer *helpDialog = new QHelpViewer(this);
+    helpDialog->setHtml(NEUROSCOPE_DOC_PATH + QLatin1String("index.html"));
+    helpDialog->setAttribute( Qt::WA_DeleteOnClose );
+    helpDialog->show();
+}
+
 #include "neuroscope.moc"

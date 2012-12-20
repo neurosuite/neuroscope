@@ -659,6 +659,7 @@ private Q_SLOTS:
     /**Enables or disables the display of events in the PositionView.*/
     void slotShowEventsInPositionView();
 
+    void slotHanbook();
 private:
 
     void initView();
