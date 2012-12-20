@@ -37,7 +37,7 @@ PositionProperties::PositionProperties(QWidget *parent ) : PositionPropertiesLay
 
     //Set an icon on the backgroundButton button
 
-    backgroundButton->setIcon(QIcon(":/icons/fileopen"));
+    backgroundButton->setIcon(QIcon(":/shared-icons/folder-open"));
 
 }
 

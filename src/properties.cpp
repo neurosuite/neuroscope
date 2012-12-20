@@ -38,7 +38,7 @@ Properties::Properties(QWidget *parent)
 
     //Set an icon on the backgroundButton button
 
-    traceBackgroundButton->setIcon(QIcon(":/icons/fileopen"));
+    traceBackgroundButton->setIcon(QIcon(":/shared-icons/folder-open"));
 
 }
 Properties::~Properties(){
