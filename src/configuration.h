@@ -118,43 +118,43 @@ public:
     
     /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
     */
-    inline float getScreenGain() const{
+    float getScreenGain() const{
         return screenGainDefault;
     }
 
     /**Returns the voltage range of the acquisition system in volts.
     */
-    inline int getVoltageRange() const{
+    int getVoltageRange() const{
         return voltageRange;
     }
 
     /**Returns the amplification of the acquisition system.
     */
-    inline int getAmplification() const{
+    int getAmplification() const{
         return amplificationDefault;
     }
 
 
     /**Returns the background color.*/
-    inline QColor getBackgroundColor() const{return backgroundColor;}
+    QColor getBackgroundColor() const{return backgroundColor;}
 
     /**Returns true if the palette headers are displayed, false othewise.*/
-    inline bool isPaletteHeadersDisplayed() const{return displayPaletteHeaders;}
+    bool isPaletteHeadersDisplayed() const{return displayPaletteHeaders;}
     
     /**Returns the number of channels.*/
-    inline int getNbChannels() const{return nbChannels;}
+    int getNbChannels() const{return nbChannels;}
 
     /**Returns sampling rate for the dat file.*/
-    inline double getDatSamplingRate() const{return datSamplingRate;}
+    double getDatSamplingRate() const{return datSamplingRate;}
 
     /**Returns sampling rate for the eeg file.*/
-    inline double getEegSamplingRate() const{return eegSamplingRate;}
+    double getEegSamplingRate() const{return eegSamplingRate;}
 
     /**Returns the initial offset for all the field potentials.*/
-    inline int getOffset() const{return offset;}
+    int getOffset() const{return offset;}
 
     /**Returns the resolution of the acquisition system.*/
-    inline int getResolution()const{
+    int getResolution()const{
         switch(resolutionIndex){
         case 0:
             return 12;
@@ -170,126 +170,126 @@ public:
     }
 
     /**Returns the index corresponding to there solution of the acquisition system.*/
-    inline int getResolutionIndex() const{return resolutionIndex;}
+    int getResolutionIndex() const{return resolutionIndex;}
 
     /**Returns the background image for the TraceView.*/
-    inline QString getTraceBackgroundImage()const{return traceBackgroundImage;}
+    QString getTraceBackgroundImage()const{return traceBackgroundImage;}
 
     /**Returns the event position, in percentage from the begining of the window, where the events are display when browsing.*/
-    inline int getEventPosition()const{return eventPosition;}
+    int getEventPosition()const{return eventPosition;}
     
     /**Returns the cluster position, in percentage from the begining of the window, where the clusters are display when browsing.*/
-    inline int getClusterPosition()const{return clusterPosition;}
+    int getClusterPosition()const{return clusterPosition;}
 
     /**Returns the number of samples per spike waveform.*/
-    inline int getNbSamples()const{return nbSamples;}
+    int getNbSamples()const{return nbSamples;}
 
     /**Returns the index of the peak sample in the spike waveform.*/
-    inline int getPeakIndex()const{return peakIndex;}
+    int getPeakIndex()const{return peakIndex;}
 
     /**Returns the video acquisition sampling rate.*/
-    inline double getVideoSamplingRate()const{return videoSamplingRate;}
+    double getVideoSamplingRate()const{return videoSamplingRate;}
 
     /**Returns the video image width.*/
-    inline int getWidth()const{return width;}
+    int getWidth()const{return width;}
 
     /**Returns the video image height.*/
-    inline int getHeight()const{return height;}
+    int getHeight()const{return height;}
 
     /**Returns the background image.*/
-    inline QString getBackgroundImage()const{return backgroundImage;}
+    QString getBackgroundImage()const{return backgroundImage;}
 
     /**Returns the video image rotation angle.*/
-    inline int getRotation()const{return rotation;}
+    int getRotation()const{return rotation;}
 
     /**Returns the video image flip orientation.
     * 0 stands for none, 1 for vertical and 2 for horizontal.
     */
-    inline int getFlip()const{return flip;}
+    int getFlip()const{return flip;}
     
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
     * The value return by this function tells if such background has to be created.
     * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
     */
-    inline bool getPositionsBackground()const{return drawPositionsOnBackground;}
+    bool getPositionsBackground()const{return drawPositionsOnBackground;}
     
     /**Returns the default screen gain in milivolts by centimeters used to display the field potentiels.
     */
-    inline float getScreenGainDefault() const{
+    float getScreenGainDefault() const{
         return screenGainDefault;
     }
 
     /**Returns the default voltage range of the acquisition system in volts.
     */
-    inline int getVoltageRangeDefault() const{
+    int getVoltageRangeDefault() const{
         return voltageRangeDefault;
     }
 
     /**Returns the default amplification of the acquisition system.
     */
-    inline int getAmplificationDefault() const{
+    int getAmplificationDefault() const{
         return amplificationDefault;
     }
 
     /**Returns the default background color.*/
-    inline QColor getBackgroundColorDefault() const{return backgroundColorDefault;}
+    QColor getBackgroundColorDefault() const{return backgroundColorDefault;}
 
     /**Returns the default value for the display of the palette headers,
     * true if the palette headers are displayed, false othewise.*/
-    inline bool isPaletteHeadersDisplayedDefault() const{return displayPaletteHeadersDefault;}
+    bool isPaletteHeadersDisplayedDefault() const{return displayPaletteHeadersDefault;}
     
     /**Returns the default number of channels.*/
-    inline int getNbChannelsDefault() const{return nbChannelsDefault;}
+    int getNbChannelsDefault() const{return nbChannelsDefault;}
 
     /**Returns the default sampling rate for the dat file.*/
-    inline double getDatSamplingRateDefault() const{return datSamplingRateDefault;}
+    double getDatSamplingRateDefault() const{return datSamplingRateDefault;}
 
     /**Returns the default sampling rate for the eeg file.*/
-    inline double getEegSamplingRateDefault() const{return eegSamplingRateDefault;}
+    double getEegSamplingRateDefault() const{return eegSamplingRateDefault;}
 
     /**Returns the default initial offset for all the field potentials.*/
-    inline int getOffsetDefault() const{return offsetDefault;}
+    int getOffsetDefault() const{return offsetDefault;}
 
     /**Returns the index corresponding to the default resolution of the acquisition system.*/
-    inline int getResolutionIndexDefault()const{return resolutionIndexDefault;}
+    int getResolutionIndexDefault()const{return resolutionIndexDefault;}
 
     /**Returns the default event position, in percentage from the begining of the window, where the events are display when browsing.*/
-    inline int getEventPositionDefault()const{return eventPositionDefault;}
+    int getEventPositionDefault()const{return eventPositionDefault;}
 
     /**Returns the default cluster position, in percentage from the begining of the window, where the clusters are display when browsing.*/
-    inline int getClusterPositionDefault()const{return clusterPositionDefault;}
+    int getClusterPositionDefault()const{return clusterPositionDefault;}
 
     /**Returns the default number of samples per spike waveform.*/
-    inline int getNbSamplesDefault()const{return nbSamplesDefault;}
+    int getNbSamplesDefault()const{return nbSamplesDefault;}
 
     /**Returns the default index of the peak sample in the spike waveform.*/
-    inline int getPeakIndexDefault()const{return peakIndexDefault;}
+    int getPeakIndexDefault()const{return peakIndexDefault;}
 
     /**Returns the default video acquisition sampling rate.*/
-    inline double getVideoSamplingRateDefault()const{return videoSamplingRateDefault;}
+    double getVideoSamplingRateDefault()const{return videoSamplingRateDefault;}
 
     /**Returns the default video image width.*/
-    inline int getWidthDefault()const{return widthDefault;}
+    int getWidthDefault()const{return widthDefault;}
 
     /**Returns the default video image height.*/
-    inline int getHeightDefault()const{return heightDefault;}
+    int getHeightDefault()const{return heightDefault;}
 
     /**Returns the default background image.*/
-    inline QString getBackgroundImageDefault()const{return backgroundImageDefault;}
+    QString getBackgroundImageDefault()const{return backgroundImageDefault;}
 
     /**Returns the default video image rotation angle.*/
-    inline int getRotationDefault()const{return rotationDefault;}
+    int getRotationDefault()const{return rotationDefault;}
 
     /**Returns the default video image flip orientation.
     * 0 stands for none, 1 for vertical and 2 for horizontal.
     */
-    inline int getFlipDefault()const{return flipDefault;}
+    int getFlipDefault()const{return flipDefault;}
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
     * The value return by this function tells if the default is to create such background.
     * @return true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
     */
-    inline bool getPositionsBackgroundDefault()const{return drawPositionsOnBackgroundDefault;}
+    bool getPositionsBackgroundDefault()const{return drawPositionsOnBackgroundDefault;}
 
     bool getUseWhiteColorDuringPrinting() const { return useWhiteColorDuringPrinting; }
 
@@ -366,7 +366,7 @@ private:
     static const QString traceBackgroundImageDefault;
 
     Configuration();
-    inline ~Configuration(){}
+    ~Configuration(){}
     Configuration(const Configuration&);
 
     friend Configuration& configuration();

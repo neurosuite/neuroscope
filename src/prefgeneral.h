@@ -35,50 +35,50 @@
 //include files for the application
 #include <prefgenerallayout.h>
 
-  /**
+/**
   * Class representing the Neuroscope Configuration page of the Neuroscope preferences dialog.
   *@author Lynn Hazan
   */
 
 class PrefGeneral : public PrefGeneralLayout  {
-   Q_OBJECT
+    Q_OBJECT
 public: 
     explicit PrefGeneral(QWidget *parent=0);
-	~PrefGeneral();
+    ~PrefGeneral();
 
 
-  /**Sets the background color.*/
-  void setBackgroundColor(const QColor& color)
-  {
-      backgroundColorButton->setColor(color);
-  }
+    /**Sets the background color.*/
+    void setBackgroundColor(const QColor& color)
+    {
+        backgroundColorButton->setColor(color);
+    }
 
-  /**Sets the display of the palette headers.*/
-  void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);}
+    /**Sets the display of the palette headers.*/
+    void setPaletteHeaders(bool show){headerCheckBox->setChecked(show);}
 
-  /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
-  void setEventPosition(int position){eventPositionSpinBox->setValue(position);}
+    /**Sets the event position in percentage from the begining of the window where the events are display when browsing.*/
+    void setEventPosition(int position){eventPositionSpinBox->setValue(position);}
 
-  /**Sets the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
+    /**Sets the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
+    void setClusterPosition(int position){clusterPositionSpinBox->setValue(position);}
 
-  /**Returns the background color.*/
-  QColor getBackgroundColor() const{
-      return backgroundColorButton->color();
-  }
+    /**Returns the background color.*/
+    QColor getBackgroundColor() const{
+        return backgroundColorButton->color();
+    }
 
-  /**Returns true if the palette headers are displayed, false othewise.*/
-  bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();}
+    /**Returns true if the palette headers are displayed, false othewise.*/
+    bool isPaletteHeadersDisplayed() const{return headerCheckBox->isChecked();}
 
-  /**Returns the event position in percentage from the begining of the window where the events are display when browsing.*/
-  int getEventPosition()const{return eventPositionSpinBox->value();}
+    /**Returns the event position in percentage from the begining of the window where the events are display when browsing.*/
+    int getEventPosition()const{return eventPositionSpinBox->value();}
 
-  /**Returns the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
-  int getClusterPosition()const{return clusterPositionSpinBox->value();}
-  
- private:
+    /**Returns the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
+    int getClusterPosition()const{return clusterPositionSpinBox->value();}
 
-  QIntValidator validator;
+private:
+
+    QIntValidator validator;
 };
 
 #endif

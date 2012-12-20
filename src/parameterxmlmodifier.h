@@ -172,7 +172,7 @@ public:
   * @param extensionSamplingRates map between file extension and the sampling rate.
   * @return true if the modification succeded, false otherwise.
   */
-    bool setSampleRateByExtension(QMap<QString,double> extensionSamplingRates);
+    bool setSampleRateByExtension(const QMap<QString, double> &extensionSamplingRates);
 
 
 private:

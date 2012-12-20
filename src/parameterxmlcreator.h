@@ -131,7 +131,7 @@ public:
   * includes the sampling rates for the extension dat and eeg, they are treated separately.
   * @param extensionSamplingRates map between file extension and the sampling rate.
   */
-    void setSampleRateByExtension(QMap<QString,double> extensionSamplingRates);
+    void setSampleRateByExtension(const QMap<QString, double> &extensionSamplingRates);
 
 private:
 

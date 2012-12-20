@@ -48,7 +48,7 @@ public:
   * @param mode the way of looking up for the color
   * @return the QColor for the given cluster
   */
-    virtual inline QColor color(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){return ItemColors::color(identifier,mode);}
+    virtual QColor color(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){return ItemColors::color(identifier,mode);}
 
     /**
   * Sets the color for a cluster with a given id or position in the list (@p identifier) to color.
@@ -64,14 +64,14 @@ public:
   * @param index the index in the list of clusters
   * @return the cluster id
   */
-    virtual inline int clusterId(int index){return itemId(index);}
+    virtual int clusterId(int index){return itemId(index);}
 
     /**
   * Returns true if the cluster Id exists false otherwise.
   * @param clusterId the id of the cluster to check for existence
   * @return the boolean value for the existance of the cluster
   */
-    virtual inline bool contains(int clusterId){return ItemColors::contains(clusterId);}
+    virtual bool contains(int clusterId){return ItemColors::contains(clusterId);}
 
     /**
   * Returns true if the color for a cluster with a given id or position in the list (@p identifier)
@@ -80,7 +80,7 @@ public:
   * @param mode the way of looking up for the color
   * @return the color status for the given cluster
   */
-    virtual inline bool isColorChanged(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){return ItemColors::isColorChanged(identifier,mode);}
+    virtual bool isColorChanged(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){return ItemColors::isColorChanged(identifier,mode);}
 
     /**
   * If changed is true, the color for a cluster with a given id or position in the list (@p identifier)
@@ -97,13 +97,13 @@ public:
   * Returns the number of clusters.
   * @return the number of clusters in the list
   */
-    inline uint numberOfClusters() const {return ItemColors::numberOfItems();}
+    uint numberOfClusters() const {return ItemColors::numberOfItems();}
 
     /**
   * Returns true if at least the color of one cluster have changed, otherwise returns false.
   * @return the color status for the identifierle list of clusters
   */
-    virtual inline bool isColorChanged()const{return ItemColors::isColorChanged();}
+    virtual bool isColorChanged()const{return ItemColors::isColorChanged();}
 
     /**
   * Sets the color status for the entire list of clusters.
@@ -118,7 +118,7 @@ public:
   * @param color the color of the cluster.
   * @return the index in the list.
   */
-    virtual inline uint append(int clusterId, QColor color){
+    virtual uint append(int clusterId, QColor color){
         return ItemColors::append(clusterId,color);
     }
 
@@ -139,7 +139,7 @@ public:
   * @param mode the way of looking up for the cluster
   * @return true if successful,i.e. if identifier is in range, otherwise returns false.
   */
-    virtual inline bool remove(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){
+    virtual bool remove(int identifier, SelectionMode mode = ItemColors::BY_ITEM_NUMBER){
         return ItemColors::remove(identifier,mode);
     }
 
@@ -148,7 +148,7 @@ public:
   * the last reset of their status.
   * @return cluster ids list.
   */
-    virtual inline QList<int> colorChangedClusterList(){
+    virtual QList<int> colorChangedClusterList(){
         return ItemColors::colorChangedItemList();
     }
 

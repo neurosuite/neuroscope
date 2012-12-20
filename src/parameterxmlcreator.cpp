@@ -342,11 +342,11 @@ void ParameterXmlCreator::setVideoInformation(int width,int height){
     video.appendChild(heightElement);
 }
 
-void ParameterXmlCreator::setSampleRateByExtension(QMap<QString,double> extensionSamplingRates){
+void ParameterXmlCreator::setSampleRateByExtension(const QMap<QString,double>& extensionSamplingRates){
     files = doc.createElement(FILES);
 
-    QMap<QString,double>::Iterator iterator;
-    for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
+    QMap<QString,double>::ConstIterator iterator;
+    for(iterator = extensionSamplingRates.constBegin(); iterator != extensionSamplingRates.constEnd(); ++iterator){
         //Get the extension information (extension and sampling rate)
         QString extension = iterator.key();
         double samplingRate = iterator.value();

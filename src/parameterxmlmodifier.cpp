@@ -546,15 +546,15 @@ bool ParameterXmlModifier::setSpikeDetectionInformation(QMap<int, QList<int> >& 
 
 
 
-bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensionSamplingRates){
+bool ParameterXmlModifier::setSampleRateByExtension(const QMap<QString,double>& extensionSamplingRates){
     files = findDirectChild(FILES);
     //If the files element does not exist, create it
     if(files.isNull()){
         newFilesNode = true;
         files = doc.createElement(FILES);
 
-        QMap<QString,double>::Iterator iterator;
-        for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
+        QMap<QString,double>::ConstIterator iterator;
+        for(iterator = extensionSamplingRates.constBegin(); iterator != extensionSamplingRates.constEnd(); ++iterator){
             //Get the extension information (extension and sampling rate)
             QString extension = iterator.key();
             double samplingRate = iterator.value();
@@ -576,8 +576,8 @@ bool ParameterXmlModifier::setSampleRateByExtension(QMap<QString,double> extensi
         return true;
     }
     else{
-        QMap<QString,double>::Iterator iterator;
-        for(iterator = extensionSamplingRates.begin(); iterator != extensionSamplingRates.end(); ++iterator){
+        QMap<QString,double>::ConstIterator iterator;
+        for(iterator = extensionSamplingRates.constBegin(); iterator != extensionSamplingRates.constEnd(); ++iterator){
             //Get the extension information (extension and sampling rate)
             QString extension = iterator.key();
             double samplingRate = iterator.value();

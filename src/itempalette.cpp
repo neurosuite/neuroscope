@@ -45,7 +45,6 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
       isInSelectItems(false),
       spaceWidget(0L),
       type(type),
-      selected(""),
       updateIconPixmap(false)
 {
     setObjectName(name);

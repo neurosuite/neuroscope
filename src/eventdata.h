@@ -40,17 +40,17 @@ public:
    * @param t Array containing the time indexes of the events relative to the current starting time. The indexes are computed using the currently open data file sampling rate.
    * @param status status of the data, true if the data are available, false otherwise.
    */
-    inline EventData(Array<int> d,Array<dataType> t,bool status){
+    EventData(Array<int> d,Array<dataType> t,bool status){
         times = t;
         ids = d;
         ready = status;
     }
 
-    inline EventData(){
+    EventData(){
         ready = false;
     }
     
-    inline EventData& operator=(const EventData& source){
+    EventData& operator=(const EventData& source){
         if(&source != this){
             ready = source.ready;
             times = source.times;
@@ -65,14 +65,14 @@ public:
         ids = d;
     }
     /**Returns the true if the data are available, false otherwise.*/
-    inline bool status(){return ready;}
+    bool status(){return ready;}
 
     /**Returns an Array containing the events ids.*/
-    inline Array<int>& getIds(){return ids;}
+    Array<int>& getIds(){return ids;}
 
     /**Returns an Array containing the time indexes of the events relative to the current starting time.
    * The indexes are computed using the currently open data file sampling rate.*/
-    inline Array<dataType>& getTimes(){return times;}
+    Array<dataType>& getTimes(){return times;}
 
     /**
    * @param samplingRate sampling rate of the current open data file in Hz.
@@ -83,7 +83,7 @@ public:
 
     /**Returns an Array containing the positions indexes computed for the events.
    * The positions indexes are computed using the position file sampling rate.*/
-    inline Array<dataType>& getPositions(){return positions;}
+    Array<dataType>& getPositions(){return positions;}
 
     
 private:    
