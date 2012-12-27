@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QCursor>
 #include <QPainter>
-//Added by qt3to4:
+
 #include <QResizeEvent>
 #include <QList>
 #include <QMouseEvent>

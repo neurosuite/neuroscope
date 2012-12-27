@@ -17,7 +17,7 @@
 //application specific include files.
 #include "neuroscopexmlreader.h"
 #include "tags.h"
-//Added by qt3to4:
+
 #include <QList>
 
 //include files for QT

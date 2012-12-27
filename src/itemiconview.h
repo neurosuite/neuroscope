@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <qwidget.h>
-//Added by qt3to4:
+
 #include <QMouseEvent>
 #include <QWheelEvent>
 

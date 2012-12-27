@@ -27,7 +27,7 @@
 #include <QMenu>
 //QT include files
 #include <QCheckBox>
-//Added by qt3to4:
+
 #include <QList>
 
 #include <QTabWidget>

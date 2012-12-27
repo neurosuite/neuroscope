@@ -17,7 +17,7 @@
 
 // include files for QT
 #include "qapplication.h"
-//Added by qt3to4:
+
 #include <QVector>
 #include <QList>
 #include <QPixmap>

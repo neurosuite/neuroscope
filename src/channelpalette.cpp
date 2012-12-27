@@ -34,7 +34,7 @@
 #include <QLayout>
 #include <QStyle>
 #include <QColorDialog>
-//Added by qt3to4:
+
 #include <QList>
 #include <QLabel>
 #include <QResizeEvent>

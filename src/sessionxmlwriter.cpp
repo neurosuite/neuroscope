@@ -21,7 +21,7 @@
 #include "channelcolors.h"
 #include "eventsprovider.h"
 
-//Added by qt3to4:
+
 #include <QTextStream>
 #include <QList>
 

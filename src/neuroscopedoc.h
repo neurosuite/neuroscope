@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QString>
 #include <QPair>
-//Added by qt3to4:
+
 #include <QList>
 
 #include <QEvent>

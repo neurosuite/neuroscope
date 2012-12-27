@@ -25,7 +25,7 @@
 
 // include files for QT
 #include <QObject>
-//Added by qt3to4:
+
 #include <QList>
 
 //include files for c/c++ libraries

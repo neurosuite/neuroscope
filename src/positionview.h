@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QPrinter>
 #include <QHash>
-//Added by qt3to4:
+
 #include <QResizeEvent>
 #include <QList>
 

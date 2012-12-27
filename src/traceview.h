@@ -25,7 +25,7 @@
 #include <QPair>
 #include <QImage>
 #include <QDebug>
-//Added by qt3to4:
+
 #include <QList>
 #include <QResizeEvent>
 #include <QMouseEvent>

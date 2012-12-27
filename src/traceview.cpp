@@ -31,7 +31,7 @@
 #include <QPainter>
 #include <QPrinter>
 
-//Added by qt3to4:
+
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QApplication>

@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QStringList>
 #include <QFileInfo>
-//Added by qt3to4:
+
 #include <QList>
 #include <QMap> 
 #include <QDebug>

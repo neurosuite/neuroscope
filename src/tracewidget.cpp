@@ -19,7 +19,7 @@
 
 // include files for QT
 #include <QString>
-//Added by qt3to4:
+
 #include <QFrame>
 #include <QList>
 #include <QLabel>

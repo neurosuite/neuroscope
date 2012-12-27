@@ -21,7 +21,7 @@
 #include <QDir>
 #include <QCursor>
 #include <qinputdialog.h>
-//Added by qt3to4:
+
 #include <QPixmap>
 #include <QList>
 #include <QEvent>

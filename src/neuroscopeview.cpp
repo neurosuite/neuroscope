@@ -18,7 +18,7 @@
 // include files for Qt
 #include <QPainter>
 
-//Added by qt3to4:
+
 #include <QList>
 #include <QPixmap>
 

@@ -29,7 +29,7 @@
 #include <QHash>
 #include <QImage>
 #include <QPrinter>
-//Added by qt3to4:
+
 #include <QList>
 
 // application specific includes

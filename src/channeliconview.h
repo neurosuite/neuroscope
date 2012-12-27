@@ -24,7 +24,7 @@
 #include <QListWidget>
 #include <q3dragobject.h>
 #include <qwidget.h>
-//Added by qt3to4:
+
 #include <QMouseEvent>
 #include <QList>
 #include <QWheelEvent>

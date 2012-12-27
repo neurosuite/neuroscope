@@ -19,7 +19,7 @@
 // include files for Qt
 #include <QCursor>
 #include <QTextCodec>
-//Added by qt3to4:
+
 #include <QDropEvent>
 #include <QFrame>
 #include <QList>

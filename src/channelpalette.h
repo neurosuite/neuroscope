@@ -24,7 +24,7 @@
 #include <qmap.h>
 #include <QLabel>
 #include <QCursor>
-//Added by qt3to4:
+
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QList>

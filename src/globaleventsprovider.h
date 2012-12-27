@@ -22,7 +22,7 @@
 
 // include files for QT
 #include <QHash>
-//Added by qt3to4:
+
 #include <QList>
 #include <QMap>
 //include files for the application

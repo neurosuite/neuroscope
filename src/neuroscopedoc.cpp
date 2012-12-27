@@ -21,7 +21,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QRegExp>
-//Added by qt3to4:
+
 #include <QList>
 #include <QInputDialog>
 #include <QFileDialog>

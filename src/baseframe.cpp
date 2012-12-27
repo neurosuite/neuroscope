@@ -21,7 +21,7 @@
 #include <qpaintdevice.h>
 #include <QPainter>
 #include <QStyle>
-//Added by qt3to4:
+
 #include <QResizeEvent>
 #include <QFrame>
 #include <QMouseEvent>

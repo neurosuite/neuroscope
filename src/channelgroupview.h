@@ -21,7 +21,7 @@
 #include <qwidget.h>
 #include <QObject> 
 #include <QPainter>
-//Added by qt3to4:
+
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QHBoxLayout>
