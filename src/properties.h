@@ -98,7 +98,7 @@ public:
     }
 
     /**Sets the background image.*/
-    void setTraceBackgroundImage(QString image){
+    void setTraceBackgroundImage(const QString& image){
         traceBackgroundLineEdit->setText(image);
     }
 
