@@ -11,9 +11,8 @@ find_package(LibXml2 REQUIRED)
 include(CheckCXXCompilerFlag)
 
 
-find_package(LibKlustersShared REQUIRED)
+find_package(LibKlustersShared 1.0.0 REQUIRED)
 add_definitions(${QT_DEFINITIONS} )
-SET( QT_USE_QT3SUPPORT TRUE )
 set( QT_USE_XML TRUE)
 
 
