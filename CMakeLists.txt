@@ -2,7 +2,7 @@ project(neuroscope)
 cmake_minimum_required(VERSION 2.8.6)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-set (QT_MIN_VERSION "4.7.0")
+set (QT_MIN_VERSION "4.8.0")
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 include(MacroEnsureVersion)
