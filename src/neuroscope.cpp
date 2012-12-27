@@ -70,19 +70,15 @@ NeuroscopeApp::NeuroscopeApp()
     ,colorModified(false)
     ,eventsModified(false)
     ,initialOffsetDefault(0)
-    ,propertiesDialog(0L),
-      select(false)
-    ,filePath("")
+    ,propertiesDialog(0L)
+    ,select(false)
     ,initialTimeWindow(0)
-    ,eventLabelToCreate(""),
-      eventProvider("")
     ,undoRedoInprocess(false)
     ,isPositionFileLoaded(false)
+    ,printer(0)
 {
     setObjectName("NeuroScope");
     initView();
-    //Prepare the actions
-    printer = new QPrinter();
 
     //Apply the user settings.
     initializePreferences();
@@ -1474,6 +1470,11 @@ void NeuroscopeApp::slotFileClose(){
 void NeuroscopeApp::slotFilePrint()
 {
     slotStatusMsg(tr("Printing..."));
+
+    //Prepare the actions
+    if(!printer)
+        printer = new QPrinter();
+
 
     printer->setOrientation(QPrinter::Landscape);
     printer->setColorMode(QPrinter::Color);
