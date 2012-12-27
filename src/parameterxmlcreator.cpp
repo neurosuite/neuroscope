@@ -50,7 +50,8 @@ ParameterXmlCreator::~ParameterXmlCreator(){}
 bool ParameterXmlCreator::writeTofile(const QString& url){ 
     QFile parameterFile(url);
     bool status = parameterFile.open(QIODevice::WriteOnly);
-    if(!status) return status;
+    if(!status)
+        return status;
 
     QDomElement neuroscope = doc.createElement(NEUROSCOPE);
     neuroscope.setAttribute(VERSION,NEUROSCOPE_VERSION);

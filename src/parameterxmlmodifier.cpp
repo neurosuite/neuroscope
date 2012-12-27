@@ -36,7 +36,8 @@ ParameterXmlModifier::~ParameterXmlModifier(){}
 bool ParameterXmlModifier::parseFile(const QString& url){
 
     QFile file(url);
-    if(!file.open(QIODevice::ReadWrite)) return false;
+    if(!file.open(QIODevice::ReadWrite))
+        return false;
     //actually load the file in a tree in  memory
     if(!doc.setContent(&file)){
         file.close();

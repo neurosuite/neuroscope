@@ -21,12 +21,7 @@
 
 #include <QList>
 #include <QPixmap>
-
-
-
 #include <QStatusBar>
-
-
 
 // application specific includes
 #include "neuroscopeview.h"
