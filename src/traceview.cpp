@@ -413,7 +413,9 @@ void TraceView::updateClusterData(bool active){
 void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     startTime = start;
     endTime = start + timeFrameWidth;
-    if(this->timeFrameWidth != timeFrameWidth) nbSamplesModified = true;
+    if(this->timeFrameWidth != timeFrameWidth)
+        nbSamplesModified = true;
+
     this->timeFrameWidth = timeFrameWidth;
 
     //Request the data
@@ -2816,9 +2818,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
             }
             else if(mode == DRAW_LINE){
                 if(!linePositions.isEmpty()) {
-                   previousDragAbscissa = lastClickAbscissa;
-                   initialDragLine = true;
-                   update();
+                    previousDragAbscissa = lastClickAbscissa;
+                    initialDragLine = true;
+                    update();
                 }
             }
             previousDragOrdinate = 0;

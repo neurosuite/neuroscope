@@ -660,6 +660,9 @@ private Q_SLOTS:
     void slotShowEventsInPositionView();
 
     void slotHanbook();
+
+    void slotSaveRecentFiles();
+
 private:
 
     void initView();

@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <qrecentfileaction.h>
 #include <QPrintDialog>
+#include <QSettings>
 
 #include <QStatusBar>
 #include <QToolBar>
@@ -140,8 +141,12 @@ void NeuroscopeApp::initActions()
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
 
     mFileOpenRecent = new QRecentFileAction(this);
+    QSettings settings;
+    mFileOpenRecent->setListOfRecentFile(settings.value(QLatin1String("Recent Files"),QStringList()).toStringList());
+
     fileMenu->addAction(mFileOpenRecent);
     connect(mFileOpenRecent, SIGNAL(recentFileSelected(QString)), this, SLOT(slotFileOpenRecent(QString)));
+    connect(mFileOpenRecent, SIGNAL(recentFileListChanged()), this, SLOT(slotSaveRecentFiles()));
 
     mLoadClusterFiles = fileMenu->addAction(tr("Load Cl&uster File(s)..."));
     connect(mLoadClusterFiles,SIGNAL(triggered()), this,SLOT(slotLoadClusterFiles()));
@@ -3571,5 +3576,12 @@ void NeuroscopeApp::slotHanbook()
     helpDialog->setAttribute( Qt::WA_DeleteOnClose );
     helpDialog->show();
 }
+
+void NeuroscopeApp::slotSaveRecentFiles()
+{
+    QSettings settings;
+    settings.setValue(QLatin1String("Recent Files"),mFileOpenRecent->listOfRecentFile());
+}
+
 
 #include "neuroscope.moc"
