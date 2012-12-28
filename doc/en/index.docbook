@@ -2381,7 +2381,7 @@ information here.
 -->
 
 <para>
-&neuroscope; requires KDE >= 3.1, QT >= 3.1 and <ulink url="http://www.xmlsoft.org/downloads.html">libxml2</ulink> >= 2.5.4
+&neuroscope; requires QT >= 4.8 and <ulink url="http://www.xmlsoft.org/downloads.html">libxml2</ulink> >= 2.5.4
 </para>
 <para>
 To build &neuroscope; from source, you will also need the corresponding devel packages and an ANSI C++ Standard compliant compiler (gcc version 3.2.2 is known to work).
@@ -2394,7 +2394,7 @@ To build &neuroscope; from source, you will also need the corresponding devel pa
 <para>
 In order to compile and install &neuroscope; on your system, download and extract the source archive, then type the following in the base directory:
 <screen width="40">
-<prompt>%</prompt> <userinput>./configure --prefix=`kde-config --prefix`</userinput>
+	<prompt>%</prompt> <userinput>cmake -DCMAKE_INSTALL_PREFIX=... ./</userinput>
 <prompt>%</prompt> <userinput>cd src</userinput>
 <prompt>%</prompt> <userinput>make</userinput>
 <prompt>%</prompt> <userinput>make install</userinput>
