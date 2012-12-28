@@ -891,6 +891,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     spikeChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
     displayChannelPalette->setGreyScale(greyScale->isChecked());
     spikeChannelPalette->setGreyScale(greyScale->isChecked());
+    paletteTabsParent->show();
 
     //Update the skip status of the channels
     displayChannelPalette->updateSkipStatus(skipStatus);
@@ -2445,8 +2446,6 @@ void NeuroscopeApp::slotDisplayClose(){
             displayChannelPalette->reset();
 
             paletteTabsParent->hide();
-            delete paletteTabsParent;
-            paletteTabsParent = 0;
             doc->closeDocument();
             //Delete the view
             delete mainDock;
