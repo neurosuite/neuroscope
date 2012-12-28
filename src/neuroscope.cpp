@@ -2235,7 +2235,10 @@ void NeuroscopeApp::slotPaletteTabChange(int index){
 
         //update the channel palettes
         NeuroscopeView* view = activeView();
+	if(!view) 
+          return;
         const QList<int> selectedChannels = view->getSelectedChannels();
+
         displayChannelPalette->hideUnselectAllChannels();
         spikeChannelPalette->hideUnselectAllChannels();
         displayChannelPalette->updateShowHideStatus(view->channels(),true);
