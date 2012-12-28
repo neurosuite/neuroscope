@@ -2428,7 +2428,6 @@ void NeuroscopeApp::slotDisplayClose(){
                 }
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
             //remove the cluster and event palettes if any
             while(paletteTabsParent->count() > 2){
                 QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->widget(0));
@@ -2444,12 +2443,15 @@ void NeuroscopeApp::slotDisplayClose(){
             //reset the channel palettes and hide the channel panels
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
-            //palettePanel->hide();
 
+            paletteTabsParent->hide();
+            delete paletteTabsParent;
+            paletteTabsParent = 0;
             doc->closeDocument();
             //Delete the view
             delete mainDock;
             mainDock = 0L;
+
             resetState();
             QApplication::restoreOverrideCursor();
         }
