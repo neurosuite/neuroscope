@@ -1166,9 +1166,6 @@ Since only selected events can be browsed, deselecting an event will automatical
 </para>
 </note>
 </sect2>
-<para>
-
-</para>
 <sect2>
 <title>Editing Events</title>
 
@@ -1334,7 +1331,7 @@ In a typical session, you open a data file, browse the local field potentials, m
 <chapter id="settings">
 <title>Settings</title>
 <para>
-Selecting <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure &neuroscope;</guimenuitem></menuchoice> will open the <guilabel>Settings Dialog</guilabel>. This lets you configure several default behaviors of &neuroscope;.
+Selecting <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure neuroscope</guimenuitem></menuchoice> will open the <guilabel>Settings Dialog</guilabel>. This lets you configure several default behaviors of &neuroscope;.
 </para>
 
 <variablelist>
@@ -2164,7 +2161,7 @@ The session file is where &neuroscope; stores information related to the working
 <guimenu>Traces</guimenu>
 <guimenuitem>Set Current Offsets as Defaults</guimenuitem>
 </menuchoice></term>
-<listitem>Sets the current offsets as the default offsets to be stored in the parameter file.</listitem>
+<listitem><para>Sets the current offsets as the default offsets to be stored in the parameter file.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><menuchoice>
@@ -2271,7 +2268,7 @@ The session file is where &neuroscope; stores information related to the working
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure &neuroscope;</guimenuitem>
+<guimenuitem>Configure neuroscope</guimenuitem>
 </menuchoice></term>
 <listitem><para>Lets you configure a number of settings including default behaviors.</para></listitem>
 </varlistentry>
@@ -2286,7 +2283,7 @@ The session file is where &neuroscope; stores information related to the working
 <varlistentry>
 <term><menuchoice>
 <guimenu>Help</guimenu>
-<guimenuitem>&neuroscope; Handbook</guimenuitem>
+<guimenuitem>neuroscope Handbook</guimenuitem>
 </menuchoice></term>
 <listitem><para>Opens this user manual in the <guilabel>Help Center</guilabel>.</para></listitem>
 </varlistentry>
@@ -2307,7 +2304,7 @@ The session file is where &neuroscope; stores information related to the working
 <varlistentry>
 <term><menuchoice>
 <guimenu>Help</guimenu>
-<guimenuitem>About &neuroscope;</guimenuitem>
+<guimenuitem>About neuroscope</guimenuitem>
 </menuchoice></term>
 <listitem><para>Shows information about the authors of and contributors to &neuroscope;.</para></listitem>
 </varlistentry>
