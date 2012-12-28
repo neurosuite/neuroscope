@@ -905,7 +905,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
 
     //Enable some actions now that a document is open (see the klustersui.rc file)
@@ -2167,7 +2167,8 @@ void NeuroscopeApp::slotHideChannels(){
     channelPalette->hideChannels();
 }
 
-void NeuroscopeApp::slotTabChange(QWidget* widget){
+void NeuroscopeApp::slotTabChange(int index){
+    QWidget *widget = tabsParent->widget(index);
     NeuroscopeView* activeView = dynamic_cast<NeuroscopeView*>(widget);
 
     isInit = true; //prevent the KToggleAction to trigger during initialisation
@@ -2217,9 +2218,10 @@ void NeuroscopeApp::slotTabChange(QWidget* widget){
 }
 
 
-void NeuroscopeApp::slotPaletteTabChange(QWidget* widget){
+void NeuroscopeApp::slotPaletteTabChange(int index){
     //Update the show/hide status of the inactive palette
     //Disable some actions when no document is open (see the klustersui.rc file)
+    QWidget *widget = paletteTabsParent->widget(index);
     if(qobject_cast<ChannelPalette*>(widget)){
         if(editMode->isChecked()){
             if(widget == displayChannelPalette){
@@ -2520,7 +2522,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
 
         //Connect the change tab signal to slotTabChange(QWidget* widget) to trigger updates when
         //the active display change.
-        connect(tabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotTabChange(QWidget*)));
+        connect(tabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotTabChange(int)));
 
         //Keep track of the number of displays
         displayCount ++;
@@ -2789,7 +2791,7 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
         disconnect(paletteTabsParent,0,0,0);
     //Connect the change tab signal to slotPaletteTabChange(QWidget* widget) to trigger updates when
     //the active palette changes.
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
     //Palette connections
     connect(clusterPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotClusterColorUpdate(int,QString)));
@@ -3006,7 +3008,7 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
     if(paletteTabsParent != NULL)
         disconnect(paletteTabsParent,0,0,0);
 
-    connect(paletteTabsParent, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotPaletteTabChange(QWidget*)));
+    connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
     slotStateChanged("eventState");
     if(isPositionFileLoaded) {

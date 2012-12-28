@@ -499,10 +499,10 @@ private Q_SLOTS:
     void slotHideChannels();
 
     /**Updates the palettes when the active display changes.*/
-    void slotTabChange(QWidget* widget);
+    void slotTabChange(int index);
 
     /**Updates internal variables when the active palettechanges.*/
-    void slotPaletteTabChange(QWidget* widget);
+    void slotPaletteTabChange(int index);
 
     /** Closes the display and if it is the last one closes the actual file and window.*/
     void slotDisplayClose();
