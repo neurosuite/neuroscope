@@ -73,10 +73,6 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-#if PORTING_KDAB
-    connect(this,SIGNAL(dropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)),
-            this,SLOT(slotDropped(QDropEvent*,Q3ValueList<Q3IconDragItem>)));
-#endif
 }
 
 void ChannelIconView::mousePressEvent(QMouseEvent* event)
