@@ -52,7 +52,7 @@ PrefDialog::PrefDialog(QWidget *parent)
     prefGeneral = new PrefGeneral(w);
     QPageWidgetItem *item = new QPageWidgetItem(prefGeneral,tr("General"));
     item->setHeader(tr("NeuroScope Configuration"));
-    item->setIcon(QIcon(":/icons/kfm"));
+    item->setIcon(QIcon(":/shared-icons/folder-open"));
 
 
     addPage(item);
@@ -74,7 +74,7 @@ PrefDialog::PrefDialog(QWidget *parent)
 
     item = new QPageWidgetItem(tabWidget,tr("Defaults"));
     item->setHeader(tr("NeuroScope Defaults"));
-    item->setIcon(QIcon(":/icons/default"));
+    item->setIcon(QIcon(":/icons/defaults"));
 
 
     addPage(item);
