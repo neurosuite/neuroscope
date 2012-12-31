@@ -30,7 +30,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     ,atStartUp(false)
 {
 
-    setButtons(Help | Default | Ok | Apply | Cancel);
+    setButtons(Help | Ok | Cancel);
     setDefaultButton(Ok);
     setFaceType(Tabbed);
     setWindowTitle(tr("File Properties"));
