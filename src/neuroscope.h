@@ -194,9 +194,9 @@ public:
 public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
-    void page() {	activeView()->page(); }
-    void accelerate() {	activeView()->accelerate(); }
-    void decelerate() {	activeView()->decelerate(); }
+    void page() {	if( activeView()) activeView()->page(); }
+    void accelerate() {	if( activeView()) activeView()->accelerate(); }
+    void decelerate() {	if( activeView()) activeView()->decelerate(); }
 
     /**Called when an event has been modified.
   * @param providerName name use to identified the event provider containing the modified event.

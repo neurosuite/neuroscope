@@ -473,15 +473,15 @@ void NeuroscopeApp::initActions()
 
 
     /// Added by M.Zugaro to enable automatic forward paging
-    mPage = traceMenu->addAction(tr("Page"));
+    mPage = new QAction(tr("Page"),this);
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 
-    mAccelerate = traceMenu->addAction(tr("Accelerate"));
+    mAccelerate = new QAction(tr("Accelerate"), this);
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
-    mDecelerate = traceMenu->addAction(tr("Decelerate"));
+    mDecelerate = new QAction(tr("Decelerate"), this);
     mDecelerate->setShortcut(Qt::CTRL + Qt::Key_Down);
     connect(mDecelerate,SIGNAL(triggered()), this,SLOT(decelerate()));
 
