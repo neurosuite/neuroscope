@@ -3592,4 +3592,3 @@ void NeuroscopeApp::slotSaveRecentFiles()
 }
 
 
-#include "neuroscope.moc"

@@ -494,6 +494,3 @@ void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
     selectedChannels = selectedIds;
     emit channelsSelected(selectedIds);
 }
-
-
-#include "neuroscopeview.moc"

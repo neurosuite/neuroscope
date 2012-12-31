@@ -1343,7 +1343,3 @@ bool operator<(const EventDescription& s1,const EventDescription& s2){
     if(s1.toLower() == s2.toLower()) return (static_cast<QString>(s1) < static_cast<QString>(s2));
     else return (static_cast<QString>(s1.toLower()) < static_cast<QString>(s2.toLower()));
 }
-
-
-
-#include "eventsprovider.moc"

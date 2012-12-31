@@ -2693,6 +2693,3 @@ void NeuroscopeDoc::resetDefaultOffsets(){
         channelDefaultOffsets.insert(i,0);
 }
 
-
-
-#include "neuroscopedoc.moc"

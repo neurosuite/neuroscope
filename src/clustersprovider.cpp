@@ -882,9 +882,3 @@ void ClustersProvider::requestPreviousClusterData(long startTime,long timeFrame,
     //Send the information to the receiver.
     emit previousClusterDataReady(finalData,initiator,name,previousStartTime,startingInCurrentRecordingUnits2);
 }
-
-
-
-
-
-#include "clustersprovider.moc"

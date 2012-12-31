@@ -294,4 +294,4 @@ void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
     Q3IconView::contentsMousePressEvent(event);
 }
 #endif
-#include "channeliconview.moc"
+

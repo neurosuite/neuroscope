@@ -359,11 +359,3 @@ void PositionsProvider::retrieveData(long startTime,long endTime,QObject* initia
 
 }
 
-
-
-
-
-
-
-
-#include "positionsprovider.moc"

@@ -110,6 +110,3 @@ void ChannelGroupView::setLabel(QLabel* label){
 QLabel* ChannelGroupView::label(){
     return mLabel;
 }
-
-
-#include "channelgroupview.moc"

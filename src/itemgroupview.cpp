@@ -87,4 +87,3 @@ QLabel* ItemGroupView::label(){
 }
 
 
-#include "itemgroupview.moc"

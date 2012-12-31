@@ -4517,8 +4517,3 @@ void TraceView::setMode(BaseFrame::Mode selectedMode,bool active){
         linePositions.clear();
     }
 }
-
-
-
-
-#include "traceview.moc"

@@ -29,6 +29,3 @@ void GlobalEventsProvider::eventInformationAvailable(QHash<QString, EventData*>&
     emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 }
 
-
-#include "globaleventsprovider.moc"
-

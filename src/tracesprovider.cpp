@@ -381,7 +381,3 @@ void TracesProvider::computeRecordingLength(){
 long TracesProvider::getTotalNbSamples(){
     return static_cast<long>((length * samplingRate) / 1000);
 }
-
-
-
-#include "tracesprovider.moc"

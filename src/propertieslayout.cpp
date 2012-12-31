@@ -5,4 +5,3 @@ PropertiesLayout::PropertiesLayout( QWidget* parent )
     setupUi( this );
 
 }
-#include "propertieslayout.moc"

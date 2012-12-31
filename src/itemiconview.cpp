@@ -97,5 +97,3 @@ void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     emit mouseReleased(this->objectName());
 }
 
-
-#include "itemiconview.moc"

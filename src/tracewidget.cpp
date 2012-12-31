@@ -621,7 +621,3 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
         emit updateStartAndDuration(startTime,timeWindow);
     }
 }
-
-
-
-#include "tracewidget.moc"

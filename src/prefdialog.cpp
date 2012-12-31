@@ -220,6 +220,3 @@ void PrefDialog::enableApply() {
     enableButtonApply(true);   // enable apply button
     applyEnable = true;
 }
-
-
-#include "prefdialog.moc"

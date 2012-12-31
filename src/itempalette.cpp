@@ -1047,6 +1047,3 @@ void ItemPalette::orderTheGroups(){
     verticalContainer->setStretchFactor(spaceWidget,2);
 }
 
-
-
-#include "itempalette.moc"

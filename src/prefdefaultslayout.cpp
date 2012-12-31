@@ -5,5 +5,3 @@ PrefDefaultsLayout::PrefDefaultsLayout( QWidget* parent )
     setupUi( this );
 
 }
-
-#include "prefdefaultslayout.moc"

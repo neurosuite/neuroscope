@@ -349,4 +349,3 @@ long BaseFrame::worldToViewportOrdinate(long wy){
     return static_cast<long>(viewportY);
 }
 
-#include "baseframe.moc"

@@ -92,5 +92,3 @@ void ImageCreator::drawPositions(QPainter& painter){
     for(int i = 1;i<=nbPoints;++i)
         painter.drawPoint(data(i,1),data(i,2));
 }
-
-#include "imagecreator.moc"

@@ -209,6 +209,3 @@ void PositionProperties::setEnabled (bool state){
         backgroundPixmap2->setPixmap(pixmap);
     }
 }
-
-
-#include "positionproperties.moc"

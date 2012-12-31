@@ -42,5 +42,3 @@ PrefDefaults::PrefDefaults(QWidget *parent )
 }
 PrefDefaults::~PrefDefaults(){
 }
-
-#include "prefdefaults.moc"

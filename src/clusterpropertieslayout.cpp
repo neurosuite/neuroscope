@@ -5,5 +5,3 @@ ClusterPropertiesLayout::ClusterPropertiesLayout( QWidget* parent )
     setupUi( this );
 
 }
-
-#include "clusterpropertieslayout.moc"

@@ -20,14 +20,9 @@
 //QT includes
 #include <QIcon>
 
-
-
-
 PrefGeneral::PrefGeneral(QWidget *parent)
     : PrefGeneralLayout(parent),validator(this)
 {
 }
 PrefGeneral::~PrefGeneral(){
 }
-
-#include "prefgeneral.moc"

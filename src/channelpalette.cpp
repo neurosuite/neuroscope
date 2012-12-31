@@ -2116,6 +2116,3 @@ void ChannelPalette::trashChannels(int destinationGroup){
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
 }
-
-
-#include "channelpalette.moc"
