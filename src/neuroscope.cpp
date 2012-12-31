@@ -2593,7 +2593,6 @@ void NeuroscopeApp::resizePalettePanel(){
 }
 
 void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){
-    qDebug()<<" void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){ :"<<selectedIds;
     spikeChannelPalette->selectChannels(selectedIds);
     displayChannelPalette->selectChannels(selectedIds);
 }
