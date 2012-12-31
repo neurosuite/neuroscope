@@ -53,9 +53,9 @@ Q_SIGNALS:
 
 
 protected:
-    void mousePressEvent(QMouseEvent* event);
     void wheelEvent ( QWheelEvent * e );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
+    void mousePressEvent(QMouseEvent *event);
 
 #if 0
 

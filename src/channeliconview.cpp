@@ -280,18 +280,4 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
     //Normally never reach
     return lastItem();
 }
-
-void ChannelIconView::contentsMousePressEvent(QMouseEvent* event){
-    //If the user did not clicked on an item, ignore the click
-    Q3IconViewItem* item = findItem(event->pos());
-    if(item == 0L) return;
-
-    //  if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
-    //   !(event->modifiers() & Qt::ControlModifier)){
-    //    emit moussePressWoModificators(this->name());
-    //  }
-
-    Q3IconView::contentsMousePressEvent(event);
-}
 #endif
-
