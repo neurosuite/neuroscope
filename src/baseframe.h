@@ -161,7 +161,7 @@ protected:
   * @param point point with coordinates relative to the widget (viewport).
   * @return the point on the viewport translated to a point in the world.
   */
-    inline QPoint viewportToWorld(const QPoint& point){
+    QPoint viewportToWorld(const QPoint& point){
         return viewportToWorld(point.x(), point.y());
     }
 
@@ -179,7 +179,7 @@ protected:
   * @param point point with coordinates in the world.
   * @return the point on the world translated to a point in the viewport.
   */
-    inline QPoint worldToViewport(const QPoint& point){
+    QPoint worldToViewport(const QPoint& point){
         return worldToViewport(point.x(), point.y());
     }
 
@@ -201,7 +201,7 @@ protected:
   * @param width width in the world's coordinates system.
   * @return width in the viewport's coordinates system.
   */
-    inline long worldToViewportWidth(long width){
+    long worldToViewportWidth(long width){
         float widthRatio = (static_cast<float>(viewport.width())/static_cast<float>(((QRect)window).width()));
         return static_cast<long>(width * widthRatio);
     }
@@ -211,7 +211,7 @@ protected:
   * @param height height in the world's coordinates system.
   * @return height in the viewport's coordinates system.
   */
-    inline long worldToViewportHeight(long height){
+    long worldToViewportHeight(long height){
         float heightRatio = (static_cast<float>(viewport.height())/static_cast<float>(((QRect)window).height()));
         return static_cast<long>(height * heightRatio);
     }
@@ -221,7 +221,7 @@ protected:
   * @param width width in the world's coordinates system.
   * @return width in the viewport's coordinates system.
   */
-    inline long viewportToWorldWidth(long width){
+    long viewportToWorldWidth(long width){
         float widthRatio = (static_cast<float>(((QRect)window).width())/static_cast<float>(viewport.width()));
         return static_cast<long>(width * widthRatio);
     }
@@ -231,7 +231,7 @@ protected:
   * @param height height in the world's coordinates system.
   * @return height in the viewport's coordinates system.
   */
-    inline long viewportToWorldHeight(long height){
+    long viewportToWorldHeight(long height){
         float heightRatio = (static_cast<float>(((QRect)window).height())/static_cast<float>(viewport.height()));
         return static_cast<long>(height * heightRatio);
     }
