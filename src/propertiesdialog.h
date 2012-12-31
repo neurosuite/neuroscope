@@ -179,7 +179,7 @@ protected:
 private Q_SLOTS:
     /** Will be called when the number of channels has been modified.*/
      void channelNbModified(){nbChannelsModified = true;}
-
+     void slotHelp();
 private:
     Properties* properties;
     PositionProperties* positionProperties;

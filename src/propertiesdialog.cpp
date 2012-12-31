@@ -21,6 +21,9 @@
 //include files for the application
 #include "propertiesdialog.h"
 
+#include "qhelpviewer.h"
+#include "config-neuroscope.h"
+
 
 PropertiesDialog::PropertiesDialog(QWidget *parent)
     : QPageDialog(parent)
@@ -74,8 +77,19 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     connect(positionProperties->rotateComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(propertyModified()));
+
+    connect(this,SIGNAL(helpClicked()),SLOT(slotHelp()));
 }
 PropertiesDialog::~PropertiesDialog(){
+}
+
+void PropertiesDialog::slotHelp()
+{
+    QHelpViewer *helpDialog = new QHelpViewer(this);
+    helpDialog->setHtml(NEUROSCOPE_DOC_PATH + QLatin1String("index.html"));
+    helpDialog->setAttribute( Qt::WA_DeleteOnClose );
+    helpDialog->show();
+
 }
 
 void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int offset,float screenGain,int voltageRange,
