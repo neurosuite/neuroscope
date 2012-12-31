@@ -22,7 +22,6 @@
 #include <qwidget.h>
 #include <QPainter>
 #include <QListWidget>
-#include <q3dragobject.h>
 #include <qwidget.h>
 
 #include <QMouseEvent>
