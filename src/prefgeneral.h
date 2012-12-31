@@ -76,6 +76,10 @@ public:
     /**Returns the cluster position in percentage from the begining of the window where the clusters are display when browsing.*/
     int getClusterPosition()const{return clusterPositionSpinBox->value();}
 
+    bool useWhiteColorDuringPrinting() const;
+
+    void setUseWhiteColorDuringPrinting(bool b);
+
 private:
 
     QIntValidator validator;

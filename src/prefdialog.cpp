@@ -86,6 +86,7 @@ PrefDialog::PrefDialog(QWidget *parent)
     connect(prefGeneral->backgroundColorButton,SIGNAL(colorChanged(QColor)),this,SLOT(enableApply()));
     connect(prefGeneral->eventPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
     connect(prefGeneral->clusterPositionSpinBox,SIGNAL(valueChanged(int)),this,SLOT(enableApply()));
+    connect(prefGeneral->useWhiteColorPrinting,SIGNAL(clicked()),this,SLOT(enableApply()));
     connect(prefDefaults->screenGainLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
     connect(prefDefaults->voltageRangeLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
     connect(prefDefaults->amplificationLineEdit,SIGNAL(textChanged(QString)),this,SLOT(enableApply()));
@@ -105,6 +106,7 @@ PrefDialog::PrefDialog(QWidget *parent)
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(enableApply()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(enableApply()));
 
+
     connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
     connect(this,SIGNAL(helpClicked()),SLOT(slotHelp()));
@@ -120,6 +122,7 @@ void PrefDialog::slotHelp()
 }
 
 void PrefDialog::updateDialog() {
+    prefGeneral->setUseWhiteColorDuringPrinting(configuration().getUseWhiteColorDuringPrinting());
     prefGeneral->setBackgroundColor(configuration().getBackgroundColor());
     prefGeneral->setPaletteHeaders(configuration().isPaletteHeadersDisplayed());
     prefGeneral->setEventPosition(configuration().getEventPosition());
@@ -150,6 +153,7 @@ void PrefDialog::updateDialog() {
 
 
 void PrefDialog::updateConfiguration(){
+    configuration().setUseWhiteColorDuringPrinting(prefGeneral->useWhiteColorDuringPrinting());
     configuration().setBackgroundColor(prefGeneral->getBackgroundColor());
     configuration().setPaletteHeaders(prefGeneral->isPaletteHeadersDisplayed());
     configuration().setEventPosition(prefGeneral->getEventPosition());
@@ -186,6 +190,8 @@ void PrefDialog::slotDefault() {
         prefGeneral->setPaletteHeaders(configuration().isPaletteHeadersDisplayedDefault());
         prefGeneral->setEventPosition(configuration().getEventPositionDefault());
         prefGeneral->setClusterPosition(configuration().getClusterPositionDefault());
+        prefGeneral->setUseWhiteColorDuringPrinting(configuration().getUseWhiteColorDuringPrinting());
+
         prefDefaults->setScreenGain(configuration().getScreenGainDefault());
         prefDefaults->setVoltageRange(configuration().getVoltageRangeDefault());
         prefDefaults->setAmplification(configuration().getAmplificationDefault());

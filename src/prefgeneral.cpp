@@ -26,3 +26,13 @@ PrefGeneral::PrefGeneral(QWidget *parent)
 }
 PrefGeneral::~PrefGeneral(){
 }
+
+bool PrefGeneral::useWhiteColorDuringPrinting() const
+{
+    return useWhiteColorPrinting->isChecked();
+}
+
+void PrefGeneral::setUseWhiteColorDuringPrinting(bool b)
+{
+    useWhiteColorPrinting->setChecked(b);
+}
