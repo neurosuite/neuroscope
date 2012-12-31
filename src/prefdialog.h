@@ -55,6 +55,8 @@ public Q_SLOTS:
     /**Will be called whenever a setting was changed.*/
     void enableApply();
 
+    void slotHelp();
+
 Q_SIGNALS:
     /// Will be emitted when the new settings should be applied.
     void settingsChanged();

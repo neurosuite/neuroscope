@@ -30,6 +30,8 @@
 #include "prefdefaults.h" // class prefDefaults
 #include "positionproperties.h"
 #include "clusterproperties.h"
+#include "qhelpviewer.h"
+#include "config-neuroscope.h"
 
 /**
   *@author Lynn Hazan
@@ -105,8 +107,16 @@ PrefDialog::PrefDialog(QWidget *parent)
 
     connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
-
+    connect(this,SIGNAL(helpClicked()),SLOT(slotHelp()));
     applyEnable = false;
+}
+
+void PrefDialog::slotHelp()
+{
+    QHelpViewer *helpDialog = new QHelpViewer(this);
+    helpDialog->setHtml(NEUROSCOPE_DOC_PATH + QLatin1String("index.html"));
+    helpDialog->setAttribute( Qt::WA_DeleteOnClose );
+    helpDialog->show();
 }
 
 void PrefDialog::updateDialog() {
