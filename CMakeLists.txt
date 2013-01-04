@@ -17,7 +17,7 @@ set( QT_USE_XML TRUE)
 
 
 # tell cmake where to search for Qt/KDE headers:
-include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QT3SUPPORT_INCLUDE_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
+include_directories(${LIBXML2_INCLUDE_DIR} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
 
 # This macro is for internal use only
 # Return the directories present in gcc's include path.

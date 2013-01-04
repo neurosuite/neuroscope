@@ -19,7 +19,6 @@
 #define SESSIONINFORMATION_H
 
 //include files for QT
-#include <q3valuelist.h>
 #include <QDateTime>
 #include <QColor>
 #include <QString>
