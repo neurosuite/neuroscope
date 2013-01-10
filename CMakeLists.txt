@@ -40,8 +40,8 @@ ENDMACRO(_DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang)
 #laurent check from kde
 if (CMAKE_COMPILER_IS_GNUCXX)
   if (NOT APPLE)
-    set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined -lc ${CMAKE_SHARED_LINKER_FLAGS}")
-    set ( CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined -lc ${CMAKE_MODULE_LINKER_FLAGS}")
+    set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined  ${CMAKE_SHARED_LINKER_FLAGS}")
+    set ( CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined  ${CMAKE_MODULE_LINKER_FLAGS}")
   endif ()
    
    _DETERMINE_GCC_SYSTEM_INCLUDE_DIRS(c++ _dirs)
