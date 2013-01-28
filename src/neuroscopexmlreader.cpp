@@ -600,29 +600,62 @@ void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>&
 
 int NeuroscopeXmlReader::getNbSamples()const{
     int nbSamples = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
     //The tag has change of location, it was inside the SPIKE element, it is now inside the NEUROSCOPE/SPIKES element.
-    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2"))
-        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + NB_SAMPLES).toLatin1());
-    else
-        searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + NB_SAMPLES).toLatin1());
-
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one nbSamples element, so take the first one.
-            xmlChar* sNbSamples = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            nbSamples = QString((char*)sNbSamples).toInt();
-            xmlFree(sNbSamples);
+    if(type == SESSION && (readVersion.isEmpty() || readVersion == "1.2.2")) {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == SPIKE) {
+                        QDomNode video = e.firstChild(); // try to convert the node to an element.
+                        while(!video.isNull()) {
+                            QDomElement u = video.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if(tag == NB_SAMPLES) {
+                                    nbSamples = u.text().toInt();
+                                    return nbSamples;
+                                }
+                            }
+                            video = video.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(SPIKES); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == NB_SAMPLES) {
+                                        nbSamples =  w.text().toInt();
+                                        return nbSamples;
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return nbSamples;
 }
 
@@ -662,27 +695,62 @@ float NeuroscopeXmlReader::getWaveformLength()const{
 
 int NeuroscopeXmlReader::getPeakSampleIndex()const{
     int index = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
     //The tag has change of location, it was inside the SPIKE element, it is now inside the NEUROSCOPE/SPIKES element.
-    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2")) searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + PEAK_SAMPLE_INDEX).toLatin1());
-    else searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_INDEX).toLatin1());
-
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one index element, so take the first one.
-            xmlChar* sindex = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            index = QString((char*)sindex).toInt();
-            xmlFree(sindex);
+    if(type == SESSION && (readVersion.isEmpty() || readVersion == "1.2.2")) {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == SPIKE) {
+                        QDomNode video = e.firstChild(); // try to convert the node to an element.
+                        while(!video.isNull()) {
+                            QDomElement u = video.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if(tag == PEAK_SAMPLE_INDEX) {
+                                    index = u.text().toInt();
+                                    return index;
+                                }
+                            }
+                            video = video.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(SPIKES); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == PEAK_SAMPLE_INDEX) {
+                                        index =  w.text().toInt();
+                                        return index;
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return index;
 }
 
