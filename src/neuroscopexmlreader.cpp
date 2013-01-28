@@ -976,23 +976,34 @@ QString NeuroscopeXmlReader::getBackgroundImage()const{
 
 QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
     QString traceBackgroundPath = "-";
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + TRACE_BACKGROUND_IMAGE).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one TRACE_BACKGROUND_IMAGE element, so take the first one.
-            xmlChar* sTraceBackgroundPath = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            traceBackgroundPath = QString((char*)sTraceBackgroundPath);
-            xmlFree(sTraceBackgroundPath);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode video = e.firstChildElement(MISCELLANEOUS); // try to convert the node to an element.
+                    if (!video.isNull()) {
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == TRACE_BACKGROUND_IMAGE) {
+                                    traceBackgroundPath =  w.text();
+                                    return traceBackgroundPath;
+                                }
+                            }
+                            b = b.nextSibling();
+                        }
+                    }
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
 
     return traceBackgroundPath;
 } 
