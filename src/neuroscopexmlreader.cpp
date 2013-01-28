@@ -630,25 +630,34 @@ int NeuroscopeXmlReader::getNbSamples()const{
 
 float NeuroscopeXmlReader::getWaveformLength()const{
     float waveformLength = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + WAVEFORM_LENGTH).toLatin1());
 
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one nbSamples element, so take the first one.
-            xmlChar* sWaveformLength = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            waveformLength = QString((char*)sWaveformLength).toInt();
-            xmlFree(sWaveformLength);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode video = e.firstChildElement(SPIKES); // try to convert the node to an element.
+                    if (!video.isNull()) {
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == WAVEFORM_LENGTH) {
+                                    waveformLength =  w.text().toFloat();
+                                    return waveformLength;
+                                }
+                            }
+                            b = b.nextSibling();
+                        }
+                    }
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
-
     return waveformLength;
 }
 
@@ -706,114 +715,155 @@ float NeuroscopeXmlReader::getPeakSampleLength()const{
 
 int NeuroscopeXmlReader::getVideoWidth()const{
     int width = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + WIDTH).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one width element, so take the first one.
-            xmlChar* sWidth = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            width = QString((char*)sWidth).toInt();
-            xmlFree(sWidth);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == WIDTH) {
+                                width = u.text().toInt();
+                                return width;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return width;
 }
 
 
 int NeuroscopeXmlReader::getVideoHeight()const{
     int height = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + HEIGHT).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one height element, so take the first one.
-            xmlChar* sHeight = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            height = QString((char*)sHeight).toInt();
-            xmlFree(sHeight);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == HEIGHT) {
+                                height = u.text().toInt();
+                                return height;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return height;
 }
 
 
 int NeuroscopeXmlReader::getRotation()const{
     int angle = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + ROTATE).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one rotation element, so take the first one.
-            xmlChar* sAngle = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            angle = QString((char*)sAngle).toInt();
-            xmlFree(sAngle);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == ROTATE) {
+                                angle = u.text().toInt();
+                                return angle;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return angle;
 }
 
 
 int NeuroscopeXmlReader::getFlip()const{
     int orientation = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + FLIP).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one flip element, so take the first one.
-            xmlChar* sOrientation = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            orientation = QString((char*)sOrientation).toInt();
-            xmlFree(sOrientation);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == FLIP) {
+                                orientation = u.text().toInt();
+                                return orientation;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return orientation;
 }
 
 int NeuroscopeXmlReader::getTrajectory()const{
     int drawTrajectory = false;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + POSITIONS_BACKGROUND).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one POSITIONS_BACKGROUND element, so take the first one.
-            xmlChar* sTrajectory = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            drawTrajectory = QString((char*)sTrajectory).toInt();
-            xmlFree(sTrajectory);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == POSITIONS_BACKGROUND) {
+                                drawTrajectory = u.text().toInt();
+                                return drawTrajectory;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return drawTrajectory;
 }  
 
