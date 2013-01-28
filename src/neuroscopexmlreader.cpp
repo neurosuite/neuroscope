@@ -23,6 +23,8 @@
 //include files for QT
 #include <QFileInfo> 
 #include <QString> 
+#include <QDomDocument>
+#include <QDebug>
 
 using namespace neuroscope;
 
@@ -35,13 +37,38 @@ NeuroscopeXmlReader::~NeuroscopeXmlReader(){
 
 bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
     this->type = type;
+    qDebug()<<" URL:"<<url;
+    QFile input(url);
+
+    QDomDocument docElement;
+    QString errorMsg;
+    int errorRow;
+    int errorCol;
+    if ( !docElement.setContent( &input, &errorMsg, &errorRow, &errorCol ) ) {
+        qWarning() << "Unable to load document.Parse error in " << url << ", line " << errorRow << ", col " << errorCol << ": " << errorMsg << endl;
+        return false;
+    }
+
+    QDomElement element = docElement.documentElement();
+
+    if (element.tagName() == QLatin1String("parameters")) {
+        if( element.hasAttribute(VERSION)) {
+            readVersion = element.attribute(VERSION);
+            qDebug()<<" readVersion "<<readVersion;
+        }
+    }
+    documentNode = element;
+
+
+
 
     // Init libxml
     xmlInitParser();
 
     // Load XML document
     doc = xmlParseFile(url.toLatin1());
-    if(doc == NULL) return false;
+    if(doc == NULL)
+        return false;
 
     // Create xpath evaluation context
     xpathContex = xmlXPathNewContext(doc);
@@ -55,9 +82,11 @@ bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
     xmlChar* versionTag = xmlCharStrdup(VERSION.toLatin1());
     if(rootElement != NULL){
         xmlChar* sVersion = xmlGetProp(rootElement,versionTag);//get the attribute with the name versionTag
-        if(sVersion != NULL) readVersion = QString((char*)sVersion);
+        if(sVersion != NULL)
+            readVersion = QString((char*)sVersion);
         xmlFree(sVersion);
     }
+    qDebug()<<" readVersion"<<readVersion;
     xmlFree(versionTag);
     
     return true;
@@ -77,67 +106,94 @@ void NeuroscopeXmlReader::closeFile(){
 
 int NeuroscopeXmlReader::getResolution()const{
     int resolution = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString(QLatin1String("//") + ACQUISITION + QLatin1String("/") + BITS).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one resolution element, so take the first one.
-            xmlChar* sResolution = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            resolution = QString((char*)sResolution).toInt();
-            xmlFree(sResolution);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == ACQUISITION) {
+                    QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                    while(!acquisition.isNull()) {
+                        QDomElement u = acquisition.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if (tag == BITS) {
+                                resolution = u.text().toInt();
+                                return resolution;
+                                break;
+                            }
+                        }
+                        acquisition = acquisition.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
 
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return resolution;
 }
 
 int NeuroscopeXmlReader::getNbChannels()const{
     int nbChannels = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + NB_CHANNELS).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one nbChannels element, so take the first one.
-            xmlChar* sNbChannels = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            nbChannels = QString((char*)sNbChannels).toInt();
-            xmlFree(sNbChannels);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == ACQUISITION) {
+                    QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                    while(!acquisition.isNull()) {
+                        QDomElement u = acquisition.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if (tag == NB_CHANNELS) {
+                                nbChannels = u.text().toInt();
+                                return nbChannels;
+                            }
+                        }
+                        acquisition = acquisition.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return nbChannels;
 }
 
 double NeuroscopeXmlReader::getSamplingRate()const{
     double samplingRate = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + SAMPLING_RATE).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one sampling rate element at that level, so take the first one.
-            xmlChar* sSamplingRate = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            samplingRate = QString((char*)sSamplingRate).toDouble();
-            xmlFree(sSamplingRate);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == ACQUISITION) {
+                    QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                    while(!acquisition.isNull()) {
+                        QDomElement u = acquisition.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if (tag == SAMPLING_RATE) {
+                                samplingRate = u.text().toDouble();
+                                return samplingRate;
+                            }
+                        }
+                        acquisition = acquisition.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return samplingRate;
 }
 
@@ -216,7 +272,8 @@ int NeuroscopeXmlReader::getVoltageRange() const{
     xmlXPathObjectPtr result;
     xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion.isEmpty() ) searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + VOLTAGE_RANGE).toLatin1());
+    if(type == SESSION && readVersion.isEmpty() )
+        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + VOLTAGE_RANGE).toLatin1());
     else
         searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + VOLTAGE_RANGE).toLatin1());
 
@@ -1154,7 +1211,7 @@ QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
 
     //The tag has change of location, it was inside the session file (at SAMPLING_RATES/EXTENSION_SAMPLING_RATE),
     //it is now inside the the parameter file (at FILES/FILE).
-    if(type == SESSION && (readVersion == "" || readVersion == "1.2.2"))
+    if(type == SESSION && (readVersion.isEmpty() || readVersion == "1.2.2"))
         searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + SAMPLING_RATES + "/" + EXTENSION_SAMPLING_RATE).toLatin1());
     else if(type == PARAMETER)
         searchPath = xmlCharStrdup(QString("//" + FILES + "/" + neuroscope::FILE).toLatin1());

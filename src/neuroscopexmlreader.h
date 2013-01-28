@@ -18,9 +18,6 @@
 #ifndef NEUROSCOPEXMLREADER_H
 #define NEUROSCOPEXMLREADER_H
 
-
-
-
 //Libxml2 include files.
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,6 +28,7 @@
 
 //include files for QT
 #include <QList> 
+#include <QDomNode>
 
 //Application specific includes
 #include "sessionInformation.h"
@@ -238,6 +236,8 @@ private:
     fileType type;
     xmlXPathContextPtr xpathContex;
     QString readVersion;
+    QDomNode documentNode;
+
 };
 
 #endif
