@@ -437,43 +437,52 @@ QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
 }
 
 void NeuroscopeXmlReader::getChannelDefaultOffset(QMap<int,int>& channelDefaultOffsets){
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + CHANNELS + "/" + CHANNEL_OFFSET).toLatin1());
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode channels = e.firstChildElement(CHANNELS); // try to convert the node to an element.
+                    if (!channels.isNull()) {
+                        QDomNode channelColors = channels.firstChild();
+                        int i = 0;
+                        while(!channelColors.isNull()) {
+                            QDomElement w = channelColors.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == CHANNEL_OFFSET) {
+                                    QDomNode channelGroup = w.firstChild(); // try to convert the node to an element.
+                                    int channelId = i;
+                                    int offset = 0;
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the CHANNEL_OFFSET.
-            int nbChannels = nodeset->nodeNr;
-            for(int i = 0; i < nbChannels; ++i){
-                int channelId = i;
-                int offset = 0;
-                xmlNodePtr child;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
-
-                    if(QString((char*)child->name) == CHANNEL){
-                        xmlChar* sId = xmlNodeListGetString(doc,child->children, 1);
-                        channelId = QString((char*)sId).toInt();
-                        xmlFree(sId);
+                                    while(!channelGroup.isNull()) {
+                                        QDomElement val = channelGroup.toElement();
+                                        if (!val.isNull()) {
+                                            tag = val.tagName();
+                                            if (tag == CHANNEL) {
+                                                channelId = val.text().toInt();
+                                            } else if(tag == DEFAULT_OFFSET) {
+                                                offset = val.text().toInt();
+                                            }
+                                        }
+                                        //the channels must be numbered continuously from 0.
+                                        //if(channelId < nbChannels)
+                                            channelDefaultOffsets.insert(channelId,offset);
+                                       channelGroup =  channelGroup.nextSibling();
+                                    }
+                                }
+                            }
+                            channelColors = channelColors.nextSibling();
+                            i++;
+                        }
                     }
-                    if(QString((char*)child->name) == DEFAULT_OFFSET){
-                        xmlChar* sOffset = xmlNodeListGetString(doc,child->children, 1);
-                        offset =  QString((char*)sOffset).toInt();
-                        xmlFree(sOffset);
-                    }
-                    //the channels must be numbered continuously from 0.
-                    if(channelId < nbChannels) channelDefaultOffsets.insert(channelId,offset);
                 }
             }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
 }
 
 void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spikeChannelsGroups,QMap<int, QList<int> >& spikeGroupsChannels){ 
