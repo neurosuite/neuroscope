@@ -690,24 +690,35 @@ int NeuroscopeXmlReader::getPeakSampleIndex()const{
 
 float NeuroscopeXmlReader::getPeakSampleLength()const{
     float indexLength = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + NEUROSCOPE + "/" + SPIKES + "/" + PEAK_SAMPLE_LENGTH).toLatin1());
 
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one index element, so take the first one.
-            xmlChar* sIndexLength = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            indexLength = QString((char*)sIndexLength).toInt();
-            xmlFree(sIndexLength);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode video = e.firstChildElement(SPIKES); // try to convert the node to an element.
+                    if (!video.isNull()) {
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == PEAK_SAMPLE_LENGTH) {
+                                    indexLength =  w.text().toFloat();
+                                    return indexLength;
+                                }
+                            }
+                            b = b.nextSibling();
+                        }
+                    }
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
 
     return indexLength;
 }
@@ -838,7 +849,7 @@ int NeuroscopeXmlReader::getFlip()const{
 }
 
 int NeuroscopeXmlReader::getTrajectory()const{
-    int drawTrajectory = false;
+    int drawTrajectory = 0;
     QDomNode n = documentNode.firstChild();
     if (!n.isNull()) {
         while(!n.isNull()) {
@@ -869,24 +880,31 @@ int NeuroscopeXmlReader::getTrajectory()const{
 
 QString NeuroscopeXmlReader::getBackgroundImage()const{
     QString backgroundPath = "-";
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + VIDEO + "/" + VIDEO_IMAGE).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one VIDEO_IMAGE element, so take the first one.
-            xmlChar* sBackgroundPath = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            backgroundPath = QString((char*)sBackgroundPath);
-            xmlFree(sBackgroundPath);
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == VIDEO) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    while(!video.isNull()) {
+                        QDomElement u = video.toElement();
+                        if (!u.isNull()) {
+                            tag = u.tagName();
+                            if(tag == VIDEO_IMAGE) {
+                                backgroundPath = u.text();
+                                return backgroundPath;
+                            }
+                        }
+                        video = video.nextSibling();
+                    }
+                    break;
+                }
+            }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
-
     return backgroundPath;
 }  
 
