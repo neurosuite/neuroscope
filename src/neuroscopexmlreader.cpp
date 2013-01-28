@@ -383,56 +383,54 @@ int NeuroscopeXmlReader::getOffset()const{
 
 QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
     QList<ChannelDescription> list;
-
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + CHANNELS + "/" + CHANNEL_COLORS).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the CHANNEL_COLORS.
-            int nbChannels = nodeset->nodeNr;
-            for(int i = 0; i < nbChannels; ++i){
-                ChannelDescription channelDescription;
-                xmlNodePtr child;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
-
-                    if(QString((char*)child->name) == CHANNEL){
-                        xmlChar* sId = xmlNodeListGetString(doc,child->children, 1);
-                        int channelId = QString((char*)sId).toInt();
-                        xmlFree(sId);
-                        channelDescription.setId(channelId) ;
-                    }
-                    if(QString((char*)child->name) == COLOR){
-                        xmlChar* sColor = xmlNodeListGetString(doc,child->children, 1);
-                        QString color = QString((char*)sColor);
-                        xmlFree(sColor);
-                        channelDescription.setColor(color) ;
-                    }
-                    if(QString((char*)child->name) == ANATOMY_COLOR){
-                        xmlChar* sColor = xmlNodeListGetString(doc,child->children, 1);
-                        QString color = QString((char*)sColor);
-                        xmlFree(sColor);
-                        channelDescription.setGroupColor(color) ;
-                    }
-                    if(QString((char*)child->name) == SPIKE_COLOR){
-                        xmlChar* sColor = xmlNodeListGetString(doc,child->children, 1);
-                        QString color = QString((char*)sColor);
-                        xmlFree(sColor);
-                        channelDescription.setSpikeGroupColor(color) ;
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode channels = e.firstChildElement(CHANNELS); // try to convert the node to an element.
+                    if (!channels.isNull()) {
+                        QDomNode channelColors = channels.firstChild();
+                        while(!channelColors.isNull()) {
+                            QDomElement w = channelColors.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == CHANNEL_COLORS) {
+                                    QDomNode channelGroup = w.firstChild(); // try to convert the node to an element.
+                                    ChannelDescription channelColors;
+                                    while(!channelGroup.isNull()) {
+                                        QDomElement val = channelGroup.toElement();
+                                        if (!val.isNull()) {
+                                            tag = val.tagName();
+                                            if (tag == CHANNEL) {
+                                                int channelId = val.text().toInt();
+                                                channelColors.setId(channelId) ;
+                                            } else if(tag == COLOR) {
+                                                QString color = val.text();
+                                                channelColors.setColor(color) ;
+                                            } else if(tag == ANATOMY_COLOR) {
+                                                QString color = val.text();
+                                                channelColors.setGroupColor(color) ;
+                                            } else if(tag == SPIKE_COLOR){
+                                                QString color = val.text();
+                                                channelColors.setSpikeGroupColor(color);
+                                            }
+                                        }
+                                       channelGroup =  channelGroup.nextSibling();
+                                    }
+                                    list.append(channelColors);
+                                }
+                            }
+                            channelColors = channelColors.nextSibling();
+                        }
                     }
                 }
-                list.append(channelDescription);
             }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return list;
 }
 
