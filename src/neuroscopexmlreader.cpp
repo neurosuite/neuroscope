@@ -298,85 +298,186 @@ float NeuroscopeXmlReader::getScreenGain() const{
 
 int NeuroscopeXmlReader::getVoltageRange() const{
     int range = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
-    //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion.isEmpty() )
-        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + VOLTAGE_RANGE).toLatin1());
-    else
-        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + VOLTAGE_RANGE).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one range element, so take the first one.
-            xmlChar* sRange = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            range = QString((char*)sRange).toInt();
-            xmlFree(sRange);
+    if(type == SESSION && readVersion.isEmpty() ) {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == MISCELLANEOUS) {
+                        QDomNode video = e.firstChild(); // try to convert the node to an element.
+                        while(!video.isNull()) {
+                            QDomElement u = video.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if(tag == VOLTAGE_RANGE) {
+                                    range = u.text().toInt();
+                                    return range;
+                                }
+                            }
+                            video = video.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == VOLTAGE_RANGE) {
+                                        range =  w.text().toInt();
+                                        return range;
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return range;
 }
 
 
 int NeuroscopeXmlReader::getAmplification() const{
     int amplification = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
     //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion.isEmpty())
-        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + AMPLIFICATION).toLatin1());
-    else
-        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + AMPLIFICATION).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one amplification element, so take the first one.
-            xmlChar* sAmplification = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            amplification = QString((char*)sAmplification).toInt();
-            xmlFree(sAmplification);
+    if(type == SESSION && readVersion.isEmpty() ) {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == MISCELLANEOUS) {
+                        QDomNode video = e.firstChild(); // try to convert the node to an element.
+                        while(!video.isNull()) {
+                            QDomElement u = video.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if(tag == AMPLIFICATION) {
+                                    amplification = u.text().toInt();
+                                    return amplification;
+                                }
+                            }
+                            video = video.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == AMPLIFICATION) {
+                                        amplification =  w.text().toInt();
+                                        return amplification;
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return amplification;
 }
 
 
 int NeuroscopeXmlReader::getOffset()const{
     int offset = 0;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
-    //The tag has change of location, it was inside the MISCELLANEOUS element, it is now inside the ACQUISITION element.
-    if(type == SESSION && readVersion.isEmpty())
-        searchPath = xmlCharStrdup(QString("//" + MISCELLANEOUS + "/" + OFFSET).toLatin1());
-    else
-        searchPath = xmlCharStrdup(QString("//" + ACQUISITION + "/" + OFFSET).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //Should be only one offset element, so take the first one.
-            xmlChar* sOffset = xmlNodeListGetString(doc,nodeset->nodeTab[0]->children, 1);
-            offset = QString((char*)sOffset).toInt();
-            xmlFree(sOffset);
+    if(type == SESSION && readVersion.isEmpty() ) {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == MISCELLANEOUS) {
+                        QDomNode video = e.firstChild(); // try to convert the node to an element.
+                        while(!video.isNull()) {
+                            QDomElement u = video.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if(tag == OFFSET) {
+                                    offset = u.text().toInt();
+                                    return offset;
+                                }
+                            }
+                            video = video.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == OFFSET) {
+                                        offset =  w.text().toInt();
+                                        return offset;
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
-
     return offset;
 }
 
