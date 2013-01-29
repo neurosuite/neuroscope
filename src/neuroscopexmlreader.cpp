@@ -735,52 +735,63 @@ void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>&
         skipStatus.insert(i,false);
     }
 
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("//" + ANATOMY + "/" + CHANNEL_GROUPS + "/" + GROUP).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the GROUP.
-            int nbGroups = nodeset->nodeNr;
-            for(int i = 0; i < nbGroups; ++i){
-                QList<int> channelList;
-                xmlNodePtr child;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
+    int i = 0;
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == ANATOMY) {
+                    QDomNode video = e.firstChild(); // try to convert the node to an element.
+                    if (!video.isNull()) {
 
-                    if(QString((char*)child->name) == CHANNEL){
-                        xmlChar* sId = xmlNodeListGetString(doc,child->children, 1);
-                        int channelId = QString((char*)sId).toInt();
-                        xmlFree(sId);
-                        channelList.append(channelId);
-                        displayChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the trash group (0)
-                        //remove the channel from the trash list as it is part of a group
-                        trashList.removeAll(channelId);
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == GROUP) {
+                                    QList<int> channelList;
+                                    QDomNode fileNode = w.firstChild(); // try to convert the node to an element.
+                                    while(!fileNode.isNull()) {
+                                        QDomElement fileElement = fileNode.toElement();
 
-                        //Look up for the SKIP attribute
-                        xmlChar* skipTag = xmlCharStrdup(QString(SKIP).toLatin1());
-                        xmlChar* sSkip = xmlGetProp(child,skipTag);
-                        if(sSkip != NULL){
-                            skipStatus.insert(channelId,QString((char*)sSkip).toInt());
+                                        if (!fileElement.isNull()) {
+                                            tag = fileElement.tagName();
+                                            if (tag == CHANNEL) {
+                                                int channelId = fileElement.text().toInt();
+                                                channelList.append(channelId);
+                                                displayChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the trash group (0)
+
+                                                //remove the channel from the trash list as it is part of a group
+                                                trashList.removeAll(channelId);
+                                                if (fileElement.hasAttribute(SKIP)) {
+                                                    int skip = fileElement.attribute(SKIP).toInt();
+                                                    skipStatus.insert(channelId,skip);
+                                                }
+                                            }
+                                        }
+                                        fileNode = fileNode.nextSibling();
+                                    }
+                                    displayGroupsChannels.insert(i + 1,channelList);
+                                    ++i;
+
+                                }
+                            }
+                            b = b.nextSibling();
                         }
-                        xmlFree(skipTag);
-                        xmlFree(sSkip);
                     }
                 }
-                displayGroupsChannels.insert(i + 1,channelList);
             }
+            n = n.nextSibling();
         }
     }
 
     if(!trashList.isEmpty())
         displayGroupsChannels.insert(0,trashList);
 
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
 }
 
 int NeuroscopeXmlReader::getNbSamples()const{
