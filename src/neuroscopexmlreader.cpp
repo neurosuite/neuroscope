@@ -58,49 +58,12 @@ bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
         }
     }
     documentNode = element;
-
-
-
-
-    // Init libxml
-    xmlInitParser();
-
-    // Load XML document
-    doc = xmlParseFile(url.toLatin1());
-    if(doc == NULL)
-        return false;
-
-    // Create xpath evaluation context
-    xpathContex = xmlXPathNewContext(doc);
-    if(xpathContex == NULL){
-        xmlFreeDoc(doc);
-        return false;
-    }
-
-    //Read the document version
-    xmlNodePtr rootElement = xmlDocGetRootElement(doc);
-    xmlChar* versionTag = xmlCharStrdup(VERSION.toLatin1());
-    if(rootElement != NULL){
-        xmlChar* sVersion = xmlGetProp(rootElement,versionTag);//get the attribute with the name versionTag
-        if(sVersion != NULL)
-            readVersion = QString((char*)sVersion);
-        xmlFree(sVersion);
-    }
-    qDebug()<<" readVersion"<<readVersion;
-    xmlFree(versionTag);
-    
     return true;
 }
 
 
 void NeuroscopeXmlReader::closeFile(){
-    //Cleanup
-    xmlXPathFreeContext(xpathContex);
-    xmlFreeDoc(doc);
     readVersion.clear();
-
-    //Shutdown libxml
-    xmlCleanupParser();
 }
 
 
@@ -1503,49 +1466,87 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
 
 QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
     QMap<QString,double> samplingRatesMap;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
 
     //The tag has change of location, it was inside the session file (at SAMPLING_RATES/EXTENSION_SAMPLING_RATE),
     //it is now inside the the parameter file (at FILES/FILE).
-    if(type == SESSION && (readVersion.isEmpty() || readVersion == "1.2.2"))
-        searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + SAMPLING_RATES + "/" + EXTENSION_SAMPLING_RATE).toLatin1());
-    else if(type == PARAMETER)
-        searchPath = xmlCharStrdup(QString("//" + FILES + "/" + neuroscope::FILE).toLatin1());
+    if(type == SESSION && (readVersion.isEmpty() || readVersion == "1.2.2")) {
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the child.
-            int nbExtensions = nodeset->nodeNr;
-            for(int i = 0; i < nbExtensions; ++i){
-                xmlNodePtr child;
-                double samplingRate;
-                QString extension;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
-
-                    if(QString((char*)child->name) == EXTENSION){
-                        xmlChar* sExtendion = xmlNodeListGetString(doc,child->children, 1);
-                        extension = QString((char*)sExtendion);
-                        xmlFree(sExtendion);
-                    }
-                    if(QString((char*)child->name) == SAMPLING_RATE){
-                        xmlChar* sSamplingRate = xmlNodeListGetString(doc,child->children, 1);
-                        samplingRate = QString((char*)sSamplingRate).toDouble();
-                        xmlFree(sSamplingRate);
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == NEUROSCOPE) {
+                        QDomNode video = e.firstChildElement(SAMPLING_RATES); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == EXTENSION_SAMPLING_RATE) {
+                                        double samplingRate;
+                                        QString extension;
+                                        QDomNode sampling = w.firstChild();
+                                        while(!sampling.isNull()) {
+                                            QDomElement samplingElement = b.toElement();
+                                            if (!samplingElement.isNull()) {
+                                                tag = samplingElement.tagName();
+                                                if (tag == EXTENSION) {
+                                                    extension = samplingElement.text();
+                                                } else if( tag == SAMPLING_RATE){
+                                                    samplingRate = samplingElement.text().toDouble();
+                                                }
+                                            }
+                                            sampling = sampling.nextSibling();
+                                        }
+                                        samplingRatesMap.insert(extension,samplingRate);
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                        }
                     }
                 }
-                samplingRatesMap.insert(extension,samplingRate);
+                n = n.nextSibling();
+            }
+        }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == FILES) {
+                        QDomNode video = e.firstChildElement(neuroscope::FILE); // try to convert the node to an element.
+                        if (!video.isNull()) {
+                            QDomNode b = video.firstChild();
+                            double samplingRate;
+                            QString extension;
+
+                            while(!b.isNull()) {
+                                QDomElement w = b.toElement();
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == EXTENSION) {
+                                        extension = w.text();
+                                    } else if( tag == SAMPLING_RATE){
+                                        samplingRate = w.text().toDouble();
+                                    }
+                                }
+                                b = b.nextSibling();
+                            }
+                            samplingRatesMap.insert(extension,samplingRate);
+                        }
+                    }
+                }
+                n = n.nextSibling();
             }
         }
     }
 
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return samplingRatesMap;
 }
 

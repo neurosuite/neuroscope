@@ -51,7 +51,7 @@ qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
 add_executable(neuroscope ${neuroscope_SRCS} )
 
-target_link_libraries(neuroscope ${QT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTXML_LIBRARY} ${LIBKLUSTERSSHARED_LIBRARY})
+target_link_libraries(neuroscope ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${LIBKLUSTERSSHARED_LIBRARY})
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/neuroscope DESTINATION bin)
 install(FILES neuroscope.desktop DESTINATION share/applications/)

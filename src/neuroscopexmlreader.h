@@ -18,14 +18,6 @@
 #ifndef NEUROSCOPEXMLREADER_H
 #define NEUROSCOPEXMLREADER_H
 
-//Libxml2 include files.
-#include <stdlib.h>
-#include <stdio.h>
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
-
 //include files for QT
 #include <QList> 
 #include <QDomNode>
@@ -232,9 +224,7 @@ public:
     NeuroscopeXmlReader::fileType getType()const{return type;}
 
 private:
-    xmlDocPtr doc;
     fileType type;
-    xmlXPathContextPtr xpathContex;
     QString readVersion;
     QDomNode documentNode;
 
