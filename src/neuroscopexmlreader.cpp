@@ -776,7 +776,8 @@ void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>&
         }
     }
 
-    if(trashList.size() != 0) displayGroupsChannels.insert(0,trashList);
+    if(!trashList.isEmpty())
+        displayGroupsChannels.insert(0,trashList);
 
     xmlFree(searchPath);
     xmlXPathFreeObject(result);
@@ -1194,6 +1195,76 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
     QList<SessionFile> list;    
+
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode video = e.firstChildElement(FILES); // try to convert the node to an element.
+                    if (!video.isNull()) {
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == neuroscope::FILE) {
+                                    QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
+                                    SessionFile sessionFile;
+                                    while(!fileNode.isNull()) {
+                                        QDomElement fileElement = fileNode.toElement();
+
+                                        if (!fileElement.isNull()) {
+                                            tag = fileElement.tagName();
+                                            if (tag == TYPE) {
+                                                int type = fileElement.text().toInt();
+                                                sessionFile.setType(static_cast<SessionFile::type>(type)) ;
+                                            } else if (tag == URL) {
+                                                QString url = fileElement.text();
+                                                sessionFile.setUrl(url);
+                                            } else if (tag == DATE) {
+                                                QString date = fileElement.text();
+                                                sessionFile.setModification(QDateTime::fromString(date,Qt::ISODate));
+                                            } else if (tag == VIDEO_IMAGE) {
+                                                QString backgroundPath = fileElement.text();
+                                                sessionFile.setBackgroundPath(backgroundPath);
+                                            } else if (tag == ITEMS) {
+                                                QDomNode itemsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                QString id;
+                                                QString color;
+                                                while(!itemsNode.isNull()) {
+                                                    QDomElement itemsElement = itemsNode.toElement();
+                                                    if (!itemsElement.isNull()) {
+                                                        tag = itemsElement.tagName();
+                                                        if (tag == ITEM) {
+                                                            id = itemsElement.text();
+                                                        } else if (tag == COLOR) {
+                                                            color = itemsElement.text();
+                                                        }
+                                                    }
+                                                    itemsNode = itemsNode.nextSibling();
+                                                }
+                                                sessionFile.setItemColor(id,color);
+                                            }
+                                        }
+                                        fileNode = fileNode.nextSibling();
+                                    }
+                                    list.append(sessionFile);
+                                }
+                            }
+                            b = b.nextSibling();
+                        }
+                    }
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+
+
     xmlXPathObjectPtr result;
     xmlChar* searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + FILES + "/" + neuroscope::FILE).toLatin1());
 
