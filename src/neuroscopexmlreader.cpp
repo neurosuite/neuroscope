@@ -598,48 +598,131 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
         }
         else spikeChannelsGroups.insert(i,0);
     }
+    if(readVersion.isEmpty() || readVersion == "1.2.2") {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == SPIKE) {
+                        QDomNode anatomy = e.firstChild(); // try to convert the node to an element.
+                        while(!anatomy.isNull()) {
+                            QDomElement u = anatomy.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if (tag == CHANNEL_GROUPS) {
+                                    QDomNode channelGroup = u.firstChild(); // try to convert the node to an element.
+                                    int i = 0;
+                                    while(!channelGroup.isNull()) {
+                                        QDomElement val = channelGroup.toElement();
+                                        if (!val.isNull()) {
+                                            tag = val.tagName();
+                                            if (tag == GROUP) {
+                                                QDomNode group = val.firstChild(); // try to convert the node to an element.
+                                                QList<int> channelList;
+                                                while(!group.isNull()) {
+                                                    QDomElement valGroup = group.toElement();
 
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath;
-    //The tag has change of location, it was inside CHANNEL_GROUPS/GROUP tag, it is now inside CHANNEL_GROUPS/GROUP/CHANNELS.
-    if(readVersion.isEmpty() || readVersion == "1.2.2")
-        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP).toLatin1());
-    else
-        searchPath = xmlCharStrdup(QString("//" + SPIKE + "/" + CHANNEL_GROUPS + "/" + GROUP + "/" + CHANNELS).toLatin1());
-
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the GROUP.
-            int nbGroups = nodeset->nodeNr;
-            for(int i = 0; i < nbGroups; ++i){
-                QList<int> channelList;
-                xmlNodePtr child;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
-
-                    if(QString((char*)child->name) == CHANNEL){
-                        xmlChar* sId = xmlNodeListGetString(doc,child->children, 1);
-                        int channelId = QString((char*)sId).toInt();
-                        xmlFree(sId);
-                        channelList.append(channelId);
-                        spikeChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the spike trash group (-1)
-                        //remove the channel from the spike trash list as it is part of a group
-                        spikeTrashList.removeAll(channelId);
+                                                    if (!valGroup.isNull()) {
+                                                        tag = valGroup.tagName();
+                                                        if (tag == CHANNEL) {
+                                                            int channelId = valGroup.text().toInt();
+                                                            channelList.append(channelId);
+                                                            spikeChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the spike trash group (-1)
+                                                            //remove the channel from the spike trash list as it is part of a group
+                                                            spikeTrashList.removeAll(channelId);
+                                                        }
+                                                    }
+                                                    group = group.nextSibling();
+                                                }
+                                                spikeGroupsChannels.insert(i + 1,channelList);
+                                                ++i;
+                                           }
+                                       }
+                                       channelGroup = channelGroup.nextSibling();
+                                   }
+                                }
+                            }
+                            anatomy = anatomy.nextSibling();
+                        }
+                        break;
                     }
                 }
-                spikeGroupsChannels.insert(i + 1,channelList);
+                n = n.nextSibling();
             }
         }
+    } else {
+        QDomNode n = documentNode.firstChild();
+        if (!n.isNull()) {
+            while(!n.isNull()) {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull()) {
+                    QString tag = e.tagName();
+                    if (tag == SPIKE) {
+                        QDomNode anatomy = e.firstChild(); // try to convert the node to an element.
+                        while(!anatomy.isNull()) {
+                            QDomElement u = anatomy.toElement();
+                            if (!u.isNull()) {
+                                tag = u.tagName();
+                                if (tag == CHANNEL_GROUPS) {
+                                   QDomNode channelGroup = u.firstChild(); // try to convert the node to an element.
+                                   int i = 0;
+                                   while(!channelGroup.isNull()) {
+                                       QDomElement val = channelGroup.toElement();
+                                       if (!val.isNull()) {
+                                           tag = val.tagName();
+                                           if (tag == GROUP) {
+                                               QDomNode group = val.firstChild(); // try to convert the node to an element.
+
+                                               QList<int> channelList;
+                                               while(!group.isNull()) {
+                                                   QDomElement valGroup = group.toElement();
+
+
+                                                   if (!valGroup.isNull()) {
+                                                       tag = valGroup.tagName();
+                                                       if( tag == CHANNELS) {
+                                                           QDomNode channelsNode = valGroup.firstChild(); // try to convert the node to an element.
+                                                           while(!channelsNode.isNull()) {
+                                                               QDomElement channelsElement = channelsNode.toElement();
+                                                               if (!channelsElement.isNull()) {
+                                                                   tag = channelsElement.tagName();
+                                                                   if (tag == CHANNEL) {
+                                                                       int channelId = channelsElement.text().toInt();
+                                                                       channelList.append(channelId);
+                                                                       spikeChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the spike trash group (-1)
+                                                                       //remove the channel from the spike trash list as it is part of a group
+                                                                       spikeTrashList.removeAll(channelId);
+                                                                   }
+                                                               }
+                                                               channelsNode = channelsNode.nextSibling();
+                                                           }
+                                                       }
+                                                   }
+                                                   group = group.nextSibling();
+                                                   spikeGroupsChannels.insert(i + 1,channelList);
+                                                   ++i;
+                                               }
+                                           }
+                                       }
+                                       channelGroup = channelGroup.nextSibling();
+                                   }
+                                }
+                            }
+                            anatomy = anatomy.nextSibling();
+                        }
+                        break;
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
+
     }
+    if(!spikeTrashList.isEmpty())
+        spikeGroupsChannels.insert(-1,spikeTrashList);
 
-    if(spikeTrashList.size() != 0) spikeGroupsChannels.insert(-1,spikeTrashList);
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
 }
 
 void NeuroscopeXmlReader::getAnatomicalDescription(int nbChannels,QMap<int,int>& displayChannelsGroups,QMap<int, QList<int> >& displayGroupsChannels,QMap<int,bool>& skipStatus){
@@ -1110,7 +1193,7 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 } 
 
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
-    QList<SessionFile> list;
+    QList<SessionFile> list;    
     xmlXPathObjectPtr result;
     xmlChar* searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + FILES + "/" + neuroscope::FILE).toLatin1());
 
