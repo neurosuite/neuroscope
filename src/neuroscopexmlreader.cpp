@@ -1269,293 +1269,223 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
 
 QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
     QList<DisplayInformation> list;
-    xmlXPathObjectPtr result;
-    xmlChar* searchPath = xmlCharStrdup(QString("/" + NEUROSCOPE + "/" + DISPLAYS + "/" + DISPLAY).toLatin1());
 
-    //Evaluate xpath expression
-    result = xmlXPathEvalExpression(searchPath,xpathContex);
-    if(result != NULL){
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NEUROSCOPE) {
+                    QDomNode video = e.firstChildElement(DISPLAYS); // try to convert the node to an element.
+                    if (!video.isNull()) {
+                        QDomNode b = video.firstChild();
+                        while(!b.isNull()) {
+                            QDomElement w = b.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == DISPLAY) {
+                                    QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
+                                    DisplayInformation displayInformation;
+                                    while(!fileNode.isNull()) {
+                                        QDomElement fileElement = fileNode.toElement();
 
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        if(!xmlXPathNodeSetIsEmpty(nodeset)){
-            //loop on all the DISPLAY.
-            int nbDisplays = nodeset->nodeNr;
+                                        if (!fileElement.isNull()) {
+                                            tag = fileElement.tagName();
+                                            if (tag == TAB_LABEL) {
+                                                QString label = fileElement.text();
+                                                displayInformation.setTabLabel(label);
+                                            } else if(tag == SHOW_LABELS){
+                                                int showLabels = fileElement.text().toInt();
+                                                displayInformation.setLabelStatus(showLabels);
+                                            } else if(tag == START_TIME){
+                                                long startTime = fileElement.text().toLong();
+                                                displayInformation.setStartTime(startTime);
+                                            } else if(tag == DURATION){
+                                                long duration = fileElement.text().toLong();
+                                                displayInformation.setTimeWindow(duration);
+                                            } else if(tag == MULTIPLE_COLUMNS){
+                                                int presentationMode = fileElement.text().toInt();
+                                                displayInformation.setMode(static_cast<DisplayInformation::mode>(presentationMode));
+                                            } else if(tag == GREYSCALE){
+                                                int greyScale = fileElement.text().toInt();
+                                                displayInformation.setGreyScale(greyScale);
+                                            } else if(tag == POSITIONVIEW){
+                                                int positionView = fileElement.text().toInt();
+                                                displayInformation.setPositionView(positionView);
+                                            } else if(tag  == SHOWEVENTS){
+                                                int showEvents = fileElement.text().toInt();
+                                                displayInformation.setEventsInPositionView(showEvents);
+                                            } else if(tag  == SPIKE_PRESENTATION){
+                                                int spikePresentation = fileElement.text().toInt();
+                                                displayInformation.addSpikeDisplayType(static_cast<DisplayInformation::spikeDisplayType>(spikePresentation));
+                                            } else if(tag  == RASTER_HEIGHT){
+                                                int height = fileElement.text().toInt();
+                                                displayInformation.setRasterHeight(height);
+                                            }
+                                            else if(tag == CLUSTERS_SELECTED){
+                                                //loop on the CLUSTERS
+                                                QString clusterFile;
+                                                QList<int> clusterIds;
+                                                QDomNode clustersNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!clustersNode.isNull()) {
+                                                    QDomElement clustersElement = fileNode.toElement();
+                                                    if (!clustersElement.isNull()) {
+                                                        tag = clustersElement.tagName();
+                                                        if (tag == FILE_URL) {
+                                                            clusterFile = clustersElement.text();
+                                                        } else if (tag == CLUSTER) {
+                                                            clusterIds.append(clustersElement.text().toInt());
+                                                        }
+                                                    }
+                                                    clustersNode = clustersNode.nextSibling();
+                                                }
+                                                displayInformation.setSelectedClusters(clusterFile,clusterIds);
+                                            } else if(tag == SPIKES_SELECTED){
+                                                QStringList files;
+                                                //loop on the urls of the files
+                                                QDomNode spikesNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!spikesNode.isNull()) {
+                                                    QDomElement spikesElement = spikesNode.toElement();
+                                                    if (!spikesElement.isNull()) {
+                                                        tag = spikesElement.tagName();
+                                                        if (tag == FILE_URL) {
+                                                            files.append(spikesElement.text());
+                                                        }
+                                                    }
+                                                    spikesNode = spikesNode.nextSibling();
 
-            for(int i = 0; i < nbDisplays; ++i){
-                DisplayInformation displayInformation;
-                xmlNodePtr child;
-                for(child = nodeset->nodeTab[i]->children;child != NULL;child = child->next){
-                    //skip the carriage return (text node named text and containing /n)
-                    if(child->type == XML_TEXT_NODE) continue;
+                                                }
+                                                displayInformation.setSelectedSpikeFiles(files);
+                                            } else if(tag == EVENTS_SELECTED){
+                                                //loop on the EVENTS
+                                                QString eventFile;
+                                                QList<int> eventIds;
+                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == FILE_URL) {
+                                                            eventFile.append(eventsElement.text());
+                                                        } else if(tag == EVENT) {
+                                                            int eventId = eventsElement.text().toInt();
+                                                            eventIds.append(eventId);
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                }
+                                                displayInformation.setSelectedEvents(eventFile,eventIds);
+                                            } else if(tag == CLUSTERS_SKIPPED){
+                                                //loop on the CLUSTERS
+                                                QString clusterFile;
+                                                QList<int> clusterIds;
 
-                    if(QString((char*)child->name) == TAB_LABEL){
-                        xmlChar* sLabel = xmlNodeListGetString(doc,child->children, 1);
-                        QString label = QString((char*)sLabel);
-                        xmlFree(sLabel);
-                        displayInformation.setTabLabel(label);
-                    }
+                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == FILE_URL) {
+                                                            clusterFile.append(eventsElement.text());
+                                                        } else if(tag == EVENT) {
+                                                            int eventId = eventsElement.text().toInt();
+                                                            clusterIds.append(eventId);
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                }
+                                                displayInformation.setSkippedClusters(clusterFile,clusterIds);
+                                            } else if(tag == EVENTS_SKIPPED){
+                                                //loop on the EVENTS
+                                                QString eventFile;
+                                                QList<int> eventIds;
+                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == FILE_URL) {
+                                                            eventFile.append(eventsElement.text());
+                                                        } else if(tag == EVENT) {
+                                                            int eventId = eventsElement.text().toInt();
+                                                            eventIds.append(eventId);
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                }
+                                                displayInformation.setSkippedEvents(eventFile,eventIds);
+                                            } else if(tag == CHANNELS_SELECTED){
+                                                QList<int> channelIds;
+                                                //loop on the urls of the files
 
-                    if(QString((char*)child->name) == SHOW_LABELS){
-                        xmlChar* sShowLabels = xmlNodeListGetString(doc,child->children, 1);
-                        int showLabels = QString((char*)sShowLabels).toInt();
-                        xmlFree(sShowLabels);
-                        displayInformation.setLabelStatus(showLabels);
-                    }
+                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == CHANNEL) {
+                                                            channelIds.append(eventsElement.text().toInt());
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                }
+                                                displayInformation.setSelectedChannelIds(channelIds);
+                                            } else if(tag == CHANNELS_SHOWN){
+                                                QList<int> channelIds;
+                                                //loop on the urls of the files
+                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == CHANNEL) {
+                                                            channelIds.append(eventsElement.text().toInt());
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                }
+                                                displayInformation.setChannelIds(channelIds);
+                                            } else if(tag == CHANNEL_POSITIONS){
+                                                QList<TracePosition> positions;
+                                                //loop on the POSITIONS
+                                                QDomNode eventsNode = fileElement.firstChild().firstChild(); // try to convert the node to an element.
+                                                TracePosition tracePosition;
+                                                while(!eventsNode.isNull()) {
+                                                    QDomElement eventsElement = eventsNode.toElement();
+                                                    if (!eventsElement.isNull()) {
+                                                        tag = eventsElement.tagName();
+                                                        if (tag == CHANNEL) {
+                                                            int channelId = eventsElement.text().toInt();
+                                                            tracePosition.setId(channelId) ;
+                                                        } else if(tag == GAIN) {
+                                                            int gain = eventsElement.text().toInt();
+                                                            tracePosition.setGain(gain);
+                                                        } else if(tag == OFFSET) {
+                                                            int offset = eventsElement.text().toInt();
+                                                            tracePosition.setOffset(offset);
+                                                        }
+                                                    }
+                                                    eventsNode = eventsNode.nextSibling();
+                                                    positions.append(tracePosition);
+                                                }
+                                                displayInformation.setPositions(positions);
+                                            }
+                                        }
+                                        list.append(displayInformation);
 
-                    if(QString((char*)child->name) == START_TIME){
-                        xmlChar* sStartTime = xmlNodeListGetString(doc,child->children, 1);
-                        long startTime = QString((char*)sStartTime).toLong();
-                        xmlFree(sStartTime);
-                        displayInformation.setStartTime(startTime);
-                    }
-
-                    if(QString((char*)child->name) == DURATION){
-                        xmlChar* sDuration = xmlNodeListGetString(doc,child->children, 1);
-                        long duration = QString((char*)sDuration).toLong();
-                        xmlFree(sDuration);
-                        displayInformation.setTimeWindow(duration);
-                    }
-
-                    if(QString((char*)child->name) == MULTIPLE_COLUMNS){
-                        xmlChar* sPresentation = xmlNodeListGetString(doc,child->children, 1);
-                        int presentationMode = QString((char*)sPresentation).toInt();
-                        xmlFree(sPresentation);
-                        displayInformation.setMode(static_cast<DisplayInformation::mode>(presentationMode));
-                    }
-
-                    if(QString((char*)child->name) == GREYSCALE){
-                        xmlChar* sGreyScale = xmlNodeListGetString(doc,child->children, 1);
-                        int greyScale = QString((char*)sGreyScale).toInt();
-                        xmlFree(sGreyScale);
-                        displayInformation.setGreyScale(greyScale);
-                    }
-
-                    if(QString((char*)child->name) == POSITIONVIEW){
-                        xmlChar* sPositionView = xmlNodeListGetString(doc,child->children, 1);
-                        int positionView = QString((char*)sPositionView).toInt();
-                        xmlFree(sPositionView);
-                        displayInformation.setPositionView(positionView);
-                    }
-
-                    if(QString((char*)child->name) == SHOWEVENTS){
-                        xmlChar* sShowEvents = xmlNodeListGetString(doc,child->children, 1);
-                        int showEvents = QString((char*)sShowEvents).toInt();
-                        xmlFree(sShowEvents);
-                        displayInformation.setEventsInPositionView(showEvents);
-                    }
-
-                    if(QString((char*)child->name) == SPIKE_PRESENTATION){
-                        xmlChar* sPresentation = xmlNodeListGetString(doc,child->children, 1);
-                        int spikePresentation = QString((char*)sPresentation).toInt();
-                        xmlFree(sPresentation);
-                        displayInformation.addSpikeDisplayType(static_cast<DisplayInformation::spikeDisplayType>(spikePresentation));
-                    }
-
-                    if(QString((char*)child->name) == RASTER_HEIGHT){
-                        xmlChar* sheight = xmlNodeListGetString(doc,child->children, 1);
-                        int height = QString((char*)sheight).toInt();
-                        xmlFree(sheight);
-                        displayInformation.setRasterHeight(height);
-                    }
-
-                    if(QString((char*)child->name) == CLUSTERS_SELECTED){
-                        //loop on the CLUSTERS
-                        xmlNodePtr clusters;
-                        QString clusterFile;
-                        QList<int> clusterIds;
-                        for(clusters = child->children;clusters != NULL;clusters = clusters->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(clusters->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)clusters->name) == FILE_URL){
-                                xmlChar* sUrl = xmlNodeListGetString(doc,clusters->children, 1);
-                                clusterFile = QString((char*)sUrl);
-                                xmlFree(sUrl);
-                            }
-                            if(QString((char*)clusters->name) == CLUSTER){
-                                xmlChar* sClusterId = xmlNodeListGetString(doc,clusters->children, 1);
-                                int clusterId = QString((char*)sClusterId).toInt();
-                                xmlFree(sClusterId);
-                                clusterIds.append(clusterId);
-                            }
-                        }
-                        displayInformation.setSelectedClusters(clusterFile,clusterIds);
-                    }
-
-                    if(QString((char*)child->name) == SPIKES_SELECTED){
-                        QStringList files;
-                        //loop on the urls of the files
-                        xmlNodePtr spikes;
-                        for(spikes = child->children;spikes != NULL;spikes = spikes->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(spikes->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)spikes->name) == FILE_URL){
-                                xmlChar* sUrl = xmlNodeListGetString(doc,spikes->children, 1);
-                                files.append(QString((char*)sUrl));
-                                xmlFree(sUrl);
-                            }
-                        }
-                        displayInformation.setSelectedSpikeFiles(files);
-                    }
-
-                    if(QString((char*)child->name) == EVENTS_SELECTED){
-                        //loop on the EVENTS
-                        xmlNodePtr events;
-                        QString eventFile;
-                        QList<int> eventIds;
-                        for(events = child->children;events != NULL;events = events->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(events->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)events->name) == FILE_URL){
-                                xmlChar* sUrl = xmlNodeListGetString(doc,events->children, 1);
-                                eventFile = QString((char*)sUrl);
-                                xmlFree(sUrl);
-                            }
-                            if(QString((char*)events->name) == EVENT){
-                                xmlChar* sEventId = xmlNodeListGetString(doc,events->children, 1);
-                                int eventId = QString((char*)sEventId).toInt();
-                                xmlFree(sEventId);
-                                eventIds.append(eventId);
-                            }
-                        }
-                        displayInformation.setSelectedEvents(eventFile,eventIds);
-                    }
-
-                    if(QString((char*)child->name) == CLUSTERS_SKIPPED){
-                        //loop on the CLUSTERS
-                        xmlNodePtr clusters;
-                        QString clusterFile;
-                        QList<int> clusterIds;
-                        for(clusters = child->children;clusters != NULL;clusters = clusters->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(clusters->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)clusters->name) == FILE_URL){
-                                xmlChar* sUrl = xmlNodeListGetString(doc,clusters->children, 1);
-                                clusterFile = QString((char*)sUrl);
-                                xmlFree(sUrl);
-                            }
-                            if(QString((char*)clusters->name) == CLUSTER){
-                                xmlChar* sClusterId = xmlNodeListGetString(doc,clusters->children, 1);
-                                int clusterId = QString((char*)sClusterId).toInt();
-                                xmlFree(sClusterId);
-                                clusterIds.append(clusterId);
-                            }
-                        }
-                        displayInformation.setSkippedClusters(clusterFile,clusterIds);
-                    }
-
-                    if(QString((char*)child->name) == EVENTS_SKIPPED){
-                        //loop on the EVENTS
-                        xmlNodePtr events;
-                        QString eventFile;
-                        QList<int> eventIds;
-                        for(events = child->children;events != NULL;events = events->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(events->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)events->name) == FILE_URL){
-                                xmlChar* sUrl = xmlNodeListGetString(doc,events->children, 1);
-                                eventFile = QString((char*)sUrl);
-                                xmlFree(sUrl);
-                            }
-                            if(QString((char*)events->name) == EVENT){
-                                xmlChar* sEventId = xmlNodeListGetString(doc,events->children, 1);
-                                int eventId = QString((char*)sEventId).toInt();
-                                xmlFree(sEventId);
-                                eventIds.append(eventId);
-                            }
-                        }
-                        displayInformation.setSkippedEvents(eventFile,eventIds);
-                    }
-
-
-                    if(QString((char*)child->name) == CHANNEL_POSITIONS){
-                        QList<TracePosition> positions;
-                        //loop on the POSITIONS
-                        xmlNodePtr positionElements;
-                        for(positionElements = child->children;positionElements != NULL;positionElements = positionElements->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(positionElements->type == XML_TEXT_NODE) continue;
-
-                            TracePosition tracePosition;
-                            //loop on the elements in each positions tag (channelId, gain and offset)
-                            xmlNodePtr positionInfo;
-                            for(positionInfo = positionElements->children;positionInfo != NULL;positionInfo = positionInfo->next){
-                                //skip the carriage return (text node named text and containing /n)
-                                if(positionInfo->type == XML_TEXT_NODE) continue;
-
-                                if(QString((char*)positionInfo->name) == CHANNEL){
-                                    xmlChar* sId = xmlNodeListGetString(doc,positionInfo->children, 1);
-                                    int channelId = QString((char*)sId).toInt();
-                                    xmlFree(sId);
-                                    tracePosition.setId(channelId) ;
-                                }
-                                if(QString((char*)positionInfo->name) == GAIN){
-                                    xmlChar* sGain = xmlNodeListGetString(doc,positionInfo->children, 1);
-                                    int gain = QString((char*)sGain).toInt();
-                                    tracePosition.setGain(gain);
-                                    xmlFree(sGain);
-                                }
-                                if(QString((char*)positionInfo->name) == OFFSET){
-                                    xmlChar* sOffset = xmlNodeListGetString(doc,positionInfo->children, 1);
-                                    int offset = QString((char*)sOffset).toInt();
-                                    tracePosition.setOffset(offset);
-                                    xmlFree(sOffset);
+                                        fileNode = fileNode.nextSibling();
+                                    }
                                 }
                             }
-                            positions.append(tracePosition);
+                            b = b.nextSibling();
                         }
-
-                        displayInformation.setPositions(positions);
                     }
-
-                    if(QString((char*)child->name) == CHANNELS_SELECTED){
-                        QList<int> channelIds;
-                        //loop on the urls of the files
-                        xmlNodePtr channels;
-                        for(channels = child->children;channels != NULL;channels = channels->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(channels->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)channels->name) == CHANNEL){
-                                xmlChar* sId = xmlNodeListGetString(doc,channels->children, 1);
-                                int channelId = QString((char*)sId).toInt();
-                                xmlFree(sId);
-                                channelIds.append(channelId) ;
-                            }
-                        }
-                        displayInformation.setSelectedChannelIds(channelIds);
-                    }
-
-                    if(QString((char*)child->name) == CHANNELS_SHOWN){
-                        QList<int> channelIds;
-                        //loop on the urls of the files
-                        xmlNodePtr channels;
-                        for(channels = child->children;channels != NULL;channels = channels->next){
-                            //skip the carriage return (text node named text and containing /n)
-                            if(channels->type == XML_TEXT_NODE) continue;
-
-                            if(QString((char*)channels->name) == CHANNEL){
-                                xmlChar* sId = xmlNodeListGetString(doc,channels->children, 1);
-                                int channelId = QString((char*)sId).toInt();
-                                xmlFree(sId);
-                                channelIds.append(channelId) ;
-                            }
-                        }
-                        displayInformation.setChannelIds(channelIds);
-                    }
-
                 }
-                list.append(displayInformation);
             }
+            n = n.nextSibling();
         }
     }
-
-    xmlFree(searchPath);
-    xmlXPathFreeObject(result);
     return list;
 }
 
