@@ -138,7 +138,7 @@ void NeuroscopeApp::initActions()
 
     mFileOpenRecent = new QRecentFileAction(this);
     QSettings settings;
-    mFileOpenRecent->setListOfRecentFile(settings.value(QLatin1String("Recent Files"),QStringList()).toStringList());
+    mFileOpenRecent->setRecentFiles(settings.value(QLatin1String("Recent Files"),QStringList()).toStringList());
 
     fileMenu->addAction(mFileOpenRecent);
     connect(mFileOpenRecent, SIGNAL(recentFileSelected(QString)), this, SLOT(slotFileOpenRecent(QString)));
@@ -3587,7 +3587,7 @@ void NeuroscopeApp::slotHanbook()
 void NeuroscopeApp::slotSaveRecentFiles()
 {
     QSettings settings;
-    settings.setValue(QLatin1String("Recent Files"),mFileOpenRecent->listOfRecentFile());
+    settings.setValue(QLatin1String("Recent Files"),mFileOpenRecent->recentFiles());
 }
 
 
