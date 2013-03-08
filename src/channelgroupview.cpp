@@ -99,6 +99,7 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
 
 void ChannelGroupView::setIconView(QListWidget* view){
     iconView = view;
+    iconView->viewport()->setAutoFillBackground(false);
     mLayout->addWidget(iconView);
 }
 
