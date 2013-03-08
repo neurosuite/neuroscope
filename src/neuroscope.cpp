@@ -1232,7 +1232,7 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Opening file..."));
 
     const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
-                                                   tr("*.dat *.eeg *.fil|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n*.dat|Data File (*.dat)\n*.eeg|EEG File (*.eeg)\n*.fil|Filter File (*.fil)\n*|All files") );
+                                                   tr("Data File (*.dat);;EEG File (*.eeg);;Filter File (*.fil);;All files (*.*)") );
     if(!url.isEmpty())
     {
         openDocumentFile(url);
@@ -1245,7 +1245,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
-                                                         tr("*.clu.*|Cluster File (*.clu.n)\n*.clu|Cluster File (*.clu)"));
+                                                         tr("Cluster File (*.clu.*);;Cluster File (*.clu)"));
     if(!urls.isEmpty())
     {
         loadClusterFiles(urls);
@@ -1259,7 +1259,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
-                                                         tr("*.evt *.evt.*|Event File (*.evt, *.evt.*)"));
+                                                         tr("Event File (*.evt, *.evt.*)"));
     if(!urls.isEmpty())
     {
         loadEventFiles(urls);
@@ -1272,7 +1272,7 @@ void NeuroscopeApp::slotLoadPositionFile(){
     slotStatusMsg(tr("Loading position file..."));
 
     QString url=QFileDialog::getOpenFileName(this, tr("Open position File..."),QString(),
-                                             tr("*|All Files") );
+                                             tr("All Files (*.*)") );
     if(!url.isEmpty())
     {
         loadPositionFile(url);
@@ -1288,7 +1288,7 @@ void NeuroscopeApp::slotCreateEventFile(){
     QString baseName = doc->documentBaseName();
     QString eventUrl = docUrl  +QDir::separator() + baseName;
 
-    QFileDialog dialog(this,tr("CreateEvent"),eventUrl,tr("*.evt *.evt.*|Event file (*.evt, *.evt.*)"));
+    QFileDialog dialog(this,tr("CreateEvent"),eventUrl,tr("Event file (*.evt, *.evt.*)"));
     dialog.setWindowTitle(tr("Create Event File as..."));
     if(!dialog.exec())
         return;
@@ -2676,7 +2676,7 @@ void NeuroscopeApp::slotSessionSaveAs(){
     }
     //Save the session
     QString url=QFileDialog::getSaveFileName(this, tr("Save as..."),doc->sessionPath(),
-                                             tr("*|All files") );
+                                             tr("All files (*.*)") );
     if(!url.isEmpty()){
         int saveStatus = doc->saveSession(url);
         if(saveStatus == NeuroscopeDoc::CREATION_ERROR){
