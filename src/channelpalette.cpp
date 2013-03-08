@@ -68,6 +68,7 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
         legendColor = Qt::white;
     setAutoFillBackground(true);
     QPalette palette; 
+    viewport()->setAutoFillBackground(false);
     palette.setColor(backgroundRole(), backgroundColor);
     palette.setColor(foregroundRole(), legendColor); 
     setPalette(palette);
