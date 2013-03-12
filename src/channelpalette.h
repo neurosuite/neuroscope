@@ -101,7 +101,7 @@ public:
     * Gets the skip status for each channel.
     * @return map between the channel and skip status.
     */
-    inline const QMap<int,bool>getSkipStatus(){return channelsSkipStatus;}
+    const QMap<int,bool>getSkipStatus(){return channelsSkipStatus;}
 
     
 public Q_SLOTS:
@@ -277,7 +277,7 @@ private:
 class SpaceWidget : public QWidget{
     Q_OBJECT
 public:
-    inline SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
+    SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
         setAcceptDrops(true);
     }
 

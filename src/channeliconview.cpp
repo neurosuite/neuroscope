@@ -128,6 +128,27 @@ void ChannelIconView::dropEvent(QDropEvent *event)
     QListWidget::dropEvent(event);
 }
 
+void ChannelIconView::startDrag(Qt::DropActions /*supportedActions*/)
+{
+    QListWidgetItem *item = currentItem();
+    if (!item)
+        return;
+
+#if 0
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("image/x-icon-view", itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setHotSpot(QPoint(pixmap.width()/2, pixmap.height()/2));
+    drag->setPixmap(pixmap);
+
+    if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
+        delete takeItem(row(item));
+#endif
+
+}
+
 #if PORTING_KDAB
 
 Q3DragObject* ChannelIconView::dragObject(){
