@@ -115,6 +115,16 @@ void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
 
 void ChannelIconView::dropEvent(QDropEvent *event)
 {
+    const QMimeData *mimeData = event->mimeData();
+    if (mimeData->hasText()) {
+        QString information = mimeData->text();
+        const int groupSource = information.section("-",0,0).toInt();
+        const int start = information.section("-",1,1).toInt();
+        const QString groupTarget = objectName();
+        emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
+        event->acceptProposedAction();
+        return;
+    }
     QListWidget::dropEvent(event);
 }
 
