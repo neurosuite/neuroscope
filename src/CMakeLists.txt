@@ -53,5 +53,5 @@ add_executable(neuroscope ${neuroscope_SRCS} )
 
 target_link_libraries(neuroscope ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${LIBKLUSTERSSHARED_LIBRARY})
 
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/neuroscope DESTINATION bin)
+install(TARGETS neuroscope DESTINATION bin)
 install(FILES neuroscope.desktop DESTINATION share/applications/)
