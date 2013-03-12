@@ -16,11 +16,6 @@
  ***************************************************************************/
 // application specific includes
 #include "itemiconview.h"
-
-
-
-
-
 // include files for Qt
 #include <QCursor>
 #include <QTextCodec>

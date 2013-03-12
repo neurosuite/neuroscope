@@ -90,8 +90,10 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //Assign firstClick
             QRect r((QRect)window);
 
-            if(r.left() != 0) firstClick = viewportToWorld(e->x(),e->y() - Yborder);
-            else firstClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+            if(r.left() != 0)
+                firstClick = viewportToWorld(e->x(),e->y() - Yborder);
+            else
+                firstClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
 
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
             //or using only the abscissa and the ordinate if the top of the window if the rubber band has to

@@ -116,7 +116,7 @@ public:
   * @param drawTrajectory all the positions contained in a position file can be used to create a background image for the PositionView.
   * This value tells if such background has to be created.
   */
-    void setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory);
+    void setNeuroscopeVideoInformation(int rotation, int flip, const QString &backgroundPath, int drawTrajectory);
 
     /**
   * Creates the elements containing the video information.

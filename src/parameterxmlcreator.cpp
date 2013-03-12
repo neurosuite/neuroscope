@@ -300,7 +300,7 @@ void ParameterXmlCreator::setSpikeDetectionInformation(QMap<int, QList<int> >& s
 }
 
 
-void ParameterXmlCreator::setNeuroscopeVideoInformation(int rotation,int flip,QString backgroundPath,int drawTrajectory){
+void ParameterXmlCreator::setNeuroscopeVideoInformation(int rotation,int flip,const QString& backgroundPath,int drawTrajectory){
     neuroscopeVideo = doc.createElement(VIDEO);
 
     QDomElement rotationElement = doc.createElement(ROTATE);

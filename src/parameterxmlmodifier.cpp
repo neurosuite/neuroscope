@@ -145,7 +145,7 @@ QDomNode ParameterXmlModifier::findDirectChild(const QString& childName,const QD
     return QDomNode();
 }
 
-QDomNode ParameterXmlModifier::findDirectChild(QString childName,QString grandChildName,QString value,QDomNode ancestor){
+QDomNode ParameterXmlModifier::findDirectChild(const QString& childName,const QString &grandChildName,const QString& value,QDomNode ancestor){
     if(ancestor.isNull())
         return QDomNode();
     QDomNode child = ancestor.firstChild();

@@ -83,7 +83,7 @@ public:
   * @param ancestor starting node from which to look up for the child node.
   * @return the first child node corresponding to the criteria.
   */
-    QDomNode findDirectChild(QString childName,QString grandChildName,QString value,QDomNode ancestor);
+    QDomNode findDirectChild(const QString &childName, const QString &grandChildName, const QString &value, QDomNode ancestor);
 
     /**
   * Modifies the elements related to the acquisition system.
