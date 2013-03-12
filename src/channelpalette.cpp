@@ -315,8 +315,7 @@ void ChannelPalette::hideUnselectAllChannels(){
             //Get the channelColor associated with the item
             const QColor color = channelColors->color(iterator.key());
             drawItem(painter,&pixmap,color,false,channelsSkipStatus[iterator.key()]);
-            QListWidgetItem *item = new QListWidgetItem(QIcon(pixmap),QString::number(iterator.key()),iconView);
-            //KDAB_VERIFY (void)new ChannelIconItem(iconView,item,QString::number(iterator.key()),pixmap);
+            new QListWidgetItem(QIcon(pixmap),QString::number(iterator.key()),iconView);
 
             //Delete the old item
             delete lstItem.first();
@@ -1835,7 +1834,9 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-        //KDAB_PENDING after = new ChannelIconItem(trash,after,channelId,pixmap);
+        const int index = trash->row(after);
+        after = new QListWidgetItem(QIcon(pixmap),(channelId));
+        trash->insertItem(index+1,after);
     }
 
     //Modify the entry in the map group-channel list
