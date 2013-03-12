@@ -94,7 +94,7 @@ void PropertiesDialog::slotHelp()
 
 void PropertiesDialog::updateDialog(int channelNb,double SR, int resolution,int offset,float screenGain,int voltageRange,
                                     int amplification,int nbSamples,int peakIndex,double videoSamplingRate, int width,
-                                    int height, QString backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool positionsBackground,QString traceBackgroundImage){
+                                    int height, const QString& backgroundImage,int rotation,int flip,double acquisitionSystemSamplingRate,bool positionsBackground,const QString& traceBackgroundImage){
     properties->setScreenGain(screenGain);
     properties->setAcquisitionSystemSamplingRate(acquisitionSystemSamplingRate);
     properties->setVoltageRange(voltageRange);
