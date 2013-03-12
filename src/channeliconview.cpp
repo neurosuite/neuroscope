@@ -103,6 +103,21 @@ void ChannelIconView::setDragAndDrop(bool dragDrop)
     drag = dragDrop;
 }
 
+void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
+{
+    QListWidget::dragEnterEvent(event);
+}
+
+void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
+{
+    QListWidget::dragMoveEvent(event);
+}
+
+void ChannelIconView::dropEvent(QDropEvent *event)
+{
+    QListWidget::dropEvent(event);
+}
+
 #if PORTING_KDAB
 
 Q3DragObject* ChannelIconView::dragObject(){

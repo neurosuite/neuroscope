@@ -55,7 +55,9 @@ protected:
     void wheelEvent ( QWheelEvent * e );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);
-
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
 #if 0
 
 protected:
