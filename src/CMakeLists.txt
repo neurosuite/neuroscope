@@ -54,4 +54,10 @@ add_executable(neuroscope ${neuroscope_SRCS} )
 target_link_libraries(neuroscope ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${LIBKLUSTERSSHARED_LIBRARY})
 
 install(TARGETS neuroscope DESTINATION bin)
+install(FILES hi16-app-neuroscope.png DESTINATION share/icons/hicolor/16x16/apps/ RENAME neuroscope.png)
+install(FILES hi22-app-neuroscope.png DESTINATION share/icons/hicolor/22x22/apps/ RENAME neuroscope.png)
+install(FILES hi32-app-neuroscope.png DESTINATION share/icons/hicolor/32x32/apps/ RENAME neuroscope.png)
+install(FILES hi48-app-neuroscope.png DESTINATION share/icons/hicolor/48x48/apps/ RENAME neuroscope.png)
+install(FILES hi64-app-neuroscope.png DESTINATION share/icons/hicolor/64x64/apps/ RENAME neuroscope.png)
+
 install(FILES neuroscope.desktop DESTINATION share/applications/)
