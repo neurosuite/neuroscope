@@ -269,9 +269,9 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
             //As all the files with the same base name share the same session and par files, ask the user to selected the desire one.
             QString startUrl = urlFileInfo.absolutePath() + QDir::separator() + baseName;
-            QString filter = baseName + ".dat " +  " " + baseName + ".eeg" +  " " +  baseName + ".fil";
-            filter.append(tr("|Data File (*.dat), EEG File (*.eeg), Filter File (*.fil)\n"));
-            filter.append(baseName + ".*");
+            //QString filter = baseName + ".dat " +  " " + baseName + ".eeg" +  " " +  baseName + ".fil";
+            QString filter(tr("Data File (*.dat);;EEG File (*.eeg);;Filter File (*.fil);;All files (*.*)"));
+            //filter.append(baseName + ".*");
 
             const QString openUrl = QFileDialog::getOpenFileName(parent, tr("Open Data File..."),startUrl,filter);
             if(!openUrl.isEmpty()) {
