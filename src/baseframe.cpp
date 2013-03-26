@@ -155,7 +155,7 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
                 //If the widget contains a left margin and draws in the negative abscisses this correction will not work.
                 if(firstClick.x() < 0 && Xborder > 0) firstClick.setX(0);
                 if(secondClick.x() < 0 && Xborder > 0) secondClick.setX(0);
-                isZoomed = window.zoom(firstClick, secondClick);
+                isZoomed = window.zoom(viewportToWorld(firstClick), secondClick);
             }
             else{
                 float factor;
