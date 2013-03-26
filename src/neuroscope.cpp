@@ -932,7 +932,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     if(!file.exists()){
         QString title = tr("File not found: ");
         title.append(filePath);
-        int answer = QMessageBox::question(this,title, tr("The selected file no longer exists. Do you want to remove it from the list?"));
+        int answer = QMessageBox::question(this,title, tr("The selected file no longer exists. Do you want to remove it from the list?"), QMessageBox::Yes|QMessageBox::No);
         if(answer == QMessageBox::Yes) {
             mFileOpenRecent->removeRecentFile(url);
         }
