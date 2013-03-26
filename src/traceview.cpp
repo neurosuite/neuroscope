@@ -1107,7 +1107,8 @@ void TraceView::updateWindow(){
 
     //Certain variables used to compute the window in multicolumns mode depend on the size of the previous window and viewport rectangles.
     //To have an acurate window size, we loop until the size of the window is stabilized.
-    if(multiColumns && oldXshift != Xshift) updateWindow();
+
+    //Laurent comment it infinit loop if(multiColumns && oldXshift != Xshift) updateWindow();
 
     //Recompute the display gains
     computeChannelDisplayGain();
