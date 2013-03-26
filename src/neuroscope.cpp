@@ -335,13 +335,6 @@ void NeuroscopeApp::initActions()
     mSynchronizeGroups =channelsMenu->addAction(tr("&Synchronize Groups"));
     connect(mSynchronizeGroups,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
 
-    channelsMenu->addSeparator();
-    showHideLabels = channelsMenu->addAction(tr("Show &Labels"));
-    showHideLabels->setShortcut(Qt::CTRL + Qt::Key_L);
-    showHideLabels->setCheckable(true);
-    connect(showHideLabels,SIGNAL(triggered()), this,SLOT(slotShowLabels()));
-
-    showHideLabels->setChecked(false);
 
     //Color section
     mColorAnatomicalGroups = channelsMenu->addAction(tr("Color by &Anatomical Groups"));
@@ -470,6 +463,15 @@ void NeuroscopeApp::initActions()
 
     mSetDefaultOffsetToZero = traceMenu->addAction(tr("Set Default Offsets to &Zero"));
     connect(mSetDefaultOffsetToZero,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
+
+    traceMenu->addSeparator();
+    showHideLabels = traceMenu->addAction(tr("Show &Labels"));
+    showHideLabels->setShortcut(Qt::CTRL + Qt::Key_L);
+    showHideLabels->setCheckable(true);
+    connect(showHideLabels,SIGNAL(triggered()), this,SLOT(slotShowLabels()));
+
+    showHideLabels->setChecked(false);
+
 
 
     /// Added by M.Zugaro to enable automatic forward paging
