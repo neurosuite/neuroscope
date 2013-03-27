@@ -429,7 +429,7 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,const 
     //Enable the View to be inform that the positions dockWidget is being close.
     //To do so, connect the positions dockwidget close button to the dockBeingClosed slot of is contained widget
     //and connect this widget parentDockBeingClosed signal to the view positionDockClosed slot.
-    connect(positions, SIGNAL(headerCloseButtonClicked()),positionView, SLOT(dockBeingClosed()));
+    //connect(positions, SIGNAL(headerCloseButtonClicked()),positionView, SLOT(dockBeingClosed()));
     connect(positionView, SIGNAL(parentDockBeingClosed(QWidget*)), this, SLOT(positionDockClosed(QWidget*)));
 
     //Set the different connections with the view
