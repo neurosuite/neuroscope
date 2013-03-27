@@ -851,6 +851,7 @@ void ItemPalette::reset(){
 void ItemPalette::createGroup(const QString &id){
     ItemGroupView* group = new ItemGroupView(backgroundColor,this);
 
+    qDebug()<<" createGroup"<<id;
     verticalContainer->addWidget(group);
     group->setObjectName(id);
     GroupNameLabel* label = new GroupNameLabel(id,group);
