@@ -126,7 +126,7 @@ protected Q_SLOTS:
     void languageChange();
     void resizeEvent(QResizeEvent* event);
     void paintEvent ( QPaintEvent*ainter);
-    void slotMouseReleased(QString sourceGroupName);
+    void slotMouseReleased(const QString &sourceGroupName);
 
 Q_SIGNALS:
     void colorChanged(int item,QString groupName);

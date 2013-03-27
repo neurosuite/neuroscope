@@ -551,7 +551,7 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
     }
 }
 
-void ItemPalette::slotMouseReleased(QString sourceGroupName){
+void ItemPalette::slotMouseReleased(const QString& sourceGroupName){
     if(!needRedrawing.isEmpty()){
         updateIconPixmap = true;
         update();
