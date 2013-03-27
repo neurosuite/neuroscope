@@ -516,7 +516,7 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
                 selection.insert(iterator.key(),selectedItems);
 
                 //update the browsing status, it is set to false for all the elements
-                QString groupName = iterator.key();
+                const QString groupName = iterator.key();
                 ItemColors* itemColors = itemColorsDict[groupName];
                 QMap<int,bool> browsingMap = browsingStatus[groupName];
                 QList<int> itemsToSkip;
@@ -889,13 +889,13 @@ void ItemPalette::createGroup(const QString &id){
     itemGroupViewDict.insert(id,group);
 
     group->adjustSize();
-    //iconView->show();
-    //group->show();
+    iconView->show();
+    group->show();
 
     delete spaceWidget;
     spaceWidget = new QWidget;
     verticalContainer->addWidget(spaceWidget);
-    //spaceWidget->show();
+    spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
     //Signal and slot connection
