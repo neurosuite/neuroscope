@@ -184,6 +184,7 @@ void NeuroscopeApp::initActions()
     mProperties = fileMenu->addAction(tr("&Properties"));
     connect(mProperties,SIGNAL(triggered()), this,SLOT(slotFileProperties()));
 
+    fileMenu->addSeparator();
 
     mCloseAction = fileMenu->addAction(tr("Close"));
     mCloseAction->setIcon(QPixmap(":/shared-icons/document-close"));
