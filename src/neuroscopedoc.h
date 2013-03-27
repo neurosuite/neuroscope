@@ -832,7 +832,7 @@ public Q_SLOTS:
    * @param newOldEventIds map between the new eventIds and the previous ones.
    * @param eventDescriptionAdded new event description added.
    */
-    void slotNewEventDescriptionCreated(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,QString eventDescriptionAdded);
+    void slotNewEventDescriptionCreated(const QString &providerName, QMap<int, int> oldNewEventIds, QMap<int, int> newOldEventIds, const QString &eventDescriptionAdded);
 
     /**Updates the event palette and the views after the suppression of an event description.
    * @param providerName provider identifier.
@@ -841,7 +841,7 @@ public Q_SLOTS:
    * @param eventIdToRemove event id removed.
    * @param eventDescriptionToRemove removed event description.
    */
-    void slotEventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
+    void slotEventDescriptionRemoved(const QString& providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove, const QString& eventDescriptionToRemove);
 
 Q_SIGNALS:
     /**Informs the application that there is no session file available.

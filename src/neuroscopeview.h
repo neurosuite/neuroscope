@@ -528,7 +528,7 @@ public:
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-    void eventToAddProperties(QString providerName,QString eventDescription){emit newEventProperties(providerName,eventDescription);}
+    void eventToAddProperties(const QString& providerName, const QString& eventDescription){emit newEventProperties(providerName,eventDescription);}
 
     /**Updates the ids of the selected events due to the modification of event ids due to the addition or suppression of an
   * event description.
@@ -538,7 +538,7 @@ public:
   * @param active true if the view is the active one, false otherwise.
   * @param added true if an event description has been added, false if it has been removed.
   */
-    void updateSelectedEventsIds(QString providerName,QMap<int,int>& oldNewEventIds,int addedEventId,bool active,bool added);
+    void updateSelectedEventsIds(const QString &providerName,QMap<int,int>& oldNewEventIds,int addedEventId,bool active,bool added);
 
     /**Removes the position provider.
   * @param name name use to identified the position provider.

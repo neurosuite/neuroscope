@@ -2357,7 +2357,7 @@ QList<EventDescription> NeuroscopeDoc::eventIds(QString providerName){
     return eventMap.keys();
 }
 
-void NeuroscopeDoc::slotNewEventDescriptionCreated(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,QString eventDescriptionAdded){
+void NeuroscopeDoc::slotNewEventDescriptionCreated(const QString &providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds, const QString& eventDescriptionAdded){
     newEventDescriptionCreated = true;
     EventsProvider* eventsProvider = static_cast<EventsProvider*>(providers[providerName]);
 
@@ -2413,7 +2413,7 @@ void NeuroscopeDoc::slotNewEventDescriptionCreated(QString providerName,QMap<int
     eventPalette->selectItems(providerName,*selectedEvents,*skippedEvents);
 }
 
-void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove){
+void NeuroscopeDoc::slotEventDescriptionRemoved(const QString &providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove, const QString &eventDescriptionToRemove){
     EventsProvider* eventsProvider = static_cast<EventsProvider*>(providers[providerName]);
 
     //Constructs the new eventColorList

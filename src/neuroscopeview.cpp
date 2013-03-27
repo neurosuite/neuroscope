@@ -349,7 +349,7 @@ void NeuroscopeView::updateEventsAfterAddition(QString providerName,int eventId,
     emit updateEventDisplay();
 }
 
-void NeuroscopeView::updateSelectedEventsIds(QString providerName,QMap<int,int>& oldNewEventIds,int modifiedEventId,bool active,bool added){
+void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<int,int>& oldNewEventIds,int modifiedEventId,bool active,bool added){
 
     if(eventsNotUsedForBrowsing.contains(providerName)){
         QList<int>* currentSkippedEvents = eventsNotUsedForBrowsing.take(providerName);

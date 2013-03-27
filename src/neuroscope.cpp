@@ -2990,7 +2990,7 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
 
 void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
-    ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,this,"events");
+    ItemPalette* eventPalette = new ItemPalette(ItemPalette::EVENT,backgroundColor,this,"eventPanel");
     eventFileList.append(eventFileId);
 
     if(displayPaletteHeaders) {
@@ -3027,8 +3027,6 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
 void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
-
-    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS";
     for(int i = 0; i<paletteTabsParent->count();i++){
         QWidget* current = paletteTabsParent->widget(i);
         QString name = current->objectName();
@@ -3226,7 +3224,9 @@ ItemPalette* NeuroscopeApp::getEventPalette(){
 
     for(int i = 0; i< paletteTabsParent->count();++i){
         QWidget* current = paletteTabsParent->widget(i);
+
         QString name = current->objectName();
+        qDebug()<<" sssssssssssssssssss"<<name;
         if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
             eventPalette = static_cast<ItemPalette*>(current);
             break;
