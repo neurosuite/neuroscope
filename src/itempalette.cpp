@@ -69,6 +69,7 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     QWidget *w = new QWidget;
     verticalContainer = new QVBoxLayout;
+    w->setLayout(verticalContainer);
     setWidget(w);
     verticalContainer->setSpacing(5);
 
