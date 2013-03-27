@@ -1248,7 +1248,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
-                                                         tr("Cluster File (*.clu.*);;Cluster File (*.clu)"));
+                                                         tr("Cluster File (*.clu.*)"));
     if(!urls.isEmpty())
     {
         loadClusterFiles(urls);
