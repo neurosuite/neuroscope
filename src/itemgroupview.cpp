@@ -32,7 +32,8 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
     setAutoFillBackground(true);
     setLayout(mLayout);
     //Set the groupview color, the foreground color depends on the background color
-    QPalette palette; palette.setColor(backgroundRole(), backgroundColor);
+    QPalette palette;
+    palette.setColor(backgroundRole(), backgroundColor);
     int h;
     int s;
     int v;
@@ -42,6 +43,7 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
         legendColor = Qt::black;
     else
         legendColor = Qt::white;
+
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
 
