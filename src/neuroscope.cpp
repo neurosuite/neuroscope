@@ -3234,7 +3234,7 @@ ItemPalette* NeuroscopeApp::getEventPalette(){
     return eventPalette;
 }
 
-void NeuroscopeApp::slotEventGroupSelected(QString eventGroupName){
+void NeuroscopeApp::slotEventGroupSelected(const QString &eventGroupName){
     //This function can be called because an undo or redo action,
     //this should not be taken into account.
     if(undoRedoInprocess) return;
@@ -3244,7 +3244,7 @@ void NeuroscopeApp::slotEventGroupSelected(QString eventGroupName){
     view->eventToAddProperties(eventProvider,eventLabelToCreate);
 }
 
-void NeuroscopeApp::slotEventAdded(QString providerName,QString addEventDescription,double time){
+void NeuroscopeApp::slotEventAdded(const QString &providerName, const QString &addEventDescription,double time){
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;

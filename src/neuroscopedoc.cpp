@@ -2457,13 +2457,14 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(QString providerName,QMap<int,in
     eventPalette->selectItems(providerName,*selectedEvents,*skippedEvents);
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QString eventUrl,NeuroscopeView*activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(const QString &eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file name
     QString fileName = eventUrl;
-    if(fileName.indexOf(".evt") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".evt") == -1)
+        return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
-    QString name = eventsProvider->getName();
+    const QString name = eventsProvider->getName();
 
     //The name should be of 3 characters length with at least one none digit character.
     if(name.length() != 3 || name.contains(QRegExp("\\d{3}"))){
@@ -2495,8 +2496,10 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(QStrin
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
 
-        if(view != activeView) view->setEventProvider(eventsProvider,name,eventColors,false,eventsToShow,eventsToSkip);
-        else view->setEventProvider(eventsProvider,name,eventColors,true,eventsToShow,eventsToSkip);
+        if(view != activeView)
+            view->setEventProvider(eventsProvider,name,eventColors,false,eventsToShow,eventsToSkip);
+        else
+            view->setEventProvider(eventsProvider,name,eventColors,true,eventsToShow,eventsToSkip);
     }
 
     return OK;

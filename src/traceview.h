@@ -469,8 +469,8 @@ public Q_SLOTS:
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.
   */
-    void eventToAddProperties(QString providerName,QString eventDescription){
-        qDebug()<<" eventToAddProperties***********************"<<providerName;
+    void eventToAddProperties(const QString &providerName, const QString &eventDescription){
+qDebug()<<" eventToAddProperties***********************";
         //If an event is being modified, this function can be called with eventDescription set to empty,
         //this should not be taken into account.
         if(!eventBeingModified){

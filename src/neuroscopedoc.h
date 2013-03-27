@@ -139,7 +139,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     @return an OpenSaveCreateReturnMessage enum giving the creation status.
     */
-    OpenSaveCreateReturnMessage createEventFile(QString eventUrl,NeuroscopeView*activeView);
+    OpenSaveCreateReturnMessage createEventFile(const QString &eventUrl, NeuroscopeView*activeView);
 
     /**Returns the QString of the document. */
     const QString& url() const;

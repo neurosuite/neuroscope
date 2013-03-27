@@ -224,14 +224,14 @@ public Q_SLOTS:
     /**Called when an event file has been selected in the event palette.
   * @param eventGroupName name use to identified the selected event file.
   */
-    void slotEventGroupSelected(QString eventGroupName);
+    void slotEventGroupSelected(const QString &eventGroupName);
 
     /**Called when an event has been added.
   * @param providerName name use to identified the event provider containing the added event.
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    void slotEventAdded(QString providerName,QString addedEventDescription,double time);
+    void slotEventAdded(const QString &providerName, const QString &addedEventDescription, double time);
 
     /**Update the positions menu due to the closing of the current position view.*/
     void positionViewClosed(){positionViewToggle->setChecked(false);}
