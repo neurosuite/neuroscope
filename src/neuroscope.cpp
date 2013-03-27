@@ -3226,7 +3226,6 @@ ItemPalette* NeuroscopeApp::getEventPalette(){
         QWidget* current = paletteTabsParent->widget(i);
 
         QString name = current->objectName();
-        qDebug()<<" sssssssssssssssssss"<<name;
         if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
             eventPalette = static_cast<ItemPalette*>(current);
             break;
