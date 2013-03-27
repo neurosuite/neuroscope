@@ -54,7 +54,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
         legendColor = Qt::black;
     else
         legendColor = Qt::white;
-    palette.setColor(foregroundRole(), legendColor); 
+    palette.setColor(QPalette::Text, legendColor);
     setPalette(palette);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
