@@ -184,7 +184,7 @@ void PrefDialog::updateConfiguration(){
 
 void PrefDialog::slotDefault() {
     if(QMessageBox::question(this, tr("Set default options?"), tr("This will set the default options "
-                                                   "in ALL pages of the preferences dialog! Do you wish to continue?"),QMessageBox::Ok|QMessageBox::Cancel)==QMessageBox::Ok){
+                                                   "in ALL pages of the preferences dialog! Do you wish to continue?"),QMessageBox::RestoreDefaults|QMessageBox::Cancel)==QMessageBox::RestoreDefaults){
         
         prefGeneral->setBackgroundColor(configuration().getBackgroundColorDefault());
         prefGeneral->setPaletteHeaders(configuration().isPaletteHeadersDisplayedDefault());
