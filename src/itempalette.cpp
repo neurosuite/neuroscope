@@ -152,8 +152,8 @@ void ItemPalette::createItemList(ItemColors* itemColors, const QString &groupNam
         clusterGroupList.append(groupName.toInt());
     else
         itemGroupList.append(groupName);
-    createGroup(groupName);
 
+    createGroup(groupName);
     updateItemList(groupName);
 
     //always select a group
@@ -888,13 +888,13 @@ void ItemPalette::createGroup(const QString &id){
     itemGroupViewDict.insert(id,group);
 
     group->adjustSize();
-    iconView->show();
-    group->show();
+    //iconView->show();
+    //group->show();
 
     delete spaceWidget;
     spaceWidget = new QWidget;
     verticalContainer->addWidget(spaceWidget);
-    spaceWidget->show();
+    //spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
     //Signal and slot connection
@@ -1043,7 +1043,7 @@ void ItemPalette::orderTheGroups(){
     delete spaceWidget;
     spaceWidget = new QWidget;
     verticalContainer->addWidget(spaceWidget);
-    spaceWidget->show();
+    //spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 }
 

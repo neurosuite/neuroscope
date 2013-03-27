@@ -1319,7 +1319,8 @@ void NeuroscopeApp::slotCreateEventFile(){
             QMessageBox::critical (this, tr("Error!"),tr("The selected file name is already opened."));
         }
         else{
-            QString eventFileId = doc->lastLoadedProviderName();
+            const QString eventFileId = doc->lastLoadedProviderName();
+            qDebug()<<" eventFileId"<<eventFileId;
             if(eventFileList.isEmpty())
                 createEventPalette(eventFileId);
             else
@@ -3000,7 +3001,6 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
     }
 
 
-
     //Palette connections
     connect(eventPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotEventColorUpdate(int,QString)));
     connect(eventPalette, SIGNAL(updateShownItems(QMap<QString,QList<int> >)), this, SLOT(slotUpdateShownEvents(QMap<QString,QList<int> >)));
@@ -3008,6 +3008,7 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
     connect(eventPalette, SIGNAL(updateItemsToSkip(QString,QList<int>)), this, SLOT(slotUpdateEventsToSkip(QString,QList<int>)));
     connect(eventPalette,SIGNAL(noEventsToBrowse()),this, SLOT(slotNoEventsToBrowse()));
     connect(eventPalette,SIGNAL(eventsToBrowse()),this, SLOT(slotEventsToBrowse()));
+
 
     //Create the list
     eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
@@ -3027,6 +3028,7 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
 
+    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS";
     for(int i = 0; i<paletteTabsParent->count();i++){
         QWidget* current = paletteTabsParent->widget(i);
         QString name = current->objectName();
