@@ -661,6 +661,7 @@ void NeuroscopeApp::initItemPanel(){
         index = paletteTabsParent->addTab(spikeChannelPalette,QString());
         paletteTabsParent->setTabIcon(index,QIcon(":/icons/spikes"));
     }
+    paletteTabsParent->hide();
 }
 void NeuroscopeApp::executePreferencesDlg(){
     if(prefDialog == 0L){
