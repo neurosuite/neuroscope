@@ -898,7 +898,7 @@ void ItemPalette::createGroup(const QString &id){
     verticalContainer->setStretchFactor(spaceWidget,2);
 
     //Signal and slot connection
-    connect(iconView,SIGNAL(selectionChanged()),this, SLOT(slotClickRedraw()));
+    connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressed(QString,QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(mousePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
