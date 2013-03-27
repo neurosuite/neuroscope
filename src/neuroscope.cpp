@@ -1878,6 +1878,7 @@ void NeuroscopeApp::resetState(){
 
     displayChannelPalette->reset();
     spikeChannelPalette->reset();
+    paletteTabsParent->hide();
     select = false;
 
     isInit = false; //now a change in a spine box  or the lineedit
