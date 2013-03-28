@@ -650,8 +650,8 @@ void NeuroscopeApp::initStatusBar()
 
 void NeuroscopeApp::initItemPanel(){
 
-    displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,this,"DisplaylPalette");
-    spikeChannelPalette = new ChannelPalette(ChannelPalette::SPIKE,backgroundColor,true,this,"SpikePalette");
+    displayChannelPalette = new ChannelPalette(ChannelPalette::DISPLAY,backgroundColor,true,this,"displayPanel");
+    spikeChannelPalette = new ChannelPalette(ChannelPalette::SPIKE,backgroundColor,true,this,"spikePanel");
 
     if(displayPaletteHeaders) {
         paletteTabsParent->addTab(displayChannelPalette,QIcon(":/icons/anatomy"),tr("Anatomy"));
@@ -723,6 +723,7 @@ void NeuroscopeApp::applyPreferences() {
                 }
             }
         } else {
+            qDebug()<<" sssssssssssssssssss";
             if(displayPaletteHeaders) {
                 paletteTabsParent->setTabText(paletteTabsParent->indexOf(displayChannelPalette),tr("Anatomy"));
                 paletteTabsParent->setTabText(paletteTabsParent->indexOf(spikeChannelPalette),tr("Spikes"));
