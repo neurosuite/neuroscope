@@ -253,17 +253,8 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
         QPalette palette;
         palette.setColor(label->backgroundRole(), palette.highlight ().color());
         label->setPalette(palette);
-    }
-
-#ifdef KDAB_PORTING
-    if(!sourceGroupName.isEmpty()){
-        ItemGroupView* group = itemGroupViewDict[sourceGroupName];
-        QLabel* label = static_cast<QLabel*>(group->label());
-        label->setPaletteBackgroundColor(colorGroup().highlight());
-
         ItemIconView* iconView = iconviewDict[sourceGroupName];
         bool unselect = selectionStatus[sourceGroupName];
-
         //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
         isInSelectItems = true;
         //If ctrlAlt is true, either set all the select items of the group for browsing or unset them (it is a toggle between the 2 states)
@@ -273,6 +264,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             QList<int> itemsToSkip;
             if(unselect){
                 selectionStatus[sourceGroupName] = false;
+                /*
                 for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
                     int currentIndex = item->index();
                     if(item->isSelected()){
@@ -286,10 +278,12 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     }
                     itemsToSkip.append(itemColors->itemId(currentIndex));
                 }
+                */
             }
             else{
                 selectionStatus[sourceGroupName] = true;
 
+                /*
                 for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
                     int currentIndex = item->index();
                     if(item->isSelected()){
@@ -303,6 +297,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     }
                     else itemsToSkip.append(itemColors->itemId(currentIndex));
                 }
+                */
             }
             browsingStatus.insert(sourceGroupName,browsingMap);
             emit updateItemsToSkip(sourceGroupName,itemsToSkip);
@@ -331,6 +326,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                 ItemColors* itemColors = itemColorsDict[sourceGroupName];
                 QMap<int,bool> browsingMap = browsingStatus[sourceGroupName];
                 QList<int> itemsToSkip;
+                /*
                 for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
                     int currentIndex = item->index();
                     if(browsingMap[currentIndex]){
@@ -343,6 +339,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     }
                     else itemsToSkip.append(itemColors->itemId(currentIndex));
                 }
+                */
                 browsingStatus.insert(sourceGroupName,browsingMap);
                 emit updateItemsToSkip(sourceGroupName,itemsToSkip);
 
@@ -361,13 +358,14 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             }
             else{
                 selectionStatus[sourceGroupName] = true;
-                iconView->selectAll(true);
+                iconView->selectAll();
                 //If it is a cluster palette and the shift key was press, select everything except 0 and 1
                 if(shiftKey && type == CLUSTER){
                     ItemColors* itemColors = itemColorsDict[sourceGroupName];
                     QMap<int,bool> browsingMap = browsingStatus[sourceGroupName];
                     QList<int> itemsToSkip;
                     bool hasChanged = false;
+                    /*
                     Q3IconViewItem* item;
                     for(int i = 0;i<2;++i){
                         item = iconView->findItem(QString::number(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
@@ -386,6 +384,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                             else itemsToSkip.append(itemColors->itemId(currentIndex));
                         }
                     }
+                    */
                     if(hasChanged){
                         browsingStatus.insert(sourceGroupName,browsingMap);
                         emit updateItemsToSkip(sourceGroupName,itemsToSkip);
@@ -406,7 +405,6 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
     selected = sourceGroupName;
     if(type == EVENT)
         emit selectedGroupChanged(selected);
-#endif
 }
 
 
