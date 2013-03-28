@@ -264,40 +264,32 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             QList<int> itemsToSkip;
             if(unselect){
                 selectionStatus[sourceGroupName] = false;
-                /*
-                for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-                    int currentIndex = item->index();
-                    if(item->isSelected()){
-                        if(browsingMap[currentIndex]){
-                            browsingMap[currentIndex] = false;
-                            QString label = item->text();
-                            redrawItem(iconView,itemColors,currentIndex,browsingMap);
+                for(int i = 0; i <iconView->count(); ++i) {
+                    QListWidgetItem * item = iconView->item(i);
+                    if (item->isSelected()) {
+                        if(browsingMap[i]) {
+                            browsingMap[i] = false;
+                            //const QString label = item->text();
+                            redrawItem(iconView,itemColors,i,browsingMap);
                             isInSelectItems = true;//redrawItem sets it back to false
-                            item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
                         }
                     }
-                    itemsToSkip.append(itemColors->itemId(currentIndex));
+                    itemsToSkip.append(itemColors->itemId(i));
                 }
-                */
-            }
-            else{
+            }else{
                 selectionStatus[sourceGroupName] = true;
-
-                /*
-                for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-                    int currentIndex = item->index();
+                for(int i = 0; i <iconView->count(); ++i) {
+                    QListWidgetItem * item = iconView->item(i);
                     if(item->isSelected()){
-                        if(!browsingMap[currentIndex]){
-                            browsingMap[currentIndex] = true;
-                            QString label = item->text();
-                            redrawItem(iconView,itemColors,currentIndex,browsingMap);
+                        if(!browsingMap[i]){
+                            browsingMap[i] = true;
+                            redrawItem(iconView,itemColors,i,browsingMap);
                             isInSelectItems = true;//redrawItem sets it back to false
-                            item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
+                        } else  {
+                            itemsToSkip.append(itemColors->itemId(i));
                         }
                     }
-                    else itemsToSkip.append(itemColors->itemId(currentIndex));
                 }
-                */
             }
             browsingStatus.insert(sourceGroupName,browsingMap);
             emit updateItemsToSkip(sourceGroupName,itemsToSkip);
