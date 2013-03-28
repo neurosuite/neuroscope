@@ -666,7 +666,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         drawTimeLine(&p);
     }
 
-    if (mode == SELECT_EVENT) {
+    if (mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) {
         //set the window (part of the world I want to show)
         QRect r((QRect)window);
         p.setViewport(viewport);
@@ -2326,8 +2326,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                         previousDragAbscissa = min - selectedEventPosition[1] + lastClickAbscissa;
                     }
                 }
-            }
-            else{
+            } else {
                 startEventDragging = false;
                 previousDragAbscissa = x;
             }
