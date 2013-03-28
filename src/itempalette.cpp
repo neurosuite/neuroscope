@@ -246,6 +246,15 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             previousLabel->setPalette(palette);
         }
     }
+
+    if (!sourceGroupName.isEmpty()){
+        ItemGroupView* group = itemGroupViewDict[sourceGroupName];
+        QLabel* label = static_cast<QLabel*>(group->label());
+        QPalette palette;
+        palette.setColor(label->backgroundRole(), palette.highlight ().color());
+        label->setPalette(palette);
+    }
+
 #ifdef KDAB_PORTING
     if(!sourceGroupName.isEmpty()){
         ItemGroupView* group = itemGroupViewDict[sourceGroupName];

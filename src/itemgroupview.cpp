@@ -81,6 +81,7 @@ void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
 
 void ItemGroupView::setLabel(QLabel* label){
     mLabel = label;
+    mLabel->setAutoFillBackground(true);
     mLayout->addWidget(mLabel);
 }
 
