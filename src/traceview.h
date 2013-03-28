@@ -320,9 +320,11 @@ public:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(QString providerName,bool active){
-        if(!eventProvidersToUpdate.contains(providerName)) eventProvidersToUpdate.append(providerName);
-        if(active) update();
+    void updateEvents(const QString& providerName,bool active){
+        if(!eventProvidersToUpdate.contains(providerName))
+            eventProvidersToUpdate.append(providerName);
+        if(active)
+            update();
     }
 
     /**Updates the event data provided by @p providerName due to the addition of an event.
@@ -330,7 +332,7 @@ public:
   * @param eventsToShow new list of events to be shown.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(QString providerName,QList<int>& eventsToShow,bool active);
+    void updateEvents(const QString &providerName, QList<int>& eventsToShow, bool active);
 
     /**Deletes the selected event.
   */
@@ -346,7 +348,7 @@ public:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-    void updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse);
+    void updateNoneBrowsingEventList(const QString &providerName, const QList<int>& eventsToNotBrowse);
 
     /**Updates the list of clusters to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.

@@ -654,7 +654,7 @@ public:
     * @param time time of the added event.
     * @param activeView the view in which the change has been made.
     */
-    void eventAdded(QString providerName,QString addedEventDescription,double time,NeuroscopeView* activeView);
+    void eventAdded(const QString &providerName, const QString &addedEventDescription, double time, NeuroscopeView* activeView);
 
 
     /** Returns the list of existing event descriptions contained in the currently selected event file.

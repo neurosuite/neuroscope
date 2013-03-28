@@ -488,7 +488,7 @@ public:
   * @param newTime new time of the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(QString providerName,int selectedEventId,float time,float newTime,bool active);
+    void updateEvents(const QString& providerName,int selectedEventId,float time,float newTime,bool active);
 
     /**Deletes the selected event.
   */
@@ -503,7 +503,7 @@ public:
   * @param time initial time of the removed event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEventsAfterRemoval(QString providerName,int eventId,float time,bool active);
+    void updateEventsAfterRemoval(const QString &providerName, int eventId, float time, bool active);
 
     /**Updates the traceView if concerned by the addition of the event.
   * @param providerName name use to identified the event provider containing the added event.
@@ -511,7 +511,7 @@ public:
   * @param time initial time of the added event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEventsAfterAddition(QString providerName,int eventId,float time,bool active);
+    void updateEventsAfterAddition(const QString &providerName, int eventId, float time, bool active);
 
     /**Updates the traceView if concerned by the modification of the event.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -519,7 +519,7 @@ public:
   * @param time initial time of the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(QString providerName,int eventId,float time,bool active){
+    void updateEvents(const QString& providerName,int eventId,float time,bool active){
         emit updateEvents(active,providerName,time);
         emit updateEventDisplay();
     }
@@ -598,7 +598,7 @@ public:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-    void updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse);
+    void updateNoneBrowsingEventList(const QString &providerName, const QList<int>& eventsToNotBrowse);
 
     /**Updates the list of clusters to not use while browsing.
   * @param providerName name use to identified the event provider containing the modified event.

@@ -396,7 +396,7 @@ public Q_SLOTS:
   * @param time initial time of the modified event.
   * @param newTime new time of the modified event.
   */
-    void slotEventModified(QString providerName,int selectedEventId,double time,double newTime){
+    void slotEventModified(const QString &providerName,int selectedEventId,double time,double newTime){
         emit eventModified(providerName,selectedEventId,time,newTime);
     }
 
@@ -405,7 +405,7 @@ public Q_SLOTS:
   * @param selectedEventId id of the removed event.
   * @param time initial time of the removed event.
   */
-    void slotEventRemoved(QString providerName,int selectedEventId,double time){
+    void slotEventRemoved(const QString& providerName,int selectedEventId,double time){
         emit eventRemoved(providerName,selectedEventId,time);
     }
 
@@ -415,11 +415,12 @@ public Q_SLOTS:
   * @param newTime new time of the modified event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(bool active,QString providerName,double time,double newTime){
+    void updateEvents(bool active,const QString& providerName,double time,double newTime){
         long eventTime = static_cast<long>(floor(0.5 + time));
         long newEventTime = static_cast<long>(floor(0.5 + newTime));
         if((eventTime >= startTime  && eventTime <= (startTime + timeWindow)) ||
                 (newEventTime >= startTime  && newEventTime <= (startTime + timeWindow))) view.updateEvents(providerName,active);
+        qDebug()<<" ssssssssssssssssssssssssssssssssss52";
     }
 
     /**Deletes the selected event.
@@ -431,9 +432,10 @@ public Q_SLOTS:
   * @param time initial time of the removed event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(bool active,QString providerName,double time){
+    void updateEvents(bool active,const QString& providerName,double time){
         long eventTime = static_cast<long>(floor(0.5 + time));
-        if((eventTime >= startTime  && eventTime <= (startTime + timeWindow))) view.updateEvents(providerName,active);
+        if((eventTime >= startTime  && eventTime <= (startTime + timeWindow)))
+            view.updateEvents(providerName,active);
     }
 
     /**Informs the traceView of the properties for the next event to be added.
@@ -449,7 +451,7 @@ public Q_SLOTS:
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    void slotEventAdded(QString providerName,QString addedEventDescription,double time){
+    void slotEventAdded(const QString &providerName,const QString& addedEventDescription,double time){
         emit eventAdded(providerName,addedEventDescription,time);
     }
 
@@ -458,7 +460,7 @@ public Q_SLOTS:
   * @param eventsToShow new list of events to be shown.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(QString providerName,QList<int>& eventsToShow,bool active){
+    void updateEvents(const QString& providerName,QList<int>& eventsToShow,bool active){
         view.updateEvents(providerName,eventsToShow,active);
     }
 

@@ -2246,7 +2246,7 @@ void NeuroscopeDoc::eventRemoved(QString providerName,int selectedEventId,double
 }
 
 
-void NeuroscopeDoc::eventAdded(QString providerName,QString addEventDescription,double time,NeuroscopeView* activeView){
+void NeuroscopeDoc::eventAdded(const QString &providerName,const QString &addEventDescription,double time,NeuroscopeView* activeView){
     int addedEventId = 0;
 
     //clear the undo/redo data of all the event providers except providerName and lookup for the selectedEventId
@@ -2269,8 +2269,11 @@ void NeuroscopeDoc::eventAdded(QString providerName,QString addEventDescription,
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
 
-            if(view != activeView) view->updateEventsAfterAddition(providerName,addedEventId,time,false);
-            else view->updateEventsAfterAddition(providerName,addedEventId,time,true);
+            qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS";
+            if(view != activeView)
+                view->updateEventsAfterAddition(providerName,addedEventId,time,false);
+            else
+                view->updateEventsAfterAddition(providerName,addedEventId,time,true);
         }
     }
     else newEventDescriptionCreated = false;

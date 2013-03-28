@@ -549,8 +549,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             }
         }
         isInit = false;
-    }
-    else if(!eventProvidersToUpdate.isEmpty()){
+    } else if(!eventProvidersToUpdate.isEmpty()){
         QStringList::iterator providerIterator;
         EventData* eventData;
         for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
@@ -2991,7 +2990,6 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             QMessageBox::critical (this, tr("Unselected description type!"),tr("In order to add an event you have to choose an event description first!"));
             return;
         }
-
         //The location for the new event has been selected
         if(newEventPosition != -1){
             double samplingRate = static_cast<double>(tracesProvider.getSamplingRate()) / 1000.0;//in eventProvider the time is in miliseconds
@@ -3834,7 +3832,7 @@ void TraceView::showEvents(QString name,QList<int>& eventsToShow){
     }
 }
 
-void  TraceView::updateEvents(QString providerName,QList<int>& eventsToShow,bool active){
+void  TraceView::updateEvents(const QString& providerName,QList<int>& eventsToShow,bool active){
     EventData* eventData;
     eventData = eventsData[providerName];
 
@@ -3848,12 +3846,14 @@ void  TraceView::updateEvents(QString providerName,QList<int>& eventsToShow,bool
         eventData = new EventData();
         eventsData.insert(providerName,eventData);
     }
-
-    if(!eventProvidersToUpdate.contains(providerName)) eventProvidersToUpdate.append(providerName);
-    if(active) update();
+    qDebug()<<" updateEvents "<<providerName;
+    if(!eventProvidersToUpdate.contains(providerName))
+        eventProvidersToUpdate.append(providerName);
+    if(active)
+        update();
 }
 
-void TraceView::updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse){
+void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QList<int>& eventsToNotBrowse){
     QList<int> events;
     QList<int>::const_iterator iterator;
     for(iterator = eventsToNotBrowse.begin(); iterator != eventsToNotBrowse.end(); ++iterator){

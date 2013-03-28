@@ -314,7 +314,7 @@ void NeuroscopeView::shownEventsUpdate(const QString& name,const QList<int>& eve
 }
 
 
-void NeuroscopeView::updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse){
+void NeuroscopeView::updateNoneBrowsingEventList(const QString& providerName,const QList<int>& eventsToNotBrowse){
     QList<int>* currentSkippedEvents = eventsNotUsedForBrowsing[providerName];
     currentSkippedEvents->clear();
 
@@ -326,24 +326,26 @@ void NeuroscopeView::updateNoneBrowsingEventList(QString providerName,const QLis
     emit noneBrowsingEventListUpdated(providerName,eventsToNotBrowse);
 }
 
-void NeuroscopeView::updateEvents(QString providerName,int selectedEventId,float time,float newTime,bool active){
+void NeuroscopeView::updateEvents(const QString& providerName,int selectedEventId,float time,float newTime,bool active){
     emit updateEvents(active,providerName,time,newTime);
     emit updateEventDisplay();
 }
 
-void NeuroscopeView::updateEventsAfterRemoval(QString providerName,int eventId,float time,bool active){
+void NeuroscopeView::updateEventsAfterRemoval(const QString& providerName,int eventId,float time,bool active){
     emit updateEvents(active,providerName,time);
     emit updateEventDisplay();
 }
 
-void NeuroscopeView::updateEventsAfterAddition(QString providerName,int eventId,float time,bool active){
+void NeuroscopeView::updateEventsAfterAddition(const QString& providerName,int eventId,float time,bool active){
     QList<int>* currentSelectedEvents = selectedEvents[providerName];
 
     if(active && !currentSelectedEvents->contains(eventId)){
         currentSelectedEvents->append(eventId);
         emit updateEvents(providerName,*currentSelectedEvents,active);
+    } else {
+        qDebug()<<" 1111111111";
+        emit updateEvents(active,providerName,time);
     }
-    else emit updateEvents(active,providerName,time);
 
     emit updateEventDisplay();
 }
