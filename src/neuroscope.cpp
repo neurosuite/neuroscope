@@ -723,7 +723,6 @@ void NeuroscopeApp::applyPreferences() {
                 }
             }
         } else {
-            qDebug()<<" sssssssssssssssssss";
             if(displayPaletteHeaders) {
                 paletteTabsParent->setTabText(paletteTabsParent->indexOf(displayChannelPalette),tr("Anatomy"));
                 paletteTabsParent->setTabText(paletteTabsParent->indexOf(spikeChannelPalette),tr("Spikes"));
