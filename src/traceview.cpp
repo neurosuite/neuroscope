@@ -529,20 +529,21 @@ void TraceView::paintEvent ( QPaintEvent*){
         if(multiColumns){
             QRect contentsRec = contentsRect();
             viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
-            if(viewport.width() == 0) update();
-            else{
+            if(viewport.width() == 0)  {
+                update();
+            } else {
                 isInit = false;
                 columnDisplayChanged = true;
                 scaleBackgroundImage();
                 updateWindow();
                 update();
             }
-        }
-        else{
+        } else {
             QRect contentsRec = contentsRect();
             viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
-            if(viewport.width() == 0) update();
-            else{
+            if(viewport.width() == 0) {
+                update();
+            } else {
                 scaleBackgroundImage();
                 computeChannelDisplayGain();
             }
@@ -661,8 +662,23 @@ void TraceView::paintEvent ( QPaintEvent*){
     //Draw the double buffer (pixmap) by copying it into the widget device.
     p.drawPixmap(0, 0, doublebuffer);
 
-    if(mode == DRAW_LINE ){
+    if (mode == DRAW_LINE ) {
         drawTimeLine(&p);
+    }
+
+    if (mode == SELECT_EVENT) {
+        //set the window (part of the world I want to show)
+        QRect r((QRect)window);
+        p.setViewport(viewport);
+
+        p.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
+        p.setViewport(viewport);
+
+        p.setPen(QPen(Qt::color0,1));
+        p.setBrush(Qt::NoBrush);
+        int top = r.top();
+        int bottom = r.bottom();
+        p.drawLine(m_currentPoint.x(),top,m_currentPoint.x(),bottom);
     }
 
     if(mMoveSelectChannel) {
@@ -2269,6 +2285,81 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     }
     //Paint the event selected while dragging
     else if((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
+
+        int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+        int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
+        int delta = x - lastClickAbscissa;
+        int currentAbscissa = selectedEventPosition[1] + delta;
+
+        int groupIndex = 0;
+        int max = nbSamplesToDraw - 1;//points draw from 0 to (nbSamplesToDraw - 1)
+        int min = borderX;
+        if(multiColumns){
+            //left margin is visible
+            if(r.left() == 0){
+                if(lastClickAbscissa <= (Xshift - XGroupSpace))
+                    groupIndex = 0;
+                else
+                    groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
+            }
+            //left margin is invisible
+            else{
+                int shift = (nbSamplesToDraw - 1) * Xstep;
+                if(lastClickAbscissa < shift + XGroupSpace)
+                    groupIndex = 0;
+                else
+                    groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
+            }
+            min = X0 + groupIndex * Xshift;
+            max = X0 + groupIndex * Xshift + nbSamplesToDraw - 1;//points draw from 0 to (nbSamplesToDraw - 1)
+        }
+
+        //If the user went to far on the left, draw a line at the minimum min
+        if(currentAbscissa < min){
+            if(!startEventDragging){
+                int previousDelta = previousDragAbscissa - lastClickAbscissa;
+                int previousAbscissa = selectedEventPosition[1] + previousDelta;
+                if(previousAbscissa > min){
+                    if(x > min)
+                        previousDragAbscissa = x;
+                    else{
+                        previousDragAbscissa = min - selectedEventPosition[1] + lastClickAbscissa;
+                    }
+                }
+            }
+            else{
+                startEventDragging = false;
+                previousDragAbscissa = x;
+            }
+        } else if(currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
+            if(!startEventDragging){
+                int previousDelta = previousDragAbscissa - lastClickAbscissa;
+                int previousAbscissa = selectedEventPosition[1] + previousDelta;
+                if(previousAbscissa < max){
+                    //compute previousDragAbscissa in order to have the line drawn at the far rigth of the trace
+                    if(x <= max){
+                        previousDragAbscissa = x;
+                        if(selectedEventPosition[1] + (previousDragAbscissa - lastClickAbscissa) > max) previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
+                    }
+                    else{
+                        previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
+                    }
+                }
+            }
+            else{
+                startEventDragging = false;
+                previousDragAbscissa = x;
+            }
+        } else {
+            startEventDragging = false;
+            //draw the new line
+            previousDragAbscissa = x;
+        }
+        m_currentPoint = QPoint(currentAbscissa, 0);
+        update();
+
+
+        /*
         QPainter painter;
         painter.begin(this);
         //set the window (part of the world I want to show)
@@ -2363,6 +2454,8 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             previousDragAbscissa = x;
             painter.end();
         }
+        */
+
     }
 
     //Paint the line while dragging
@@ -3623,7 +3716,8 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     //Fill the background with the background color and ensure we draw the same portion of the world than on the screen
     QRect back = QRect(r.left(),r.top(),r.width(),r.height());
     float widthRatio = (static_cast<float>(back.width())/static_cast<float>(width));
-    if(r.left() == 0) back.setLeft(r.left() - static_cast<long>(xMargin * widthRatio));
+    if(r.left() == 0)
+        back.setLeft(r.left() - static_cast<long>(xMargin * widthRatio));
 
     QColor colorLegendTmp = colorLegend;
     QColor background= palette().color(backgroundRole());
