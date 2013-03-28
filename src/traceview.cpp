@@ -2268,7 +2268,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         previousDragOrdinate = current.y();
     }
     //Paint the event selected while dragging
-    if((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
+    else if((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
         QPainter painter;
         painter.begin(this);
         //set the window (part of the world I want to show)
@@ -2324,9 +2324,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 previousDragAbscissa = x;
             }
             painter.end();
-        }
-        //If the user went to far on the right, draw a line at the last sample position (max)
-        else if(currentAbscissa > max){
+        } else if(currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
             if(!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
@@ -2348,8 +2346,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 previousDragAbscissa = x;
             }
             painter.end();
-        }
-        else{
+        } else {
             //erase the previous line
             if(!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
@@ -2864,9 +2861,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 }
             }
         }
-    }
-
-    if(mode == SELECT_EVENT && (event->button() & Qt::LeftButton)){
+    } else if(mode == SELECT_EVENT && (event->button() & Qt::LeftButton)){
         //There was a drag of an event
         if(!startEventDragging){
             int delta = previousDragAbscissa - lastClickAbscissa;
@@ -2899,8 +2894,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             //Redraw
             update();
         }
-    }
-    if(mode == ADD_EVENT && (event->button() & Qt::LeftButton)){
+    } else if(mode == ADD_EVENT && (event->button() & Qt::LeftButton)){
         if(eventDescriptionToCreate.isEmpty()){
             QMessageBox::critical (this, tr("Unselected description type!"),tr("In order to add an event you have to choose an event description first!"));
             return;
@@ -2944,12 +2938,10 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         computeChannelDisplayGain();
         drawContentsMode = REDRAW;
         update();
-    }
-    if(mode == MEASURE && (event->button() & Qt::LeftButton)){
+    } else if(mode == MEASURE && (event->button() & Qt::LeftButton)){
         //The parent implementation takes care of the rubber band
         BaseFrame::mouseReleaseEvent(event);
-    }
-    if(mode == SELECT_TIME && (event->button() & Qt::LeftButton)){
+    } else if(mode == SELECT_TIME && (event->button() & Qt::LeftButton)){
         //The parent implementation takes care of the rubber band
         BaseFrame::mouseReleaseEvent(event);
         QPoint current;
@@ -2967,8 +2959,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         if(startingIndex < 0){
             columnNb = 1;
             relativeStartingTime = 0;
-        }
-        else{
+        } else {
             if(multiColumns){
                 //left margin is visible
                 if(r.left() == 0){
@@ -3007,8 +2998,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             startingTime = startTime;
             relativeEndingTime = relativeStartingTime;
             relativeStartingTime = 0;
-        }
-        else{
+        } else {
             if(multiColumns){
                 //left margin is visible
                 if(r.left() == 0){
@@ -3077,8 +3067,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         if(duration > timeFrameWidth) duration = timeFrameWidth;
 
         emit setStartAndDuration(startingTime,duration);
-    }
-    if(mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
+    } else if(mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
         //erase the line
         if(!linePositions.isEmpty()) {
             initialDragLine = false;
