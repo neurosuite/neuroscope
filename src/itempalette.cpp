@@ -306,8 +306,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                 else
                     emit eventsToBrowse();
             }
-        }
-        else{
+        } else{
             //If shiftKey is false, either select all the items of the group or deselect them all (it is a toggle between the 2 states)
             if(unselect){
                 selectionStatus[sourceGroupName] = false;
@@ -318,20 +317,17 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                 ItemColors* itemColors = itemColorsDict[sourceGroupName];
                 QMap<int,bool> browsingMap = browsingStatus[sourceGroupName];
                 QList<int> itemsToSkip;
-                /*
-                for(Q3IconViewItem* item = iconView->firstItem(); item; item = item->nextItem()){
-                    int currentIndex = item->index();
-                    if(browsingMap[currentIndex]){
-                        browsingMap[currentIndex] = false;
-                        QString label = item->text();
-                        redrawItem(iconView,itemColors,currentIndex,browsingMap);
+                for(int i = 0; i <iconView->count(); ++i) {
+                    //QListWidgetItem * item = iconView->item(i);
+                    if(browsingMap[i]){
+                        browsingMap[i] = false;
+                        redrawItem(iconView,itemColors,i,browsingMap);
                         isInSelectItems = true;//redrawItem sets it back to false
-                        item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
-                        itemsToSkip.append(itemColors->itemId(currentIndex));
+                        itemsToSkip.append(itemColors->itemId(i));
                     }
-                    else itemsToSkip.append(itemColors->itemId(currentIndex));
+                    else itemsToSkip.append(itemColors->itemId(i));
+
                 }
-                */
                 browsingStatus.insert(sourceGroupName,browsingMap);
                 emit updateItemsToSkip(sourceGroupName,itemsToSkip);
 
@@ -347,8 +343,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     else
                         emit eventsToBrowse();
                 }
-            }
-            else{
+            } else{
                 selectionStatus[sourceGroupName] = true;
                 iconView->selectAll();
                 //If it is a cluster palette and the shift key was press, select everything except 0 and 1
