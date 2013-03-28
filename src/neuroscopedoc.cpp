@@ -1078,7 +1078,8 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
 
     reader.getAnatomicalDescription(channelNb,displayChannelsGroups,displayGroupsChannels,skipStatus);
 
-    if(displayGroupsChannels.contains(0)) spikeGroupsChannels.insert(0,displayGroupsChannels[0]);
+    if(displayGroupsChannels.contains(0))
+        spikeGroupsChannels.insert(0,displayGroupsChannels[0]);
     reader.getSpikeDescription(channelNb,channelsSpikeGroups,spikeGroupsChannels);
 
     //compute which cluster files give data for a given anatomical group

@@ -664,9 +664,10 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
                                                        }
                                                    }
                                                    group = group.nextSibling();
-                                                   spikeGroupsChannels.insert(i + 1,channelList);
-                                                   ++i;
                                                }
+
+                                               spikeGroupsChannels.insert(i + 1,channelList);
+                                               ++i;
                                            }
                                        }
                                        channelGroup = channelGroup.nextSibling();

@@ -154,7 +154,6 @@ void ItemPalette::createItemList(ItemColors* itemColors, const QString &groupNam
     else
         itemGroupList.append(groupName);
 
-    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSs"<<groupName;
     createGroup(groupName);
     updateItemList(groupName);
 
