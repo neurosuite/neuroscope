@@ -425,21 +425,20 @@ void ItemPalette::slotClickRedraw(){
             QList<int> itemsToRedraw;
             for(int i = 0 ; i<iterator.value()->count(); ++i ){
                 QListWidgetItem *item = iterator.value()->item(i);
-                int index = item->data(ItemIconView::INDEXICON).toInt();
                 if(item->isSelected()){
-                    selectedItems.append(itemColors->itemId(index));
-                    if(!browsingMap[index])
-                        itemsToSkip.append(itemColors->itemId(index));
+                    selectedItems.append(itemColors->itemId(i));
+                    if(!browsingMap[i])
+                        itemsToSkip.append(itemColors->itemId(i));
                     else
                         browsingEnable = true;
                 }
                 else{
-                    if(browsingMap[index]){
-                        browsingMap[index] = false;
-                        itemsToRedraw.append(index);
+                    if(browsingMap[i]){
+                        browsingMap[i] = false;
+                        itemsToRedraw.append(i);
                         needToBeUpdated = true;
                     }
-                    itemsToSkip.append(itemColors->itemId(index));
+                    itemsToSkip.append(itemColors->itemId(i));
                 }
             }
             selection.insert(groupName,selectedItems);
