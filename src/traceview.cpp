@@ -560,7 +560,6 @@ void TraceView::paintEvent ( QPaintEvent*){
             }
             else eventsData[*providerIterator]->setStatus(false);
         }
-
         QHashIterator<QString, EventData*> iterator(eventsData);
         while (iterator.hasNext()) {
             iterator.next();
