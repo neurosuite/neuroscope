@@ -201,6 +201,7 @@ void NeuroscopeDoc::closeDocument(){
     skipStatus.clear();
 
     //Variables used for cluster and event providers
+    qDeleteAll(providers);
     providers.clear();
     qDeleteAll(providerItemColors);
     providerItemColors.clear();
@@ -1957,7 +1958,7 @@ void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activ
             view->removeClusterProvider(providerName,true);
     }
 
-    providers.remove(providerName);
+    delete providers.take(providerName);
     delete providerItemColors.take(providerName);
     providerUrls.remove(providerName);
 }
@@ -2167,7 +2168,7 @@ void NeuroscopeDoc::removeEventFile(QString providerName,NeuroscopeView* activeV
             view->removeEventProvider(providerName,true,lastFile);
     }
 
-    providers.remove(providerName);
+    delete providers.take(providerName);
     delete providerItemColors.take(providerName);
     providerUrls.remove(providerName);
 }
@@ -2626,7 +2627,7 @@ void NeuroscopeDoc::removePositionFile(NeuroscopeView* activeView){
         else view->removePositionProvider(name,true);
     }
 
-    providers.remove(name);
+    delete providers.take(name);
     providerUrls.remove(name);
 }
 
