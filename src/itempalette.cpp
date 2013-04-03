@@ -201,9 +201,7 @@ void ItemPalette::updateItemList(const QString& groupName){
 
 
 void ItemPalette::slotMousePressed(const QString&sourceGroupName,QListWidgetItem*item){
-    if (!item) {
-        return; //pressed on viewport
-    } else {
+    if (item) {
         changeColor(item,sourceGroupName);
     }
 }
