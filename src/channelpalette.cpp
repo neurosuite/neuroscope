@@ -812,7 +812,9 @@ void ChannelPalette::selectChannels(const QList<int>& selectedChannels){
 
 void ChannelPalette::reset(){
     iconviewDict.clear();
+    qDeleteAll(channelGroupViewDict);
     channelGroupViewDict.clear();
+
     channelsShowHideStatus.clear();
     edit = true;
     selected.clear();
@@ -1213,7 +1215,7 @@ void ChannelPalette::deleteEmptyGroups(){
             if(deletedGroups.contains(gpId)){
                 deletedGroups.append(gpId);
                 iconviewDict.remove(QString::number(gpId));
-                channelGroupViewDict.remove(QString::number(gpId));
+                delete channelGroupViewDict.take(QString::number(gpId));
                 selectionStatus.remove(QString::number(gpId));
                 //-1 and 0 are the trash groups, they are not renamed
                 if(gpId == 0 || gpId == -1)
