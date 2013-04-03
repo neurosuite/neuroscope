@@ -153,7 +153,8 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                     // Files are numbered 1...N but we do not know if they are zero-padded,
                     // so we try different padding lengths (from 0 to 3 digits)
                     QString pad;
-                    for ( int j = 0 ; j < i ; ++j ) pad += "0";
+                    for ( int j = 0 ; j < i ; ++j )
+                        pad += "0";
                     cscFileName = baseName + pad + QString("%1.ncs").arg(channel);
                     dataFile = fopen(cscFileName.toLatin1(),"rb");
                     if (dataFile != NULL) break;

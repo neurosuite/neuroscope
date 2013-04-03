@@ -273,13 +273,15 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
         while (iterator.hasNext()) {
             iterator.next();
             ready = iterator.value()->status();
-            if(!ready) break;
+            if(!ready)
+                break;
         }
         QHashIterator<QString, EventData*> iterator2(eventsData);
         while (iterator2.hasNext()) {
             iterator2.next();
             ready = iterator2.value()->status();
-            if(!ready) break;
+            if(!ready)
+                break;
         }
         if(ready){
             changeCursor();
@@ -310,13 +312,15 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready) break;
+        if(!ready)
+            break;
     }
     QHashIterator<QString, EventData*> iterator2(eventsData);
     while (iterator2.hasNext()) {
         iterator2.next();
         ready = iterator2.value()->status();
-        if(!ready) break;
+        if(!ready)
+            break;
     }
     if(dataReady && ready){
         changeCursor();
@@ -341,7 +345,8 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready) break;
+        if(!ready)
+            break;
     }
     //If all the data for the events are available, send an signal for the listeners interested in it.
     // if(ready) emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
@@ -350,7 +355,8 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
     while (iterator2.hasNext()) {
         iterator2.next();
         ready = iterator2.value()->status();
-        if(!ready) break;
+        if(!ready)
+            break;
     }
     if(dataReady && ready){
         changeCursor();
