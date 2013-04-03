@@ -391,7 +391,7 @@ void TraceView::updateClusterData(bool active){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString::number(*toRemoveIterator));
+            delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
         if(clustersData.count() != 0)
@@ -444,7 +444,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString::number(*toRemoveIterator));
+            delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
 
@@ -477,7 +477,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QStringList::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedEvents.remove(*toRemoveIterator);
-            eventsData.remove(*toRemoveIterator);
+            delete eventsData.take(*toRemoveIterator);
         }
 
         //If there is only one event provider and the data rewuest have been made by a request for the next or previous event, this signal make sur
@@ -3616,11 +3616,13 @@ void TraceView::removeClusterProvider(const QString &name, bool active){
     clustersNotUsedForBrowsing.remove(name);
     clusterProviders.remove(name);
     providerItemColors.remove(name);
-    clustersData.remove(name);
+    delete clustersData.take(name);
 
-    if(raster) updateWindow();
+    if(raster)
+        updateWindow();
     drawContentsMode = REDRAW;
-    if(active) update();
+    if(active)
+        update();
 }
 
 
@@ -3800,7 +3802,7 @@ void TraceView::removeEventProvider(const QString& name,bool active){
     eventsNotUsedForBrowsing.remove(name);
     eventProviders.remove(name);
     providerItemColors.remove(name);
-    eventsData.remove(name);
+    delete eventsData.take(name);
 
     drawContentsMode = REDRAW;
     if(active) update();
@@ -3903,7 +3905,7 @@ void TraceView::showNextEvent(){
         QStringList::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedEvents.remove(*toRemoveIterator);
-            eventsData.remove(*toRemoveIterator);
+            delete eventsData.take(*toRemoveIterator);
         }
 
         if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
@@ -3951,7 +3953,7 @@ void TraceView::showPreviousEvent(){
         QStringList::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedEvents.remove(*toRemoveIterator);
-            eventsData.remove(*toRemoveIterator);
+            delete eventsData.take(*toRemoveIterator);
         }
 
         if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
@@ -4265,7 +4267,7 @@ void TraceView::showNextCluster(){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString::number(*toRemoveIterator));
+            delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
@@ -4317,7 +4319,7 @@ void TraceView::showPreviousCluster(){
         QList<int>::iterator toRemoveIterator;
         for(toRemoveIterator = toRemove.begin(); toRemoveIterator != toRemove.end(); ++toRemoveIterator){
             selectedClusters.remove(*toRemoveIterator);
-            clustersData.remove(QString::number(*toRemoveIterator));
+            delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
         if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
