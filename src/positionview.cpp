@@ -376,6 +376,7 @@ void PositionView::dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QSt
     }
 
     //Update the event data
+    qDeleteAll(this->eventsData);
     this->eventsData.clear();
 
     //unselect all the items first
@@ -462,11 +463,13 @@ void PositionView::eventColorUpdate(QString name,int eventId,bool active){
 void PositionView::removeEventProvider(const QString& name,bool active,bool lastFile){
     selectedEvents.remove(name);
     providerItemColors.remove(name);
-    eventsData.remove(name);
-    if(lastFile) showEvents = false;
+    delete eventsData.take(name);
+    if(lastFile)
+        showEvents = false;
 
     drawContentsMode = REDRAW;
-    if(active) update();
+    if(active)
+        update();
 }
 
 void PositionView::setEventsInPositionView(bool shown){
