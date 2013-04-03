@@ -59,13 +59,13 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setPalette(palette);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setDragEnabled(true);
+
     if(edit){
-        drag = true;
+        setDragEnabled(true);
         setMovement(QListView::Free);
     }
     else{
-        drag = false;
+        setDragEnabled(false);
         setMovement(QListView::Static);
     }
     setSpacing(4);
@@ -99,8 +99,7 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
 
 void ChannelIconView::setDragAndDrop(bool dragDrop)
 {
-    drag = dragDrop;
-    setDragEnabled(drag);
+    setDragEnabled(dragDrop);
 }
 
 void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)

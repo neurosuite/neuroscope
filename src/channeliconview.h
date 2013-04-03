@@ -73,10 +73,6 @@ private:
     Q3IconViewItem* findItemToInsertAfter(QPoint position);
 #endif
 
-private:
-    /**True the drag and drop is allow, false otherwise.*/
-    bool drag;
-
 };
 
 #endif
