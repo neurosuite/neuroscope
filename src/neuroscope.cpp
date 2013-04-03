@@ -3252,7 +3252,6 @@ void NeuroscopeApp::slotEventAdded(const QString &providerName, const QString &a
     currentNbRedo = 0;
     slotStateChanged("undoState");
     slotStateChanged("emptyRedoState");
-    qDebug()<<" ssssssssssssssssssss "<<providerName;
     doc->eventAdded(providerName,addEventDescription,time,activeView());
 }
 

@@ -82,8 +82,6 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
 
     //Set the legend in the good language
     languageChange();
-
-    //verticalContainer->adjustSize();
     adjustSize();
 }    
 
@@ -845,8 +843,6 @@ void ItemPalette::reset(){
 void ItemPalette::createGroup(const QString &id){
     ItemGroupView* group = new ItemGroupView(backgroundColor,this);
 
-    qDebug()<<" createGroup"<<id;
-    verticalContainer->addWidget(group);
     group->setObjectName(id);
     GroupNameLabel* label = new GroupNameLabel(id,group);
     group->setLabel(label);
@@ -881,8 +877,8 @@ void ItemPalette::createGroup(const QString &id){
     group->setIconView(iconView);
 
     iconviewDict.insert(id,iconView);
-    itemGroupViewDict.insert(id,group);
 
+    itemGroupViewDict.insert(id,group);
     group->adjustSize();
     iconView->show();
     group->show();
@@ -910,7 +906,7 @@ void ItemPalette::createGroup(const QString &id){
 
 void ItemPalette::removeGroup(const QString &groupName){
     itemColorsDict.remove(groupName);
-    itemGroupViewDict.remove(groupName);
+    delete itemGroupViewDict.take(groupName);
     iconviewDict.remove(groupName);
     browsingStatus.remove(groupName);
     selectionStatus.remove(groupName);
@@ -1035,7 +1031,6 @@ void ItemPalette::orderTheGroups(){
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
             verticalContainer->addWidget(itemGroupViewDict[*iterator]);
     }
-
     delete spaceWidget;
     spaceWidget = new QWidget;
     verticalContainer->addWidget(spaceWidget);

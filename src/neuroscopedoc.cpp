@@ -2269,7 +2269,6 @@ void NeuroscopeDoc::eventAdded(const QString &providerName,const QString &addEve
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
 
-            qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS";
             if(view != activeView)
                 view->updateEventsAfterAddition(providerName,addedEventId,time,false);
             else

@@ -420,7 +420,6 @@ public Q_SLOTS:
         long newEventTime = static_cast<long>(floor(0.5 + newTime));
         if((eventTime >= startTime  && eventTime <= (startTime + timeWindow)) ||
                 (newEventTime >= startTime  && newEventTime <= (startTime + timeWindow))) view.updateEvents(providerName,active);
-        qDebug()<<" ssssssssssssssssssssssssssssssssss52";
     }
 
     /**Deletes the selected event.
