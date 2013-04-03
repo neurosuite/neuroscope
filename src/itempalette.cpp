@@ -239,7 +239,7 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
             GroupNameLabel* previousLabel = static_cast<GroupNameLabel*>(previousSelectedGroup->label());
 
             QPalette palette;
-            palette.setColor(previousLabel->backgroundRole(), palette.background().color());
+            palette.setColor(previousLabel->backgroundRole(), this->palette().background().color());
             previousLabel->setPalette(palette);
         }
     }
