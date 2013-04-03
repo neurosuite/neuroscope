@@ -2770,7 +2770,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 }
                 else{
                     QList<int> groupIds = shownGroupsChannels.keys();
-
+                    
+                    if (shownGroupsChannels.isEmpty() )
+                       return;
                     QList<int> firstGroup = shownGroupsChannels[groupIds[0]];
                     int y = Y0;
                     int channelId = firstGroup[0];
