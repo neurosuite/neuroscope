@@ -38,7 +38,6 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setResizeMode(QListWidget::Adjust);
     setGridSize(QSize(gridX, gridY));
     setViewMode(QListView::IconMode);
-    setMovement(QListView::Static);
 
     //arrangeItemsInGrid();
 
@@ -60,16 +59,16 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setPalette(palette);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setDragEnabled(true);
     if(edit){
         drag = true;
-        //setMovement(QListView::Snap);
+        setMovement(QListView::Free);
     }
     else{
         drag = false;
-        //setMovement(QListView::Static);
+        setMovement(QListView::Static);
     }
     setSpacing(4);
-    setMovement(QListView::Static);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -101,6 +100,7 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
 void ChannelIconView::setDragAndDrop(bool dragDrop)
 {
     drag = dragDrop;
+    setDragEnabled(drag);
 }
 
 void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
