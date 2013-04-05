@@ -21,8 +21,7 @@
 // include files for QT
 #include <qwidget.h>
 
-//includes files for KDE
-#include "qpagedialog.h"
+#include <QDialog>
 
 //include files for the application
 #include "properties.h"  
@@ -35,12 +34,12 @@
   */
 
 class Properties;
-
-class PropertiesDialog : public QPageDialog  {
+class QTabWidget;
+class PropertiesDialog : public QDialog  {
     Q_OBJECT
 public:
     //Constructor
-    PropertiesDialog(QWidget *parent);
+    explicit PropertiesDialog(QWidget *parent);
     ~PropertiesDialog();
 
     /** Updates the dialog.
@@ -156,9 +155,7 @@ public:
     void setEnabledCurrentSamplingRate(bool state){properties->setCurrentSamplingRateEnabled(state);}
 
     /**Shows the page containing the position information in front.*/
-    void showPositionPage(){
-        setCurrentPage(mPositionPageIndex);
-    }
+    void showPositionPage();
 
 public Q_SLOTS:
     /** Will be called when any properties except the number of channels has been modified.*/
@@ -168,7 +165,7 @@ public Q_SLOTS:
     void slotVerify();
 
 protected:
-    virtual void accept(){
+    void accept(){
         if(oops){
             oops = false;
         }
@@ -189,7 +186,7 @@ private:
     int nbChannels;
     bool oops;
     bool atStartUp;
-    QPageWidgetItem* mPositionPageIndex;
+    QTabWidget *mTabWidget;
 };
 
 #endif

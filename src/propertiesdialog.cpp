@@ -18,6 +18,8 @@
 #include <QLayout>        // for QVBoxLayout
 #include <QLabel>         // for QLabel
 #include <QMessageBox>
+#include <QTabWidget>
+#include <QDialogButtonBox>
 //include files for the application
 #include "propertiesdialog.h"
 
@@ -26,37 +28,24 @@
 
 
 PropertiesDialog::PropertiesDialog(QWidget *parent)
-    : QPageDialog(parent)
+    : QDialog(parent)
     ,modified(false)
     ,nbChannelsModified(false)
     ,oops(false)
     ,atStartUp(false)
 {
+    QVBoxLayout *lay = new QVBoxLayout;
+    setLayout(lay);
+    mTabWidget = new QTabWidget;
+    lay->addWidget(mTabWidget);
 
-    setButtons(Help | Ok | Cancel);
-    setDefaultButton(Ok);
-    setFaceType(Tabbed);
     setWindowTitle(tr("File Properties"));
-
-
-    setHelp("properties","neuroscope");
-
-    //page "Channels"
-
-    QWidget * w = new QWidget(this);
-    properties = new Properties(w);
-    addPage(properties,tr("Channels"));
-
-    //adding "Units" page
-    w = new QWidget(this);
-    clusterProperties = new ClusterProperties(w);
-    addPage(clusterProperties,tr("Units"));
-
-    //adding "Positions" page
-    w = new QWidget(this);
-    positionProperties = new PositionProperties(w);
-    mPositionPageIndex = addPage(positionProperties,tr("Positions"));
-
+    properties = new Properties;
+    mTabWidget->addTab(properties, tr("Channels"));
+    clusterProperties = new ClusterProperties;
+    mTabWidget->addTab(clusterProperties,tr("Units"));
+    positionProperties = new PositionProperties;
+    mTabWidget->addTab(positionProperties,tr("Positions"));
     // connect interactive widgets and selfmade signals to the enableApply slotDefault
     connect(properties->nbChannelsLineEdit,SIGNAL(textChanged(QString)),this,SLOT(channelNbModified()));
     connect(properties->screenGainLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
@@ -78,7 +67,11 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     connect(positionProperties->filpComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(positionProperties->checkBoxBackground,SIGNAL(clicked()),this,SLOT(propertyModified()));
 
-    connect(this,SIGNAL(helpClicked()),SLOT(slotHelp()));
+    QDialogButtonBox *dialogButton = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
+    lay->addWidget(dialogButton);
+    connect(dialogButton, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(dialogButton, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(dialogButton, SIGNAL(helpRequested()), this, SLOT(slotHelp()));
 }
 PropertiesDialog::~PropertiesDialog(){
 }
@@ -137,3 +130,6 @@ void PropertiesDialog::slotVerify(){
     }
 }
 
+void PropertiesDialog::showPositionPage(){
+    mTabWidget->setCurrentWidget(positionProperties);
+}
