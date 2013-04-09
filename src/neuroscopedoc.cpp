@@ -1221,22 +1221,14 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         bool raster = false;
         bool waveforms = false;
         bool multipleColumns = false;
-        bool greyMode = false;
-        QString tabLabel;
-        bool showLabels = false;
-        long startTime;
-        long duration;
-        bool isAPositionView = false;
-        int rasterHeight;
-        bool showEventsInPositionView = false;
 
         //Get the information store in DisplayInformation
         DisplayInformation::mode presentationMode = static_cast<DisplayInformation>(*iterator).getMode();
-        startTime = static_cast<DisplayInformation>(*iterator).getStartTime();
-        duration = static_cast<DisplayInformation>(*iterator).getTimeWindow();
-        greyMode = static_cast<DisplayInformation>(*iterator).getGreyScale();
+        long startTime = static_cast<DisplayInformation>(*iterator).getStartTime();
+        long duration = static_cast<DisplayInformation>(*iterator).getTimeWindow();
+        bool greyMode = static_cast<DisplayInformation>(*iterator).getGreyScale();
         QList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
-        rasterHeight = static_cast<DisplayInformation>(*iterator).getRasterHeight();
+        int rasterHeight = static_cast<DisplayInformation>(*iterator).getRasterHeight();
         QMap<QString, QList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
         //An id has been assigned to each event, this id will be used internally in NeuroScope and in the session file.
         QMap<QString, QList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
@@ -1246,9 +1238,9 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         QList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
         QList<int> channelIds = static_cast<DisplayInformation>(*iterator).getChannelIds();
         QList<int> selectedChannelIds = static_cast<DisplayInformation>(*iterator).getSelectedChannelIds();
-        tabLabel = static_cast<DisplayInformation>(*iterator).getTabLabel();
-        showLabels = static_cast<DisplayInformation>(*iterator).getLabelStatus();
-        showEventsInPositionView = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
+        QString tabLabel = static_cast<DisplayInformation>(*iterator).getTabLabel();
+        bool showLabels = static_cast<DisplayInformation>(*iterator).getLabelStatus();
+        bool showEventsInPositionView = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
 
         //info on the trace presentation
         if(presentationMode == DisplayInformation::MULTIPLE) multipleColumns = true;
@@ -1262,7 +1254,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         }
 
         //Info regarding the positionView
-        isAPositionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
+        bool isAPositionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
 
         /*****************TO FINISH***************************/
 
