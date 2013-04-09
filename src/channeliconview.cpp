@@ -68,6 +68,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
         setDragEnabled(false);
         setMovement(QListView::Static);
     }
+    setSelectionRectVisible(false);
     setSpacing(4);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -102,8 +103,6 @@ void ChannelIconView::setDragAndDrop(bool dragDrop)
     setDragEnabled(dragDrop);
 }
 
-#if 0
-
 void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
 {
     QListWidget::dragEnterEvent(event);
@@ -113,6 +112,7 @@ void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
 {
     QListWidget::dragMoveEvent(event);
 }
+#if 0
 
 void ChannelIconView::dropEvent(QDropEvent *event)
 {
