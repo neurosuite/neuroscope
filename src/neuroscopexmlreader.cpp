@@ -84,7 +84,6 @@ int NeuroscopeXmlReader::getResolution()const{
                             if (tag == BITS) {
                                 resolution = u.text().toInt();
                                 return resolution;
-                                break;
                             }
                         }
                         acquisition = acquisition.nextSibling();
