@@ -58,7 +58,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     palette.setColor(QPalette::Text, legendColor);
     setPalette(palette);
 
-    setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setSelectionMode(QAbstractItemView::MultiSelection);
 
     if(edit){
         setDragEnabled(true);
