@@ -144,10 +144,6 @@ void NeuroscopeDoc::removeView(NeuroscopeView* view)
     viewList->removeAll(view);
     delete view;
 }
-void NeuroscopeDoc::setURL(const QString &url)
-{
-    docUrl = url;
-}
 
 const QString& NeuroscopeDoc::url() const
 {

@@ -144,8 +144,6 @@ public:
     /**Returns the QString of the document. */
     const QString& url() const;
 
-    /**Sets the URL of the document.*/
-    void setURL(const QString& url);
 
     /**Changes the color of a channel.
     * @param channelId id of the channel to redraw.
