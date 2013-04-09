@@ -55,24 +55,12 @@ protected:
     void wheelEvent ( QWheelEvent * e );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);
+#if 0
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     void startDrag(Qt::DropActions /*supportedActions*/);
-#if 0
-
-protected:
-    virtual Q3DragObject* dragObject();
-    virtual void contentsDropEvent(QDropEvent* event);
-
-protected Q_SLOTS:
-    void slotDropped(QDropEvent* event, const Q3ValueList<Q3IconDragItem> &draggedList);
-
-private:
-    /**Return 0 if it has to be before the first one.*/
-    Q3IconViewItem* findItemToInsertAfter(QPoint position);
 #endif
-
 };
 
 #endif

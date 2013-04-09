@@ -62,7 +62,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
 
     if(edit){
         setDragEnabled(true);
-        setMovement(QListView::Free);
+        setMovement(QListView::Snap);
     }
     else{
         setDragEnabled(false);
@@ -101,6 +101,8 @@ void ChannelIconView::setDragAndDrop(bool dragDrop)
 {
     setDragEnabled(dragDrop);
 }
+
+#if 0
 
 void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -321,4 +323,5 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
     //Normally never reach
     return lastItem();
 }
+#endif
 #endif
