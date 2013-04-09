@@ -50,7 +50,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if(s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+    if (s <= 80 && v >= 240 || (s <= 40 && v >= 220))
         legendColor = Qt::black;
     else
         legendColor = Qt::white;
@@ -60,11 +60,10 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
 
     setSelectionMode(QAbstractItemView::MultiSelection);
 
-    if(edit){
+    if (edit) {
         setDragEnabled(true);
         setMovement(QListView::Snap);
-    }
-    else{
+    } else {
         setDragEnabled(false);
         setMovement(QListView::Static);
     }
@@ -79,15 +78,15 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
     //If the user did not clicked on an item, ignore the click
     QListWidgetItem* item = itemAt(event->pos());
-    if(item == 0L)
+    if (item == 0L)
         return;
 
-    //  if(event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
+    //  if (event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
     //   !(event->modifiers() & Qt::ControlModifier)){
     //    emit moussePressWoModificators(this->name());
     //  }
 
-    if(event->button() == Qt::MiddleButton) {
+    if (event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(item);
     }
     QListWidget::mousePressEvent(event);
@@ -153,7 +152,7 @@ void ChannelIconView::startDrag(Qt::DropActions /*supportedActions*/)
 #if PORTING_KDAB
 
 Q3DragObject* ChannelIconView::dragObject(){
-    if(!currentItem() || !drag)
+    if (!currentItem() || !drag)
         return 0;
 
     Q3IconDrag* drag = new Q3IconDrag(viewport());
@@ -163,7 +162,7 @@ Q3DragObject* ChannelIconView::dragObject(){
     QPoint orig = viewportToContents( viewport()->mapFromGlobal(QCursor::pos()));
     //Insert only one item to have a pixmap to draw.
     for(Q3IconViewItem* item = firstItem();item; item = item->nextItem()){
-        if(item->isSelected()){
+        if (item->isSelected()){
             Q3IconDragItem id;
             id.setData(item->text().toLocal8Bit());
             drag->append(id,
@@ -182,15 +181,15 @@ Q3DragObject* ChannelIconView::dragObject(){
 
 void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
     //The source of the drag is not a widget of the application
-    if(event->source() == 0 || !drag){
+    if (event->source() == 0 || !drag){
         event->ignore();
         return;
     }
 
     //Drop of a label to move the whole block
-    if(QString(event->format()).contains("text/plain")){
+    if (QString(event->format()).contains("text/plain")){
         QString information;
-        if(Q3TextDrag::decode(event,information)){
+        if (Q3TextDrag::decode(event,information)){
             int groupSource = information.section("-",0,0).toInt();
             int start = information.section("-",1,1).toInt();
             QString groupTarget = this->name();
@@ -200,7 +199,7 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
     }
 
 
-    if(event->action() == QDropEvent::Move){
+    if (event->action() == QDropEvent::Move){
         event->acceptAction();
 
         QString groupSource = (event->source())->parent()->name();
@@ -216,10 +215,10 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
 
         QList<int> selectedChannels;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-            if(item->isSelected()) selectedChannels.append(item->text().toInt());
+            if (item->isSelected()) selectedChannels.append(item->text().toInt());
 
         //If all the channels are selected insert after the first one.
-        if(selectedChannels.size() == this->count()){
+        if (selectedChannels.size() == this->count()){
             emit channelsMoved(this->name(),0);
             return;
         }
@@ -230,24 +229,24 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
 }
 
 void ChannelIconView::contentsDropEvent(QDropEvent* event){
-    if(event->source() == 0 || !drag){
+    if (event->source() == 0 || !drag){
         event->ignore();
         return;
     }
-    if((event->source())->parent()->objectName() != objectName()){
+    if ((event->source())->parent()->objectName() != objectName()){
         Q3IconView::contentsDropEvent(event);
         return;
     }
 
     //Move items around in the iconview
     Q3IconViewItem* item = findItem(event->pos());
-    if(item == 0){
+    if (item == 0){
         QList<int> selectedChannels;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-            if(item->isSelected()) selectedChannels.append(item->text().toInt());
+            if (item->isSelected()) selectedChannels.append(item->text().toInt());
 
         //If all the items have been selected, do not do anything
-        if(selectedChannels.size() == count()){
+        if (selectedChannels.size() == count()){
             Q3IconView::contentsDropEvent(event);
             arrangeItemsInGrid();
             return;
@@ -270,18 +269,18 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
     
     int firstY = firstItem()->pos().y();
     //test if the position is above all the other items, if so find the item to insert after.
-    if(posY < firstY){
+    if (posY < firstY){
         Q3IconViewItem* after = 0L;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem()){
-            if(!item->isSelected()){
+            if (!item->isSelected()){
                 after = item;
-                if(((item->pos().y() == firstY) && (item->pos().x() >= posX)) || (item->pos().y() > firstY)){
-                    if(item->index() == 0) return 0;
+                if (((item->pos().y() == firstY) && (item->pos().x() >= posX)) || (item->pos().y() > firstY)){
+                    if (item->index() == 0) return 0;
                     else{
                         //take the first item before the current one which is not selected (<=> not to be moved)
                         Q3IconViewItem* after = item->prevItem();
                         while(after->isSelected()){
-                            if(after->index() == 0) return 0;
+                            if (after->index() == 0) return 0;
                             else after = after->prevItem();
                         }
                         return after;
@@ -295,11 +294,11 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
 
     int lastY = lastItem()->pos().y();
     //else test if the position is below all the other items, if so find item to insert after.
-    if(posY > lastY){
+    if (posY > lastY){
         for(Q3IconViewItem* item = lastItem(); item; item = item->prevItem()){
-            if(!item->isSelected()){
-                if(((item->pos().y() == lastY) && (item->pos().x() <= posX)) || (item->pos().y() < lastY)){
-                    if(item->index() == 0 && posX < item->pos().x()) return 0;
+            if (!item->isSelected()){
+                if (((item->pos().y() == lastY) && (item->pos().x() <= posX)) || (item->pos().y() < lastY)){
+                    if (item->index() == 0 && posX < item->pos().x()) return 0;
                     else return item;
                 }
             }
@@ -308,13 +307,13 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
     //else the other cases
     Q3IconViewItem* item;
     for(item = lastItem(); item;item = item->prevItem())
-        if(!item->isSelected() && (item->pos().y() <= posY)) break;
+        if (!item->isSelected() && (item->pos().y() <= posY)) break;
 
     int maxY = item->pos().y();
     for(;item;item = item->prevItem()){
-        if(!item->isSelected()){
-            if((item->pos().x() <= posX) || (item->pos().y() < maxY) || item == firstItem()){
-                if(item->index() == 0 && posX < item->pos().x()) return 0;
+        if (!item->isSelected()){
+            if ((item->pos().x() <= posX) || (item->pos().y() < maxY) || item == firstItem()){
+                if (item->index() == 0 && posX < item->pos().x()) return 0;
                 else return item;
             }
         }
