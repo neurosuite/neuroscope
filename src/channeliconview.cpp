@@ -25,6 +25,7 @@
 #include <QList>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QApplication>
 
 
 ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const QString& name):
@@ -74,6 +75,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
 
 }
 
+
 void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
     //If the user did not clicked on an item, ignore the click
@@ -88,6 +90,8 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
 
     if (event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(item);
+    } else if (event->button() == Qt::LeftButton) {
+        startPos = event->pos();
     }
     QListWidget::mousePressEvent(event);
 }
@@ -104,13 +108,50 @@ void ChannelIconView::setDragAndDrop(bool dragDrop)
 
 void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
 {
-    QListWidget::dragEnterEvent(event);
+    if (event->source() && event->source() != this) {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+
+
+    //QListWidget::dragEnterEvent(event);
 }
 
 void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
 {
-    QListWidget::dragMoveEvent(event);
+    if (event->source() && event->source() != this) {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+
+    //QListWidget::dragMoveEvent(e);
 }
+
+void ChannelIconView::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        const int distance = (event->pos() - startPos).manhattanLength();
+        if (distance >= QApplication::startDragDistance())
+            startDrag();
+    }
+    QListWidget::mouseMoveEvent(event);
+}
+
+void ChannelIconView::startDrag()
+{
+    /*
+    QListWidgetItem *item = currentItem();
+    if (item) {
+        QMimeData *mimeData = new QMimeData;
+        mimeData->setText(item->text());
+        QDrag *drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+        if (drag->start(Qt::MoveAction) == Qt::MoveAction)
+            delete item;
+    }
+    */
+}
+
 #if 0
 
 void ChannelIconView::dropEvent(QDropEvent *event)
