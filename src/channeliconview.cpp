@@ -112,9 +112,6 @@ void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
-
-
-    //QListWidget::dragEnterEvent(event);
 }
 
 void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
@@ -123,8 +120,6 @@ void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
-
-    //QListWidget::dragMoveEvent(e);
 }
 
 void ChannelIconView::mouseMoveEvent(QMouseEvent *event)
@@ -140,6 +135,21 @@ void ChannelIconView::mouseMoveEvent(QMouseEvent *event)
 void ChannelIconView::startDrag()
 {
     /*
+    const QList<QListWidgetItem *> lst = selectedItems();
+    if (!lst.isEmpty()) {
+        qDebug()<<" ssssssssssssssssss";
+        QMimeData * data = mimeData (lst);
+        qDebug()<<" data "<<data;
+        QDrag *drag = new QDrag(this);
+        drag->setMimeData(data);
+        if (drag->start(Qt::MoveAction) == Qt::MoveAction) {
+            Q_FOREACH(QListWidgetItem *item, lst ) {
+                delete item;
+            }
+        }
+    }
+    */
+    /*
     QListWidgetItem *item = currentItem();
     if (item) {
         QMimeData *mimeData = new QMimeData;
@@ -151,9 +161,7 @@ void ChannelIconView::startDrag()
     }
     */
 }
-
 #if 0
-
 void ChannelIconView::dropEvent(QDropEvent *event)
 {
     const QMimeData *mimeData = event->mimeData();
@@ -166,6 +174,7 @@ void ChannelIconView::dropEvent(QDropEvent *event)
         event->acceptProposedAction();
         return;
     }
+    event->acceptProposedAction();
     QListWidget::dropEvent(event);
 }
 
