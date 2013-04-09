@@ -860,7 +860,7 @@ void ItemPalette::createGroup(const QString &id){
         iconView = new ItemIconView(backgroundColor,QListView::ListMode,gridX,15*2,group,id);
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-    if(iconviewDict.count() >= 1){
+    if(!iconviewDict.isEmpty()){
         QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
         while (iterator.hasNext()) {
             iterator.next();
