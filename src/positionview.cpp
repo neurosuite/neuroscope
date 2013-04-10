@@ -65,8 +65,10 @@ void PositionView::paintEvent ( QPaintEvent*){
     if(isInit){
         QRect contentsRec = contentsRect();
         viewport =  QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
-        if(viewport.width() == 0) update();
-        else scaleBackgroundImage();
+        if(viewport.width() == 0)
+            update();
+        else
+            scaleBackgroundImage();
 
         isInit = false;
     }
@@ -137,7 +139,7 @@ void PositionView::paintEvent ( QPaintEvent*){
     p.drawPixmap(0, 0, doublebuffer);
 }
 
-void PositionView::updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){
+void PositionView::updatePositionInformation(int width, int height, const QImage &backgroundImage, bool newOrientation, bool active){
     background = backgroundImage;
     //The video recording stores information like in the QT coordinate system: Y axis in oriented downwards
     window = ZoomWindow(QRect(QPoint(0,0),QPoint(width,height)));
@@ -358,7 +360,7 @@ void PositionView::print(QPainter& printPainter,int width, int height,bool white
     printPainter.resetMatrix();
 }
 
-void PositionView::changeBackgroundColor(QColor color){
+void PositionView::changeBackgroundColor(const QColor &color){
     BaseFrame::changeBackgroundColor(color);
 }
 
@@ -454,7 +456,7 @@ void PositionView::drawEvents(QPainter& painter){
     }
 }
 
-void PositionView::eventColorUpdate(QString name,int eventId,bool active){
+void PositionView::eventColorUpdate(const QString &name, int eventId, bool active){
     if(active){
         drawContentsMode = REDRAW ;
         update();

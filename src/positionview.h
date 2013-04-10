@@ -76,7 +76,7 @@ public Q_SLOTS:
   * @param newOrientation true if the image has been transformed (rotate and or flip), false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active);
+    void updatePositionInformation(int width, int height,const QImage& backgroundImage,bool newOrientation,bool active);
 
     /**Updates the postions to show between @p start and @p start + @p timeFrameWidth.
    * @param start starting time in miliseconds.
@@ -101,7 +101,7 @@ public Q_SLOTS:
     void print(QPainter& printPainter,int width, int height,bool whiteBackground,QImage backgroundForPrinting = QImage());
 
     /***Changes the color of the background.*/
-    void changeBackgroundColor(QColor color);
+    void changeBackgroundColor(const QColor& color);
     
     /** Displays the event data that has been retrieved.
   * @param eventsData dictionary between the event provider names and the event data and status.
@@ -120,7 +120,7 @@ public Q_SLOTS:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void eventColorUpdate(QString name,int eventId,bool active);
+    void eventColorUpdate(const QString& name,int eventId,bool active);
 
     /**Update the information presented in the view.*/
     void updateDrawing(){
