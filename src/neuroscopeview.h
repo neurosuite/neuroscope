@@ -858,6 +858,7 @@ private:
 
     /**Boolean indicating whether events are displayed in the PositionView.*/
     bool eventsInPositionView;
+    QDockWidget* positionsDockWidget;
 };
 
 #endif // NEUROSCOPEVIEW_H

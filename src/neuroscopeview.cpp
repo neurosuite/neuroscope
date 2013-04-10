@@ -41,7 +41,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
   ,shownChannels(channelsToDisplay),mainWindow(mainWindow),greyScaleMode(greyScale),
     multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),
     channelOffsets(),gains(),selectedChannels(),tabLabel(label),startTime(startTime),timeWindow(duration),
-    labelsDisplay(labelsDisplay),isPositionFileShown(false),positionView(0L),eventsInPositionView(false){
+    labelsDisplay(labelsDisplay),isPositionFileShown(false),positionView(0L),eventsInPositionView(false), positionsDockWidget(0){
 
     //Duplicate the offset,gain and channelSelected lists
     QList<int>::iterator offsetIterator;
@@ -420,13 +420,13 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,const 
     eventsInPositionView = showEvents;
 
     //Create and add the position view
-    QDockWidget* positions = new QDockWidget();
-    positions->setFeatures(QDockWidget::NoDockWidgetFeatures);
+    positionsDockWidget = new QDockWidget();
+    positionsDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
     //createDockWidget( "Positions", QPixmap());
-    positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positions,"PositionView",backgroundColor);
-    positions->setWidget(positionView);//assign the widget
+    positionView = new PositionView(*positionsProvider,globalEventProvider,backgroundImage,startTime,duration,showEvents,height,width,positionsDockWidget,"PositionView",backgroundColor);
+    positionsDockWidget->setWidget(positionView);//assign the widget
 
-    addDockWidget(Qt::TopDockWidgetArea,positions);
+    addDockWidget(Qt::TopDockWidgetArea,positionsDockWidget);
     //Enable the View to be inform that the positions dockWidget is being close.
     //To do so, connect the positions dockwidget close button to the dockBeingClosed slot of is contained widget
     //and connect this widget parentDockBeingClosed signal to the view positionDockClosed slot.
@@ -460,6 +460,9 @@ void  NeuroscopeView::positionDockClosed(QWidget* view){
 }
 
 void NeuroscopeView::removePositionView(){
+    removeDockWidget(positionsDockWidget);
+
+    delete positionView;
     positionView = 0L;
     isPositionFileShown = false;
 }

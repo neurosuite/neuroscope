@@ -21,6 +21,7 @@
 #include <QVector>
 #include <QList>
 #include <QPixmap>
+#include <QDebug>
 
 //include files for the application
 #include "positionview.h"

@@ -1548,12 +1548,9 @@ void NeuroscopeApp::slotShowCalibration(){
 
 void NeuroscopeApp::slotShowPositionView(){
     NeuroscopeView* view = activeView();
-    if(!positionViewToggle->isChecked())
-    {
+    if(!positionViewToggle->isChecked()) {
         view->removePositionView();
-    }
-    else
-    {
+    } else {
         doc->addPositionView(view,backgroundColor);
     }
 }
