@@ -61,3 +61,4 @@ install(FILES hi48-app-neuroscope.png DESTINATION share/icons/hicolor/48x48/apps
 install(FILES hi64-app-neuroscope.png DESTINATION share/icons/hicolor/64x64/apps/ RENAME neuroscope.png)
 
 install(FILES neuroscope.desktop DESTINATION share/applications/)
+#install(FILES data-file.desktop eeg-file.desktop neuroscope-session.desktop filter-file.desktop DESTINATION MIMETYPES)
