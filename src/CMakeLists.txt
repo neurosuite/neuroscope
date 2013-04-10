@@ -43,7 +43,7 @@ set(neuroscope_SRCS
 	propertieslayout.cpp
 	)
 
-qt4_add_resources(neuroscope_SRCS neuroscope-cursors.qrc neuroscope-icons.qrc)
+qt4_add_resources(neuroscope_SRCS neuroscope-icons.qrc)
 
 set(neuroscope_UI  propertieslayout.ui prefdefaultslayout.ui positionpropertieslayout.ui prefgenerallayout.ui clusterpropertieslayout.ui)
 
