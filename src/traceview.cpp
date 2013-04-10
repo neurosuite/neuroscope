@@ -189,14 +189,12 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     if(!multiColumns) updateWindow();
 
     //Create the cursors
-
     measureCursor = QCursor(QPixmap(":/shared-cursors/measure_cursor"),0,0);
     selectTimeCursor = QCursor(QPixmap(":/shared-cursors/select_time_cursor"),0,0);
     selectEventCursor = QCursor(QPixmap(":/shared-cursors/select_event_cursor"),0,0);
     addEventCursor = QCursor(QPixmap(":/shared-cursors/add_event_cursor"),0,0);
     selectCursor = QCursor(QPixmap(":/shared-cursors/select_channels_cursor"),0,0);
     drawLineCursor = QCursor(QPixmap(":/shared-cursors/time_line_cursor"),0,0);
-
     //Set the cursor shap to a magnifier as the only action allowed on the widget is to zoom.
     setCursor(zoomCursor);
 
