@@ -163,7 +163,7 @@ public:
     * @param eventId id of the event to redraw.
     * @param activeView the view in which the change has to be immediate.
     */
-    void eventColorUpdate(QString providerName,int eventId,NeuroscopeView* activeView);
+    void eventColorUpdate(const QString &providerName, int eventId, NeuroscopeView* activeView);
 
     /**Changes the color of a group of channels.
     * @param groupId id of the group for which the color have been changed.
@@ -576,7 +576,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @param lastFile true if the event file removed is the last event provider, false otherwise.
     */
-    void removeEventFile(QString providerName,NeuroscopeView* activeView,bool lastFile);
+    void removeEventFile(const QString &providerName, NeuroscopeView* activeView, bool lastFile);
 
     /**Sets the data providers to the newly created view.
     * @param activeView the view which gives its parameters to the new view.
@@ -626,7 +626,7 @@ public:
     * @param newTime new time of the modified event.
     * @param activeView the view in which the change has been made.
     */
-    void eventModified(QString providerName,int selectedEventId,double time,double newTime,NeuroscopeView* activeView);
+    void eventModified(const QString &providerName, int selectedEventId, double time, double newTime, NeuroscopeView* activeView);
 
     /**Informs that an event has been removed.
     * @param providerName name use to identified the event provider containing the removed event.
@@ -634,7 +634,7 @@ public:
     * @param time initial time of the removed event.
     * @param activeView the view in which the change has been made.
     */
-    void eventRemoved(QString providerName,int selectedEventId,double time,NeuroscopeView* activeView);
+    void eventRemoved(const QString &providerName, int selectedEventId, double time, NeuroscopeView* activeView);
 
     /** Reverts the last user action.
     * @param activeView the currently active view.

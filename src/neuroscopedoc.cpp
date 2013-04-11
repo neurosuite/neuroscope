@@ -50,13 +50,39 @@
 
 extern QString version;
 
-NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPalette, ChannelPalette& spikeChannelPalette, int channelNbDefault, double datSamplingRateDefault,
-                             double eegSamplingRateDefault, int initialOffset, int voltageRangeDefault, int amplificationDefault, float screenGainDefault, int resolutionDefault, int eventPosition, int clusterPosition,
-                             int nbSamples, int peakSampleIndex, double videoSamplingRate, int width, int height, const QString& backgroundImage, const QString &traceBackgroundImage, int rotation, int flip, bool positionsBackground) :
-    docUrl(),sessionUrl(),displayChannelPalette(displayChannelPalette),spikeChannelPalette(spikeChannelPalette),resolutionDefault(resolutionDefault),channelNbDefault(channelNbDefault),datSamplingRateDefault(datSamplingRateDefault),
-    eegSamplingRateDefault(eegSamplingRateDefault),videoSamplingRateDefault(videoSamplingRate),initialOffsetDefault(initialOffset),screenGainDefault(screenGainDefault),voltageRangeDefault(voltageRangeDefault),amplificationDefault(amplificationDefault),isCommandLineProperties(false),
-    channelColorList(0L),tracesProvider(0L),parent(parent),baseName(""),nbSamplesDefault(nbSamples),peakSampleIndexDefault(peakSampleIndex),extension(""),eventPosition(eventPosition),clusterPosition(clusterPosition),
-    newEventDescriptionCreated(false),videoWidthDefault(width),videoHeightDefault(height),backgroundImageDefault(backgroundImage),traceBackgroundImageDefault(traceBackgroundImage),rotationDefault(rotation),flipDefault(flip),drawPositionsOnBackgroundDefault(positionsBackground),positionFileOpenOnce(false)
+NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPalette, ChannelPalette& spikeChannelPalette, int channelNbDefault,
+                             double datSamplingRateDefault, double eegSamplingRateDefault, int initialOffset, int voltageRangeDefault,
+                             int amplificationDefault, float screenGainDefault, int resolutionDefault, int eventPosition, int clusterPosition,
+                             int nbSamples, int peakSampleIndex, double videoSamplingRate, int width, int height, const QString& backgroundImage,
+                             const QString &traceBackgroundImage, int rotation, int flip, bool positionsBackground)
+    : displayChannelPalette(displayChannelPalette),
+      spikeChannelPalette(spikeChannelPalette),
+      resolutionDefault(resolutionDefault),
+      channelNbDefault(channelNbDefault),
+      datSamplingRateDefault(datSamplingRateDefault),
+      eegSamplingRateDefault(eegSamplingRateDefault),
+      videoSamplingRateDefault(videoSamplingRate),
+      initialOffsetDefault(initialOffset),
+      screenGainDefault(screenGainDefault),
+      voltageRangeDefault(voltageRangeDefault),
+      amplificationDefault(amplificationDefault),
+      isCommandLineProperties(false),
+      channelColorList(0L),
+      tracesProvider(0L),
+      parent(parent),
+      nbSamplesDefault(nbSamples),
+      peakSampleIndexDefault(peakSampleIndex),
+      eventPosition(eventPosition),
+      clusterPosition(clusterPosition),
+      newEventDescriptionCreated(false),
+      videoWidthDefault(width),
+      videoHeightDefault(height),
+      backgroundImageDefault(backgroundImage),
+      traceBackgroundImageDefault(traceBackgroundImage),
+      rotationDefault(rotation),
+      flipDefault(flip),
+      drawPositionsOnBackgroundDefault(positionsBackground),
+      positionFileOpenOnce(false)
 {
     viewList = new QList<NeuroscopeView*>();
 
@@ -440,8 +466,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 isaDatFile = false;
             //Show a dialog to inform the user what are the parameters which will be used.
             static_cast<NeuroscopeApp*>(parent)->displayFileProperties(channelNb,samplingRate,resolution,initialOffset,voltageRange,
-                                                                        amplification,screenGain,nbSamples,peakSampleIndex,videoSamplingRate,videoWidth,videoHeight,backgroundImage,
-                                                                        rotation,flip,datSamplingRate,isaDatFile,drawPositionsOnBackground,traceBackgroundImage);
+                                                                       amplification,screenGain,nbSamples,peakSampleIndex,videoSamplingRate,videoWidth,videoHeight,backgroundImage,
+                                                                       rotation,flip,datSamplingRate,isaDatFile,drawPositionsOnBackground,traceBackgroundImage);
 
             if(extension == "eeg")
                 eegSamplingRate = samplingRate;
@@ -1387,7 +1413,8 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         NeuroscopeView* view = viewList->last();
 
         //If the data file is not a dat file, do not display the waveforms but keep the information
-        if(extension != "dat") view->ignoreWaveformInformation();
+        if(extension != "dat")
+            view->ignoreWaveformInformation();
 
         //Inform the view of the available providers
         QStringList::iterator providerIterator;
@@ -1459,7 +1486,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                 //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
                 else
                     view->addPositionView(static_cast<PositionsProvider*>(providers[loadedPositionFile]),transformedBackground, dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),
-                                           startTime,duration,videoHeight,videoWidth,showEventsInPositionView);
+                                          startTime,duration,videoHeight,videoWidth,showEventsInPositionView);
 
             }
         }
@@ -1505,8 +1532,10 @@ void NeuroscopeDoc::setWaveformInformation(int nb,int index,NeuroscopeView* acti
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
 
-        if(view != activeView) view->updateWaveformInformation(peakSampleIndex - 1,nbSamples - peakSampleIndex,false);
-        else view->updateWaveformInformation(peakSampleIndex - 1,nbSamples - peakSampleIndex,true);
+        if(view != activeView)
+            view->updateWaveformInformation(peakSampleIndex - 1,nbSamples - peakSampleIndex,false);
+        else
+            view->updateWaveformInformation(peakSampleIndex - 1,nbSamples - peakSampleIndex,true);
     }
 }
 
@@ -2145,7 +2174,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString 
     return OK;
 }
 
-void NeuroscopeDoc::removeEventFile(QString providerName,NeuroscopeView* activeView,bool lastFile){
+void NeuroscopeDoc::removeEventFile(const QString& providerName,NeuroscopeView* activeView,bool lastFile){
     //Informs the views than the event provider will be removed.
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
@@ -2161,7 +2190,7 @@ void NeuroscopeDoc::removeEventFile(QString providerName,NeuroscopeView* activeV
     providerUrls.remove(providerName);
 }
 
-void NeuroscopeDoc::eventColorUpdate(QString providerName,int eventId,NeuroscopeView* activeView){
+void NeuroscopeDoc::eventColorUpdate(const QString& providerName,int eventId,NeuroscopeView* activeView){
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
@@ -2183,7 +2212,7 @@ void NeuroscopeDoc::setEventPosition(int position){
     }
 }
 
-void NeuroscopeDoc::eventModified(QString providerName,int selectedEventId,double time,double newTime,NeuroscopeView* activeView){
+void NeuroscopeDoc::eventModified(const QString& providerName,int selectedEventId,double time,double newTime,NeuroscopeView* activeView){
     //clear the undo/redo data of all the event providers except providerName
     QHashIterator<QString, DataProvider*> i(providers);
     while (i.hasNext()) {
@@ -2210,7 +2239,7 @@ void NeuroscopeDoc::eventModified(QString providerName,int selectedEventId,doubl
 }
 
 
-void NeuroscopeDoc::eventRemoved(QString providerName,int selectedEventId,double time,NeuroscopeView* activeView){
+void NeuroscopeDoc::eventRemoved(const QString& providerName,int selectedEventId,double time,NeuroscopeView* activeView){
     //clear the undo/redo data of all the event providers except providerName
     QHashIterator<QString, DataProvider*> i(providers);
     while (i.hasNext()) {
@@ -2432,7 +2461,7 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(const QString &providerName,QMap
 
 
     //Update the event palette
-    ItemPalette* eventPalette = dynamic_cast<NeuroscopeApp*>(parent)->getEventPalette();
+    ItemPalette* eventPalette = static_cast<NeuroscopeApp*>(parent)->getEventPalette();
     eventPalette->removeGroup(providerName);
     eventPalette->createItemList(currentEventColors,providerName,eventsProvider->getDescriptionLength());
     eventPalette->selectGroup(providerName);
@@ -2527,7 +2556,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
     providerUrls.insert(name,url);
     positionFileOpenOnce = true;
 
-    if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground)) transformedBackground = transformBackgroundImage();
+    if(!backgroundImage.isEmpty() || (backgroundImage.isEmpty() && drawPositionsOnBackground))
+        transformedBackground = transformBackgroundImage();
 
     //Informs the views than there is a new position provider.
     for(int i = 0; i<viewList->count(); ++i) {
@@ -2536,7 +2566,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QStri
             if(rotation != 90 && rotation != 270)
                 view->addPositionView(positionsProvider,transformedBackground,dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),videoWidth,videoHeight);
             //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
-            else view->addPositionView(positionsProvider,transformedBackground,dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),videoHeight,videoWidth);
+            else
+                view->addPositionView(positionsProvider,transformedBackground,dynamic_cast<NeuroscopeApp*>(parent)->getBackgroundColor(),videoHeight,videoWidth);
         }
     }
     return OK;
@@ -2547,7 +2578,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const
     QString positionUrl = fileUrl;
     QString positionFileName = positionUrl;
     QStringList fileParts = positionFileName.split(".", QString::SkipEmptyParts);
-    if(fileParts.count() < 2) return INCORRECT_FILE;
+    if(fileParts.count() < 2)
+        return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];
 
     //check if the file still exist before trying to load it
