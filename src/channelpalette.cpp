@@ -507,8 +507,9 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
             QColor color = channelColors->color(*channelIterator);
 
             //set the channelColor associated with the item to the background color if the status is true
-            if(skipStatus) color = backgroundColor;
-            else{
+            if(skipStatus) {
+                color = backgroundColor;
+            } else {
                 //if the status is false and the item has the background color has color change it to the group color.
                 if(color == backgroundColor){
                     if(type == DISPLAY)

@@ -57,13 +57,16 @@ bool ParameterXmlCreator::writeTofile(const QString& url){
     neuroscope.setAttribute(VERSION,NEUROSCOPE_VERSION);
     neuroscope.appendChild(miscellaneous);
     neuroscope.appendChild(neuroscopeVideo);
-    if(!spikes.isNull()) neuroscope.appendChild(spikes);
+    if(!spikes.isNull())
+        neuroscope.appendChild(spikes);
     neuroscope.appendChild(channels);
 
     root.appendChild(acquisitionSystem);
-    if(!video.isNull())root.appendChild(video);
+    if(!video.isNull())
+        root.appendChild(video);
     root.appendChild(lfp);
-    if(!files.isNull()) root.appendChild(files);
+    if(!files.isNull())
+        root.appendChild(files);
     root.appendChild(anatomicalDescription);
     root.appendChild(spikeDetection);
     root.appendChild(neuroscope);

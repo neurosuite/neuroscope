@@ -34,7 +34,8 @@
 TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                          bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int gain,int acquisitionGain,
                          ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,
-                         QMap<int,int>* channelsGroups,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
+                         QMap<int,int>* channelsGroups,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,
+                         int rasterHeight,const QImage& backgroundImage,QWidget* parent,
                          const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                          int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
    QWidget(parent),timeWindow(duration),
@@ -285,7 +286,8 @@ void TraceWidget::slotDurationUpdated(){
 
 
         //Test if we go over the time of the recording if so keep the time window and move back in time
-        if((startTime + timeWindow) > recordingLength) correctStartTime();
+        if((startTime + timeWindow) > recordingLength)
+            correctStartTime();
         else{
             startMinute->setMaximum(minutePart);
             startSecond->setMaximum(recordingLength/1000);
@@ -293,8 +295,10 @@ void TraceWidget::slotDurationUpdated(){
         }
 
         //beyond 10 ms the lineStep is fixe at 1 ms
-        if(timeWindow < 10) lineStep = 1;
-        else lineStep =  static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
+        if(timeWindow < 10)
+            lineStep = 1;
+        else
+            lineStep =  static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeWindow) / static_cast<float>(20))));
         pageStep = timeWindow;
 
         scrollBar->setMaximum(recordingLength - timeWindow);

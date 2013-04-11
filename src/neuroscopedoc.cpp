@@ -98,7 +98,7 @@ NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPale
 
 NeuroscopeDoc::~NeuroscopeDoc(){
     delete viewList;
-    if(channelColorList != 0L){
+    if(channelColorList){
         delete channelColorList;
         delete tracesProvider;
     }
@@ -204,7 +204,7 @@ void NeuroscopeDoc::closeDocument(){
     providerUrls.clear();
     displayGroupsClusterFile.clear();
 
-    if(channelColorList != 0L){
+    if(channelColorList){
         delete channelColorList;
         channelColorList = 0L;
         delete tracesProvider;

@@ -37,7 +37,6 @@ NeuroscopeXmlReader::~NeuroscopeXmlReader(){
 
 bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
     this->type = type;
-    qDebug()<<" URL:"<<url;
     QFile input(url);
 
     QDomDocument docElement;

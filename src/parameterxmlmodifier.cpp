@@ -379,14 +379,13 @@ bool ParameterXmlModifier::setChannelDisplayInformation(ChannelColors* channelCo
         channels.appendChild(channelDisplay);
         channels.appendChild(channelOffset);
     }
-
     return true;
-
 }
 
 bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
     anatomicalDescription = findDirectChild(ANATOMY);
-    if(anatomicalDescription.isNull()) return false;
+    if(anatomicalDescription.isNull())
+        return false;
     QDomNode channelGroupsNode = findDirectChild(CHANNEL_GROUPS,anatomicalDescription);
 
     QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
@@ -396,7 +395,8 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QList<int> >& anat
     //The iterator gives the keys sorted.
     for(iterator = anatomicalGroups.begin(); iterator != anatomicalGroups.end(); ++iterator){
         //the trash groups are not stored
-        if(iterator.key() == 0) continue;
+        if(iterator.key() == 0)
+            continue;
         QList<int> channelIds = iterator.value();
         QList<int>::iterator channelIterator;
 
@@ -417,10 +417,13 @@ bool ParameterXmlModifier::setAnatomicalDescription(QMap<int, QList<int> >& anat
     if(channelGroupsElement.hasChildNodes()){
         if(!channelGroupsNode.isNull()){
             QDomNode newChild = anatomicalDescription.replaceChild(channelGroupsElement,channelGroupsNode);
-            if(newChild.isNull()) return false;
-            else return true;
+            if(newChild.isNull())
+                return false;
+            else
+                return true;
+        } else {
+            anatomicalDescription.appendChild(channelGroupsElement);
         }
-        else anatomicalDescription.appendChild(channelGroupsElement);
         return true;
     }
     else{

@@ -220,7 +220,8 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                         //emit dataReady(data,initiator);
                         //return;
                     }
-                    for ( int i = 0 ; i < inLastRecord ; ++i )  retrieveData[(i+inFirstRecord+nRecords*nSamplesPerRecord)*nbChannels+channel-1] = buffer[i];
+                    for ( int i = 0 ; i < inLastRecord ; ++i )
+                        retrieveData[(i+inFirstRecord+nRecords*nSamplesPerRecord)*nbChannels+channel-1] = buffer[i];
                 }
                 fclose(dataFile);
             }
