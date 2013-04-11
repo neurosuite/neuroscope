@@ -181,7 +181,7 @@ void ItemPalette::updateItemList(const QString& groupName){
 
     for(int i = 0; i<nbItems; ++i){
         browsingMap.insert(i,false);
-        QPixmap pix(14,14);
+        QPixmap pix(12,12);
         pix.fill(backgroundColor);
         painter.begin(&pix);
         painter.fillRect(0,0,12,12,itemColors->color(i,ItemColors::BY_INDEX));
@@ -698,7 +698,7 @@ void ItemPalette::changeBackgroundColor(const QColor& color){
         //Construct one icon for each item
         QPainter painter;
         for(int i = 0; i<nbItems; ++i){
-            QPixmap pix(14,14);
+            QPixmap pix(12,12);
             pix.fill(backgroundColor);
             painter.begin(&pix);
             painter.fillRect(0,0,12,12,itemColors->color(i,ItemColors::BY_INDEX));
@@ -751,7 +751,7 @@ void ItemPalette::changeColor(QListWidgetItem* item,const QString& groupName){
 
         //Update the icon
         QIcon icon = item->icon();
-        QPixmap pixmap(14,14);
+        QPixmap pixmap(12,12);
         QPainter painter;
         painter.begin(&pixmap);
         painter.fillRect(0,0,12,12,result);
