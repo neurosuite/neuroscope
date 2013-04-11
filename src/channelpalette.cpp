@@ -50,8 +50,8 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     ,channelsGroups(0L)
     ,groupsChannels(0L)
     ,greyScale(false)
-    ,isGroupToRemove(false),
-      type(type)
+    ,isGroupToRemove(false)
+    ,type(type)
     ,edit(edition)
 {
     setObjectName(name);

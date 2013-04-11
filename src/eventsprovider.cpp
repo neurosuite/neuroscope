@@ -41,13 +41,12 @@ EventsProvider::EventsProvider(QString fileUrl,double currentSamplingRate,int po
     //Find the event file identifier and use it as the name for the provider
     //the file name is X.id.evt (id is a 3 character identifier)
     QString fileName = fileUrl;
-    int startingIndex = fileName.lastIndexOf("evt");
+    const int startingIndex = fileName.lastIndexOf("evt");
     if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.id.evt
         int nBStartingIndex = fileName.lastIndexOf(".",startingIndex - 2);
         name = fileName.mid(nBStartingIndex + 1,(startingIndex - 1) - (nBStartingIndex + 1));
-    }
-    else{//X.evt.id
-        int nBStartingIndex = fileName.lastIndexOf(".");
+    } else {//X.evt.id
+        const int nBStartingIndex = fileName.lastIndexOf(".");
         name = fileName.right(static_cast<int>(fileName.length()) - (nBStartingIndex + 1));
     }
 }

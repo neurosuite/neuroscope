@@ -120,6 +120,9 @@ Q_SIGNALS:
    */
     void parentDockBeingClosed(QWidget* viewWidget);
 
+private:
+    void changeColor(const QColor & color);
+
 protected:
 
     /**The view responds to a resize event.

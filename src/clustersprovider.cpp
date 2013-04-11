@@ -45,8 +45,7 @@ ClustersProvider::ClustersProvider(const QString &fileUrl, double samplingRate, 
     if(startingIndex == static_cast<int>(fileName.length()) - 3){//X.n.clu
         int nBStartingIndex = fileName.lastIndexOf(".",startingIndex - 2);
         name = fileName.mid(nBStartingIndex + 1,(startingIndex - 1) - (nBStartingIndex + 1));
-    }
-    else{//X.clu.n
+    } else {//X.clu.n
         int nBStartingIndex = fileName.lastIndexOf(".");
         name = fileName.right(static_cast<int>(fileName.length()) - (nBStartingIndex + 1));
     }
@@ -112,7 +111,7 @@ int ClustersProvider::loadData(){
     sNbClusters = QString::fromLatin1(buf, ret);
 
 
-    nbClusters = QString(sNbClusters).toInt();
+    nbClusters = sNbClusters.toInt();
     //This map is used as an easy way to compute the unique list of cluster ids
     QMap<int,long> ids;
     QByteArray buffer = clusterFile.readAll();
@@ -212,19 +211,24 @@ void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiat
         emit dataReady(data,initiator,name);
         return;
     }
-    if(endTime > fileMaxTime) endTime = fileMaxTime;
+    if(endTime > fileMaxTime)
+        endTime = fileMaxTime;
 
 
     //Convert the time in miliseconds to time in recording units if need it.
     dataType startInRecordingUnits;
     //startTimeInRecordingUnits has been computed in a previous call to a browsing function. It has to be used insted of computing
     //the value from startTime because of the rounding which has been applied to it.
-    if(startTimeInRecordingUnits != 0) startInRecordingUnits = startTimeInRecordingUnits;
-    else startInRecordingUnits = static_cast<dataType>(startTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
+    if(startTimeInRecordingUnits != 0)
+        startInRecordingUnits = startTimeInRecordingUnits;
+    else
+        startInRecordingUnits = static_cast<dataType>(startTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
     dataType endInRecordingUnits;
     //Hack to be sure not to forget a spike due to conversion rounding
-    if(endTime == fileMaxTime) endInRecordingUnits = clusters(2,nbSpikes);
-    else endInRecordingUnits =  static_cast<dataType>(endTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
+    if(endTime == fileMaxTime)
+        endInRecordingUnits = clusters(2,nbSpikes);
+    else
+        endInRecordingUnits =  static_cast<dataType>(endTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
 
     long startIndex;
     long endIndex;
@@ -242,15 +246,22 @@ void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiat
         }
         if(startTime < previousStartTime){
             startIndex = static_cast<int>(previousStartIndex / 2);
-            if(startIndex <= 0) startIndex = 1;
-            if(endTime <= previousStartTime) endIndex = previousStartIndex;
-            else if(endTime <= previousEndTime) endIndex = previousEndIndex;
-            else if(endTime > previousEndTime) endIndex = nbSpikes;
+            if(startIndex <= 0)
+                startIndex = 1;
+
+            if(endTime <= previousStartTime)
+                endIndex = previousStartIndex;
+            else if(endTime <= previousEndTime)
+                endIndex = previousEndIndex;
+            else if(endTime > previousEndTime)
+                endIndex = nbSpikes;
         }
         else if(startTime < previousEndTime && startTime > previousStartTime){
             startIndex = previousStartIndex + static_cast<int>((previousEndIndex - previousStartIndex + 1)/ 2);
-            if(endTime <= previousEndTime) endIndex = previousEndIndex;
-            else if(endTime > previousEndTime) endIndex = nbSpikes;
+            if(endTime <= previousEndTime)
+                endIndex = previousEndIndex;
+            else if(endTime > previousEndTime)
+                endIndex = nbSpikes;
         }
         else if(startTime > previousEndTime){
             startIndex = previousEndIndex;
@@ -525,7 +536,8 @@ void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QLis
     dataType timeInMiliseconds = static_cast<dataType>(floor(0.5 + computeTime));
     //check that the spike corresponding to the current startIndex
     //is not the one already at clusterPosition, if so take the following start index.
-    if(((timeInMiliseconds == previousTime) || (time == startInRecordingUnits)) && (startIndex < nbSpikes)) startIndex++;
+    if(((timeInMiliseconds == previousTime) || (time == startInRecordingUnits)) && (startIndex < nbSpikes))
+        startIndex++;
 
     //look up for the first spike contained in selectedIds which exist after startTime
     while(true){

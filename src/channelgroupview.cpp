@@ -75,8 +75,6 @@ void ChannelGroupView::dropEvent(QDropEvent* event){
         event->ignore();
         return;
     }
-
-
     if(event->mimeData()->hasText()){
         QString information = event->mimeData()->text();
         const int groupSource = information.section("-",0,0).toInt();

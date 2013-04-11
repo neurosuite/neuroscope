@@ -85,7 +85,7 @@ void ImageCreator::drawPositions(QPainter& painter){
     //The points are drawn in the QT coordinate system where the Y axis in oriented downwards
     if(nbSpots == 0)
         return;
-    int nbPoints = data.nbOfRows();
+    const int nbPoints = data.nbOfRows();
     if(nbPoints == 0)
         return;
     painter.setPen(foregroundColor);
