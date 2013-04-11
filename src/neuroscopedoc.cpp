@@ -176,8 +176,8 @@ const QString& NeuroscopeDoc::url() const
     return docUrl;
 }
 
-QString NeuroscopeDoc::sessionPath() const{
-    return QFileInfo(sessionUrl).absolutePath();
+QString NeuroscopeDoc::sessionPath() const {
+    return QFileInfo(sessionUrl).absoluteFilePath();
 }
 
 void NeuroscopeDoc::closeDocument(){  
