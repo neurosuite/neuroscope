@@ -26,8 +26,13 @@
 #include <QFile>
 #include <QRegExp>
 
-TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset):
-    DataProvider(fileUrl),nbChannels(nbChannels),resolution(resolution),samplingRate(samplingRate),offset(offset){
+TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
+    : DataProvider(fileUrl),
+      nbChannels(nbChannels),
+      resolution(resolution),
+      samplingRate(samplingRate),
+      offset(offset)
+{
     computeRecordingLength();
 }
 
@@ -44,8 +49,11 @@ dataType TracesProvider::getNbSamples(long startTime,long endTime,long startTime
     dataType startInRecordingUnits;
     //startTimeInRecordingUnits has been computed in a previous call to a clustersProvider browsing function. It has to be used insted of computing
     //the value from startTime because of the rounding which has been applied to it.
-    if(startTimeInRecordingUnits != 0) startInRecordingUnits = startTimeInRecordingUnits;
-    else startInRecordingUnits = static_cast<dataType>(startTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
+    if(startTimeInRecordingUnits != 0)
+        startInRecordingUnits = startTimeInRecordingUnits;
+    else
+        startInRecordingUnits = static_cast<dataType>(startTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
+
     dataType endInRecordingUnits =  static_cast<dataType>(endTime * static_cast<double>(static_cast<double>(samplingRate) / static_cast<double>(1000)));
 
 
@@ -53,18 +61,21 @@ dataType TracesProvider::getNbSamples(long startTime,long endTime,long startTime
     //The recording starts at time equals 0 and ends at length of the file minus one.
     //Therefore if the end time requested equals the length of the file, endInRecordingUnits
     // should be diminish by one sample.
-    if(endTime == length) endInRecordingUnits--;
+    if(endTime == length)
+        endInRecordingUnits--;
 
     dataType nbSamples = static_cast<dataType>(endInRecordingUnits - startInRecordingUnits) + 1;
 
     return nbSamples;
 }
 
-void TracesProvider::requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits){
+void TracesProvider::requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits)
+{
     retrieveData(startTime,endTime,initiator,startTimeInRecordingUnits);
 }
 
-void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits){
+void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits)
+{
     Array<dataType> data;
     //When the bug in gcc will be corrected for the 64 bits, the c++ code will be use
     //[alex@slut]/home/alex/src/sizetest > ./sizetest-2.95.3
@@ -155,7 +166,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                     QString pad;
                     for ( int j = 0 ; j < i ; ++j )
                         pad += "0";
-                    cscFileName = baseName + pad + QString("%1.ncs").arg(channel);
+                    cscFileName = baseName + pad + QString::fromLatin1("%1.ncs").arg(channel);
                     dataFile = fopen(cscFileName.toLatin1(),"rb");
                     if (dataFile != NULL) break;
                 }

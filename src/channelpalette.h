@@ -157,7 +157,7 @@ protected Q_SLOTS:
     virtual void setChannelLists();
     virtual void resizeEvent(QResizeEvent* event);
     void paintEvent (QPaintEvent*);
-    void slotDragLabeltMoved(QPoint position){ensureVisible(position.x(),position.y());}
+    void slotDragLabeltMoved(const QPoint& position){ensureVisible(position.x(),position.y());}
     
 Q_SIGNALS:
     void singleChangeColor(int selectedChannel);
@@ -289,9 +289,9 @@ public:
             return;
         }
         if(event->mimeData()->hasText()){
-            QString information = event->mimeData()->text();
-            int groupSource = information.section("-",0,0).toInt();
-            int start = information.section("-",1,1).toInt();
+            const QString information = event->mimeData()->text();
+            const int groupSource = information.section("-",0,0).toInt();
+            const int start = information.section("-",1,1).toInt();
             //to inform that the target is the SpaceWidget, put -2 as the target group.
             emit dropLabel(groupSource,-2,start,QWidget::mapToGlobal(event->pos()).y());
         }
@@ -340,7 +340,7 @@ protected:
 
             QPoint firstClick = QWidget::mapToGlobal(e->pos());
             QString information = parent()->objectName();
-            information.append(QString("-%1").arg(firstClick.y()));
+            information.append(QString::fromLatin1("-%1").arg(firstClick.y()));
 
             QDrag *drag = new QDrag(this);
             QMimeData *mimeData = new QMimeData;

@@ -41,8 +41,12 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
    QWidget(parent),timeWindow(duration),
     view(tracesProvider,greyScale,multiColumns,verticalLines,raster,waveforms,labelsDisplay,channelsToDisplay,gain,acquisitionGain,
          startTime,timeWindow,channelColors,groupsChannels,channelsGroups,channelOffsets,gains,skippedChannels,rasterHeight,backgroundImage,this,name,
-         backgroundColor,statusBar,minSize,maxSize,windowTopLeft,windowBottomRight,border),startTime(startTime),
-    validator(this),isInit(true),updateView(true){
+         backgroundColor,statusBar,minSize,maxSize,windowTopLeft,windowBottomRight,border),
+    startTime(startTime),
+    validator(this),
+    isInit(true),
+    updateView(true)
+{
 
     QVBoxLayout *lay = new QVBoxLayout;
     setLayout(lay);
@@ -250,7 +254,6 @@ void TraceWidget::samplingRateModified(long long length){
     slotSetStartAndDuration(0,50);
 }
 
-
 void TraceWidget::keyPressEvent(QKeyEvent* event){
     switch(event->key()){
     case Qt::Key_Plus:                               // double the duration
@@ -355,15 +358,14 @@ void TraceWidget::correctStartTime(){
         startSecond->setValue(nbSeconds);
     }
 
-    if(nbMinutes < 0){
+    if (nbMinutes < 0) {
         startMinute->setMaximum(0);
         startMinute->setValue(0);
         startSecond->setMaximum(0);
         startSecond->setValue(0);
         startMilisecond->setMaximum(0);
         startMilisecond->setValue(0);
-    }
-    else{
+    } else {
         startMinute->setMaximum(nbMinutes);
         startMinute->setValue(nbMinutes);
     }
@@ -604,7 +606,8 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
 
         //Start time
         //Test if we go over the time of the recording if so keep the time window and move back in time
-        if((time + timeWindow) > recordingLength) correctStartTime();
+        if((time + timeWindow) > recordingLength)
+            correctStartTime();
         else{
             scrollBar->setValue(time);
             startTime = time;

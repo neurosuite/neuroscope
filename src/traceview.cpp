@@ -132,7 +132,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     updateShownGroupsChannels(shownChannels);
 
     //rasterHeight is equals to -1 if no value is available.
-    if(rasterHeight == -1)
+    if (rasterHeight == -1)
         this->rasterHeight = 33;
     else
         this->rasterHeight = rasterHeight;
@@ -155,12 +155,12 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
 
     //The initial offset for each channel is set to zero.
-    if(channelOffsets.isEmpty())
+    if (channelOffsets.isEmpty())
         for(int i = 0; i < nbChannels; ++i)
             channelOffsets.append(0);
 
     //The initial amplitude and factor for each channel.
-    if(gains.size() == 0)
+    if (gains.size() == 0)
         setGains(unitGain,acquisitionGain);
     else{
         //Compute alpha: (3.traceVspace) / (Utheta . acquisitionGain)
@@ -178,7 +178,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     connect(&tracesProvider,SIGNAL(dataReady(Array<dataType>&,QObject*)),this,SLOT(dataAvailable(Array<dataType>&,QObject*)));
 
     //Set the display of the labels, the default is to hide them, if need it change that.
-    if(showLabels){
+    if (showLabels){
         xMargin = XMARGIN;
         yMargin = YMARGIN;
         setBorders(xMargin,yMargin);
@@ -186,7 +186,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
     //compute the size of the window if the display is not on multicolumns,
     //in that case the viewport needs to be compute before.
-    if(!multiColumns) updateWindow();
+    if (!multiColumns) updateWindow();
 
     //Create the cursors
     measureCursor = QCursor(QPixmap(":/shared-cursors/measure_cursor"),0,0);
@@ -216,24 +216,23 @@ TraceView::~TraceView()
     clustersData.clear();
     qDeleteAll(eventsData);
     eventsData.clear();
-
 }
 
 void TraceView::changeCursor()
 {
-    if(mode == SELECT)
+    if (mode == SELECT)
         setCursor(selectCursor);
-    else if(mode == ZOOM)
+    else if (mode == ZOOM)
         setCursor(zoomCursor);
-    else if(mode == MEASURE)
+    else if (mode == MEASURE)
         setCursor(measureCursor);
-    else if(mode == SELECT_TIME)
+    else if (mode == SELECT_TIME)
         setCursor(selectTimeCursor);
-    else if(mode == SELECT_EVENT)
+    else if (mode == SELECT_EVENT)
         setCursor(selectEventCursor);
-    else if(mode == ADD_EVENT)
+    else if (mode == ADD_EVENT)
         setCursor(addEventCursor);
-    else if(mode == DRAW_LINE)
+    else if (mode == DRAW_LINE)
         setCursor(drawLineCursor);
 
 }
@@ -242,9 +241,9 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
 
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if (initiator != this) return;
 
-    if(data.nbOfRows() == 0){
+    if (data.nbOfRows() == 0){
         QApplication::restoreOverrideCursor();
 
         QMessageBox::critical(this, tr("IO Error"),tr("An error has occured, the data file could not be opened or the file size is incorrect."));
@@ -259,7 +258,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
     //The following code was done in case of threads, without thread the trace data arrive always last
     //No clusters or events selected
-    if(clustersData.count() == 0 && eventsData.count() == 0){
+    if (clustersData.isEmpty() && eventsData.isEmpty()){
         changeCursor();
         //Everything has to be redraw
         repaint();
@@ -271,17 +270,17 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
         while (iterator.hasNext()) {
             iterator.next();
             ready = iterator.value()->status();
-            if(!ready)
+            if (!ready)
                 break;
         }
         QHashIterator<QString, EventData*> iterator2(eventsData);
         while (iterator2.hasNext()) {
             iterator2.next();
             ready = iterator2.value()->status();
-            if(!ready)
+            if (!ready)
                 break;
         }
-        if(ready){
+        if (ready){
             changeCursor();
 
             //Everything has to be redraw
@@ -293,7 +292,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
 void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this)
+    if (initiator != this)
         return;
 
 
@@ -310,17 +309,17 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
     QHashIterator<QString, EventData*> iterator2(eventsData);
     while (iterator2.hasNext()) {
         iterator2.next();
         ready = iterator2.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
-    if(dataReady && ready){
+    if (dataReady && ready){
         changeCursor();
 
         //Everything has to be redraw
@@ -331,7 +330,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
 
 void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if (initiator != this) return;
 
     EventData* eventData = eventsData[providerName];
     eventData->setStatus(true);
@@ -343,20 +342,20 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
     //If all the data for the events are available, send an signal for the listeners interested in it.
-    // if(ready) emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
+    // if (ready) emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 
     QHashIterator<QString, ClusterData*> iterator2(clustersData);
     while (iterator2.hasNext()) {
         iterator2.next();
         ready = iterator2.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
-    if(dataReady && ready){
+    if (dataReady && ready){
         changeCursor();
 
         //Everything has to be redraw
@@ -366,23 +365,24 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
 }
 
 void TraceView::updateClusterData(bool active){
-    if(!active){
+    if (!active){
         retrieveClusterData = true;
         return;
+    } else  {
+        retrieveClusterData = false;
     }
-    else retrieveClusterData = false;
 
-    if(clustersData.isEmpty())
+    if (clustersData.isEmpty())
         return;
 
     //Request the data
 
     //Retrieve the data for the clusters, only request data from the provider for which clusters have been selected
-    if(verticalLines || raster || waveforms){
+    if (verticalLines || raster || waveforms){
         QList<int> toRemove;
         QMap<int, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty())
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty())
                 toRemove.append(providersIterator.key());
         }
 
@@ -392,19 +392,19 @@ void TraceView::updateClusterData(bool active){
             delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
-        if(clustersData.count() != 0)
+        if (!clustersData.isEmpty())
             setCursor(Qt::WaitCursor);
 
         QHashIterator<QString, ClusterData*> iterator(clustersData);
         while (iterator.hasNext()) {
             iterator.next();
-            if(iterator.key() != clusterProviderToSkip)
+            if (iterator.key() != clusterProviderToSkip)
                 iterator.value()->setStatus(false);
         }
         QHashIterator<QString, ClusterData*> iterator2(clustersData);
         while (iterator2.hasNext()) {
             iterator2.next();
-            if(iterator2.key() != clusterProviderToSkip){
+            if (iterator2.key() != clusterProviderToSkip){
                 static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
             else
@@ -417,7 +417,7 @@ void TraceView::updateClusterData(bool active){
 void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     startTime = start;
     endTime = start + timeFrameWidth;
-    if(this->timeFrameWidth != timeFrameWidth)
+    if (this->timeFrameWidth != timeFrameWidth)
         nbSamplesModified = true;
 
     this->timeFrameWidth = timeFrameWidth;
@@ -427,15 +427,15 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     setCursor(Qt::WaitCursor);
 
     //If the update is not due to spike browsing reset startTimeInRecordingUnits
-    if(!spikeBrowsing) startTimeInRecordingUnits = 0;
+    if (!spikeBrowsing) startTimeInRecordingUnits = 0;
     else spikeBrowsing = false;
 
     //Retreive the data for the clusters, only request data from the provider for which clusters have been selected
-    if(verticalLines || raster || waveforms){
+    if (verticalLines || raster || waveforms){
         QList<int> toRemove;
         QMap<int, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty())
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty())
                 toRemove.append(providersIterator.key());
         }
 
@@ -450,13 +450,13 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QHashIterator<QString, ClusterData*> iterator(clustersData);
         while (iterator.hasNext()) {
             iterator.next();
-            if(iterator.key() != clusterProviderToSkip)
+            if (iterator.key() != clusterProviderToSkip)
                 iterator.value()->setStatus(false);
         }
         QHashIterator<QString, ClusterData*> iterator2(clustersData);
         while (iterator2.hasNext()) {
             iterator2.next();
-            if(iterator2.key() != clusterProviderToSkip){
+            if (iterator2.key() != clusterProviderToSkip){
                 static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
             else clusterProviderToSkip.clear();
@@ -464,11 +464,11 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     }
 
     //Retreive the data for the events, only request data from the provider for which events have been selected
-    if(!selectedEvents.isEmpty()){
+    if (!selectedEvents.isEmpty()){
         QStringList toRemove;
         QMap<QString, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty())
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty())
                 toRemove.append(providersIterator.key());
         }
 
@@ -480,12 +480,12 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
 
         //If there is only one event provider and the data rewuest have been made by a request for the next or previous event, this signal make sur
         //listeners of the event data will receive the nformation
-        //  if(selectedEvents.count() == 1 && eventProviderToSkip != "") emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
+        //  if (selectedEvents.count() == 1 && eventProviderToSkip != "") emit eventsAvailable(eventsData,selectedEvents,providerItemColors);
 
         QHashIterator<QString, EventData*> iterator(eventsData);
         while (iterator.hasNext()) {
             iterator.next();
-            if(iterator.key() != eventProviderToSkip)
+            if (iterator.key() != eventProviderToSkip)
                 iterator.value()->setStatus(false);
         }
 
@@ -493,7 +493,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QHashIterator<QString, EventData*> iterator2(eventsData);
         while (iterator2.hasNext()) {
             iterator2.next();
-            if(iterator2.key() != eventProviderToSkip){
+            if (iterator2.key() != eventProviderToSkip){
                 static_cast<EventsProvider*>(eventProviders[iterator2.key()])->requestData(startTime,endTime,this);
             }
             else eventProviderToSkip.clear();
@@ -506,7 +506,7 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
 void TraceView::showHideLabels(bool show){
     showLabels = show;
 
-    if(show){
+    if (show){
         xMargin = XMARGIN;
         yMargin = YMARGIN;
     }
@@ -524,16 +524,16 @@ void TraceView::showHideLabels(bool show){
 
 void TraceView::paintEvent ( QPaintEvent*){
     bool isInitAndResized = false;
-    if(isInit){
-        if(resized){
+    if (isInit){
+        if (resized){
             isInitAndResized = true;
             scaleBackgroundImage();
         }
 
-        if(multiColumns){
+        if (multiColumns){
             QRect contentsRec = contentsRect();
             viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
-            if(viewport.width() == 0)  {
+            if (viewport.width() == 0)  {
                 update();
             } else {
                 isInit = false;
@@ -545,7 +545,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         } else {
             QRect contentsRec = contentsRect();
             viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
-            if(viewport.width() == 0) {
+            if (viewport.width() == 0) {
                 update();
             } else {
                 scaleBackgroundImage();
@@ -553,12 +553,12 @@ void TraceView::paintEvent ( QPaintEvent*){
             }
         }
         isInit = false;
-    } else if(!eventProvidersToUpdate.isEmpty()){
+    } else if (!eventProvidersToUpdate.isEmpty()){
         QStringList::iterator providerIterator;
         EventData* eventData;
         for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
             eventData = eventsData[*providerIterator];
-            if(eventData == 0){
+            if (eventData == 0){
                 eventData = new EventData();
                 eventsData.insert(*providerIterator,eventData);
             }
@@ -567,7 +567,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         QHashIterator<QString, EventData*> iterator(eventsData);
         while (iterator.hasNext()) {
             iterator.next();
-            if(eventProvidersToUpdate.contains(iterator.key())){
+            if (eventProvidersToUpdate.contains(iterator.key())){
                 static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestData(startTime,endTime,this);
                 eventProvidersToUpdate.removeAll(iterator.key());
             }
@@ -575,29 +575,29 @@ void TraceView::paintEvent ( QPaintEvent*){
         return;
     }
     QPainter p(this);
-    if(drawContentsMode == REDRAW && dataReady){
+    if (drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
 
         //If the left margin is not visible (the user zoomed without taking it in his selection), the viewport and the contentsRec
         //have the same size.
-        if(r.left() != 0)
+        if (r.left() != 0)
             viewport = QRect(contentsRec.left(),contentsRec.top(),contentsRec.width(),contentsRec.height());
         else
             viewport = QRect(contentsRec.left() + xMargin,contentsRec.top(),contentsRec.width() - xMargin,contentsRec.height());
 
-        if(resized)
+        if (resized)
             scaleBackgroundImage();
 
-        if(resized || (selectedClusters.count() != 0 && nbClusters == 0))
+        if (resized || (selectedClusters.count() != 0 && nbClusters == 0))
             updateWindow();
 
-        if(!isInitAndResized){
+        if (!isInitAndResized){
             //Resize the double buffer with the width and the height of the widget(QFrame)
             //doublebuffer.resize(contentsRec.width(),contentsRec.height());
 
             if (contentsRec.size() != doublebuffer.size()) {
-                if(!doublebuffer.isNull()) {
+                if (!doublebuffer.isNull()) {
                     QPixmap tmp = QPixmap( contentsRec.width(),contentsRec.height() );
                     tmp.fill( Qt::white );
                     QPainter painter2( &tmp );
@@ -615,7 +615,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.begin(&doublebuffer);
 
             //if need it, draw the background image before applying any transformation to the painter.
-            if(!background.isNull())
+            if (!background.isNull())
                 painter.drawPixmap(0,0,scaledBackground);
 
             //Correct the window after the user zoomed if need it.
@@ -630,7 +630,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.setViewport(viewport);
 
             //Fill the double buffer with the background color if no image has been set.
-            if(background.isNull())
+            if (background.isNull())
                 doublebuffer.fill(palette().color(backgroundRole()));
 
             //Paint all the traces in the shownChannels list (in the double buffer,on top of the background image or the background color )
@@ -640,11 +640,11 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.resetMatrix() ;
 
             //Draw channel ids and amplitude on the left side.
-            if(showLabels)
+            if (showLabels)
                 drawChannelIdsAndGain(painter);
 
             //Draw the calibration scale
-            if(showCalibrationScale)
+            if (showCalibrationScale)
                 drawCalibrationScale(painter);
 
             //Closes the painter on the double buffer
@@ -654,9 +654,9 @@ void TraceView::paintEvent ( QPaintEvent*){
         //Back to the default
         drawContentsMode = REFRESH;
     }
-    if(!mSelectedChannels.isEmpty())
+    if (!mSelectedChannels.isEmpty())
         drawTraces(mSelectedChannels,true);
-    if(!mDeselectedChannels.isEmpty())
+    if (!mDeselectedChannels.isEmpty())
         drawTraces(mDeselectedChannels,false);
 
     //if drawContentsMode == REFRESH, we reuse the double buffer (pixmap)
@@ -683,7 +683,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         p.drawLine(m_currentPoint.x(),top,m_currentPoint.x(),bottom);
     }
 
-    if(mMoveSelectChannel) {
+    if (mMoveSelectChannel) {
         QRect r((QRect)window);
 
         p.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
@@ -698,7 +698,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         QList<int>::iterator channelIterator;
         for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
             //if the channel is skipped, do no draw it
-            if(skippedChannels.contains(*channelIterator ))
+            if (skippedChannels.contains(*channelIterator ))
                 continue;
 
             int initialBasePosition = channelsStartingOrdinate[*channelIterator] +  static_cast<long>(data(1,*channelIterator + 1) * channelFactors[*channelIterator]);
@@ -707,7 +707,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             int delta = m_currentPoint.y() - lastClickOrdinate;
 
             int basePosition = initialBasePosition + delta;
-            if(downSampling != 1){
+            if (downSampling != 1){
                 drawTrace(p,limit,basePosition,X,*channelIterator,nbSamplesToDraw,true);
             }
             else{
@@ -722,7 +722,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         }
     }
 
-    if(resized){
+    if (resized){
         resized = false;
         drawContentsMode = REDRAW;
         update();
@@ -809,7 +809,7 @@ void TraceView::showChannels(const QList<int>& channelsToShow){
     QList<int>::iterator iterator;
     QList<int> toRemoved;
     for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator)
-        if(!shownChannels.contains(*iterator))toRemoved.append(*iterator);
+        if (!shownChannels.contains(*iterator))toRemoved.append(*iterator);
 
     for(iterator = toRemoved.begin(); iterator != toRemoved.end(); ++iterator)
         selectedChannels.removeAll(*iterator);
@@ -832,11 +832,11 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
     }
 
     for(int i = 0; i < nbChannels; ++i){
-        if(!channelsToShow.contains(i)){
+        if (!channelsToShow.contains(i)){
             int groupId = (*channelsGroups)[i];
             QList<int> channelIds = shownGroupsChannels[groupId];
             channelIds.removeAll(i);
-            if(channelIds.isEmpty()) {
+            if (channelIds.isEmpty()) {
                 shownGroupsChannels.remove(groupId);
             } else {
                 shownGroupsChannels.remove(groupId);
@@ -846,14 +846,14 @@ void TraceView::updateShownGroupsChannels(const QList<int>& channelsToShow){
     }
 
     //The trash group (index 0) is always at the bottom in the display, so reindex it with the highest index.
-    if(shownGroupsChannels.contains(0)){
+    if (shownGroupsChannels.contains(0)){
         QList<int> channelIds = shownGroupsChannels[0];
         shownGroupsChannels.remove(0);
         shownGroupsChannels.insert(nbGps,channelIds);
     }
 
     //If the number of shown groups has changed, update groupsChanged to correctly update the window
-    if(shownGroupsChannels.count() != nbGpsShown)
+    if (shownGroupsChannels.count() != nbGpsShown)
         groupsChanged = true;
 }
 
@@ -862,7 +862,7 @@ void TraceView::groupsModified(bool active){
 
     groupsChanged = true;
     updateWindow();
-    if(active)
+    if (active)
         update();
 }
 
@@ -913,7 +913,7 @@ void TraceView::computeChannelDisplayGain(const QList<int>& channelIds){
     float beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
 
     for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
-        int channelId = channelIds[i];
+        int channelId = channelIds.at(i);
         channelDisplayGains[channelId] = static_cast<float>(beta * pow(0.75,gains[channelId]));
     }
 }
@@ -941,7 +941,7 @@ void TraceView::decreaseAllAmplitude(){
     //factor = traceVspace / ((4/3)^gain * unitGain)
     for(int i = 0; i < nbChannels; ++i){
         gains[i]++;
-        channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains[i]));
+        channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains.at(i)));
     }
 
     computeChannelDisplayGain();
@@ -997,10 +997,12 @@ void TraceView::updateWindow(){
     int oldXshift = Xshift;
 
     //traces presented on a single column
-    if(!multiColumns){
-        if(!isInit){
-            if(nbSamples < viewport.width() || printState) downSampling = 1;
-            else downSampling = static_cast<float>(nbSamples) / static_cast<float>(viewport.width());
+    if (!multiColumns){
+        if (!isInit){
+            if (nbSamples < viewport.width() || printState)
+                downSampling = 1;
+            else
+                downSampling = static_cast<float>(nbSamples) / static_cast<float>(viewport.width());
         }
 
         int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
@@ -1023,7 +1025,7 @@ void TraceView::updateWindow(){
         }
 
         //there are cluster rasters
-        if(raster && nbClusters != 0){
+        if (raster && nbClusters != 0){
             int rasterTotalHeight = YTracesRasterSeparator + nbClusters * rasterHeight + (nbClusters - 1) * YRasterSpace;
 
             ordinateMin = -(borderY + borderY/2 + (nbGps - 1) * YGroupSpace + nbShownchannels * traceVspace + nbYspaces * Yspace
@@ -1041,11 +1043,11 @@ void TraceView::updateWindow(){
     }
     //traces presented on multiple columns
     else{
-        if(!isInit){
-            if(nbSamples < viewport.width() || printState) downSampling = 1;
+        if (!isInit){
+            if (nbSamples < viewport.width() || printState) downSampling = 1;
             else{
                 int nbGroups = shownGroupsChannels.count();
-                if(nbGroups == 0) {
+                if (nbGroups == 0) {
                     traceWidth = 0;
                     downSampling = 1;
                 }
@@ -1068,7 +1070,8 @@ void TraceView::updateWindow(){
         QMap<int, QList<int> >::Iterator iterator;
         for(iterator = shownGroupsChannels.begin(); iterator != shownGroupsChannels.end(); ++iterator){
             int currentNbChannels = static_cast<QList<int> >(iterator.value()).size();
-            if(currentNbChannels > maxNbChannels) maxNbChannels = currentNbChannels;
+            if (currentNbChannels > maxNbChannels)
+                maxNbChannels = currentNbChannels;
         }
 
         nbClusters = 0;
@@ -1079,7 +1082,7 @@ void TraceView::updateWindow(){
         }
 
         //there are cluster raster
-        if(raster && nbClusters != 0){
+        if (raster && nbClusters != 0){
             int maxNbClusters = 0;
 
             //Compute the maximum number of clusters which will be drawn beneath a group
@@ -1090,12 +1093,12 @@ void TraceView::updateWindow(){
                 QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
                 QList<int>::iterator spikeGroupIterator;
                 for(spikeGroupIterator = clusterFileList.begin(); spikeGroupIterator != clusterFileList.end(); ++spikeGroupIterator){
-                    if(selectedClusters.contains(*spikeGroupIterator)){
+                    if (selectedClusters.contains(*spikeGroupIterator)){
                         QList<int> selection = static_cast<QList<int> >(selectedClusters[*spikeGroupIterator]);
                         currentNbClusters += selection.size();
                     }
                 }
-                if(currentNbClusters > maxNbClusters) maxNbClusters = currentNbClusters;
+                if (currentNbClusters > maxNbClusters) maxNbClusters = currentNbClusters;
             }
 
             int rasterTotalHeight = YTracesRasterSeparator + maxNbClusters * rasterHeight + (maxNbClusters - 1) * YRasterSpace;
@@ -1117,7 +1120,7 @@ void TraceView::updateWindow(){
     window = ZoomWindow(QRect(QPoint(abscissaMin,ordinateMin),QPoint(abscissaMax,ordinateMax)));
 
 
-    if(columnDisplayChanged || groupsChanged){
+    if (columnDisplayChanged || groupsChanged){
         columnDisplayChanged = false;
         groupsChanged = false;
         updateWindow();
@@ -1126,7 +1129,7 @@ void TraceView::updateWindow(){
     //Certain variables used to compute the window in multicolumns mode depend on the size of the previous window and viewport rectangles.
     //To have an acurate window size, we loop until the size of the window is stabilized.
 
-    //Laurent comment it infinit loop if(multiColumns && oldXshift != Xshift) updateWindow();
+    //Laurent comment it infinit loop if (multiColumns && oldXshift != Xshift) updateWindow();
 
     //Recompute the display gains
     computeChannelDisplayGain();
@@ -1140,14 +1143,14 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
     bool areClustersToDraw = false;
     int clusterFileId = 0;
     QString providerName;
-    if(!clusterProviders.isEmpty()){
+    if (!clusterProviders.isEmpty()){
         clusterFileId = (*channelClusterFiles)[channelId];
         providerName = QString::number(clusterFileId);
-        if(clustersData.contains(providerName))
+        if (clustersData.contains(providerName))
             areClustersToDraw = true;
     }
 
-    if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && mouseMoveEvent) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+    if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && mouseMoveEvent) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
         int start = 1;
         int stop = static_cast<int>(floor(downSampling + 0.5));//included
         long min = data(1,channelId + 1);
@@ -1157,12 +1160,12 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
 
         for(int k = start + 1;k<= stop;++k){
             value = data(k,channelId + 1);
-            if(value < min) min = value;
-            if(value > max) max = value;
+            if (value < min) min = value;
+            if (value > max) max = value;
         }
         int yMin = basePosition - static_cast<long>(min * channelFactors[channelId]);
         int yMax = basePosition - static_cast<long>(max * channelFactors[channelId]);
-        if((yMax - yMin) <= limit){
+        if ((yMax - yMin) <= limit){
             painter.drawPoint(X,yMin);
         }
         else{
@@ -1180,18 +1183,18 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             max = min;
             for(int k = start + 1;k<= stop;++k){
                 value = data(k,channelId + 1);
-                if(value < min) min = value;
-                if(value > max) max = value;
+                if (value < min) min = value;
+                if (value > max) max = value;
             }
-            if(min > previousMax) min = previousMax;
-            if(max < previousMin) max = previousMin;
+            if (min > previousMax) min = previousMax;
+            if (max < previousMin) max = previousMin;
             previousMax = max;
             previousMin = min;
 
             yMax = basePosition - static_cast<long>(min * channelFactors[channelId]);
             yMin = basePosition - static_cast<long>(max * channelFactors[channelId]);
 
-            if((yMax - yMin) <= limit){
+            if ((yMax - yMin) <= limit){
                 painter.drawPoint(X,yMin);
             }
             else{
@@ -1213,12 +1216,12 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
 
         for(int k = start + 1;k<= stop;++k){
             value = data(k,channelId + 1);
-            if(value < min) min = value;
-            if(value > max) max = value;
+            if (value < min) min = value;
+            if (value > max) max = value;
         }
         int yMin = basePosition - static_cast<long>(min * channelFactors[channelId]);
         int yMax = basePosition - static_cast<long>(max * channelFactors[channelId]);
-        if((yMax - yMin) <= limit){
+        if ((yMax - yMin) <= limit){
             painter.drawPoint(X,yMin);
         }
         else{
@@ -1242,18 +1245,18 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             max = min;
             for(int k = start + 1;k<= stop;++k){
                 value = data(k,channelId + 1);
-                if(value < min) min = value;
-                if(value > max) max = value;
+                if (value < min) min = value;
+                if (value > max) max = value;
             }
-            if(min > previousMax) min = previousMax;
-            if(max < previousMin) max = previousMin;
+            if (min > previousMax) min = previousMax;
+            if (max < previousMin) max = previousMin;
             previousMax = max;
             previousMin = min;
 
             yMax = basePosition - static_cast<long>(min * channelFactors[channelId]);
             yMin = basePosition - static_cast<long>(max * channelFactors[channelId]);
 
-            if((yMax - yMin) <= limit){
+            if ((yMax - yMin) <= limit){
                 painter.drawPoint(X,yMin);
             }
             else{
@@ -1281,19 +1284,19 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             int lastIndex = index + nbSamplesAfter;
             dataType clusterId = currentData(2,i);
 
-            if(clusterList.contains(clusterId)){
+            if (clusterList.contains(clusterId)){
                 QColor color = colors->color(clusterId);
                 painter.setPen(color);
                 for(int j = currentIndex; j <= nbSamplesToDraw;++j){
-                    if(firstIndex > traceInfo(1,j)) continue;//case 1
-                    else if(firstIndex <= traceInfo(1,j)){//case 2
+                    if (firstIndex > traceInfo(1,j)) continue;//case 1
+                    else if (firstIndex <= traceInfo(1,j)){//case 2
                         for(int k = j;k<= nbSamplesToDraw;++k){
-                            if(traceInfo(1,k) > lastIndex){
+                            if (traceInfo(1,k) > lastIndex){
                                 currentIndex = k;
                                 break;
                             }
-                            else if(traceInfo(1,k) <= lastIndex){
-                                if(traceInfo(3,k) != traceInfo(4,k)) painter.drawLine(traceInfo(2,k),traceInfo(3,k),traceInfo(2,k),traceInfo(4,k));
+                            else if (traceInfo(1,k) <= lastIndex){
+                                if (traceInfo(3,k) != traceInfo(4,k)) painter.drawLine(traceInfo(2,k),traceInfo(3,k),traceInfo(2,k),traceInfo(4,k));
                                 else painter.drawPoint(traceInfo(2,k),traceInfo(3,k));
                             }
                         }
@@ -1329,25 +1332,25 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     QList<int>::const_iterator iterator;
     for(iterator = channels.constBegin();iterator != channels.constEnd();++iterator){
         //if the channel is skipped, do no draw it
-        if(skippedChannels.contains(*iterator)) continue;
+        if (skippedChannels.contains(*iterator)) continue;
 
         int basePosition = channelsStartingOrdinate[*iterator] +  static_cast<long>(data(1,*iterator + 1) * channelFactors[*iterator]);
 
         //The abscissa of the system coordinate center for the current channel
         int X;
-        if(!multiColumns) X = X0;
+        if (!multiColumns) X = X0;
         else X = channelsStartingAbscissa[*iterator];
 
         //Get the color associated with the channel and set the color to use to this color
         QColor color = channelColors->color(*iterator);
-        if(greyScaleMode){
+        if (greyScaleMode){
             int greyvalue = qGray(color.rgb());
             color.setHsv(0,0,greyvalue);
         }
 
-        if(downSampling != 1){
+        if (downSampling != 1){
             //draw the trace
-            if(highlight){
+            if (highlight){
                 QPen pen(color,2);
                 painter.setPen(pen);
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
@@ -1362,7 +1365,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 pen.setColor(color);
                 pen.setWidth(1);
                 painter.setPen(pen);
-                if(!multiColumns) X = X0;
+                if (!multiColumns) X = X0;
                 else X = channelsStartingAbscissa[*iterator];
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
             }
@@ -1371,27 +1374,26 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
             bool areClustersToDraw = false;
             int clusterFileId = 0;
             QString providerName;
-            if(!clusterProviders.isEmpty()){
+            if (!clusterProviders.isEmpty()){
                 areClustersToDraw = true;
                 clusterFileId = (*channelClusterFiles)[*iterator];
                 providerName = QString::number(clusterFileId);
-                if(clustersData.contains(providerName))
+                if (clustersData.contains(providerName))
                     areClustersToDraw = true;
             }
 
-            if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+            if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
                 QPolygon trace(nbSamples);
                 for(int i = 0; i < nbSamples;++i){
                     int y = basePosition - static_cast<long>(data(i + 1,*iterator + 1) * channelFactors[*iterator]);
                     trace.setPoint(i,X,y);
                     X += Xstep;
                 }
-                if(highlight){
+                if (highlight) {
                     QPen pen(color,2);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
-                }
-                else{
+                } else {
                     QPen pen(palette().color(backgroundRole()),2);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
@@ -1413,12 +1415,11 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                     traceInfo(3,i) = y;
                     X += Xstep;
                 }
-                if(highlight){
+                if (highlight){
                     QPen pen(color,2);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
-                }
-                else{
+                } else {
                     QPen pen(palette().color(backgroundRole()),2);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
@@ -1442,18 +1443,18 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                     int nbWaveformSamples = lastIndex - firstIndex + 1;
                     dataType clusterId = currentData(2,i);
 
-                    if(clusterList.contains(clusterId)){
+                    if (clusterList.contains(clusterId)){
                         QColor color = colors->color(clusterId);
                         for(int j = currentIndex; j <= nbSamples;++j){
-                            if(firstIndex > traceInfo(1,j)) continue;//case 1
-                            else if(firstIndex == traceInfo(1,j)){//case 2
+                            if (firstIndex > traceInfo(1,j)) continue;//case 1
+                            else if (firstIndex == traceInfo(1,j)){//case 2
                                 QPolygon trace(nbWaveformSamples);
                                 int pos = 0;
                                 for(int k = firstIndex;k<= lastIndex;++k){
                                     trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
                                     pos++;
                                 }
-                                if(highlight){
+                                if (highlight){
                                     QPen pen(color,2);
                                     painter.setPen(pen);
                                     painter.drawPolyline(trace);
@@ -1481,14 +1482,14 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     painter.resetMatrix() ;
 
     //Draw channel ids and amplitude on the left side.
-    if(showLabels){
+    if (showLabels){
         QFont f("Helvetica",8);
         painter.setFont(f);
         painter.setPen(colorLegend); //set the color for the legends.
         QRect windowRectangle((QRect)window);
         for(iterator = channels.constBegin();iterator != channels.constEnd();++iterator){
             //if the channel is skipped, do no draw it
-            if(skippedChannels.contains(*iterator)) continue;
+            if (skippedChannels.contains(*iterator)) continue;
 
             int position = channelsStartingOrdinate[*iterator];
             int abscissa = channelsStartingAbscissa[*iterator];
@@ -1496,7 +1497,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
             QRect rHighlight;
             //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
             //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport.
-            if(windowRectangle.left() != 0){
+            if (windowRectangle.left() != 0){
                 r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
                 rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
             }
@@ -1505,9 +1506,11 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
             }
             float gain = channelDisplayGains[*iterator];
-            if(highlight) painter.fillRect(rHighlight,palette().highlight());
-            else painter.fillRect(rHighlight,palette().color(backgroundRole()));
-            painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString("%1 x%2").arg(*iterator).arg(gain,0,'f',2));
+            if (highlight)
+                painter.fillRect(rHighlight,palette().highlight());
+            else
+                painter.fillRect(rHighlight,palette().color(backgroundRole()));
+            painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString::fromLatin1("%1 x%2").arg(*iterator).arg(gain,0,'f',2));
         }
     }
 
@@ -1527,7 +1530,7 @@ void TraceView::drawTraces(QPainter& painter){
     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
 
     //traces presented on multiple columns
-    if(multiColumns){
+    if (multiColumns){
         //The abscissa of the system coordinate center for the current channel
         int X = X0;
         //The ordinate of the system coordinate center for the current channel
@@ -1544,7 +1547,7 @@ void TraceView::drawTraces(QPainter& painter){
         for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
 
             //Draw events
-            if(!selectedEvents.isEmpty()){
+            if (!selectedEvents.isEmpty()){
                 QRect windowRectangle((QRect)window);
                 int top = windowRectangle.top();
                 int bottom = windowRectangle.bottom();
@@ -1554,7 +1557,7 @@ void TraceView::drawTraces(QPainter& painter){
                 for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
                     QList<int> eventList = iterator.value();
                     QString providerName = iterator.key();
-                    if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+                    if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
                     ItemColors* colors = providerItemColors[providerName];
                     Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
                     Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
@@ -1562,7 +1565,7 @@ void TraceView::drawTraces(QPainter& painter){
                     for(int i = 1; i <= nbEvents;++i){
                         dataType index = currentData(1,i);
                         int eventId = currentIds(1,i);
-                        if(eventList.contains(eventId)){
+                        if (eventList.contains(eventId)){
                             QColor color = colors->color(eventId);
                             pen.setColor(color);
                             painter.setPen(pen);
@@ -1572,7 +1575,7 @@ void TraceView::drawTraces(QPainter& painter){
                     }
                 }
             }//events
-            if(verticalLines && nbClusters != 0){
+            if (verticalLines && nbClusters != 0){
                 QRect windowRectangle((QRect)window);
                 int top = windowRectangle.top();
                 int bottom = windowRectangle.bottom();
@@ -1581,9 +1584,9 @@ void TraceView::drawTraces(QPainter& painter){
                 QMap<int,QList<int> >::Iterator selectedIterator;
                 for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
                     //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
-                    if(!clusterFileList.contains(selectedIterator.key())) continue;
+                    if (!clusterFileList.contains(selectedIterator.key())) continue;
                     QString providerName = QString::number(selectedIterator.key());
-                    if(clustersData[providerName] == 0)
+                    if (clustersData[providerName] == 0)
                         continue;
 
                     ItemColors* colors = providerItemColors[providerName];
@@ -1597,7 +1600,7 @@ void TraceView::drawTraces(QPainter& painter){
                         for(int i = 1; i <= nbSpikes;++i){
                             dataType index = currentData(1,i);
                             dataType clusterId = currentData(2,i);
-                            if(clusterId == *clusterIterator){
+                            if (clusterId == *clusterIterator){
                                 int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                                 painter.drawLine(abscissa,top,abscissa,bottom);
                             }
@@ -1613,7 +1616,7 @@ void TraceView::drawTraces(QPainter& painter){
             int y = Y;
             for(int j = 0; j < currentNbChannels; ++j){
                 int channelId = channelIds[j];
-                int position = -y + channelOffsets[channelId];
+                int position = -y + channelOffsets.at(channelId);
                 positions.append(position);
                 channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
                 channelsStartingAbscissa.insert(channelId,X);
@@ -1626,34 +1629,34 @@ void TraceView::drawTraces(QPainter& painter){
                 int x = 0;
 
                 //if the channel is skipped, do no draw it
-                if(skippedChannels.contains(channelId)) continue;
+                if (skippedChannels.contains(channelId)) continue;
 
                 QColor color = channelColors->color(channelId);
 
-                if(greyScaleMode){
+                if (greyScaleMode){
                     int greyvalue = qGray(color.rgb());
                     color.setHsv(0,0,greyvalue);
                 }
                 QPen pen(color,1);
-                if(selectedChannels.contains(channelId)) pen.setWidth(2);
+                if (selectedChannels.contains(channelId)) pen.setWidth(2);
                 painter.setPen(pen);
 
-                if(downSampling != 1){
-                    drawTrace(painter,limit,positions[j],X,channelId,nbSamplesToDraw);
+                if (downSampling != 1){
+                    drawTrace(painter,limit,positions.at(j),X,channelId,nbSamplesToDraw);
                 }
                 else{
                     bool areClustersToDraw = false;
                     int clusterFileId = 0;
                     QString providerName;
-                    if(!clusterProviders.isEmpty()){
+                    if (!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
                         clusterFileId = (*channelClusterFiles)[channelId];
                         providerName = QString::number(clusterFileId);
-                        if(clustersData.contains(providerName))
+                        if (clustersData.contains(providerName))
                             areClustersToDraw = true;
                     }
 
-                    if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+                    if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
                         QPolygon trace(nbSamples);
                         for(int i = 0; i < nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
@@ -1690,15 +1693,15 @@ void TraceView::drawTraces(QPainter& painter){
                             int nbWaveformSamples = lastIndex - firstIndex + 1;
                             dataType clusterId = currentData(2,i);
 
-                            if(clusterList.contains(clusterId)){
+                            if (clusterList.contains(clusterId)){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
-                                if(selectedChannels.contains(channelId)) pen.setWidth(2);
+                                if (selectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
 
                                 for(int j = currentIndex; j <= nbSamples;++j){
-                                    if(firstIndex > traceInfo(1,j)) continue;//case 1
-                                    else if(firstIndex == traceInfo(1,j)){//case 2
+                                    if (firstIndex > traceInfo(1,j)) continue;//case 1
+                                    else if (firstIndex == traceInfo(1,j)){//case 2
                                         QPolygon trace(nbWaveformSamples);
                                         int pos = 0;
                                         for(int k = firstIndex;k<= lastIndex;++k){
@@ -1717,7 +1720,7 @@ void TraceView::drawTraces(QPainter& painter){
             }
 
             //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
-            if(raster && nbClusters != 0){
+            if (raster && nbClusters != 0){
                 int y = Y0Raster;
 
                 QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
@@ -1725,16 +1728,16 @@ void TraceView::drawTraces(QPainter& painter){
                 QMap<int,QList<int> >::Iterator selectedIterator;
                 for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
                     //Only draw rasters for clusters contained in a cluster file containing data for channels of the current group
-                    if(!clusterFileList.contains(selectedIterator.key())) continue;
+                    if (!clusterFileList.contains(selectedIterator.key())) continue;
                     QList<int> clusterList = selectedIterator.value();
-                    if(clusterList.size() == 0) continue;
+                    if (clusterList.size() == 0) continue;
                     QString providerName = QString::number(selectedIterator.key());
                     ItemColors* colors = providerItemColors[providerName];
                     Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
                     int nbSpikes = currentData.nbOfColumns();
                     QList<int>::iterator clusterIterator;
                     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
-                        QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
+                        const QString identifier = QString::fromLatin1("%1-%2").arg(providerName).arg(*clusterIterator);
 
                         qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
 
@@ -1748,7 +1751,7 @@ void TraceView::drawTraces(QPainter& painter){
                         for(int i = 1; i <= nbSpikes;++i){
                             dataType index = currentData(1,i);
                             dataType clusterId = currentData(2,i);
-                            if(clusterId == *clusterIterator){
+                            if (clusterId == *clusterIterator){
                                 int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                                 painter.drawLine(abscissa,-y,abscissa,-bottom);
                             }
@@ -1763,7 +1766,7 @@ void TraceView::drawTraces(QPainter& painter){
     //traces presented on a single column
     else{
         //Draw events
-        if(!selectedEvents.isEmpty()){
+        if (!selectedEvents.isEmpty()){
             QRect windowRectangle((QRect)window);
             int top = windowRectangle.top();
             int bottom = windowRectangle.bottom();
@@ -1773,7 +1776,7 @@ void TraceView::drawTraces(QPainter& painter){
                 QList<int> eventList = iterator.value();
                 QString providerName = iterator.key();
 
-                if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+                if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
                 ItemColors* colors = providerItemColors[providerName];
                 Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
                 Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
@@ -1781,7 +1784,7 @@ void TraceView::drawTraces(QPainter& painter){
                 for(int i = 1; i <= nbEvents;++i){
                     dataType index = currentData(1,i);
                     int eventId = currentIds(1,i);
-                    if(eventList.contains(eventId)){
+                    if (eventList.contains(eventId)){
                         QColor color = colors->color(eventId);
                         pen.setColor(color);
                         painter.setPen(pen);
@@ -1793,7 +1796,7 @@ void TraceView::drawTraces(QPainter& painter){
         }//events
 
         //Draw clusters on vertical lines
-        if(verticalLines && nbClusters != 0){
+        if (verticalLines && nbClusters != 0){
             QRect windowRectangle((QRect)window);
             int top = windowRectangle.top();
             int bottom = windowRectangle.bottom();
@@ -1809,7 +1812,7 @@ void TraceView::drawTraces(QPainter& painter){
                     dataType index = currentData(1,i);
                     dataType clusterId = currentData(2,i);
 
-                    if(clusterList.contains(clusterId)){
+                    if (clusterList.contains(clusterId)){
                         QColor color = colors->color(clusterId);
                         painter.setPen(color);
                         int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
@@ -1846,22 +1849,22 @@ void TraceView::drawTraces(QPainter& painter){
                 int channelId = channelIds[j];
 
                 //if the channel is skipped, do no draw it
-                if(skippedChannels.contains(channelId)) continue;
+                if (skippedChannels.contains(channelId)) continue;
 
                 //The abscissa of the system coordinate center for the current channel
                 int X = X0;
 
                 //Get the color associated with the channel and set the color to use to this color
                 QColor color = channelColors->color(channelId);
-                if(greyScaleMode){
+                if (greyScaleMode){
                     int greyvalue = qGray(color.rgb());
                     color.setHsv(0,0,greyvalue);
                 }
                 QPen pen(color,1);
-                if(selectedChannels.contains(channelId)) pen.setWidth(2);
+                if (selectedChannels.contains(channelId)) pen.setWidth(2);
                 painter.setPen(pen);
 
-                if(downSampling != 1){
+                if (downSampling != 1){
                     drawTrace(painter,limit,positions[j],X,channelId,nbSamplesToDraw);
                 }
                 else{
@@ -1869,15 +1872,15 @@ void TraceView::drawTraces(QPainter& painter){
                     int clusterFileId = 0;
                     QString providerName;
 
-                    if(!clusterProviders.isEmpty()){
+                    if (!clusterProviders.isEmpty()){
                         areClustersToDraw = true;
                         clusterFileId = (*channelClusterFiles)[channelId];
                         providerName = QString::number(clusterFileId);
-                        if(clustersData.contains(providerName))
+                        if (clustersData.contains(providerName))
                             areClustersToDraw = true;
                     }
 
-                    if(!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+                    if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
                         QPolygon trace(nbSamples);
                         for(int i = 0; i < nbSamples;++i){
                             int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
@@ -1915,15 +1918,15 @@ void TraceView::drawTraces(QPainter& painter){
                             int nbWaveformSamples = lastIndex - firstIndex + 1;
                             dataType clusterId = currentData(2,i);
 
-                            if(clusterList.contains(clusterId)){
+                            if (clusterList.contains(clusterId)){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
-                                if(selectedChannels.contains(channelId)) pen.setWidth(2);
+                                if (selectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
 
                                 for(int j = currentIndex; j <= nbSamples;++j){
-                                    if(firstIndex > traceInfo(1,j)) continue;//case 1
-                                    else if(firstIndex == traceInfo(1,j)){//case 2
+                                    if (firstIndex > traceInfo(1,j)) continue;//case 1
+                                    else if (firstIndex == traceInfo(1,j)){//case 2
                                         QPolygon trace(nbWaveformSamples);
                                         int pos = 0;
                                         for(int k = firstIndex;k<= lastIndex;++k){
@@ -1951,13 +1954,13 @@ void TraceView::drawTraces(QPainter& painter){
         rasterAbscisses.clear();
 
         //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
-        if(raster && nbClusters != 0){
+        if (raster && nbClusters != 0){
             Y = Y0Raster;
 
             QMap<int,QList<int> >::Iterator iterator;
             for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
                 QList<int> clusterList = iterator.value();
-                if(clusterList.size() == 0) continue;
+                if (clusterList.size() == 0) continue;
                 QString providerName = QString::number(iterator.key());
                 ItemColors* colors = providerItemColors[providerName];
                 Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
@@ -1977,7 +1980,7 @@ void TraceView::drawTraces(QPainter& painter){
                     for(int i = 1; i < nbSpikes + 1;++i){
                         dataType index = currentData(1,i);
                         dataType clusterId = currentData(2,i);
-                        if(clusterId == *clusterIterator){
+                        if (clusterId == *clusterIterator){
                             int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                             painter.drawLine(abscissa,-Y,abscissa,-bottom);
                         }
@@ -1996,7 +1999,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
     painter.setPen(colorLegend); //set the color for the legends.
     QRect windowRectangle((QRect)window);
 
-    if(!multiColumns && (windowRectangle.left() >= xMargin)){
+    if (!multiColumns && (windowRectangle.left() >= xMargin)){
     }
     else{
         QList<int> groupIds = shownGroupsChannels.keys();
@@ -2006,7 +2009,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
             QList<int>::iterator channelIterator;
             for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
                 //if the channel is skipped, do no draw it
-                // if(skippedChannels.contains(*channelIterator )) continue;
+                // if (skippedChannels.contains(*channelIterator )) continue;
 
                 int position = channelsStartingOrdinate[*channelIterator];
                 int abscissa = channelsStartingAbscissa[*channelIterator];
@@ -2014,7 +2017,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
                 QRect rHighlight;
                 //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
                 //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport.
-                if(windowRectangle.left() != 0){
+                if (windowRectangle.left() != 0){
                     r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
                     rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
                 }
@@ -2023,13 +2026,13 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
                     rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
                 }
                 float gain = channelDisplayGains[*channelIterator];
-                if(selectedChannels.contains(*channelIterator))
+                if (selectedChannels.contains(*channelIterator))
                     painter.fillRect(rHighlight,palette().highlight());
                 else painter.fillRect(rHighlight,palette().color(backgroundRole()));
                 painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString("%1 x%2").arg(*channelIterator).arg(gain,0,'f',2));
             }
         }
-        if(raster){
+        if (raster){
             //Draw the cluster labels
             for(int i = 0;i < static_cast<int>(clustersOrder.size());++i){
                 int position = rasterOrdinates[i];
@@ -2038,7 +2041,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
                 QRect r;
                 QRect rHighlight;
 
-                if(windowRectangle.left() != 0){
+                if (windowRectangle.left() != 0){
                     r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
                     rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
                 }
@@ -2076,7 +2079,7 @@ void TraceView::drawTimeLine(QPainter *painter){
     QList<int> max;
     QList<int> min;
 
-    if(multiColumns){
+    if (multiColumns){
         nbColumns = shownGroupsChannels.count();
         //Compute the current abscissae in each group
         for(int i = 0; i<nbColumns;++i){
@@ -2084,8 +2087,8 @@ void TraceView::drawTimeLine(QPainter *painter){
         }
 
         //left margin is visible
-        if(r.left() == 0){
-            if(lastClickAbscissa <= (Xshift - XGroupSpace))
+        if (r.left() == 0){
+            if (lastClickAbscissa <= (Xshift - XGroupSpace))
                 groupIndex = 0;
             else
                 groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
@@ -2093,7 +2096,7 @@ void TraceView::drawTimeLine(QPainter *painter){
         //left margin is invisible
         else{
             int shift = (nbSamplesToDraw - 1) * Xstep;
-            if(lastClickAbscissa < shift + XGroupSpace)
+            if (lastClickAbscissa < shift + XGroupSpace)
                 groupIndex = 0;
             else
                 groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
@@ -2105,25 +2108,25 @@ void TraceView::drawTimeLine(QPainter *painter){
         }
     } else {
         nbColumns = 1;
-        if(!linePositions.isEmpty())
+        if (!linePositions.isEmpty())
             currentAbscissae.append(linePositions.at(0) + delta);
         max.append(nbSamplesToDraw - 1);//points draw from 0 to (nbSamplesToDraw - 1)
         min.append(borderX);
     }
 
-    if(currentAbscissae.isEmpty() || min.isEmpty())
+    if (currentAbscissae.isEmpty() || min.isEmpty())
         return;
     //If the user went to far on the left, draw a line at the minimum min
-    if(currentAbscissae[groupIndex] < min[groupIndex]){
-        if(!initialDragLine){
+    if (currentAbscissae[groupIndex] < min[groupIndex]){
+        if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
-            if(previousAbscissae[groupIndex] >= min[groupIndex]){
+            if (previousAbscissae[groupIndex] >= min[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(min[i],top,min[i],bottom);//draw a line at min
                 }
-                if(previousDragAbscissa > min[groupIndex])
+                if (previousDragAbscissa > min[groupIndex])
                     previousDragAbscissa = previousDragAbscissa;
                 else{
                     previousDragAbscissa = min[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
@@ -2132,19 +2135,19 @@ void TraceView::drawTimeLine(QPainter *painter){
         }
     }
     //If the user went to far on the right, draw a line at the last sample position (max)
-    else if(currentAbscissae[groupIndex] > max[groupIndex]){
-        if(!initialDragLine){
+    else if (currentAbscissae[groupIndex] > max[groupIndex]){
+        if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
-            if(previousAbscissae[groupIndex] < max[groupIndex]){
+            if (previousAbscissae[groupIndex] < max[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(max[i],top,max[i],bottom);//draw a line at max
                 }
                 //compute previousDragAbscissa in order to have the line drawn at the far rigth of the trace
-                if(previousDragAbscissa <= max[groupIndex]){
+                if (previousDragAbscissa <= max[groupIndex]){
                     previousDragAbscissa = previousDragAbscissa;
-                    if(linePositions[groupIndex] + (previousDragAbscissa - lastClickAbscissa) > max[groupIndex])
+                    if (linePositions[groupIndex] + (previousDragAbscissa - lastClickAbscissa) > max[groupIndex])
                         previousDragAbscissa = max[groupIndex] - linePositions[groupIndex]  + lastClickAbscissa;
                 }
                 else{
@@ -2155,14 +2158,14 @@ void TraceView::drawTimeLine(QPainter *painter){
     }
     else{
         //erase the previous line
-        if(!initialDragLine){
+        if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
             for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             for(int i = 0; i<nbColumns;++i){
-                if(previousAbscissae[i] >= min[i])
+                if (previousAbscissae[i] >= min[i])
                     painter->drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
-                if(previousAbscissae[i] < min[i])
+                if (previousAbscissae[i] < min[i])
                     painter->drawLine(min[i],top,min[i],bottom);//the line has been drawn at min
             }
         }
@@ -2174,7 +2177,7 @@ void TraceView::drawTimeLine(QPainter *painter){
 void TraceView::mouseDoubleClickEvent(QMouseEvent* e){
     BaseFrame::mouseDoubleClickEvent(e);
 
-    if(mode == ZOOM){
+    if (mode == ZOOM){
         doubleClick = true;
         zoomed = true;
         //update the window
@@ -2190,7 +2193,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
     //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport and included in the
     //values return par the event.
-    if(r.left() != 0)
+    if (r.left() != 0)
         current = viewportToWorld(event->x(),event->y());
     else
         current = viewportToWorld(event->x() - xMargin,event->y());
@@ -2198,7 +2201,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     int x = (current.x() - static_cast<int>(borderX));
 
     //Compute and write the duration and the voltage in the statusbar.
-    if(mode == MEASURE && (event->buttons() == Qt::LeftButton)){
+    if (mode == MEASURE && (event->buttons() == Qt::LeftButton)){
         //Compute the duration between the begining of the drag and now
         int duration = abs(x - startingIndex);
         float time = static_cast<float>(duration) / static_cast<float>(Xstep) * timeStep;
@@ -2207,7 +2210,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         float remainingSeconds = static_cast<float>(fmod(static_cast<double>(time),60000));
         int nbSeconds = static_cast<int>(remainingSeconds / 1000);
         int nbMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000) + 0.5);
-        if(nbMiliseconds == 1000){
+        if (nbMiliseconds == 1000){
             nbMiliseconds = 0;
             nbSeconds++;
         }
@@ -2220,13 +2223,13 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     }
     else{
         //Compute the time
-        if(x < 0) {
+        if (x < 0) {
             statusBar->clearMessage();//on the left side of the display.
         } else {
             float relativeTime;
-            if(multiColumns){
+            if (multiColumns){
                 //left margin is visible
-                if(r.left() == 0)
+                if (r.left() == 0)
                     relativeTime = static_cast<float>(fmod(x,static_cast<float>(Xshift)))
                             /  static_cast<float>(Xstep) * timeStep;
                 //left margin is invisible
@@ -2234,7 +2237,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
                     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
                     int shift = (nbSamplesToDraw - 1) * Xstep;
-                    if(x < shift)
+                    if (x < shift)
                         relativeTime = static_cast<float>(x) / static_cast<float>(Xstep) * timeStep;
                     else{
                         relativeTime = static_cast<float>(fmod((x),static_cast<float>(shift + XGroupSpace)))
@@ -2246,14 +2249,14 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             else relativeTime = static_cast<float>(x) / static_cast<float>(Xstep) * timeStep;
 
             //between columns
-            if(relativeTime > timeFrameWidth){
+            if (relativeTime > timeFrameWidth){
                 message.clear();
             }
             else{
                 float time;
                 //If the data have been browsed for spikes, startTimeInRecordingUnits !=0 and the rounding applied to startTime make the computation
                 // of time wrong. The correct start time has to be recompute using startTimeInRecordingUnits.
-                if(startTimeInRecordingUnits !=0){
+                if (startTimeInRecordingUnits !=0){
                     double samplingRate = tracesProvider.getSamplingRate();
                     double computeTime = static_cast<double>(static_cast<double>(startTimeInRecordingUnits) * static_cast<double>(1000) / static_cast<double>(samplingRate));
                     time =  relativeTime + computeTime;
@@ -2265,7 +2268,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 float remainingSeconds = static_cast<float>(fmod(static_cast<double>(time),60000));
                 int nbSeconds = static_cast<int>(remainingSeconds / 1000);
                 int nbMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000) + 0.5);
-                if(nbMiliseconds == 1000){
+                if (nbMiliseconds == 1000){
                     nbMiliseconds = 0;
                     nbSeconds++;
                 }
@@ -2279,14 +2282,14 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
     mMoveSelectChannel = false;
     //Paint the channels selected while dragging
-    if(mode == SELECT && !selectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
+    if (mode == SELECT && !selectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
         mMoveSelectChannel = true;
         m_currentPoint = current;
         update();
         previousDragOrdinate = current.y();
     }
     //Paint the event selected while dragging
-    else if((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
+    else if ((mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) && (event->buttons() == Qt::LeftButton)){
 
         int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
         int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
@@ -2296,10 +2299,10 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         int groupIndex = 0;
         int max = nbSamplesToDraw - 1;//points draw from 0 to (nbSamplesToDraw - 1)
         int min = borderX;
-        if(multiColumns){
+        if (multiColumns){
             //left margin is visible
-            if(r.left() == 0){
-                if(lastClickAbscissa <= (Xshift - XGroupSpace))
+            if (r.left() == 0){
+                if (lastClickAbscissa <= (Xshift - XGroupSpace))
                     groupIndex = 0;
                 else
                     groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
@@ -2307,7 +2310,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             //left margin is invisible
             else{
                 int shift = (nbSamplesToDraw - 1) * Xstep;
-                if(lastClickAbscissa < shift + XGroupSpace)
+                if (lastClickAbscissa < shift + XGroupSpace)
                     groupIndex = 0;
                 else
                     groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
@@ -2317,12 +2320,12 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         }
 
         //If the user went to far on the left, draw a line at the minimum min
-        if(currentAbscissa < min){
-            if(!startEventDragging){
+        if (currentAbscissa < min){
+            if (!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
-                if(previousAbscissa > min){
-                    if(x > min)
+                if (previousAbscissa > min){
+                    if (x > min)
                         previousDragAbscissa = x;
                     else{
                         previousDragAbscissa = min - selectedEventPosition[1] + lastClickAbscissa;
@@ -2332,15 +2335,15 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 startEventDragging = false;
                 previousDragAbscissa = x;
             }
-        } else if(currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
-            if(!startEventDragging){
+        } else if (currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
+            if (!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
-                if(previousAbscissa < max){
+                if (previousAbscissa < max){
                     //compute previousDragAbscissa in order to have the line drawn at the far rigth of the trace
-                    if(x <= max){
+                    if (x <= max){
                         previousDragAbscissa = x;
-                        if(selectedEventPosition[1] + (previousDragAbscissa - lastClickAbscissa) > max) previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
+                        if (selectedEventPosition[1] + (previousDragAbscissa - lastClickAbscissa) > max) previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
                     }
                     else{
                         previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
@@ -2381,16 +2384,16 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         int groupIndex = 0;
         int max = nbSamplesToDraw - 1;//points draw from 0 to (nbSamplesToDraw - 1)
         int min = borderX;
-        if(multiColumns){
+        if (multiColumns){
             //left margin is visible
-            if(r.left() == 0){
-                if(lastClickAbscissa <= (Xshift - XGroupSpace)) groupIndex = 0;
+            if (r.left() == 0){
+                if (lastClickAbscissa <= (Xshift - XGroupSpace)) groupIndex = 0;
                 else groupIndex = ((lastClickAbscissa - (Xshift - XGroupSpace)) / Xshift) + 1;
             }
             //left margin is invisible
             else{
                 int shift = (nbSamplesToDraw - 1) * Xstep;
-                if(lastClickAbscissa < shift + XGroupSpace) groupIndex = 0;
+                if (lastClickAbscissa < shift + XGroupSpace) groupIndex = 0;
                 else groupIndex = ((lastClickAbscissa - (shift + XGroupSpace)) / Xshift) + 1;
             }
             min = X0 + groupIndex * Xshift;
@@ -2398,14 +2401,14 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
         }
 
         //If the user went to far on the left, draw a line at the minimum min
-        if(currentAbscissa < min){
-            if(!startEventDragging){
+        if (currentAbscissa < min){
+            if (!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
-                if(previousAbscissa > min){
+                if (previousAbscissa > min){
                     painter.drawLine(previousAbscissa,top,previousAbscissa,bottom);//erase the previous line
                     painter.drawLine(min,top,min,bottom);//draw a line at min
-                    if(x > min) previousDragAbscissa = x;
+                    if (x > min) previousDragAbscissa = x;
                     else{
                         previousDragAbscissa = min - selectedEventPosition[1] + lastClickAbscissa;
                     }
@@ -2416,17 +2419,17 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
                 previousDragAbscissa = x;
             }
             painter.end();
-        } else if(currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
-            if(!startEventDragging){
+        } else if (currentAbscissa > max){//If the user went to far on the right, draw a line at the last sample position (max)
+            if (!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
-                if(previousAbscissa < max){
+                if (previousAbscissa < max){
                     painter.drawLine(previousAbscissa,top,previousAbscissa,bottom);//erase the previous line
                     painter.drawLine(max,top,max,bottom);//draw a line at max
                     //compute previousDragAbscissa in order to have the line drawn at the far rigth of the trace
-                    if(x <= max){
+                    if (x <= max){
                         previousDragAbscissa = x;
-                        if(selectedEventPosition[1] + (previousDragAbscissa - lastClickAbscissa) > max) previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
+                        if (selectedEventPosition[1] + (previousDragAbscissa - lastClickAbscissa) > max) previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
                     }
                     else{
                         previousDragAbscissa = max - selectedEventPosition[1] + lastClickAbscissa;
@@ -2440,11 +2443,11 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             painter.end();
         } else {
             //erase the previous line
-            if(!startEventDragging){
+            if (!startEventDragging){
                 int previousDelta = previousDragAbscissa - lastClickAbscissa;
                 int previousAbscissa = selectedEventPosition[1] + previousDelta;
-                if(previousAbscissa >= min) painter.drawLine(previousAbscissa,top,previousAbscissa,bottom);
-                if(previousAbscissa < min) painter.drawLine(min,top,min,bottom);//the line has been drawn at min
+                if (previousAbscissa >= min) painter.drawLine(previousAbscissa,top,previousAbscissa,bottom);
+                if (previousAbscissa < min) painter.drawLine(min,top,min,bottom);//the line has been drawn at min
             }
             else{
                 previousDragAbscissa = x;
@@ -2460,8 +2463,8 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     }
 
     //Paint the line while dragging
-    if(mode == DRAW_LINE && (event->buttons() == Qt::LeftButton)){
-        if(!linePositions.isEmpty()) {
+    if (mode == DRAW_LINE && (event->buttons() == Qt::LeftButton)){
+        if (!linePositions.isEmpty()) {
             previousDragAbscissa = x;
             initialDragLine = false;
             update();
@@ -2472,9 +2475,9 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 }
 
 void TraceView::mousePressEvent(QMouseEvent* event){
-    if(event->button() == Qt::LeftButton){
+    if (event->button() == Qt::LeftButton){
 
-        if(mode == ZOOM || mode == MEASURE || mode == SELECT_TIME){
+        if (mode == ZOOM || mode == MEASURE || mode == SELECT_TIME){
             //The parent implementation takes care of the zoom.
             BaseFrame::mousePressEvent(event);
         }
@@ -2483,43 +2486,43 @@ void TraceView::mousePressEvent(QMouseEvent* event){
 
         QPair<QString,int> deselectedEvent(selectedEvent.first,selectedEvent.second);
         int deselectedEventIndex = 0;
-        if(!selectedEventPosition.isEmpty())
+        if (!selectedEventPosition.isEmpty())
             deselectedEventIndex = selectedEventPosition[0];
 
-        if(mode == SELECT && !shownChannels.isEmpty() || mode == MEASURE || mode == SELECT_TIME || mode == SELECT_EVENT || mode == ADD_EVENT || mode == DRAW_LINE){
+        if (mode == SELECT && !shownChannels.isEmpty() || mode == MEASURE || mode == SELECT_TIME || mode == SELECT_EVENT || mode == ADD_EVENT || mode == DRAW_LINE){
             QRect r((QRect)window);
             QPoint current;
             //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
             //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport and included in the
             //values return par the event.
-            if(r.left() != 0)
+            if (r.left() != 0)
                 current = viewportToWorld(event->x(),event->y());
             else
                 current = viewportToWorld(event->x() - xMargin,event->y());
             lastClickOrdinate = current.y();
 
-            if(multiColumns){
+            if (multiColumns){
                 //determine the group
                 int groupIndex;
                 int sampleIndex;
                 bool labelSelected = false;
                 int x = (current.x() - static_cast<int>(borderX));
                 //on the left side of the display.
-                if(x <= 0){
+                if (x <= 0){
                     sampleIndex = 1;
                     groupIndex = 0;
                     labelSelected = true;
                 }
                 //left margin is visible
-                else if(r.left() == 0){
-                    if(x <= (Xshift - XGroupSpace)){
+                else if (r.left() == 0){
+                    if (x <= (Xshift - XGroupSpace)){
                         groupIndex = 0;
                         sampleIndex = static_cast<int>(floor(0.5 +static_cast<float>(x) / static_cast<float>(Xstep)) * downSampling);
                     }
                     else{
                         groupIndex = ((x - (Xshift - XGroupSpace)) / Xshift) + 1;
                         int samplePart = x - (groupIndex * Xshift);
-                        if(samplePart <= 0){
+                        if (samplePart <= 0){
                             sampleIndex = 1;
                             labelSelected = true;
                         }
@@ -2537,25 +2540,25 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     // is larger. In that case an adjustment is computed to give the ability to the user to click on the legend to select the trace.
                     int overlap = viewportToWorldWidth(xMargin) - (XGroupSpace / 2);
 
-                    if(overlap < 0) overlap = 0;
-                    if(x <= (shift + (XGroupSpace / 2) - overlap)){
+                    if (overlap < 0) overlap = 0;
+                    if (x <= (shift + (XGroupSpace / 2) - overlap)){
                         groupIndex = 0;
-                        if(x >= shift) sampleIndex = nbSamples;
+                        if (x >= shift) sampleIndex = nbSamples;
                         else sampleIndex = static_cast<int>(floor(0.5 +static_cast<float>(x) / static_cast<float>(Xstep)) * downSampling);
                     }
                     else{
                         groupIndex = ((x - (shift + (XGroupSpace / 2) - overlap)) / Xshift) + 1;
                         int samplePart = x - (groupIndex * Xshift);
-                        if(samplePart <= 0){
+                        if (samplePart <= 0){
                             sampleIndex = 1;
                             labelSelected = true;
                         }
                         else sampleIndex = static_cast<int>(floor(0.5 +static_cast<float>(samplePart) / static_cast<float>(Xstep)) * downSampling);
-                        if(sampleIndex > nbSamples) sampleIndex = nbSamplesToDraw;
+                        if (sampleIndex > nbSamples) sampleIndex = nbSamplesToDraw;
                     }
                 }
 
-                if(mode == DRAW_LINE && x >= (X0 + groupIndex * Xshift)){
+                if (mode == DRAW_LINE && x >= (X0 + groupIndex * Xshift)){
                     linePositions.clear();
                     previousDragAbscissa = 0;
                     lastClickAbscissa = x;
@@ -2564,10 +2567,10 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         linePositions.append(X0 + i * Xshift + static_cast<int>(0.5 + (static_cast<float>(sampleIndex) / downSampling)));
                     }
                 }
-                else if(mode == ADD_EVENT && x >= (X0 + groupIndex * Xshift)){
+                else if (mode == ADD_EVENT && x >= (X0 + groupIndex * Xshift)){
                     newEventPosition = sampleIndex;
                 }
-                else if(mode == SELECT_EVENT && x >= (X0 + groupIndex * Xshift)){
+                else if (mode == SELECT_EVENT && x >= (X0 + groupIndex * Xshift)){
                     lastClickAbscissa = x;
                     int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
                     QMap<QString, QList<int> >::Iterator iterator;
@@ -2575,14 +2578,14 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         QList<int> eventList = iterator.value();
                         QString providerName = iterator.key();
 
-                        if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+                        if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
                         Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
                         Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
                         int nbEvents = currentData.nbOfColumns();
                         for(int i = 1; i <= nbEvents;++i){
                             dataType index = currentData(1,i);
                             int eventId = currentIds(1,i);
-                            if(eventList.contains(eventId) && abs(index - sampleIndex) <= difference){
+                            if (eventList.contains(eventId) && abs(index - sampleIndex) <= difference){
                                 difference = abs(index - sampleIndex);
                                 selectedEvent.first = providerName;
                                 selectedEvent.second = eventId;
@@ -2605,9 +2608,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     int channelId = channelIds[0];
                     int channelIndex = 1;
                     //look up for the first channel which is not skipped
-                    if(skippedChannels.contains(channelId)){
+                    if (skippedChannels.contains(channelId)){
                         for(int i = 1; i < currentNbChannels; ++i){
-                            if(!skippedChannels.contains(i)){
+                            if (!skippedChannels.contains(i)){
                                 channelId = channelIds[i];
                                 channelIndex = i + 1;
                                 break;
@@ -2625,20 +2628,20 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         channelId = channelIds[i];
                         position = -y + channelOffsets[channelId] - static_cast<long>(data(sampleIndex,channelId + 1) * channelFactors[channelId]);
 
-                        if(abs(current.y() - position) < difference && !skippedChannels.contains(channelId)){
+                        if (abs(current.y() - position) < difference && !skippedChannels.contains(channelId)){
                             difference = abs(current.y() - position);
                             selectedChannel = channelId;
                         }
                         y -= Yshift;
                     }
 
-                    if(mode == SELECT){
+                    if (mode == SELECT){
                         //If there is not modificator key and selectedChannels does not already contain the selectedChannel
                         //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
                         //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
-                        if(!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
+                        if (!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
                             //if the channel is skipped, deselect all the channels (clear selectedChannels)
-                            if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
+                            if (!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
                                 for(it = selectedChannels.begin();it != selectedChannels.end();++it)
@@ -2647,15 +2650,15 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                             else{
                                 selectedChannels.removeAll(selectedChannel);
-                                if(!selectedChannels.isEmpty()) alreadySelected = true;
+                                if (!selectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 
                         //Check the modificator keys
-                        if(event->modifiers() & Qt::ControlModifier){
+                        if (event->modifiers() & Qt::ControlModifier){
                             //if the channel is skipped, do not do anything
-                            if(!skippedChannels.contains(selectedChannel)){
-                                if(selectedChannels.contains(selectedChannel)){
+                            if (!skippedChannels.contains(selectedChannel)){
+                                if (selectedChannels.contains(selectedChannel)){
                                     selectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
@@ -2665,15 +2668,15 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 }
                             }
                         }
-                        else if((event->modifiers() & Qt::ShiftModifier) && !selectedChannels.isEmpty()){
+                        else if ((event->modifiers() & Qt::ShiftModifier) && !selectedChannels.isEmpty()){
                             //take all the channels, not skipped of groupId with a label ordinate in the range defined by the label ordinate of the last
                             //selected channel and the one of the currently selected channel.
-                            if(labelSelected){
+                            if (labelSelected){
                                 int previousChannelId = selectedChannels[selectedChannels.size() - 1];
                                 //If the prevously selected channel is not in the same group, only select the currently selected.
                                 //No cross group selection is done.
-                                if(!channelIds.contains(previousChannelId)){
-                                    if(!skippedChannels.contains(selectedChannel)){
+                                if (!channelIds.contains(previousChannelId)){
+                                    if (!skippedChannels.contains(selectedChannel)){
                                         selectedChannels.append(selectedChannel);
                                         currentlySelectedChannels.append(selectedChannel);
                                     }
@@ -2683,7 +2686,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                     int currentOrdinate = channelsStartingOrdinate[selectedChannel];
                                     int min = previousOrdinate;
                                     int max = currentOrdinate;
-                                    if(currentOrdinate < previousOrdinate){
+                                    if (currentOrdinate < previousOrdinate){
                                         min = currentOrdinate;
                                         max = previousOrdinate;
                                     }
@@ -2691,8 +2694,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                     for(int i = 0; i < currentNbChannels; ++i){
                                         channelId = channelIds[i];
                                         int ordinate = channelsStartingOrdinate[channelId];
-                                        if(ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
-                                            if(!skippedChannels.contains(selectedChannel)){
+                                        if (ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
+                                            if (!skippedChannels.contains(selectedChannel)){
                                                 selectedChannels.append(channelId);
                                                 currentlySelectedChannels.append(channelId);
                                             }
@@ -2705,7 +2708,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                         }
                         else{
-                            if(!skippedChannels.contains(selectedChannel)){
+                            if (!skippedChannels.contains(selectedChannel)){
                                 selectedChannels.append(selectedChannel);
                                 currentlySelectedChannels.append(selectedChannel);
                             }
@@ -2713,7 +2716,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         emit channelsSelected(selectedChannels);
                     }//end of mode == SELECT
                     //mode == MEASURE
-                    else if(mode == MEASURE){
+                    else if (mode == MEASURE){
                         channelforVoltageComputation = selectedChannel;
                         startingIndex = x;
                     }
@@ -2725,20 +2728,20 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 int x = (current.x() - static_cast<int>(borderX));
                 int sampleIndex;
                 //on the left side of the display.
-                if(x <= 0) sampleIndex = 1;
+                if (x <= 0) sampleIndex = 1;
                 //take the last sample of the downSampling one at the same abscissa
                 else sampleIndex = static_cast<int>(floor(0.5 +static_cast<float>(x) / static_cast<float>(Xstep)) * downSampling);
 
-                if(mode == DRAW_LINE && x >= 0){
+                if (mode == DRAW_LINE && x >= 0){
                     linePositions.clear();
                     previousDragAbscissa = 0;
                     lastClickAbscissa = x;
                     linePositions.append(static_cast<int>(0.5 + (static_cast<float>(sampleIndex) / downSampling)));
                 }
-                else if(mode == ADD_EVENT && x >= 0){
+                else if (mode == ADD_EVENT && x >= 0){
                     newEventPosition = sampleIndex;
                 }
-                else if(mode == SELECT_EVENT && x >= 0){
+                else if (mode == SELECT_EVENT && x >= 0){
                     lastClickAbscissa = x;
                     int difference = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits); //nbSamples as a starting point
                     QMap<QString, QList<int> >::Iterator iterator;
@@ -2746,14 +2749,14 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         QList<int> eventList = iterator.value();
                         QString providerName = iterator.key();
 
-                        if(eventList.size() == 0 || eventsData[providerName] == 0) continue;
+                        if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
                         Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
                         Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
                         int nbEvents = currentData.nbOfColumns();
                         for(int i = 1; i <= nbEvents;++i){
                             dataType index = currentData(1,i);
                             int eventId = currentIds(1,i);
-                            if(eventList.contains(eventId) && abs(index - sampleIndex) <= difference){
+                            if (eventList.contains(eventId) && abs(index - sampleIndex) <= difference){
                                 difference = abs(index - sampleIndex);
                                 selectedEvent.first = providerName;
                                 selectedEvent.second = eventId;
@@ -2777,12 +2780,12 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     int channelIndex = 1;
                     int startingGroupIndex = 0;
                     //look up for the first channel which is not skipped.
-                    if(skippedChannels.contains(channelId)){
+                    if (skippedChannels.contains(channelId)){
                         for(uint j = 0; j<groupIds.size();++j){
                             QList<int> channelIds = shownGroupsChannels[groupIds[j]];
                             int currentNbChannels = channelIds.size();
                             for(int i = 0; i < currentNbChannels; ++i){
-                                if(!skippedChannels.contains(channelIds[i])){
+                                if (!skippedChannels.contains(channelIds[i])){
                                     channelId = channelIds[i];
                                     channelIndex = i + 1;
                                     startingGroupIndex = j;
@@ -2790,7 +2793,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 }
                                 y -= Yshift;
                             }
-                            if(!skippedChannels.contains(channelId))  break;
+                            if (!skippedChannels.contains(channelId))  break;
                         }
                     }
 
@@ -2803,12 +2806,12 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         QList<int> channelIds = shownGroupsChannels[groupIds[j]];
                         int currentNbChannels = channelIds.size();
                         int i = 0;
-                        if(j == startingGroupIndex) i = channelIndex;
+                        if (j == startingGroupIndex) i = channelIndex;
                         for(; i < currentNbChannels; ++i){
                             channelId = channelIds[i];
                             position = -y + channelOffsets[channelId] - static_cast<long>(data(sampleIndex,channelId + 1) * channelFactors[channelId]);
 
-                            if(abs(current.y() - position) < difference && !skippedChannels.contains(channelId)){
+                            if (abs(current.y() - position) < difference && !skippedChannels.contains(channelId)){
                                 difference = abs(current.y() - position);
                                 selectedChannel = channelId;
                             }
@@ -2817,13 +2820,13 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         y -= YGroupSpace;
                     }
 
-                    if(mode == SELECT){
+                    if (mode == SELECT){
                         //If there is not modificator key and selectedChannels does not already contain the selectedChannel
                         //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
                         //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
-                        if(!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
+                        if (!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
                             //if the channel is skipped, deselect all the channels (clear selectedChannels)
-                            if(!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
+                            if (!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
 
@@ -2833,14 +2836,14 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                             else{
                                 selectedChannels.removeAll(selectedChannel);
-                                if(!selectedChannels.isEmpty()) alreadySelected = true;
+                                if (!selectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 
-                        if(event->modifiers() & Qt::ControlModifier){
+                        if (event->modifiers() & Qt::ControlModifier){
                             //if the channel is skipped, do not do anything
-                            if(!skippedChannels.contains(selectedChannel)){
-                                if(selectedChannels.contains(selectedChannel)){
+                            if (!skippedChannels.contains(selectedChannel)){
+                                if (selectedChannels.contains(selectedChannel)){
                                     selectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
@@ -2850,16 +2853,16 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 }
                             }
                         }
-                        else if((event->modifiers() & Qt::ShiftModifier) && selectedChannels.size() != 0){
+                        else if ((event->modifiers() & Qt::ShiftModifier) && selectedChannels.size() != 0){
                             //take all the channels of groupId with a label ordinate in the range defined by the label ordinate of the last
                             //selected channel and the one of the currently selected channel.
-                            if(x < 0){
+                            if (x < 0){
                                 int previousChannelId = selectedChannels[selectedChannels.size() - 1];
                                 int previousOrdinate = channelsStartingOrdinate[previousChannelId];
                                 int currentOrdinate = channelsStartingOrdinate[selectedChannel];
                                 int min = previousOrdinate;
                                 int max = currentOrdinate;
-                                if(currentOrdinate < previousOrdinate){
+                                if (currentOrdinate < previousOrdinate){
                                     min = currentOrdinate;
                                     max = previousOrdinate;
                                 }
@@ -2867,8 +2870,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 for(int i = 0; i < currentNbChannels; ++i){
                                     channelId = shownChannels[i];
                                     int ordinate = channelsStartingOrdinate[channelId];
-                                    if(ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
-                                        if(!skippedChannels.contains(selectedChannel)){
+                                    if (ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
+                                        if (!skippedChannels.contains(selectedChannel)){
                                             selectedChannels.append(channelId);
                                             currentlySelectedChannels.append(channelId);
                                         }
@@ -2880,7 +2883,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                         }
                         else{
-                            if(!skippedChannels.contains(selectedChannel)){
+                            if (!skippedChannels.contains(selectedChannel)){
                                 selectedChannels.append(selectedChannel);
                                 currentlySelectedChannels.append(selectedChannel);
                             }
@@ -2888,7 +2891,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         emit channelsSelected(selectedChannels);
                     }//end of mode == SELECT
                     //mode == MEASURE
-                    else if(mode == MEASURE){
+                    else if (mode == MEASURE){
                         channelforVoltageComputation = selectedChannel;
                         startingIndex = x;
                     }
@@ -2897,21 +2900,21 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         startingIndex = x;
                 }//mode != SELECT_EVENT
             }//single column
-            if(mode == SELECT){
+            if (mode == SELECT){
                 mDeselectedChannels.clear();
                 mSelectedChannels.clear();
                 mSelectedChannels = currentlySelectedChannels;
                 mDeselectedChannels = deselectedChannels;
                 update();
             }
-            else if(mode == SELECT_EVENT){
-                if(!deselectedEvent.first.isEmpty())
+            else if (mode == SELECT_EVENT){
+                if (!deselectedEvent.first.isEmpty())
                     drawEvent(deselectedEvent.first,deselectedEvent.second,deselectedEventIndex,false);
-                if(!selectedEvent.first.isEmpty())
+                if (!selectedEvent.first.isEmpty())
                     drawEvent(selectedEvent.first,selectedEvent.second,selectedEventPosition[0],true);
             }
-            else if(mode == DRAW_LINE){
-                if(!linePositions.isEmpty()) {
+            else if (mode == DRAW_LINE){
+                if (!linePositions.isEmpty()) {
                     previousDragAbscissa = lastClickAbscissa;
                     initialDragLine = true;
                     update();
@@ -2924,11 +2927,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
 
 
 void TraceView::mouseReleaseEvent(QMouseEvent* event){
-    if(mode == SELECT){
+    if (mode == SELECT){
         mMoveSelectChannel = false;
-        if(event->button() & Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
+        if (event->button() & Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
             //There was a drag of channels
-            if(previousDragOrdinate != 0){
+            if (previousDragOrdinate != 0){
                 int delta = previousDragOrdinate - lastClickOrdinate;
                 QList<int>::iterator channelIterator;
                 for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator)
@@ -2941,7 +2944,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             }
             else{
                 //deselect all the channels except the last one.
-                if(alreadySelected){
+                if (alreadySelected){
                     int channelId = selectedChannels[selectedChannels.size() - 1];
                     selectedChannels.removeAll(channelId);
 
@@ -2957,9 +2960,9 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 }
             }
         }
-    } else if(mode == SELECT_EVENT && (event->button() & Qt::LeftButton)){
+    } else if (mode == SELECT_EVENT && (event->button() & Qt::LeftButton)){
         //There was a drag of an event
-        if(!startEventDragging){
+        if (!startEventDragging){
             int delta = previousDragAbscissa - lastClickAbscissa;
 
             Array<dataType>& currentData = static_cast<EventData*>(eventsData[selectedEvent.first])->getTimes();
@@ -2968,9 +2971,9 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             for(int i = 1; i <= nbEvents;++i){
                 dataType index = currentData(1,i);
                 int eventId = currentIds(1,i);
-                if(eventId == selectedEvent.second && index == selectedEventPosition[0]){
+                if (eventId == selectedEvent.second && index == selectedEventPosition[0]){
                     currentData(1,i) += static_cast<dataType>(delta * downSampling);
-                    if(currentData(1,i) < 0) currentData(1,i) = 0;
+                    if (currentData(1,i) < 0) currentData(1,i) = 0;
                     double samplingRate = static_cast<double>(tracesProvider.getSamplingRate()) / 1000.0;//in eventProvider the time is in miliseconds
                     double previousTime = (static_cast<double>(index) / samplingRate) + static_cast<double>(startTime);
                     double newTime = (static_cast<double>(currentData(1,i)) / samplingRate) + static_cast<double>(startTime);
@@ -2990,13 +2993,13 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             //Redraw
             update();
         }
-    } else if(mode == ADD_EVENT && (event->button() & Qt::LeftButton)){
-        if(eventDescriptionToCreate.isEmpty()){
+    } else if (mode == ADD_EVENT && (event->button() & Qt::LeftButton)){
+        if (eventDescriptionToCreate.isEmpty()){
             QMessageBox::critical (this, tr("Unselected description type!"),tr("In order to add an event you have to choose an event description first!"));
             return;
         }
         //The location for the new event has been selected
-        if(newEventPosition != -1){
+        if (newEventPosition != -1){
             double samplingRate = static_cast<double>(tracesProvider.getSamplingRate()) / 1000.0;//in eventProvider the time is in miliseconds
             double time = (static_cast<double>(newEventPosition) / samplingRate) + static_cast<double>(startTime);
 
@@ -3010,20 +3013,20 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         }
     }
 
-    if(mode == ZOOM && (event->button() & Qt::LeftButton)){
+    if (mode == ZOOM && (event->button() & Qt::LeftButton)){
         //Zoom out
-        if(event->modifiers() & Qt::ShiftModifier){
+        if (event->modifiers() & Qt::ShiftModifier){
             previousWindow = (QRect)window;
             zoomOut = true;
             zoomed = true;
             /*QRect r((QRect)window);
    QPoint click;
-   if(r.left() != 0) click = viewportToWorld(e->x(),e->y());
+   if (r.left() != 0) click = viewportToWorld(e->x(),e->y());
    else click = viewportToWorld(e->x() - xMargin,e->y());
-   if(click.x() < 0) click.setX(0);*/
+   if (click.x() < 0) click.setX(0);*/
         }
-        else if(!doubleClick){
-            if(!maxZoomReached) previousWindow = (QRect)window;
+        else if (!doubleClick){
+            if (!maxZoomReached) previousWindow = (QRect)window;
             zoomed = true;
         }
 
@@ -3033,15 +3036,15 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         computeChannelDisplayGain();
         drawContentsMode = REDRAW;
         update();
-    } else if(mode == MEASURE && (event->button() & Qt::LeftButton)){
+    } else if (mode == MEASURE && (event->button() & Qt::LeftButton)){
         //The parent implementation takes care of the rubber band
         BaseFrame::mouseReleaseEvent(event);
-    } else if(mode == SELECT_TIME && (event->button() & Qt::LeftButton)){
+    } else if (mode == SELECT_TIME && (event->button() & Qt::LeftButton)){
         //The parent implementation takes care of the rubber band
         BaseFrame::mouseReleaseEvent(event);
         QPoint current;
         QRect r((QRect)window);
-        if(r.left() != 0) current = viewportToWorld(event->x(),event->y());
+        if (r.left() != 0) current = viewportToWorld(event->x(),event->y());
         else current = viewportToWorld(event->x() - xMargin,event->y());
         int x = (current.x() - static_cast<int>(borderX));
 
@@ -3051,16 +3054,16 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
         int startingTime;
         int columnNb = 0;
         //starting time
-        if(startingIndex < 0){
+        if (startingIndex < 0){
             columnNb = 1;
             relativeStartingTime = 0;
         } else {
-            if(multiColumns){
+            if (multiColumns){
                 //left margin is visible
-                if(r.left() == 0){
+                if (r.left() == 0){
                     relativeStartingTime = static_cast<float>(fmod(startingIndex,static_cast<float>(Xshift)))
                             /  static_cast<float>(Xstep) * timeStep;
-                    if(startingIndex < Xshift) columnNb = 1;
+                    if (startingIndex < Xshift) columnNb = 1;
                     else columnNb = ((startingIndex - (Xshift)) / Xshift) + 2;
                 }
                 //left margin is invisible
@@ -3068,7 +3071,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
                     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
                     int shift = (nbSamplesToDraw - 1) * Xstep;
-                    if(startingIndex < shift){
+                    if (startingIndex < shift){
                         relativeStartingTime = static_cast<float>(startingIndex) / static_cast<float>(Xstep) * timeStep;
                         columnNb = 1;
                     }
@@ -3084,29 +3087,29 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 relativeStartingTime = static_cast<float>(startingIndex) / static_cast<float>(Xstep) * timeStep;
             }
             //between columns
-            if(relativeStartingTime > timeFrameWidth) relativeStartingTime = 0;
+            if (relativeStartingTime > timeFrameWidth) relativeStartingTime = 0;
         }
         startingTime = startTime + static_cast<int>(0.5 + relativeStartingTime);
 
         //ending time
-        if(x < 0){
+        if (x < 0){
             startingTime = startTime;
             relativeEndingTime = relativeStartingTime;
             relativeStartingTime = 0;
         } else {
-            if(multiColumns){
+            if (multiColumns){
                 //left margin is visible
-                if(r.left() == 0){
+                if (r.left() == 0){
                     relativeEndingTime = static_cast<float>(fmod(x,static_cast<float>(Xshift)))
                             /  static_cast<float>(Xstep) * timeStep;
                     int currentColumnNb;
-                    if(x < Xshift) currentColumnNb = 1;
+                    if (x < Xshift) currentColumnNb = 1;
                     else currentColumnNb = ((x - (Xshift)) / Xshift) + 2;
-                    if(currentColumnNb == columnNb && relativeEndingTime < relativeStartingTime){
+                    if (currentColumnNb == columnNb && relativeEndingTime < relativeStartingTime){
                         startingTime = startTime + static_cast<int>(0.5 + relativeEndingTime);
                     }
-                    if(currentColumnNb > columnNb && relativeStartingTime != 0) relativeEndingTime = timeFrameWidth;
-                    if(currentColumnNb < columnNb){//the user went backwards
+                    if (currentColumnNb > columnNb && relativeStartingTime != 0) relativeEndingTime = timeFrameWidth;
+                    if (currentColumnNb < columnNb){//the user went backwards
                         startingTime = startTime;
                         relativeEndingTime = relativeStartingTime;
                         relativeStartingTime = 0;
@@ -3117,14 +3120,14 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
                     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
                     int shift = (nbSamplesToDraw - 1) * Xstep;
-                    if(x < shift){
+                    if (x < shift){
                         relativeEndingTime = static_cast<float>(x) / static_cast<float>(Xstep) * timeStep;
-                        if(columnNb != 1){//the user went backwards
+                        if (columnNb != 1){//the user went backwards
                             startingTime = startTime;
                             relativeEndingTime = relativeStartingTime;
                             relativeStartingTime = 0;
                         }
-                        if(columnNb == 1 && relativeEndingTime < relativeStartingTime){//the user went backwards on the first column
+                        if (columnNb == 1 && relativeEndingTime < relativeStartingTime){//the user went backwards on the first column
                             startingTime = startTime + static_cast<int>(0.5 + relativeEndingTime);
                         }
                     }
@@ -3133,11 +3136,11 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                                 /  static_cast<float>(Xstep) * timeStep;
 
                         int currentColumnNb = ((x - (Xshift - XGroupSpace)) / Xshift) + 2;
-                        if(currentColumnNb == columnNb && relativeEndingTime < relativeStartingTime){
+                        if (currentColumnNb == columnNb && relativeEndingTime < relativeStartingTime){
                             startingTime = startTime + static_cast<int>(0.5 + relativeEndingTime);
                         }
-                        if(currentColumnNb > columnNb && relativeStartingTime != 0) relativeEndingTime = timeFrameWidth;
-                        if(currentColumnNb < columnNb){//the user went backwards
+                        if (currentColumnNb > columnNb && relativeStartingTime != 0) relativeEndingTime = timeFrameWidth;
+                        if (currentColumnNb < columnNb){//the user went backwards
                             startingTime = startTime;
                             relativeEndingTime = relativeStartingTime;
                             relativeStartingTime = 0;
@@ -3148,23 +3151,23 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             //single column
             else{
                 relativeEndingTime = static_cast<float>(x) / static_cast<float>(Xstep) * timeStep;
-                if(relativeEndingTime < relativeStartingTime){
+                if (relativeEndingTime < relativeStartingTime){
                     startingTime = startTime + static_cast<int>(0.5 + relativeEndingTime);
                 }
             }
             //between columns
-            if(relativeEndingTime > timeFrameWidth) relativeEndingTime = timeFrameWidth;
+            if (relativeEndingTime > timeFrameWidth) relativeEndingTime = timeFrameWidth;
         }
 
         //Compute the duration
         int duration = abs(static_cast<int>(0.5 + relativeEndingTime) - static_cast<int>(0.5 + relativeStartingTime));
         //The user drag over another column
-        if(duration > timeFrameWidth) duration = timeFrameWidth;
+        if (duration > timeFrameWidth) duration = timeFrameWidth;
 
         emit setStartAndDuration(startingTime,duration);
-    } else if(mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
+    } else if (mode == DRAW_LINE && (event->button() & Qt::LeftButton)){
         //erase the line
-        if(!linePositions.isEmpty()) {
+        if (!linePositions.isEmpty()) {
             initialDragLine = false;
             previousDragAbscissa = 0;
             linePositions.clear();
@@ -3174,13 +3177,13 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 }
 
 void TraceView::selectChannels(const QList<int>& selectedIds){
-    if((selectedChannels.size() == 0 && selectedIds.size() == 0)) return;
+    if ((selectedChannels.size() == 0 && selectedIds.size() == 0)) return;
 
     //Unhighlight the currently selected traces which are not selected any more
     mDeselectedChannels.clear();
     QList<int>::iterator it;
     for(it = selectedChannels.begin();it != selectedChannels.end();++it)
-        if(!selectedIds.contains(*it) && shownChannels.contains(*it))
+        if (!selectedIds.contains(*it) && shownChannels.contains(*it))
             mDeselectedChannels.append(*it);
 
 
@@ -3188,9 +3191,9 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
     mSelectedChannels.clear();
     QList<int>::const_iterator iterator;
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
-        if(!selectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
+        if (!selectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
             //if the channel is skipped, do no draw it
-            if(!skippedChannels.contains(*iterator))
+            if (!skippedChannels.contains(*iterator))
                 mSelectedChannels.append(*iterator);
         }
     }
@@ -3200,7 +3203,7 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
 
     //the skipped channels are not selected
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
-        if(shownChannels.contains(*iterator) && !skippedChannels.contains(*iterator))
+        if (shownChannels.contains(*iterator) && !skippedChannels.contains(*iterator))
             selectedChannels.append(*iterator);
     }
 
@@ -3210,7 +3213,7 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
 
 void TraceView::reset(){
     dataReady = false;
-    if(multiColumns) columnDisplayChanged = true;
+    if (multiColumns) columnDisplayChanged = true;
     selectedChannels.clear();
 
     //Retreive the new information
@@ -3258,7 +3261,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     long barLengthInMs = static_cast<long>(floor(0.5 + static_cast<float>(static_cast<float>(timeFrameWidth) / static_cast<float>(20))));
 
     float width;
-    if(!multiColumns) width = static_cast<float>(viewport.width());
+    if (!multiColumns) width = static_cast<float>(viewport.width());
     else width = static_cast<float>(worldToViewportWidth(Xshift) - worldToViewportWidth(XGroupSpace));
 
     long barLengthInpx = static_cast<long>(floor(0.5 + (width / static_cast<float>(timeFrameWidth)) * static_cast<float>(barLengthInMs)));
@@ -3272,23 +3275,23 @@ void TraceView::drawCalibrationScale(QPainter& painter){
 
 void TraceView::correctZoom(QRect& r){
 
-    if(zoomed && firstZoom && downSampling == 1){
+    if (zoomed && firstZoom && downSampling == 1){
         zoomed = false;
         firstZoom = false;
         initialWindow = previousWindow;
         initialDownSampling = downSampling;
-        if(multiColumns){
+        if (multiColumns){
             initialXshift = Xshift;
             initialXGroupSpace = XGroupSpace;
             initialTraceWidth = traceWidth;
         }
     }
-    /* if(zoomed && !firstZoom && zoomOut){
+    /* if (zoomed && !firstZoom && zoomOut){
      qDebug()<<" zoomed && !firstZoom && zoomOut r.width() "<<r.width();
     zoomOut = false;
     zoomed = false;
-    if(zoomFactor != 1){
-     if(multiColumns){
+    if (zoomFactor != 1){
+     if (multiColumns){
      }
      else{
       zoomed = false;
@@ -3306,7 +3309,7 @@ void TraceView::correctZoom(QRect& r){
 
 
 
-      if(downSampling < 1) downSampling = 1;
+      if (downSampling < 1) downSampling = 1;
       int newWidth = static_cast<int>(2 * windowWidth * previousDownSampling/ downSampling) * Xstep;
       int newLeft = 0;//static_cast<int>(static_cast<float>(r.left()) * previousDownSampling / downSampling) * Xstep;
       timeStep = timeStepUnit * downSampling;
@@ -3321,8 +3324,8 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
      }
     }
    }*/
-    else if(zoomed && downSampling == 1 && !doubleClick){
-        if(maxZoomReached){
+    else if (zoomed && downSampling == 1 && !doubleClick){
+        if (maxZoomReached){
             int newLeft = r.left();
             r = QRect(previousWindow);
             r.setLeft(newLeft);
@@ -3331,11 +3334,11 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
             window = ZoomWindow(r);
             previousWindow = QRect(r);
         }
-        else if(zoomFactor != 0){
+        else if (zoomFactor != 0){
             int windowWidth = r.width();
             zoomFactor *= static_cast<float>(initialWindow.width())/static_cast<float>(windowWidth);
 
-            if(zoomFactor > 22.73){
+            if (zoomFactor > 22.73){
                 zoomFactor /= static_cast<float>(initialWindow.width())/static_cast<float>(r.width());
                 float final = 22.73 / zoomFactor;
                 windowWidth = static_cast<int>(static_cast<float>(initialWindow.width())/ final);
@@ -3349,27 +3352,27 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
             }
         }
     }
-    else if(zoomed && downSampling != 1 && !doubleClick){
+    else if (zoomed && downSampling != 1 && !doubleClick){
         zoomed = false;
         int windowWidth = r.width();
 
-        if(firstZoom){
+        if (firstZoom){
             firstZoom = false;
             initialWindow = previousWindow;
             initialDownSampling = downSampling;
 
             zoomFactor = static_cast<float>(initialWindow.width())/static_cast<float>(windowWidth);
-            if(multiColumns){
+            if (multiColumns){
                 initialXshift = Xshift;
                 initialXGroupSpace = XGroupSpace;
                 initialTraceWidth = traceWidth;
             }
         }
-        else if(!maxZoomReached){
+        else if (!maxZoomReached){
             zoomFactor *= static_cast<float>(initialWindow.width())/static_cast<float>(windowWidth);
         }
 
-        if(maxZoomReached){
+        if (maxZoomReached){
             int newLeft = r.left();
             r = QRect(previousWindow);
             r.setLeft(newLeft);
@@ -3379,7 +3382,7 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
             previousWindow = QRect(r);
         }
         else{
-            if(zoomFactor > 22.73){
+            if (zoomFactor > 22.73){
                 zoomFactor /= static_cast<float>(initialWindow.width())/static_cast<float>(r.width());
                 float final = 22.73 / zoomFactor;
                 windowWidth = static_cast<int>(static_cast<float>(initialWindow.width())/ final);
@@ -3394,12 +3397,12 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
 
             }
 
-            if(multiColumns){
+            if (multiColumns){
                 float factor = static_cast<float>(previousWindow.width())/static_cast<float>(windowWidth);
                 float previousDownSampling = downSampling;
 
                 downSampling = downSampling/factor;
-                if(downSampling < 1) downSampling = 1;
+                if (downSampling < 1) downSampling = 1;
 
                 int newWidth;
                 int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
@@ -3410,14 +3413,14 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                 //int shift = traceWidth * Xstep + previousXGroupSpace;
                 int newLeft;
 
-                if(r.left() == 0){
+                if (r.left() == 0){
                     newLeft = 0;
                     //Compute the width of the window
-                    if(windowWidth <= traceWidth) newWidth = static_cast<int>((windowWidth) * previousDownSampling/ downSampling) * Xstep;
+                    if (windowWidth <= traceWidth) newWidth = static_cast<int>((windowWidth) * previousDownSampling/ downSampling) * Xstep;
                     else{
                         int nbGroupParts = static_cast<int>(windowWidth / Xshift);
                         int secondPart = windowWidth - (nbGroupParts * Xshift);
-                        if(secondPart <= traceWidth){
+                        if (secondPart <= traceWidth){
                             newWidth = static_cast<int>((windowWidth - (nbGroupParts * previousXGroupSpace)) * previousDownSampling/ downSampling) * Xstep
                                     + (nbGroupParts * XGroupSpace);
                         }
@@ -3430,20 +3433,20 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                 }
                 else{
                     int groupIndex;
-                    if(r.left() <= Xshift){
+                    if (r.left() <= Xshift){
                         groupIndex = 0;
-                        if(r.left() > traceWidth){
+                        if (r.left() > traceWidth){
                             int marginPart =  static_cast<int>(XGroupSpace * static_cast<float>(r.left() - traceWidth) / static_cast<float>(previousXGroupSpace));
                             newLeft = static_cast<int>(static_cast<float>(previousNbSamplesToDraw) * previousDownSampling / downSampling) * Xstep + marginPart;
                             //Compute the width of the window
                             int withoutFirstMarginPart = static_cast<int>(windowWidth - (previousXGroupSpace - (r.left() - traceWidth)));
-                            if(withoutFirstMarginPart <= traceWidth)
+                            if (withoutFirstMarginPart <= traceWidth)
                                 newWidth = static_cast<int>(static_cast<float>(withoutFirstMarginPart) * previousDownSampling/ downSampling) * Xstep
                                         + (XGroupSpace - marginPart);
                             else{
                                 int nbGroupParts = static_cast<int>(withoutFirstMarginPart / Xshift);
                                 int secondPart = withoutFirstMarginPart - (nbGroupParts * Xshift);
-                                if(secondPart <= traceWidth){
+                                if (secondPart <= traceWidth){
                                     newWidth = static_cast<int>(static_cast<float>(withoutFirstMarginPart - (nbGroupParts * previousXGroupSpace)) * previousDownSampling/ downSampling) * Xstep
                                             + (nbGroupParts * XGroupSpace) + (XGroupSpace - marginPart);
                                 }
@@ -3459,13 +3462,13 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                             newLeft = static_cast<int>(static_cast<float>(r.left()) * previousDownSampling / downSampling) * Xstep;
                             //Compute the width of the window
                             int firstPart = traceWidth - r.left();
-                            if(windowWidth <= firstPart){
+                            if (windowWidth <= firstPart){
                                 newWidth =  static_cast<int>((static_cast<float>(windowWidth) * previousDownSampling/ downSampling)) * Xstep;
                             }
                             else{
                                 int nbGroupParts = static_cast<int>((windowWidth - firstPart) / Xshift);
                                 int secondPart = windowWidth - firstPart - (nbGroupParts * Xshift);
-                                if(secondPart <= previousXGroupSpace){
+                                if (secondPart <= previousXGroupSpace){
                                     int marginPart = static_cast<int>(XGroupSpace * static_cast<float>(secondPart) / static_cast<float>(previousXGroupSpace));
                                     newWidth =  static_cast<int>((static_cast<float>(windowWidth - (nbGroupParts * previousXGroupSpace) - secondPart) * previousDownSampling/ downSampling)) * Xstep
                                             + (nbGroupParts * XGroupSpace) + marginPart;
@@ -3481,17 +3484,17 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                     else{
                         groupIndex = ((r.left() - Xshift) / Xshift) + 1;
                         int samplePart = r.left() - (groupIndex * Xshift);
-                        if(samplePart <= traceWidth){
+                        if (samplePart <= traceWidth){
                             newLeft = static_cast<int>(static_cast<float>(r.left() - (groupIndex * previousXGroupSpace)) * previousDownSampling / downSampling) * Xstep
                                     + (groupIndex * XGroupSpace);
                             //Compute the width of the window
-                            if(windowWidth <= (traceWidth - samplePart)){
+                            if (windowWidth <= (traceWidth - samplePart)){
                                 newWidth =  static_cast<int>((static_cast<float>(windowWidth) * previousDownSampling/ downSampling)) * Xstep;
                             }
                             else{
                                 int nbGroupParts = static_cast<int>((windowWidth - (traceWidth - samplePart)) / Xshift);
                                 int secondPart = windowWidth - (traceWidth - samplePart) - (nbGroupParts * Xshift);
-                                if(secondPart <= previousXGroupSpace){
+                                if (secondPart <= previousXGroupSpace){
                                     int marginPart = static_cast<int>(XGroupSpace * static_cast<float>(secondPart) / static_cast<float>(previousXGroupSpace));
                                     newWidth =  static_cast<int>((static_cast<float>(windowWidth - (nbGroupParts * previousXGroupSpace) - secondPart) * previousDownSampling/ downSampling)) * Xstep
                                             + (nbGroupParts * XGroupSpace) + marginPart;
@@ -3511,7 +3514,7 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                             int firstMarginPart = static_cast<int>(XGroupSpace * static_cast<float>(firstMargin) / static_cast<float>(previousXGroupSpace));
                             int nbGroupParts = static_cast<int>((windowWidth - firstMargin) / Xshift);
                             int secondPart = windowWidth - firstMargin - (nbGroupParts * Xshift);
-                            if(secondPart <= traceWidth){
+                            if (secondPart <= traceWidth){
                                 newWidth = static_cast<int>(static_cast<float>(windowWidth - firstMargin - (nbGroupParts * previousXGroupSpace)) * previousDownSampling/ downSampling) * Xstep
                                         + (nbGroupParts * XGroupSpace) + firstMarginPart;
                             }
@@ -3541,7 +3544,7 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
                 float previousDownSampling = downSampling;
 
                 downSampling = downSampling/factor;
-                if(downSampling < 1) downSampling = 1;
+                if (downSampling < 1) downSampling = 1;
                 int newWidth = static_cast<int>(windowWidth * previousDownSampling/ downSampling) * Xstep;
                 int newLeft = static_cast<int>(static_cast<float>(r.left()) * previousDownSampling / downSampling) * Xstep;
                 timeStep = timeStepUnit * downSampling;
@@ -3553,7 +3556,7 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
             }
         }
     }
-    else if(zoomed && doubleClick){
+    else if (zoomed && doubleClick){
         setCursor(zoomCursor);
         zoomed = false;
         maxZoomReached = false;
@@ -3561,7 +3564,7 @@ qDebug()<<" downSampling "<<downSampling<<" newWidth "<<newWidth<<" r.left() "<<
         downSampling = initialDownSampling;
         timeStep = downSampling * timeStepUnit;
 
-        if(multiColumns){
+        if (multiColumns){
             Xshift = initialXshift;
             XGroupSpace = initialXGroupSpace;
             traceWidth = initialTraceWidth;
@@ -3584,7 +3587,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
 
     updateNoneBrowsingClusterList(name,clustersToSkip);
 
-    if(clustersToShow.size() != 0){
+    if (clustersToShow.size() != 0){
         QList<int> clusters;
         QList<int>::iterator shownClustersIterator;
         for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
@@ -3596,7 +3599,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
         clustersData.insert(name,clusterData);
 
         //if the view is the active one, load the cluster data for the current start time and time window
-        if(active){
+        if (active){
             setCursor(Qt::WaitCursor);
             clustersProvider->requestData(startTime,endTime,this,startTimeInRecordingUnits);
         }
@@ -3618,10 +3621,10 @@ void TraceView::removeClusterProvider(const QString &name, bool active){
     providerItemColors.remove(name);
     delete clustersData.take(name);
 
-    if(raster)
+    if (raster)
         updateWindow();
     drawContentsMode = REDRAW;
-    if(active)
+    if (active)
         update();
 }
 
@@ -3631,13 +3634,13 @@ void TraceView::showClusters(const QString &name, const QList<int> &clustersToSh
     clusterData = clustersData[name];
 
     QList<int> clusters;
-    if(clustersToShow.size() != 0){
+    if (clustersToShow.size() != 0){
         QList<int>::ConstIterator shownClustersIterator;
         for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
             clusters.append(*shownClustersIterator);
         }
         selectedClusters.insert(name.toInt(),clusters);
-        if(clusterData == 0){
+        if (clusterData == 0){
             clusterData = new ClusterData();
             clustersData.insert(name,clusterData);
             ClustersProvider* provider = clusterProviders[name];
@@ -3677,7 +3680,7 @@ void TraceView::skipStatusChanged(const QList<int>& skippedChannels){
 
 void TraceView::clusterColorUpdate(QString name,int clusterId,bool active){
     //redraw everything
-    if(active){
+    if (active){
         drawContentsMode = REDRAW ;
         update();
     }
@@ -3687,7 +3690,7 @@ void TraceView::updateWaveformInformation(int nbSamplesBefore, int nbSamplesAfte
     this->nbSamplesBefore = nbSamplesBefore;
     this->nbSamplesAfter = nbSamplesAfter;
 
-    if(active){
+    if (active){
         drawContentsMode = REDRAW ;
         update();
     }
@@ -3700,7 +3703,7 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     //If the left margin is not visible (the user zoomed without taking it in his selection), the viewport and the printer
     //have the same size.
     QRect r((QRect)window);
-    if(r.left() != 0) viewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
+    if (r.left() != 0) viewport = QRect(printPainter.viewport().left(),printPainter.viewport().top(),printPainter.viewport().width(),printPainter.viewport().height());
     else viewport = QRect(printPainter.viewport().left() + xMargin,printPainter.viewport().top(),printPainter.viewport().width() - xMargin,printPainter.viewport().height());
 
     //Enable to draw all the points without down sampling in order to have one line per trace and not a multiple number of small vertical lines
@@ -3720,12 +3723,12 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     //Fill the background with the background color and ensure we draw the same portion of the world than on the screen
     QRect back = QRect(r.left(),r.top(),r.width(),r.height());
     float widthRatio = (static_cast<float>(back.width())/static_cast<float>(width));
-    if(r.left() == 0)
+    if (r.left() == 0)
         back.setLeft(r.left() - static_cast<long>(xMargin * widthRatio));
 
     QColor colorLegendTmp = colorLegend;
     QColor background= palette().color(backgroundRole());
-    if(whiteBackground){
+    if (whiteBackground){
         colorLegend = Qt::black;
         QPalette palette;
         palette.setColor(backgroundRole(), Qt::white);
@@ -3742,15 +3745,15 @@ void TraceView::print(QPainter& printPainter,int width, int height,bool whiteBac
     printPainter.resetMatrix() ;
 
     //Draw channel ids and amplitude on the left side.
-    if(showLabels) drawChannelIdsAndGain(printPainter);
+    if (showLabels) drawChannelIdsAndGain(printPainter);
 
     //Draw the calibration scale
-    if(showCalibrationScale) drawCalibrationScale(printPainter);
+    if (showCalibrationScale) drawCalibrationScale(printPainter);
 
     printPainter.setClipping(false);
 
     //Restore the colors.
-    if(whiteBackground){
+    if (whiteBackground){
         colorLegend = colorLegendTmp;
         QPalette palette;
         palette.setColor(backgroundRole(), background);
@@ -3775,7 +3778,7 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,Ite
 
     updateNoneBrowsingEventList(name,eventsToSkip);
 
-    if(eventsToShow.size() != 0){
+    if (eventsToShow.size() != 0){
         QList<int> events;
         QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
@@ -3787,7 +3790,7 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,Ite
         eventsData.insert(name,eventData);
 
         //if the view is the active one, load the event data for the current start time and time window
-        if(active){
+        if (active){
             setCursor(Qt::WaitCursor);
             eventsProvider->requestData(startTime,endTime,this);
         }
@@ -3805,7 +3808,7 @@ void TraceView::removeEventProvider(const QString& name,bool active){
     delete eventsData.take(name);
 
     drawContentsMode = REDRAW;
-    if(active) update();
+    if (active) update();
 }
 
 void TraceView::showEvents(QString name,QList<int>& eventsToShow){
@@ -3813,13 +3816,13 @@ void TraceView::showEvents(QString name,QList<int>& eventsToShow){
     eventData = eventsData[name];
 
     QList<int> events;
-    if(eventsToShow.size() != 0){
+    if (eventsToShow.size() != 0){
         QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
             events.append(*shownEventsIterator);
         }
         selectedEvents.insert(name,events);
-        if(eventData == 0){
+        if (eventData == 0){
             eventData = new EventData();
             eventsData.insert(name,eventData);
             EventsProvider* provider = eventProviders[name];
@@ -3849,14 +3852,14 @@ void  TraceView::updateEvents(const QString& providerName,QList<int>& eventsToSh
         events.append(*shownEventsIterator);
     }
     selectedEvents.insert(providerName,events);
-    if(eventData == 0){
+    if (eventData == 0){
         eventData = new EventData();
         eventsData.insert(providerName,eventData);
     }
     qDebug()<<" updateEvents "<<providerName;
-    if(!eventProvidersToUpdate.contains(providerName))
+    if (!eventProvidersToUpdate.contains(providerName))
         eventProvidersToUpdate.append(providerName);
-    if(active)
+    if (active)
         update();
 }
 
@@ -3870,23 +3873,23 @@ void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QL
 }
 
 void TraceView::eventColorUpdate(QString name,int eventId,bool active){
-    if(active){
+    if (active){
         drawContentsMode = REDRAW ;
         update();
     }
 }
 
 void TraceView::showNextEvent(){
-    if(endTime == length) return;
+    if (endTime == length) return;
 
     //Only request data from the provider for which events have been selected
-    if(!selectedEvents.isEmpty()){
+    if (!selectedEvents.isEmpty()){
 
         QStringList toRemove;
         QMap<QString, QList<int> > idsToBrowse;
         QMap<QString, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
             //check if there are events to browse through taking the skip list into account
             else{
                 QList<int> selectedIds = selectedEvents[providersIterator.key()];
@@ -3894,8 +3897,8 @@ void TraceView::showNextEvent(){
                 QList<int> ids;
                 QList<int>::iterator shownEventsIterator;
                 for(shownEventsIterator = selectedIds.begin(); shownEventsIterator != selectedIds.end(); ++shownEventsIterator)
-                    if(!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
-                if(ids.size() != 0){
+                    if (!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
+                if (ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
                     static_cast<EventData*>(eventsData[providersIterator.key()])->setStatus(false);
                 }
@@ -3908,7 +3911,7 @@ void TraceView::showNextEvent(){
             delete eventsData.take(*toRemoveIterator);
         }
 
-        if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
+        if (!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
             nextEventProvider.first.clear();
@@ -3917,7 +3920,7 @@ void TraceView::showNextEvent(){
             while (iterator.hasNext()) {
                 iterator.next();
                 QList<int> ids = idsToBrowse[iterator.key()];
-                if(!static_cast<EventData*>(iterator.value())->status() && ids.size() != 0)
+                if (!static_cast<EventData*>(iterator.value())->status() && ids.size() != 0)
                     static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestNextEventData(startTime,timeFrameWidth,ids,this);
             }
         }
@@ -3925,16 +3928,16 @@ void TraceView::showNextEvent(){
 }
 
 void TraceView::showPreviousEvent(){
-    if(startTime == 0) return;
+    if (startTime == 0) return;
 
     //Only request data from the provider for which events have been selected
-    if(!selectedEvents.isEmpty()){
+    if (!selectedEvents.isEmpty()){
 
         QStringList toRemove;
         QMap<QString, QList<int> > idsToBrowse;
         QMap<QString, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
             //check if there are events to browse through taking the skip list into account
             else{
                 QList<int> selectedIds = selectedEvents[providersIterator.key()];
@@ -3942,8 +3945,8 @@ void TraceView::showPreviousEvent(){
                 QList<int> ids;
                 QList<int>::iterator shownEventsIterator;
                 for(shownEventsIterator = selectedIds.begin(); shownEventsIterator != selectedIds.end(); ++shownEventsIterator)
-                    if(!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
-                if(ids.size() != 0){
+                    if (!idsToNotUse.contains(*shownEventsIterator)) ids.append(*shownEventsIterator);
+                if (ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
                     static_cast<EventData*>(eventsData[providersIterator.key()])->setStatus(false);
                 }
@@ -3956,7 +3959,7 @@ void TraceView::showPreviousEvent(){
             delete eventsData.take(*toRemoveIterator);
         }
 
-        if(!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
+        if (!selectedEvents.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
             previousEventProvider.first.clear();
@@ -3965,7 +3968,7 @@ void TraceView::showPreviousEvent(){
             while (iterator.hasNext()) {
                 iterator.next();
                 QList<int> ids = idsToBrowse[iterator.key()];
-                if(!static_cast<EventData*>(iterator.value())->status() && ids.size() != 0)
+                if (!static_cast<EventData*>(iterator.value())->status() && ids.size() != 0)
                     static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestPreviousEventData(startTime,timeFrameWidth,ids,this);
             }
         }
@@ -3974,17 +3977,17 @@ void TraceView::showPreviousEvent(){
 
 void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if (initiator != this) return;
 
     //if no event has been found the return startingTime is the same as the send one (endTime).
     EventData* eventData = eventsData[providerName];
-    if(startingTime != startTime && startingTime < length){
+    if (startingTime != startTime && startingTime < length){
         eventData->setStatus(true);
         eventData->setData(times,ids);
     }
     else eventData->setStatus(true);
 
-    if(nextEventProvider.first == "" || (nextEventProvider.first != "" && startingTime < nextEventProvider.second)){
+    if (nextEventProvider.first == "" || (nextEventProvider.first != "" && startingTime < nextEventProvider.second)){
         nextEventProvider.first = providerName;
         nextEventProvider.second = startingTime;
     }
@@ -3994,14 +3997,14 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
 
     //if the new start time is equals to the current startTime do not do anything
-    if(ready && nextEventProvider.second != startTime && nextEventProvider.second < length){
+    if (ready && nextEventProvider.second != startTime && nextEventProvider.second < length){
         long timeFrameWidth = endTime - startTime;
-        if((nextEventProvider.second + timeFrameWidth > length)){
+        if ((nextEventProvider.second + timeFrameWidth > length)){
             //new start time =  length - timeFrameWidth
             //update the traceWidget time widgets and retrieve the data for the new start time for all the providers.
             eventProviderToSkip.clear();
@@ -4013,7 +4016,7 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
             emit setStartAndDuration(nextEventProvider.second,timeFrameWidth);
         }
     }
-    else if(ready && (nextEventProvider.second == startTime || nextEventProvider.second > length)){
+    else if (ready && (nextEventProvider.second == startTime || nextEventProvider.second > length)){
         changeCursor();
     }
 }
@@ -4021,19 +4024,19 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
 
 void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName,long startingTime){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if (initiator != this) return;
 
     //if no event has been found the return startingTime is the same as the send one (startTime).
     //If te event file is longer than the data file, the startingTime can be over the recording Length, this
     //case as to be taken into account.
     EventData* eventData = eventsData[providerName];
-    if(startingTime != startTime && startingTime < length){
+    if (startingTime != startTime && startingTime < length){
         eventData->setStatus(true);
         eventData->setData(times,ids);
     }
     else eventData->setStatus(true);
 
-    if(previousEventProvider.first == "" ||
+    if (previousEventProvider.first == "" ||
             (previousEventProvider.first != "" && startingTime > previousEventProvider.second && startingTime != startTime) ||
             (previousEventProvider.first != "" && startingTime != startTime && previousEventProvider.second == startTime) ){
 
@@ -4046,13 +4049,13 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready)
+        if (!ready)
             break;
     }
 
-    if(ready && previousEventProvider.second != startTime && previousEventProvider.second < length){
+    if (ready && previousEventProvider.second != startTime && previousEventProvider.second < length){
         long timeFrameWidth = endTime - startTime;
-        if(previousEventProvider.second + timeFrameWidth > length){
+        if (previousEventProvider.second + timeFrameWidth > length){
             eventProviderToSkip.clear();
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
         }
@@ -4063,11 +4066,11 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
         }
     }
     //if the new start time is equals to the current one or superior to the recording lenght do not do anything
-    else if(ready && previousEventProvider.second == startTime){
+    else if (ready && previousEventProvider.second == startTime){
         changeCursor();
 
     }
-    else if(ready && previousEventProvider.second > length){
+    else if (ready && previousEventProvider.second > length){
         long timeFrameWidth = endTime - startTime;
         previousEventProvider.first.clear();
         previousEventProvider.second = 0;
@@ -4099,18 +4102,18 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
     for(int i = 1; i <= nbEvents;++i){
         dataType index = currentData(1,i);
         int eventId = currentIds(1,i);
-        if(eventId == selectedEventId && index == selectedEventIndex){
+        if (eventId == selectedEventId && index == selectedEventIndex){
             ItemColors* colors = providerItemColors[providerName];
             QColor color = colors->color(eventId);
 
-            if(multiColumns){
+            if (multiColumns){
                 int X = X0;
                 //Loop on all the groups (one by column)
                 QList<int> groupIds = shownGroupsChannels.keys();
                 QList<int>::iterator iterator;
                 for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
                     int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                    if(highlight){
+                    if (highlight){
                         //erase the previous line
                         QPen pen(palette().color(backgroundRole()),1,Qt::DotLine);
                         painter.setPen(pen);
@@ -4139,7 +4142,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
             }//multicolumns
             else{//single column
                 int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                if(highlight){
+                if (highlight){
                     //erase the previous line
                     QPen pen(palette().color(backgroundRole()),1,Qt::DotLine);
                     painter.setPen(pen);
@@ -4187,9 +4190,9 @@ void TraceView::channelColorUpdate(int channelId,bool active){
     mDeselectedChannels.clear();
     for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
         QList<int> channelIds = shownGroupsChannels[*iterator];
-        if(channelIds.contains(channelId)){
-            if(active){
-                if(mode == SELECT)
+        if (channelIds.contains(channelId)){
+            if (active){
+                if (mode == SELECT)
                     mSelectedChannels.append(channelId);
                 else
                     mDeselectedChannels.append(channelId);
@@ -4205,14 +4208,14 @@ void TraceView::channelColorUpdate(int channelId,bool active){
 }
 
 void TraceView::removeEvent(){
-    if(selectedEvent.first != ""){
+    if (selectedEvent.first != ""){
         Array<dataType>& currentData = static_cast<EventData*>(eventsData[selectedEvent.first])->getTimes();
         Array<int>& currentIds = static_cast<EventData*>(eventsData[selectedEvent.first])->getIds();
         int nbEvents = currentData.nbOfColumns();
         for(int i = 1; i <= nbEvents;++i){
             dataType index = currentData(1,i);
             int eventId = currentIds(1,i);
-            if(eventId == selectedEvent.second && index == selectedEventPosition[0]){
+            if (eventId == selectedEvent.second && index == selectedEventPosition[0]){
                 double samplingRate = static_cast<double>(tracesProvider.getSamplingRate()) / 1000.0;//in eventProvider the time is in miliseconds
                 double time = (static_cast<double>(index) / samplingRate) + static_cast<double>(startTime);
                 eventBeingModified = true;
@@ -4239,16 +4242,16 @@ void TraceView::removeEvent(){
 
 
 void TraceView::showNextCluster(){
-    if(endTime == length)
+    if (endTime == length)
         return;
 
     //Only request data from the provider for which clusters have been selected
-    if(!selectedClusters.isEmpty()){
+    if (!selectedClusters.isEmpty()){
         QList<int> toRemove;
         QMap<int, QList<int> > idsToBrowse;
         QMap<int, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
             //check if there are clusters to browse through taking the skip list
             else{
                 QList<int> selectedIds = selectedClusters[providersIterator.key()];
@@ -4256,8 +4259,8 @@ void TraceView::showNextCluster(){
                 QList<int> ids;
                 QList<int>::iterator shownClustersIterator;
                 for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator)
-                    if(!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
-                if(ids.size() != 0){
+                    if (!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
+                if (ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
                     static_cast<ClusterData*>(clustersData[QString::number(providersIterator.key())])->setStatus(false);
                 }
@@ -4270,7 +4273,7 @@ void TraceView::showNextCluster(){
             delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
-        if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
+        if (!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
             nextClusterProvider.first.clear();
@@ -4283,7 +4286,7 @@ void TraceView::showNextCluster(){
 
                 qDebug()<<"key " <<iterator.key().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits ;
 
-                if(!static_cast<ClusterData*>(iterator.value())->status() && ids.size() != 0)
+                if (!static_cast<ClusterData*>(iterator.value())->status() && ids.size() != 0)
                     static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestNextClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
             }
         }
@@ -4291,15 +4294,15 @@ void TraceView::showNextCluster(){
 }
 
 void TraceView::showPreviousCluster(){
-    if(startTime == 0) return;
+    if (startTime == 0) return;
 
     //Only request data from the provider for which clusters have been selected
-    if(!selectedClusters.isEmpty()){
+    if (!selectedClusters.isEmpty()){
         QList<int> toRemove;
         QMap<int, QList<int> > idsToBrowse;
         QMap<int, QList<int> >::Iterator providersIterator;
         for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-            if(static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
+            if (static_cast< QList<int> >(providersIterator.value()).isEmpty()) toRemove.append(providersIterator.key());
             //check if there are clusters to browse through taking the skip list
             else{
                 QList<int> selectedIds = selectedClusters[providersIterator.key()];
@@ -4307,9 +4310,9 @@ void TraceView::showPreviousCluster(){
                 QList<int> ids;
                 QList<int>::iterator shownClustersIterator;
                 for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator){
-                    if(!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
+                    if (!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
                 }
-                if(ids.size() != 0){
+                if (ids.size() != 0){
                     idsToBrowse.insert(providersIterator.key(),ids);
                     static_cast<ClusterData*>(clustersData[QString::number(providersIterator.key())])->setStatus(false);
                 }
@@ -4322,7 +4325,7 @@ void TraceView::showPreviousCluster(){
             delete clustersData.take(QString::number(*toRemoveIterator));
         }
 
-        if(!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
+        if (!selectedClusters.isEmpty() && idsToBrowse.count() != 0){
             setCursor(Qt::WaitCursor);
             long timeFrameWidth = endTime - startTime;
             previousClusterProvider.first.clear();
@@ -4332,7 +4335,7 @@ void TraceView::showPreviousCluster(){
             while (iterator.hasNext()) {
                 iterator.next();
                 QList<int> ids = idsToBrowse[iterator.key().toInt()];
-                if(!static_cast<ClusterData*>(iterator.value())->status() && ids.size() != 0)
+                if (!static_cast<ClusterData*>(iterator.value())->status() && ids.size() != 0)
                     static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestPreviousClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
             }
         }
@@ -4341,7 +4344,7 @@ void TraceView::showPreviousCluster(){
 
 void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this)
+    if (initiator != this)
         return;
 
 
@@ -4352,13 +4355,13 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
 
     //if no cluster has been found the return startingTime is the same as the send one (endTime).
     ClusterData* clusterData = clustersData[providerName];
-    if(startingTime != startTime && startingTime < length){
+    if (startingTime != startTime && startingTime < length){
         clusterData->setStatus(true);
         clusterData->setData(data);
     }
     else clusterData->setStatus(true);
 
-    if(nextClusterProvider.first == "" || (nextClusterProvider.first != "" && startingTimeInRecordingUnits < startTimeInRecordingUnits)){
+    if (nextClusterProvider.first == "" || (nextClusterProvider.first != "" && startingTimeInRecordingUnits < startTimeInRecordingUnits)){
         nextClusterProvider.first = providerName;
         nextClusterProvider.second = startingTime;
         startTimeInRecordingUnits = startingTimeInRecordingUnits;
@@ -4370,13 +4373,13 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready) break;
+        if (!ready) break;
     }
 
     //if the new start time is equals to the current startTime (in recording unit) do not do anything
-    if(ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && nextClusterProvider.second < length){
+    if (ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && nextClusterProvider.second < length){
         long timeFrameWidth = endTime - startTime;
-        if(nextClusterProvider.second + timeFrameWidth > length){
+        if (nextClusterProvider.second + timeFrameWidth > length){
             //new start time =  length - timeFrameWidth
             //update the traceWidget time widgets and retrieve the data for the new start time for all the providers.
             clusterProviderToSkip.clear();
@@ -4393,7 +4396,7 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
             emit setStartAndDuration(nextClusterProvider.second,timeFrameWidth);
         }
     }
-    else if(ready && (startTimeInRecordingUnits == previousStartTimeInRecordingUnits || nextClusterProvider.second > length)){
+    else if (ready && (startTimeInRecordingUnits == previousStartTimeInRecordingUnits || nextClusterProvider.second > length)){
         startTimeInRecordingUnits = 0;
         changeCursor();
     }
@@ -4401,19 +4404,19 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
 
 void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits){
     //If another widget was the initiator of the request, ignore the data.
-    if(initiator != this) return;
+    if (initiator != this) return;
 
     //if no cluster has been found the return startingTime is the same as the send one (startTime).
     //If the cluster file is longer than the data file, the startingTime can be over the recording Length, this
     //case has to be taken into account.
     ClusterData* clusterData = clustersData[providerName];
-    if(startingTime != startTime && startingTime < length){
+    if (startingTime != startTime && startingTime < length){
         clusterData->setStatus(true);
         clusterData->setData(data);
     }
     else clusterData->setStatus(true);
 
-    if(previousClusterProvider.first == "" ||
+    if (previousClusterProvider.first == "" ||
             (previousClusterProvider.first != "" && startingTimeInRecordingUnits > startTimeInRecordingUnits && startingTimeInRecordingUnits != previousStartTimeInRecordingUnits) ||
             (previousClusterProvider.first != "" && startingTimeInRecordingUnits != previousStartTimeInRecordingUnits && startTimeInRecordingUnits == previousStartTimeInRecordingUnits)){
 
@@ -4428,12 +4431,12 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if(!ready) break;
+        if (!ready) break;
     }
 
-    if(ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && previousClusterProvider.second < length){
+    if (ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && previousClusterProvider.second < length){
         long timeFrameWidth = endTime - startTime;
-        if(previousClusterProvider.second + timeFrameWidth > length){
+        if (previousClusterProvider.second + timeFrameWidth > length){
             clusterProviderToSkip.clear();
 
             emit setStartAndDuration(length - timeFrameWidth,timeFrameWidth);
@@ -4445,12 +4448,12 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
         }
     }
     //if the new start time (in recording unit) is equals to the current one do not do anything
-    else if(ready && startTimeInRecordingUnits == previousStartTimeInRecordingUnits){
+    else if (ready && startTimeInRecordingUnits == previousStartTimeInRecordingUnits){
         changeCursor();
 
     }
     //if the new start time is superior to the recording lenght, look up in all the files at the last timeFrameWidth of the data file
-    else if(ready && previousClusterProvider.second > length){
+    else if (ready && previousClusterProvider.second > length){
         clusterProviderToSkip.clear();
         long timeFrameWidth = endTime - startTime;
         previousClusterProvider.first.clear();
@@ -4473,10 +4476,10 @@ void TraceView::updateClusters(QString name,QList<int>& clustersToShow,ItemColor
 }
 
 void TraceView::increaseRatio(){
-    if(raster){
+    if (raster){
         int onePixel = viewportToWorldHeight(1);
         //Limit case: if the height of the widget is greater than the width of the world, onePixel is equal to 0. Set it to 1 to keep growing
-        if(onePixel == 0) onePixel = 1;
+        if (onePixel == 0) onePixel = 1;
         rasterHeight += onePixel;
 
         YRasterSpace = rasterHeight/3;
@@ -4487,14 +4490,14 @@ void TraceView::increaseRatio(){
 }
 
 void TraceView::decreaseRatio(){
-    if(raster){
+    if (raster){
         int onePixel = viewportToWorldHeight(1);
         //Limit case: if the height of the widget is greater than the width of the world, onePixel is equal to 0. Set it to 1 to keep decreasing
-        if(onePixel == 0) onePixel = 1;
+        if (onePixel == 0) onePixel = 1;
         rasterHeight -= onePixel;
 
         //The rasterHeight has to be at least 1px in the widget
-        if(rasterHeight < onePixel) rasterHeight = onePixel;
+        if (rasterHeight < onePixel) rasterHeight = onePixel;
         YRasterSpace = rasterHeight/3;
         updateWindow();
         //Redraw
@@ -4504,12 +4507,12 @@ void TraceView::decreaseRatio(){
 
 void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* initiator){
     //If an event has been added or removed, make sure the information is up to date before emitting a signal with it.
-    if(!eventProvidersToUpdate.isEmpty()){
+    if (!eventProvidersToUpdate.isEmpty()){
         QStringList::iterator providerIterator;
         EventData* eventData;
         for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
             eventData = eventsData[*providerIterator];
-            if(eventData == 0){
+            if (eventData == 0){
                 eventData = new EventData();
                 eventsData.insert(*providerIterator,eventData);
             }
@@ -4520,14 +4523,14 @@ void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* 
         QHashIterator<QString, EventData*> iterator(eventsData);
         while (iterator.hasNext()) {
             iterator.next();
-            if(eventProvidersToUpdate.contains(iterator.key())){
+            if (eventProvidersToUpdate.contains(iterator.key())){
                 static_cast<EventsProvider*>(eventProviders[iterator.key()])->requestData(startTime,endTime,this);
                 eventProvidersToUpdate.removeAll(iterator.key());
             }
         }
     }
 
-    if(!selectedEvents.isEmpty())
+    if (!selectedEvents.isEmpty())
         emit eventsAvailable(eventsData,selectedEvents,providerItemColors,initiator,tracesProvider.getSamplingRate());
 }
 
@@ -4537,12 +4540,12 @@ void TraceView::traceBackgroundImageUpdate(QImage traceBackgroundImage,bool acti
     scaleBackgroundImage();
 
     drawContentsMode = REDRAW;
-    if(active)
+    if (active)
         update();
 }
 
 void TraceView::scaleBackgroundImage(){
-    if(!background.isNull()){
+    if (!background.isNull()){
         QRect contentsRec = contentsRect();
         scaledBackground.convertFromImage(background.scaled(contentsRec.width(),contentsRec.height()),Qt::PreferDither);
     }
@@ -4551,13 +4554,13 @@ void TraceView::scaleBackgroundImage(){
 void TraceView::groupColorUpdate(int groupId,bool active){
     //Everything has to be redraw
     drawContentsMode = REDRAW ;
-    if(active)
+    if (active)
         update();
 }
 
 /**Update the information presented in the view.*/
 void TraceView::updateDrawing(){
-    if(retrieveClusterData)
+    if (retrieveClusterData)
         updateClusterData(true);
     else{
         //Everything has to be redraw
@@ -4569,41 +4572,41 @@ void TraceView::updateDrawing(){
 void TraceView::setMode(BaseFrame::Mode selectedMode,bool active){
     Mode previousMode = mode;
     mode = selectedMode;
-    if(selectedMode == SELECT){
+    if (selectedMode == SELECT){
         setCursor(selectCursor);
         drawRubberBand(false);
-    } else if(selectedMode == SELECT_EVENT){
+    } else if (selectedMode == SELECT_EVENT){
         setCursor(selectEventCursor);
         drawRubberBand(false);
-    } else if(selectedMode == ADD_EVENT){
+    } else if (selectedMode == ADD_EVENT){
         setCursor(addEventCursor);
         drawRubberBand(false);
-    } else if(selectedMode == ZOOM){
+    } else if (selectedMode == ZOOM){
         setCursor(zoomCursor);
         drawRubberBand(false);
-    } else if(selectedMode == MEASURE){
+    } else if (selectedMode == MEASURE){
         drawRubberBand(true);
         setCursor(measureCursor);
-    } else if(selectedMode == SELECT_TIME){
+    } else if (selectedMode == SELECT_TIME){
         drawRubberBand(true,true);
         setCursor(selectTimeCursor);
-    } else if(selectedMode == DRAW_LINE){
+    } else if (selectedMode == DRAW_LINE){
         setCursor(drawLineCursor);
         drawRubberBand(false);
     }
 
-    if(previousMode == SELECT){
+    if (previousMode == SELECT){
         selectedChannels.clear();
         drawContentsMode = REDRAW;
-        if(active) update();
-    } else if(previousMode == SELECT_EVENT){
+        if (active) update();
+    } else if (previousMode == SELECT_EVENT){
         selectedEvent.first.clear();
         selectedEvent.second = 0;
         drawContentsMode = REDRAW;
-        if(active) update();
-    } else if(previousMode == ADD_EVENT){
+        if (active) update();
+    } else if (previousMode == ADD_EVENT){
         newEventPosition = -1;
-    } else if(previousMode == DRAW_LINE){
+    } else if (previousMode == DRAW_LINE){
         linePositions.clear();
     }
 }
