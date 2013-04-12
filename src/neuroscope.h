@@ -934,4 +934,6 @@ private:
     QAction *actNewEvent;
 };
 
+Q_DECLARE_METATYPE(QList<int>*)
+
 #endif // NEUROSCOPE_H
