@@ -53,7 +53,8 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
     setAcceptDrops(true);
 }
 
-void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
+void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize)
+{
     if((iconView->size().width() != 1 && width() != parentWidth) || init){
         init = false;
         int futurWidth = parentWidth ;
@@ -71,7 +72,8 @@ void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize){
         setFixedHeight(iconView->size().height());
 }
 
-void ChannelGroupView::dropEvent(QDropEvent* event){
+void ChannelGroupView::dropEvent(QDropEvent* event)
+{
     if(event->source() == 0 || !drag){
         event->ignore();
         return;
@@ -90,6 +92,7 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
         event->ignore();
         return;
     }
+
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
     //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
