@@ -18,6 +18,7 @@
 #include "channelgroupview.h"
 #include <QListWidget>
 #include <QLabel>
+#include <QMimeData>
 
 ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidget* parent)
     :QWidget(parent),

@@ -31,6 +31,8 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDrag>
 
 // application specific includes
 #include "channelgroupview.h"

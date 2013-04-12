@@ -3,14 +3,43 @@ cmake_minimum_required(VERSION 2.8.6)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 set (QT_MIN_VERSION "4.8.0")
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+
+find_package(Qt5Core QUIET)
+
+if(Qt5Core_FOUND)
+  find_package(Qt5Gui REQUIRED)
+  find_package(Qt5Widgets REQUIRED)
+  find_package(Qt5Xml REQUIRED)
+
+  find_package(Qt5WebKitWidgets 5.0.2 QUIET)
+
+  include(ECMQt4To5Porting)
+  include_directories(${QT_INCLUDES}) # TODO: Port away from this.
+
+  set(QT_QTWEBKIT_FOUND ${Qt5WebKitWidgets_FOUND}) # backward compat with Qt4 webkit code
+
+  if(Qt5_POSITION_INDEPENDENT_CODE)
+    if(CMAKE_VERSION VERSION_LESS 2.8.9) # TODO remove once we increase the cmake requirement
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+    else()
+      set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    endif()
+  endif()
+  MESSAGE(STATUS "use qt5 version")
+# Qt4
+else()
+  MESSAGE(STATUS "use qt4 version")
+  find_package(Qt4 ${QT_MIN_VERSION} REQUIRED QtCore QtGui)
+
+  include(${QT_USE_FILE})
+  include_directories(${QT_INCLUDES})
+endif()
+
 include(MacroEnsureVersion)
 
 include(CheckCXXCompilerFlag)
 
-
-find_package(LibKlustersShared 1.0.3 REQUIRED)
+find_package(LibKlustersShared 1.0.4 REQUIRED)
 add_definitions(${QT_DEFINITIONS} )
 set( QT_USE_XML TRUE)
 

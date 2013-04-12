@@ -51,7 +51,13 @@ qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
 add_executable(neuroscope ${neuroscope_SRCS} )
 
-target_link_libraries(neuroscope ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${LIBKLUSTERSSHARED_LIBRARY})
+
+if(Qt5Core_FOUND)
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml ${Qt5WebKitWidgets_LIBRARIES})
+else(Qt5Core_FOUND)
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY})
+endif()
+
 
 install(TARGETS neuroscope DESTINATION bin)
 install(FILES hi16-app-neuroscope.png DESTINATION share/icons/hicolor/16x16/apps/ RENAME neuroscope.png)
