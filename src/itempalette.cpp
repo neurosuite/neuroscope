@@ -39,6 +39,7 @@
 #include <QResizeEvent>
 #include <QList>
 #include <QLabel>
+
 ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidget* parent, const char* name)
     : QScrollArea(parent),
       backgroundColor(backgroundColor),
@@ -566,8 +567,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,ItemColors* itemColors,int i
         painter.begin(&pixmap);
         if(!browsingStatus){
             painter.fillRect(0,0,12,12,color);
-        }
-        else{
+        } else {
             QPolygon polygon(4);
             polygon.putPoints(0,3,0,0,14,0,7,14);
             painter.setBrush(color);

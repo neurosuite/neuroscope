@@ -33,13 +33,10 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setFont(font);
     setSpacing(4);
     setFrameStyle(QFrame::NoFrame);
-    //setArrangement(LeftToRight);
     setResizeMode(QListWidget::Adjust);
     setViewMode(mode);
     setGridSize(QSize(gridX,gridY));
-    //arrangeItemsInGrid();
     setWordWrap(false);
-    //setDragAutoScroll(false);
     setAutoFillBackground(true);
     viewport()->setAutoFillBackground(false);
     //Set the iconView color, the foreground color depends on the background color
