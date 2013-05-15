@@ -27,7 +27,6 @@
 #include <QDebug>
 #include <QApplication>
 
-
 ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const QString& name)
     : QListWidget(parent)
 {
@@ -40,7 +39,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setResizeMode(QListWidget::Adjust);
     setGridSize(QSize(gridX, gridY));
     setViewMode(QListView::IconMode);
-
+    setDragDropMode(QAbstractItemView::DragDrop); // no internal moves
     setAutoFillBackground(true);
     //Set the iconView color, the foreground color depends on the background color
     QPalette palette = this->palette();

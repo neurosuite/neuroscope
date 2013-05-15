@@ -32,8 +32,10 @@
 #include "utilities.h"
 
 
-ClustersProvider::ClustersProvider(const QString &fileUrl, double samplingRate, double currentSamplingRate, dataType fileMaxTime, int position): DataProvider(fileUrl),timeFileUrl(fileUrl),
-    samplingRate(samplingRate),nbSpikes(0),nbClusters(0),clusterPosition(static_cast<float>(position) / 100.0){
+ClustersProvider::ClustersProvider(const QString &fileUrl, double samplingRate, double currentSamplingRate, dataType fileMaxTime, int position)
+    : DataProvider(fileUrl),timeFileUrl(fileUrl),
+    samplingRate(samplingRate),nbSpikes(0),nbClusters(0),clusterPosition(static_cast<float>(position) / 100.0)
+{
 
     dataCurrentRatio = static_cast<float>(samplingRate / currentSamplingRate);
     dataFileMaxTime = fileMaxTime * dataCurrentRatio;
