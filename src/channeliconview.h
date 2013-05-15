@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <QPainter>
 #include <QListWidget>
+#include <QListWidgetItem>
 #include <qwidget.h>
 
 #include <QMouseEvent>
@@ -32,6 +33,17 @@
 /**Utilitary class used to build the channel palettes (anatomical and spike).
   *@author Lynn Hazan
   */
+class ChannelIconViewItem : public QListWidgetItem {
+public:
+    ChannelIconViewItem(const QIcon &icon, const QString &text, QListWidget *view, int type)
+        : QListWidgetItem(icon, text, view, type)
+    {
+        // Drop between items, not onto items
+        setFlags((flags() | Qt::ItemIsDragEnabled) & ~Qt::ItemIsDropEnabled);
+    }
+
+};
+
 
 class ChannelIconView : public QListWidget  {
     Q_OBJECT
