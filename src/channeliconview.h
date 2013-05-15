@@ -50,21 +50,21 @@ Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start,int destination);
 
 
-
 protected:
-    void wheelEvent ( QWheelEvent * e );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-#if 0
-    void dropEvent(QDropEvent *event);
-    void startDrag(Qt::DropActions /*supportedActions*/);
-#endif
-private:
-    void startDrag();
-    QPoint startPos;
+    void wheelEvent ( QWheelEvent * e );
+    QMimeData* mimeData(const QList<QListWidgetItem*> items) const;
+    bool dropMimeData(int index, const QMimeData * data, Qt::DropAction action);
+    Qt::DropActions supportedDropActions() const
+    {
+        return Qt::MoveAction;
+    }
+    QStringList mimeTypes() const
+    {
+        return QStringList() << "application/x-channeliconview";
+    }
+
 };
 
 #endif

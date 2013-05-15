@@ -71,6 +71,46 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
+QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
+{
+    if (items.isEmpty())
+        return 0;
+    QMimeData* mimedata = new QMimeData();
+
+    QByteArray data;
+    //For the moment just one item
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream << *items.first();
+
+    mimedata->setData("application/x-channeliconview", data);
+
+    return mimedata;
+}
+
+void ChannelIconView::setDragAndDrop(bool dragDrop)
+{
+    setDragEnabled(dragDrop);
+}
+
+void ChannelIconView::wheelEvent ( QWheelEvent * event )
+{
+    event->accept();
+}
+
+bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::DropAction action)
+{
+    Q_UNUSED(action)
+    const QByteArray data = mimeData->data("application/x-channeliconview");
+    if (data.isEmpty())
+        return false;
+    QDataStream stream(data);
+    QListWidgetItem *item = new QListWidgetItem(this);
+    stream >> *item;
+    //emit dropped(this, index, item, sourceIsActiveList);
+    return true;
+}
+
+
 
 void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
@@ -86,113 +126,8 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
 
     if (event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(item);
-    } else if (event->button() == Qt::LeftButton) {
-        startPos = event->pos();
     }
     QListWidget::mousePressEvent(event);
-}
-
-void ChannelIconView::wheelEvent ( QWheelEvent * event )
-{
-    event->accept();
-}
-
-void ChannelIconView::setDragAndDrop(bool dragDrop)
-{
-    setDragEnabled(dragDrop);
-}
-
-void ChannelIconView::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->source() && event->source() != this) {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
-    }
-}
-
-void ChannelIconView::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (event->source() && event->source() != this) {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
-    }
-}
-
-void ChannelIconView::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() & Qt::LeftButton) {
-        const int distance = (event->pos() - startPos).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-            startDrag();
-    }
-    QListWidget::mouseMoveEvent(event);
-}
-
-void ChannelIconView::startDrag()
-{
-    /*
-    const QList<QListWidgetItem *> lst = selectedItems();
-    if (!lst.isEmpty()) {
-        qDebug()<<" ssssssssssssssssss";
-        QMimeData * data = mimeData (lst);
-        qDebug()<<" data "<<data;
-        QDrag *drag = new QDrag(this);
-        drag->setMimeData(data);
-        if (drag->start(Qt::MoveAction) == Qt::MoveAction) {
-            Q_FOREACH(QListWidgetItem *item, lst ) {
-                delete item;
-            }
-        }
-    }
-    */
-    /*
-    QListWidgetItem *item = currentItem();
-    if (item) {
-        QMimeData *mimeData = new QMimeData;
-        mimeData->setText(item->text());
-        QDrag *drag = new QDrag(this);
-        drag->setMimeData(mimeData);
-        if (drag->start(Qt::MoveAction) == Qt::MoveAction)
-            delete item;
-    }
-    */
-}
-#if 0
-void ChannelIconView::dropEvent(QDropEvent *event)
-{
-    const QMimeData *mimeData = event->mimeData();
-    if (mimeData->hasText()) {
-        QString information = mimeData->text();
-        const int groupSource = information.section("-",0,0).toInt();
-        const int start = information.section("-",1,1).toInt();
-        const QString groupTarget = objectName();
-        emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
-        event->acceptProposedAction();
-        return;
-    }
-    event->acceptProposedAction();
-    QListWidget::dropEvent(event);
-}
-
-void ChannelIconView::startDrag(Qt::DropActions /*supportedActions*/)
-{
-    QListWidgetItem *item = currentItem();
-    if (!item)
-        return;
-
-#if 0
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData("image/x-icon-view", itemData);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->setHotSpot(QPoint(pixmap.width()/2, pixmap.height()/2));
-    drag->setPixmap(pixmap);
-
-    if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
-        delete takeItem(row(item));
-#endif
-
 }
 
 #if PORTING_KDAB
@@ -369,4 +304,4 @@ Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
     return lastItem();
 }
 #endif
-#endif
+
