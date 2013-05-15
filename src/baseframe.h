@@ -277,11 +277,6 @@ protected:
   * Boolean indicating that the user has double clicked
   */
     bool isDoubleClick;
-    /**
-  * Rectangle identifying the selected area
-  */
-    QRect* rubber;
-
     /**Mode giving the way of drawing the contents of the view*/
     DrawContentsMode drawContentsMode;
 

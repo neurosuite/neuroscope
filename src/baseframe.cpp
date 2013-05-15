@@ -32,7 +32,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &nam
     QFrame(parent),
     MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
     viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
-    firstClick(0,0),isDoubleClick(false),rubber(0),
+    firstClick(0,0),isDoubleClick(false),
     drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
     wholeHeightRectangle(false),mRubberBand(0)
 {
@@ -96,10 +96,9 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
             //drawn on whole the height of the window.
             if(isRubberBandToBeDrawn && wholeHeightRectangle)
-                rubber = new QRect(firstClick.x(),r.top(),1,1);
+                mRubberBand->setGeometry(QRect(firstClick.x(),r.top(),1,1));
             else
-                rubber = new QRect(firstClick.x(),firstClick.y(),1,1);
-            mRubberBand->setGeometry(*rubber);
+                mRubberBand->setGeometry(QRect(firstClick.x(),firstClick.y(),1,1));
             mRubberBand->show();
 
         }
@@ -114,10 +113,6 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
 
         if(isRubberBandToBeDrawn){
             //Test if a selected rectangle exist, if so draw it and delete it.
-            if(rubber){
-                delete rubber;
-                rubber = 0;
-            }
             if(mRubberBand) {
                 mRubberBand->hide();
             }
@@ -131,10 +126,6 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
             }
 
             //Test if a selected rectangle exist, if so draw it and delete it.
-            if(rubber){
-                delete rubber;
-                rubber = 0;
-            }
             if(mRubberBand) {
                 mRubberBand->hide();
             }
