@@ -35,8 +35,8 @@
   */
 class ChannelIconViewItem : public QListWidgetItem {
 public:
-    ChannelIconViewItem(const QIcon &icon, const QString &text, QListWidget *view, int type)
-        : QListWidgetItem(icon, text, view, type)
+    ChannelIconViewItem(const QIcon &icon, const QString &text, QListWidget *view = 0)
+        : QListWidgetItem(icon, text, view)
     {
         // Drop between items, not onto items
         setFlags((flags() | Qt::ItemIsDragEnabled) & ~Qt::ItemIsDropEnabled);
