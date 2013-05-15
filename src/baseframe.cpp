@@ -27,14 +27,16 @@
 #include <QMouseEvent>
 
 
-BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const char* name,const QColor& backgroundColor,
+BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &name,const QColor& backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
     QFrame(parent),
     MIN_SIZE(minSize),MAX_SIZE(maxSize),BORDER(border),WINDOW_TOP_LEFT(windowTopLeft),WINDOW_BOTTOM_RIGHT(windowBottomRight),
     viewport(QRect()),window (QRect(QPoint(0,-WINDOW_TOP_LEFT),QPoint(WINDOW_BOTTOM_RIGHT,0))),
     firstClick(0,0),isDoubleClick(false),rubber(0),
     drawContentsMode(REDRAW),Xborder(Xborder),Yborder(Yborder),isRubberBandToBeDrawn(false),
-    wholeHeightRectangle(false),mRubberBand(0){
+    wholeHeightRectangle(false),mRubberBand(0)
+{
+    setObjectName(name);
     setAutoFillBackground(true);
 
     //Setting of the frame
