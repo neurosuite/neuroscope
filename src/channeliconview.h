@@ -76,6 +76,7 @@ protected:
     {
         return QStringList() << "application/x-channeliconview";
     }
+    // Skip internal dnd handling in QListWidget ---- how is one supposed to figure this out
     // without reading the QListWidget code !?
     virtual void dropEvent(QDropEvent* ev) {
         QAbstractItemView::dropEvent(ev);
