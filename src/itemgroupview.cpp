@@ -85,7 +85,7 @@ void ItemGroupView::setLabel(QLabel* label){
     mLayout->addWidget(mLabel);
 }
 
-QLabel* ItemGroupView::label(){
+QLabel* ItemGroupView::label() const{
     return mLabel;
 }
 

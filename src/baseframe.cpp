@@ -25,7 +25,7 @@
 #include <QResizeEvent>
 #include <QFrame>
 #include <QMouseEvent>
-
+#include <QRubberBand>
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &name,const QColor& backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):

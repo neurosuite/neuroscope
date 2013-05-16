@@ -25,11 +25,11 @@
 
 #include <QResizeEvent>
 #include <QMouseEvent>
-#include <QRubberBand>
+
 
 //include files for the application
 #include "zoomwindow.h"
-
+class QRubberBand;
 
 /**
   * Frame base class containing the following features:

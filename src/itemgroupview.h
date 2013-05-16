@@ -37,7 +37,7 @@ public:
     void setIconView(QListWidget *view);
 
     void setLabel(QLabel *label);
-    QLabel *label();
+    QLabel *label() const;
 
 public Q_SLOTS:
     void reAdjustSize(int parentWidth,int labelSize);
