@@ -100,7 +100,7 @@ public:
     void setHeight(int height){this->height = height;}
 
     /**Sets the background image for the position view.*/
-    void setBackgroundImage(QString image){backgroundImage = image;}
+    void setBackgroundImage(const QString &image){backgroundImage = image;}
 
     /**Sets the video image rotation angle.*/
     void setRotation(int angle){rotation = angle;}
@@ -114,7 +114,7 @@ public:
     void setPositionsBackground(int drawPositions){drawPositionsOnBackground = drawPositions;}
     
     /**Sets the background image for the trace view.*/
-    void setTraceBackgroundImage(QString image){traceBackgroundImage = image;}
+    void setTraceBackgroundImage(const QString &image){traceBackgroundImage = image;}
     
     /**Returns the screen gain in milivolts by centimeters used to display the field potentiels.
     */

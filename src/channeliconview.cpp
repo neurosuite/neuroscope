@@ -138,33 +138,6 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
 
 #if PORTING_KDAB
 
-Q3DragObject* ChannelIconView::dragObject(){
-    if (!currentItem() || !drag)
-        return 0;
-
-    Q3IconDrag* drag = new Q3IconDrag(viewport());
-    drag->setPixmap(*currentItem()->pixmap(),
-                    QPoint(currentItem()->pixmapRect().width() / 2, currentItem()->pixmapRect().height() / 2));
-
-    QPoint orig = viewportToContents( viewport()->mapFromGlobal(QCursor::pos()));
-    //Insert only one item to have a pixmap to draw.
-    for(Q3IconViewItem* item = firstItem();item; item = item->nextItem()){
-        if (item->isSelected()){
-            Q3IconDragItem id;
-            id.setData(item->text().toLocal8Bit());
-            drag->append(id,
-                         QRect(item->pixmapRect(false).x() - orig.x(),
-                               item->pixmapRect(false).y() - orig.y(),
-                               item->pixmapRect().width(),item->pixmapRect().height()),
-                         QRect(item->textRect(false).x() - orig.x(),
-                               item->textRect(false).y() - orig.y(),
-                               item->textRect().width(),item->textRect().height()));
-            break;
-        }
-    }
-
-    return drag;
-}
 
 void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
     //The source of the drag is not a widget of the application
