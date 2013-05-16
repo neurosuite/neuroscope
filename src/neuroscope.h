@@ -204,7 +204,7 @@ public Q_SLOTS:
   * @param time initial time of the modified event.
   * @param newTime new time of the modified event.
   */
-    void slotEventModified(QString providerName,int selectedEventId,double time,double newTime);
+    void slotEventModified(const QString &providerName,int selectedEventId,double time,double newTime);
 
     /**Deletes the selected event.
   */
@@ -215,7 +215,7 @@ public Q_SLOTS:
   * @param selectedEventId id of the removed event.
   * @param time initial time of the removed event.
   */
-    void slotEventRemoved(QString providerName,int selectedEventId,double time);
+    void slotEventRemoved(const QString &providerName,int selectedEventId,double time);
 
     /**Adds an event.
   */
@@ -572,7 +572,7 @@ private Q_SLOTS:
    * @param clusterId id of the cluster which has had its color changed.
    * @param groupName identifier of the file containing the cluster to update.
    */
-    void slotClusterColorUpdate(int clusterId,QString groupName);
+    void slotClusterColorUpdate(int clusterId,const QString &groupName);
 
     /**Updates the active display with the clusters selected in the cluster palette.
    *@param selection map given the list of the selected clusters by cluster file identified.

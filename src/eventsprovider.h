@@ -100,25 +100,25 @@ public:
     /**Returns the number of events in the event file the provider provides the data for
   * @return number of events.
   .*/
-    inline int getNbEvents() const {return nbEvents;}
+    int getNbEvents() const {return nbEvents;}
 
     /**Returns map between the description of the events and an numeric identifier.
   * @return map for the event descriptions.*/
-    inline QMap<EventDescription,int> eventDescriptionIdMap() const{return eventIds;}
+    QMap<EventDescription,int> eventDescriptionIdMap() const{return eventIds;}
 
     /**Returns map between the a numeric identifier and the description of the events.
   * @return map for the event ids.*/
-    inline QMap<int,EventDescription> eventIdDescriptionMap() const{return idsDescriptions;}
+    QMap<int,EventDescription> eventIdDescriptionMap() const{return idsDescriptions;}
 
     /**Returns the name of the provider which is the event file number.
   * @return provider'name.
   */
-    inline QString getName() const {return name;}
+    QString getName() const {return name;}
 
     /**Returns the value to use as the length for the event descriptions in the event palette.
   * @return length.
   */
-    inline int getDescriptionLength() const {return descriptionLength;}
+    int getDescriptionLength() const {return descriptionLength;}
 
     /** Sets the position where the events are display when browsing.
   * @param position percentage from the begining of the window.
@@ -142,7 +142,7 @@ public:
   * @param eventDescriptionToAdd description of the added event.
   * @param time time of the added event.
   */
-    void addEvent(QString eventDescriptionToAdd,double time);
+    void addEvent(const QString &eventDescriptionToAdd,double time);
 
     /** Reverts the last user action.*/
     void undo();
@@ -186,7 +186,7 @@ public:
   * @param newEventDescription new name for the event to rename.
   * @param time time of the event to rename.
   */
-    void renameEvent(int selectedEventId,QString newEventDescription,double time);
+    void renameEvent(int selectedEventId,const QString &newEventDescription,double time);
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.

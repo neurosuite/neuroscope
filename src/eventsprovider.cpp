@@ -1124,7 +1124,7 @@ void EventsProvider::removeEvent(int selectedEventId,double time){
     }
 }
 
-void EventsProvider::addEvent(QString eventDescriptionToAdd,double time){
+void EventsProvider::addEvent(const QString &eventDescriptionToAdd, double time){
     modified = true;
 
     //Clear the redo variables
@@ -1295,7 +1295,7 @@ void EventsProvider::removeEventDescription(QString eventDescriptionToRemove){
     emit eventDescriptionRemoved(name,oldNewEventIds,newOldEventIds,removedEventId,eventDescriptionToRemove);
 }
 
-void EventsProvider::renameEvent(int selectedEventId,QString newEventDescription,double time){
+void EventsProvider::renameEvent(int selectedEventId, const QString &newEventDescription, double time){
     modified = true;
 
     //Clear the redo variables

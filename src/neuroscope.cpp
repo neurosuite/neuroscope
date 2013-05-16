@@ -2834,7 +2834,7 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
 }
 
 
-void NeuroscopeApp::slotClusterColorUpdate(int clusterId,QString providerName){
+void NeuroscopeApp::slotClusterColorUpdate(int clusterId,const QString &providerName){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
@@ -3112,7 +3112,7 @@ void NeuroscopeApp::slotShowPreviousEvent(){
     view->showPreviousEvent();
 }
 
-void NeuroscopeApp::slotEventModified(QString providerName,int selectedEventId,double time,double newTime){
+void NeuroscopeApp::slotEventModified(const QString &providerName, int selectedEventId, double time, double newTime){
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;
@@ -3160,7 +3160,7 @@ void NeuroscopeApp::removeEvent(){
     view->removeEvent();
 }
 
-void NeuroscopeApp::slotEventRemoved(QString providerName,int selectedEventId,double time){
+void NeuroscopeApp::slotEventRemoved(const QString &providerName,int selectedEventId,double time){
     eventsModified = true;
     currentNbUndo = 1;
     currentNbRedo = 0;

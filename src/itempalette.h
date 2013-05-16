@@ -92,7 +92,7 @@ public:
     /**Returns the currently selected group.
     * @return the name of the selected group.
     */
-    inline QString selectedGroup() const {return selected;}
+    QString selectedGroup() const {return selected;}
 
     /** Removes a group from the palette.
     * @param groupName name of the group to be removed.
