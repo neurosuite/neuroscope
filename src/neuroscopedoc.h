@@ -522,7 +522,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,NeuroscopeView* activeView);
+    OpenSaveCreateReturnMessage loadClusterFile(const QString &clusterUrl,NeuroscopeView* activeView);
 
     /**Loads the cluster file store in the session file and identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.
@@ -531,7 +531,7 @@ public:
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadClusterFile(const QString &clusterUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
 
 
     /**Loads the position file and creates the position view in the current display.
@@ -539,7 +539,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadPositionFile(QString url,NeuroscopeView*activeView);
+    OpenSaveCreateReturnMessage loadPositionFile(const QString &url,NeuroscopeView*activeView);
 
     /**Loads the position file.
     * @param filePath path of the file to be opened.

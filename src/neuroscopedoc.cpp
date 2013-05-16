@@ -1782,7 +1782,7 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 }
 
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,NeuroscopeView* activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
     //Check that the selected file is a cluster file
     QString fileName = clusterUrl;
     if(fileName.indexOf(".clu") == -1) return INCORRECT_FILE;
@@ -1855,7 +1855,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
     //already be loaded once).
     QString fileName = clusterUrl;
@@ -2528,7 +2528,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(const 
 
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(QString url,NeuroscopeView* activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const QString &url, NeuroscopeView* activeView){
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionFileName = url;
     QStringList fileParts = positionFileName.split(".", QString::SkipEmptyParts);
