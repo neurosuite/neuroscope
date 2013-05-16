@@ -383,13 +383,17 @@ void TraceWidget::slotStartMinuteTimeUpdated(int start){
         long modifiedStartTime = start * 60000 + startSecond->value() * 1000 + startMilisecond->value();
 
         //Test if we go over the time of the recording if so keep the time window and move back in time
-        if((modifiedStartTime + timeWindow) > recordingLength) correctStartTime();
-        else{
+        if((modifiedStartTime + timeWindow) > recordingLength)  {
+           correctStartTime();
+        }else{
             startTime = modifiedStartTime;
+/*
             startMinute->setMaximum(minutePart);
             startSecond->setMaximum(recordingLength/1000);
             startMilisecond->setMaximum(recordingLength);
+*/
             scrollBar->setValue(startTime);
+
         }
 
         updateView = true;
@@ -428,9 +432,9 @@ void TraceWidget::slotStartSecondTimeUpdated(int start){
         }
         else{
             startTime = modifiedStartTime;
-            startMinute->setMaximum(minutePart);
-            startSecond->setMaximum(recordingLength/1000);
-            startMilisecond->setMaximum(recordingLength);
+            //startMinute->setMaximum(minutePart);
+            //startSecond->setMaximum(recordingLength/1000);
+            //startMilisecond->setMaximum(recordingLength);
             scrollBar->setValue(startTime);
         }
 
@@ -482,9 +486,9 @@ void TraceWidget::slotStartMilisecondTimeUpdated(int start){
         }
         else{
             startTime = modifiedStartTime;
-            startMinute->setMaximum(minutePart);
-            startSecond->setMaximum(recordingLength/1000);
-            startMilisecond->setMaximum(recordingLength);
+            //startMinute->setMaximum(minutePart);
+            //startSecond->setMaximum(recordingLength/1000);
+            //startMilisecond->setMaximum(recordingLength);
             scrollBar->setValue(startTime);
         }
         updateView = true;
