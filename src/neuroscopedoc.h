@@ -156,7 +156,7 @@ public:
     * @param clusterId id of the cluster to redraw.
     * @param activeView the view in which the change has to be immediate.
     */
-    void clusterColorUpdate(QString providerName,int clusterId,NeuroscopeView* activeView);
+    void clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView);
 
     /**Changes the color of a event.
     * @param providerName identifier of the event provider containing the updated cluster.
@@ -499,7 +499,7 @@ public:
     * @return true if the document can be close, false if there still thread running and
     * the document could not be close.
     */
-    bool canCloseDocument(NeuroscopeApp* mainWindow,QString callingMethod);
+    bool canCloseDocument(NeuroscopeApp* mainWindow,const QString &callingMethod);
 
     /** Shows or hides the calibration bar. This bar is meaningful only when all the channels
     *  have the same amplification.
@@ -510,12 +510,12 @@ public:
 
     /**Returns the name used to identified the last loaded provider.
     */
-    QString lastLoadedProviderName(){return lastLoadedProvider;}
+    QString lastLoadedProviderName() const {return lastLoadedProvider;}
 
     /**Returns the item color list for the given provider.
     * @param fileName name of the file containing the data of the provider.
     */
-    ItemColors* providerColorList(QString fileName){return providerItemColors[fileName];}
+    ItemColors* providerColorList(const QString &fileName){return providerItemColors[fileName];}
 
     /**Loads the cluster file identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.

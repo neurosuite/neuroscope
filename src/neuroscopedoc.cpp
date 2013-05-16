@@ -135,7 +135,7 @@ NeuroscopeDoc::~NeuroscopeDoc(){
 
 }
 
-bool NeuroscopeDoc::canCloseDocument(NeuroscopeApp* mainWindow,QString callingMethod){
+bool NeuroscopeDoc::canCloseDocument(NeuroscopeApp* mainWindow, const QString &callingMethod){
     //Before closing, make sure that there is no thread running.
     //Loop on all the cluster and event Providers, moving to the next one when the current one has no more thread running.
     bool threadRunning = false;
@@ -1980,7 +1980,7 @@ void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activ
     providerUrls.remove(providerName);
 }
 
-void NeuroscopeDoc::clusterColorUpdate(QString providerName,int clusterId,NeuroscopeView* activeView){
+void NeuroscopeDoc::clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView){
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
