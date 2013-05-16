@@ -40,7 +40,7 @@ public:
    * @param t Array containing the time indexes of the events relative to the current starting time. The indexes are computed using the currently open data file sampling rate.
    * @param status status of the data, true if the data are available, false otherwise.
    */
-    EventData(Array<int> d,Array<dataType> t,bool status){
+    EventData(const Array<int> &d,const Array<dataType> &t,bool status){
         times = t;
         ids = d;
         ready = status;
@@ -60,12 +60,12 @@ public:
     }
 
     void setStatus(bool status){ready = status;}
-    void setData(Array<dataType>& t,Array<int>& d){
+    void setData(const Array<dataType>& t,const Array<int>& d){
         times = t;
         ids = d;
     }
     /**Returns the true if the data are available, false otherwise.*/
-    bool status(){return ready;}
+    bool status()const {return ready;}
 
     /**Returns an Array containing the events ids.*/
     Array<int>& getIds(){return ids;}
