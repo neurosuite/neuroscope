@@ -60,7 +60,7 @@ public:
   * @param currentSamplingRate sampling rate of the current file.
   * @param position represents the percentage from the begining of the window where the events are display when browsing.
   */
-    EventsProvider(QString fileUrl,double currentSamplingRate,int position = 25);
+    EventsProvider(const QString &fileUrl,double currentSamplingRate,int position = 25);
     ~EventsProvider();
 
     /**Triggers the retrieve of the events included in the time interval given by @p startTime and @p endTime.
@@ -79,7 +79,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-    void requestNextEventData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator);
+    void requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator);
 
 
     /**Looks up for the first of the events included in the list @p selectedIds existing before the time @p endTime.

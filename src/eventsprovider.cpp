@@ -33,7 +33,7 @@
 #include "utilities.h"
 
 
-EventsProvider::EventsProvider(QString fileUrl,double currentSamplingRate,int position): DataProvider(fileUrl),nbEvents(0),
+EventsProvider::EventsProvider(const QString &fileUrl, double currentSamplingRate, int position): DataProvider(fileUrl),nbEvents(0),
     eventPosition(static_cast<float>(position) / 100.0),modified(false){
 
     this->currentSamplingRate = static_cast<double>(currentSamplingRate / 1000.0);
@@ -334,7 +334,7 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
     emit dataReady(finalTimes,finalIds,initiator,name);
 }
 
-void EventsProvider::requestNextEventData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator){  
+void EventsProvider::requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator){
     long initialStartTime = startTime;
     //Compute the start time for the event look up
     startTime = initialStartTime + static_cast<long>(timeFrame * eventPosition);
