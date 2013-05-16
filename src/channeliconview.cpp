@@ -116,8 +116,6 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     return true;
 }
 
-
-
 void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
     //If the user did not clicked on an item, ignore the click

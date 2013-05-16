@@ -76,7 +76,12 @@ protected:
     {
         return QStringList() << "application/x-channeliconview";
     }
+    // without reading the QListWidget code !?
+    virtual void dropEvent(QDropEvent* ev) {
+        QAbstractItemView::dropEvent(ev);
+    }
 
 };
+
 
 #endif
