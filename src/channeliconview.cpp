@@ -103,6 +103,7 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
 bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::DropAction action)
 {
     Q_UNUSED(action)
+    Q_UNUSED(index)
     const QByteArray data = mimeData->data("application/x-channeliconview");
     if (data.isEmpty())
         return false;
@@ -112,7 +113,6 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         QListWidgetItem *item = new QListWidgetItem(this);
         stream >> *item;
     }
-    //emit dropped(this, index, item, sourceIsActiveList);
     return true;
 }
 
