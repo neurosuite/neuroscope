@@ -580,9 +580,16 @@ void TraceWidget::moveToTime(long time){
             int nbSeconds = remainingSeconds / 1000;
             int remainingMiliseconds = static_cast<int>(fmod(static_cast<double>(remainingSeconds),1000));
 
+            startMinute->blockSignals(true);
+            startSecond->blockSignals(true);
+            startMilisecond->blockSignals(true);
+
             startMinute->setValue(nbMinutes);
             startSecond->setValue(nbSeconds);
             startMilisecond->setValue(remainingMiliseconds);
+            startMinute->blockSignals(false);
+            startSecond->blockSignals(false);
+            startMilisecond->blockSignals(false);
         }
         updateView = true;
 
