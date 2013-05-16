@@ -232,7 +232,6 @@ void TraceWidget::initSelectionWidgets(){
     //enable the user to use the keyboard to interact with the scrollbar.
     scrollBar->setMouseTracking(false);
     scrollBar->setFocusPolicy(Qt::StrongFocus);
-    //connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(slotScrollBarUpdated()));
 
     lay->setMargin(0);
     lay->setSpacing(0);
