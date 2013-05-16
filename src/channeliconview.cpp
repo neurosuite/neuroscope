@@ -80,9 +80,12 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
     QByteArray data;
     //For the moment just one item
     QDataStream stream(&data, QIODevice::WriteOnly);
-    stream << *items.first();
+    Q_FOREACH(QListWidgetItem *item, items) {
+        stream << *item;
+    }
 
     mimedata->setData("application/x-channeliconview", data);
+    mimedata->setData("application/x-channeliconview-number-item", QByteArray::number(items.count()));
 
     return mimedata;
 }
@@ -104,8 +107,11 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     if (data.isEmpty())
         return false;
     QDataStream stream(data);
-    QListWidgetItem *item = new QListWidgetItem(this);
-    stream >> *item;
+    const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
+    for (int i=0; i< numberOfItems; ++i) {
+        QListWidgetItem *item = new QListWidgetItem(this);
+        stream >> *item;
+    }
     //emit dropped(this, index, item, sourceIsActiveList);
     return true;
 }
