@@ -1855,7 +1855,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QStrin
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(QString clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
     //already be loaded once).
     QString fileName = clusterUrl;

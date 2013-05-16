@@ -531,7 +531,7 @@ public:
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadClusterFile(QString clusterUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
 
 
     /**Loads the position file and creates the position view in the current display.
