@@ -86,6 +86,8 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
 
     mimedata->setData("application/x-channeliconview", data);
     mimedata->setData("application/x-channeliconview-number-item", QByteArray::number(items.count()));
+    mimedata->setData("application/x-channeliconview-name", objectName().toUtf8());
+    mimedata->setData("application/x-channeliconview-move-all-channels", (items.count() == count()) ? "true" : "false");
 
     return mimedata;
 }
@@ -112,6 +114,11 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     for (int i=0; i< numberOfItems; ++i) {
         QListWidgetItem *item = new QListWidgetItem(this);
         stream >> *item;
+    }
+    const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
+    if (moveAllGroup) {
+        const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
+        emit channelsMoved(name, 0);
     }
     return true;
 }
