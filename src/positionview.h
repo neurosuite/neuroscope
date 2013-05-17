@@ -98,7 +98,7 @@ public Q_SLOTS:
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   * @param backgroundForPrinting special background to be used for printing.
   */
-    void print(QPainter& printPainter,int width, int height,bool whiteBackground,QImage backgroundForPrinting = QImage());
+    void print(QPainter& printPainter, int width, int height, bool whiteBackground, const QImage &backgroundForPrinting = QImage());
 
     /***Changes the color of the background.*/
     void changeBackgroundColor(const QColor& color);

@@ -293,7 +293,7 @@ void PositionView::drawPositions(QPainter& painter){
     }
 }
 
-void PositionView::print(QPainter& printPainter,int width, int height,bool whiteBackground,QImage backgroundForPrinting){
+void PositionView::print(QPainter& printPainter,int width, int height,bool whiteBackground,const QImage &backgroundForPrinting){
     //first  print the information on the file: name and position in the file.
     int nbMinutes = static_cast<int>(startTime / 60000.0);
     float remainingSeconds = static_cast<float>(fmod(static_cast<double>(startTime),60000));
