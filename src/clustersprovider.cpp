@@ -398,7 +398,7 @@ void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiat
     emit dataReady(finalData,initiator,name);
 }
 
-void ClustersProvider::requestNextClusterData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits){
+void ClustersProvider::requestNextClusterData(long startTime, long timeFrame, const QList<int> &selectedIds, QObject* initiator, long startTimeInRecordingUnits){
     long initialStartTime = startTime;
     //Compute the start time for the spike look up
     startTime = initialStartTime + static_cast<long>(timeFrame * clusterPosition);

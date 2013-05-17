@@ -70,7 +70,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-    void requestNextClusterData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+    void requestNextClusterData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator,long startTimeInRecordingUnits);
 
 
     /**Looks up for the first of the clusters included in the list @p selectedIds existing before the time @p endTime.

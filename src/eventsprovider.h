@@ -40,8 +40,8 @@
 /**Class used to compare strings in case-insensitive maner.*/
 class EventDescription : public QString{
 public:
-    inline EventDescription():QString(){}
-    inline EventDescription(const QString& s):QString(s){}
+    EventDescription():QString(){}
+    EventDescription(const QString& s):QString(s){}
 };
 
 bool operator<(const EventDescription& s1,const EventDescription& s2);
