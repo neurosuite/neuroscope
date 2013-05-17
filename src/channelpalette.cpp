@@ -1101,9 +1101,9 @@ void ChannelPalette::moveChannels(int targetGroup){
     groupColor.setHsv(210,255,255);
     if(!destinationChannels.isEmpty()){
         if(type == DISPLAY)
-            groupColor = channelColors->groupColor(destinationChannels[0]);
+            groupColor = channelColors->groupColor(destinationChannels.at(0));
         else
-            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+            groupColor = channelColors->spikeGroupColor(destinationChannels.at(0));
     }
 
     //will store the selected channels which to be moved.
@@ -1422,9 +1422,9 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
     groupColor.setHsv(210,255,255);
     if(!destinationChannels.isEmpty()) {
         if(type == DISPLAY)
-            groupColor = channelColors->groupColor(destinationChannels[0]);
+            groupColor = channelColors->groupColor(destinationChannels.at(0));
         else
-            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+            groupColor = channelColors->spikeGroupColor(destinationChannels.at(0));
     }
 
     ChannelIconView* targetIconView = iconviewDict[targetGroup];
@@ -1654,7 +1654,8 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QStri
 }
 
 
-void ChannelPalette::discardChannels(){
+void ChannelPalette::discardChannels()
+{
     trashChannels(0);
 }
 
@@ -1788,9 +1789,9 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
     QList<int> destinationChannels = (*groupsChannels)[0];
     if(!destinationChannels.isEmpty()){
         if(type == DISPLAY)
-            groupColor = channelColors->groupColor(destinationChannels[0]);
+            groupColor = channelColors->groupColor(destinationChannels.at(0));
         else
-            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+            groupColor = channelColors->spikeGroupColor(destinationChannels.at(0));
     }
 
     QList<int>::const_iterator channelIterator;
@@ -2012,9 +2013,9 @@ void ChannelPalette::trashChannels(int destinationGroup){
     QList<int> destinationChannels = (*groupsChannels)[0];
     if(!destinationChannels.isEmpty()){
         if(type == DISPLAY)
-            groupColor = channelColors->groupColor(destinationChannels[0]);
+            groupColor = channelColors->groupColor(destinationChannels.at(0));
         else
-            groupColor = channelColors->spikeGroupColor(destinationChannels[0]);
+            groupColor = channelColors->spikeGroupColor(destinationChannels.at(0));
     }
 
     //Will store the selected channels which to be discarded.
