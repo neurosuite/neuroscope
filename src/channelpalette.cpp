@@ -67,10 +67,10 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     else
         legendColor = Qt::white;
     setAutoFillBackground(true);
-    QPalette palette; 
+    QPalette palette;
     viewport()->setAutoFillBackground(false);
     palette.setColor(backgroundRole(), backgroundColor);
-    palette.setColor(foregroundRole(), legendColor); 
+    palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -611,29 +611,29 @@ void ChannelPalette::applyGroupColor(PaletteType paletteType){
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QMap<int,int>::Iterator iterator;
-   for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
-       int groupId = (*channelsGroups)[iterator.key()];
-       iconView = iconviewDict[QString::number(groupId)];
-       QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::number(iterator.key()),Qt::MatchExactly);
-       if(!lstItem.isEmpty()) {
-           QListWidgetItem *item = lstItem.first();
-           //Get the channelColor associated with the item
-           QColor color;
-           if(paletteType == SPIKE)
-               color = channelColors->spikeGroupColor(iterator.key());
-           else
-               color = channelColors->groupColor(iterator.key());
+    for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
+        int groupId = (*channelsGroups)[iterator.key()];
+        iconView = iconviewDict[QString::number(groupId)];
+        QList<QListWidgetItem*>lstItem =  iconView->findItems(QString::number(iterator.key()),Qt::MatchExactly);
+        if(!lstItem.isEmpty()) {
+            QListWidgetItem *item = lstItem.first();
+            //Get the channelColor associated with the item
+            QColor color;
+            if(paletteType == SPIKE)
+                color = channelColors->spikeGroupColor(iterator.key());
+            else
+                color = channelColors->groupColor(iterator.key());
 
-           //Update the channelColor if the channel is not skipped
-           if(!channelsSkipStatus[iterator.key()])
-               channelColors->setColor(iterator.key(),color);
+            //Update the channelColor if the channel is not skipped
+            if(!channelsSkipStatus[iterator.key()])
+                channelColors->setColor(iterator.key(),color);
 
-           //Update the icon
-           QPixmap pixmap(14,14);
-           drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
-           item->setIcon(QIcon(pixmap));
-       }
-   }
+            //Update the icon
+            QPixmap pixmap(14,14);
+            drawItem(painter,&pixmap,color,channelsShowHideStatus[iterator.key()],channelsSkipStatus[iterator.key()]);
+            item->setIcon(QIcon(pixmap));
+        }
+    }
 }
 
 void ChannelPalette::applyCustomColor(){
@@ -673,7 +673,7 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
 
     QPalette palette;
     palette.setColor(backgroundRole(), backgroundColor);
-    palette.setColor(foregroundRole(), legendColor); 
+    palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
 
     viewport()->setPalette(palette);
