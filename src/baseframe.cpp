@@ -55,7 +55,8 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &nam
     zoomCursor = QCursor(QPixmap(":/shared-cursors/zoom_cursor"),7,7);
 }
 
-BaseFrame::~BaseFrame(){
+BaseFrame::~BaseFrame()
+{
 }
 
 void BaseFrame::changeColor(const QColor & color)

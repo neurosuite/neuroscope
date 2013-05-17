@@ -124,7 +124,7 @@ public Q_SLOTS:
     void advance();
 
     /**Changes the color of the background.*/
-    void changeBackgroundColor(QColor color);
+    void changeBackgroundColor(const QColor &color);
 
     /**All the channels are now display either in a gradation of grey or in color.
   * @param grey true if the channels have to be displayed in grey false otherwise.
@@ -209,7 +209,7 @@ public Q_SLOTS:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  clusterColorUpdate(QString name,int clusterId,bool active){view.clusterColorUpdate(name,clusterId,active);}
+    void  clusterColorUpdate(const QString &name,int clusterId,bool active){view.clusterColorUpdate(name,clusterId,active);}
 
     /**Changes the color of a event.
   * @param name name use to identified the event provider containing the updated event.

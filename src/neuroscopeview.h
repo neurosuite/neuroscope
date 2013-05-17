@@ -435,7 +435,7 @@ public:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  clusterColorUpdate(QString name,int clusterId,bool active){emit clusterColorUpdated(name,clusterId,active);}
+    void  clusterColorUpdate(const QString &name,int clusterId,bool active){emit clusterColorUpdated(name,clusterId,active);}
 
     /**Hides the cluster waveforms on top of the traces but keep the setting of displaying or hidding them.*/
     void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false);}

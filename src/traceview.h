@@ -229,7 +229,8 @@ public:
     void showCalibration(bool show,bool active){
         drawContentsMode = REDRAW;
         showCalibrationScale = show;
-        if(active) update();
+        if(active)
+            update();
     }
 
     /**Adds a new provider of cluster data.
@@ -267,7 +268,7 @@ public:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void clusterColorUpdate(QString name,int clusterId,bool active);
+    void clusterColorUpdate(const QString &name,int clusterId,bool active);
 
 
     /**Adds a new provider of event data.

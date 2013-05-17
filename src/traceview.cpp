@@ -3678,7 +3678,7 @@ void TraceView::skipStatusChanged(const QList<int>& skippedChannels){
     }
 }
 
-void TraceView::clusterColorUpdate(QString name,int clusterId,bool active){
+void TraceView::clusterColorUpdate(const QString &name, int clusterId, bool active){
     //redraw everything
     if (active){
         drawContentsMode = REDRAW ;

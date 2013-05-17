@@ -137,17 +137,20 @@ void TraceWidget::advance()
     timer->start(pageTime); // restart timer
 }
 
-void TraceWidget::changeBackgroundColor(QColor color){
+void TraceWidget::changeBackgroundColor(const QColor &color)
+{
     view.changeBackgroundColor(color);
     update();
 }
 
-void TraceWidget::setGreyScale(bool grey){
+void TraceWidget::setGreyScale(bool grey)
+{
     view.setGreyScale(grey);
 }
 
 
-void TraceWidget::initSelectionWidgets(){
+void TraceWidget::initSelectionWidgets()
+{
     QHBoxLayout *lay = new QHBoxLayout;
     selectionWidgets->setLayout(lay);
     QFont font("Helvetica",9);
@@ -244,7 +247,8 @@ void TraceWidget::initSelectionWidgets(){
     lay->setStretchFactor(scrollBar,200);
 }
 
-void TraceWidget::samplingRateModified(long long length){
+void TraceWidget::samplingRateModified(long long length)
+{
     recordingLength = length;
 
     view.samplingRateModified(length);
@@ -253,7 +257,8 @@ void TraceWidget::samplingRateModified(long long length){
     slotSetStartAndDuration(0,50);
 }
 
-void TraceWidget::keyPressEvent(QKeyEvent* event){
+void TraceWidget::keyPressEvent(QKeyEvent* event)
+{
     switch(event->key()){
     case Qt::Key_Plus:                               // double the duration
         timeWindow = timeWindow * 2;
@@ -268,7 +273,8 @@ void TraceWidget::keyPressEvent(QKeyEvent* event){
     }
 }
 
-void TraceWidget::slotDurationUpdated(){
+void TraceWidget::slotDurationUpdated()
+{
     if(!isInit && updateView){
         //Modify updateView to prevent the scrollBar to trigger a changeEvent while been updated.
         updateView = false;
@@ -316,7 +322,8 @@ void TraceWidget::slotDurationUpdated(){
     }
 }
 
-void TraceWidget::correctStartTime(){
+void TraceWidget::correctStartTime()
+{
     //update the selection widgets
     int extraMinutes = timeWindow / 60000;
     int remainingSeconds = static_cast<int>(fmod(static_cast<double>(timeWindow),60000));
