@@ -176,11 +176,13 @@ const QString& NeuroscopeDoc::url() const
     return docUrl;
 }
 
-QString NeuroscopeDoc::sessionPath() const {
+QString NeuroscopeDoc::sessionPath() const
+{
     return QFileInfo(sessionUrl).absoluteFilePath();
 }
 
-void NeuroscopeDoc::closeDocument(){  
+void NeuroscopeDoc::closeDocument()
+{
     //If a document has been open reset the members
     viewList->clear();
     docUrl.clear();
@@ -792,6 +794,7 @@ void NeuroscopeDoc::setBackgroundColor(const QColor& backgroundColor){
         NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
         if(rotation != 90 && rotation != 270){
             for(int i = 0; i<viewList->count(); ++i) {
+                view = viewList->at(i);
                 if(view != activeView)
                     view->updatePositionInformation(videoWidth,videoHeight,transformedBackground,false,false);
                 else
@@ -801,6 +804,7 @@ void NeuroscopeDoc::setBackgroundColor(const QColor& backgroundColor){
         //If there is a rotation of 90 or 270 degree, the with and height have to be inverted.
         else{
             for(int i = 0; i<viewList->count(); ++i) {
+                view = viewList->at(i);
                 if(view != activeView)
                     view->updatePositionInformation(videoHeight,videoWidth,transformedBackground,false,false);
                 else
