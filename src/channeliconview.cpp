@@ -106,6 +106,16 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
 {
     Q_UNUSED(action)
     Q_UNUSED(index)
+
+    if (mimeData->hasText()) {
+        const QString information = mimeData->text();
+        const int groupSource = information.section("-",0,0).toInt();
+        const int start = information.section("-",1,1).toInt();
+        QString groupTarget = objectName();
+        emit dropLabel(groupSource,groupTarget.toInt(),start,/*QWidget::mapToGlobal(event->pos()).y()*/0);
+        return true;
+    }
+
     const QByteArray data = mimeData->data("application/x-channeliconview");
     if (data.isEmpty())
         return false;
@@ -118,7 +128,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
     if (moveAllGroup) {
         const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
-        emit channelsMoved(name, 0);
+        //emit channelsMoved(name, 0);
     }
     return true;
 }
