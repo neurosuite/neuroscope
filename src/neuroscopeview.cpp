@@ -266,7 +266,7 @@ void NeuroscopeView::updateNoneBrowsingClusterList(QString providerName,const QL
 }
 
 
-void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
+void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QString &name,ItemColors* eventColors,bool active,
                                       QList<int>& eventsToShow,const QList<int>& eventsToSkip){
     QList<int>* currentSelectedEvents = new QList<int>();
     QList<int>::iterator shownEventsIterator;

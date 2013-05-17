@@ -454,8 +454,8 @@ public:
   * @param eventsToShow list of events to be shown.
   * @param eventsToSkip list of clusters to be skipped while browsing.
   */
-    void setEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
-                          QList<int>& eventsToShow,const QList<int>& eventsToSkip);
+    void setEventProvider(EventsProvider* eventsProvider, const QString &name, ItemColors* eventColors, bool active,
+                          QList<int>& eventsToShow, const QList<int>& eventsToSkip);
 
     /**Removes a provider of event data.
   * @param name name use to identified the event provider.

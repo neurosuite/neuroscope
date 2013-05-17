@@ -952,7 +952,8 @@ void NeuroscopeDoc::setSamplingRate(double rate){
         //Notify all the views of the modification
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
-            if(view != activeView) view->samplingRateModified(length);
+            if(view != activeView)
+                view->samplingRateModified(length);
         }
 
         //Ask the active view to take the modification into account immediately
@@ -979,8 +980,10 @@ void NeuroscopeDoc::setAcquisitionSystemSamplingRate(double rate){
         //Notify all the views of the modification
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
-            if(view != activeView) view->updateClusterData(false);
-            else view->updateClusterData(true);
+            if(view != activeView)
+                view->updateClusterData(false);
+            else
+                view->updateClusterData(true);
         }
     }
 }
@@ -1036,7 +1039,8 @@ void NeuroscopeDoc::setChannelNb(int nb){
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
 
-            if(view != activeView) view->setChannelNb(nb);
+            if(view != activeView)
+                view->setChannelNb(nb);
         }
 
         //Ask the active view to take the modification into account immediately
@@ -1063,7 +1067,8 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
 
     //The background image information is stored in the parameter file starting with the version 1.2.3
     if(reader.getType() == NeuroscopeXmlReader::PARAMETER){
-        if(reader.getBackgroundImage() != "-") backgroundImage = reader.getBackgroundImage();
+        if(reader.getBackgroundImage() != "-")
+            backgroundImage = reader.getBackgroundImage();
 
         if(!backgroundImage.isEmpty()){
             QFileInfo fileInfo = QFileInfo(backgroundImage);
@@ -1185,8 +1190,7 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
         int peakSampleIndexRead = reader.getPeakSampleIndex();
         if(nbSamplesRead != 0) nbSamples = nbSamplesRead;
         if(peakSampleIndexRead != 0) peakSampleIndex = peakSampleIndexRead;
-    }
-    else{
+    } else {
         float waveformLengthRead = reader.getWaveformLength();
         float indexLengthRead = reader.getPeakSampleLength();
         if(waveformLengthRead != 0) waveformLength = waveformLengthRead;
