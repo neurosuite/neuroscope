@@ -926,7 +926,7 @@ void TraceView::increaseAllAmplitude(){
     //factor = traceVspace / ((4/3)^gain * unitGain)
     for(int i = 0; i < nbChannels; ++i){
         gains[i]--;
-        channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains[i]));
+        channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains.at(i)));
     }
 
     computeChannelDisplayGain();
@@ -959,7 +959,7 @@ void TraceView::increaseSelectedChannelsAmplitude(const QList<int>& channelIds){
     for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
         int channelId = channelIds[i];
         gains[channelId]--;
-        channelFactors[channelId] = static_cast<float>(alpha * pow(0.75,gains[channelId]));
+        channelFactors[channelId] = static_cast<float>(alpha * pow(0.75,gains.at(channelId)));
     }
 
     computeChannelDisplayGain(channelIds);
@@ -975,7 +975,7 @@ void TraceView::decreaseSelectedChannelsAmplitude(const QList<int>& channelIds){
     for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
         int channelId = channelIds[i];
         gains[channelId]++;
-        channelFactors[channelId] = static_cast<float>(alpha * pow(0.75,gains[channelId]));
+        channelFactors[channelId] = static_cast<float>(alpha * pow(0.75,gains.at(channelId)));
     }
 
     computeChannelDisplayGain(channelIds);
@@ -1165,8 +1165,8 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             if (value < min) min = value;
             if (value > max) max = value;
         }
-        int yMin = basePosition - static_cast<long>(min * channelFactors[channelId]);
-        int yMax = basePosition - static_cast<long>(max * channelFactors[channelId]);
+        int yMin = basePosition - static_cast<long>(min * channelFactors.at(channelId));
+        int yMax = basePosition - static_cast<long>(max * channelFactors.at(channelId));
         if ((yMax - yMin) <= limit){
             painter.drawPoint(X,yMin);
         }
@@ -1193,8 +1193,8 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             previousMax = max;
             previousMin = min;
 
-            yMax = basePosition - static_cast<long>(min * channelFactors[channelId]);
-            yMin = basePosition - static_cast<long>(max * channelFactors[channelId]);
+            yMax = basePosition - static_cast<long>(min * channelFactors.at(channelId));
+            yMin = basePosition - static_cast<long>(max * channelFactors.at(channelId));
 
             if ((yMax - yMin) <= limit){
                 painter.drawPoint(X,yMin);
@@ -1221,8 +1221,8 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             if (value < min) min = value;
             if (value > max) max = value;
         }
-        int yMin = basePosition - static_cast<long>(min * channelFactors[channelId]);
-        int yMax = basePosition - static_cast<long>(max * channelFactors[channelId]);
+        int yMin = basePosition - static_cast<long>(min * channelFactors.at(channelId));
+        int yMax = basePosition - static_cast<long>(max * channelFactors.at(channelId));
         if ((yMax - yMin) <= limit){
             painter.drawPoint(X,yMin);
         }
@@ -1255,8 +1255,8 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
             previousMax = max;
             previousMin = min;
 
-            yMax = basePosition - static_cast<long>(min * channelFactors[channelId]);
-            yMin = basePosition - static_cast<long>(max * channelFactors[channelId]);
+            yMax = basePosition - static_cast<long>(min * channelFactors.at(channelId));
+            yMin = basePosition - static_cast<long>(max * channelFactors.at(channelId));
 
             if ((yMax - yMin) <= limit){
                 painter.drawPoint(X,yMin);
