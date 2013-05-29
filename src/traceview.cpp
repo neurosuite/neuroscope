@@ -48,7 +48,8 @@ const int TraceView::YMARGIN = 0;
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
                      bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
                      ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent, const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
+                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
+                     const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                      int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
     BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
     greyScaleMode(greyScale),
@@ -328,7 +329,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
     }
 }
 
-void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName){
+void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,const QString &providerName){
     //If another widget was the initiator of the request, ignore the data.
     if (initiator != this) return;
 
@@ -809,7 +810,8 @@ void TraceView::showChannels(const QList<int>& channelsToShow){
     QList<int>::iterator iterator;
     QList<int> toRemoved;
     for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator)
-        if (!shownChannels.contains(*iterator))toRemoved.append(*iterator);
+        if (!shownChannels.contains(*iterator))
+            toRemoved.append(*iterator);
 
     for(iterator = toRemoved.begin(); iterator != toRemoved.end(); ++iterator)
         selectedChannels.removeAll(*iterator);
@@ -914,7 +916,7 @@ void TraceView::computeChannelDisplayGain(const QList<int>& channelIds){
 
     for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
         int channelId = channelIds.at(i);
-        channelDisplayGains[channelId] = static_cast<float>(beta * pow(0.75,gains[channelId]));
+        channelDisplayGains[channelId] = static_cast<float>(beta * pow(0.75,gains.at(channelId)));
     }
 }
 

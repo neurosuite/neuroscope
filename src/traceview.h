@@ -428,7 +428,7 @@ public Q_SLOTS:
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   */
-    void dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* initiator,QString providerName);
+    void dataAvailable(Array<dataType>& times, Array<int>& ids, QObject* initiator, const QString &providerName);
 
     /**Compute the cluster information that has been retrieved regarding the next cluster to display.
   * @param data 2 line array containing the sample index of the peak index of each spike existing in the requested time frame with the
