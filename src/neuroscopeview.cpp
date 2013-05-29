@@ -343,7 +343,6 @@ void NeuroscopeView::updateEventsAfterAddition(const QString& providerName,int e
         currentSelectedEvents->append(eventId);
         emit updateEvents(providerName,*currentSelectedEvents,active);
     } else {
-        qDebug()<<" 1111111111";
         emit updateEvents(active,providerName,time);
     }
 
