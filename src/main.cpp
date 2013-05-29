@@ -27,6 +27,7 @@
 #include "neuroscope.h"
 int main(int argc, char *argv[])
 {
+
     QApplication::setOrganizationName("sourceforge");
     QApplication::setOrganizationDomain("sourceforge.net");
     QApplication::setApplicationName("neuroscope");
@@ -42,6 +43,7 @@ int main(int argc, char *argv[])
     QString screenGain;
     QString timeWindow;
     QString file;
+    //TODO Qt5.2 use QCommandLineParser
     for (int i = 1, n = args.size(); i < n; ++i) {
         const QString arg = args.at(i);
         if (arg == "-h" || arg == "--help" || arg == "-help") {
@@ -91,8 +93,8 @@ int main(int argc, char *argv[])
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
     neuroscope->show();
     if(!file.isEmpty()){
-        if(file.left(1) != "/"){
-            QString url = QDir::currentPath().append("/") + file;
+        if(file.left(1) != QLatin1String("/")){
+            const QString url = QDir::currentPath().append("/") + file;
             neuroscope->openDocumentFile(url);
         }
         else
