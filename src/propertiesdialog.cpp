@@ -121,9 +121,9 @@ void PropertiesDialog::slotVerify(){
             properties->setNbChannels(nbChannels);
             nbChannelsModified = false;
             oops = true;
-        }
-        else
+        } else {
             modified = true;
+        }
     }
     else{
         if(nbChannelsModified)

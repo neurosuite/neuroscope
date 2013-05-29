@@ -18,9 +18,6 @@
 //includes files for the application
 #include "properties.h"
 
-
-
-
 Properties::Properties(QWidget *parent)
     : PropertiesLayout(parent),
       intValidator(this),doubleValidator(this)
