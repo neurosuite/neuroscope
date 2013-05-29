@@ -336,6 +336,7 @@ void NeuroscopeApp::initActions()
     mSynchronizeGroups =channelsMenu->addAction(tr("&Synchronize Groups"));
     connect(mSynchronizeGroups,SIGNAL(triggered()), this,SLOT(slotSynchronize()));
 
+    channelsMenu->addSeparator();
 
     //Color section
     mColorAnatomicalGroups = channelsMenu->addAction(tr("Color by &Anatomical Groups"));
