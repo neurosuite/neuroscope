@@ -443,7 +443,7 @@ int NeuroscopeXmlReader::getOffset()const{
 }
 
 
-QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription(){
+QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription() const {
     QList<ChannelDescription> list;
     QDomNode n = documentNode.firstChild();
     if (!n.isNull()) {

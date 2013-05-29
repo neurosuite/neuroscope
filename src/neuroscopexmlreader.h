@@ -53,31 +53,31 @@ public:
   * Returns the resolution in bits.
   * @return resolution.
   */
-    int getResolution()const;
+    int getResolution() const;
 
     /**
   * Returns the number of channels.
   * @return number of channels.
   */
-    int getNbChannels()const;
+    int getNbChannels() const;
 
     /**
   * Returns the sampling rate of the system in hertz.
   * @return sampling rate in hertz.
   */
-    double getSamplingRate()const;
+    double getSamplingRate() const;
 
     /**
   * Returns the sampling rate used to upsample the waveforms.
   * @return upsampling rate in hertz.
   */
-    double getUpsamplingRate()const;
+    double getUpsamplingRate() const;
 
     /**
   * Returns the local field potential sampling rate in hertz.
   * @return local field potential sampling rate in hertz.
   */
-    double getLfpInformation()const;
+    double getLfpInformation() const;
 
 
     /**Returns the screen gain in milivolts by centimeters used to display the field potentiels
@@ -103,12 +103,12 @@ public:
   * or zero if the element could not be found in the file.
   * @return offset.
   */
-    int getOffset()const;
+    int getOffset() const;
 
     /** Returns the list of ChannelDescription, class given the color for each channel.
   * @return list of ChannelDescription.
   */
-    QList<ChannelDescription> getChannelDescription();
+    QList<ChannelDescription> getChannelDescription() const;
 
     /** Returns the list of channel default offsets.
   * @param channelDefaultOffsets empty map to be filled with the channel default offsets.
@@ -137,25 +137,25 @@ public:
   * or zero if the element could not be found in the file.
   * @return number of samples.
   */
-    int getNbSamples()const;
+    int getNbSamples() const;
 
     /**Returns the length for a spike,
   * or zero if the corresponding information could not be found in the file.
   * @return length of a spike in miliseconds.
   */
-    float getWaveformLength()const;
+    float getWaveformLength() const;
 
     /**Returns the sample index corresponding to the peak of the spike,
   * or zero if the element could not be found in the file.
   * @return index.
   */
-    int getPeakSampleIndex()const;
+    int getPeakSampleIndex() const;
 
     /**Returns the Length corresponding to the index of the spike peak,
   * or zero if the corresponding could not be found in the file.
   * @return length of the index of the peak index in miliseconds.
   */
-    float getPeakSampleLength()const;
+    float getPeakSampleLength() const;
 
 
     /** Returns the list of files which where loaded in the last session, cluster, spike or event files.
@@ -180,38 +180,38 @@ public:
     /**Returns the video image width.
   * @return width.
   */
-    int getVideoWidth()const;
+    int getVideoWidth() const;
 
     /**Returns the video image height.
   * @return height.
   */
-    int getVideoHeight()const;
+    int getVideoHeight() const;
 
     /**Returns the video image rotation angle (0,90,180,270). The angle is counted counterclockwise.
   * @return rotation angle.
   */
-    int getRotation()const;
+    int getRotation() const;
 
     /**Returns the video image flip orientation. 0 stands for none, 1 for vertical and 2 for horizontal.
   * @return flip orientation.
   */
-    int getFlip()const;
+    int getFlip() const;
 
     /**All the positions contained in a position file can be used to create a background image for the PositionView.
   * The value return by this function tells if such background has to be created.
   * @return 1 if the all the positions contain in the position file have to be drawn on the background, 0 otherwise.
    */
-    int getTrajectory()const;
+    int getTrajectory() const;
 
     /**Gets the url of the background image.
   * @return the url of the background image, an empty string if no background has been choosen and a dash if the entry does not exist in the file.
   */
-    QString getBackgroundImage()const;
+    QString getBackgroundImage() const;
 
     /**Gets the url of the background image use for the trace view.
   * @return the url of the background image use for the trace view, an empty string if no background has been choosen and a dash if the entry does not exist in the file.
   */
-    QString getTraceBackgroundImage()const;
+    QString getTraceBackgroundImage() const;
 
     /**Returns the version of current file.
   * @return version.
