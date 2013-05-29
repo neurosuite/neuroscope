@@ -91,7 +91,7 @@ public:
   * @param anatomicalGroups map given to which anatomical group each channel belongs.
   * @param skipStatus map given the skip status of the channels.
   */
-    void setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus);
+    void setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups, const QMap<int, bool> &skipStatus);
 
     /**
   * Creates the elements related to the spike detection.

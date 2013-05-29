@@ -193,7 +193,7 @@ void ParameterXmlCreator::setChannelDisplayInformation(ChannelColors* channelCol
     }
 }
 
-void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,QMap<int,bool> skipStatus){
+void ParameterXmlCreator::setAnatomicalDescription(QMap<int, QList<int> >& anatomicalGroups,const QMap<int,bool> &skipStatus){
     anatomicalDescription = doc.createElement(ANATOMY);
     QDomElement channelGroupsElement = doc.createElement(CHANNEL_GROUPS);
 
