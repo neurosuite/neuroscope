@@ -142,6 +142,40 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 
 endif()
 
+if (CMAKE_C_COMPILER MATCHES "icc")
+
+   set (KDE4_ENABLE_EXCEPTIONS -fexceptions)
+   # Select flags.
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+   set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG          "-O2 -g -fno-inline -noalign")
+   set(CMAKE_CXX_FLAGS_DEBUGFULL      "-g -fno-inline -noalign")
+   set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -g")
+   set(CMAKE_C_FLAGS_RELEASE          "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_C_FLAGS_DEBUG            "-O2 -g -fno-inline -noalign")
+   set(CMAKE_C_FLAGS_DEBUGFULL        "-g -fno-inline -noalign")
+
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common")
+
+   # visibility support
+   set(__KDE_HAVE_ICC_VISIBILITY)
+#   check_cxx_compiler_flag(-fvisibility=hidden __KDE_HAVE_ICC_VISIBILITY)
+#   if (__KDE_HAVE_ICC_VISIBILITY)
+#      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+#   endif (__KDE_HAVE_ICC_VISIBILITY)
+
+endif (CMAKE_C_COMPILER MATCHES "icc")
+
+# Adjust code on OS X since file operation are always 64bit there.
+if(APPLE)
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dfseeko64=fseeko")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dfseeko64=fseeko")
+
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dftello64=ftello")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dftello64=ftello")
+endif()
+
 
 if (MSVC)
    set (KDE4_ENABLE_EXCEPTIONS -EHsc)
@@ -168,7 +202,6 @@ if(WIN32)
 endif()
 if(UNIX)
   if(APPLE)
-    set( CMAKE_INSTALL_PREFIX "/Applications" )
     set( CPACK_GENERATOR "ZIP" )
     set( CPACK_DMG_VOLUME_NAME "neuroscope" )
     set( CPACK_SYSTEM_NAME "OSX" )
