@@ -576,6 +576,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         return;
     }
     QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
     if (drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
