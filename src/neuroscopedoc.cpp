@@ -250,6 +250,7 @@ bool NeuroscopeDoc::isADocumentToClose(){
 
 int NeuroscopeDoc::openDocument(const QString& url)
 {
+    qDebug()<<" int NeuroscopeDoc::openDocument(const QString& url)"<<url;
     channelColorList = new ChannelColors();
     docUrl = url;
 
@@ -283,11 +284,13 @@ int NeuroscopeDoc::openDocument(const QString& url)
     QStringList fileParts = fileName.split(QLatin1Char('.'), QString::SkipEmptyParts);
     if(fileParts.count() < 2)
         return INCORRECT_FILE;
+    qDebug()<<"NeuroscopeDoc::openDocument file correct";
     //QString extension;
 
     //Treat the case when the selected file is a neuroscope session file or a par file.
     if(fileName.contains(QLatin1String(".nrs")) || fileName.contains(QLatin1String(".xml"))){
         if((fileName.contains(".nrs") && fileParts[fileParts.count() - 1] != "nrs") || (fileName.contains(".xml") && fileParts[fileParts.count() - 1] != "xml")) {
+            qDebug()<<" NeuroscopeDoc::openDocument INCORRECT FILE";
             return INCORRECT_FILE;
         } else {
             baseName = fileParts[0];
@@ -307,8 +310,11 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 QString docFile = baseName + ".dat";
                 docUrl = urlFileInfo.absolutePath() + QDir::separator() + docFile;
 
-                if(!QFile::exists(docUrl))
+                qDebug()<<" NeuroscopeDoc::openDocument dat file";
+                if(!QFile::exists(docUrl)) {
+                    qDebug()<<" NeuroscopeDoc::openDocument DOWNLOADERROR";
                     return DOWNLOAD_ERROR;
+                }
             }
         }
     }
@@ -317,11 +323,11 @@ int NeuroscopeDoc::openDocument(const QString& url)
     fileParts = fileName.split(".", QString::SkipEmptyParts);
     baseName = fileParts[0];
     for(uint i = 1;i < fileParts.count() - 1; ++i)
-        baseName += "." + fileParts[i];
+        baseName += "." + fileParts.at(i);
     QString sessionFile = baseName + ".nrs";
     sessionUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() + sessionFile;
 
-    extension = fileParts[fileParts.count() - 1];
+    extension = fileParts.at(fileParts.count() - 1);
 
     //Look up in the parameter file
     const QString parFileUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() +baseName +".xml";
@@ -346,10 +352,11 @@ int NeuroscopeDoc::openDocument(const QString& url)
             //try to get the extension information from the parameter file (prior to the 1.2.3 version, the information was
             //store in the session file)
             extensionSamplingRates = reader.getSampleRateByExtension();
+            qDebug()<<" NeuroscopeDoc::openDocument NeuroscopeXmlReader::PARAMETER";
             reader.closeFile();
         }
         else{
-
+            qDebug()<<" NeuroscopeDoc::openDocument PARSE_ERROR";
             return PARSE_ERROR;
         }
 
@@ -361,6 +368,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 if(reader.getVersion().isEmpty() || reader.getVersion() == QLatin1String("1.2.2"))
                     extensionSamplingRates = reader.getSampleRateByExtension();
             } else {
+                qDebug()<<" NeuroscopeDoc::openDocument PARSE_ERROR 2";
                 return PARSE_ERROR;
             }
         }
@@ -394,7 +402,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
         tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
 
         //Is there a session file?
-        if(sessionFileExist){
+        if(sessionFileExist) {
+            qDebug()<<" NeuroscopeDoc::openDocument sessionfile exit";
             loadSession(reader);
             reader.closeFile();
         }
@@ -421,6 +430,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                     //Load the general info
                     loadDocumentInformation(reader);
                 }else {
+                    qDebug()<<" NeuroscopeDoc::openDocument MISSING FILE";
                     return MISSING_FILE;
                 }
 
@@ -430,7 +440,8 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 //If the file extension is not a .nrs, .dat or .eeg look up the sampling rate for
                 //the extension. If no sampling rate is available, prompt the user for the information.
                 if(extension != "eeg" && extension != "dat" && extension != "xml"){
-                    if(extensionSamplingRates.contains(extension)) samplingRate = extensionSamplingRates[extension];
+                    if(extensionSamplingRates.contains(extension))
+                        samplingRate = extensionSamplingRates[extension];
                     //Prompt the user
                     else{
                         QApplication::restoreOverrideCursor();
@@ -458,6 +469,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 //Load the session information
                 loadSession(reader);
 
+                qDebug()<<" NeuroscopeDoc::openDocument CLOSE FILE";
                 reader.closeFile();
             }
             else return PARSE_ERROR;
@@ -508,8 +520,9 @@ int NeuroscopeDoc::openDocument(const QString& url)
         }
     }
 
+    qDebug()<<" NeuroscopeDoc::openDocument END ?";
     //if skipStatus is empty, set the default status to 0
-    if(skipStatus.size() == 0){
+    if(skipStatus.isEmpty()){
         for(int i = 0; i < channelNb; ++i)
             skipStatus.insert(i,false);
     }
@@ -517,6 +530,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     //Use the channel default offsets
     if(!sessionFileExist)
         emit noSession(channelDefaultOffsets,skipStatus);
+    qDebug()<<" NeuroscopeDoc::openDocument END FINISH";
     return OK;
 }
 
