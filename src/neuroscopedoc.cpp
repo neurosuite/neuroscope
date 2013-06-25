@@ -156,8 +156,9 @@ bool NeuroscopeDoc::canCloseDocument(NeuroscopeApp* mainWindow, const QString &c
         CloseDocumentEvent* event = getCloseDocumentEvent(callingMethod);
         QApplication::postEvent(mainWindow,event);
         return false;
+    } else {
+        return true;
     }
-    else return true;
 }
 
 void NeuroscopeDoc::addView(NeuroscopeView* view)
@@ -279,7 +280,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     bool sessionFileExist = false;
     QFileInfo urlFileInfo(url);
     QString fileName = urlFileInfo.fileName();
-    QStringList fileParts = fileName.split(".", QString::SkipEmptyParts);
+    QStringList fileParts = fileName.split(QLatin1Char('.'), QString::SkipEmptyParts);
     if(fileParts.count() < 2)
         return INCORRECT_FILE;
     //QString extension;
@@ -291,7 +292,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
         } else {
             baseName = fileParts[0];
             for(uint i = 1;i < fileParts.count() - 1; ++i)
-                baseName += "." + fileParts[i];
+                baseName += "." + fileParts.at(i);
 
             //As all the files with the same base name share the same session and par files, ask the user to selected the desire one.
             QString startUrl = urlFileInfo.absolutePath() + QDir::separator() + baseName;
@@ -695,8 +696,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         for(int i = 0; i < channelNb; ++i){
             TracePosition tracePosition;
             tracePosition.setId(i);
-            tracePosition.setGain(gains[i]);
-            tracePosition.setOffset(offsets[i]);
+            tracePosition.setGain(gains.at(i));
+            tracePosition.setOffset(offsets.at(i));
             tracePositions.append(tracePosition);
         }
 
