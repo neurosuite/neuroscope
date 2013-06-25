@@ -942,7 +942,7 @@ void TraceView::decreaseAllAmplitude(){
     //an enlargement of the traces in the ordinate direction.
     //factor = traceVspace / ((4/3)^gain * unitGain)
     for(int i = 0; i < nbChannels; ++i){
-        gains[i]++;
+        ++gains[i];
         channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains.at(i)));
     }
 
@@ -996,7 +996,7 @@ void TraceView::updateWindow(){
     int nbShownchannels = shownChannels.size();
     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
 
-    int oldXshift = Xshift;
+    //int oldXshift = Xshift;
 
     //traces presented on a single column
     if (!multiColumns){
@@ -1324,6 +1324,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     //By default, the viewport is the same as the device's rectangle (contentsRec), taking a smaller
     //one will ensure that the legends (cluster ids) will not ovelap a correlogram.
     painter.setViewport(viewport);
+    painter.setRenderHint(QPainter::Antialiasing);
 
 
     //Paint the selected channels
