@@ -1002,6 +1002,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         }
 
 
+        qDebug()<<"NeuroscopeApp::openDocumentFile no error ??????";
 
         //update the spike and event browsing status
         updateBrowsingStatus();
