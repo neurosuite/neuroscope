@@ -1330,21 +1330,24 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
 
 
     //Paint the selected channels
-    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
-    int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
-    int limit = viewportToWorldHeight(1);
+    const int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+    const int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
+    const int limit = viewportToWorldHeight(1);
 
     QList<int>::const_iterator iterator;
     for(iterator = channels.constBegin();iterator != channels.constEnd();++iterator){
         //if the channel is skipped, do no draw it
-        if (skippedChannels.contains(*iterator)) continue;
+        if (skippedChannels.contains(*iterator))
+            continue;
 
-        int basePosition = channelsStartingOrdinate[*iterator] +  static_cast<long>(data(1,*iterator + 1) * channelFactors[*iterator]);
+        int basePosition = channelsStartingOrdinate[*iterator] +  static_cast<long>(data(1,*iterator + 1) * channelFactors.at(*iterator));
 
         //The abscissa of the system coordinate center for the current channel
         int X;
-        if (!multiColumns) X = X0;
-        else X = channelsStartingAbscissa[*iterator];
+        if (!multiColumns)
+            X = X0;
+        else
+            X = channelsStartingAbscissa[*iterator];
 
         //Get the color associated with the channel and set the color to use to this color
         QColor color = channelColors->color(*iterator);
@@ -1390,7 +1393,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
             if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
                 QPolygon trace(nbSamples);
                 for(int i = 0; i < nbSamples;++i){
-                    int y = basePosition - static_cast<long>(data(i + 1,*iterator + 1) * channelFactors[*iterator]);
+                    int y = basePosition - static_cast<long>(data(i + 1,*iterator + 1) * channelFactors.at(*iterator));
                     trace.setPoint(i,X,y);
                     X += Xstep;
                 }
@@ -1407,8 +1410,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
                 }
-            }
-            else{
+            } else {
                 //Array containing 3 lines: sample index, abscissa and ordinate
                 Array<dataType> traceInfo(3,nbSamples);
                 QPolygon trace(nbSamples);
@@ -1505,12 +1507,11 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
             if (windowRectangle.left() != 0){
                 r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
                 rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
-            }
-            else{
+            } else {
                 r = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
                 rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
             }
-            float gain = channelDisplayGains[*iterator];
+            const float gain = channelDisplayGains.at(*iterator);
             if (highlight)
                 painter.fillRect(rHighlight,palette().highlight());
             else
@@ -1533,6 +1534,7 @@ void TraceView::drawTraces(QPainter& painter){
     int limit = viewportToWorldHeight(1);
     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
+    qDebug()<<"nbSamplesToDraw "<<nbSamplesToDraw;
 
     //traces presented on multiple columns
     if (multiColumns){
@@ -1620,16 +1622,16 @@ void TraceView::drawTraces(QPainter& painter){
             QList<int> positions;
             int y = Y;
             for(int j = 0; j < currentNbChannels; ++j){
-                int channelId = channelIds[j];
+                const int channelId = channelIds.at(j);
                 int position = -y + channelOffsets.at(channelId);
                 positions.append(position);
-                channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
+                channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors.at(channelId)));
                 channelsStartingAbscissa.insert(channelId,X);
                 y -= Yshift;
             }
 
             for(int j = 0; j < currentNbChannels; ++j){
-                int channelId = channelIds[j];
+                const int channelId = channelIds.at(j);
                 //The abscissa of the system coordinate center for the current channel
                 int x = 0;
 
@@ -1643,7 +1645,8 @@ void TraceView::drawTraces(QPainter& painter){
                     color.setHsv(0,0,greyvalue);
                 }
                 QPen pen(color,1);
-                if (selectedChannels.contains(channelId)) pen.setWidth(2);
+                if (selectedChannels.contains(channelId))
+                    pen.setWidth(2);
                 painter.setPen(pen);
 
                 if (downSampling != 1){
@@ -4504,6 +4507,7 @@ void TraceView::getCurrentEventInformation(long startTime,long endTime,QObject* 
     if (!eventProvidersToUpdate.isEmpty()){
         QStringList::iterator providerIterator;
         EventData* eventData;
+
         for(providerIterator = eventProvidersToUpdate.begin(); providerIterator != eventProvidersToUpdate.end(); ++providerIterator){
             eventData = eventsData[*providerIterator];
             if (eventData == 0){
