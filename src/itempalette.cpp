@@ -981,7 +981,7 @@ void ItemPalette::deselectAllItems(){
         ItemColors* itemColors = itemColorsDict[groupName];
         QMap<int,bool> browsingMap = browsingStatus[groupName];
         QList<int> itemsToSkip;
-        for(int i = 0; i<iterator2.value()->count();i++) {
+        for(int i = 0; i<iterator2.value()->count();++i) {
             QListWidgetItem *item = iterator2.value()->item(i);
             int currentIndex = item->data(ItemIconView::INDEXICON).toInt();
             if(browsingMap[currentIndex]){

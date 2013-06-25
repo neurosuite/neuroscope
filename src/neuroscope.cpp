@@ -1046,7 +1046,7 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 void NeuroscopeApp::updateBrowsingStatus(){
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette;
-        for(int i = 0; i<paletteTabsParent->count();i++){
+        for(int i = 0; i<paletteTabsParent->count();++i){
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
             if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
@@ -1072,7 +1072,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
     }
     if(!eventFileList.isEmpty()){
         ItemPalette* palette;
-        for(int i = 0; i<paletteTabsParent->count();i++){
+        for(int i = 0; i<paletteTabsParent->count();++i){
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
             if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
@@ -2822,7 +2822,7 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
 void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
     clusterFileList.append(clusterFileId);
 
-    for(int i = 0; i<paletteTabsParent->count();i++){
+    for(int i = 0; i<paletteTabsParent->count();++i){
         QWidget* current = paletteTabsParent->widget(i);
         QString name = current->objectName();
         if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
@@ -3026,7 +3026,7 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
 void NeuroscopeApp::addEventFile(const QString& eventFileId){
     eventFileList.append(eventFileId);
-    for(int i = 0; i<paletteTabsParent->count();i++){
+    for(int i = 0; i<paletteTabsParent->count();++i){
         QWidget* current = paletteTabsParent->widget(i);
         QString name = current->objectName();
         if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
