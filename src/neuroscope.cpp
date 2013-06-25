@@ -928,6 +928,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
 void NeuroscopeApp::openDocumentFile(const QString& url)
 {
+    qDebug()<<" void NeuroscopeApp::openDocumentFile(const QString& url)"<<url;
     slotStatusMsg(tr("Opening file..."));
     filePath = url;
     QFileInfo file(filePath);
@@ -953,6 +954,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         return;
     }
 
+    qDebug()<<" NeuroscopeApp::openDocumentFile will open "<<url;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //If no document is open already, open the document asked.
@@ -1020,7 +1022,8 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     else{
         QString path = doc->url();
 
-        if(path == url){
+        if (path == url) {
+            qDebug()<<"  NeuroscopeApp::openDocumentFile document is already open"<<path;
             mFileOpenRecent->addRecentFile(url); //hack, unselect the item
             QApplication::restoreOverrideCursor();
             return;
