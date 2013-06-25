@@ -1047,6 +1047,7 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 }
 
 void NeuroscopeApp::updateBrowsingStatus(){
+    qDebug()<<" void NeuroscopeApp::updateBrowsingStatus(){ clusterFileList"<<clusterFileList.count();
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette;
         for(int i = 0; i<paletteTabsParent->count();++i){
@@ -1073,6 +1074,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
             slotStateChanged("clusterBrowsingState");
         }
     }
+    qDebug()<<"NeuroscopeApp::updateBrowsingStatus() eventFileList.Count:"<<eventFileList.count();
     if(!eventFileList.isEmpty()){
         ItemPalette* palette;
         for(int i = 0; i<paletteTabsParent->count();++i){
