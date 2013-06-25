@@ -897,14 +897,15 @@ void TraceView::setGains(int gain,int acquisitionGain){
 
 void TraceView::computeChannelDisplayGain(){
     // Those gains are computed as (unitGain.alpha / screenResolution) .(world-viewport height ratio) .channelFactor).
-    QRect r((QRect)window);
-    float heightRatio = static_cast<float>(static_cast<float>(viewport.height()) / static_cast<float>(r.height()));
-    float beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
+    QRectF r((QRectF)window);
+
+    qreal heightRatio = viewport.height() / r.height();
+    qreal beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
 
     channelDisplayGains.clear();
 
     for(int i = 0; i < nbChannels; ++i){
-        channelDisplayGains.append(beta * pow(0.75,gains[i]));
+        channelDisplayGains.append(beta * pow(0.75,gains.at(i)));
     }
 
 }
@@ -915,7 +916,7 @@ void TraceView::computeChannelDisplayGain(const QList<int>& channelIds){
     float heightRatio = static_cast<float>(static_cast<float>(viewport.height()) / static_cast<float>(r.height()));
     float beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
 
-    for(int i = 0; i < static_cast<int>(channelIds.size()); ++i){
+    for(int i = 0; i < channelIds.size(); ++i){
         int channelId = channelIds.at(i);
         channelDisplayGains[channelId] = static_cast<float>(beta * pow(0.75,gains.at(channelId)));
     }
@@ -4288,9 +4289,7 @@ void TraceView::showNextCluster(){
                 iterator.next();
                 QList<int> ids = idsToBrowse[iterator.key().toInt()];
 
-                qDebug()<<"key " <<iterator.key().toInt()<<" ids.size() " <<ids.size()<<" startTime " <<startTime<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits ;
-
-                if (!static_cast<ClusterData*>(iterator.value())->status() && ids.size() != 0)
+                if (!static_cast<ClusterData*>(iterator.value())->status() && !ids.isEmpty())
                     static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestNextClusterData(startTime,timeFrameWidth,ids,this,startTimeInRecordingUnits);
             }
         }
@@ -4316,7 +4315,7 @@ void TraceView::showPreviousCluster(){
                 for(shownClustersIterator = selectedIds.begin(); shownClustersIterator != selectedIds.end(); ++shownClustersIterator){
                     if (!idsToNotUse.contains(*shownClustersIterator)) ids.append(*shownClustersIterator);
                 }
-                if (ids.size() != 0){
+                if (!ids.isEmpty()){
                     idsToBrowse.insert(providersIterator.key(),ids);
                     static_cast<ClusterData*>(clustersData[QString::number(providersIterator.key())])->setStatus(false);
                 }
@@ -4351,12 +4350,6 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
     if (initiator != this)
         return;
 
-
-    qDebug()<<" providerName " <<providerName<<" data.nbOfColumns() " <<data.nbOfColumns()<<" startingTime " <<startingTime ;
-
-    qDebug()<<" nextClusterProvider.first " <<nextClusterProvider.first<<" startingTimeInRecordingUnits " <<startingTimeInRecordingUnits<<" startTimeInRecordingUnits " <<startTimeInRecordingUnits ;
-
-
     //if no cluster has been found the return startingTime is the same as the send one (endTime).
     ClusterData* clusterData = clustersData[providerName];
     if (startingTime != startTime && startingTime < length){
@@ -4365,7 +4358,7 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
     }
     else clusterData->setStatus(true);
 
-    if (nextClusterProvider.first == "" || (nextClusterProvider.first != "" && startingTimeInRecordingUnits < startTimeInRecordingUnits)){
+    if (nextClusterProvider.first.isEmpty() || (!nextClusterProvider.first.isEmpty() && startingTimeInRecordingUnits < startTimeInRecordingUnits)){
         nextClusterProvider.first = providerName;
         nextClusterProvider.second = startingTime;
         startTimeInRecordingUnits = startingTimeInRecordingUnits;
@@ -4392,10 +4385,6 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
         else{
             clusterProviderToSkip = nextClusterProvider.first;
 
-            qDebug()<<" clusterProviderToSkip " <<clusterProviderToSkip<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits<<" startTime "<<startTime<<" endTime "<<endTime;
-            qDebug()<<" previousStartTimeInRecordingUnits " <<previousStartTimeInRecordingUnits<<" nextClusterProvider.second " <<nextClusterProvider.second<<" length "<<length;
-
-
             //update the traceWidget time widgets and retrieve the data for the new start time for all the providers except the one containing the data for the new start time.
             emit setStartAndDuration(nextClusterProvider.second,timeFrameWidth);
         }
@@ -4420,7 +4409,7 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     }
     else clusterData->setStatus(true);
 
-    if (previousClusterProvider.first == "" ||
+    if (previousClusterProvider.first.isEmpty() ||
             (previousClusterProvider.first != "" && startingTimeInRecordingUnits > startTimeInRecordingUnits && startingTimeInRecordingUnits != previousStartTimeInRecordingUnits) ||
             (previousClusterProvider.first != "" && startingTimeInRecordingUnits != previousStartTimeInRecordingUnits && startTimeInRecordingUnits == previousStartTimeInRecordingUnits)){
 
@@ -4435,7 +4424,8 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     while (iterator.hasNext()) {
         iterator.next();
         ready = iterator.value()->status();
-        if (!ready) break;
+        if (!ready)
+            break;
     }
 
     if (ready && startTimeInRecordingUnits != previousStartTimeInRecordingUnits && previousClusterProvider.second < length){
