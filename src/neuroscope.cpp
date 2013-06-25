@@ -1030,6 +1030,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             mFileOpenRecent->addRecentFile(url);
             filePath = path;
 
+            qDebug()<<" Start detached neuroscope *****************************************************************"<<url;
             QProcess::startDetached("neuroscope", QStringList()<<url);
             QApplication::restoreOverrideCursor();
         }
