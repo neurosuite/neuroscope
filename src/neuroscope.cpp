@@ -939,8 +939,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         int answer = QMessageBox::question(this,title, tr("The selected file no longer exists. Do you want to remove it from the list?"), QMessageBox::Yes|QMessageBox::No);
         if(answer == QMessageBox::Yes) {
             mFileOpenRecent->removeRecentFile(url);
-        }
-        else  {
+        } else {
             mFileOpenRecent->addRecentFile(url); //hack, unselect the item
         }
         filePath.clear();
@@ -979,24 +978,21 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             doc->closeDocument();
             resetState();
             return;
-        }
-        if(returnStatus == NeuroscopeDoc::OPEN_ERROR){
+        } else if (returnStatus == NeuroscopeDoc::OPEN_ERROR){
             QApplication::restoreOverrideCursor();
             QMessageBox::critical (this, tr("Error!"),tr("Could not open the files."));
             //close the document
             doc->closeDocument();
             resetState();
             return;
-        }
-        if(returnStatus == NeuroscopeDoc::PARSE_ERROR){
+        } else if (returnStatus == NeuroscopeDoc::PARSE_ERROR){
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("IO Error!"),tr("Either the parameter file or the session file could not be parsed correctly."));
             //close the document
             doc->closeDocument();
             resetState();
             return;
-        }
-        if(returnStatus == NeuroscopeDoc::MISSING_FILE){
+        } else if(returnStatus == NeuroscopeDoc::MISSING_FILE){
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("IO Error!"),tr("The parameter file is missing."));
             //close the document
