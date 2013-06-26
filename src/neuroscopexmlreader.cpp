@@ -55,7 +55,13 @@ bool NeuroscopeXmlReader::parseFile(const QString& url,fileType type){
             readVersion = element.attribute(VERSION);
             qDebug()<<" readVersion "<<readVersion;
         }
+    } else if (element.tagName() == QLatin1String("neuroscope")) {
+        if( element.hasAttribute(VERSION)) {
+            readVersion = element.attribute(VERSION);
+            qDebug()<<" readVersion "<<readVersion;
+        }
     }
+
     documentNode = element;
     return true;
 }

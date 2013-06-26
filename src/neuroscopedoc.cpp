@@ -293,7 +293,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
             qDebug()<<" NeuroscopeDoc::openDocument INCORRECT FILE";
             return INCORRECT_FILE;
         } else {
-            baseName = fileParts[0];
+            baseName = fileParts.first();
             for(uint i = 1;i < fileParts.count() - 1; ++i)
                 baseName += "." + fileParts.at(i);
 
@@ -362,11 +362,15 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
         //Is there a session file?
         if(sessionFileInfo.exists()){
+
             sessionFileExist = true;
-            if(reader.parseFile(sessionUrl,NeuroscopeXmlReader::SESSION)){
+            qDebug()<<" sessionUrl"<<sessionUrl;
+            if(reader.parseFile(sessionUrl,NeuroscopeXmlReader::SESSION)) {
                 //if the session file has been created by a version of NeuroScope prior to the 1.2.3, it contains the extension information
+                qDebug()<<" reader.getVersion()"<<reader.getVersion();
                 if(reader.getVersion().isEmpty() || reader.getVersion() == QLatin1String("1.2.2"))
                     extensionSamplingRates = reader.getSampleRateByExtension();
+                qDebug()<<"extensionSamplingRates"<<extensionSamplingRates;
             } else {
                 qDebug()<<" NeuroscopeDoc::openDocument PARSE_ERROR 2";
                 return PARSE_ERROR;
