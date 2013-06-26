@@ -281,7 +281,7 @@ protected:
     * @param tabLabel label for the display when in tab page mode.
     */
     void initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
-                     QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = "");
+                     QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = QString());
     
     /** queryClose is called by KDocMainWindow call just before being closed.
      */
@@ -451,7 +451,7 @@ private Q_SLOTS:
     */
     void slotSetUp(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
                    bool greyMode,QList<int> offsets,QList<int> channelGains,QList<int> selectedChannels,QMap<int,bool>& skipStatus,
-                   long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,bool showEventsInPositionView);
+                   long startTime,long duration,const QString &tabLabel,bool positionView,int rasterHeight,bool showEventsInPositionView);
 
     /**All the channels of the current display are display either in a gradation of grey or in color.*/
     void slotSetGreyScale();

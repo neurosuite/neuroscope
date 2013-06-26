@@ -1923,9 +1923,9 @@ void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<i
 
 }
 
-void NeuroscopeApp::slotSetUp(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,
-                              bool greyMode,QList<int> offsets,QList<int> channelGains,QList<int> selectedChannels,
-                              QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,bool showEventsInPositionView){
+void NeuroscopeApp::slotSetUp(QList<int>* channelsToDisplay, bool verticalLines, bool raster, bool waveforms, bool showLabels, bool multipleColumns,
+                              bool greyMode, QList<int> offsets, QList<int> channelGains, QList<int> selectedChannels,
+                              QMap<int,bool>& skipStatus, long startTime, long duration, const QString &tabLabel, bool positionView, int rasterHeight, bool showEventsInPositionView){
 
     isInit = true; //prevent the KToggleAction to trigger during initialisation
 
