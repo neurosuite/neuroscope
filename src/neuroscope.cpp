@@ -1069,8 +1069,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
 
         if(!palette->isBrowsingEnable()) {
             slotStateChanged("noClusterBrowsingState");
-        }
-        else {
+        } else {
             slotStateChanged("clusterBrowsingState");
         }
     }
@@ -2783,8 +2782,9 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
     QApplication::restoreOverrideCursor();
 }
 
-void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
-
+void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
+{
+    qDebug()<<"void NeuroscopeApp::createClusterPalette(const QString& clusterFileId) "<<clusterFileId;
     ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,this,"units");
     if(displayPaletteHeaders) {
         int index = paletteTabsParent->addTab(clusterPalette,tr("Units"));
@@ -2825,6 +2825,7 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId){
 }
 
 void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
+    qDebug()<<" void NeuroscopeApp::addClusterFile(const QString& clusterFileId){"<<clusterFileId;
     clusterFileList.append(clusterFileId);
 
     for(int i = 0; i<paletteTabsParent->count();++i){
