@@ -486,7 +486,7 @@ QList<ChannelDescription> NeuroscopeXmlReader::getChannelDescription() const {
                                                 channelColors.setSpikeGroupColor(color);
                                             }
                                         }
-                                       channelGroup =  channelGroup.nextSibling();
+                                        channelGroup =  channelGroup.nextSibling();
                                     }
                                     list.append(channelColors);
                                 }
@@ -535,8 +535,8 @@ void NeuroscopeXmlReader::getChannelDefaultOffset(QMap<int,int>& channelDefaultO
                                         }
                                         //the channels must be numbered continuously from 0.
                                         //if(channelId < nbChannels)
-                                            channelDefaultOffsets.insert(channelId,offset);
-                                       channelGroup =  channelGroup.nextSibling();
+                                        channelDefaultOffsets.insert(channelId,offset);
+                                        channelGroup =  channelGroup.nextSibling();
                                     }
                                 }
                             }
@@ -605,10 +605,10 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
                                                 }
                                                 spikeGroupsChannels.insert(i + 1,channelList);
                                                 ++i;
-                                           }
-                                       }
-                                       channelGroup = channelGroup.nextSibling();
-                                   }
+                                            }
+                                        }
+                                        channelGroup = channelGroup.nextSibling();
+                                    }
                                 }
                             }
                             anatomy = anatomy.nextSibling();
@@ -633,49 +633,49 @@ void NeuroscopeXmlReader::getSpikeDescription(int nbChannels,QMap<int,int>& spik
                             if (!u.isNull()) {
                                 tag = u.tagName();
                                 if (tag == CHANNEL_GROUPS) {
-                                   QDomNode channelGroup = u.firstChild(); // try to convert the node to an element.
-                                   int i = 0;
-                                   while(!channelGroup.isNull()) {
-                                       QDomElement val = channelGroup.toElement();
-                                       if (!val.isNull()) {
-                                           tag = val.tagName();
-                                           if (tag == GROUP) {
-                                               QDomNode group = val.firstChild(); // try to convert the node to an element.
+                                    QDomNode channelGroup = u.firstChild(); // try to convert the node to an element.
+                                    int i = 0;
+                                    while(!channelGroup.isNull()) {
+                                        QDomElement val = channelGroup.toElement();
+                                        if (!val.isNull()) {
+                                            tag = val.tagName();
+                                            if (tag == GROUP) {
+                                                QDomNode group = val.firstChild(); // try to convert the node to an element.
 
-                                               QList<int> channelList;
-                                               while(!group.isNull()) {
-                                                   QDomElement valGroup = group.toElement();
+                                                QList<int> channelList;
+                                                while(!group.isNull()) {
+                                                    QDomElement valGroup = group.toElement();
 
 
-                                                   if (!valGroup.isNull()) {
-                                                       tag = valGroup.tagName();
-                                                       if( tag == CHANNELS) {
-                                                           QDomNode channelsNode = valGroup.firstChild(); // try to convert the node to an element.
-                                                           while(!channelsNode.isNull()) {
-                                                               QDomElement channelsElement = channelsNode.toElement();
-                                                               if (!channelsElement.isNull()) {
-                                                                   tag = channelsElement.tagName();
-                                                                   if (tag == CHANNEL) {
-                                                                       int channelId = channelsElement.text().toInt();
-                                                                       channelList.append(channelId);
-                                                                       spikeChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the spike trash group (-1)
-                                                                       //remove the channel from the spike trash list as it is part of a group
-                                                                       spikeTrashList.removeAll(channelId);
-                                                                   }
-                                                               }
-                                                               channelsNode = channelsNode.nextSibling();
-                                                           }
-                                                       }
-                                                   }
-                                                   group = group.nextSibling();
-                                               }
+                                                    if (!valGroup.isNull()) {
+                                                        tag = valGroup.tagName();
+                                                        if( tag == CHANNELS) {
+                                                            QDomNode channelsNode = valGroup.firstChild(); // try to convert the node to an element.
+                                                            while(!channelsNode.isNull()) {
+                                                                QDomElement channelsElement = channelsNode.toElement();
+                                                                if (!channelsElement.isNull()) {
+                                                                    tag = channelsElement.tagName();
+                                                                    if (tag == CHANNEL) {
+                                                                        int channelId = channelsElement.text().toInt();
+                                                                        channelList.append(channelId);
+                                                                        spikeChannelsGroups.insert(channelId,i + 1);//overwrite the entry for the spike trash group (-1)
+                                                                        //remove the channel from the spike trash list as it is part of a group
+                                                                        spikeTrashList.removeAll(channelId);
+                                                                    }
+                                                                }
+                                                                channelsNode = channelsNode.nextSibling();
+                                                            }
+                                                        }
+                                                    }
+                                                    group = group.nextSibling();
+                                                }
 
-                                               spikeGroupsChannels.insert(i + 1,channelList);
-                                               ++i;
-                                           }
-                                       }
-                                       channelGroup = channelGroup.nextSibling();
-                                   }
+                                                spikeGroupsChannels.insert(i + 1,channelList);
+                                                ++i;
+                                            }
+                                        }
+                                        channelGroup = channelGroup.nextSibling();
+                                    }
                                 }
                             }
                             anatomy = anatomy.nextSibling();
@@ -1173,7 +1173,7 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 } 
 
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
-    QList<SessionFile> list;    
+    QList<SessionFile> list;
 
     QDomNode n = documentNode.firstChild();
     if (!n.isNull()) {
@@ -1255,210 +1255,207 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
             QDomElement e = n.toElement(); // try to convert the node to an element.
             if(!e.isNull()) {
                 QString tag = e.tagName();
-                if (tag == NEUROSCOPE) {
-                    QDomNode video = e.firstChildElement(DISPLAYS); // try to convert the node to an element.
-                    if (!video.isNull()) {
-                        QDomNode b = video.firstChild();
-                        while(!b.isNull()) {
-                            QDomElement w = b.toElement();
-                            if(!w.isNull()) {
-                                tag = w.tagName();
-                                if (tag == DISPLAY) {
-                                    QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
-                                    DisplayInformation displayInformation;
-                                    while(!fileNode.isNull()) {
-                                        QDomElement fileElement = fileNode.toElement();
+                if (tag == DISPLAYS) {
+                    QDomNode b = e.firstChild();
+                    while(!b.isNull()) {
+                        QDomElement w = b.toElement();
+                        if(!w.isNull()) {
+                            tag = w.tagName();
+                            if (tag == DISPLAY) {
+                                QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
+                                DisplayInformation displayInformation;
+                                while(!fileNode.isNull()) {
+                                    QDomElement fileElement = fileNode.toElement();
 
-                                        if (!fileElement.isNull()) {
-                                            tag = fileElement.tagName();
-                                            if (tag == TAB_LABEL) {
-                                                QString label = fileElement.text();
-                                                displayInformation.setTabLabel(label);
-                                            } else if(tag == SHOW_LABELS){
-                                                int showLabels = fileElement.text().toInt();
-                                                displayInformation.setLabelStatus(showLabels);
-                                            } else if(tag == START_TIME){
-                                                long startTime = fileElement.text().toLong();
-                                                displayInformation.setStartTime(startTime);
-                                            } else if(tag == DURATION){
-                                                long duration = fileElement.text().toLong();
-                                                displayInformation.setTimeWindow(duration);
-                                            } else if(tag == MULTIPLE_COLUMNS){
-                                                int presentationMode = fileElement.text().toInt();
-                                                displayInformation.setMode(static_cast<DisplayInformation::mode>(presentationMode));
-                                            } else if(tag == GREYSCALE){
-                                                int greyScale = fileElement.text().toInt();
-                                                displayInformation.setGreyScale(greyScale);
-                                            } else if(tag == POSITIONVIEW){
-                                                int positionView = fileElement.text().toInt();
-                                                displayInformation.setPositionView(positionView);
-                                            } else if(tag  == SHOWEVENTS){
-                                                int showEvents = fileElement.text().toInt();
-                                                displayInformation.setEventsInPositionView(showEvents);
-                                            } else if(tag  == SPIKE_PRESENTATION){
-                                                int spikePresentation = fileElement.text().toInt();
-                                                displayInformation.addSpikeDisplayType(static_cast<DisplayInformation::spikeDisplayType>(spikePresentation));
-                                            } else if(tag  == RASTER_HEIGHT){
-                                                int height = fileElement.text().toInt();
-                                                displayInformation.setRasterHeight(height);
-                                            }
-                                            else if(tag == CLUSTERS_SELECTED){
-                                                //loop on the CLUSTERS
-                                                QString clusterFile;
-                                                QList<int> clusterIds;
-                                                QDomNode clustersNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!clustersNode.isNull()) {
-                                                    QDomElement clustersElement = fileNode.toElement();
-                                                    if (!clustersElement.isNull()) {
-                                                        tag = clustersElement.tagName();
-                                                        if (tag == FILE_URL) {
-                                                            clusterFile = clustersElement.text();
-                                                        } else if (tag == CLUSTER) {
-                                                            clusterIds.append(clustersElement.text().toInt());
-                                                        }
-                                                    }
-                                                    clustersNode = clustersNode.nextSibling();
-                                                }
-                                                displayInformation.setSelectedClusters(clusterFile,clusterIds);
-                                            } else if(tag == SPIKES_SELECTED){
-                                                QStringList files;
-                                                //loop on the urls of the files
-                                                QDomNode spikesNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!spikesNode.isNull()) {
-                                                    QDomElement spikesElement = spikesNode.toElement();
-                                                    if (!spikesElement.isNull()) {
-                                                        tag = spikesElement.tagName();
-                                                        if (tag == FILE_URL) {
-                                                            files.append(spikesElement.text());
-                                                        }
-                                                    }
-                                                    spikesNode = spikesNode.nextSibling();
-
-                                                }
-                                                displayInformation.setSelectedSpikeFiles(files);
-                                            } else if(tag == EVENTS_SELECTED){
-                                                //loop on the EVENTS
-                                                QString eventFile;
-                                                QList<int> eventIds;
-                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == FILE_URL) {
-                                                            eventFile.append(eventsElement.text());
-                                                        } else if(tag == EVENT) {
-                                                            int eventId = eventsElement.text().toInt();
-                                                            eventIds.append(eventId);
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                }
-                                                displayInformation.setSelectedEvents(eventFile,eventIds);
-                                            } else if(tag == CLUSTERS_SKIPPED){
-                                                //loop on the CLUSTERS
-                                                QString clusterFile;
-                                                QList<int> clusterIds;
-
-                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == FILE_URL) {
-                                                            clusterFile.append(eventsElement.text());
-                                                        } else if(tag == EVENT) {
-                                                            int eventId = eventsElement.text().toInt();
-                                                            clusterIds.append(eventId);
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                }
-                                                displayInformation.setSkippedClusters(clusterFile,clusterIds);
-                                            } else if(tag == EVENTS_SKIPPED){
-                                                //loop on the EVENTS
-                                                QString eventFile;
-                                                QList<int> eventIds;
-                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == FILE_URL) {
-                                                            eventFile.append(eventsElement.text());
-                                                        } else if(tag == EVENT) {
-                                                            int eventId = eventsElement.text().toInt();
-                                                            eventIds.append(eventId);
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                }
-                                                displayInformation.setSkippedEvents(eventFile,eventIds);
-                                            } else if(tag == CHANNELS_SELECTED){
-                                                QList<int> channelIds;
-                                                //loop on the urls of the files
-
-                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == CHANNEL) {
-                                                            channelIds.append(eventsElement.text().toInt());
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                }
-                                                displayInformation.setSelectedChannelIds(channelIds);
-                                            } else if(tag == CHANNELS_SHOWN){
-                                                QList<int> channelIds;
-                                                //loop on the urls of the files
-                                                QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == CHANNEL) {
-                                                            channelIds.append(eventsElement.text().toInt());
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                }
-                                                displayInformation.setChannelIds(channelIds);
-                                            } else if(tag == CHANNEL_POSITIONS){
-                                                QList<TracePosition> positions;
-                                                //loop on the POSITIONS
-                                                QDomNode eventsNode = fileElement.firstChild().firstChild(); // try to convert the node to an element.
-                                                TracePosition tracePosition;
-                                                while(!eventsNode.isNull()) {
-                                                    QDomElement eventsElement = eventsNode.toElement();
-                                                    if (!eventsElement.isNull()) {
-                                                        tag = eventsElement.tagName();
-                                                        if (tag == CHANNEL) {
-                                                            int channelId = eventsElement.text().toInt();
-                                                            tracePosition.setId(channelId) ;
-                                                        } else if(tag == GAIN) {
-                                                            int gain = eventsElement.text().toInt();
-                                                            tracePosition.setGain(gain);
-                                                        } else if(tag == OFFSET) {
-                                                            int offset = eventsElement.text().toInt();
-                                                            tracePosition.setOffset(offset);
-                                                        }
-                                                    }
-                                                    eventsNode = eventsNode.nextSibling();
-                                                    positions.append(tracePosition);
-                                                }
-                                                displayInformation.setPositions(positions);
-                                            }
+                                    if (!fileElement.isNull()) {
+                                        tag = fileElement.tagName();
+                                        if (tag == TAB_LABEL) {
+                                            QString label = fileElement.text();
+                                            displayInformation.setTabLabel(label);
+                                        } else if(tag == SHOW_LABELS){
+                                            int showLabels = fileElement.text().toInt();
+                                            displayInformation.setLabelStatus(showLabels);
+                                        } else if(tag == START_TIME){
+                                            long startTime = fileElement.text().toLong();
+                                            displayInformation.setStartTime(startTime);
+                                        } else if(tag == DURATION){
+                                            long duration = fileElement.text().toLong();
+                                            displayInformation.setTimeWindow(duration);
+                                        } else if(tag == MULTIPLE_COLUMNS){
+                                            int presentationMode = fileElement.text().toInt();
+                                            displayInformation.setMode(static_cast<DisplayInformation::mode>(presentationMode));
+                                        } else if(tag == GREYSCALE){
+                                            int greyScale = fileElement.text().toInt();
+                                            displayInformation.setGreyScale(greyScale);
+                                        } else if(tag == POSITIONVIEW){
+                                            int positionView = fileElement.text().toInt();
+                                            displayInformation.setPositionView(positionView);
+                                        } else if(tag  == SHOWEVENTS){
+                                            int showEvents = fileElement.text().toInt();
+                                            displayInformation.setEventsInPositionView(showEvents);
+                                        } else if(tag  == SPIKE_PRESENTATION){
+                                            int spikePresentation = fileElement.text().toInt();
+                                            displayInformation.addSpikeDisplayType(static_cast<DisplayInformation::spikeDisplayType>(spikePresentation));
+                                        } else if(tag  == RASTER_HEIGHT){
+                                            int height = fileElement.text().toInt();
+                                            displayInformation.setRasterHeight(height);
                                         }
-                                        list.append(displayInformation);
+                                        else if(tag == CLUSTERS_SELECTED){
+                                            //loop on the CLUSTERS
+                                            QString clusterFile;
+                                            QList<int> clusterIds;
+                                            QDomNode clustersNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!clustersNode.isNull()) {
+                                                QDomElement clustersElement = fileNode.toElement();
+                                                if (!clustersElement.isNull()) {
+                                                    tag = clustersElement.tagName();
+                                                    if (tag == FILE_URL) {
+                                                        clusterFile = clustersElement.text();
+                                                    } else if (tag == CLUSTER) {
+                                                        clusterIds.append(clustersElement.text().toInt());
+                                                    }
+                                                }
+                                                clustersNode = clustersNode.nextSibling();
+                                            }
+                                            displayInformation.setSelectedClusters(clusterFile,clusterIds);
+                                        } else if(tag == SPIKES_SELECTED){
+                                            QStringList files;
+                                            //loop on the urls of the files
+                                            QDomNode spikesNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!spikesNode.isNull()) {
+                                                QDomElement spikesElement = spikesNode.toElement();
+                                                if (!spikesElement.isNull()) {
+                                                    tag = spikesElement.tagName();
+                                                    if (tag == FILE_URL) {
+                                                        files.append(spikesElement.text());
+                                                    }
+                                                }
+                                                spikesNode = spikesNode.nextSibling();
 
-                                        fileNode = fileNode.nextSibling();
+                                            }
+                                            displayInformation.setSelectedSpikeFiles(files);
+                                        } else if(tag == EVENTS_SELECTED){
+                                            //loop on the EVENTS
+                                            QString eventFile;
+                                            QList<int> eventIds;
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == FILE_URL) {
+                                                        eventFile.append(eventsElement.text());
+                                                    } else if(tag == EVENT) {
+                                                        int eventId = eventsElement.text().toInt();
+                                                        eventIds.append(eventId);
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                            }
+                                            displayInformation.setSelectedEvents(eventFile,eventIds);
+                                        } else if(tag == CLUSTERS_SKIPPED){
+                                            //loop on the CLUSTERS
+                                            QString clusterFile;
+                                            QList<int> clusterIds;
+
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == FILE_URL) {
+                                                        clusterFile.append(eventsElement.text());
+                                                    } else if(tag == EVENT) {
+                                                        int eventId = eventsElement.text().toInt();
+                                                        clusterIds.append(eventId);
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                            }
+                                            displayInformation.setSkippedClusters(clusterFile,clusterIds);
+                                        } else if(tag == EVENTS_SKIPPED){
+                                            //loop on the EVENTS
+                                            QString eventFile;
+                                            QList<int> eventIds;
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == FILE_URL) {
+                                                        eventFile.append(eventsElement.text());
+                                                    } else if(tag == EVENT) {
+                                                        int eventId = eventsElement.text().toInt();
+                                                        eventIds.append(eventId);
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                            }
+                                            displayInformation.setSkippedEvents(eventFile,eventIds);
+                                        } else if(tag == CHANNELS_SELECTED){
+                                            QList<int> channelIds;
+                                            //loop on the urls of the files
+
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == CHANNEL) {
+                                                        channelIds.append(eventsElement.text().toInt());
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                            }
+                                            displayInformation.setSelectedChannelIds(channelIds);
+                                        } else if(tag == CHANNELS_SHOWN){
+                                            QList<int> channelIds;
+                                            //loop on the urls of the files
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == CHANNEL) {
+                                                        channelIds.append(eventsElement.text().toInt());
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                            }
+                                            displayInformation.setChannelIds(channelIds);
+                                        } else if(tag == CHANNEL_POSITIONS){
+                                            QList<TracePosition> positions;
+                                            //loop on the POSITIONS
+                                            QDomNode eventsNode = fileElement.firstChild().firstChild(); // try to convert the node to an element.
+                                            TracePosition tracePosition;
+                                            while(!eventsNode.isNull()) {
+                                                QDomElement eventsElement = eventsNode.toElement();
+                                                if (!eventsElement.isNull()) {
+                                                    tag = eventsElement.tagName();
+                                                    if (tag == CHANNEL) {
+                                                        int channelId = eventsElement.text().toInt();
+                                                        tracePosition.setId(channelId) ;
+                                                    } else if(tag == GAIN) {
+                                                        int gain = eventsElement.text().toInt();
+                                                        tracePosition.setGain(gain);
+                                                    } else if(tag == OFFSET) {
+                                                        int offset = eventsElement.text().toInt();
+                                                        tracePosition.setOffset(offset);
+                                                    }
+                                                }
+                                                eventsNode = eventsNode.nextSibling();
+                                                positions.append(tracePosition);
+                                            }
+                                            displayInformation.setPositions(positions);
+                                        }
                                     }
+                                    list.append(displayInformation);
+
+                                    fileNode = fileNode.nextSibling();
                                 }
                             }
-                            b = b.nextSibling();
                         }
+                        b = b.nextSibling();
                     }
                 }
             }

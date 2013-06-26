@@ -1247,14 +1247,17 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
     }
 }
 
-void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){  
+void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     //Get the file video information
-    if(reader.getRotation() != 0)
+    if(reader.getRotation() != 0) {
         rotation = reader.getRotation();
-    if(reader.getFlip() != 0)
+    }
+    if(reader.getFlip() != 0) {
         flip = reader.getFlip();
+    }
 
     QList<SessionFile> filesToLoad = reader.getFilesToLoad();
+    //qDebug()<<" filesToLoad"<<filesToLoad;
     QStringList loadedClusterFiles;
     QStringList loadedEventFiles;
     QString loadedPositionFile;
@@ -1265,7 +1268,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
 
     bool first = true;
     QList<DisplayInformation>::iterator iterator;
-    for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator){
+    for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator) {
         QList<int> offsets;
         QList<int> channelGains;
         QList<int>* channelsToDisplay = new QList<int>();
@@ -1285,7 +1288,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         QMap<QString, QList<int> > selectedClusters = static_cast<DisplayInformation>(*iterator).getSelectedClusters();
         //An id has been assigned to each event, this id will be used internally in NeuroScope and in the session file.
         QMap<QString, QList<int> > selectedEvents = static_cast<DisplayInformation>(*iterator).getSelectedEvents();
-        QStringList shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
+        //QStringList shownSpikeFiles = static_cast<DisplayInformation>(*iterator).getSelectedSpikeFiles();
         QMap<QString, QList<int> > skippedClusters = static_cast<DisplayInformation>(*iterator).getSkippedClusters();
         QMap<QString, QList<int> > skippedEvents = static_cast<DisplayInformation>(*iterator).getSkippedEvents();
         QList<TracePosition> positions = static_cast<DisplayInformation>(*iterator).getPositions();
@@ -1425,7 +1428,8 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                     OpenSaveCreateReturnMessage status = loadPositionFile(QFileInfo(fileUrl).absolutePath());
                     if(status == OK){
                         loadedPositionFile = lastLoadedProvider;
-                        if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground)) transformedBackground = transformBackgroundImage();
+                        if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground))
+                            transformedBackground = transformBackgroundImage();
                         dynamic_cast<NeuroscopeApp*>(parent)->positionFileLoaded();
                     }
                 }
