@@ -2245,8 +2245,8 @@ void NeuroscopeApp::slotPaletteTabChange(int index){
 
         //update the channel palettes
         NeuroscopeView* view = activeView();
-	if(!view) 
-          return;
+        if(!view)
+            return;
         const QList<int> selectedChannels = view->getSelectedChannels();
 
         displayChannelPalette->hideUnselectAllChannels();
@@ -2726,6 +2726,7 @@ void NeuroscopeApp::customEvent (QEvent* event){
 
 void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
 
+    qDebug()<<" void NeuroscopeApp::loadClusterFiles(const QStringList &urls){"<<urls;
     NeuroscopeView* view = activeView();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -2776,7 +2777,9 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
         //Create the cluster palette if need it
         counter++;
         QString clusterFileId = doc->lastLoadedProviderName();
-        if(clusterFileList.isEmpty() && counter == 1) createClusterPalette(clusterFileId);
+        qDebug()<<" NeuroscopeApp::loadClusterFiles(const QStringList &urls){"<<urls;
+        if(clusterFileList.isEmpty() && counter == 1)
+            createClusterPalette(clusterFileId);
         else addClusterFile(clusterFileId);
     }
     QApplication::restoreOverrideCursor();
