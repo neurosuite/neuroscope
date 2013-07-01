@@ -120,7 +120,7 @@ void NeuroscopeApp::initView()
     splitter->addWidget(tabsParent);
     setCentralWidget(splitter);
     QList<int> size;
-    size <<10<<90;
+    size <<300<<1000;
     splitter->setSizes(size);
 }
 
