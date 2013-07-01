@@ -207,7 +207,7 @@ void NeuroscopeApp::initActions()
     mQuitAction = fileMenu->addAction(tr("Quit"));
     mQuitAction->setIcon(QPixmap(":/shared-icons/window-close"));
     mQuitAction->setShortcut(QKeySequence::Quit);
-    connect(mQuitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(mQuitAction, SIGNAL(triggered()), this, SLOT(slotFileQuit()));
 
 
 
@@ -1514,9 +1514,11 @@ void NeuroscopeApp::slotFilePrint()
 void NeuroscopeApp::slotFileQuit()
 {
     slotStatusMsg(tr("Exiting..."));
+    if (!queryClose()) {
+        slotStatusMsg(tr("Ready."));
+        return;
+    }
     close();
-
-    slotStatusMsg(tr("Ready."));
 }
 
 void NeuroscopeApp::slotViewMainToolBar()
