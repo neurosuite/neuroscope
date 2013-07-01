@@ -69,6 +69,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setSelectionRectVisible(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setMaximumHeight(40);
 }
 
 QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
