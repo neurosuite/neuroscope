@@ -1262,7 +1262,7 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                         if(!w.isNull()) {
                             tag = w.tagName();
                             if (tag == DISPLAY) {
-                                QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
+                                QDomNode fileNode = w.firstChild(); // try to convert the node to an element.
                                 DisplayInformation displayInformation;
                                 while(!fileNode.isNull()) {
                                     QDomElement fileElement = fileNode.toElement();
@@ -1299,8 +1299,7 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                         } else if(tag  == RASTER_HEIGHT){
                                             int height = fileElement.text().toInt();
                                             displayInformation.setRasterHeight(height);
-                                        }
-                                        else if(tag == CLUSTERS_SELECTED){
+                                        } else if(tag == CLUSTERS_SELECTED){
                                             //loop on the CLUSTERS
                                             QString clusterFile;
                                             QList<int> clusterIds;
@@ -1450,7 +1449,6 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                         }
                                     }
                                     list.append(displayInformation);
-
                                     fileNode = fileNode.nextSibling();
                                 }
                             }
