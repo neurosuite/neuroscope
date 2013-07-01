@@ -1267,8 +1267,9 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     QList<DisplayInformation> displayList = reader.getDisplayInformation();
 
     bool first = true;
-    QList<DisplayInformation>::iterator iterator;
-    for(iterator = displayList.begin(); iterator != displayList.end(); ++iterator) {
+    QList<DisplayInformation>::ConstIterator iterator;
+    QList<DisplayInformation>::ConstIterator end(displayList.constEnd());
+    for(iterator = displayList.constBegin(); iterator != end; ++iterator) {
         QList<int> offsets;
         QList<int> channelGains;
         QList<int>* channelsToDisplay = new QList<int>();
@@ -1299,14 +1300,19 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         bool showEventsInPositionView = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
 
         //info on the trace presentation
-        if(presentationMode == DisplayInformation::MULTIPLE) multipleColumns = true;
+        if(presentationMode == DisplayInformation::MULTIPLE)
+            multipleColumns = true;
 
         //info on the spike presentation
-        QList<DisplayInformation::spikeDisplayType>::iterator typeIterator;
-        for(typeIterator = spikeDisplayTypes.begin(); typeIterator != spikeDisplayTypes.end(); ++typeIterator){
-            if(*typeIterator == DisplayInformation::LINES) verticalLines = true;
-            if(*typeIterator == DisplayInformation::RASTER) raster = true;
-            if(*typeIterator == DisplayInformation::WAVEFORMS) waveforms = true;
+        QList<DisplayInformation::spikeDisplayType>::ConstIterator typeIterator;
+        QList<DisplayInformation::spikeDisplayType>::ConstIterator typeIteratorEnd(spikeDisplayTypes.end());
+        for(typeIterator = spikeDisplayTypes.constBegin(); typeIterator != typeIteratorEnd; ++typeIterator){
+            if(*typeIterator == DisplayInformation::LINES)
+                verticalLines = true;
+            if(*typeIterator == DisplayInformation::RASTER)
+                raster = true;
+            if(*typeIterator == DisplayInformation::WAVEFORMS)
+                waveforms = true;
         }
 
         //Info regarding the positionView
@@ -1315,8 +1321,9 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         /*****************TO FINISH***************************/
 
         //Get the information concerning the channel positions (gain and offset)
-        QList<TracePosition>::iterator positionIterator;
-        for(positionIterator = positions.begin(); positionIterator != positions.end(); ++positionIterator){
+        QList<TracePosition>::ConstIterator positionIterator;
+        QList<TracePosition>::ConstIterator positionIteratorEnd(positions.constEnd());
+        for(positionIterator = positions.constBegin(); positionIterator != positionIteratorEnd; ++positionIterator){
             int gain = static_cast<TracePosition>(*positionIterator).getGain();
             int offset = static_cast<TracePosition>(*positionIterator).getOffset();
             offsets.append(offset);
@@ -1324,8 +1331,9 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         }
 
         //Get the information concerning the channels shown in the display
-        QList<int>::iterator channelIterator;
-        for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+        QList<int>::ConstIterator channelIterator;
+        QList<int>::ConstIterator channelIteratorEnd(channelIds.constEnd());
+        for(channelIterator = channelIds.constBegin(); channelIterator != channelIteratorEnd; ++channelIterator){
             channelsToDisplay->append(*channelIterator);
         }
 
