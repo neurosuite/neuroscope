@@ -1448,9 +1448,10 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                             displayInformation.setPositions(positions);
                                         }
                                     }
-                                    list.append(displayInformation);
+
                                     fileNode = fileNode.nextSibling();
                                 }
+                                list.append(displayInformation);
                             }
                         }
                         b = b.nextSibling();

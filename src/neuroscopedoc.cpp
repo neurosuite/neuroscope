@@ -1323,7 +1323,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         //Get the information concerning the channel positions (gain and offset)
         QList<TracePosition>::ConstIterator positionIterator;
         QList<TracePosition>::ConstIterator positionIteratorEnd(positions.constEnd());
-        for(positionIterator = positions.constBegin(); positionIterator != positionIteratorEnd; ++positionIterator){
+        for (positionIterator = positions.constBegin(); positionIterator != positionIteratorEnd; ++positionIterator) {
             int gain = static_cast<TracePosition>(*positionIterator).getGain();
             int offset = static_cast<TracePosition>(*positionIterator).getOffset();
             offsets.append(offset);
@@ -1333,13 +1333,15 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         //Get the information concerning the channels shown in the display
         QList<int>::ConstIterator channelIterator;
         QList<int>::ConstIterator channelIteratorEnd(channelIds.constEnd());
-        for(channelIterator = channelIds.constBegin(); channelIterator != channelIteratorEnd; ++channelIterator){
+        for (channelIterator = channelIds.constBegin(); channelIterator != channelIteratorEnd; ++channelIterator) {
             channelsToDisplay->append(*channelIterator);
+            qDebug()<<" channelIterator"<<*channelIterator;
         }
 
         //Get the information concerning the channels selected in the display
-        QList<int>::iterator channelSelectedIterator;
-        for(channelSelectedIterator = selectedChannelIds.begin(); channelSelectedIterator != selectedChannelIds.end(); ++channelSelectedIterator){
+        QList<int>::ConstIterator channelSelectedIterator;
+        QList<int>::ConstIterator channelSelectedIteratorEnd(selectedChannelIds.constEnd());
+        for (channelSelectedIterator = selectedChannelIds.constBegin(); channelSelectedIterator != channelSelectedIteratorEnd; ++channelSelectedIterator) {
             selectedChannels.append(*channelSelectedIterator);
         }
 
@@ -1399,9 +1401,10 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         loadedEventFiles.append(lastLoadedProvider);
                         fistEventFile = false;
                         QMap<EventDescription,int> loadedItems;
-                        QMap<EventDescription,QColor>::Iterator it;
+                        QMap<EventDescription,QColor>::ConstIterator it;
+                        QMap<EventDescription,QColor>::ConstIterator endColor(itemColors.constEnd());
                         int index = 1;
-                        for(it = itemColors.begin(); it != itemColors.end(); ++it){
+                        for(it = itemColors.constBegin(); it != endColor; ++it){
                             loadedItems.insert(it.key(),index);
                             index++;
                         }
@@ -1436,16 +1439,16 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                     OpenSaveCreateReturnMessage status = loadPositionFile(QFileInfo(fileUrl).absolutePath());
                     if(status == OK){
                         loadedPositionFile = lastLoadedProvider;
-                        if(backgroundImage != "" || (backgroundImage == "" && drawPositionsOnBackground))
+                        if(!backgroundImage.isEmpty() || (backgroundImage.isEmpty() && drawPositionsOnBackground))
                             transformedBackground = transformBackgroundImage();
-                        dynamic_cast<NeuroscopeApp*>(parent)->positionFileLoaded();
+                        static_cast<NeuroscopeApp*>(parent)->positionFileLoaded();
                     }
                 }
             }
-        }
-        else
-            dynamic_cast<NeuroscopeApp*>(parent)->createDisplay(channelsToDisplay,verticalLines,raster,waveforms,showLabels,multipleColumns,
+        } else {
+            static_cast<NeuroscopeApp*>(parent)->createDisplay(channelsToDisplay,verticalLines,raster,waveforms,showLabels,multipleColumns,
                                                                 greyMode,offsets,channelGains,selectedChannels,startTime,duration,rasterHeight,tabLabel);
+        }
 
 
         //the new view is the last one in the list of view (viewList)
