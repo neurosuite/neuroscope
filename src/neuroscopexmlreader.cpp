@@ -1522,7 +1522,7 @@ QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
                     QString tag = e.tagName();
                     if (tag == FILES) {
                         QDomNode video = e.firstChildElement(neuroscope::FILE); // try to convert the node to an element.
-                        if (!video.isNull()) {
+                        while (!video.isNull()) {
                             QDomNode b = video.firstChild();
                             double samplingRate;
                             QString extension;
@@ -1540,7 +1540,9 @@ QMap<QString,double> NeuroscopeXmlReader::getSampleRateByExtension(){
                                 b = b.nextSibling();
                             }
                             samplingRatesMap.insert(extension,samplingRate);
+                            video = video.nextSibling();
                         }
+
                     }
                 }
                 n = n.nextSibling();
