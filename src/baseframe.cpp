@@ -26,6 +26,7 @@
 #include <QFrame>
 #include <QMouseEvent>
 #include <QRubberBand>
+#include <QDebug>
 
 BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &name,const QColor& backgroundColor,
                       int minSize,int maxSize ,int windowTopLeft ,int windowBottomRight,int border):
@@ -88,10 +89,12 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //Assign firstClick
             QRect r((QRect)window);
 
+            //qDebug()<<" e->pos()"<<e->pos();
+
             if(r.left() != 0)
-                firstClick = viewportToWorld(e->x(),e->y() - Yborder);
+                firstClick = /*viewportToWorld*/QPoint(e->x(),e->y() - Yborder);
             else
-                firstClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+                firstClick = /*viewportToWorld*/QPoint(e->x() - Xborder,e->y() - Yborder);
 
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
             //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
@@ -174,7 +177,7 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e){
             if(wholeHeightRectangle)
                 mRubberBand->setGeometry(QRect(r.left(),rect().top(), r.width(), rect().height()));
             else
-                mRubberBand->setGeometry(QRect(firstClick, e->pos()).normalized());
+                mRubberBand->setGeometry(r);
         }
     }
 }
