@@ -1915,6 +1915,7 @@ void ChannelPalette::setEditMode(bool edition){
 void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
     pixmap->fill(backgroundColor);
     painter.begin(pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     if(greyScale){
         int greyvalue = qGray(color.rgb());
         color.setHsv(0,0,greyvalue);
@@ -1926,11 +1927,11 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
     if(edit){
         painter.setPen(color);
         painter.setBrush(color);
-        painter.drawEllipse(QRect(0,0,12,12));
+        painter.drawEllipse(QRect(1,1,12,12));
         if(!show){
             painter.setPen(backgroundColor);
             painter.setBrush(backgroundColor);
-            painter.drawEllipse(QRect(3,3,6,6));
+            painter.drawEllipse(QRect(4,4,6,6));
         }
     }
     else
