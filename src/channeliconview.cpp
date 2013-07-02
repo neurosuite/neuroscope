@@ -19,6 +19,7 @@
 // include files for Qt
 #include <QCursor>
 #include <QTextCodec>
+#include <QMimeData>
 
 #include <QDropEvent>
 #include <QFrame>
