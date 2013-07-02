@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY neuroscope '<application>NeuroScope</application>'>
   <!ENTITY kapp "&neuroscope;">
@@ -19,7 +19,7 @@
 </affiliation>
 </author>
 <author>
-<firstname>MichaÃ«l</firstname>
+<firstname>Michaël</firstname>
 <surname>Zugaro</surname>
 <affiliation>
 <address><email>mzugaro@andromeda.rutgers.edu</email></address>
@@ -30,7 +30,7 @@
 <copyright>
 <year>2004-2006</year>
 <holder>Lynn Hazan</holder>
-<holder>MichaÃ«l Zugaro</holder>
+<holder>Michaël Zugaro</holder>
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
@@ -51,7 +51,7 @@ Do NOT change these in the translation. -->
 &neuroscope; is a viewer for displaying various physiological and behavioral data. It allows comparison of analyzed data with the original recordings.
 </para>
 <para>
-&neuroscope; is developped by Lynn Hazan in <ulink url="http://osiris.rutgers.edu">G. BuzsÃ¡ki's lab</ulink> (CMBN, Rutgers Newark, USA).
+&neuroscope; is developped by Lynn Hazan in <ulink url="http://osiris.rutgers.edu">G. Buzsáki's lab</ulink> (CMBN, Rutgers Newark, USA).
 </para>
 </abstract>
 
@@ -136,7 +136,7 @@ Initial offset: some acquisition systems record the data with a fixed offset; th
 </listitem>
 <listitem>
 <para>
-Voltage range: the total voltage range, e.g. if the system is set to Â±5V, the range is 10V.
+Voltage range: the total voltage range, e.g. if the system is set to ±5V, the range is 10V.
 </para>
 </listitem>
 <listitem>
@@ -1393,7 +1393,7 @@ Selecting <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure neuros
 </listitem>
 <listitem>
 <para>
-<guilabel>Voltage range (V)</guilabel>. Default total voltage range of the recording system, e.g. 10V for Â±5V.
+<guilabel>Voltage range (V)</guilabel>. Default total voltage range of the recording system, e.g. 10V for ±5V.
 </para>
 </listitem>
 <listitem>
@@ -2334,7 +2334,7 @@ Program copyright 2004 Lynn Hazan <email>lynn.hazan@myrealbox.com</email>
 <para>
 Contributors:
 <itemizedlist>
-<listitem><para>MichaÃ«l B. Zugaro <email>mzugaro@andromeda.rutgers.edu</email></para></listitem>
+<listitem><para>Michaël B. Zugaro <email>mzugaro@andromeda.rutgers.edu</email></para></listitem>
 </itemizedlist>
 </para>
 <para>
@@ -2342,7 +2342,7 @@ The data shown in this documentation were kindly provided by:
 <itemizedlist>
 <listitem><para>Sean M. Montgomery <email>smontgom@pegasus.rutgers.edu</email></para></listitem>
 <listitem><para>David Robbe <email>robbe@axon.rutgers.edu</email></para></listitem>
-<listitem><para>MichaÃ«l B. Zugaro <email>mzugaro@andromeda.rutgers.edu</email></para></listitem>
+<listitem><para>Michaël B. Zugaro <email>mzugaro@andromeda.rutgers.edu</email></para></listitem>
 </itemizedlist>
 </para>
 
