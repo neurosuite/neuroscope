@@ -170,7 +170,11 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e){
     if(e->buttons() == Qt::LeftButton){
         //Test if a selected rectangle exist, if so draw to erase the previous one,
         if(mRubberBand) {
-            mRubberBand->setGeometry(QRect(firstClick, e->pos()).normalized());
+            const QRect r = QRect(firstClick, e->pos()).normalized();
+            if(wholeHeightRectangle)
+                mRubberBand->setGeometry(QRect(r.left(),rect().top(), r.width(), rect().height()));
+            else
+                mRubberBand->setGeometry(QRect(firstClick, e->pos()).normalized());
         }
     }
 }
