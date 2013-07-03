@@ -63,6 +63,7 @@ Q_SIGNALS:
 
 
 protected:
+    void resizeEvent ( QResizeEvent * event );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent ( QWheelEvent * e );
