@@ -1267,7 +1267,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
-                                                         tr("Event File (*.evt, *.evt.*)"));
+                                                         tr("Event File (*.evt*)"));
     if(!urls.isEmpty())
     {
         loadEventFiles(urls);
