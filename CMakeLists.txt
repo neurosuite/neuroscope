@@ -4,7 +4,16 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 set (QT_MIN_VERSION "4.8.0")
 
-find_package(Qt5Core QUIET)
+option(
+  ENFORCE_QT4_BUILD
+  "Enable if you want to enfore a build with Qt4"
+  ON
+)
+
+# try Qt5 first, and prefer that (if found), but only if not disabled via option
+if(NOT ENFORCE_QT4_BUILD)
+  find_package(Qt5Core QUIET)
+endif()
 
 if(Qt5Core_FOUND)
   find_package(Qt5Gui REQUIRED)
