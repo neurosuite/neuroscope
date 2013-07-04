@@ -138,8 +138,10 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
             //Calculate the selected point in world coordinates
             QPoint secondClick;
             QRect r((QRect)window);
-            if(r.left() != 0) secondClick = viewportToWorld(e->x(),e->y() - Yborder);
-            else secondClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+            if(r.left() != 0)
+                secondClick = /*viewportToWorld*/QPoint(e->x(),e->y() - Yborder);
+            else
+                secondClick = /*viewportToWorld*/QPoint(e->x() - Xborder,e->y() - Yborder);
 
             //If the distance between the first and second selected points are > 5:
             //the user wanted to draw a rectangle otherwise he intended to select a single point
