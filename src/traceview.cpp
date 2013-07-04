@@ -2090,8 +2090,10 @@ void TraceView::drawTimeLine(QPainter *painter){
     if (multiColumns){
         nbColumns = shownGroupsChannels.count();
         //Compute the current abscissae in each group
-        for(int i = 0; i<nbColumns;++i){
-            currentAbscissae.append(linePositions.at(i) + delta);
+        if (!linePositions.isEmpty()) {
+          for(int i = 0; i<nbColumns;++i){
+              currentAbscissae.append(linePositions.at(i) + delta);
+          }
         }
 
         //left margin is visible
@@ -2129,7 +2131,8 @@ void TraceView::drawTimeLine(QPainter *painter){
         if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
+            if (!linePositions.isEmpty())
+              for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             if (previousAbscissae[groupIndex] >= min[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(min[i],top,min[i],bottom);//draw a line at min
@@ -2147,7 +2150,9 @@ void TraceView::drawTimeLine(QPainter *painter){
         if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
+            if (!linePositions.isEmpty() ) {
+              for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
+            }
             if (previousAbscissae[groupIndex] < max[groupIndex]){
                 for(int i = 0; i<nbColumns;++i){
                     painter->drawLine(max[i],top,max[i],bottom);//draw a line at max
@@ -2169,7 +2174,8 @@ void TraceView::drawTimeLine(QPainter *painter){
         if (!initialDragLine){
             int previousDelta = previousDragAbscissa - lastClickAbscissa;
             QList<int> previousAbscissae;
-            for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
+            if (!linePositions.isEmpty())
+              for(int i = 0; i<nbColumns;++i) previousAbscissae.append(linePositions.at(i) + previousDelta);
             for(int i = 0; i<nbColumns;++i){
                 if (previousAbscissae[i] >= min[i])
                     painter->drawLine(previousAbscissae[i],top,previousAbscissae[i],bottom);
@@ -2495,7 +2501,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
         QPair<QString,int> deselectedEvent(selectedEvent.first,selectedEvent.second);
         int deselectedEventIndex = 0;
         if (!selectedEventPosition.isEmpty())
-            deselectedEventIndex = selectedEventPosition[0];
+            deselectedEventIndex = selectedEventPosition.at(0);
 
         if (mode == SELECT && !shownChannels.isEmpty() || mode == MEASURE || mode == SELECT_TIME || mode == SELECT_EVENT || mode == ADD_EVENT || mode == DRAW_LINE){
             QRect r((QRect)window);
