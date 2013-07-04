@@ -84,7 +84,7 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
     if(mode == ZOOM || isRubberBandToBeDrawn){
         if(e->button() == Qt::LeftButton){
             if (!mRubberBand)
-                mRubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+                mRubberBand = new KlusterRubberBand(QRubberBand::Rectangle, this);
 
             //Assign firstClick
             QRect r((QRect)window);

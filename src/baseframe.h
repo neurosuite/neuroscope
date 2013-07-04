@@ -25,11 +25,10 @@
 
 #include <QResizeEvent>
 #include <QMouseEvent>
-
+#include "klusterrubberband.h"
 
 //include files for the application
 #include "zoomwindow.h"
-class QRubberBand;
 
 /**
   * Frame base class containing the following features:
@@ -306,7 +305,7 @@ protected:
 
     /**Color use to display the legends.*/
     QColor colorLegend;
-    QRubberBand *mRubberBand;
+    KlusterRubberBand *mRubberBand;
 
 };
 
