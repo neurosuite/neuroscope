@@ -90,3 +90,15 @@ void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     emit mouseReleased(this->objectName());
 }
 
+void ItemIconView::resizeEvent(QResizeEvent *event)
+{
+    QListWidget::resizeEvent(event);
+    int maxY = 0;
+    for (int i = 0; i < count(); ++i) {
+        QRect r = visualItemRect(item(i));
+        maxY = qMax(r.y()+r.height()+5, maxY);
+    }
+    if (maxY != event->size().height()) {
+        resize(event->size().width(), maxY);
+    }
+}
