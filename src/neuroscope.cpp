@@ -596,6 +596,7 @@ void NeuroscopeApp::initActions()
 
 
     mMainToolBar = new QToolBar;
+    mMainToolBar->setObjectName("maintoolbar");
     mMainToolBar->addAction(mOpenAction);
     mMainToolBar->addAction(mSaveAction);
     mMainToolBar->addAction(mPrintAction);
@@ -607,6 +608,7 @@ void NeuroscopeApp::initActions()
     addToolBar(mMainToolBar);
 
     mToolBar = new QToolBar(tr("Tools"));
+    mToolBar->setObjectName("Tools");
     mToolBar->addAction(mZoomTool);
     mToolBar->addAction(mDrawTimeLine);
     mToolBar->addAction(mSelectTool);
@@ -617,6 +619,7 @@ void NeuroscopeApp::initActions()
     addToolBar(Qt::LeftToolBarArea, mToolBar);
 
     mChannelToolBar = new QToolBar(tr("Channels Actions"));
+    mChannelToolBar->setObjectName("Channels Actions");
     mChannelToolBar->addAction(mMoveToNewGroup);
     mChannelToolBar->addAction(mRemoveChannelFromGroup);
     mChannelToolBar->addAction(mDiscardChannels);
@@ -628,14 +631,17 @@ void NeuroscopeApp::initActions()
     addToolBar(Qt::LeftToolBarArea, mChannelToolBar);
 
     mEventToolBar = new QToolBar(tr("Events Actions"));
+    mEventToolBar->setObjectName("Events Actions");
     mEventToolBar->addAction(mPreviousEvent);
     mEventToolBar->addAction(mNextEvent);
     addToolBar(Qt::LeftToolBarArea, mEventToolBar);
 
     mClusterToolBar = new QToolBar(tr("Clusters Actions"));
+    mClusterToolBar->setObjectName("Clusters Actions");
     mClusterToolBar->addAction(mPreviousSpike);
     mClusterToolBar->addAction(mNextSpike);
     addToolBar(Qt::LeftToolBarArea, mClusterToolBar);
+    readSettings();
 
 }
 
@@ -3604,4 +3610,23 @@ void NeuroscopeApp::slotSaveRecentFiles()
     settings.setValue(QLatin1String("Recent Files"),mFileOpenRecent->recentFiles());
 }
 
+void NeuroscopeApp::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup("geometry");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
+    settings.endGroup();
+}
+
+void NeuroscopeApp::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.beginGroup("geometry");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    settings.endGroup();
+    settings.sync();
+    QMainWindow::closeEvent(event);
+}
 

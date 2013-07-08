@@ -295,6 +295,7 @@ protected:
     
     
     void customEvent (QEvent* event);
+    void closeEvent(QCloseEvent *event);
     
 private Q_SLOTS:
 
@@ -664,7 +665,7 @@ private Q_SLOTS:
     void slotSaveRecentFiles();
 
 private:
-
+    void readSettings();
     void initView();
     /** Doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
