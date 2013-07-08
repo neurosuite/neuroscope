@@ -90,7 +90,6 @@ int EventsProvider::loadData(){
     QTextStream fileStream(&eventFile);
     QString line;
     int lineCounter = 0;
-    QStringList list;
     for(line = fileStream.readLine(); !line.isNull() && lineCounter< nbEvents;line = fileStream.readLine()){
         line = line.trimmed();
 
