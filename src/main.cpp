@@ -64,11 +64,13 @@ int main(int argc, char *argv[])
         }
 
         bool handled = true;
-         if (i < n - 1) {
+         if (i <= n - 1) {
              if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
                  resolution = args.at(++i);
-             else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels")
+             else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels") {
                  channelNb = args.at(++i);
+                 qDebug()<<" channelNb :"<<channelNb;
+             }
              else if (arg == "o-" || arg == "--offset" || arg == "-offset")
                   offset = args.at(++i);
              else if (arg == "-m" || arg == "--voltageRange" || arg == "-voltageRange")
@@ -86,7 +88,6 @@ int main(int argc, char *argv[])
 
          }
          // Nothing know. Treat it as path.
-         qDebug()<<" n "<<n;
          if (!handled || (n == 2) )
              file = args.at(i);
     }
