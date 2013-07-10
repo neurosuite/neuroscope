@@ -56,7 +56,8 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     connect(properties->offsetLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(properties->resolutionComboBox,SIGNAL(activated(int)),this,SLOT(propertyModified()));
     connect(properties->traceBackgroundLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotVerify()));
+
+
     connect(clusterProperties->nbSamplesLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(clusterProperties->peakIndexLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
     connect(positionProperties->samplingRateLineEdit,SIGNAL(textChanged(QString)),this,SLOT(propertyModified()));
@@ -69,7 +70,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
 
     QDialogButtonBox *dialogButton = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Help);
     lay->addWidget(dialogButton);
-    connect(dialogButton, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(dialogButton, SIGNAL(accepted()), this, SLOT(slotVerify()));
     connect(dialogButton, SIGNAL(rejected()), this, SLOT(reject()));
     connect(dialogButton, SIGNAL(helpRequested()), this, SLOT(slotHelp()));
 }
@@ -129,6 +130,7 @@ void PropertiesDialog::slotVerify(){
         if(nbChannelsModified)
             modified = true;
     }
+    accept();
 }
 
 void PropertiesDialog::showPositionPage(){
