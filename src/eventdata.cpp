@@ -37,7 +37,6 @@ void EventData::computePositions(double samplingRate,double positionSamplingRate
 
     for(int i = 1; i <= nbEvents;++i){
         dataType index = times(1,i);
-        int eventId = ids(1,i);
         double time = static_cast<double>(static_cast<double>(index) / samplingRateInMs);
 
         //Positions start at 1.
