@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("neuroscope");
 
     QApplication app(argc, argv);
+    QString file;
     QStringList args = QApplication::arguments();
     QString channelNb;
     QString SR;
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     QString amplification;
     QString screenGain;
     QString timeWindow;
-    QString file;
+    QString stylename;
     //TODO Qt5.2 use QCommandLineParser
     for (int i = 1, n = args.size(); i < n; ++i) {
         const QString arg = args.at(i);
@@ -64,12 +65,11 @@ int main(int argc, char *argv[])
         }
 
         bool handled = true;
-         if (i <= n - 1) {
+         if (i < n - 1) {
              if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
                  resolution = args.at(++i);
              else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels") {
                  channelNb = args.at(++i);
-                 qDebug()<<" channelNb :"<<channelNb;
              }
              else if (arg == "o-" || arg == "--offset" || arg == "-offset")
                   offset = args.at(++i);
@@ -86,6 +86,8 @@ int main(int argc, char *argv[])
              else
                  handled = false;
 
+         } else {
+                 handled = false;
          }
          // Nothing know. Treat it as path.
          if (!handled || (n == 2) )
@@ -93,22 +95,23 @@ int main(int argc, char *argv[])
     }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
     neuroscope->show();
-    if(!file.isEmpty()){
-        if(file.left(1) != QLatin1String("/")){
+    if (!file.isEmpty()) {
+        if (file.startsWith(QLatin1String("-")) ) {
+            qWarning() << "it's not a filename :"<<file;
+        } else if(file.left(1) != QLatin1String("/")){
             const QString url = QDir::currentPath().append("/") + file;
             neuroscope->openDocumentFile(url);
-        }
-        else
+        } else {
             neuroscope->openDocumentFile(file);
+        } 
     }
-
 
     neuroscope->setFileProperties(channelNb,SR,resolution,
                                   offset,voltageRange,amplification,
                                   screenGain,timeWindow);
 
-
     const int ret = app.exec();
     delete neuroscope;
     return ret;
 }  
+
