@@ -104,7 +104,10 @@ void ChannelIconView::resizeEvent ( QResizeEvent * event )
         maxY = qMax(r.y()+r.height()+5, maxY);
     }
     if (maxY != event->size().height()) {
+        const QSize size(event->size().width(), maxY);
+        qDebug()<<" size "<<size;
         resize(event->size().width(), maxY);
+        qDebug()<<" rect :"<<rect();
     }
 }
 
