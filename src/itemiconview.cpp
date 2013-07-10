@@ -21,6 +21,7 @@
 #include <QTextCodec>
 
 #include <QMouseEvent>
+#include <QDebug>
 #include <QFrame>
 
 
@@ -64,6 +65,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
 
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
+    setSortingEnabled(true);
 }
 
 void ItemIconView::wheelEvent ( QWheelEvent * event )
