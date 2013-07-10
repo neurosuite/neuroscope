@@ -94,6 +94,10 @@ int main(int argc, char *argv[])
              file = args.at(i);
     }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
+    neuroscope->setFileProperties(channelNb,SR,resolution,
+                                  offset,voltageRange,amplification,
+                                  screenGain,timeWindow);
+
     neuroscope->show();
     if (!file.isEmpty()) {
         if (file.startsWith(QLatin1String("-")) ) {
@@ -106,9 +110,6 @@ int main(int argc, char *argv[])
         } 
     }
 
-    neuroscope->setFileProperties(channelNb,SR,resolution,
-                                  offset,voltageRange,amplification,
-                                  screenGain,timeWindow);
 
     const int ret = app.exec();
     delete neuroscope;
