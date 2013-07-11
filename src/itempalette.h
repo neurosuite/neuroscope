@@ -129,11 +129,11 @@ protected Q_SLOTS:
     void slotMouseReleased(const QString &sourceGroupName);
 
 Q_SIGNALS:
-    void colorChanged(int item,QString groupName);
+    void colorChanged(int item, const QString &groupName);
     void updateShownItems(const QMap<QString,QList<int> >& selectedItems);
     void paletteResized(int parentWidth,int labelSize);
-    void selectedGroupChanged(QString eventGroupName);
-    void updateItemsToSkip(QString groupName,const QList<int>& itemsToSkip);
+    void selectedGroupChanged(const QString &eventGroupName);
+    void updateItemsToSkip(const QString &groupName,const QList<int>& itemsToSkip);
     void noClustersToBrowse();
     void noEventsToBrowse();
     void clustersToBrowse();
@@ -240,7 +240,7 @@ Q_SIGNALS:
     void middleClickOnLabel(const QString& sourceId);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent* e){
+    void mousePressEvent(QMouseEvent* e){
         if(e->button() == Qt::LeftButton && !(e->modifiers() & Qt::ShiftModifier) && !(e->modifiers() & Qt::ControlModifier) && !(e->modifiers() & Qt::AltModifier)){
             emit leftClickOnLabel(parent()->objectName(),false,false);
         }

@@ -301,7 +301,7 @@ public:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void eventColorUpdate(QString name,int eventId,bool active);
+    void eventColorUpdate(const QString &name, int eventId, bool active);
 
     /**Prints the currently display information on a printer via the painter @p printPainter.
   * Does not print zoomed display.

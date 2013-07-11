@@ -200,6 +200,7 @@ void ChannelPalette::setChannelLists(){
 }
 
 void ChannelPalette::slotMousePressMiddleButton(QListWidgetItem*item) {
+    qDebug()<<" void ChannelPalette::slotMousePressMiddleButton(QListWidgetItem*item) {"<<item;
     if (!item) {
         return; //pressed on viewport
     } else {

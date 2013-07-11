@@ -3886,7 +3886,7 @@ void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QL
     eventsNotUsedForBrowsing.insert(providerName,events);
 }
 
-void TraceView::eventColorUpdate(QString name,int eventId,bool active){
+void TraceView::eventColorUpdate(const  QString &name,int eventId,bool active){
     if (active){
         drawContentsMode = REDRAW ;
         update();

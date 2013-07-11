@@ -97,7 +97,7 @@ void ItemIconView::resizeEvent(QResizeEvent *event)
     int maxY = 0;
     for (int i = 0; i < count(); ++i) {
         QRect r = visualItemRect(item(i));
-        maxY = qMax(r.y()+r.height()+5, maxY);
+        maxY = qMax(r.y()+r.height()+25, maxY);
     }
     if (maxY != event->size().height()) {
         resize(event->size().width(), maxY);

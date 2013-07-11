@@ -194,7 +194,7 @@ public Q_SLOTS:
   * @param name name use to identified the event provider containing the events to show.
   * @param eventsToShow new list of events to be shown.
   */
-    void showEvents(QString name,QList<int>& eventsToShow){
+    void showEvents(const QString &name,QList<int>& eventsToShow){
         view.showEvents(name,eventsToShow);
     }
 
@@ -216,7 +216,7 @@ public Q_SLOTS:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  eventColorUpdate(QString name,int eventId,bool active){view.eventColorUpdate(name,eventId,active);}
+    void  eventColorUpdate(const QString &name,int eventId,bool active){view.eventColorUpdate(name,eventId,active);}
 
     /**Changes the color of a group of channels.
   * @param groupId id of the group for which the color have been changed.
@@ -318,7 +318,7 @@ public Q_SLOTS:
   * @param nbSamplesAfter number of samples after the sample of the peak are contained in the waveform of a spike.
   * @param clustersToSkip list of clusters to not use while browsing.
   */
-    void addClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
+    void addClusterProvider(ClustersProvider* clustersProvider,const QString &name,ItemColors* clusterColors,bool active,
                                    QList<int>& clustersToShow,QMap<int, QList<int> >* displayGroupsClusterFile,
                                    QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip){
         view.addClusterProvider(clustersProvider,name,clusterColors,active,clustersToShow,displayGroupsClusterFile,
@@ -341,7 +341,7 @@ public Q_SLOTS:
   * @param eventsToShow list of clusters to be shown.
   * @param eventsToNotBrowse list of events to not use while browsing.
   */
-    void addEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
+    void addEventProvider(EventsProvider* eventsProvider,const QString &name,ItemColors* eventColors,bool active,
                                  QList<int>& eventsToShow,const QList<int>& eventsToNotBrowse){
         view.addEventProvider(eventsProvider,name,eventColors,active,eventsToShow,eventsToNotBrowse);
     }
@@ -361,7 +361,7 @@ public Q_SLOTS:
   * @param filePath path of the opened document.
   * @param whiteBackground true if the printed background has to be white, false otherwise.
   */
-    void print(QPainter& printPainter,int width,int height,QString filePath,bool whiteBackground){
+    void print(QPainter& printPainter,int width,int height,const QString &filePath,bool whiteBackground){
 
         QRect textRec = QRect(printPainter.viewport().left() + 5 ,printPainter.viewport().height() - 20,printPainter.viewport().width() - 5,20);
         QFont f("Helvetica",8);
@@ -481,7 +481,7 @@ public Q_SLOTS:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param eventsToNotBrowse new list of events to not use while browsing.
   */
-    void updateNoneBrowsingEventList(QString providerName,const QList<int>& eventsToNotBrowse){
+    void updateNoneBrowsingEventList(const QString &providerName,const QList<int>& eventsToNotBrowse){
         view.updateNoneBrowsingEventList(providerName,eventsToNotBrowse);
     }
 
@@ -489,7 +489,7 @@ public Q_SLOTS:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param clustersToNotBrowse new list of clusters to not use while browsing.
   */
-    void updateNoneBrowsingClusterList(QString providerName,const QList<int>& clustersToNotBrowse){
+    void updateNoneBrowsingClusterList(const QString &providerName,const QList<int>& clustersToNotBrowse){
         view.updateNoneBrowsingClusterList(providerName,clustersToNotBrowse);
     }
 
@@ -548,7 +548,7 @@ public Q_SLOTS:
   * @param traceBackgroundImage image to be used as background.
   * @param active true if the view is the active one, false otherwise.
   */
-    void traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active){
+    void traceBackgroundImageUpdate(const QImage &traceBackgroundImage,bool active){
         view.traceBackgroundImageUpdate(traceBackgroundImage,active);
     }
 
@@ -567,21 +567,21 @@ Q_SIGNALS:
   * @param time initial time of the modified event.
   * @param newTime new time of the modified event.
   */
-    void eventModified(QString providerName,int selectedEventId,double time,double newTime);
+    void eventModified(const QString &providerName,int selectedEventId,double time,double newTime);
 
     /**Informs that an event has been removed.
   * @param providerName name use to identified the event provider containing the removed event.
   * @param selectedEventId id of the removed event.
   * @param time initial time of the removed event.
   */
-    void eventRemoved(QString providerName,int selectedEventId,double time);
+    void eventRemoved(const QString &providerName,int selectedEventId,double time);
 
     /**Informs that an event has been added.
   * @param providerName name use to identified the event provider containing the added event.
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    void eventAdded(QString providerName,QString addedEventDescription,double time);
+    void eventAdded(const QString &providerName,const QString &addedEventDescription,double time);
 
     /**Signals that the enclosing dockwidget is being closed
   * @param viewWidget pointer on the the current object.

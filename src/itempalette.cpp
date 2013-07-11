@@ -116,7 +116,7 @@ void ItemPalette::paintEvent ( QPaintEvent*){
             }
 
             //In order to avoid problems when double clicking, all the icons of the iconview are redrawn
-            if(items.size() == 0 && selectedItems.size() == 1){
+            if(items.isEmpty() && selectedItems.size() == 1){
                 for(int i = 0; i < iconView->count();++i){
                     redrawItem(iconView,itemColors,i,browsingMap);
                 }
@@ -203,6 +203,7 @@ void ItemPalette::updateItemList(const QString& groupName){
 
 void ItemPalette::slotMousePressed(const QString&sourceGroupName,QListWidgetItem*item){
     if (item) {
+
         changeColor(item,sourceGroupName);
     }
 }
