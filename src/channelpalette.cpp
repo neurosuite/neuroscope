@@ -886,11 +886,11 @@ void ChannelPalette::createGroup(int id){
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
         moveTrashesToBottom();
 }
-
+#include <QTimer>
 void ChannelPalette::slotRemoveGroup(const QString &name)
 {
-    qDebug()<<" void ChannelPalette::slotRemoveGroup(const QString &name) "<<name;
     isGroupToRemove = true;
+    QTimer::singleShot(100, this, SLOT(update()));
 }
 
 void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destination){  
