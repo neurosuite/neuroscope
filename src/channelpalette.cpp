@@ -169,7 +169,8 @@ void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, Q
     setChannelLists();
 }
 
-void ChannelPalette::setChannelLists(){  
+void ChannelPalette::setChannelLists()
+{
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
         iteratordict.next();
@@ -316,10 +317,7 @@ void ChannelPalette::hideUnselectAllChannels(){
             //Get the channelColor associated with the item
             const QColor color = channelColors->color(iterator.key());
             drawItem(painter,&pixmap,color,false,channelsSkipStatus[iterator.key()]);
-            new ChannelIconViewItem(QIcon(pixmap),QString::number(iterator.key()),iconView);
-
-            //Delete the old item
-            delete lstItem.first();
+            lstItem.first()->setIcon(QIcon(pixmap));
         }
     }
 
@@ -374,13 +372,9 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
             //Get the channelColor associated with the item
             QColor color = channelColors->color(*channelIterator);
             drawItem(painter,&pixmap,color,showStatus,channelsSkipStatus[*channelIterator]);
-            (void)new ChannelIconViewItem(QIcon(pixmap),QString::number(*channelIterator),iconView);
-
+            item->setIcon(QIcon(pixmap));
             if(selected)
                 selectedIds.append(*channelIterator);
-
-            //Delete the old item
-            delete item;
         }
     }
 
@@ -456,12 +450,9 @@ void ChannelPalette::updateSkipStatus(const QMap<int,bool>& skipStatus){
 
             channelColors->setColor(channelId,color);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],status);
-            new ChannelIconViewItem(QIcon(pixmap),QString::number(channelId),iconView);
+            item->setIcon(QIcon(pixmap));
             if(selected)
                 selectedIds.append(channelId);
-
-            //Delete the old item
-            delete item;
         }
     }
 
@@ -488,8 +479,8 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
     ChannelIconView* iconView = 0L;
     QPainter painter;
     QList<int> selectedIds;
-
-    for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
+    QList<int>::const_iterator end(channelIds.end());
+    for(channelIterator = channelIds.begin(); channelIterator != end; ++channelIterator){
         //update the status
         channelsSkipStatus.remove(*channelIterator);
         channelsSkipStatus.insert(*channelIterator,skipStatus);
@@ -523,15 +514,10 @@ void ChannelPalette::updateSkipStatus(const QList<int>&channelIds,bool skipStatu
             channelColors->setColor(*channelIterator,color);
 
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*channelIterator],skipStatus);
-            new ChannelIconViewItem(QIcon(pixmap),QString::number(*channelIterator),iconView);
-            //(void)new ChannelIconItem(iconView,item,QString::number(*channelIterator),pixmap);
-
+            item->setIcon(QIcon(pixmap));
 
             if(selected)
                 selectedIds.append(*channelIterator);
-
-            //Delete the old item
-            delete item;
         }
     }
 
