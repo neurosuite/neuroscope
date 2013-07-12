@@ -256,7 +256,7 @@ private:
     void moveChannels(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after);
 
     /**Channels moved to an empty group.*/
-    void moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup);
+    void moveChannels(const QList<int>& channelIds,const QString &sourceGroup,const QString &targetGroup);
 
     /**Moves channels to either the trash group or the unspecified group in the spike palette.
     * @param destinationGroup the id of the group of destination.
@@ -279,7 +279,10 @@ private:
 class SpaceWidget : public QWidget{
     Q_OBJECT
 public:
-    SpaceWidget(QWidget* parent,bool drag):QWidget(parent),drag(drag){
+    SpaceWidget(QWidget* parent,bool drag)
+        : QWidget(parent),
+          drag(drag)
+    {
         setAcceptDrops(true);
     }
 

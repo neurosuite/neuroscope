@@ -1314,7 +1314,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds){
 
 }
 
-void ChannelPalette::moveChannels(const QList<int>& channelIds,QString sourceGroup,QString targetGroup){
+void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup){
     QList<int> targetChannels = (*groupsChannels)[targetGroup.toInt()];
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
