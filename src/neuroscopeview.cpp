@@ -252,7 +252,7 @@ void NeuroscopeView::shownClustersUpdate(const QString &name, QList<int>& cluste
     showAllWidgets();
 }
 
-void NeuroscopeView::updateNoneBrowsingClusterList(QString providerName,const QList<int>& clustersToNotBrowse){
+void NeuroscopeView::updateNoneBrowsingClusterList(const QString &providerName, const QList<int>& clustersToNotBrowse){
     QList<int>* currentSkippedClusters = clustersNotUsedForBrowsing[providerName];
     currentSkippedClusters->clear();
 

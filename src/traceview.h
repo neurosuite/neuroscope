@@ -355,7 +355,7 @@ public:
   * @param providerName name use to identified the event provider containing the modified event.
   * @param clustersToNotBrowse new list of clusters to not use while browsing.
   */
-    void updateNoneBrowsingClusterList(QString providerName,const QList<int>& clustersToNotBrowse);
+    void updateNoneBrowsingClusterList(const QString &providerName, const QList<int>& clustersToNotBrowse);
 
     /** Updates the description of a spike waveform.
   * @param nbSamplesBefore number of samples contained in the waveform of a spike before the sample of the peak.

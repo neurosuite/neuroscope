@@ -595,6 +595,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
     QList<int> itemsToRedraw;
     bool browsingEnable = false;
 
+    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     if(!item->isSelected())
         return;
 
@@ -609,6 +610,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
         browsingEnable = true;
     }
 
+    qDebug()<<" browsingMap"<<browsingMap;
     itemsToRedraw.append(index);
     needRedrawing.insert(sourceGroup,itemsToRedraw);
     QList<int> itemsToSkip;

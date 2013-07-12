@@ -3675,7 +3675,7 @@ void TraceView::showClusters(const QString &name, const QList<int> &clustersToSh
     }
 }
 
-void TraceView::updateNoneBrowsingClusterList(QString providerName,const QList<int>& clustersToNotBrowse){
+void TraceView::updateNoneBrowsingClusterList(const QString &providerName,const QList<int>& clustersToNotBrowse){
     QList<int> clusters;
     QList<int>::const_iterator iterator;
     for(iterator = clustersToNotBrowse.begin(); iterator != clustersToNotBrowse.end(); ++iterator){
