@@ -864,6 +864,7 @@ void ChannelPalette::createGroup(int id){
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
+    connect(iconView, SIGNAL(removeGroup(QString)), SLOT(slotRemoveGroup(QString)));
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QListWidgetItem*)),this, SLOT(slotMousePressMiddleButton(QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
@@ -884,6 +885,12 @@ void ChannelPalette::createGroup(int id){
 
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
         moveTrashesToBottom();
+}
+
+void ChannelPalette::slotRemoveGroup(const QString &name)
+{
+    qDebug()<<" void ChannelPalette::slotRemoveGroup(const QString &name) "<<name;
+    isGroupToRemove = true;
 }
 
 void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destination){  

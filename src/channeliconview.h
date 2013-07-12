@@ -61,6 +61,7 @@ Q_SIGNALS:
     void channelsMoved(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after);
     void dropLabel(int sourceId,int targetId,int start,int destination);
 
+    void removeGroup(const QString &name);
 
 protected:
     void resizeEvent ( QResizeEvent * event );

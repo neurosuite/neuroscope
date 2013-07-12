@@ -147,6 +147,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
     if (moveAllGroup) {
         const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
+        emit removeGroup(name);
         //emit channelsMoved(name, 0);
     }
     return true;
