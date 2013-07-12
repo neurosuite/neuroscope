@@ -140,8 +140,6 @@ Q_SIGNALS:
     void eventsToBrowse();
     
 private:    
-    /**Dictionnary of the itemColors storing the color information for the items.*/
-    QHash<QString, ItemColors*> itemColorsDict;
 
     /**Background color.*/
     QColor backgroundColor;
@@ -206,7 +204,7 @@ private:
     /** Redraws the list corresponding to the group @p groupName.
     * @param groupName name of the list to update.
     */
-    void updateItemList(const QString& groupName);
+    void updateItemList(const QString& groupName, ItemColors *itemColors);
 
     /**Reorders the groups to display them in either alphabetic order or numerical order.*/
     void orderTheGroups();
@@ -217,7 +215,7 @@ private:
     * @param index index in itemColors or in the iconview (the are identical) of the item to recreate.
     * @param browsingMap map giving the browsing status of the items contained in the iconView.
     */
-    void redrawItem(ItemIconView* iconView,ItemColors* itemColors,int index,QMap<int,bool> browsingMap);
+    void redrawItem(ItemIconView* iconView, int index, QMap<int,bool> browsingMap);
     
     /**Selects the group identify by @p groupName.
     * @param groupName the group to be selected.
