@@ -294,7 +294,7 @@ public:
   * @param name name use to identified the event provider containing the events to show.
   * @param eventsToShow new list of events to be shown.
   */
-    void showEvents(QString name,QList<int>& eventsToShow);
+    void showEvents(const QString &name, QList<int>& eventsToShow);
 
     /**Changes the color of an event.
   * @param name name use to identified the event provider containing the updated event.

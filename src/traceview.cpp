@@ -3825,12 +3825,12 @@ void TraceView::removeEventProvider(const QString& name,bool active){
     if (active) update();
 }
 
-void TraceView::showEvents(QString name,QList<int>& eventsToShow){
+void TraceView::showEvents(const QString &name,QList<int>& eventsToShow){
     EventData* eventData;
     eventData = eventsData[name];
 
     QList<int> events;
-    if (eventsToShow.size() != 0){
+    if (!eventsToShow.isEmpty()){
         QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
             events.append(*shownEventsIterator);
@@ -3880,7 +3880,8 @@ void  TraceView::updateEvents(const QString& providerName,QList<int>& eventsToSh
 void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QList<int>& eventsToNotBrowse){
     QList<int> events;
     QList<int>::const_iterator iterator;
-    for(iterator = eventsToNotBrowse.begin(); iterator != eventsToNotBrowse.end(); ++iterator){
+    QList<int>::const_iterator end(eventsToNotBrowse.end());
+    for(iterator = eventsToNotBrowse.begin(); iterator != end; ++iterator){
         events.append(*iterator);
     }
     eventsNotUsedForBrowsing.insert(providerName,events);
