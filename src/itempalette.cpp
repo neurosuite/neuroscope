@@ -619,6 +619,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
             itemsToSkip.append(iconView->item(i)->data(ItemIconView::INDEXICON).toInt());
         }
     }
+    qDebug()<<" sourceGroup"<<sourceGroup<<" itemsToSkip"<<itemsToSkip;
     emit updateItemsToSkip(sourceGroup,itemsToSkip);
 
     if(!browsingEnable){

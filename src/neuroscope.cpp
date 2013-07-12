@@ -3278,11 +3278,11 @@ void NeuroscopeApp::slotClosePositionFile(){
     slotStateChanged("noPositionState");
 }
 
-void NeuroscopeApp::slotUpdateEventsToSkip(QString groupName,const QList<int>& eventsToSkip){
+void NeuroscopeApp::slotUpdateEventsToSkip(const QString &groupName,const QList<int>& eventsToSkip){
     activeView()->updateNoneBrowsingEventList(groupName,eventsToSkip);
 }
 
-void NeuroscopeApp::slotUpdateClustersToSkip(QString groupName,const QList<int>& clustersToSkip){
+void NeuroscopeApp::slotUpdateClustersToSkip(const QString &groupName,const QList<int>& clustersToSkip){
     activeView()->updateNoneBrowsingClusterList(groupName,clustersToSkip);
 }
 
@@ -3628,5 +3628,32 @@ void NeuroscopeApp::closeEvent(QCloseEvent *event)
     settings.endGroup();
     settings.sync();
     QMainWindow::closeEvent(event);
+}
+
+void NeuroscopeApp::slotNoClustersToBrowse()
+{
+    slotStateChanged("noClusterBrowsingState");
+}
+
+/**Enables clusters browsing as some clusters have been selected for browsing.
+*/
+void NeuroscopeApp::slotClustersToBrowse()
+{
+    slotStateChanged("clusterBrowsingState");
+}
+
+
+/**Disables events browsing as no events have been selected for browsing.
+*/
+void NeuroscopeApp::slotNoEventsToBrowse()
+{
+    slotStateChanged("noEventBrowsingState");
+}
+
+/**Enables events browsing as some events have been selected for browsing.
+*/
+void NeuroscopeApp::slotEventsToBrowse()
+{
+    slotStateChanged("eventBrowsingState");
 }
 

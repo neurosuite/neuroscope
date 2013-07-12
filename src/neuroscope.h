@@ -238,28 +238,20 @@ public Q_SLOTS:
 
     /**Disables clusters browsing as no clusters have been selected for browsing.
   */
-    void slotNoClustersToBrowse(){
-        slotStateChanged("noClusterBrowsingState");
-    }
+    void slotNoClustersToBrowse();
 
     /**Enables clusters browsing as some clusters have been selected for browsing.
   */
-    void slotClustersToBrowse(){
-        slotStateChanged("clusterBrowsingState");
-    }
+    void slotClustersToBrowse();
 
 
     /**Disables events browsing as no events have been selected for browsing.
   */
-    void slotNoEventsToBrowse(){
-        slotStateChanged("noEventBrowsingState");
-    }
+    void slotNoEventsToBrowse();
 
     /**Enables events browsing as some events have been selected for browsing.
   */
-    void slotEventsToBrowse(){
-        slotStateChanged("eventBrowsingState");
-    }
+    void slotEventsToBrowse();
 
     void slotStateChanged(const QString& state);
 protected:
@@ -626,13 +618,13 @@ private Q_SLOTS:
    * @param groupName identifier of the file containing the events to browse.
    * @param eventsToSkip new list of events to skip while browsing
    */
-    void slotUpdateEventsToSkip(QString groupName,const QList<int>& eventsToSkip);
+    void slotUpdateEventsToSkip(const QString &groupName, const QList<int>& eventsToSkip);
 
     /**Updates the active display with the clusters to skip while browsing.
    * @param groupName identifier of the file containing the clusters to browse.
    * @param clustersToSkip new list of clusters to skip while browsing
    */
-    void slotUpdateClustersToSkip(QString groupName,const QList<int>& clustersToSkip);
+    void slotUpdateClustersToSkip(const QString &groupName, const QList<int>& clustersToSkip);
     
     /**Marks the selected channels has keeped.*/
     void slotKeepChannels();
