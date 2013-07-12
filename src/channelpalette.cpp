@@ -1328,9 +1328,9 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
     groupColor.setHsv(210,255,255);
     if(!targetChannels.isEmpty()){
         if(type == DISPLAY)
-            groupColor = channelColors->groupColor(targetChannels[0]);
+            groupColor = channelColors->groupColor(targetChannels.first());
         else
-            groupColor = channelColors->spikeGroupColor(targetChannels[0]);
+            groupColor = channelColors->spikeGroupColor(targetChannels.first());
     }
 
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
