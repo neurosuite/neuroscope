@@ -61,6 +61,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setSpacing(4);
 
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
