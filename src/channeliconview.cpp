@@ -159,6 +159,7 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     if (item == 0L)
         return;
 
+    qDebug()<<"void ChannelIconView::mousePressEvent(QMouseEvent* event) ";
     //  if (event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
     //   !(event->modifiers() & Qt::ControlModifier)){
     //    emit moussePressWoModificators(this->name());

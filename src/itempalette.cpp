@@ -587,11 +587,10 @@ bool ItemPalette::isBrowsingEnable(){
     return browsingEnable;
 }
 
-void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,int index){
+void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidgetItem *item){
     QMap<int,bool> browsingMap = browsingStatus[sourceGroup];
 
     ItemIconView* iconView = iconviewDict[sourceGroup];
-    QListWidgetItem *item = iconView->item(index);
 
     QList<int> itemsToRedraw;
     bool browsingEnable = false;
@@ -599,6 +598,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,int index)
     if(!item->isSelected())
         return;
 
+    const int index = item->data(ItemIconView::INDEXICON).toInt();
     if(browsingMap[index]){
         browsingMap[index] = false;
         browsingStatus.insert(sourceGroup,browsingMap);
@@ -809,7 +809,7 @@ void ItemPalette::createGroup(const QString &id){
     connect(iconView,SIGNAL(mousePressMiddleButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressed(QString,QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
     connect(iconView,SIGNAL(mousePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
-    connect(iconView,SIGNAL(mousePressWAltButton(QString,int)),this, SLOT(slotMousePressWAltButton(QString,int)));
+    connect(iconView,SIGNAL(mousePressWAltButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressWAltButton(QString,QListWidgetItem*)));
     connect(iconView,SIGNAL(mouseReleased(QString)),this, SLOT(slotMouseReleased(QString)));
 
     connect(label,SIGNAL(leftClickOnLabel(QString,bool,bool)),this, SLOT(slotMousePressed(QString,bool,bool)));

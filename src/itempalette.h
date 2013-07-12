@@ -117,7 +117,7 @@ public:
     
 public Q_SLOTS:
     void slotMousePressWoModificators(const QString &sourceGroup);
-    void slotMousePressWAltButton(const QString &sourceGroup, int index);
+    void slotMousePressWAltButton(const QString &sourceGroup, QListWidgetItem *item);
     
 protected Q_SLOTS:
     void slotMousePressed(const QString &sourceGroupName,QListWidgetItem* item);

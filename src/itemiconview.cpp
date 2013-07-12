@@ -77,8 +77,9 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
     QListWidgetItem *item = itemAt(event->pos());
     if(!item)
         return;
+    qDebug()<<" void ItemIconView::mousePressEvent ( QMouseEvent * event )";
     if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
-        emit mousePressWAltButton(this->objectName(),item->data(INDEXICON).toInt());
+        emit mousePressWAltButton(this->objectName(),item);
     } else if(event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(this->objectName(),item);
         emit mousePressMiddleButton(item);

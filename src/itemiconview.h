@@ -51,7 +51,7 @@ protected:
 Q_SIGNALS:
     void mousePressWoModificators(const QString &sourceGroup);
     void mousePressMiddleButton(const QString& sourceGroup,QListWidgetItem*);
-    void mousePressWAltButton(const QString &sourceGroup,int index);
+    void mousePressWAltButton(const QString &sourceGroup, QListWidgetItem*);
     void mouseReleased(const QString &sourceGroup);
     void mousePressMiddleButton(QListWidgetItem*);
 
