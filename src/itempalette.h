@@ -120,7 +120,7 @@ public Q_SLOTS:
     void slotMousePressWAltButton(const QString &sourceGroup, int index);
     
 protected Q_SLOTS:
-    void slotMousePressed(const QString& sourceGroupName,QListWidgetItem* item);
+    void slotMousePressed(const QString &sourceGroupName,QListWidgetItem* item);
     void slotMousePressed(const QString &sourceGroupName, bool shiftKey = false, bool ctrlAlt = false);
     void slotClickRedraw();
     void languageChange();
