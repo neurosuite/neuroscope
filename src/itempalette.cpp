@@ -121,11 +121,6 @@ void ItemPalette::paintEvent ( QPaintEvent*){
                     redrawItem(iconView,i,browsingMap);
                 }
             }
-
-            //    QValueList<int>::iterator iterator;
-            //    for(iterator = items.begin(); iterator != items.end(); ++iterator){
-            //     redrawItem(iconView,itemColors,*iterator,browsingMap);
-            //    }
         }
 
         needRedrawing.clear();
@@ -264,7 +259,6 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     if (item->isSelected()) {
                         if(browsingMap[i]) {
                             browsingMap[i] = false;
-                            //const QString label = item->text();
                             redrawItem(iconView,i,browsingMap);
                             isInSelectItems = true;//redrawItem sets it back to false
                         }
@@ -552,7 +546,6 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
         return;
 
     isInSelectItems = true;
-    qDebug()<<" browsingMap***************"<<browsingMap;
     bool browsingStatus = browsingMap[index];
 
     //Recreate the item
@@ -561,7 +554,6 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
     QColor color = qvariant_cast<QColor>(item->data(ItemIconView::Color));
     QPainter painter;
     painter.begin(&pixmap);
-    qDebug()<<"browsingStatus "<<browsingStatus<<" index"<<index;
     if(!browsingStatus){
         painter.fillRect(0,0,12,12,color);
     } else {
@@ -701,7 +693,6 @@ void ItemPalette::changeColor(QListWidgetItem* item, const QString& groupName){
         item->setIcon(icon);
         item->setData(ItemIconView::Color, result);
 
-        //TODO fixme
         //As soon a color changes a signal is emitted.
         emit colorChanged(item->data(ItemIconView::INDEXICON).toInt(),groupName);
     }
@@ -725,7 +716,6 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
 
     //update the browsing map and rebuild the icons
     QMap<int,bool> browsingMap = browsingStatus[groupName];
-    //qDebug()<<"browsingMap :"<<browsingMap<< " itemsToSelect"<<itemsToSelect<<" itemsToSkip"<<itemsToSkip;
     browsingMap.clear();
     for(int i=0;i<iconView->count();++i) {
         QListWidgetItem *item = iconView->item(i);
@@ -830,7 +820,6 @@ void ItemPalette::createGroup(const QString &id){
 }
 
 void ItemPalette::removeGroup(const QString &groupName){
-    //itemColorsDict.remove(groupName);
     delete itemGroupViewDict.take(groupName);
     iconviewDict.remove(groupName);
     browsingStatus.remove(groupName);
