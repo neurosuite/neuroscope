@@ -37,8 +37,10 @@ public:
     explicit ItemIconView(const QColor &backgroundColor, ViewMode mode, int gridX, int gridY, QWidget* parent = 0, const QString& name = QString());
     ~ItemIconView(){}
 
-    enum IndexItem { INDEXICON = Qt::UserRole + 1,
-                   Color = Qt::UserRole + 2 };
+    enum IndexItem {
+        INDEXICON = Qt::UserRole + 1,
+        Color = Qt::UserRole + 2
+    };
 
 protected:
     void mousePressEvent ( QMouseEvent * event );

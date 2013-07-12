@@ -100,7 +100,8 @@ void ItemPalette::paintEvent ( QPaintEvent*){
         QMap<QString,QList<int> > selected = selectedItems();
         //update the icons if need it
         QMap<QString,QList<int> >::Iterator it;
-        for(it = needRedrawing.begin(); it != needRedrawing.end(); ++it){
+        QMap<QString,QList<int> >::Iterator end(needRedrawing.end());
+        for(it = needRedrawing.begin(); it != end; ++it){
             QList<int> items = it.value();
             QString  groupName = it.key();
             QMap<int,bool> browsingMap = browsingStatus[groupName];
@@ -203,7 +204,6 @@ void ItemPalette::updateItemList(const QString& groupName){
 
 void ItemPalette::slotMousePressed(const QString&sourceGroupName,QListWidgetItem*item){
     if (item) {
-
         changeColor(item,sourceGroupName);
     }
 }
