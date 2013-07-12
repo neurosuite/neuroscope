@@ -621,8 +621,9 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,int index)
     needRedrawing.insert(sourceGroup,itemsToRedraw);
     QList<int> itemsToSkip;
     for(int i = 0; i < iconView->count();++i) {
-        if(!browsingMap[i])
-            itemsToSkip.append(i);
+        if(!browsingMap[i]) {
+            itemsToSkip.append(iconView->item(i)->data(ItemIconView::INDEXICON).toInt());
+        }
     }
     emit updateItemsToSkip(sourceGroup,itemsToSkip);
 
@@ -919,9 +920,9 @@ void ItemPalette::deselectAllItems(){
                 if(!lstItem.isEmpty()) {
                     i = iterator.value()->row(lstItem.first());
                 }
-                itemsToSkip.append(i);
+                itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
             } else {
-                itemsToSkip.append(i);
+                itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
             }
         }
         browsingStatus.insert(groupName,browsingMap);
