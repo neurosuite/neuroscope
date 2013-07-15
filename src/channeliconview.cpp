@@ -123,9 +123,10 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
 
 bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::DropAction action)
 {
-    Q_UNUSED(action)
-    Q_UNUSED(index)
+    Q_UNUSED(action);
+    Q_UNUSED(index);
 
+    qDebug()<<" index "<<index;
     if (mimeData->hasText()) {
         const QString information = mimeData->text();
         const int groupSource = information.section("-",0,0).toInt();
@@ -138,18 +139,20 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     const QByteArray data = mimeData->data("application/x-channeliconview");
     if (data.isEmpty())
         return false;
+
     QDataStream stream(data);
     const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
     for (int i=0; i< numberOfItems; ++i) {
-        QListWidgetItem *item = new QListWidgetItem(this);
+        ChannelIconViewItem *item = new ChannelIconViewItem(this);
         stream >> *item;
     }
     const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
     if (moveAllGroup) {
         const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
         emit removeGroup(name);
-        //emit channelsMoved(name, 0);
+        return true;
     }
+    //emit channelsMoved(objectName(), 0);
     return true;
 }
 
