@@ -124,7 +124,6 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
 bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::DropAction action)
 {
     Q_UNUSED(action);
-    Q_UNUSED(index);
 
     qDebug()<<" index "<<index;
     if (mimeData->hasText()) {
