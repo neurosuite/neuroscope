@@ -1054,24 +1054,29 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 void NeuroscopeApp::updateBrowsingStatus(){
     qDebug()<<" void NeuroscopeApp::updateBrowsingStatus(){ clusterFileList"<<clusterFileList.count();
     if(!clusterFileList.isEmpty()){
-        ItemPalette* palette;
+        ItemPalette* palette = 0;
         for(int i = 0; i<paletteTabsParent->count();++i){
+            qDebug()<<" sssssssssssssssssss"<<paletteTabsParent->count();
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
+            qDebug()<<" name "<<name;
             if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
                 palette = static_cast<ItemPalette*>(current);
+                qDebug()<<" xxxxxxxxxxxxxxxxxxxxx";
                 break;
             }
         }
-
+        qDebug()<<" 9999999999999999"<<palette;
         NeuroscopeView* view = activeView();
         QStringList::iterator iterator;
         for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
+            qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxx999999999999";
             const QList<int>* selectedClusters = view->getSelectedClusters(*iterator);
             const QList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
             palette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
         }
 
+        qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxx";
         if(!palette->isBrowsingEnable()) {
             slotStateChanged("noClusterBrowsingState");
         } else {
@@ -2732,8 +2737,6 @@ void NeuroscopeApp::customEvent (QEvent* event){
 }
 
 void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
-
-    qDebug()<<" void NeuroscopeApp::loadClusterFiles(const QStringList &urls){"<<urls;
     NeuroscopeView* view = activeView();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -2795,7 +2798,7 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
 void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
 {
     qDebug()<<"void NeuroscopeApp::createClusterPalette(const QString& clusterFileId) "<<clusterFileId;
-    ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,this,"units");
+    ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,this,"clusterPanel");
     if(displayPaletteHeaders) {
         int index = paletteTabsParent->addTab(clusterPalette,tr("Units"));
         paletteTabsParent->setTabIcon(index,QIcon(":/icons/clusters"));

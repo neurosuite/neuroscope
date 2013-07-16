@@ -1246,7 +1246,7 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
         else displayGroupsClusterFile.insert(iterator.key(),clusterFileList);
     }
 }
-
+#include <QDebug>
 void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     //Get the file video information
     if(reader.getRotation() != 0) {
@@ -1256,8 +1256,9 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         flip = reader.getFlip();
     }
 
+    qDebug()<<" 55555555555555555555555555555555555555555555555555555555555";
     QList<SessionFile> filesToLoad = reader.getFilesToLoad();
-    //qDebug()<<" filesToLoad"<<filesToLoad;
+    qDebug()<<" filesToLoad"<<filesToLoad.count();
     QStringList loadedClusterFiles;
     QStringList loadedEventFiles;
     QString loadedPositionFile;
@@ -1335,7 +1336,6 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         QList<int>::ConstIterator channelIteratorEnd(channelIds.constEnd());
         for (channelIterator = channelIds.constBegin(); channelIterator != channelIteratorEnd; ++channelIterator) {
             channelsToDisplay->append(*channelIterator);
-            qDebug()<<" channelIterator"<<*channelIterator;
         }
 
         //Get the information concerning the channels selected in the display
@@ -1896,6 +1896,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
 
     return OK;
 }
+#include <QDebug>
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
@@ -1978,16 +1979,19 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
     //Build the clusterColorList
     QList<int> clusterList = clustersProvider->clusterIdList();
     QList<int>::iterator it;
-    for(it = clusterList.begin(); it != clusterList.end(); ++it){
+    QList<int>::iterator end(clusterList.end());
+    for(it = clusterList.begin(); it != end; ++it){
         if(itemColors.contains(QString::number(*it))){
             clusterColors->append(static_cast<int>(*it),itemColors[QString::number(*it)]);
-        }
-        else{
+        } else {
             modified = true;
             QColor color;
-            if(*it == 1) color.setHsv(0,0,220);//Cluster 1 is always gray
-            else if(*it == 0) color.setHsv(0,255,255);//Cluster 0 is always red
-            else color.setHsv(static_cast<int>(fmod(static_cast<double>(*it)*7,36))*10,255,255);
+            if(*it == 1)
+                color.setHsv(0,0,220);//Cluster 1 is always gray
+            else if(*it == 0)
+                color.setHsv(0,255,255);//Cluster 0 is always red
+            else
+                color.setHsv(static_cast<int>(fmod(static_cast<double>(*it)*7,36))*10,255,255);
             clusterColors->append(static_cast<int>(*it),color);
         }
     }
@@ -2001,9 +2005,11 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
 
-    if(firstFile) dynamic_cast<NeuroscopeApp*>(parent)->createClusterPalette(name);
-    else dynamic_cast<NeuroscopeApp*>(parent)->addClusterFile(name);
-
+    if(firstFile) {
+        static_cast<NeuroscopeApp*>(parent)->createClusterPalette(name);
+    } else {
+        static_cast<NeuroscopeApp*>(parent)->addClusterFile(name);
+    }
     return OK;
 }
 
