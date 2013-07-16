@@ -497,3 +497,9 @@ void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
     selectedChannels = selectedIds;
     emit channelsSelected(selectedIds);
 }
+
+void  NeuroscopeView::eventColorUpdate(const QString &name,int eventId,bool active)
+{
+    qDebug()<<" name"<<name<<" eventId"<<eventId;
+    emit eventColorUpdated(name,eventId,active);
+}

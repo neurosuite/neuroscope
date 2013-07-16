@@ -469,8 +469,7 @@ public:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  eventColorUpdate(const QString &name,int eventId,bool active){emit eventColorUpdated(name,eventId,active);}
-
+    void  eventColorUpdate(const QString &name,int eventId,bool active);
     /**Retrieves the next event.*/
     void showNextEvent(){
         emit nextEvent();
@@ -746,15 +745,15 @@ Q_SIGNALS:
     void newSamplingRate(long long recordingLength);
     void clusterProviderRemoved(QString name,bool active);
     void showClusters(const QString& name,const QList<int>& clustersToShow);
-    void clusterColorUpdated(QString name,int clusterId,bool active);
+    void clusterColorUpdated(const QString &name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();
     void print(QPainter& printPainter,int width, int height,QString filePath,bool whiteBackground);
     void newEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
                           QList<int>& eventsToShow,const QList<int>& eventsToSkip);
-    void eventProviderRemoved(QString name,bool active,bool lastFile);
-    void showEvents(QString name,QList<int>& eventsToShow);
-    void eventColorUpdated(QString name,int eventId,bool active);
+    void eventProviderRemoved(const QString &name,bool active,bool lastFile);
+    void showEvents(const QString &name,QList<int>& eventsToShow);
+    void eventColorUpdated(const QString &name,int eventId,bool active);
     void nextEvent();
     void previousEvent();
     void eventModified(QString providerName,int selectedEventId,double time,double newTime);

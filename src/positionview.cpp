@@ -457,6 +457,7 @@ void PositionView::drawEvents(QPainter& painter){
 }
 
 void PositionView::eventColorUpdate(const QString &name, int eventId, bool active){
+    qDebug()<<" active "<<active <<" name"<<name<<" eventId"<<eventId;
     if(active){
         drawContentsMode = REDRAW ;
         update();

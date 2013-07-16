@@ -2237,8 +2237,11 @@ void NeuroscopeDoc::eventColorUpdate(const QString& providerName,int eventId,Neu
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
 
-        if(view != activeView) view->eventColorUpdate(providerName,eventId,false);
-        else view->eventColorUpdate(providerName,eventId,true);
+        qDebug()<<" :::::::::::::::::::::::::::::::::"<<eventId<<" providerName"<<providerName;
+        if(view != activeView)
+            view->eventColorUpdate(providerName,eventId,false);
+        else
+            view->eventColorUpdate(providerName,eventId,true);
     }
 
     //Ask the active view to take the modification into account immediately
