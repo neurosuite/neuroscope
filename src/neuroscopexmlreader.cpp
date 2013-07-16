@@ -1425,21 +1425,35 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                         } else if(tag == CHANNEL_POSITIONS){
                                             QList<TracePosition> positions;
                                             //loop on the POSITIONS
-                                            QDomNode eventsNode = fileElement.firstChild().firstChild(); // try to convert the node to an element.
+                                            QDomNode eventsNode = fileElement.firstChild(); // try to convert the node to an element.
+
                                             TracePosition tracePosition;
                                             while(!eventsNode.isNull()) {
                                                 QDomElement eventsElement = eventsNode.toElement();
                                                 if (!eventsElement.isNull()) {
                                                     tag = eventsElement.tagName();
-                                                    if (tag == CHANNEL) {
-                                                        int channelId = eventsElement.text().toInt();
-                                                        tracePosition.setId(channelId) ;
-                                                    } else if(tag == GAIN) {
-                                                        int gain = eventsElement.text().toInt();
-                                                        tracePosition.setGain(gain);
-                                                    } else if(tag == OFFSET) {
-                                                        int offset = eventsElement.text().toInt();
-                                                        tracePosition.setOffset(offset);
+                                                    if (tag == CHANNEL_POSITION) {
+                                                        QDomNode channelNode = eventsElement.firstChild(); // try to convert the node to an element.
+                                                        tag = eventsElement.tagName();
+                                                        while(!channelNode.isNull()) {
+                                                            QDomElement cElement = channelNode.toElement();
+                                                            if (!cElement.isNull()) {
+                                                                tag = cElement.tagName();
+
+                                                                if (tag == CHANNEL) {
+                                                                    int channelId = cElement.text().toInt();
+                                                                    tracePosition.setId(channelId) ;
+                                                                } else if(tag == GAIN) {
+                                                                    int gain = cElement.text().toInt();
+                                                                    tracePosition.setGain(gain);
+                                                                } else if(tag == OFFSET) {
+
+                                                                    int offset = cElement.text().toInt();
+                                                                    tracePosition.setOffset(offset);
+                                                                }
+                                                            }
+                                                            channelNode = channelNode.nextSibling();
+                                                        }
                                                     }
                                                 }
                                                 eventsNode = eventsNode.nextSibling();
