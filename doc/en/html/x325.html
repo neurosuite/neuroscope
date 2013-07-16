@@ -1,0 +1,472 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing the Display</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Editing Channel Groups"
+HREF="x160.html"><LINK
+REL="NEXT"
+TITLE="Advanced Display Management"
+HREF="x471.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x160.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x471.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="managing-display"
+>2.4. Managing the Display</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="direct-selection"
+>2.4.1. Selecting Channels</A
+></H2
+><P
+>&#13;As mentioned previously, channels can be selected by clicking on the corresponding circles in the palettes. Clicking on a group ID (the number on the left side of a group box) will select or deselect all the channels in the group at once. Another, more graphical way is to directly click on the traces in the display using the <SPAN
+CLASS="guilabel"
+>Select Channels</SPAN
+> tool. To activate this tool, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Select Channels</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/select_tool.png"></SPAN
+></SPAN
+>. Use <B
+CLASS="keycap"
+>Ctrl</B
+> for multiple selections (see <A
+HREF="x471.html#selection-labels"
+>Labels and Calibration Bars</A
+> for yet another way to select channels).
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN344"
+>2.4.2. Channel Colors</A
+></H2
+><P
+>&#13;In order to make individual channels as well as channel groups more readily visible, channels can be colored using three different schemes:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;By Anatomical Group: A color can be assigned to all the channels in a given anatomical group by middle-clicking on the group ID in the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+>. This brings up the <SPAN
+CLASS="guilabel"
+>Color Chooser</SPAN
+>. As soon as you validate your new choice, the palettes and display will be updated accordingly. The new colors are referred to as the Anatomical Group colors for the given channels.
+</P
+></LI
+><LI
+><P
+>&#13;By Spike Group: Similarly, a color can be assigned to all the channels in a given spike group by middle-clicking on the group ID in the <SPAN
+CLASS="guilabel"
+>Spike Groups Palette</SPAN
+>. The new colors are referred to as the Spike Group colors for the given channels.
+</P
+></LI
+><LI
+><P
+>&#13;By Channel: Additionally, an individual channel can also be assigned a color by middle-clicking on the corresponding circle in either palette.
+</P
+></LI
+></UL
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/colors.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Although each channel can only have one single color at a time, Anatomical Group colors and Spike Group colors are always kept in memory. This means that although assigning an individual channel a new color will change its color in the display, this will not override its Anatomical Group color nor its Spike Group color (in memory): these can still be later reactivated. Similarly, changing Anatomical Group colors does not affect Spike Group colors and vice versa.
+</P
+><P
+>&#13;To recolor all channels using Anatomical Group colors, select <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Color by Anatomical Groups</SPAN
+>. Similarly, to recolor all channels using Spike Group colors, select <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Color by Spike Groups</SPAN
+>.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Contrary to Anatomical Group colors and Spike Group colors, individual channel colors are not kept in memory. You can think of them as temporary colors: they are typically used when you need to temporarily identify one particular channel from the other channels in the same group.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="show-hide"
+>2.4.3. Showing and Hiding Channels</A
+></H2
+><P
+>&#13;When you first open a data file with <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+>, all the channels are shown in the display. But you can decide to hide some channels, for instance to temporarily focus on a subset of the data. To hide channels, select them (in either palette or <A
+HREF="x325.html#direct-selection"
+>directly in the display</A
+>), and choose <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Hide Channels</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/eye_close.png"></SPAN
+></SPAN
+>. The remaining channels will be reorganized in the display to optimally utilize the available space. The circles in the palette will become hollow to indicate that the channels are now hidden (see the above <A
+HREF="x325.html#fig-colors"
+>figure</A
+>).
+</P
+><P
+>&#13;To make hidden channels visible again, select the corresponding circles and choose <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Show Channels</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/eye.png"></SPAN
+></SPAN
+>.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN405"
+>2.4.4. Adjusting Amplitudes and Offsets</A
+></H2
+><P
+>&#13;Channel amplitudes can be adjusted by selecting channels and choosing <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase Selected Channel Amplitudes</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease Selected Channel Amplitudes</SPAN
+>. To adjust all channels at once, select <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase All Channel Amplitudes</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease All Channel Amplitudes</SPAN
+>. To reset the amplitudes to their default (initial) settings, select channels and choose <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Reset Selected Channel Amplitudes</SPAN
+>.
+</P
+><P
+>&#13;Channels can be offset by clicking on the traces and dragging them by the appropriate amount using the <SPAN
+CLASS="guilabel"
+>Select Channels</SPAN
+> tool. To activate this tool, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Select Channels</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/select_tool.png"></SPAN
+></SPAN
+>. Use <B
+CLASS="keycap"
+>Ctrl</B
+> for multiple selections (see <A
+HREF="x471.html#selection-labels"
+>Labels and Calibration Bars</A
+> for yet another way to select channels). Notice that in order to provide visual feedback the traces become slightly thicker when the channels are selected using the <SPAN
+CLASS="guilabel"
+>Select Channels</SPAN
+> tool. As you drag them around, their new positions are indicated by white outlines. Upon releasing the mouse button, the traces will move to their new positions.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/offsets.png"></P
+></DIV
+>
+</P
+><P
+>&#13;When the physical organisation of your electrodes is more complex than vertical arrays (e.g. epidural electrodes covering the surface of the brain), NeuroScope provides a way to store your electrode layout. This can be done by redefining the default offsets which are stored in the parameter file (see <A
+HREF="x1200.html"
+>File Formats</A
+>). To set the current offsets as the default offsets, select <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Set Current Offsets as Default</SPAN
+>. To set the default offsets back to zero, select <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Set Default Offsets to Zero</SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/epidural.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Defaut offsets can be reused for subsequent experiments. This can be done using <A
+HREF="http://ndmanager.sourceforge.net"
+TARGET="_top"
+>NDManager</A
+>, which is part of the larger data analysis framework including <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> and <A
+HREF="http://klusters.sourceforge.net"
+TARGET="_top"
+>Klusters</A
+>. Alternatively, this can also be done manually by duplicating and modifing the parameter file (see <A
+HREF="x1200.html"
+>File Formats</A
+>).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x160.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x471.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Editing Channel Groups</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Advanced Display Management</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

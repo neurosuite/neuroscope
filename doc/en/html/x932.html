@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Positions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Events"
+HREF="x816.html"><LINK
+REL="NEXT"
+TITLE="File Properties"
+HREF="x962.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x816.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x962.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="positions"
+>2.10. Positions</A
+></H1
+><P
+>&#13;In certain behavioral experiments, e.g. when studying place cells or head direction cells, it is necessary to record brain signals as well as the ongoing position and orientation of the animal. The latter is usually stored in a file listing the positions across time of one or more small lights (spots) attached to the head of the animal (see <A
+HREF="c1111.html#position-file"
+>File Formats</A
+>). <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> has the ability to simultaneously display brain signals and the successive positions of the animal during the same episode.
+</P
+><P
+>&#13;To open a position file, select <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Load Position File...</SPAN
+>. A new view is added in the display, showing the successive positions recorded during the current time window. The spots are represented as colored circles linked by grey lines (e.g., a segment for two spots, a triangle for three spots, etc.) The front spot is drawn in red, and all the other spots in green. Also, the last position in the current time window is highlighted: the circles are larger, and the lines are white. This helps determine the direction of movement.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/positions.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Events can be superimposed on the position display as colored crosses. Events are drawn at the position where the animal was at the time of their occurent. Notice that if no the position of the animal could be detected at the time of the event, this will not be drawn. To display or hide the events, toggle <SPAN
+CLASS="guimenu"
+>Positions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Show Events</SPAN
+>.
+</P
+><P
+>&#13;By default, the positions are drawn against a black background, but <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> can instead use an overview of the behavioral maze as a background image. Select <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Properties</SPAN
+>, and choose the <SPAN
+CLASS="guilabel"
+>Positions</SPAN
+> tab, where you can specify the image location on your disk. You can also flip and rotate the image (the positions will be flipped and rotated accordingly). In addition, <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> can draw over the background (be it a black background or an image) an outline of the trajectory of the animal throughout the experiment. This can be activated using the <SPAN
+CLASS="guilabel"
+>Draw trajectory</SPAN
+> checkbox.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x816.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x962.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Events</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>File Properties</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

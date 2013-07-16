@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Using NeuroScope</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Introduction"
+HREF="c40.html"><LINK
+REL="NEXT"
+TITLE="Palettes"
+HREF="x118.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c40.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x118.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="using-neuroscope"
+></A
+>Chapter 2. Using NeuroScope</H1
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="starting"
+>2.1. Starting a New Session</A
+></H1
+><P
+>&#13;To start a new session, select <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Open</SPAN
+>. In the <SPAN
+CLASS="guilabel"
+>Open</SPAN
+> dialog, you can select any type of data file (<TT
+CLASS="filename"
+>dat</TT
+>, <TT
+CLASS="filename"
+>eeg</TT
+>, <TT
+CLASS="filename"
+>nrs</TT
+> or <TT
+CLASS="filename"
+>xml</TT
+>: see <A
+HREF="c1111.html"
+>File Formats</A
+>).
+</P
+><P
+>&#13;A session can also be started from Konqueror by clicking on one of the above files, or on the command line by typing:
+</P
+><PRE
+CLASS="screen"
+>&#13;<SAMP
+CLASS="prompt"
+>%</SAMP
+> <KBD
+CLASS="userinput"
+>neuroscope</KBD
+> <TT
+CLASS="replaceable"
+><I
+>filename</I
+></TT
+>
+</PRE
+><P
+>&#13;First, <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> needs some information about the acquisition system. You will be prompted to provide this information in the
+<SPAN
+CLASS="guilabel"
+>Properties</SPAN
+> dialog. More generally, this dialog is where you can set all the parameters for the various files you view and edit (this will be presented in later sections of this manual). For now, suffice it to introduce the <SPAN
+CLASS="guilabel"
+>Channels</SPAN
+> tab, which is the only one enabled at this point.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/properties.png"></P
+></DIV
+>
+</P
+><P
+>&#13;All the fields are self-explanatory, but these fields may need clarification:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Initial offset: some acquisition systems record the data with a fixed offset; this can be specified here so that <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> can recenter all the channels in the display.
+</P
+></LI
+><LI
+><P
+>&#13;Voltage range: the total voltage range, e.g. if the system is set to ±5V, the range is 10V.
+</P
+></LI
+><LI
+><P
+>&#13;Screen gain: millivolts per screen centimeter when the magnification level is set to 1x.
+</P
+></LI
+></UL
+><P
+>&#13;The information provided in the <SPAN
+CLASS="guilabel"
+>Properties</SPAN
+> dialog can be later displayed and modified at any time by selecting <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Properties</SPAN
+>.
+</P
+><P
+>&#13;When starting <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> from a terminal, this information can also be provided as command line options. To list available options, type <PRE
+CLASS="screen"
+>&#13;<SAMP
+CLASS="prompt"
+>%</SAMP
+> <KBD
+CLASS="userinput"
+>neuroscope --help</KBD
+>
+Usage: neuroscope [Qt-options] [KDE-options] [options] file
+
+NeuroScope - Viewer for local field potentials, spikes and events
+
+Generic options:
+  --help                    Show help about options
+  --help-qt                 Show Qt specific options
+  --help-kde                Show KDE specific options
+  --help-all                Show all options
+  --author                  Show author information
+  -v, --version             Show version information
+  --license                 Show license information
+  --                        End of options
+
+Options:
+  -r, --resolution          Resolution of the acquisition system.
+  -c, --nbChannels          Number of channels.
+  -o, --offset              Initial offset.
+  -m, --voltageRange        Voltage range.
+  -a, --amplification       Amplification.
+  -g, --screenGain          Screen gain.
+  -s, --samplingRate        Sampling rate.
+  -t, --timeWindow          Initial time window (in miliseconds).
+
+Arguments:
+  file                      Document to open.
+
+</PRE
+>
+</P
+><P
+>&#13;The options provided on the command line will be displayed in the <SPAN
+CLASS="guilabel"
+>Properties</SPAN
+> dialog.
+</P
+><P
+>&#13;Once the information is properly set, the first 1000 ms of data are loaded and displayed in the main window, which should look like this:
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/initialView.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Note: if the channel amplitudes are too large, they can be easily adjusted (see <A
+HREF="c1111.html"
+>Traces</A
+>).
+</P
+><P
+>&#13;The window contains two functionally distinct areas: the <SPAN
+CLASS="guilabel"
+>Palettes</SPAN
+> on the left, and the <SPAN
+CLASS="guilabel"
+>Display</SPAN
+> containing a <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+> on the right. These will be discussed in the following sections.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c40.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x118.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introduction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Palettes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

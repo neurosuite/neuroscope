@@ -1,0 +1,445 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Events</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Unit Activity"
+HREF="x730.html"><LINK
+REL="NEXT"
+TITLE="Positions"
+HREF="x932.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x730.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x932.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="events"
+>2.9. Events</A
+></H1
+><P
+>&#13;</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN819"
+>2.9.1. Displaying Events</A
+></H2
+><P
+>&#13;Events are described in one or more event files (listing the timestamps and descriptions of the events, see <A
+HREF="c1111.html"
+>File Formats</A
+>). Event files can be loaded by selecting <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Load Event File(s)...</SPAN
+> (multiple files can be opened in parallel). This creates a new box in the <SPAN
+CLASS="guilabel"
+>Events Palette</SPAN
+>, where all the events are listed (the <SPAN
+CLASS="guilabel"
+>Events Palette</SPAN
+> is created upon loading the first event file).
+</P
+><P
+>&#13;To display certain events, click on the colored squares in the palette. Use <B
+CLASS="keycap"
+>Shift</B
+> or <B
+CLASS="keycap"
+>Ctrl</B
+> for multiple selections. Clicking on an event file ID (the three letters on the left side of an event box) will select or deselect all the events in the file at once. Events are represented as colored dashed lines spanning the whole display.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/events.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN840"
+>2.9.2. Browsing Events</A
+></H2
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides a mechanism to easily 'browse' events, i.e. to automatically move the time window to the previous or next event among a list of activated events. First, indicate which events you wish to browse by holding both <B
+CLASS="keycap"
+>Ctrl</B
+> and <B
+CLASS="keycap"
+>Alt</B
+> and clicking on the corresponding colored squares in the palette (only already selected events can be used). The squares are now replaced by triangles to reflect their activated state. Now, choose <SPAN
+CLASS="guimenu"
+>Events</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Previous Event</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/backEvent.png"></SPAN
+>
+</SPAN
+> to move the time window to the previous activated event, or choose <SPAN
+CLASS="guimenu"
+>Events</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Next Event</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/forwardEvent.png"></SPAN
+>
+</SPAN
+> to move the time window to the next activated event.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Holding <B
+CLASS="keycap"
+>Ctrl</B
+> and <B
+CLASS="keycap"
+>Alt</B
+> while clicking on an event file ID will activate or deactivate all selected events in the corresponding file.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Since only selected events can be browsed, deselecting an event will automatically reset its activation state.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN874"
+>2.9.3. Editing Events</A
+></H2
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN876"
+>2.9.3.1. Selecting Events</A
+></H3
+><P
+>&#13;To select a single event, choose <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Select Event</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/event_tool.png"></SPAN
+>
+</SPAN
+>, and click on the event line in the display. The event line becomes slightly thicker. The event can now be moved or deleted.
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN890"
+>2.9.3.2. Moving an Event</A
+></H3
+><P
+>&#13;To move an event, i.e to change its timestamp, select it in the display, and move the pointer while holding the mouse button. As you drag the event around, its new position is indicated by a white outline. Upon releasing the mouse button, the event will move to its new position.
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN893"
+>2.9.3.3. Deleting an Event</A
+></H3
+><P
+>&#13;To delete an event, select it in the display, and choose <SPAN
+CLASS="guimenu"
+>Events</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Delete Event</SPAN
+>.
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN899"
+>2.9.3.4. Adding an Event</A
+></H3
+><P
+>&#13;To add a single event to an existing event file, first choose in the palette the event file where the event should be added by clicking on the three-letter ID on the left side of the corresponding event box. Then, select an event type under <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Add Event</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/add_event_tool.png"></SPAN
+>
+</SPAN
+> (optionally selecting an event type in the drop down menu). Now click in the display where the new event should be added.
+</P
+><P
+>&#13;New event types can also be created, by selecting <SPAN
+CLASS="guimenuitem"
+>New Event...</SPAN
+> under either of the two menus mentioned above. A dialog box will pop up to allow you to provide a new event description.
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN916"
+>2.9.3.5. Undo and Redo</A
+></H3
+><P
+>&#13;To undo the last operation (addition, deletion, or timestamp change), select <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Undo</SPAN
+>. Conversely, after cancelling an operation, selecting <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Redo</SPAN
+> will apply the changes again.
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN925"
+>2.9.3.6. Creating a New Event File</A
+></H3
+><P
+>&#13;A new event file can be created by selecting <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Create Event File...</SPAN
+> and choosing a new name in the file creation dialog. A new box appears in the <SPAN
+CLASS="guilabel"
+>Event Palette</SPAN
+>, where new events can now be added.
+</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x730.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x932.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Unit Activity</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Positions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

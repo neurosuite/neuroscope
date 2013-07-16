@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>File Formats</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Settings"
+HREF="c1012.html"><LINK
+REL="NEXT"
+TITLE="The Parameter File"
+HREF="x1200.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1012.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1200.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="data-files"
+></A
+>Chapter 4. File Formats</H1
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> reads electrophysiological data from a set of files. Each of these files has a name of the form <TT
+CLASS="filename"
+>base.ext</TT
+> or <TT
+CLASS="filename"
+>base.n.ext</TT
+> (or <TT
+CLASS="filename"
+>base.ext.n</TT
+>), where <TT
+CLASS="filename"
+>base</TT
+> stands for the common base name of all files belonging to a single recording session, <TT
+CLASS="filename"
+>ext</TT
+> is an extension describing the type of data stored in the file, and <TT
+CLASS="filename"
+>n</TT
+> stands for the ID of the particular group of channels from which the data was recorded. Thus, using this convention the data for session <ACRONYM
+CLASS="acronym"
+>CS150612</ACRONYM
+> would be named <TT
+CLASS="filename"
+>CS150612.dat</TT
+>, the filter data for local filed potentials would be named <TT
+CLASS="filename"
+>CS150612.eeg</TT
+> and the cluster file for tetrode 2  would be named <TT
+CLASS="filename"
+>CS150612.2.clu</TT
+> or <TT
+CLASS="filename"
+>CS150612.clu.2</TT
+>.
+</P
+><P
+>&#13;More specifically, the data files are organized as described in the following sections.
+</P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="data_files"
+>4.1. Data Files</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="data-file"
+>4.1.1. The data File</A
+></H2
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>base.dat</TT
+> for the raw data, <TT
+CLASS="filename"
+>base.eeg</TT
+> for local field potentials,  and  more generally <TT
+CLASS="filename"
+>base.ext</TT
+> for any other type of filtered data (where <TT
+CLASS="filename"
+>ext</TT
+> is extension describing the type of data stored in the file).
+</P
+><P
+>&#13;Format: 12, 14, 16 or 32 bit binary.
+</P
+><P
+>&#13;The data file contains the data for each channel. Assuming <TT
+CLASS="literal"
+>N1</TT
+> channels (<TT
+CLASS="literal"
+>channel1...channelN1</TT
+>) and <TT
+CLASS="literal"
+>N2</TT
+> samples (<TT
+CLASS="literal"
+>sample1...sampleN2</TT
+>) the data are stored as follows:
+<PRE
+CLASS="programlisting"
+>&#13;sample1_channel1
+sample1_channel2
+...
+sample1_channelN1
+sample2_channel1
+sample2_channel2
+...
+sample2_channelN1
+...
+sampleN2_channelN1
+</PRE
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="cluster-file"
+>4.1.2. The Cluster File</A
+></H2
+><P
+>&#13;Generic file name:  <TT
+CLASS="filename"
+>base.n.clu</TT
+> (or <TT
+CLASS="filename"
+>base.clu.n</TT
+>)
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The cluster file lists the cluster ID of each spike, one per line. The first line contains the total number of clusters. Assuming <TT
+CLASS="literal"
+>N</TT
+> spikes (<TT
+CLASS="literal"
+>spike1...spikeN</TT
+>), this file looks like:
+<PRE
+CLASS="programlisting"
+>&#13;nClusters
+clusterID_spike1
+clusterID_spike2
+clusterID_spike3
+...
+clusterID_spikeN
+</PRE
+>
+</P
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Notice that the last line must end with a newline or carriage return.</I
+></SPAN
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="res-file"
+>4.1.3. The Spike Time File</A
+></H2
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>base.n.res</TT
+> (or <TT
+CLASS="filename"
+>base.res.n</TT
+>)
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The spike time file lists the timestamp for each spike. The timestamp is expressed in multiples of the sampling interval. For instance, for a 20kHz recording (50 microsecond sampling interval), a timestamp of 200 corresponds to 200x0.000050s=0.01s from the beginning of the recording session.
+Assuming <TT
+CLASS="literal"
+>N</TT
+> spikes (<TT
+CLASS="literal"
+>spike1...spikeN</TT
+>), this file looks like:
+<PRE
+CLASS="programlisting"
+>&#13;timestamp_spike1
+timestamp_spike2
+timestamp_spike3
+...
+timestamp_spikeN
+</PRE
+>
+</P
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Notice that the last line must end with a newline or carriage return.</I
+></SPAN
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="event-file"
+>4.1.4. The Event File</A
+></H2
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>basename.ext.evt</TT
+> or <TT
+CLASS="filename"
+>basename.evt.ext</TT
+> (where <TT
+CLASS="filename"
+>ext</TT
+> is a three-letter extension describing the type of data stored in the file)
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The event file lists the events and their timestamps. The timestamps are given in miliseconds (floating point values) and the event types are arbitrary strings.
+Assuming <TT
+CLASS="literal"
+>N</TT
+> events (<TT
+CLASS="literal"
+>event1...eventN</TT
+>), this file looks like:
+<PRE
+CLASS="programlisting"
+>&#13;timestamp_event1	description_event1
+timestamp_event2	description_event2
+timestamp_event3	description_event3
+...
+timestamp_eventN	description_eventN
+</PRE
+>
+</P
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Notice that the last line must end with a newline or carriage return.</I
+></SPAN
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="position-file"
+>4.1.5. The Positon File</A
+></H2
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>basename.ext</TT
+> (where <TT
+CLASS="filename"
+>ext</TT
+> can be any three-letter extension)
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The position file lists the <TT
+CLASS="literal"
+>x</TT
+> and <TT
+CLASS="literal"
+>y</TT
+> coordinates of the each spot. Assuming <TT
+CLASS="literal"
+>N</TT
+> position samples  (<TT
+CLASS="literal"
+>position1...positionN</TT
+>) and <TT
+CLASS="literal"
+>M</TT
+> spots on the head of the animal, this file looks like:
+<PRE
+CLASS="programlisting"
+>&#13;x_position1_spot1	y_position1_spot1	...	 x_position1_spotM	y_position1_spotM
+x_position2_spot1	y_position2_spot1	...	 x_position2_spotM	y_position2_spotM
+...
+x_positionN_spot1	y_positionN_spot1	...	 x_positionN_spotM	y_positionN_spotM
+</PRE
+>
+</P
+><P
+>&#13;By convention, spots which have not been detected by the video recording system should be given negatives coordinates. These spots will not be drawn in the position view.
+</P
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Notice that the last line must end with a newline or carriage return.</I
+></SPAN
+>
+</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1012.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1200.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Settings</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>The Parameter File</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

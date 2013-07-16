@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Settings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Session Management"
+HREF="x1005.html"><LINK
+REL="NEXT"
+TITLE="File Formats"
+HREF="c1111.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1005.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1111.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="settings"
+></A
+>Chapter 3. Settings</H1
+><P
+>&#13;Selecting <SPAN
+CLASS="guimenu"
+>Settings</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Configure neuroscope</SPAN
+> will open the <SPAN
+CLASS="guilabel"
+>Settings Dialog</SPAN
+>. This lets you configure several default behaviors of <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+>.
+</P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="settings-general"
+></A
+><SPAN
+CLASS="guilabel"
+>General</SPAN
+></DT
+><DD
+><P
+>In this page, you can configure the following:</P
+><P
+></P
+><UL
+><LI
+><A
+NAME="settings-background"
+></A
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Background color</SPAN
+>. This setting affects all views.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Display labels in the palette headers</SPAN
+>. This shows or hides the labels ('Anatomy','Spikes', 'Units' and 'Events') next to the icons in the palette headers. Hiding them saves some space.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Align events...</SPAN
+>. This setting is used when you browse events. For instance, each time you move to the next event, the time window is shifted forward in such a way that the next event appears at a fixed position in the display. This setting determines where the events are aligned in the display.
+</P
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Align units...</SPAN
+>. Same as above, for spikes.
+</P
+></LI
+></UL
+></DD
+><DT
+><A
+NAME="defaults"
+></A
+><SPAN
+CLASS="guilabel"
+>Defaults</SPAN
+></DT
+><DD
+><P
+>In this page, you can configure the default values for the items contained in the following categories.
+</P
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Channels</SPAN
+>
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Number of channels</SPAN
+>. Default number of channels.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Sampling rate (Hz)</SPAN
+>. Default sampling rate of the <TT
+CLASS="filename"
+>.dat</TT
+> files.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Resolution (bits)</SPAN
+>. Default resolution of the recording system.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Initial offset</SPAN
+>. Default offset in the recording system.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Voltage range (V)</SPAN
+>. Default total voltage range of the recording system, e.g. 10V for ±5V.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Amplification</SPAN
+>. Default gain of the amplifiers.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Screen gain (mV/cm)</SPAN
+>. Default screen gain (see <A
+HREF="x471.html#screen-gain"
+>this paragraph</A
+> for details).
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Sampling rate for EEG (Hz)</SPAN
+>. Default sampling rate of the local field potentials (<TT
+CLASS="filename"
+>.eeg</TT
+>) file.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Background image</SPAN
+>. Background image for the <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+>. You can use any image format supported by Qt: JPEG, PNG, BMP, XBM, XPM, PNM, MNG and GIF. See your Qt documentation for details (e.g. the QImageIO class description).
+</P
+></LI
+></UL
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Units</SPAN
+>
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Number of samples per waveform</SPAN
+>. Default number of samples per waveform, used when highlighting waveforms on the traces.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Index of the peak sample</SPAN
+>. Default peak sample in the waveforms, used when highlighting waveforms on the traces.
+</P
+></LI
+></UL
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Positions</SPAN
+>
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Sampling rate (Hz)</SPAN
+>. Default sampling rate of the position file.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Width (pixels)</SPAN
+>. Default horizontal resolution of the video camera.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Height (pixels)</SPAN
+>. Default vertical resolution of the video camera.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Background image</SPAN
+>. Background image for the <SPAN
+CLASS="guilabel"
+>Position View</SPAN
+>. You can use any image format supported by Qt: JPEG, PNG, BMP, XBM, XPM, PNM, MNG and GIF. See your Qt documentation for details (e.g. the QImageIO class description).
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Draw trajectory</SPAN
+>. Activate this to draw over the background (be it a black background or an image) an outline of the trajectory of the animal throughout the experiment.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Rotate CCW (degrees)</SPAN
+>. This allows you to rotate (counterclockwise) both the position data and the background image.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>flip</SPAN
+>. This allows you to flip both the position data and the background image.
+</P
+></LI
+></UL
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1005.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1111.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Session Management</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>File Formats</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

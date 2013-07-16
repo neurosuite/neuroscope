@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Advanced Display Management</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Managing the Display"
+HREF="x325.html"><LINK
+REL="NEXT"
+TITLE="Browsing Local Field Potentials"
+HREF="x566.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x325.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x566.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="advanced-display-management"
+>2.5. Advanced Display Management</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN473"
+>2.5.1. Multiple Column Mode</A
+></H2
+><P
+>&#13;A very useful feature when recording from multisite silicon probes is the ability to display each shank as a separate 'column', so that the traces are laid out on the screen in a similar way as the physical recording sites in the brain. Select <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Multiple Columns</SPAN
+>. Channels from each <SPAN
+CLASS="guilabel"
+>Anatomical Group</SPAN
+> now appear in separate columns.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/multipleColumns.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Keep in mind that although <SPAN
+CLASS="guilabel"
+>Anatomical Groups</SPAN
+> were primarily designed to help you organize the channels to reflect the positions of the electrodes in the brain, they can be more generally used to implement any kind of classification that may suit your needs.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;When channels are hidden in multiple column mode, dynamical reorganization of the display may not always be the appropriate behavior. Indeed, if you are viewing data recorded from silicon probes, you will most likely prefer keeping the channels always laid out in the same way no matter how many channels are displayed, rather than having them moved around to optimize the available space. In order to hide channels while keeping their spatial arrangement, use this trick: change the color of the channels you wish to hide to the background color (black, unless you modified it in the <A
+HREF="c1012.html#settings-background"
+>Settings</A
+>).
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN494"
+>2.5.2. Labels and Calibration Bars</A
+></H2
+><P
+>&#13;Labels provide information about the traces: the ID of the corresponding channel, and the current amplitude. Labels can be showed by selecting <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Show Labels</SPAN
+> (selecting this menu item a second time will toggle its status and hide the labels).
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/labels.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Amplitudes are described as follows. By convention, 'x1' corresponds to the <A
+HREF="x962.html"
+>current screen gain</A
+>. Thus, assuming for instance a screen gain of 1 mV/cm, an amplitude of 'x0.38' corresponds to 0.38 mV/cm. Notice that different traces can have different amplitudes, as is the case in the above screenshot where local field potentials have a gain of x0.38 and the synchronization pulse has a gain of x0.12.
+</P
+><P
+>&#13;Calibration bars also provide scaling information. The horizontal bar indicates the time scale, and the vertical bar indicates the voltage scale <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>for channel 0</I
+></SPAN
+> (notice that there is only one vertical bar, but each channel can have a different amplitude, hence the need for a convention). Showing calibration bars is most useful when printing traces. To display or hide the calibration bars, toggle <SPAN
+CLASS="guimenu"
+>Settings</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Show Calibration</SPAN
+>.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Labels can be shown or hidden on a display-by-display basis, but showing or hiding calibration bars applies to all displays at once (which is why these functions appear in different menus).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;Besides clicking on the corresponding circles in the palette or <A
+HREF="x325.html#direct-selection"
+>on the traces</A
+> in the display, channels can also be selected by clicking on the corresponding labels using the <SPAN
+CLASS="guilabel"
+>Select Channel</SPAN
+> tool. For multiple selections, this offers the possibility to use the <B
+CLASS="keycap"
+>Shift</B
+> key (for continuous selections) in addition to the <B
+CLASS="keycap"
+>Ctrl</B
+> key (for non-continuous selections).
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN523"
+>2.5.3. View Mode and Edit Mode</A
+></H2
+><P
+>&#13;All the features described up to this point are most useful in the initial stages of data exploration. But once all groups are defined, the interface can be simplified by enabling only those features related to data browsing. This is know as the <SPAN
+CLASS="guilabel"
+>View Mode</SPAN
+>, as opposed to the elaborate (default) <SPAN
+CLASS="guilabel"
+>Edit Mode</SPAN
+>. You can toggle between the two modes by selecting <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Edit Mode</SPAN
+> or clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/edit.png"></SPAN
+></SPAN
+>. In <SPAN
+CLASS="guilabel"
+>View Mode</SPAN
+>, the channels are represented by colored squares in the palettes: this visual feedback allows you to instantly differentiate between modes. Channels can now be shown or hidden by simply selecting or deselecting the corresponding squares - you no longer need to explicitly show or hide them.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/modes.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Notice that the editing tools are now disabled: you can no longer create, modify or delete groups, nor can you change channel offsets.
+</P
+><P
+>&#13;In <SPAN
+CLASS="guilabel"
+>View Mode</SPAN
+>, the palettes behave in the same way as in <A
+HREF="http://klusters.sourceforge.net"
+TARGET="_top"
+><SPAN
+CLASS="application"
+>Klusters</SPAN
+></A
+>. This is also how the <SPAN
+CLASS="guilabel"
+>Units Palette</SPAN
+> and the <SPAN
+CLASS="guilabel"
+>Events Palette</SPAN
+> behave.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN556"
+>2.5.4. Using Multiple Displays</A
+></H2
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides the possibility to use several displays at once, which can be useful to examine different subsets of the data in parallel. To open a new display, select <SPAN
+CLASS="guimenu"
+>Displays</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>New Display</SPAN
+>. The new display is copied from the currently active display as a starting point, and can then be independently modified. After you have modified the contents of a display to fit your needs, you may wish to change its title (the label of the tab) to reflect your changes. Select <SPAN
+CLASS="guimenu"
+>Displays</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Rename Active Display</SPAN
+>. This will bring up a dialog where you can type the new title for the currently active display.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x325.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x566.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing the Display</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Browsing Local Field Potentials</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

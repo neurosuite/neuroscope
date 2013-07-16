@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Unit Activity</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Tools"
+HREF="x598.html"><LINK
+REL="NEXT"
+TITLE="Events"
+HREF="x816.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x598.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x816.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="units"
+>2.8. Unit Activity</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN732"
+>2.8.1. Displaying Unit Activity</A
+></H2
+><P
+>&#13;Unit activity is described in two files: a spike time file (listing the timestamps of the spikes) and a cluster file (assigning each spike to a cluster which corresponds to a putative unit). In addition, if you are working with a <TT
+CLASS="filename"
+>.dat</TT
+> file, spike waveforms can be extracted from that file. This is explained in more detail in <A
+HREF="c1111.html"
+>File Formats</A
+>. The spike time file and the cluster file can be loaded by selecting <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Load Cluster File(s)...</SPAN
+>  (multiple files can be opened in parallel). This creates a new cluster box in the <SPAN
+CLASS="guilabel"
+>Units Palette</SPAN
+>, where all the clusters are listed (the <SPAN
+CLASS="guilabel"
+>Units Palette</SPAN
+> is created upon loading the first cluster file).
+</P
+><P
+>&#13;To display the spikes fired by certain clusters, select the corresponding clusters by clicking on the colored squares in the palette. Use <B
+CLASS="keycap"
+>Shift</B
+> or <B
+CLASS="keycap"
+>Ctrl</B
+> for multiple selections. Clicking on a cluster file ID (the number on the left side of a unit box) will select or deselect all the clusters in the file at once. Hold the <B
+CLASS="keycap"
+>Shift</B
+> key while clicking on a cluster file ID to select all clusters except 0 and 1 (artefacts and noise, respectively).
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/clusters.png"></P
+></DIV
+>
+</P
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides three different graphical representations for spikes. You can activate or deactivate one or more representations by selecting or deselecting the corresponding items in the <SPAN
+CLASS="guimenu"
+>Units</SPAN
+> menu.
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;Vertical Lines: each spike is represented as a vertical line spanning the entire display.
+</P
+></LI
+><LI
+><P
+>&#13;Rasters: spikes are represented as small vertical segments below the local field potential traces, grouped by unit. In the display, the total height devoted to the rasters (vs the traces) can be adjusted by selecting <SPAN
+CLASS="guimenu"
+>Units</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase Height</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Units</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease Height</SPAN
+>.
+
+</P
+></LI
+><LI
+><P
+>&#13;Waveforms: spike waveforms are highlighted on their respective traces (for instance, since the <TT
+CLASS="filename"
+>.clu.5</TT
+> file describes the clusters of spike group 5, selecting a cluster from this group will cause <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> to draw the corresponding waveforms on the traces listed in the spike group 5). Highlighting is rendered even more visible if the traces are drawn using shades of grey instead of colors. This can be obtained by selecting <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Grey-Scale</SPAN
+>.
+</P
+></LI
+></UL
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;The waveforms can be drawn only when working with raw data (<TT
+CLASS="filename"
+>.dat</TT
+> files), as the waveform information is not available in low-pass filtered data.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;In multiple column mode, spikes recorded from a given set of electrodes are shown only in the column containing the corresponding traces. If however these traces are split across two or more columns, the spikes will be shown in each of these columns.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN782"
+>2.8.2. Browsing Unit Activity</A
+></H2
+><P
+>&#13;Pyramidal or granule cells typically fire at low rates. Thus, when examining their firing patterns, you may sometimes find it difficult to locate those epochs when the neurons discharge. <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides a mechanism to easily 'browse' spikes, i.e. to automatically move the time window to the previous or next spike fired by one or more neurons. First, indicate which clusters you wish to browse by holding both <B
+CLASS="keycap"
+>Ctrl</B
+> and <B
+CLASS="keycap"
+>Alt</B
+> and clicking on the corresponding colored squares in the palette (only already selected clusters can be used). The squares are now replaced by triangles to reflect their activated state. Now, choose <SPAN
+CLASS="guimenu"
+>Units</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Previous Spike</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/backCluster.png"></SPAN
+>
+</SPAN
+> to move the time window to the previous spike fired by one of the activated clusters, or choose <SPAN
+CLASS="guimenu"
+>Units</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Next Spike</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/forwardCluster.png"></SPAN
+>
+</SPAN
+> to move the time window to the next spike.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Holding <B
+CLASS="keycap"
+>Ctrl</B
+> and <B
+CLASS="keycap"
+>Alt</B
+> while clicking on a cluster file ID will activate or deactivate all selected clusters in the corresponding file.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Since only selected clusters can be browsed, deselecting a unit will automatically reset its activation state.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x598.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x816.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Tools</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Events</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Palettes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="NEXT"
+TITLE="Editing Channel Groups"
+HREF="x160.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c48.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x160.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="palettes"
+>2.2. Palettes</A
+></H1
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides several palettes to manipulate the data: the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+>, the <SPAN
+CLASS="guilabel"
+>Spike Groups Palette</SPAN
+>, as well as the <SPAN
+CLASS="guilabel"
+>Units Palette</SPAN
+> and the <SPAN
+CLASS="guilabel"
+>Events Palette</SPAN
+> (the latter two become available upon loading cluster and event files, respectively). To display a palette, click on the corresponding tab. Each tab has a distinctive icon next to the palette name to make it more easily identifiable. Optionally, palette names can be hidden, leaving only the icons, to save space in the main window (see <A
+HREF="c1012.html"
+>Settings</A
+>).
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/palettes.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN136"
+>2.2.1. Anatomical Groups and Spike Groups</A
+></H2
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+> and the <SPAN
+CLASS="guilabel"
+>Spike Groups Palette</SPAN
+> are both used to manipulate the local field potential traces, and they share very similar behaviors. While the purpose of both palettes is to selectively display and group related channels, their main difference lies in how the groups are defined.
+</P
+><P
+>&#13;Suppose you record data from both the neocortex and the hippocampus: you may want to assign all channels recorded from the neocortex into one group, and all channels recorded from the hippocampus into another group, or maybe have two distinct groups for CA1 and CA3, respectively. This is what anatomical groups are for. More generally however, anatomical groups can be used to implement any classification you may wish, e.g. sites from the same shank in recordings using silicon probes. Anatomical groups are handled in the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+>.
+</P
+><P
+>&#13;On the other hand, spike groups are related to unit activity. In most experimental paradigms, you will want to study neuronal firing patterns, and thus you will need to extract unit activity from local field potentials. Usually, the spikes emitted by each single unit appear only on a limited subset of the channels. In <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+>, each such set of channels (e.g. a tetrode) is referred to as a spike group. Although <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> will not perform spike extraction and classification (many other tools are available to perform these tasks), it will help you define the spike groups for later processing. Remember that spike groups are not necessarily equivalent to physical electrode groups: for instance, if one channel from a tetrode is floating or too noisy, discarding it altogether will yield better results during subsequent spike sorting. In general, these groups cannot be efficiently defined without first inspecting the data. This is why <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> provides the ability to define spike groups. These are handled in the <SPAN
+CLASS="guilabel"
+>Spike Groups Palette</SPAN
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN148"
+>2.2.2. Units</A
+></H2
+><P
+>&#13;Unit activity can be extracted and sorted using a combination of automatic and manual cluster cutting. Spike sorting applications include Kenneth D. Harris' <A
+HREF="http://klustakwik.sourceforge.net"
+TARGET="_top"
+>KlustaKwik</A
+> (a powerful automatic cluster cutting command-line tool) and Lynn Hazan's <A
+HREF="http://klusters.sourceforge.net"
+TARGET="_top"
+>Klusters</A
+> (an advanced cluster viewer/editor application for KDE). Cluster files can be loaded into <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+>, which allows for browsing identified unit activity together with local field potentials. The <SPAN
+CLASS="guilabel"
+>Units Palette</SPAN
+> is where you perform all operations related to spike clusters.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN155"
+>2.2.3. Events</A
+></H2
+><P
+>&#13;Many experimental paradigms involve correlating brain activity with behavior. The latter is often described using timestamped markers listed in an event file. These event markers can be loaded and displayed in <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+>, which allows for visually assessing relations between behavioral events (water delivery, tone onset, etc.) and the occurrence of neurophysiological activity (increased neuronal firing, theta rhythm, etc.) The <SPAN
+CLASS="guilabel"
+>Events Palette</SPAN
+> is where you perform all operations related to behavioral events.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x160.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Using NeuroScope</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Editing Channel Groups</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

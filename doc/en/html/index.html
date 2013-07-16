@@ -1,0 +1,629 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>The NeuroScope Handbook</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="NEXT"
+TITLE="Introduction"
+HREF="c40.html"><META
+NAME="KEYWORD"
+CONTENT="KDE"><META
+NAME="KEYWORD"
+CONTENT="kdeutils"><META
+NAME="KEYWORD"
+CONTENT="Kapp"><META
+NAME="KEYWORD"
+CONTENT="Viewer"><META
+NAME="KEYWORD"
+CONTENT="Local Field Potentials"><META
+NAME="KEYWORD"
+CONTENT="Cortex"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</A
+></H1
+><H3
+CLASS="author"
+><A
+NAME="AEN6"
+></A
+>Lynn Hazan</H3
+><DIV
+CLASS="affiliation"
+><DIV
+CLASS="address"
+><P
+CLASS="address"
+><CODE
+CLASS="email"
+>&#60;<A
+HREF="mailto:lynn.hazan@myrealbox.com"
+>lynn.hazan@myrealbox.com</A
+>&#62;</CODE
+></P
+></DIV
+></DIV
+><H3
+CLASS="author"
+><A
+NAME="AEN12"
+></A
+>Michaël Zugaro</H3
+><DIV
+CLASS="affiliation"
+><DIV
+CLASS="address"
+><P
+CLASS="address"
+><CODE
+CLASS="email"
+>&#60;<A
+HREF="mailto:mzugaro@andromeda.rutgers.edu"
+>mzugaro@andromeda.rutgers.edu</A
+>&#62;</CODE
+></P
+></DIV
+></DIV
+><P
+CLASS="copyright"
+>Copyright &copy; 2004-2006 Lynn Hazan, Michaël Zugaro</P
+><DIV
+><DIV
+CLASS="abstract"
+><P
+></P
+><A
+NAME="AEN27"
+></A
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> is a viewer for displaying various physiological and behavioral data. It allows comparison of analyzed data with the original recordings.
+</P
+><P
+>&#13;<SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> is developped by Lynn Hazan in <A
+HREF="http://osiris.rutgers.edu"
+TARGET="_top"
+>G. Buzsáki's lab</A
+> (CMBN, Rutgers Newark, USA).
+</P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="legalnotice"
+><P
+></P
+><A
+NAME="AEN22"
+></A
+><P
+>Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.1 or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts, and
+with no Back-Cover Texts.  A copy of the license is included in <A
+HREF="c1881.html#gnu-fdl"
+>the section entitled "GNU Free Documentation License"</A
+>.</P
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>1. <A
+HREF="c40.html"
+>Introduction</A
+></DT
+><DT
+>2. <A
+HREF="c48.html"
+>Using NeuroScope</A
+></DT
+><DD
+><DL
+><DT
+>2.1. <A
+HREF="c48.html#starting"
+>Starting a New Session</A
+></DT
+><DT
+>2.2. <A
+HREF="x118.html"
+>Palettes</A
+></DT
+><DD
+><DL
+><DT
+>2.2.1. <A
+HREF="x118.html#AEN136"
+>Anatomical Groups and Spike Groups</A
+></DT
+><DT
+>2.2.2. <A
+HREF="x118.html#AEN148"
+>Units</A
+></DT
+><DT
+>2.2.3. <A
+HREF="x118.html#AEN155"
+>Events</A
+></DT
+></DL
+></DD
+><DT
+>2.3. <A
+HREF="x160.html"
+>Editing Channel Groups</A
+></DT
+><DD
+><DL
+><DT
+>2.3.1. <A
+HREF="x160.html#AEN166"
+>Creating a New Group</A
+></DT
+><DT
+>2.3.2. <A
+HREF="x160.html#AEN193"
+>Discarding Bad Channels</A
+></DT
+><DT
+>2.3.3. <A
+HREF="x160.html#AEN224"
+>Skipping Channels</A
+></DT
+><DT
+>2.3.4. <A
+HREF="x160.html#moving-groups"
+>Moving Channels between Groups</A
+></DT
+><DT
+>2.3.5. <A
+HREF="x160.html#reordering-channels"
+>Reordering Channels within a Group</A
+></DT
+><DT
+>2.3.6. <A
+HREF="x160.html#reordering-groups"
+>Reordering Groups</A
+></DT
+><DT
+>2.3.7. <A
+HREF="x160.html#synchronizing"
+>Synchronizing Anatomical and Spike Groups</A
+></DT
+><DT
+>2.3.8. <A
+HREF="x160.html#removing-from-group"
+>Removing Channels from a Spike Group</A
+></DT
+></DL
+></DD
+><DT
+>2.4. <A
+HREF="x325.html"
+>Managing the Display</A
+></DT
+><DD
+><DL
+><DT
+>2.4.1. <A
+HREF="x325.html#direct-selection"
+>Selecting Channels</A
+></DT
+><DT
+>2.4.2. <A
+HREF="x325.html#AEN344"
+>Channel Colors</A
+></DT
+><DT
+>2.4.3. <A
+HREF="x325.html#show-hide"
+>Showing and Hiding Channels</A
+></DT
+><DT
+>2.4.4. <A
+HREF="x325.html#AEN405"
+>Adjusting Amplitudes and Offsets</A
+></DT
+></DL
+></DD
+><DT
+>2.5. <A
+HREF="x471.html"
+>Advanced Display Management</A
+></DT
+><DD
+><DL
+><DT
+>2.5.1. <A
+HREF="x471.html#AEN473"
+>Multiple Column Mode</A
+></DT
+><DT
+>2.5.2. <A
+HREF="x471.html#AEN494"
+>Labels and Calibration Bars</A
+></DT
+><DT
+>2.5.3. <A
+HREF="x471.html#AEN523"
+>View Mode and Edit Mode</A
+></DT
+><DT
+>2.5.4. <A
+HREF="x471.html#AEN556"
+>Using Multiple Displays</A
+></DT
+></DL
+></DD
+><DT
+>2.6. <A
+HREF="x566.html"
+>Browsing Local Field Potentials</A
+></DT
+><DT
+>2.7. <A
+HREF="x598.html"
+>Tools</A
+></DT
+><DD
+><DL
+><DT
+>2.7.1. <A
+HREF="x598.html#AEN603"
+>Zoom</A
+></DT
+><DT
+>2.7.2. <A
+HREF="x598.html#AEN617"
+>Draw Time Line</A
+></DT
+><DT
+>2.7.3. <A
+HREF="x598.html#AEN633"
+>Select Channels</A
+></DT
+><DT
+>2.7.4. <A
+HREF="x598.html#AEN649"
+>Measure</A
+></DT
+><DT
+>2.7.5. <A
+HREF="x598.html#AEN673"
+>Select Time</A
+></DT
+><DT
+>2.7.6. <A
+HREF="x598.html#AEN700"
+>Select Event</A
+></DT
+><DT
+>2.7.7. <A
+HREF="x598.html#AEN715"
+>Add Event</A
+></DT
+></DL
+></DD
+><DT
+>2.8. <A
+HREF="x730.html"
+>Unit Activity</A
+></DT
+><DD
+><DL
+><DT
+>2.8.1. <A
+HREF="x730.html#AEN732"
+>Displaying Unit Activity</A
+></DT
+><DT
+>2.8.2. <A
+HREF="x730.html#AEN782"
+>Browsing Unit Activity</A
+></DT
+></DL
+></DD
+><DT
+>2.9. <A
+HREF="x816.html"
+>Events</A
+></DT
+><DD
+><DL
+><DT
+>2.9.1. <A
+HREF="x816.html#AEN819"
+>Displaying Events</A
+></DT
+><DT
+>2.9.2. <A
+HREF="x816.html#AEN840"
+>Browsing Events</A
+></DT
+><DT
+>2.9.3. <A
+HREF="x816.html#AEN874"
+>Editing Events</A
+></DT
+></DL
+></DD
+><DT
+>2.10. <A
+HREF="x932.html"
+>Positions</A
+></DT
+><DT
+>2.11. <A
+HREF="x962.html"
+>File Properties</A
+></DT
+><DT
+>2.12. <A
+HREF="x978.html"
+>Printing and Exporting</A
+></DT
+><DD
+><DL
+><DT
+>2.12.1. <A
+HREF="x978.html#AEN980"
+>Printing</A
+></DT
+><DT
+>2.12.2. <A
+HREF="x978.html#AEN996"
+>Exporting</A
+></DT
+></DL
+></DD
+><DT
+>2.13. <A
+HREF="x1005.html"
+>Session Management</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="c1012.html"
+>Settings</A
+></DT
+><DT
+>4. <A
+HREF="c1111.html"
+>File Formats</A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="c1111.html#data_files"
+>Data Files</A
+></DT
+><DD
+><DL
+><DT
+>4.1.1. <A
+HREF="c1111.html#data-file"
+>The data File</A
+></DT
+><DT
+>4.1.2. <A
+HREF="c1111.html#cluster-file"
+>The Cluster File</A
+></DT
+><DT
+>4.1.3. <A
+HREF="c1111.html#res-file"
+>The Spike Time File</A
+></DT
+><DT
+>4.1.4. <A
+HREF="c1111.html#event-file"
+>The Event File</A
+></DT
+><DT
+>4.1.5. <A
+HREF="c1111.html#position-file"
+>The Positon File</A
+></DT
+></DL
+></DD
+><DT
+>4.2. <A
+HREF="x1200.html"
+>The Parameter File</A
+></DT
+><DT
+>4.3. <A
+HREF="x1211.html"
+>The Session File</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
+HREF="c1219.html"
+>Menu Entries</A
+></DT
+><DD
+><DL
+><DT
+>5.1. <A
+HREF="c1219.html#menu-file"
+>The File Menu</A
+></DT
+><DT
+>5.2. <A
+HREF="x1349.html"
+>The Edit Menu</A
+></DT
+><DT
+>5.3. <A
+HREF="x1421.html"
+>The Tools Menu</A
+></DT
+><DT
+>5.4. <A
+HREF="x1488.html"
+>The Channels Menu</A
+></DT
+><DT
+>5.5. <A
+HREF="x1570.html"
+>The Units Menu</A
+></DT
+><DT
+>5.6. <A
+HREF="x1609.html"
+>The Events Menu</A
+></DT
+><DT
+>5.7. <A
+HREF="x1634.html"
+>The Positions Menu</A
+></DT
+><DT
+>5.8. <A
+HREF="x1645.html"
+>The Traces Menu</A
+></DT
+><DT
+>5.9. <A
+HREF="x1748.html"
+>The Displays Menu</A
+></DT
+><DT
+>5.10. <A
+HREF="x1781.html"
+>The Settings Menu</A
+></DT
+><DT
+>5.11. <A
+HREF="x1838.html"
+>The Help Menu</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="c1881.html"
+>Credits and License</A
+></DT
+><DT
+>A. <A
+HREF="a1907.html"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+>A.1. <A
+HREF="a1907.html#getting-neuroscope"
+>How to obtain Neuroscope</A
+></DT
+><DT
+>A.2. <A
+HREF="x1914.html"
+>Requirements</A
+></DT
+><DT
+>A.3. <A
+HREF="x1921.html"
+>Compilation and Installation</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c40.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introduction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

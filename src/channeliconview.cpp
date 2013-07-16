@@ -105,9 +105,9 @@ void ChannelIconView::resizeEvent ( QResizeEvent * event )
     }
     if (maxY != event->size().height()) {
         const QSize size(event->size().width(), maxY);
-        qDebug()<<" size "<<size<<" maxY"<<maxY;
+        //qDebug()<<" size "<<size<<" maxY"<<maxY;
         resize(event->size().width(), maxY);
-        qDebug()<<" rect :"<<rect();
+        //qDebug()<<" rect :"<<rect();
     }
 }
 
@@ -152,6 +152,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         return true;
     }
     //emit channelsMoved(objectName(), 0);
+
     return true;
 }
 

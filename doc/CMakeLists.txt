@@ -18,10 +18,14 @@ macro (CREATE_HTML_DOC _docbook _dir )
 
 endmacro (CREATE_HTML_DOC)
 
-find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html )
-if(DOCBOOK2HTML_EXECUTABLE)
-   add_subdirectory(en)
-else(DOCBOOK2HTML_EXECUTABLE)
-   MESSAGE(STATUS "docbook2html not found. Document will not generated")
-endif(DOCBOOK2HTML_EXECUTABLE)
+#find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html )
+#if(DOCBOOK2HTML_EXECUTABLE)
+#   add_subdirectory(en)
+#else(DOCBOOK2HTML_EXECUTABLE)
+#   MESSAGE(STATUS "docbook2html not found. Document will not generated")
+#endif(DOCBOOK2HTML_EXECUTABLE)
+
+file(GLOB _html ${CMAKE_CURRENT_SOURCE_DIR}/en/html/*.html)
+install(FILES ${_html} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/neuroscope/HTML/en)
+
 

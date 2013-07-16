@@ -1,0 +1,519 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Editing Channel Groups</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The NeuroScope Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using NeuroScope"
+HREF="c48.html"><LINK
+REL="PREVIOUS"
+TITLE="Palettes"
+HREF="x118.html"><LINK
+REL="NEXT"
+TITLE="Managing the Display"
+HREF="x325.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x118.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using NeuroScope</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x325.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="channel-groups"
+>2.3. Editing Channel Groups</A
+></H1
+><P
+>&#13;The first task you will want to perform upon starting <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> is to group related channels. Usually, this is first done in the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+>, because this determines how the channels are displayed. Indeed, in the display channels are layed out in the same order as they appear in the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+>: the first channel of the first group appears at the top, the second channel of the first group appears right below, etc. until the last channel of the last group which appears at the bottom of the display. Also, groups are separated by small gaps so they are more readily visible.
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN166"
+>2.3.1. Creating a New Group</A
+></H2
+><P
+>&#13;Initially, all channels belong to the same group. In order to create a new group, you must first select the channels you want to group by clicking on the corresponding colored circles in the palette. Use <B
+CLASS="keycap"
+>Shift</B
+> or <B
+CLASS="keycap"
+>Ctrl</B
+> for multiple selections (see the <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+> menu for more choices). Then, group these channels by selecting <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Move Channels to New Group</SPAN
+> or by clicking on  <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/new_group.png"></SPAN
+></SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/newGroup.png"></P
+></DIV
+>
+</P
+><P
+>&#13;On the display, groups are spatially separated by small gaps to make them more readily visible.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN193"
+>2.3.2. Discarding Bad Channels</A
+></H2
+><P
+>&#13;You may want to discard floating or noisy channels altogether. This can be done by selecting the channels and selecting <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Discard Channels</SPAN
+> or by clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/discard.png"></SPAN
+></SPAN
+>. The channels will be moved to the <SPAN
+CLASS="guilabel"
+>Discarded Group</SPAN
+>, as indicated by the small trash icon next to the group box in the palette.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Notice that discarding channels <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>does not modify your data</I
+></SPAN
+> in any way: it does not actually remove the channels from the data files, but merely hides them from the display. Discarded channels can be brought back by moving them to an existing group (this is explained in <A
+HREF="x160.html#moving-groups"
+>Moving Channels between Groups</A
+>).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/discardingChannels.png"></P
+></DIV
+>
+</P
+><P
+>&#13;You may have noticed in the above screenshot that the circle for the channel in the <SPAN
+CLASS="guilabel"
+>Discarded Group</SPAN
+> is now hollow. This is a visual hint to indicate that this channel is now hidden from the display (for more information on hidden channels, see <A
+HREF="x325.html#show-hide"
+>Showing and Hiding Channels</A
+>).
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN224"
+>2.3.3. Skipping Channels</A
+></H2
+><P
+>&#13;If you are viewing data recorded from silicon probes and one or more channels are unusable (e.g. floating or extremely noisy), you may want to discard those channels using the method described in the previous section. However, this would not be appropriate here because valuable spatial information would be lost: due to dynamical rearrangement of the display, the layout of the traces would no longer reflect the spatial arrangement of the recording sites on the probes. The solution is instead to have <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> 'skip' the unusable channels by selecting the channels and choosing <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Skip Channels</SPAN
+> or by clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/skip.png"></SPAN
+></SPAN
+>. The traces will be hidden and replaced with a small gap, thus ensuring that the overall layout of the channels remains unchanged in the displays. The corresponding circles in the palettes will also be hidden (leaving only the channel numbers).
+</P
+><P
+>&#13;You can bring back skipped channels by selecting the channels and choosing <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Keep Channels</SPAN
+> or by clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/keep.png"></SPAN
+></SPAN
+>. The channels will be reappear in the displays and the palettes.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/keepDisplay.png"></P
+></DIV
+>
+<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/skipDisplay.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="moving-groups"
+>2.3.4. Moving Channels between Groups</A
+></H2
+><P
+>&#13;Channels can be moved from one group to another group by simply dragging and dropping the corresponding circles in the palette. This includes moving channels to and from the <SPAN
+CLASS="guilabel"
+>Discarded Group</SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/movingChannels.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Note that the channels cannot be dropped on top of another channel (if you attempt this, the pointer will turn into a "forbidden" cursor and the operation will be cancelled). Instead, they must be dropped on an empty space.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="reordering-channels"
+>2.3.5. Reordering Channels within a Group</A
+></H2
+><P
+>&#13;Channels can be easily reordered within a group by dragging and dropping the corresponding circles in the group box, similar to moving channels between groups except that the displacement occurs within a single group.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="reordering-groups"
+>2.3.6. Reordering Groups</A
+></H2
+><P
+>&#13;Groups can also be reordered using a drag and drop approach. To select a group, click on its ID (the number on the left side of the group box). You can then drag it and drop it just above or below the ID of another group to move it there.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="synchronizing"
+>2.3.7. Synchronizing Anatomical and Spike Groups</A
+></H2
+><P
+>&#13;As mentioned earlier, the typical way to organize channels is to first work with anatomical groups. In many cases, spike groups are mostly identical to anatomical groups: anatomical groups could thus be used as a basis to define spike groups. In such cases, <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> can reuse the groups in the <SPAN
+CLASS="guilabel"
+>Anatomical Groups Palette</SPAN
+> to define spike groups: select <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Synchronize Groups</SPAN
+>. Since this will override any existing spike groups, you will be prompted for confirmation if you have already defined spike groups.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="removing-from-group"
+>2.3.8. Removing Channels from a Spike Group</A
+></H2
+><P
+>&#13;While all the above mentioned operations apply to both anatomical and spike groups, this feature is only relevant for spike groups. It provides a way to deal with those channels that did not record any unit activity, although they did record valuable local field potential information. Obviously, these channels should not be discarded. However, they should not be used for spike extraction and sorting, either. In order to indicate that these channels do not belong to any spike group, select them and choose <SPAN
+CLASS="guimenu"
+>Channels</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Remove Channels from Group</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/remove.png"></SPAN
+></SPAN
+>. The channels will be moved to the <SPAN
+CLASS="guilabel"
+>Undefined Spike Group</SPAN
+>, indentified by the question mark. Notice that this is the same group where all channels are initially listed before you start defining spike groups.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/removingChannels.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Notice that removing channels from a spike group <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>does not modify your data</I
+></SPAN
+> in any way: it does not actually remove the channels from the data files, but removes their IDs from the list of spike groups used for subsequent spike extraction and sorting. Removed channels can be brought back by moving them to an existing spike group (this is explained in <A
+HREF="x160.html#moving-groups"
+>Moving Channels between Groups</A
+>).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x118.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x325.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Palettes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c48.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Managing the Display</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -73,7 +73,6 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     QWidget *w = new QWidget;
     verticalContainer = new QVBoxLayout;
@@ -387,11 +386,13 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
 
 const QList<int> ChannelPalette::getShowHideChannels(bool showStatus){
     QList<int> channelIds;
-    QMap<int,bool>::Iterator iterator;
-
-    for(iterator = channelsShowHideStatus.begin(); iterator != channelsShowHideStatus.end(); ++iterator)
-        if(iterator.value() == showStatus)
+    QMap<int,bool>::ConstIterator iterator;
+    QMap<int,bool>::ConstIterator end(channelsShowHideStatus.constEnd());
+    for(iterator = channelsShowHideStatus.constBegin(); iterator != end; ++iterator) {
+        if(iterator.value() == showStatus) {
             channelIds.append(iterator.key());
+        }
+    }
 
     return channelIds;
 }
@@ -664,8 +665,6 @@ void ChannelPalette::changeBackgroundColor(const QColor &color){
     setPalette(palette);
 
     viewport()->setPalette(palette);
-    //verticalContainer->setPaletteBackgroundColor(backgroundColor);
-    //verticalContainer->setPaletteForegroundColor(legendColor);
 
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
@@ -716,7 +715,7 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
 
     //Get the channelColor associated with the item
     const QColor oldColor = channelColors->color(id);
-
+    qDebug()<<" void ChannelPalette::changeColor(QListWidgetItem* item,bool single){";
     QColor color = QColorDialog::getColor(oldColor,0);
     if(color.isValid()){
         if(single){
@@ -1402,8 +1401,6 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
     update();
 }
 
-
-
 void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetItem* after){
     //If the channels have been moved to the trash inform the other palette.
     QString afterId;
@@ -1412,8 +1409,9 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
         if(after == 0){
             beforeFirst = true;
             afterId.clear();
+        } else {
+            afterId = after->text();
         }
-        else afterId = after->text();
     }
 
     //Get the destination group color to later update the group color of the moved channels, default is blue
@@ -1650,7 +1648,7 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QStri
     //Inform the application that the spike groups have been modified (use to warn the user at the end of the session)
     emit groupModified();
 
-    update();
+    //update();
 }
 
 
@@ -1991,7 +1989,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
         return;
 
     //Check if the destination group exists, if not create it.
-    ChannelIconView* trash;
+    ChannelIconView* trash = 0;
     if(destinationGroup == 0){
         if(!iconviewDict.contains("0")){
             createGroup(0);
@@ -2005,7 +2003,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
         }
         trash = iconviewDict["-1"];
     }
-
+    qDebug()<<" xxxxxxxxxxxxxxxxxxxx";
     emit paletteResized(viewport()->width(),labelSize);
 
     //Get the destination group colors to later update the group colors of the moved channels, default is blue

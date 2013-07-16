@@ -401,7 +401,10 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
 }
 
 void ItemPalette::slotClickRedraw(){
+    qDebug()<<" void ItemPalette::slotClickRedraw(){";
+    return;
     if(!isInSelectItems){
+        qDebug()<<" xxxxxxxxxxxxxxxxxx after!!!!!!!!!!!!!!!!";
         bool browsingEnable = false;
         bool needToBeUpdated = false;
         QMap<QString,QList<int> > selection;
@@ -546,8 +549,8 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
         return;
 
     isInSelectItems = true;
-    bool browsingStatus = browsingMap[index];
-
+    bool browsingStatus = browsingMap[item->data(ItemIconView::INDEXICON).toInt()];
+    qDebug()<<"browsingStatus "<<browsingStatus<<" index "<<index<<" item->data(ItemIconView::INDEXICON).toInt()"<<item->data(ItemIconView::INDEXICON).toInt();
     //Recreate the item
     QPixmap pixmap(14,14);
     pixmap.fill(backgroundColor);
@@ -557,6 +560,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
     if(!browsingStatus){
         painter.fillRect(0,0,12,12,color);
     } else {
+
         QPolygon polygon(4);
         polygon.putPoints(0,3,0,0,14,0,7,14);
         painter.setBrush(color);
