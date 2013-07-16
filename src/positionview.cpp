@@ -360,7 +360,8 @@ void PositionView::print(QPainter& printPainter,int width, int height,bool white
     printPainter.resetMatrix();
 }
 
-void PositionView::changeBackgroundColor(const QColor &color){
+void PositionView::changeBackgroundColor(const QColor &color)
+{
     BaseFrame::changeBackgroundColor(color);
 }
 
@@ -402,7 +403,8 @@ void PositionView::dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QSt
         this->providerItemColors.insert(colorIterator.key(),colorIterator.value());
     }
 
-    if(selectedEvents.size() !=0) computeEventPositions(samplingRate);
+    if(!selectedEvents.isEmpty())
+        computeEventPositions(samplingRate);
 
     //Everything has to be redraw
     drawContentsMode = REDRAW;
@@ -425,9 +427,11 @@ void PositionView::computeEventPositions(double samplingRate){
 
 }
 
-void PositionView::updateEventDisplay(){;
-                                        if(showEvents) globalEventProvider.requestData(startTime,endTime,this);
-                                       }
+void PositionView::updateEventDisplay()
+{
+    if(showEvents)
+        globalEventProvider.requestData(startTime,endTime,this);
+}
 
 void PositionView::drawEvents(QPainter& painter){  
     QPen pen;
