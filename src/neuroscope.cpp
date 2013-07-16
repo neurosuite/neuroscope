@@ -933,7 +933,6 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
 
 void NeuroscopeApp::openDocumentFile(const QString& url)
 {
-    qDebug()<<" void NeuroscopeApp::openDocumentFile(const QString& url)"<<url;
     slotStatusMsg(tr("Opening file..."));
     filePath = url;
     QFileInfo file(filePath);
@@ -958,7 +957,6 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         return;
     }
 
-    qDebug()<<" NeuroscopeApp::openDocumentFile will open "<<url;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //If no document is open already, open the document asked.
@@ -1006,9 +1004,6 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             return;
         }
 
-
-        qDebug()<<"NeuroscopeApp::openDocumentFile no error ??????";
-
         //update the spike and event browsing status
         updateBrowsingStatus();
 
@@ -1035,7 +1030,6 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             mFileOpenRecent->addRecentFile(url);
             filePath = path;
 
-            qDebug()<<" Start detached neuroscope *****************************************************************"<<url;
             if (!QProcess::startDetached("neuroscope", QStringList()<<url)) {
                 QMessageBox::critical(this, tr("Neuroscope"),tr("neuroscope can be launch"));
             }
@@ -1052,38 +1046,30 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 }
 
 void NeuroscopeApp::updateBrowsingStatus(){
-    qDebug()<<" void NeuroscopeApp::updateBrowsingStatus(){ clusterFileList"<<clusterFileList.count();
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette = 0;
         for(int i = 0; i<paletteTabsParent->count();++i){
-            qDebug()<<" sssssssssssssssssss"<<paletteTabsParent->count();
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
-            qDebug()<<" name "<<name;
             if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
                 palette = static_cast<ItemPalette*>(current);
-                qDebug()<<" xxxxxxxxxxxxxxxxxxxxx";
                 break;
             }
         }
-        qDebug()<<" 9999999999999999"<<palette;
         NeuroscopeView* view = activeView();
         QStringList::iterator iterator;
         for(iterator = clusterFileList.begin(); iterator != clusterFileList.end(); ++iterator){
-            qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxx999999999999";
             const QList<int>* selectedClusters = view->getSelectedClusters(*iterator);
             const QList<int>* skippedClusterIds = view->getClustersNotUsedForBrowsing(*iterator);
             palette->selectItems(*iterator,*selectedClusters,*skippedClusterIds);
         }
 
-        qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxx";
         if(!palette->isBrowsingEnable()) {
             slotStateChanged("noClusterBrowsingState");
         } else {
             slotStateChanged("clusterBrowsingState");
         }
     }
-    qDebug()<<"NeuroscopeApp::updateBrowsingStatus() eventFileList.Count:"<<eventFileList.count();
     if(!eventFileList.isEmpty()){
         ItemPalette* palette;
         for(int i = 0; i<paletteTabsParent->count();++i){
@@ -1336,7 +1322,6 @@ void NeuroscopeApp::slotCreateEventFile(){
         }
         else{
             const QString eventFileId = doc->lastLoadedProviderName();
-            qDebug()<<" eventFileId"<<eventFileId;
             if(eventFileList.isEmpty())
                 createEventPalette(eventFileId);
             else
@@ -2787,7 +2772,6 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
         //Create the cluster palette if need it
         counter++;
         QString clusterFileId = doc->lastLoadedProviderName();
-        qDebug()<<" NeuroscopeApp::loadClusterFiles(const QStringList &urls){"<<urls;
         if(clusterFileList.isEmpty() && counter == 1)
             createClusterPalette(clusterFileId);
         else addClusterFile(clusterFileId);
@@ -2797,7 +2781,6 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
 
 void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
 {
-    qDebug()<<"void NeuroscopeApp::createClusterPalette(const QString& clusterFileId) "<<clusterFileId;
     ItemPalette* clusterPalette = new ItemPalette(ItemPalette::CLUSTER,backgroundColor,this,"clusterPanel");
     if(displayPaletteHeaders) {
         int index = paletteTabsParent->addTab(clusterPalette,tr("Units"));
@@ -2838,7 +2821,6 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
 }
 
 void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
-    qDebug()<<" void NeuroscopeApp::addClusterFile(const QString& clusterFileId){"<<clusterFileId;
     clusterFileList.append(clusterFileId);
 
     for(int i = 0; i<paletteTabsParent->count();++i){

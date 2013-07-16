@@ -1175,7 +1175,6 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
     QList<SessionFile> list;
 
-    qDebug()<<" getFilesToLoad()";
     QDomNode n = documentNode.firstChild();
     if (!n.isNull()) {
         while(!n.isNull()) {
@@ -1200,11 +1199,9 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
                                         sessionFile.setType(static_cast<SessionFile::type>(type)) ;
                                     } else if (tag == URL) {
                                         QString url = sfileElement.text();
-                                        qDebug()<<" url"<<url;
                                         sessionFile.setUrl(url);
                                     } else if (tag == DATE) {
                                         QString date = sfileElement.text();
-                                        qDebug()<<" date "<<date;
                                         sessionFile.setModification(QDateTime::fromString(date,Qt::ISODate));
                                     } else if (tag == VIDEO_IMAGE) {
                                         QString backgroundPath = fileElement.text();
@@ -1228,7 +1225,6 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
                                                                 id = itemsDescriptionElement.text();
                                                             } else if (tag == COLOR) {
                                                                 color = itemsDescriptionElement.text();
-                                                                qDebug()<<" color "<<color;
                                                             }
                                                         }
                                                         itemsDescriptionNode = itemsDescriptionNode.nextSibling();
