@@ -1182,7 +1182,6 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
             QDomElement e = n.toElement(); // try to convert the node to an element.
             if(!e.isNull()) {
                 QString tag = e.tagName();
-                qDebug()<<" tag :"<<tag;
                 if (tag == FILES) {
                     QDomNode file = e.firstChild();
                     while(!file.isNull()) {
@@ -1196,7 +1195,6 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
 
                                 if (!sfileElement.isNull()) {
                                     tag = sfileElement.tagName();
-                                    qDebug()<<" tag"<<tag;
                                     if (tag == TYPE) {
                                         int type = sfileElement.text().toInt();
                                         sessionFile.setType(static_cast<SessionFile::type>(type)) ;
@@ -1218,7 +1216,6 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
                                         while(!itemsNode.isNull()) {
 
                                             QDomElement itemsElement = itemsNode.toElement();
-                                            qDebug()<<"xxxxxxxxxxxxxxxxx5555555555";
                                             if (!itemsElement.isNull()) {
                                                 tag = itemsElement.tagName();
                                                 if (tag == ITEM_DESCRIPTION) {
@@ -1236,12 +1233,12 @@ QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
                                                         }
                                                         itemsDescriptionNode = itemsDescriptionNode.nextSibling();
                                                     }
+                                                    sessionFile.setItemColor(id,color);
 
                                                 }
                                             }
                                             itemsNode = itemsNode.nextSibling();
                                         }
-                                        sessionFile.setItemColor(id,color);
                                     }
                                 }
                                 fileNode = fileNode.nextSibling();
