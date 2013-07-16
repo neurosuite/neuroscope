@@ -1175,66 +1175,80 @@ QString NeuroscopeXmlReader::getTraceBackgroundImage()const{
 QList<SessionFile> NeuroscopeXmlReader::getFilesToLoad(){
     QList<SessionFile> list;
 
+    qDebug()<<" getFilesToLoad()";
     QDomNode n = documentNode.firstChild();
     if (!n.isNull()) {
         while(!n.isNull()) {
             QDomElement e = n.toElement(); // try to convert the node to an element.
             if(!e.isNull()) {
                 QString tag = e.tagName();
-                if (tag == NEUROSCOPE) {
-                    QDomNode video = e.firstChildElement(FILES); // try to convert the node to an element.
-                    if (!video.isNull()) {
-                        QDomNode b = video.firstChild();
-                        while(!b.isNull()) {
-                            QDomElement w = b.toElement();
-                            if(!w.isNull()) {
-                                tag = w.tagName();
-                                if (tag == neuroscope::FILE) {
-                                    QDomNode fileNode = e.firstChild(); // try to convert the node to an element.
-                                    SessionFile sessionFile;
-                                    while(!fileNode.isNull()) {
-                                        QDomElement fileElement = fileNode.toElement();
+                qDebug()<<" tag :"<<tag;
+                if (tag == FILES) {
+                    QDomNode file = e.firstChild();
+                    while(!file.isNull()) {
+                        QDomElement fileElement = file.toElement();
+                        tag = fileElement.tagName();
+                        if (tag == neuroscope::FILE) {
+                            QDomNode fileNode = fileElement.firstChild(); // try to convert the node to an element.
+                            SessionFile sessionFile;
+                            while(!fileNode.isNull()) {
+                                QDomElement sfileElement = fileNode.toElement();
 
-                                        if (!fileElement.isNull()) {
-                                            tag = fileElement.tagName();
-                                            if (tag == TYPE) {
-                                                int type = fileElement.text().toInt();
-                                                sessionFile.setType(static_cast<SessionFile::type>(type)) ;
-                                            } else if (tag == URL) {
-                                                QString url = fileElement.text();
-                                                sessionFile.setUrl(url);
-                                            } else if (tag == DATE) {
-                                                QString date = fileElement.text();
-                                                sessionFile.setModification(QDateTime::fromString(date,Qt::ISODate));
-                                            } else if (tag == VIDEO_IMAGE) {
-                                                QString backgroundPath = fileElement.text();
-                                                sessionFile.setBackgroundPath(backgroundPath);
-                                            } else if (tag == ITEMS) {
-                                                QDomNode itemsNode = fileElement.firstChild(); // try to convert the node to an element.
-                                                QString id;
-                                                QString color;
-                                                while(!itemsNode.isNull()) {
-                                                    QDomElement itemsElement = itemsNode.toElement();
-                                                    if (!itemsElement.isNull()) {
-                                                        tag = itemsElement.tagName();
-                                                        if (tag == ITEM) {
-                                                            id = itemsElement.text();
-                                                        } else if (tag == COLOR) {
-                                                            color = itemsElement.text();
+                                if (!sfileElement.isNull()) {
+                                    tag = sfileElement.tagName();
+                                    qDebug()<<" tag"<<tag;
+                                    if (tag == TYPE) {
+                                        int type = sfileElement.text().toInt();
+                                        sessionFile.setType(static_cast<SessionFile::type>(type)) ;
+                                    } else if (tag == URL) {
+                                        QString url = sfileElement.text();
+                                        qDebug()<<" url"<<url;
+                                        sessionFile.setUrl(url);
+                                    } else if (tag == DATE) {
+                                        QString date = sfileElement.text();
+                                        qDebug()<<" date "<<date;
+                                        sessionFile.setModification(QDateTime::fromString(date,Qt::ISODate));
+                                    } else if (tag == VIDEO_IMAGE) {
+                                        QString backgroundPath = fileElement.text();
+                                        sessionFile.setBackgroundPath(backgroundPath);
+                                    } else if (tag == ITEMS) {
+                                        QDomNode itemsNode = sfileElement.firstChild(); // try to convert the node to an element.
+                                        QString id;
+                                        QString color;
+                                        while(!itemsNode.isNull()) {
+
+                                            QDomElement itemsElement = itemsNode.toElement();
+                                            qDebug()<<"xxxxxxxxxxxxxxxxx5555555555";
+                                            if (!itemsElement.isNull()) {
+                                                tag = itemsElement.tagName();
+                                                if (tag == ITEM_DESCRIPTION) {
+                                                    QDomNode itemsDescriptionNode = itemsElement.firstChild(); // try to convert the node to an element.
+                                                    while(!itemsDescriptionNode.isNull()) {
+                                                        QDomElement itemsDescriptionElement = itemsDescriptionNode.toElement();
+                                                        if (!itemsDescriptionElement.isNull()) {
+                                                            tag = itemsDescriptionElement.tagName();
+                                                            if (tag == ITEM) {
+                                                                id = itemsDescriptionElement.text();
+                                                            } else if (tag == COLOR) {
+                                                                color = itemsDescriptionElement.text();
+                                                                qDebug()<<" color "<<color;
+                                                            }
                                                         }
+                                                        itemsDescriptionNode = itemsDescriptionNode.nextSibling();
                                                     }
-                                                    itemsNode = itemsNode.nextSibling();
+
                                                 }
-                                                sessionFile.setItemColor(id,color);
                                             }
+                                            itemsNode = itemsNode.nextSibling();
                                         }
-                                        fileNode = fileNode.nextSibling();
+                                        sessionFile.setItemColor(id,color);
                                     }
-                                    list.append(sessionFile);
                                 }
+                                fileNode = fileNode.nextSibling();
                             }
-                            b = b.nextSibling();
+                            list.append(sessionFile);
                         }
+                        file = file.nextSibling();
                     }
                 }
             }
