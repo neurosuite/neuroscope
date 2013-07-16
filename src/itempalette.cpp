@@ -686,14 +686,12 @@ void ItemPalette::changeColor(QListWidgetItem* item, const QString& groupName){
     const QColor result = QColorDialog::getColor(color,0);
     if(result.isValid()){
         //Update the icon
-        QIcon icon = item->icon();
         QPixmap pixmap(12,12);
         QPainter painter;
         painter.begin(&pixmap);
         painter.fillRect(0,0,12,12,result);
         painter.end();
-        icon.addPixmap(pixmap);
-        item->setIcon(icon);
+        item->setIcon(QIcon(pixmap));
         item->setData(ItemIconView::Color, result);
 
         //As soon a color changes a signal is emitted.

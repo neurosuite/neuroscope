@@ -925,7 +925,8 @@ void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destin
             }
         }
 
-        if(targetId == sourceId) return;
+        if(targetId == sourceId)
+            return;
 
         //insert after targetId
         //Rename the groups
