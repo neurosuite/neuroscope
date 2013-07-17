@@ -70,8 +70,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setSelectionRectVisible(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
-    //setMinimumHeight(40);
+    setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 }
 
 QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
@@ -95,20 +94,16 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
     return mimedata;
 }
 
+QSize ChannelIconView::sizeHint() const
+{
+    const QSize size = QSize(contentsSize().width() + 5, contentsSize().height() + 5);
+    return size;
+}
+
 void ChannelIconView::resizeEvent ( QResizeEvent * event )
 {
     QListWidget::resizeEvent(event);
-    int maxY = 0;
-    for (int i = 0; i < count(); ++i) {
-        QRect r = visualItemRect(item(i));
-        maxY = qMax(r.y()+r.height()+5, maxY);
-    }
-    if (maxY != event->size().height()) {
-        const QSize size(event->size().width(), maxY);
-        //qDebug()<<" size "<<size<<" maxY"<<maxY;
-        resize(event->size().width(), maxY);
-        //qDebug()<<" rect :"<<rect();
-    }
+    resize(sizeHint());
 }
 
 void ChannelIconView::setDragAndDrop(bool dragDrop)

@@ -29,7 +29,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     QListWidget(parent)
 {
     setObjectName(name);
-
+    qDebug()<<" ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent, const QString& name):"<<name;
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
@@ -93,15 +93,14 @@ void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     emit mouseReleased(this->objectName());
 }
 
+QSize ItemIconView::sizeHint() const
+{
+    const QSize size = QSize(contentsSize().width() + 5, contentsSize().height() + 5);
+    return size;
+}
+
 void ItemIconView::resizeEvent(QResizeEvent *event)
 {
     QListWidget::resizeEvent(event);
-    int maxY = 0;
-    for (int i = 0; i < count(); ++i) {
-        QRect r = visualItemRect(item(i));
-        maxY = qMax(r.y()+r.height()+25, maxY);
-    }
-    if (maxY != event->size().height()) {
-        resize(event->size().width(), maxY);
-    }
+    resize(sizeHint());
 }

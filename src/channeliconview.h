@@ -71,6 +71,7 @@ Q_SIGNALS:
     void removeGroup(const QString &name);
 
 protected:
+    QSize sizeHint() const;
     void resizeEvent ( QResizeEvent * event );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);

@@ -47,6 +47,7 @@ protected:
     void wheelEvent ( QWheelEvent * e );
     void mouseReleaseEvent ( QMouseEvent * event );
     void resizeEvent(QResizeEvent *event);
+    QSize sizeHint() const;
 
 Q_SIGNALS:
     void mousePressWoModificators(const QString &sourceGroup);
