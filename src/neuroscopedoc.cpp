@@ -2532,8 +2532,8 @@ void NeuroscopeDoc::slotEventDescriptionRemoved(const QString &providerName,QMap
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(const QString &eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file name
-    QString fileName = eventUrl;
-    if(fileName.indexOf(".evt") == -1)
+    const QString fileName = eventUrl;
+    if(fileName.indexOf(QLatin1String(".evt")) == -1)
         return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);

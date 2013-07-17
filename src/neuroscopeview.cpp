@@ -278,7 +278,8 @@ void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QStri
 
     QList<int>* currentSkippedEvents = new QList<int>();
     QList<int>::const_iterator skippedEventsIterator;
-    for(skippedEventsIterator = eventsToSkip.begin(); skippedEventsIterator != eventsToSkip.end(); ++skippedEventsIterator)
+    QList<int>::const_iterator skippedEventsIteratorEnd(eventsToSkip.constEnd());
+    for(skippedEventsIterator = eventsToSkip.constBegin(); skippedEventsIterator != skippedEventsIteratorEnd; ++skippedEventsIterator)
         currentSkippedEvents->append(*skippedEventsIterator);
 
     eventsNotUsedForBrowsing.insert(name,currentSkippedEvents);
