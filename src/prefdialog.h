@@ -45,7 +45,7 @@ public:
     /** Transfers the settings from the dialog to the configuration object.*/
     void updateConfiguration();
     /** */
-    bool isApplyEnable(){return applyEnable;}
+    bool isApplyEnable() const {return applyEnable;}
     
 public Q_SLOTS:
     /**Will be called when the "Default" button has been clicked.*/
