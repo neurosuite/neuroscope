@@ -96,7 +96,7 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
 
 QSize ChannelIconView::sizeHint() const
 {
-    const QSize size = QSize(contentsSize().width() + 5, contentsSize().height() + 5);
+    const QSize size = QSize(contentsSize().width() + 5, qMax(contentsSize().height() + 5, 40));
     return size;
 }
 
