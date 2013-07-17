@@ -48,10 +48,13 @@ bool ParameterXmlModifier::parseFile(const QString& url){
 
     //Find the root element
     root = doc.firstChild();
-    if(root.isNull()) return false;
+    if(root.isNull())
+        return false;
     //if the first element is an Processing Instruction takes the sibiling child as the root.
-    if(root.isProcessingInstruction()) root = root.nextSibling();
-    if(root.isNull()) return false;
+    if(root.isProcessingInstruction())
+        root = root.nextSibling();
+    if(root.isNull())
+        return false;
 
     //Find the neuroscope node
     neuroscope = findDirectChild(NEUROSCOPE);
