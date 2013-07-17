@@ -78,7 +78,7 @@ public:
     void setResolutionIndex(int index){resolutionComboBox->setCurrentIndex(index);}
 
     /**Sets the background image.*/
-    void setTraceBackgroundImage(QString image){
+    void setTraceBackgroundImage(const QString &image){
         traceBackgroundLineEdit->setText(image);
     }
     
@@ -120,7 +120,7 @@ public:
     
 private Q_SLOTS:
     void updateTraceBackgroundImage(){
-        QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
+        const QString image = QFileDialog::getOpenFileName(this, tr("Select the background image..."));
 
         if(!image.isEmpty()) setTraceBackgroundImage(image);
     }
