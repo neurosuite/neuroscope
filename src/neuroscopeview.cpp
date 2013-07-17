@@ -476,7 +476,8 @@ void NeuroscopeView::resetOffsets(const QList<int>& selectedIds){
     //update the list of selected channels
     selectedChannels.clear();
     QList<int>::const_iterator selectedIterator;
-    for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
+    QList<int>::const_iterator selectedIteratorEnd(selectedIds.end());
+    for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIteratorEnd; ++selectedIterator){
         selectedChannels.append(*selectedIterator);
         selectedChannelDefaultOffsets.insert(*selectedIterator,channelDefaultOffsets[*selectedIterator]);
     }
@@ -501,6 +502,5 @@ void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
 
 void  NeuroscopeView::eventColorUpdate(const QString &name,int eventId,bool active)
 {
-    qDebug()<<" name"<<name<<" eventId"<<eventId;
     emit eventColorUpdated(name,eventId,active);
 }
