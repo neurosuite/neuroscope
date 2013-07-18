@@ -2073,7 +2073,7 @@ void TraceView::drawTimeLine(QPainter *painter){
     painter->setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
     painter->setViewport(viewport);
 
-    painter->setPen(QPen(Qt::color0,1));
+    painter->setPen(QPen(Qt::color0,0));
     painter->setBrush(Qt::NoBrush);
     int top = r.top();
     int bottom = r.bottom();
