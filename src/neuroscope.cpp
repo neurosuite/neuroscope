@@ -1294,6 +1294,7 @@ void NeuroscopeApp::slotCreateEventFile(){
     const QString eventUrl = docUrl  +QDir::separator() + baseName;
 
     QFileDialog dialog(this,tr("CreateEvent"),eventUrl,tr("Event file (*.evt, *.evt.*)"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setWindowTitle(tr("Create Event File as..."));
     if(!dialog.exec())
         return;
