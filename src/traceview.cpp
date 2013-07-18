@@ -678,7 +678,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         p.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
         p.setViewport(viewport);
 
-        p.setPen(QPen(Qt::color0,1));
+        p.setPen(QPen(Qt::color0,0));
         p.setBrush(Qt::NoBrush);
         int top = r.top();
         int bottom = r.bottom();
@@ -692,7 +692,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         p.setViewport(viewport);
 
         p.setBrush(Qt::NoBrush);
-        p.setPen(QPen(Qt::color0,1));
+        p.setPen(QPen(Qt::color0,0));
         int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
         int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
         int limit = viewportToWorldHeight(1);
@@ -1360,12 +1360,14 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
             //draw the trace
             if (highlight){
                 QPen pen(color,2);
+                pen.setCosmetic(true);
                 painter.setPen(pen);
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
             }//highlight
             else{
                 //erase the previous trace
                 QPen pen(palette().color(backgroundRole()),2);
+                pen.setCosmetic(true);
                 painter.setPen(pen);
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
 
@@ -1399,10 +1401,12 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 }
                 if (highlight) {
                     QPen pen(color,2);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
                 } else {
                     QPen pen(palette().color(backgroundRole()),2);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
                     pen.setColor(color);
@@ -1424,10 +1428,12 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 }
                 if (highlight){
                     QPen pen(color,2);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
                 } else {
                     QPen pen(palette().color(backgroundRole()),2);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawPolyline(trace);
                     pen.setColor(color);
@@ -1463,12 +1469,14 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                                 }
                                 if (highlight){
                                     QPen pen(color,2);
+                                    pen.setCosmetic(true);
                                     painter.setPen(pen);
                                     painter.drawPolyline(trace);
                                 }
                                 else{
                                     QPen pen(palette().color(backgroundRole()),2);
                                     painter.setPen(pen);
+                                    pen.setCosmetic(true);
                                     painter.drawPolyline(trace);
                                     pen.setColor(color);
                                     pen.setWidth(1);
@@ -1576,6 +1584,7 @@ void TraceView::drawTraces(QPainter& painter){
                             QColor color = colors->color(eventId);
                             pen.setColor(color);
                             painter.setPen(pen);
+                            pen.setCosmetic(true);
                             int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                             painter.drawLine(abscissa,top,abscissa,bottom);
                         }
@@ -1648,6 +1657,7 @@ void TraceView::drawTraces(QPainter& painter){
                 if (selectedChannels.contains(channelId))
                     pen.setWidth(2);
                 painter.setPen(pen);
+                pen.setCosmetic(true);
 
                 if (downSampling != 1){
                     drawTrace(painter,limit,positions.at(j),X,channelId,nbSamplesToDraw);
@@ -1706,6 +1716,7 @@ void TraceView::drawTraces(QPainter& painter){
                                 QPen pen(color,1);
                                 if (selectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
+                                pen.setCosmetic(true);
 
                                 for(int j = currentIndex; j <= nbSamples;++j){
                                     if (firstIndex > traceInfo(1,j)) continue;//case 1
@@ -1795,6 +1806,7 @@ void TraceView::drawTraces(QPainter& painter){
                     if (eventList.contains(eventId)){
                         QColor color = colors->color(eventId);
                         pen.setColor(color);
+                        pen.setCosmetic(true);
                         painter.setPen(pen);
                         int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                         painter.drawLine(abscissa,top,abscissa,bottom);
@@ -1870,6 +1882,7 @@ void TraceView::drawTraces(QPainter& painter){
                 }
                 QPen pen(color,1);
                 if (selectedChannels.contains(channelId)) pen.setWidth(2);
+                pen.setCosmetic(true);
                 painter.setPen(pen);
 
                 if (downSampling != 1){
@@ -1929,6 +1942,7 @@ void TraceView::drawTraces(QPainter& painter){
                             if (clusterList.contains(clusterId)){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
+                                pen.setCosmetic(true);
                                 if (selectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
 
@@ -4131,6 +4145,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
                     if (highlight){
                         //erase the previous line
                         QPen pen(palette().color(backgroundRole()),1,Qt::DotLine);
+                        pen.setCosmetic(true);
                         painter.setPen(pen);
                         painter.drawLine(abscissa,top,abscissa,bottom);
 
@@ -4143,6 +4158,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
                     else{
                         //erase the previous line
                         QPen pen(palette().color(backgroundRole()),2,Qt::DotLine);
+                        pen.setCosmetic(true);
                         painter.setPen(pen);
                         painter.drawLine(abscissa,top,abscissa,bottom);
 
@@ -4160,6 +4176,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
                 if (highlight){
                     //erase the previous line
                     QPen pen(palette().color(backgroundRole()),1,Qt::DotLine);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawLine(abscissa,top,abscissa,bottom);
 
@@ -4172,6 +4189,7 @@ void TraceView::drawEvent(const QString& providerName,int selectedEventId,dataTy
                 else{
                     //erase the previous line
                     QPen pen(palette().color(backgroundRole()),2,Qt::DotLine);
+                    pen.setCosmetic(true);
                     painter.setPen(pen);
                     painter.drawLine(abscissa,top,abscissa,bottom);
 
