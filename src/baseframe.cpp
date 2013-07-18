@@ -89,12 +89,10 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //Assign firstClick
             QRect r((QRect)window);
 
-            //qDebug()<<" e->pos()"<<e->pos();
-
             if(r.left() != 0)
-                firstClick = /*viewportToWorld*/QPoint(e->x() + 4, e->y()+ 8 - Yborder);
+                firstClick = QPoint(e->x() + 4, e->y()+ 8 - Yborder);
             else
-                firstClick = /*viewportToWorld*/QPoint(e->x() + 8 - Xborder,e->y()+4 - Yborder);
+                firstClick = QPoint(e->x() + 8 - Xborder,e->y()+4 - Yborder);
 
             //qDebug()<<" firstClick"<<firstClick;
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
@@ -139,17 +137,23 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
             QPoint secondClick;
             QRect r((QRect)window);
             if(r.left() != 0)
-                secondClick = /*viewportToWorld*/QPoint(e->x(),e->y() - Yborder);
+                secondClick = QPoint(e->x(),e->y() - Yborder);
             else
-                secondClick = /*viewportToWorld*/QPoint(e->x() - Xborder,e->y() - Yborder);
+                secondClick = QPoint(e->x() - Xborder,e->y() - Yborder);
 
             //If the distance between the first and second selected points are > 5:
             //the user wanted to draw a rectangle otherwise he intended to select a single point
             if((abs(secondClick.x() - firstClick.x()) > 5) || (abs(secondClick.y() - firstClick.y()) > 5)){
                 //CAUTION this correction is intended to compensate for a selection in the left margin which is not part of the widget'window.
                 //If the widget contains a left margin and draws in the negative abscisses this correction will not work.
-                if(firstClick.x() < 0 && Xborder > 0) firstClick.setX(0);
-                if(secondClick.x() < 0 && Xborder > 0) secondClick.setX(0);
+                if(r.left() != 0)
+                    secondClick = viewportToWorld(e->x(),e->y() - Yborder);
+                else
+                    secondClick = viewportToWorld(e->x() - Xborder,e->y() - Yborder);
+                if(firstClick.x() < 0 && Xborder > 0)
+                    firstClick.setX(0);
+                if(secondClick.x() < 0 && Xborder > 0)
+                    secondClick.setX(0);
                 isZoomed = window.zoom(viewportToWorld(firstClick), secondClick);
             }
             else{
