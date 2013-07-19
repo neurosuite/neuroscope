@@ -89,11 +89,13 @@ void BaseFrame::mousePressEvent(QMouseEvent* e){
             //Assign firstClick
             QRect r((QRect)window);
 
+            firstClick = e->pos();
+            /*
             if(r.left() != 0)
                 firstClick = QPoint(e->x() + 4, e->y()+ 8 - Yborder);
             else
                 firstClick = QPoint(e->x() + 8 - Xborder,e->y()+4 - Yborder);
-
+*/
             //qDebug()<<" firstClick"<<firstClick;
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
             //or using only the abscissa and the ordinate if the top of the window if the rubber band has to
