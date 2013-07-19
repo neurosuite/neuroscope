@@ -238,11 +238,11 @@ void TraceView::changeCursor()
 
 }
 
-void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
-
-
+void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
+{
     //If another widget was the initiator of the request, ignore the data.
-    if (initiator != this) return;
+    if (initiator != this)
+        return;
 
     if (data.nbOfRows() == 0){
         QApplication::restoreOverrideCursor();
@@ -291,14 +291,10 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator){
 
 }
 
-void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName){
+void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,const QString &providerName){
     //If another widget was the initiator of the request, ignore the data.
     if (initiator != this)
         return;
-
-
-    qDebug()<<" in  dataAvailable, providerName"<<providerName<<" data.nbOfColumns() " <<data.nbOfColumns() ;
-
     ClusterData* clusterData = clustersData[providerName];
     clusterData->setStatus(true);
     clusterData->setData(data);
@@ -309,7 +305,8 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,QString p
     QHashIterator<QString, ClusterData*> iterator(clustersData);
     while (iterator.hasNext()) {
         iterator.next();
-        ready = iterator.value()->status();
+        if (iterator.value())
+            ready = iterator.value()->status();
         if (!ready)
             break;
     }
@@ -1757,8 +1754,6 @@ void TraceView::drawTraces(QPainter& painter){
                     QList<int>::iterator clusterIterator;
                     for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
                         const QString identifier = QString::fromLatin1("%1-%2").arg(providerName).arg(*clusterIterator);
-
-                        qDebug()<<" identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
 
 
                         clustersOrder.append(identifier);
@@ -3662,12 +3657,8 @@ void TraceView::showClusters(const QString &name, const QList<int> &clustersToSh
     clusterData = clustersData[name];
 
     QList<int> clusters;
-    if (clustersToShow.size() != 0){
-        QList<int>::ConstIterator shownClustersIterator;
-        for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
-            clusters.append(*shownClustersIterator);
-        }
-        selectedClusters.insert(name.toInt(),clusters);
+    if (!clustersToShow.isEmpty()){
+        selectedClusters.insert(name.toInt(),clustersToShow);
         if (clusterData == 0){
             clusterData = new ClusterData();
             clustersData.insert(name,clusterData);

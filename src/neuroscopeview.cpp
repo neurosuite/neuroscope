@@ -236,16 +236,17 @@ void NeuroscopeView::removeClusterProvider(const QString &name, bool active){
     emit clusterProviderRemoved(name,active);
 }
 
-void NeuroscopeView::shownClustersUpdate(const QString &name, QList<int>& clustersToShow){
+void NeuroscopeView::shownClustersUpdate(const QString &name, const QList<int>& clustersToShow){
     QList<int>* currentSelectedClusters = selectedClusters[name];
     currentSelectedClusters->clear();
 
     //update the list of shown clusters
-    QList<int>::iterator iterator;
-    for(iterator = clustersToShow.begin(); iterator != clustersToShow.end(); ++iterator){
+    QList<int>::ConstIterator iterator;
+    QList<int>::ConstIterator iteratorEnd(clustersToShow.constEnd());
+    for(iterator = clustersToShow.constBegin(); iterator != iteratorEnd; ++iterator){
         currentSelectedClusters->append(*iterator);
     }
-
+    
     emit showClusters(name,*currentSelectedClusters);
 
     //Show all the enclosed widgets of the dockWindows.

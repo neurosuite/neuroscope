@@ -179,7 +179,7 @@ public:
     * @param name name use to identified the cluster provider containing the clusters to show.
     * @param clustersToShow list of clusters to be shown.
     */
-    void shownClustersUpdate(const QString& name,QList<int>& clustersToShow);
+    void shownClustersUpdate(const QString& name, const QList<int> &clustersToShow);
 
     /**
     * Updates the list of events for the event provider @p name shown with @p eventsToShow.

@@ -420,7 +420,7 @@ public Q_SLOTS:
   * @param initiator instance requesting the data.
   * @param providerName name of the instance providing the data.
   */
-    void dataAvailable(Array<dataType>& data,QObject* initiator,QString providerName);
+    void dataAvailable(Array<dataType>& data, QObject* initiator, const QString &providerName);
 
     /**Displays the event information that has been retrieved.
   * @param times 1 line array containing the time (in recording samples) of each event existing in the requested time frame.
