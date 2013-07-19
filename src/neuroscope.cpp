@@ -1985,14 +1985,14 @@ void NeuroscopeApp::slotSelectAll(){
         if(qobject_cast<ItemPalette*>(current)){
             QString name = current->objectName();
             //update the cluster palette
-            if(name.contains("clusterPanel")){
+            if(name.contains(QLatin1String("clusterPanel"))){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 QList<int> clustersToHide;
                 doc->showAllClustersExcept(clusterPalette,view,clustersToHide);
             }
             //update the event palette
-            if(name.contains("eventPanel")){
+            else if(name.contains(QLatin1String("eventPanel"))){
                 ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
                 NeuroscopeView* view = activeView();
                 doc->showAllEvents(eventPalette,view);
@@ -2605,6 +2605,7 @@ void NeuroscopeApp::slotSelectChannelsInPalette(const QList<int>& selectedIds){
 
 void NeuroscopeApp::slotChannelsSelected(const QList<int>& selectedIds){
     //if the selection tool is selected  warn the active display
+    qDebug()<<" void NeuroscopeApp::slotChannelsSelected(const QList<int>& selectedIds){"<<activeView()<<" select"<<select;
     if(select)
         activeView()->selectChannels(selectedIds);
     else

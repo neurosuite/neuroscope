@@ -313,15 +313,7 @@ public:
     /**Selects the channels in the TraceView.
    *@param selectedIds ids of the selected channels.
    */
-    void selectChannels(const QList<int>& selectedIds){
-        selectedChannels.clear();
-        QList<int>::const_iterator selectedIterator;
-        for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
-            selectedChannels.append(*selectedIterator);
-        }
-
-        emit channelsToBeSelected(selectedIds);
-    }
+    void selectChannels(const QList<int>& selectedIds);
 
     /**Resets the offset of the selected channels.
    *@param selectedIds ids of the selected channels.
@@ -360,14 +352,7 @@ public:
     /** Sets the channels selected in the channel palettes.
    *@param selectedIds ids of the selected channels.
    */
-    void setSelectedChannels(const QList<int>& selectedIds){
-        //update the list of selected channels
-        selectedChannels.clear();
-        QList<int>::const_iterator selectedIterator;
-        for(selectedIterator = selectedIds.begin(); selectedIterator != selectedIds.end(); ++selectedIterator){
-            selectedChannels.append(*selectedIterator);
-        }
-    }
+    void setSelectedChannels(const QList<int>& selectedIds);
 
     /** Sets the label for the display when in tab page mode.
    * @param newLabel the new label for the display.

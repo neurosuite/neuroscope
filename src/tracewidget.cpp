@@ -665,3 +665,9 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
         emit updateStartAndDuration(startTime,timeWindow);
     }
 }
+
+void TraceWidget::selectChannels(const QList<int>& selectedIds)
+{
+    qDebug()<<" void TraceWidget::selectChannels(const QList<int>& selectedIds)";
+    view.selectChannels(selectedIds);
+}

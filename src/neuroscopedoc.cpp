@@ -1696,11 +1696,15 @@ QImage NeuroscopeDoc::transformBackgroundImage(bool useWhiteBackground){
 
 
 void NeuroscopeDoc::selectAllChannels(NeuroscopeView& activeView,bool editMode){
-    QList<int> channelsSelected = displayChannelsGroups.keys();
+    const QList<int> channelsSelected = displayChannelsGroups.keys();
 
     //The new selection of channels only means for the active view
-    if(editMode) activeView.setSelectedChannels(channelsSelected);
-    else activeView.shownChannelsUpdate(channelsSelected);
+    qDebug()<<" editmode"<<editMode;
+    if(editMode) {
+        activeView.setSelectedChannels(channelsSelected);
+    } else {
+        activeView.shownChannelsUpdate(channelsSelected);
+    }
 }
 
 void NeuroscopeDoc::showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,QList<int> clustersToHide){

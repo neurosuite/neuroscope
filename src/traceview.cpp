@@ -3200,6 +3200,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 }
 
 void TraceView::selectChannels(const QList<int>& selectedIds){
+    qDebug()<<" void TraceView::selectChannels(const QList<int>& selectedIds){";
     if ((selectedChannels.size() == 0 && selectedIds.size() == 0)) return;
 
     //Unhighlight the currently selected traces which are not selected any more

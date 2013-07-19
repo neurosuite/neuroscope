@@ -262,7 +262,7 @@ public Q_SLOTS:
     /**Selects the channels in the TraceView.
   *@param selectedIds ids of the selected channels.
   */
-    void selectChannels(const QList<int>& selectedIds){view.selectChannels(selectedIds);}
+    void selectChannels(const QList<int>& selectedIds);
 
     /**Resets the offset of the selected channels to the default values.
   * @param selectedChannelDefaultOffsets map given the default offsets for the selected channels.

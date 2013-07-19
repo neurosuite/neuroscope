@@ -505,3 +505,20 @@ void  NeuroscopeView::eventColorUpdate(const QString &name,int eventId,bool acti
 {
     emit eventColorUpdated(name,eventId,active);
 }
+
+void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)
+{
+    qDebug()<<" void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)";
+    //update the list of selected channels
+    selectedChannels.clear();
+    selectedChannels = selectedIds;
+    emit channelsSelected(selectedIds);
+}
+
+void NeuroscopeView::selectChannels(const QList<int>& selectedIds)
+{
+    qDebug()<<" void NeuroscopeView::selectChannels(const QList<int>& selectedIds)"<<selectedIds;
+    selectedChannels.clear();
+    selectedChannels=selectedIds;
+    emit channelsToBeSelected(selectedIds);
+}
