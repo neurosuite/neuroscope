@@ -29,7 +29,6 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     QListWidget(parent)
 {
     setObjectName(name);
-    qDebug()<<" ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent, const QString& name):"<<name;
     QFont font( "Helvetica",8);
     setFont(font);
     setSpacing(4);
@@ -78,7 +77,6 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
     QListWidgetItem *item = itemAt(event->pos());
     if(!item)
         return;
-    qDebug()<<" void ItemIconView::mousePressEvent ( QMouseEvent * event )";
     if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
         emit mousePressWAltButton(this->objectName(),item);
     } else if(event->button() == Qt::MiddleButton) {
