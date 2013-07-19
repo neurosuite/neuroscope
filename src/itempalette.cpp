@@ -402,7 +402,6 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
 
 void ItemPalette::slotClickRedraw(){
     qDebug()<<" void ItemPalette::slotClickRedraw(){";
-    return;
     if(!isInSelectItems){
         qDebug()<<" xxxxxxxxxxxxxxxxxx after!!!!!!!!!!!!!!!!";
         bool browsingEnable = false;
@@ -760,7 +759,9 @@ void ItemPalette::reset(){
     isInSelectItems = false;
 }
 
-void ItemPalette::createGroup(const QString &id){
+void ItemPalette::createGroup(const QString &id)
+{
+    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<id;
     ItemGroupView* group = new ItemGroupView(backgroundColor,this);
 
     group->setObjectName(id);
@@ -796,18 +797,24 @@ void ItemPalette::createGroup(const QString &id){
     //group->setStretchFactor(iconView,200);
     group->setIconView(iconView);
 
+    delete spaceWidget;
+    spaceWidget = new QWidget;
+    verticalContainer->addWidget(spaceWidget);
+    spaceWidget->show();
+    verticalContainer->setStretchFactor(spaceWidget,2);
+
     iconviewDict.insert(id,iconView);
 
     itemGroupViewDict.insert(id,group);
     group->adjustSize();
     iconView->show();
     group->show();
+    if (iconView->size().isNull()) {
+        iconView->resize(50,50);
+    }
+    qDebug()<<" group"<<group->size();
+    qDebug()<<" iconView"<<iconView->size();
 
-    delete spaceWidget;
-    spaceWidget = new QWidget;
-    verticalContainer->addWidget(spaceWidget);
-    spaceWidget->show();
-    verticalContainer->setStretchFactor(spaceWidget,2);
 
     //Signal and slot connection
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
