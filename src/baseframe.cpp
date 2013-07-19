@@ -162,9 +162,15 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e){
                 float factor;
 
                 //Shrink asked
-                if(e->modifiers() & Qt::ShiftModifier) factor = static_cast<float>(0.5);
+                if(e->modifiers() & Qt::ShiftModifier)
+                    factor = static_cast<float>(0.5);
                 //Enlarge asked
-                else factor = static_cast<float>(2);
+                else
+                    factor = static_cast<float>(2);
+                if(r.left() != 0)
+                    secondClick = QPoint(e->x(),e->y() - Yborder);
+                else
+                    secondClick = QPoint(e->x() - Xborder,e->y() - Yborder);
 
                 //modify the window rectangle
                 isZoomed = window.zoom(factor, secondClick);
