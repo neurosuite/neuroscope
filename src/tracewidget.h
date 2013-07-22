@@ -612,13 +612,13 @@ private:
 
 private Q_SLOTS:
     /**Informs the view to present the traces for an updated time frame.*/
-    void slotStartMinuteTimeUpdated(int start);
+    void slotStartMinuteTimeUpdated();
 
     /**Informs the view to present the traces for an updated time frame.*/
-    void slotStartSecondTimeUpdated(int start);
+    void slotStartSecondTimeUpdated(/*int start*/);
 
     /**Informs the view to present the traces for an updated time frame.*/
-    void slotStartMilisecondTimeUpdated(int start);
+    void slotStartMilisecondTimeUpdated(/*int start*/);
 
     /**Update the selection widgets and informs view to present the traces for an updated time frame.*/
     void slotDurationUpdated();

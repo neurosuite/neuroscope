@@ -210,9 +210,15 @@ void TraceWidget::initSelectionWidgets()
     //to maximum of time for the current document (set when the document will be opened)
     duration->setValidator(&validator);
 
+#if 0
     connect(startMinute,SIGNAL(valueChanged(int)),this, SLOT(slotStartMinuteTimeUpdated(int)));
     connect(startSecond,SIGNAL(valueChanged(int)),this, SLOT(slotStartSecondTimeUpdated(int)));
     connect(startMilisecond,SIGNAL(valueChanged(int)),this, SLOT(slotStartMilisecondTimeUpdated(int)));
+#else
+    connect(startMinute,SIGNAL(editingFinished()),this, SLOT(slotStartMinuteTimeUpdated()));
+    connect(startSecond,SIGNAL(editingFinished()),this, SLOT(slotStartSecondTimeUpdated()));
+    connect(startMilisecond,SIGNAL(editingFinished()),this, SLOT(slotStartMilisecondTimeUpdated()));
+#endif
     connect(duration,SIGNAL(returnPressed()),this, SLOT(slotDurationUpdated()));
 
     //Create and initialize the scrollbar. The line step is a 20iest of the page step
@@ -381,8 +387,9 @@ void TraceWidget::correctStartTime()
     scrollBar->setValue(startTime);
 }
 
-void TraceWidget::slotStartMinuteTimeUpdated(int start){
+void TraceWidget::slotStartMinuteTimeUpdated(/*int start*/){
     if(!isInit && updateView){
+        int start = startMinute->value();
         //Modify updateView to prevent the scrollBar and other spinboxes to trigger a changeEvent while been updated.
         updateView = false;
 
@@ -413,8 +420,9 @@ void TraceWidget::slotStartMinuteTimeUpdated(int start){
     }
 }
 
-void TraceWidget::slotStartSecondTimeUpdated(int start){
+void TraceWidget::slotStartSecondTimeUpdated(){
     if(!isInit && updateView){
+        int start = startSecond->value();
         //Modify updateView to prevent the scrollBar and other spinboxes to trigger a changeEvent while been updated.
         updateView = false;
 
@@ -459,8 +467,9 @@ void TraceWidget::slotStartSecondTimeUpdated(int start){
     }
 }
 
-void TraceWidget::slotStartMilisecondTimeUpdated(int start){
+void TraceWidget::slotStartMilisecondTimeUpdated(){
     if(!isInit && updateView){
+        int start = startMilisecond->value();
         //Modify updateView to prevent the scrollBar to trigger a changeEvent while been updated.
         updateView = false;
 
