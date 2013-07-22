@@ -100,9 +100,10 @@ int main(int argc, char *argv[])
 
     neuroscope->show();
     if (!file.isEmpty()) {
+        QFileInfo fInfo(file);
         if (file.startsWith(QLatin1String("-")) ) {
             qWarning() << "it's not a filename :"<<file;
-        } else if(file.left(1) != QLatin1String("/")){
+        } else if(fInfo.isRelative()) {
             const QString url = QDir::currentPath().append("/") + file;
             neuroscope->openDocumentFile(url);
         } else {
