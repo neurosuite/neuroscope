@@ -1372,8 +1372,10 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 pen.setColor(color);
                 pen.setWidth(1);
                 painter.setPen(pen);
-                if (!multiColumns) X = X0;
-                else X = channelsStartingAbscissa[*iterator];
+                if (!multiColumns)
+                    X = X0;
+                else
+                    X = channelsStartingAbscissa[*iterator];
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
             }
         }
@@ -1564,6 +1566,7 @@ void TraceView::drawTraces(QPainter& painter){
                 int top = windowRectangle.top();
                 int bottom = windowRectangle.bottom();
                 QPen pen(Qt::DotLine);
+                pen.setCosmetic(true);
 
                 QMap<QString, QList<int> >::Iterator iterator;
                 for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
