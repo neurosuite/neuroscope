@@ -54,8 +54,6 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     ,type(type)
     ,edit(edition)
 {
-    qDebug()<<" ChannelPalette::ChannelPalette"<<this<<" name"<<name;
-    qDebug()<<" ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name)"<<name;
     setObjectName(name);
     setWidgetResizable(true);
     //Set the palette color, the foreground color depends on the background color
