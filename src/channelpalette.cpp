@@ -196,7 +196,6 @@ void ChannelPalette::setChannelLists()
             QIcon icon(pixmap);
 
             new ChannelIconViewItem(icon,(QString::number(channelList.at(i))),iconviewDict[groupId]);
-            //KDAB_PENDING TODO add key
         }
     }
 }

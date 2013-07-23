@@ -579,6 +579,8 @@ void NeuroscopeApp::initActions()
 
     connect(displayChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
     connect(spikeChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
+
+
     connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
     connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
     connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
