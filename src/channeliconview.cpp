@@ -144,6 +144,17 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         return false;
 
     QDataStream stream(data);
+
+    QList<int> channelIds;
+    const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
+    for (int i=0; i< numberOfItems; ++i) {
+        ChannelIconViewItem *item = new ChannelIconViewItem(this);
+        stream >> *item;
+        channelIds<<item->text().toInt();
+        delete item;
+    }
+
+    const QString sourceGroupName = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
     const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
     if (moveAllGroup) {
         const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
@@ -151,8 +162,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             ChannelIconViewItem *item = new ChannelIconViewItem(this);
             stream >> *item;
         }
-        const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
-        emit removeGroup(name);
+        emit removeGroup(sourceGroupName);
         //emit channelsMoved(objectName(), /*item(index)*/0);
         return true;
     }
@@ -163,7 +173,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         posItem = item(count()-1);
     }
     emit channelsMoved(objectName(), posItem);
-
+    emit channelsMoved(channelIds, sourceGroupName, posItem);
     return true;
 }
 
