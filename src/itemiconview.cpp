@@ -31,7 +31,6 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setObjectName(name);
     QFont font( "Helvetica",8);
     setFont(font);
-    setSpacing(4);
     setFrameStyle(QFrame::NoFrame);
     setResizeMode(QListWidget::Adjust);
     setViewMode(mode);
