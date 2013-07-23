@@ -270,14 +270,16 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
         QHashIterator<QString, ClusterData*> iterator(clustersData);
         while (iterator.hasNext()) {
             iterator.next();
-            ready = iterator.value()->status();
+            if (iterator.value())
+              ready = iterator.value()->status();
             if (!ready)
                 break;
         }
         QHashIterator<QString, EventData*> iterator2(eventsData);
         while (iterator2.hasNext()) {
             iterator2.next();
-            ready = iterator2.value()->status();
+            if (iterator2.value())
+               ready = iterator2.value()->status();
             if (!ready)
                 break;
         }
@@ -313,7 +315,8 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator,const QSt
     QHashIterator<QString, EventData*> iterator2(eventsData);
     while (iterator2.hasNext()) {
         iterator2.next();
-        ready = iterator2.value()->status();
+        if (iterator2.value())
+          ready = iterator2.value()->status();
         if (!ready)
             break;
     }
@@ -339,7 +342,8 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
     QHashIterator<QString, EventData*> iterator(eventsData);
     while (iterator.hasNext()) {
         iterator.next();
-        ready = iterator.value()->status();
+        if (iterator.value())
+          ready = iterator.value()->status();
         if (!ready)
             break;
     }
@@ -349,6 +353,7 @@ void TraceView::dataAvailable(Array<dataType>& times,Array<int>& ids,QObject* in
     QHashIterator<QString, ClusterData*> iterator2(clustersData);
     while (iterator2.hasNext()) {
         iterator2.next();
+        if (iterator2.value())
         ready = iterator2.value()->status();
         if (!ready)
             break;
@@ -4020,7 +4025,8 @@ void TraceView::nextEventDataAvailable(Array<dataType>& times,Array<int>& ids,QO
     QHashIterator<QString, EventData*> iterator(eventsData);
     while (iterator.hasNext()) {
         iterator.next();
-        ready = iterator.value()->status();
+        if (iterator.value())
+           ready = iterator.value()->status();
         if (!ready)
             break;
     }
@@ -4072,7 +4078,8 @@ void TraceView::previousEventDataAvailable(Array<dataType>& times,Array<int>& id
     QHashIterator<QString, EventData*> iterator(eventsData);
     while (iterator.hasNext()) {
         iterator.next();
-        ready = iterator.value()->status();
+        if (iterator.value())
+           ready = iterator.value()->status();
         if (!ready)
             break;
     }
@@ -4392,7 +4399,8 @@ void TraceView::nextClusterDataAvailable(Array<dataType>& data,QObject* initiato
     QHashIterator<QString, ClusterData*> iterator(clustersData);
     while (iterator.hasNext()) {
         iterator.next();
-        ready = iterator.value()->status();
+        if (iterator.value())
+           ready = iterator.value()->status();
         if (!ready) break;
     }
 
@@ -4446,6 +4454,7 @@ void TraceView::previousClusterDataAvailable(Array<dataType>& data,QObject* init
     QHashIterator<QString, ClusterData*> iterator(clustersData);
     while (iterator.hasNext()) {
         iterator.next();
+        if (iterator.value())
         ready = iterator.value()->status();
         if (!ready)
             break;
