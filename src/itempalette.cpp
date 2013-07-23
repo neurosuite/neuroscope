@@ -401,9 +401,7 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
 }
 
 void ItemPalette::slotClickRedraw(){
-    qDebug()<<" void ItemPalette::slotClickRedraw(){";
     if(!isInSelectItems){
-        qDebug()<<" xxxxxxxxxxxxxxxxxx after!!!!!!!!!!!!!!!!";
         bool browsingEnable = false;
         bool needToBeUpdated = false;
         QMap<QString,QList<int> > selection;
@@ -549,7 +547,6 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
 
     isInSelectItems = true;
     bool browsingStatus = browsingMap[item->data(ItemIconView::INDEXICON).toInt()];
-    qDebug()<<"browsingStatus "<<browsingStatus<<" index "<<index<<" item->data(ItemIconView::INDEXICON).toInt()"<<item->data(ItemIconView::INDEXICON).toInt();
     //Recreate the item
     QPixmap pixmap(14,14);
     pixmap.fill(backgroundColor);
@@ -598,7 +595,6 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
     QList<int> itemsToRedraw;
     bool browsingEnable = false;
 
-    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     if(!item->isSelected())
         return;
 
@@ -613,7 +609,6 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
         browsingEnable = true;
     }
 
-    qDebug()<<" browsingMap"<<browsingMap;
     itemsToRedraw.append(index);
     needRedrawing.insert(sourceGroup,itemsToRedraw);
     QList<int> itemsToSkip;
@@ -622,7 +617,6 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
             itemsToSkip.append(iconView->item(i)->data(ItemIconView::INDEXICON).toInt());
         }
     }
-    qDebug()<<" sourceGroup"<<sourceGroup<<" itemsToSkip"<<itemsToSkip;
     emit updateItemsToSkip(sourceGroup,itemsToSkip);
 
     if(!browsingEnable){
