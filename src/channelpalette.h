@@ -170,7 +170,7 @@ Q_SIGNALS:
     void channelsDiscarded(const QList<int>& discarded);
     void setDragAndDrop(bool dragAndDrop);
     void groupModified();
-    void channelsMovedToTrash(const QList<int>&channelIds,QString afterId,bool beforeFirst);
+    void channelsMovedToTrash(const QList<int> &channelIds, const QString &afterId,bool beforeFirst);
     void channelsMovedAroundInTrash(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
     void channelsRemovedFromTrash(const QList<int>& channelIds);
     void channelsSelected(const QList<int>& selectedChannels);

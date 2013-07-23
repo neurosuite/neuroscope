@@ -54,6 +54,8 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     ,type(type)
     ,edit(edition)
 {
+    qDebug()<<" ChannelPalette::ChannelPalette"<<this<<" name"<<name;
+    qDebug()<<" ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name)"<<name;
     setObjectName(name);
     setWidgetResizable(true);
     //Set the palette color, the foreground color depends on the background color
@@ -88,7 +90,6 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     //Set the legend in the good language
     languageChange();
 
-    //verticalContainer->adjustSize();
     adjustSize();
 }    
 
@@ -285,10 +286,12 @@ void ChannelPalette::showChannels(){
     emit updateShownChannels(getShowHideChannels(true));
 }
 
-void ChannelPalette::hideChannels(){
+void ChannelPalette::hideChannels()
+{
     //Change the status show/hide of the selected channels
     updateShowHideStatus(false);
 
+    qDebug()<<" getShowHideChannels(false) :"<<getShowHideChannels(false)<<" getShowHideChannels(true)"<<getShowHideChannels(true);
     emit updateHideChannels(getShowHideChannels(false));
     emit updateShownChannels(getShowHideChannels(true));
 }
@@ -324,7 +327,8 @@ void ChannelPalette::hideUnselectAllChannels(){
     isInSelectItems = false;
 }
 
-void ChannelPalette::updateShowHideStatus(bool showStatus){
+void ChannelPalette::updateShowHideStatus(bool showStatus)
+{
 
     //Get the selected channels and set them the showStatus
     const QList<int> channelIds = selectedChannels();
@@ -1272,7 +1276,7 @@ void ChannelPalette::selectAllChannels(){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-
+    qDebug()<<" ChannelPalette::selectAllChannels(){";
     //unselect all the items first
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
@@ -1402,6 +1406,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
 }
 
 void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetItem* after){
+    qDebug()<<" void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetItem* after){"<<targetGroup<<" after "<<after;
     //If the channels have been moved to the trash inform the other palette.
     QString afterId;
     bool beforeFirst = false;
@@ -1553,8 +1558,11 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
     isGroupToRemove = true;
 
     //If the channels have been moved to the trash inform the other palette.
-    if(targetGroup == "0")
+    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs"<<targetGroup<<" objetcName"<<objectName();
+    if(targetGroup == "0") {
+        qDebug()<<" emit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         emit channelsMovedToTrash(movedChannels,afterId,beforeFirst);
+    }
     update();
 }
 
@@ -1654,10 +1662,12 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QStri
 
 void ChannelPalette::discardChannels()
 {
+    qDebug()<<" sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
     trashChannels(0);
 }
 
-void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){    
+void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
+    qDebug()<<" void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){ "<<objectName()<<" channelsToDiscard "<<channelsToDiscard;
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
     groupColor.setHsv(210,255,255);
@@ -1766,6 +1776,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const QString& afterId,bool beforeFirst){
+    qDebug()<<" void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const QString& afterId,bool beforeFirst){"<<this<<" channelsToDiscard"<<channelsToDiscard<<" afterid"<<afterId;
     QListWidgetItem* after = 0;
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
@@ -1809,7 +1820,13 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         QColor color = channelColors->color(*channelIterator);
         channelsShowHideStatus[*channelIterator] = false;
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-        //KDAB_PORITNG after = new ChannelIconItem(trash,after,QString::number(*channelIterator),pixmap);
+
+        const int index = trash->row(after);
+        ChannelIconViewItem *newItem = new ChannelIconViewItem(QIcon(pixmap),QString::number(*channelIterator));
+        trash->insertItem(index+1, newItem);
+
+
+        //new ChannelIconViewItem(trash,after,QString::number(*channelIterator),pixmap);
         sourceChannels.removeAll(*channelIterator);
         channelsGroups->remove(*channelIterator);
         channelsGroups->insert(*channelIterator,0);
@@ -1980,6 +1997,7 @@ void ChannelPalette::discardSpikeChannels(){
 
 
 void ChannelPalette::trashChannels(int destinationGroup){
+    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxChannelPalette::trashChannels"<<objectName();
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
