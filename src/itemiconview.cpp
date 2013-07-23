@@ -100,6 +100,6 @@ void ItemIconView::setNewWidth(int width)
 
 QSize ItemIconView::sizeHint() const
 {
-    const int height = rectForIndex(model()->index(model()->rowCount() - 1, 0)).bottom();
+    const int height = rectForIndex(model()->index(model()->rowCount() - 1, 0)).bottom() + 5;
     return QSize(width(), height);
 }

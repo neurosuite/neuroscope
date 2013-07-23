@@ -77,7 +77,7 @@ void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
         }*/
     }
 
-     int iconHeight = iconView->sizeHint().height();
+     int iconHeight = iconView->sizeHint().height() + 5;
 
     //If items have been moved in or out of the iconview, its sized has changed and the ItemGroupView has to compensate
     if (iconHeight != 1 && height() != iconHeight) {
