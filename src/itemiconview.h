@@ -42,12 +42,15 @@ public:
         Color = Qt::UserRole + 2
     };
 
+    void setNewWidth(int width);
+
+    QSize sizeHint() const;
+
+
 protected:
     void mousePressEvent ( QMouseEvent * event );
     void wheelEvent ( QWheelEvent * e );
     void mouseReleaseEvent ( QMouseEvent * event );
-    void resizeEvent(QResizeEvent *event);
-    QSize sizeHint() const;
 
 Q_SIGNALS:
     void mousePressWoModificators(const QString &sourceGroup);

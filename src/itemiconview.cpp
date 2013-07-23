@@ -91,14 +91,15 @@ void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     emit mouseReleased(this->objectName());
 }
 
-QSize ItemIconView::sizeHint() const
+void ItemIconView::setNewWidth(int width)
 {
-    const QSize size = QSize(contentsSize().width() + 5, qMax(contentsSize().height() + 5, 40));
-    return size;
+    setFixedWidth(width);
+    doItemsLayout();
+    resize(sizeHint());
 }
 
-void ItemIconView::resizeEvent(QResizeEvent *event)
+QSize ItemIconView::sizeHint() const
 {
-    QListWidget::resizeEvent(event);
-    resize(sizeHint());
+    const int height = rectForIndex(model()->index(model()->rowCount() - 1, 0)).bottom();
+    return QSize(width(), height);
 }
