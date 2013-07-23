@@ -153,11 +153,16 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         }
         const QString name = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
         emit removeGroup(name);
+        //emit channelsMoved(objectName(), /*item(index)*/0);
         return true;
     }
 
-    qDebug()<<" index "<<index<<" item"<<item(index)<<" objectName "<<objectName();
-    emit channelsMoved(objectName(), item(index));
+    QListWidgetItem *posItem = item(index);
+    if (!posItem) {
+        //Find last item
+        posItem = item(count()-1);
+    }
+    emit channelsMoved(objectName(), posItem);
 
     return true;
 }
@@ -220,7 +225,8 @@ void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDrag
 
         QList<int> selectedChannels;
         for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-            if (item->isSelected()) selectedChannels.append(item->text().toInt());
+            if (item->isSelected())
+                selectedChannels.append(item->text().toInt());
 
         //If all the channels are selected insert after the first one.
         if (selectedChannels.size() == this->count()){
