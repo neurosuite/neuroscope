@@ -58,8 +58,13 @@ public:
     explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const QString& name = QString());
     ~ChannelIconView(){}
 
+    void setNewWidth(int width);
+
+    QSize sizeHint() const;
+
 public Q_SLOTS:
     void setDragAndDrop(bool dragDrop);
+    void slotRowInsered();
 
 Q_SIGNALS:
     void mousePressMiddleButton(QListWidgetItem* item);
@@ -71,8 +76,6 @@ Q_SIGNALS:
     void removeGroup(const QString &name);
 
 protected:
-    QSize sizeHint() const;
-    void resizeEvent ( QResizeEvent * event );
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent ( QWheelEvent * e );

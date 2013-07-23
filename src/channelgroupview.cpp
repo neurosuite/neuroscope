@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "channelgroupview.h"
+#include "channeliconview.h"
 #include <QListWidget>
 #include <QLabel>
 #include <QMimeData>
@@ -61,15 +62,18 @@ void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize)
 
         setFixedWidth(futurWidth);
         int viewfuturWidth = width() - labelSize - 6;//give so space on the right
-        iconView->setFixedWidth(viewfuturWidth);
+        iconView->setNewWidth(viewfuturWidth);
 
+        /*
         if(iconView->size().height() != 1 && height() != iconView->size().height())
             setFixedHeight(iconView->size().height());
+            */
 
     }
-    //If items have been moved in or out of the iconview, its sized has changed and the ChannelGroupView has to compensate
-    if(iconView->size().height() != 1 && height() != iconView->size().height())
-        setFixedHeight(iconView->size().height());
+    int iconHeight = iconView->sizeHint().height()+5;
+    if (iconHeight != 1 && height() != iconHeight) {
+        setFixedHeight(iconHeight);
+    }
 }
 
 void ChannelGroupView::dropEvent(QDropEvent* event)
@@ -99,7 +103,7 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
     emit dragObjectMoved(QWidget::mapToParent(event->pos()));
 }
 
-void ChannelGroupView::setIconView(QListWidget* view){
+void ChannelGroupView::setIconView(ChannelIconView *view){
     iconView = view;
     iconView->viewport()->setAutoFillBackground(false);
     mLayout->addWidget(iconView);

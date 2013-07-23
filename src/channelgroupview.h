@@ -27,7 +27,7 @@
 #include <QHBoxLayout>
 
 class QLabel;
-class QListWidget;
+class ChannelIconView;
 
 /**Utilitary class used to build the channel palettes (anatomical and spike).
   *@author Lynn Hazan
@@ -41,7 +41,7 @@ public:
     ~ChannelGroupView(){}
 
     void setLabel(QLabel *label);
-    void setIconView(QListWidget *view);
+    void setIconView(ChannelIconView *view);
 
     QLabel *label();
 Q_SIGNALS:
@@ -59,7 +59,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent* event);
 
 private:
-    QListWidget* iconView;
+    ChannelIconView* iconView;
 
     /**True the drag and drop is allow, false otherwise.*/
     bool drag;

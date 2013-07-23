@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QApplication>
+#include <QAbstractItemModel>
 
 ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int gridY, bool edit, QWidget* parent, const QString& name)
     : QListWidget(parent)
@@ -71,6 +72,13 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+    connect(model(), SIGNAL(rowsInserted(QModelIndex, int,int)), this, SLOT(slotRowInsered()));
+}
+
+void ChannelIconView::slotRowInsered()
+{
+    adjustSize();
+    resize(sizeHint());
 }
 
 QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
@@ -94,16 +102,17 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
     return mimedata;
 }
 
-QSize ChannelIconView::sizeHint() const
+void ChannelIconView::setNewWidth(int width)
 {
-    const QSize size = QSize(contentsSize().width() + 5, qMax(contentsSize().height() + 5, 40));
-    return size;
+    setFixedWidth(width);
+    doItemsLayout();
+    resize(sizeHint());
 }
 
-void ChannelIconView::resizeEvent ( QResizeEvent * event )
+QSize ChannelIconView::sizeHint() const
 {
-    QListWidget::resizeEvent(event);
-    resize(sizeHint());
+    const int height = rectForIndex(model()->index(model()->rowCount() - 1, 0)).bottom() + 5;
+    return QSize(width(), height);
 }
 
 void ChannelIconView::setDragAndDrop(bool dragDrop)
