@@ -25,6 +25,8 @@
 
 #include <QFile>
 #include <QRegExp>
+#include <QDebug>
+#include <QFileInfo>
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
     : DataProvider(fileUrl),
@@ -342,15 +344,14 @@ void TracesProvider::computeRecordingLength(){
  off_t fileLength = dataFile.tellg();
  dataFile.close();*/
 
-    FILE* file = fopen(fileName.toLatin1(),"rb");
-    if(file == NULL){
+    QFile f(fileName);
+    if (!f.open(QIODevice::ReadOnly)) {
         length = 0;
         return;
     }
-    // obtain file size.
-    fseeko64(file,0,SEEK_END);
-    off_t fileLength = ftello64(file);
-    fclose(file);
+    f.close();
+    QFileInfo fInfo(fileName);
+    qint64 fileLength = fInfo.size();
 
     int dataSize = 0;
     if((resolution == 12) | (resolution == 14) | (resolution == 16)) dataSize = 2;
