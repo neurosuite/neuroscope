@@ -53,7 +53,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
         legendColor = Qt::white;
     palette.setColor(QPalette::Text, legendColor);
     setPalette(palette);
-    setSelectionMode(QAbstractItemView::MultiSelection);
+    setSelectionMode(QAbstractItemView::ContiguousSelection);
 
     setMovement(QListView::Static);
 
