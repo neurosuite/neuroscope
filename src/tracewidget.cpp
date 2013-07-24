@@ -253,7 +253,7 @@ void TraceWidget::initSelectionWidgets()
     lay->setStretchFactor(scrollBar,200);
 }
 
-void TraceWidget::samplingRateModified(long long length)
+void TraceWidget::samplingRateModified(qlonglong length)
 {
     recordingLength = length;
 

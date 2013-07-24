@@ -368,7 +368,7 @@ public:
   * Updates the length of the document due to a modification of the sampling rate.
   * @param length the newly computed length of the document.
   */
-    void samplingRateModified(long long length){
+    void samplingRateModified(qlonglong length){
         this->length = length;
         int samplingRate = tracesProvider.getSamplingRate();
         timeStepUnit = timeStep = static_cast<float>(static_cast<float>(1000) / static_cast<float>(samplingRate));

@@ -673,7 +673,7 @@ private:
     QScrollBar* scrollBar;
 
     /**Length of the recording in miliseconds.*/
-    long long recordingLength;
+    qlonglong recordingLength;
 
     /**ScrollBar line step size in miliseconds.*/
     long lineStep;
