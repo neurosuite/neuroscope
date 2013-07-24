@@ -677,6 +677,10 @@ void TraceWidget::slotSetStartAndDuration(long time,long duration){
 
 void TraceWidget::selectChannels(const QList<int>& selectedIds)
 {
-    qDebug()<<" void TraceWidget::selectChannels(const QList<int>& selectedIds)";
     view.selectChannels(selectedIds);
+}
+
+void TraceWidget::setMode(BaseFrame::Mode selectedMode,bool active)
+{
+    view.setMode(selectedMode,active);
 }

@@ -243,13 +243,7 @@ public:
    * @param selectedMode the new mode.
    * @param active true if the view is the active one, false otherwise.
    */
-    void setMode(BaseFrame::Mode selectedMode,bool active){
-        if(selectedMode == 2)
-            selectMode = true;
-        else
-            selectMode = false;
-        emit modeToSet(selectedMode,active);
-    }
+    void setMode(BaseFrame::Mode selectedMode,bool active);
 
     /** Tests if the currently selected tool is the selection one.
    * @ return true if the current tool is the selection one, false otherwise.

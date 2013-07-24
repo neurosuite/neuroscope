@@ -742,7 +742,7 @@ private:
     bool resized;
 
     /**List of the selected channels.*/
-    QList<int> selectedChannels;
+    QList<int> mSelectedChannels;
 
     /**Boolean used to update the display after a change in the number of groups.*/
     bool groupsChanged;
@@ -1083,7 +1083,6 @@ private:
     void changeCursor();
 
     QList<int> mDeselectedChannels;
-    QList<int> mSelectedChannels;
 
     QPoint m_currentPoint;
     bool mMoveSelectChannel;

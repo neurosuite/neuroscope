@@ -522,3 +522,12 @@ void NeuroscopeView::selectChannels(const QList<int>& selectedIds)
     selectedChannels=selectedIds;
     emit channelsToBeSelected(selectedIds);
 }
+
+void NeuroscopeView::setMode(BaseFrame::Mode selectedMode,bool active)
+{
+    if(selectedMode == 2)
+        selectMode = true;
+    else
+        selectMode = false;
+    emit modeToSet(selectedMode,active);
+}

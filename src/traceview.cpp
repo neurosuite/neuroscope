@@ -700,7 +700,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         int limit = viewportToWorldHeight(1);
 
         QList<int>::iterator channelIterator;
-        for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator){
+        for(channelIterator = mSelectedChannels.begin(); channelIterator != mSelectedChannels.end(); ++channelIterator){
             //if the channel is skipped, do no draw it
             if (skippedChannels.contains(*channelIterator ))
                 continue;
@@ -809,15 +809,15 @@ void TraceView::showChannels(const QList<int>& channelsToShow){
         shownChannels.append(*channelsToShowIterator);
     }
 
-    //remove the channels in selectedChannels which are no more shown
+    //remove the channels in mSelectedChannels which are no more shown
     QList<int>::iterator iterator;
     QList<int> toRemoved;
-    for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator)
+    for(iterator = mSelectedChannels.begin(); iterator != mSelectedChannels.end(); ++iterator)
         if (!shownChannels.contains(*iterator))
             toRemoved.append(*iterator);
 
     for(iterator = toRemoved.begin(); iterator != toRemoved.end(); ++iterator)
-        selectedChannels.removeAll(*iterator);
+        mSelectedChannels.removeAll(*iterator);
 
     updateShownGroupsChannels(channelsToShow);
 
@@ -1659,7 +1659,7 @@ void TraceView::drawTraces(QPainter& painter){
                     color.setHsv(0,0,greyvalue);
                 }
                 QPen pen(color,1);
-                if (selectedChannels.contains(channelId))
+                if (mSelectedChannels.contains(channelId))
                     pen.setWidth(2);
                 painter.setPen(pen);
                 pen.setCosmetic(true);
@@ -1719,7 +1719,7 @@ void TraceView::drawTraces(QPainter& painter){
                             if (clusterList.contains(clusterId)){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
-                                if (selectedChannels.contains(channelId)) pen.setWidth(2);
+                                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
                                 pen.setCosmetic(true);
 
@@ -1884,7 +1884,7 @@ void TraceView::drawTraces(QPainter& painter){
                     color.setHsv(0,0,greyvalue);
                 }
                 QPen pen(color,1);
-                if (selectedChannels.contains(channelId)) pen.setWidth(2);
+                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
                 pen.setCosmetic(true);
                 painter.setPen(pen);
 
@@ -1946,7 +1946,7 @@ void TraceView::drawTraces(QPainter& painter){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
                                 pen.setCosmetic(true);
-                                if (selectedChannels.contains(channelId)) pen.setWidth(2);
+                                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
                                 painter.setPen(pen);
 
                                 for(int j = currentIndex; j <= nbSamples;++j){
@@ -2051,7 +2051,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
                     rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
                 }
                 float gain = channelDisplayGains[*channelIterator];
-                if (selectedChannels.contains(*channelIterator))
+                if (mSelectedChannels.contains(*channelIterator))
                     painter.fillRect(rHighlight,palette().highlight());
                 else painter.fillRect(rHighlight,palette().color(backgroundRole()));
                 painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString("%1 x%2").arg(*channelIterator).arg(gain,0,'f',2));
@@ -2313,7 +2313,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
     mMoveSelectChannel = false;
     //Paint the channels selected while dragging
-    if (mode == SELECT && !selectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
+    if (mode == SELECT && !mSelectedChannels.isEmpty() && (event->buttons() == Qt::LeftButton)){
         mMoveSelectChannel = true;
         m_currentPoint = current;
         update();
@@ -2667,21 +2667,21 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     }
 
                     if (mode == SELECT){
-                        //If there is not modificator key and selectedChannels does not already contain the selectedChannel
-                        //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
-                        //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
+                        //If there is not modificator key and mSelectedChannels does not already contain the selectedChannel
+                        //deselect all the channels (clear mSelectedChannels) otherwise remove selectedChannel from the list.
+                        //if the channel is skipped,there is a special treatment: deselect all the channels (clear mSelectedChannels)
                         if (!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
-                            //if the channel is skipped, deselect all the channels (clear selectedChannels)
-                            if (!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
+                            //if the channel is skipped, deselect all the channels (clear mSelectedChannels)
+                            if (!mSelectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
-                                for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+                                for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
                                     deselectedChannels.append(*it);
-                                selectedChannels.clear();
+                                mSelectedChannels.clear();
                             }
                             else{
-                                selectedChannels.removeAll(selectedChannel);
-                                if (!selectedChannels.isEmpty()) alreadySelected = true;
+                                mSelectedChannels.removeAll(selectedChannel);
+                                if (!mSelectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 
@@ -2689,26 +2689,26 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         if (event->modifiers() & Qt::ControlModifier){
                             //if the channel is skipped, do not do anything
                             if (!skippedChannels.contains(selectedChannel)){
-                                if (selectedChannels.contains(selectedChannel)){
-                                    selectedChannels.removeAll(selectedChannel);
+                                if (mSelectedChannels.contains(selectedChannel)){
+                                    mSelectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
                                 else{
-                                    selectedChannels.append(selectedChannel);
+                                    mSelectedChannels.append(selectedChannel);
                                     currentlySelectedChannels.append(selectedChannel);
                                 }
                             }
                         }
-                        else if ((event->modifiers() & Qt::ShiftModifier) && !selectedChannels.isEmpty()){
+                        else if ((event->modifiers() & Qt::ShiftModifier) && !mSelectedChannels.isEmpty()){
                             //take all the channels, not skipped of groupId with a label ordinate in the range defined by the label ordinate of the last
                             //selected channel and the one of the currently selected channel.
                             if (labelSelected){
-                                int previousChannelId = selectedChannels[selectedChannels.size() - 1];
+                                int previousChannelId = mSelectedChannels[mSelectedChannels.size() - 1];
                                 //If the prevously selected channel is not in the same group, only select the currently selected.
                                 //No cross group selection is done.
                                 if (!channelIds.contains(previousChannelId)){
                                     if (!skippedChannels.contains(selectedChannel)){
-                                        selectedChannels.append(selectedChannel);
+                                        mSelectedChannels.append(selectedChannel);
                                         currentlySelectedChannels.append(selectedChannel);
                                     }
                                 }
@@ -2725,9 +2725,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                     for(int i = 0; i < currentNbChannels; ++i){
                                         channelId = channelIds[i];
                                         int ordinate = channelsStartingOrdinate[channelId];
-                                        if (ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
+                                        if (ordinate>= min && ordinate <= max && !mSelectedChannels.contains(channelId)){
                                             if (!skippedChannels.contains(selectedChannel)){
-                                                selectedChannels.append(channelId);
+                                                mSelectedChannels.append(channelId);
                                                 currentlySelectedChannels.append(channelId);
                                             }
                                         }
@@ -2740,11 +2740,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         }
                         else{
                             if (!skippedChannels.contains(selectedChannel)){
-                                selectedChannels.append(selectedChannel);
+                                mSelectedChannels.append(selectedChannel);
                                 currentlySelectedChannels.append(selectedChannel);
                             }
                         }
-                        emit channelsSelected(selectedChannels);
+                        emit channelsSelected(mSelectedChannels);
                     }//end of mode == SELECT
                     //mode == MEASURE
                     else if (mode == MEASURE){
@@ -2852,43 +2852,43 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                     }
 
                     if (mode == SELECT){
-                        //If there is not modificator key and selectedChannels does not already contain the selectedChannel
-                        //deselect all the channels (clear selectedChannels) otherwise remove selectedChannel from the list.
-                        //if the channel is skipped,there is a special treatment: deselect all the channels (clear selectedChannels)
+                        //If there is not modificator key and mSelectedChannels does not already contain the selectedChannel
+                        //deselect all the channels (clear mSelectedChannels) otherwise remove selectedChannel from the list.
+                        //if the channel is skipped,there is a special treatment: deselect all the channels (clear mSelectedChannels)
                         if (!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)){
-                            //if the channel is skipped, deselect all the channels (clear selectedChannels)
-                            if (!selectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
+                            //if the channel is skipped, deselect all the channels (clear mSelectedChannels)
+                            if (!mSelectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
 
-                                for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+                                for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
                                     deselectedChannels.append(*it);
-                                selectedChannels.clear();
+                                mSelectedChannels.clear();
                             }
                             else{
-                                selectedChannels.removeAll(selectedChannel);
-                                if (!selectedChannels.isEmpty()) alreadySelected = true;
+                                mSelectedChannels.removeAll(selectedChannel);
+                                if (!mSelectedChannels.isEmpty()) alreadySelected = true;
                             }
                         }
 
                         if (event->modifiers() & Qt::ControlModifier){
                             //if the channel is skipped, do not do anything
                             if (!skippedChannels.contains(selectedChannel)){
-                                if (selectedChannels.contains(selectedChannel)){
-                                    selectedChannels.removeAll(selectedChannel);
+                                if (mSelectedChannels.contains(selectedChannel)){
+                                    mSelectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
                                 }
                                 else{
-                                    selectedChannels.append(selectedChannel);
+                                    mSelectedChannels.append(selectedChannel);
                                     currentlySelectedChannels.append(selectedChannel);
                                 }
                             }
                         }
-                        else if ((event->modifiers() & Qt::ShiftModifier) && selectedChannels.size() != 0){
+                        else if ((event->modifiers() & Qt::ShiftModifier) && mSelectedChannels.size() != 0){
                             //take all the channels of groupId with a label ordinate in the range defined by the label ordinate of the last
                             //selected channel and the one of the currently selected channel.
                             if (x < 0){
-                                int previousChannelId = selectedChannels[selectedChannels.size() - 1];
+                                int previousChannelId = mSelectedChannels[mSelectedChannels.size() - 1];
                                 int previousOrdinate = channelsStartingOrdinate[previousChannelId];
                                 int currentOrdinate = channelsStartingOrdinate[selectedChannel];
                                 int min = previousOrdinate;
@@ -2901,9 +2901,9 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 for(int i = 0; i < currentNbChannels; ++i){
                                     channelId = shownChannels[i];
                                     int ordinate = channelsStartingOrdinate[channelId];
-                                    if (ordinate>= min && ordinate <= max && !selectedChannels.contains(channelId)){
+                                    if (ordinate>= min && ordinate <= max && !mSelectedChannels.contains(channelId)){
                                         if (!skippedChannels.contains(selectedChannel)){
-                                            selectedChannels.append(channelId);
+                                            mSelectedChannels.append(channelId);
                                             currentlySelectedChannels.append(channelId);
                                         }
                                     }
@@ -2915,11 +2915,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         }
                         else{
                             if (!skippedChannels.contains(selectedChannel)){
-                                selectedChannels.append(selectedChannel);
+                                mSelectedChannels.append(selectedChannel);
                                 currentlySelectedChannels.append(selectedChannel);
                             }
                         }
-                        emit channelsSelected(selectedChannels);
+                        emit channelsSelected(mSelectedChannels);
                     }//end of mode == SELECT
                     //mode == MEASURE
                     else if (mode == MEASURE){
@@ -2965,7 +2965,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             if (previousDragOrdinate != 0){
                 int delta = previousDragOrdinate - lastClickOrdinate;
                 QList<int>::iterator channelIterator;
-                for(channelIterator = selectedChannels.begin(); channelIterator != selectedChannels.end(); ++channelIterator)
+                for(channelIterator = mSelectedChannels.begin(); channelIterator != mSelectedChannels.end(); ++channelIterator)
                     channelOffsets[*channelIterator] += delta;
 
                 previousDragOrdinate = 0;
@@ -2976,18 +2976,18 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             else{
                 //deselect all the channels except the last one.
                 if (alreadySelected){
-                    int channelId = selectedChannels[selectedChannels.size() - 1];
-                    selectedChannels.removeAll(channelId);
+                    int channelId = mSelectedChannels[mSelectedChannels.size() - 1];
+                    mSelectedChannels.removeAll(channelId);
 
                     mDeselectedChannels.clear();
                     QList<int>::iterator it;
-                    for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+                    for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
                         mDeselectedChannels.append(*it);
 
-                    selectedChannels.clear();
+                    mSelectedChannels.clear();
                     update();
-                    selectedChannels.append(channelId);
-                    emit channelsSelected(selectedChannels);
+                    mSelectedChannels.append(channelId);
+                    emit channelsSelected(mSelectedChannels);
                 }
             }
         }
@@ -3209,12 +3209,12 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 
 void TraceView::selectChannels(const QList<int>& selectedIds){
     qDebug()<<" void TraceView::selectChannels(const QList<int>& selectedIds){";
-    if ((selectedChannels.size() == 0 && selectedIds.size() == 0)) return;
+    if ((mSelectedChannels.size() == 0 && selectedIds.size() == 0)) return;
 
     //Unhighlight the currently selected traces which are not selected any more
     mDeselectedChannels.clear();
     QList<int>::iterator it;
-    for(it = selectedChannels.begin();it != selectedChannels.end();++it)
+    for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
         if (!selectedIds.contains(*it) && shownChannels.contains(*it))
             mDeselectedChannels.append(*it);
 
@@ -3223,7 +3223,7 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
     mSelectedChannels.clear();
     QList<int>::const_iterator iterator;
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
-        if (!selectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
+        if (!mSelectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
             //if the channel is skipped, do no draw it
             if (!skippedChannels.contains(*iterator))
                 mSelectedChannels.append(*iterator);
@@ -3231,12 +3231,12 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
     }
 
     //Update the list of selected channels
-    selectedChannels.clear();
+    mSelectedChannels.clear();
 
     //the skipped channels are not selected
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
         if (shownChannels.contains(*iterator) && !skippedChannels.contains(*iterator))
-            selectedChannels.append(*iterator);
+            mSelectedChannels.append(*iterator);
     }
 
     update();
@@ -3246,7 +3246,7 @@ void TraceView::selectChannels(const QList<int>& selectedIds){
 void TraceView::reset(){
     dataReady = false;
     if (multiColumns) columnDisplayChanged = true;
-    selectedChannels.clear();
+    mSelectedChannels.clear();
 
     //Retreive the new information
     nbChannels = tracesProvider.getNbChannels();
@@ -4599,6 +4599,7 @@ void TraceView::updateDrawing(){
 void TraceView::setMode(BaseFrame::Mode selectedMode,bool active){
     Mode previousMode = mode;
     mode = selectedMode;
+
     if (selectedMode == SELECT){
         setCursor(selectCursor);
         drawRubberBand(false);
@@ -4623,14 +4624,16 @@ void TraceView::setMode(BaseFrame::Mode selectedMode,bool active){
     }
 
     if (previousMode == SELECT){
-        selectedChannels.clear();
+        mSelectedChannels.clear();
         drawContentsMode = REDRAW;
-        if (active) update();
+        if (active)
+            update();
     } else if (previousMode == SELECT_EVENT){
         selectedEvent.first.clear();
         selectedEvent.second = 0;
         drawContentsMode = REDRAW;
-        if (active) update();
+        if (active)
+            update();
     } else if (previousMode == ADD_EVENT){
         newEventPosition = -1;
     } else if (previousMode == DRAW_LINE){
