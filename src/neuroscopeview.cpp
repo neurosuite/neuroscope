@@ -246,7 +246,7 @@ void NeuroscopeView::shownClustersUpdate(const QString &name, const QList<int>& 
     for(iterator = clustersToShow.constBegin(); iterator != iteratorEnd; ++iterator){
         currentSelectedClusters->append(*iterator);
     }
-    
+    qDebug()<<" void NeuroscopeView::shownClustersUpdate(const QString &name, const QList<int>& clustersToShow){*********************"<<clustersToShow;
     emit showClusters(name,*currentSelectedClusters);
 
     //Show all the enclosed widgets of the dockWindows.
@@ -530,4 +530,10 @@ void NeuroscopeView::setMode(BaseFrame::Mode selectedMode,bool active)
     else
         selectMode = false;
     emit modeToSet(selectedMode,active);
+}
+
+void NeuroscopeView::showLabelsUpdate(bool status)
+{
+    labelsDisplay = status;
+    emit showLabels(status);
 }

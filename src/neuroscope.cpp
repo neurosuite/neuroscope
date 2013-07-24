@@ -2858,6 +2858,7 @@ void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& sel
             QString providerName = groupIterator.key();
             QList<int> clusterIds = groupIterator.value();
             NeuroscopeView* view = activeView();
+            qDebug()<<" void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& selection){"<<selection;
             view->shownClustersUpdate(providerName,clusterIds);
         }
     }

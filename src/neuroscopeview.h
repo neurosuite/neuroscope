@@ -371,10 +371,7 @@ public:
     /**Displays or hides the labels next to the traces.
   * @param status true if the labels have to be drawn, false otherwise.
   */
-    void showLabelsUpdate(bool status){
-        labelsDisplay = status;
-        emit showLabels(status);
-    }
+    void showLabelsUpdate(bool status);
 
     /**Returns true if labels are drawn next to the traces, false otherwise.
   */

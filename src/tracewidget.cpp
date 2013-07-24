@@ -684,3 +684,8 @@ void TraceWidget::setMode(BaseFrame::Mode selectedMode,bool active)
 {
     view.setMode(selectedMode,active);
 }
+
+void TraceWidget::showLabels(bool show)
+{
+    view.showHideLabels(show);
+}

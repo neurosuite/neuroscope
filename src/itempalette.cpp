@@ -393,7 +393,7 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
         for(int i = 0; i < iterator.value()->count(); ++i) {
             QListWidgetItem *item = iterator.value()->item(i);
             if(item->isSelected()){
-                selectedItems.append(i);
+                selectedItems.append(item->data(ItemIconView::INDEXICON).toInt());
             }
         }
         selection.insert(groupName,selectedItems);
@@ -417,9 +417,9 @@ void ItemPalette::slotClickRedraw(){
             for(int i = 0 ; i<iterator.value()->count(); ++i ){
                 QListWidgetItem *item = iterator.value()->item(i);
                 if(item->isSelected()){
-                    selectedItems.append(i);
+                    selectedItems.append(item->data(ItemIconView::INDEXICON).toInt());
                     if(!browsingMap[i])
-                        itemsToSkip.append(i);
+                        itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
                     else
                         browsingEnable = true;
                 }
@@ -429,7 +429,7 @@ void ItemPalette::slotClickRedraw(){
                         itemsToRedraw.append(i);
                         needToBeUpdated = true;
                     }
-                    itemsToSkip.append(i);
+                    itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
                 }
             }
             selection.insert(groupName,selectedItems);

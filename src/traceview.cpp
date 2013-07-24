@@ -1962,7 +1962,8 @@ void TraceView::drawTraces(QPainter& painter){
                                 QColor color = colors->color(clusterId);
                                 QPen pen(color,1);
 
-                                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
+                                if (mSelectedChannels.contains(channelId))
+                                    pen.setWidth(2);
                                 pen.setCosmetic(true);
                                 painter.setPen(pen);
 
@@ -2001,15 +2002,20 @@ void TraceView::drawTraces(QPainter& painter){
 
             QMap<int,QList<int> >::Iterator iterator;
             for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
+                qDebug()<<" selectedClusters.begin()"<<*iterator;
                 QList<int> clusterList = iterator.value();
-                if (clusterList.size() == 0) continue;
+                if (clusterList.isEmpty())
+                    continue;
                 QString providerName = QString::number(iterator.key());
+                qDebug()<<" providerName "<<providerName;
                 ItemColors* colors = providerItemColors[providerName];
+                qDebug()<<" clustersData[providerName]"<<clustersData[providerName];
                 Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
                 int nbSpikes = currentData.nbOfColumns();
                 QList<int>::iterator clusterIterator;
-                for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
-                    QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
+                QList<int>::iterator clusterIteratorEnd(clusterList.end());
+                for(clusterIterator = clusterList.begin(); clusterIterator != clusterIteratorEnd; ++clusterIterator){
+                    const QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
 
                     qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
 
@@ -2046,6 +2052,7 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
     if (!multiColumns && (windowRectangle.left() >= xMargin)){
     }
     else{
+        qDebug()<<"void TraceView::drawChannelIdsAndGain(QPainter& painter){ ";
         QList<int> groupIds = shownGroupsChannels.keys();
         QList<int>::iterator iterator;
         for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
@@ -2079,9 +2086,10 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
         if (raster){
             //Draw the cluster labels
             for(int i = 0;i < static_cast<int>(clustersOrder.size());++i){
-                int position = rasterOrdinates[i];
-                QString clusterIdentifier = clustersOrder[i];
-                int abscissa = rasterAbscisses[i];
+                int position = rasterOrdinates.at(i);
+                QString clusterIdentifier = clustersOrder.at(i);
+                qDebug()<<"clusterIdentifier "<<clusterIdentifier;
+                int abscissa = rasterAbscisses.at(i);
                 QRect r;
                 QRect rHighlight;
 
@@ -3641,7 +3649,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
 
     updateNoneBrowsingClusterList(name,clustersToSkip);
 
-    if (clustersToShow.size() != 0){
+    if (!clustersToShow.isEmpty()){
         QList<int> clusters;
         QList<int>::iterator shownClustersIterator;
         for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator){
@@ -3649,6 +3657,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
         }
 
         selectedClusters.insert(name.toInt(),clusters);
+        qDebug()<<"name.toInt() "<<name.toInt();
         ClusterData* clusterData = new ClusterData();
         clustersData.insert(name,clusterData);
 
@@ -3659,6 +3668,7 @@ void TraceView::addClusterProvider(ClustersProvider* clustersProvider,QString na
         }
     }
 
+    qDebug()<<" void TraceView::addClusterProvider*************************************"<<name;
     clusterProviders.insert(name,clustersProvider);
     providerItemColors.insert(name,clusterColors);
 
@@ -3684,15 +3694,17 @@ void TraceView::removeClusterProvider(const QString &name, bool active){
 
 
 void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){
-    ClusterData* clusterData;
-    clusterData = clustersData[name];
+    qDebug()<<" void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){"<<name;
+    ClusterData* clusterData = clustersData[name];
 
     QList<int> clusters;
     if (!clustersToShow.isEmpty()){
+        qDebug()<<" selectedClusters.insert(name.toInt(),clustersToShow);"<<clustersToShow;
         selectedClusters.insert(name.toInt(),clustersToShow);
         if (clusterData == 0){
             clusterData = new ClusterData();
             clustersData.insert(name,clusterData);
+            qDebug()<<" name "<<name;
             ClustersProvider* provider = clusterProviders[name];
             setCursor(Qt::WaitCursor);
             updateWindow();

@@ -283,7 +283,7 @@ public Q_SLOTS:
     /**Informs the view to show or hide the labels display next to the traces.
   * @param show true if the labels have to be shown, false otherwise.
   */
-    void showLabels(bool show){view.showHideLabels(show);}
+    void showLabels(bool show);
 
     /**Displays the traces starting at the given time @p time in miliseconds and for the given duration @p duration.
   * The selection widgets are updated accordingly.

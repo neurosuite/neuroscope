@@ -127,8 +127,9 @@ int ClustersProvider::loadData(){
     int l = 0;
     char clusterID[255];
     for(uint i = 0 ; i < size ; ++i){
-        if(buffer[i] >= '0' && buffer[i] <= '9') clusterID[l++] = buffer[i];
-        else if(l){
+        if(buffer[i] >= '0' && buffer[i] <= '9')  {
+            clusterID[l++] = buffer[i];
+        } else if(l) {
             clusterID[l] = '\0';
             long id = atol(clusterID);
             clusters[k++] = id;//Warning if the typedef dataType changes, change will have to be made here.
