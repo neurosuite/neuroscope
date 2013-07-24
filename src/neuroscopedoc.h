@@ -481,7 +481,7 @@ public:
     QString sessionPath() const;
 
     /**Returns the total length of the document in seconds.*/
-    long long recordingLength();
+    qlonglong recordingLength() const;
 
     /**Tells if there is opened document to be closed.
    * @return true if there is a document to close, false otherwise.

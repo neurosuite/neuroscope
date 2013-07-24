@@ -98,7 +98,7 @@ public:
     ~TraceView();
 
     /// Added by M.Zugaro to enable automatic forward paging
-    long long recordingLength() const { return length; }
+    qlonglong recordingLength() const { return length; }
     void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
 
     /**Enum to be use as a Mode.
@@ -952,7 +952,7 @@ private:
     QString eventProviderToSkip;
 
     /**Length of the recording in miliseconds.*/
-    long long length;
+    qlonglong length;
 
     /**Pair storing the event provider and the event id corresponding to the currently selected event.*/
     QPair<QString,int> selectedEvent;

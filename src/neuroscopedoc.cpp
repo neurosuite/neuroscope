@@ -962,7 +962,7 @@ void NeuroscopeDoc::setSamplingRate(double rate){
     if(tracesProvider){
         //Inform the tracesProvider
         tracesProvider->setSamplingRate(rate);
-        long long length = tracesProvider->recordingLength();
+        qlonglong length = tracesProvider->recordingLength();
 
         //Get the active view and make it the first to take the modification into account.
         NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
@@ -1807,7 +1807,7 @@ void NeuroscopeDoc::synchronize(){
     }
 }
 
-long long NeuroscopeDoc::recordingLength(){
+qlonglong NeuroscopeDoc::recordingLength() const{
     return tracesProvider->recordingLength();
 }
 

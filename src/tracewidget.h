@@ -304,7 +304,7 @@ public Q_SLOTS:
   * Informs the view to update the traces.
   * @param length the newly computed length of the document.
   */
-    void samplingRateModified(long long length);
+    void samplingRateModified(qlonglong length);
 
     /**Adds a new provider of cluster data.
   * @param clustersProvider provider of cluster data.

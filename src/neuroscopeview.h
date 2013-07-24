@@ -135,7 +135,7 @@ public:
     * Informs all the child widgets that the sampling rate for the document has changed.
     * @param recordingLength the newly computed length of the document.
     */
-    void samplingRateModified(long long recordingLength){
+    void samplingRateModified(qlonglong recordingLength){
         emit newSamplingRate(recordingLength);
     }
 
@@ -727,13 +727,13 @@ Q_SIGNALS:
     void newClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
                             QList<int>& clustersToShow,QMap<int, QList<int> >* displayGroupsClusterFile,
                             QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip);
-    void newSamplingRate(long long recordingLength);
-    void clusterProviderRemoved(QString name,bool active);
+    void newSamplingRate(qlonglong recordingLength);
+    void clusterProviderRemoved(const QString &name,bool active);
     void showClusters(const QString& name,const QList<int>& clustersToShow);
     void clusterColorUpdated(const QString &name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();
-    void print(QPainter& printPainter,int width, int height,QString filePath,bool whiteBackground);
+    void print(QPainter& printPainter,int width, int height, const QString &filePath,bool whiteBackground);
     void newEventProvider(EventsProvider* eventsProvider,QString name,ItemColors* eventColors,bool active,
                           QList<int>& eventsToShow,const QList<int>& eventsToSkip);
     void eventProviderRemoved(const QString &name,bool active,bool lastFile);

@@ -374,7 +374,7 @@ void TracesProvider::computeRecordingLength(){
         if ( extraData < 0 ) extraData = 0;
         int64_t		dataLength = nRecords*nSamplesPerRecord*dataSize+extraData;
 
-        length = static_cast<long long>(
+        length = static_cast<qlonglong>(
                     static_cast<float>(
                         dataLength / static_cast<float>(samplingRate * dataSize)  // Only one channel per file!
                         ) * 1000
@@ -383,7 +383,7 @@ void TracesProvider::computeRecordingLength(){
     }
     else
     {
-        length = static_cast<long long>(
+        length = static_cast<qlonglong>(
                     static_cast<float>(
                         fileLength / static_cast<float>(nbChannels * samplingRate * dataSize)
                         ) * 1000

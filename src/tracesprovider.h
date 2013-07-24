@@ -102,7 +102,7 @@ public:
     int getOffset() const {return offset;}
 
     /**Returns the total length of the document in miliseconds.*/
-    long long recordingLength()const{return length;}
+    qlonglong recordingLength()const{return length;}
 
     /**Computes the number of samples between @p startTime and @p endTime.
   * @param startTime begining of the time frame from which the data have been retrieved, given in milisecond.
@@ -136,7 +136,7 @@ private:
     int offset;
 
     /**the total length of the document in miliseconds.*/
-    long long length;
+    qlonglong length;
 
     //Functions
 
