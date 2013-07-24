@@ -34,7 +34,8 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setFrameStyle(QFrame::NoFrame);
     setResizeMode(QListWidget::Adjust);
     setViewMode(mode);
-    setGridSize(QSize(gridX,gridY));
+    if (mode == QListView::IconMode)
+        setGridSize(QSize(gridX,gridY));
     setWordWrap(false);
     setAutoFillBackground(true);
     viewport()->setAutoFillBackground(false);
