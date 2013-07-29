@@ -339,26 +339,19 @@ void ItemPalette::slotMousePressed(const QString& sourceGroupName,bool shiftKey,
                     QMap<int,bool> browsingMap = browsingStatus[sourceGroupName];
                     QList<int> itemsToSkip;
                     bool hasChanged = false;
-                    /*
-                    Q3IconViewItem* item;
-                    for(int i = 0;i<2;++i){
-                        item = iconView->findItem(QString::number(i),Q3ListBox::ExactMatch|Qt::CaseSensitive);
-                        if(item != 0){
+                    for (int i = 0; i < iconView->count(); ++i) {
+                        QListWidgetItem * item = iconView->item(i);
+                        if (item->text() == QLatin1String("0") || item->text() == QLatin1String("1")) {
                             item->setSelected(false);
-                            int currentIndex = item->index();
-                            if(browsingMap[currentIndex]){
+                            if(browsingMap[i]){
                                 hasChanged = true;
-                                browsingMap[currentIndex] = false;
-                                QString label = item->text();
-                                redrawItem(iconView,itemColors,currentIndex,browsingMap);
+                                browsingMap[i] = false;
+                                redrawItem(iconView,i,browsingMap);
                                 isInSelectItems = true;//redrawItem sets it back to false
-                                item = iconView->findItem(label,Q3ListBox::ExactMatch|Qt::CaseSensitive);
-                                itemsToSkip.append(itemColors->itemId(currentIndex));
                             }
-                            else itemsToSkip.append(itemColors->itemId(currentIndex));
+                            itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
                         }
                     }
-                    */
                     if(hasChanged){
                         browsingStatus.insert(sourceGroupName,browsingMap);
                         emit updateItemsToSkip(sourceGroupName,itemsToSkip);
