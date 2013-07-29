@@ -143,6 +143,8 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     if (data.isEmpty())
         return false;
 
+    const QString sourceGroupName = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
+
     QDataStream stream(data);
 
     QList<int> channelIds;
@@ -154,7 +156,6 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         delete item;
     }
 
-    const QString sourceGroupName = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
     const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
     if (moveAllGroup) {
         const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
@@ -195,153 +196,3 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     }
     QListWidget::mousePressEvent(event);
 }
-
-#if PORTING_KDAB
-
-
-void ChannelIconView::slotDropped(QDropEvent* event,const Q3ValueList<Q3IconDragItem>& draggedList){
-    //The source of the drag is not a widget of the application
-    if (event->source() == 0 || !drag){
-        event->ignore();
-        return;
-    }
-
-    //Drop of a label to move the whole block
-    if (QString(event->format()).contains("text/plain")){
-        QString information;
-        if (Q3TextDrag::decode(event,information)){
-            int groupSource = information.section("-",0,0).toInt();
-            int start = information.section("-",1,1).toInt();
-            QString groupTarget = this->name();
-            emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
-            return;
-        }
-    }
-
-
-    if (event->action() == QDropEvent::Move){
-        event->acceptAction();
-
-        QString groupSource = (event->source())->parent()->name();
-
-        QList<int> channelIds;
-        QList<Q3IconDragItem>::const_iterator iterator;
-        for(iterator = draggedList.begin(); iterator != draggedList.end(); ++iterator){
-            QTextCodec* codec = QTextCodec::codecForLocale();
-            QByteArray data =  (*iterator).data();
-            int channelId = codec->toUnicode(data).toInt();
-            channelIds.append(channelId);
-        }
-
-        QList<int> selectedChannels;
-        for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-            if (item->isSelected())
-                selectedChannels.append(item->text().toInt());
-
-        //If all the channels are selected insert after the first one.
-        if (selectedChannels.size() == this->count()){
-            emit channelsMoved(this->name(),0);
-            return;
-        }
-
-        Q3IconViewItem* after = findItemToInsertAfter(event->pos());
-        emit channelsMoved(this->name(),after);
-    }
-}
-
-void ChannelIconView::contentsDropEvent(QDropEvent* event){
-    if (event->source() == 0 || !drag){
-        event->ignore();
-        return;
-    }
-    if ((event->source())->parent()->objectName() != objectName()){
-        Q3IconView::contentsDropEvent(event);
-        return;
-    }
-
-    //Move items around in the iconview
-    Q3IconViewItem* item = findItem(event->pos());
-    if (item == 0){
-        QList<int> selectedChannels;
-        for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem())
-            if (item->isSelected()) selectedChannels.append(item->text().toInt());
-
-        //If all the items have been selected, do not do anything
-        if (selectedChannels.size() == count()){
-            Q3IconView::contentsDropEvent(event);
-            arrangeItemsInGrid();
-            return;
-        }
-
-        Q3IconViewItem* after = findItemToInsertAfter(event->pos());
-
-        Q3IconView::contentsDropEvent(event);
-        emit channelsMoved(selectedChannels,this->objectName(),after);
-    }
-    else{
-        Q3IconView::contentsDropEvent(event);
-        return;
-    }
-}
-
-Q3IconViewItem* ChannelIconView::findItemToInsertAfter(QPoint position){
-    int posX = position.x();
-    int posY = position.y();
-    
-    int firstY = firstItem()->pos().y();
-    //test if the position is above all the other items, if so find the item to insert after.
-    if (posY < firstY){
-        Q3IconViewItem* after = 0L;
-        for(Q3IconViewItem* item = firstItem(); item; item = item->nextItem()){
-            if (!item->isSelected()){
-                after = item;
-                if (((item->pos().y() == firstY) && (item->pos().x() >= posX)) || (item->pos().y() > firstY)){
-                    if (item->index() == 0) return 0;
-                    else{
-                        //take the first item before the current one which is not selected (<=> not to be moved)
-                        Q3IconViewItem* after = item->prevItem();
-                        while(after->isSelected()){
-                            if (after->index() == 0) return 0;
-                            else after = after->prevItem();
-                        }
-                        return after;
-                    }
-                }
-            }
-        }
-        //if the location is on above the first line but after the last item of the first line.
-        return after;
-    }
-
-    int lastY = lastItem()->pos().y();
-    //else test if the position is below all the other items, if so find item to insert after.
-    if (posY > lastY){
-        for(Q3IconViewItem* item = lastItem(); item; item = item->prevItem()){
-            if (!item->isSelected()){
-                if (((item->pos().y() == lastY) && (item->pos().x() <= posX)) || (item->pos().y() < lastY)){
-                    if (item->index() == 0 && posX < item->pos().x()) return 0;
-                    else return item;
-                }
-            }
-        }
-    }
-    //else the other cases
-    Q3IconViewItem* item;
-    for(item = lastItem(); item;item = item->prevItem())
-        if (!item->isSelected() && (item->pos().y() <= posY)) break;
-
-    int maxY = item->pos().y();
-    for(;item;item = item->prevItem()){
-        if (!item->isSelected()){
-            if ((item->pos().x() <= posX) || (item->pos().y() < maxY) || item == firstItem()){
-                if (item->index() == 0 && posX < item->pos().x()) return 0;
-                else return item;
-            }
-        }
-    }
-
-    //Normally never reach
-    return lastItem();
-}
-#endif
-
