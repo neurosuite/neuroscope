@@ -188,7 +188,6 @@ void ItemPalette::updateItemList(const QString& groupName, ItemColors* itemColor
     }
 
     browsingStatus.insert(groupName,browsingMap);
-    qDebug()<<" browsingMap"<<browsingMap;
     if(nbItems == 0)
         iconView->resize(50,20);
     else
@@ -539,7 +538,7 @@ void ItemPalette::slotMouseReleased(const QString& sourceGroupName){
 }
 
 
-void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> browsingMap){
+void ItemPalette::redrawItem(ItemIconView* iconView,int index, const QMap<int,bool>& browsingMap){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
 
     QListWidgetItem *item = iconView->item(index);
@@ -547,7 +546,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index,QMap<int,bool> bro
         return;
 
     isInSelectItems = true;
-    bool browsingStatus = browsingMap[item->data(ItemIconView::INDEXICON).toInt()];
+    bool browsingStatus = browsingMap[index];
     //Recreate the item
     QPixmap pixmap(14,14);
     pixmap.fill(backgroundColor);
@@ -756,7 +755,6 @@ void ItemPalette::reset(){
 
 void ItemPalette::createGroup(const QString &id)
 {
-    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"<<id;
     ItemGroupView* group = new ItemGroupView(backgroundColor,this);
 
     group->setObjectName(id);
@@ -807,9 +805,6 @@ void ItemPalette::createGroup(const QString &id)
     if (iconView->size().isNull()) {
         iconView->resize(50,50);
     }
-    qDebug()<<" group"<<group->size();
-    qDebug()<<" iconView"<<iconView->size();
-
 
     //Signal and slot connection
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));

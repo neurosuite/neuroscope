@@ -215,7 +215,7 @@ private:
     * @param index index in itemColors or in the iconview (the are identical) of the item to recreate.
     * @param browsingMap map giving the browsing status of the items contained in the iconView.
     */
-    void redrawItem(ItemIconView* iconView, int index, QMap<int,bool> browsingMap);
+    void redrawItem(ItemIconView* iconView, int index, const QMap<int, bool> &browsingMap);
     
     /**Selects the group identify by @p groupName.
     * @param groupName the group to be selected.
