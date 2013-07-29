@@ -467,11 +467,7 @@ public:
 
     /**Deletes the selected event.
   */
-    void removeEvent(){
-        emit eventToRemove();
-        emit updateEventDisplay();
-    }
-
+    void removeEvent();
     /**Updates the traceView if concerned by the suppression of the event.
   * @param providerName name use to identified the event provider containing the removed event.
   * @param eventId id of the removed event.

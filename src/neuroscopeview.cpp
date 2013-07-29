@@ -381,6 +381,7 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
 
     if(selectedEvents.contains(providerName)){
         QList<int>* currentSelectedEvents = selectedEvents.take(providerName);
+        qDebug()<<" currentSelectedEvents"<<currentSelectedEvents;
         QList<int>* newSelectedEventsIds = new QList<int>();
         QList<int>::iterator iterator;
 
@@ -403,6 +404,7 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
             }
         }
 
+        qDebug()<<" newSelectedEventsIds ******************************************************"<<(*newSelectedEventsIds);
         selectedEvents.insert(providerName,newSelectedEventsIds);
         delete currentSelectedEvents;
 
@@ -548,5 +550,11 @@ const QList<int>* NeuroscopeView::getSelectedClusters(const QString& name) const
 
 const QList<int>* NeuroscopeView::getSelectedEvents(const QString& name) const
 {
+    qDebug()<<" selectedEvents[name]"<<(*selectedEvents[name]);
     return selectedEvents[name];
+}
+
+void NeuroscopeView::removeEvent(){
+    emit eventToRemove();
+    emit updateEventDisplay();
 }

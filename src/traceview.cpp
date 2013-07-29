@@ -4281,14 +4281,14 @@ void TraceView::channelColorUpdate(int channelId,bool active){
 }
 
 void TraceView::removeEvent(){
-    if (selectedEvent.first != ""){
+    if (!selectedEvent.first.isEmpty()){
         Array<dataType>& currentData = static_cast<EventData*>(eventsData[selectedEvent.first])->getTimes();
         Array<int>& currentIds = static_cast<EventData*>(eventsData[selectedEvent.first])->getIds();
         int nbEvents = currentData.nbOfColumns();
         for(int i = 1; i <= nbEvents;++i){
             dataType index = currentData(1,i);
             int eventId = currentIds(1,i);
-            if (eventId == selectedEvent.second && index == selectedEventPosition[0]){
+            if (eventId == selectedEvent.second && index == selectedEventPosition.at(0)){
                 double samplingRate = static_cast<double>(tracesProvider.getSamplingRate()) / 1000.0;//in eventProvider the time is in miliseconds
                 double time = (static_cast<double>(index) / samplingRate) + static_cast<double>(startTime);
                 eventBeingModified = true;
