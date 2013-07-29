@@ -231,13 +231,13 @@ public:
    * @param name name use to identified the cluster provider containing selected the clusters.
    * @return the list of selected clusters.
    */
-    const QList<int>* getSelectedClusters(const QString& name) const{return selectedClusters[name];}
+    const QList<int>* getSelectedClusters(const QString& name) const;
 
     /** Returns the list containing the selected events for the given event provider @p identified by name.
    * @param name name use to identified the event provider containing selected the events.
    * @return the list of selected events.
    */
-    const QList<int>* getSelectedEvents(const QString& name) const{return selectedEvents[name];}
+    const QList<int>* getSelectedEvents(const QString& name) const;
 
     /**Updates the selected tool, methode call after the user selected a tool.
    * @param selectedMode the new mode.
@@ -248,7 +248,7 @@ public:
     /** Tests if the currently selected tool is the selection one.
    * @ return true if the current tool is the selection one, false otherwise.
    */
-    bool isSelectionTool(){return selectMode;}
+    bool isSelectionTool() const {return selectMode;}
 
     /**Changes the color of a channel.
    * @param channelId id of the channel to redraw.

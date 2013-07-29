@@ -274,6 +274,7 @@ void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QStri
     for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator)
         currentSelectedEvents->append(*shownEventsIterator);
 
+    qDebug()<<" void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QString &name,ItemColors* eventColors,bool active,"<<name;
     selectedEvents.insert(name,currentSelectedEvents);
 
 
@@ -385,8 +386,10 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
 
         //An event description has been added
         if(added){
-            for(iterator = currentSelectedEvents->begin(); iterator != currentSelectedEvents->end(); ++iterator)
+            for(iterator = currentSelectedEvents->begin(); iterator != currentSelectedEvents->end(); ++iterator) {
                 newSelectedEventsIds->append(oldNewEventIds[*iterator]);
+                qDebug()<<" oldNewEventIds"<<oldNewEventIds[*iterator];
+            }
 
             //Add the new type of event to the active view in order to display the added event right away.
             if(active)newSelectedEventsIds->append(modifiedEventId);
@@ -536,4 +539,14 @@ void NeuroscopeView::showLabelsUpdate(bool status)
 {
     labelsDisplay = status;
     emit showLabels(status);
+}
+
+const QList<int>* NeuroscopeView::getSelectedClusters(const QString& name) const
+{
+    return selectedClusters[name];
+}
+
+const QList<int>* NeuroscopeView::getSelectedEvents(const QString& name) const
+{
+    return selectedEvents[name];
 }

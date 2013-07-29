@@ -2353,7 +2353,7 @@ void NeuroscopeDoc::eventAdded(const QString &providerName,const QString &addEve
 
 
     //Update the event palette
-    ItemPalette* eventPalette = dynamic_cast<NeuroscopeApp*>(parent)->getEventPalette();
+    ItemPalette* eventPalette = static_cast<NeuroscopeApp*>(parent)->getEventPalette();
     const QList<int>* selectedEvents = activeView->getSelectedEvents(providerName);
     const QList<int>* skippedEvents = activeView->getEventsNotUsedForBrowsing(providerName);
     eventPalette->selectItems(providerName,*selectedEvents,*skippedEvents);
@@ -2469,7 +2469,7 @@ void NeuroscopeDoc::slotNewEventDescriptionCreated(const QString &providerName,Q
 
 
     //Update the event palette
-    ItemPalette* eventPalette = dynamic_cast<NeuroscopeApp*>(parent)->getEventPalette();
+    ItemPalette* eventPalette = static_cast<NeuroscopeApp*>(parent)->getEventPalette();
     eventPalette->removeGroup(providerName);
     eventPalette->createItemList(currentEventColors,providerName,eventsProvider->getDescriptionLength());
     eventPalette->selectGroup(providerName);
