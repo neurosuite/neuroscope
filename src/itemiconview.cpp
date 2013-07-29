@@ -39,6 +39,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setWordWrap(false);
     setAutoFillBackground(true);
     viewport()->setAutoFillBackground(false);
+    setSelectionRectVisible (false);
     //Set the iconView color, the foreground color depends on the background color
     QPalette palette;
     palette.setColor(backgroundRole(), backgroundColor);
