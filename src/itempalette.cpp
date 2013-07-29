@@ -722,11 +722,13 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clearSelection();
 
+    qDebug()<<"ItemPalette::selectItem "<<itemsToSelect<<" itemsToSkip"<<itemsToSkip;
     //update the browsing map and rebuild the icons
     QMap<int,bool> browsingMap = browsingStatus[groupName];
     browsingMap.clear();
+    QListWidgetItem *item = 0;
     for(int i=0;i<iconView->count();++i) {
-        QListWidgetItem *item = iconView->item(i);
+        item = iconView->item(i);
         if(itemsToSkip.contains(item->data(ItemIconView::INDEXICON).toInt()))
             browsingMap.insert(i,false);
         else
@@ -739,11 +741,9 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
     }
     browsingStatus.insert(groupName,browsingMap);
 
-#if 0
     //Last item in selection gets focus if it exists
     if(!itemsToSelect.isEmpty())
-        iconView->setCurrentItem(currentIcon);
-#endif
+        iconView->setCurrentItem(item);
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
 }
