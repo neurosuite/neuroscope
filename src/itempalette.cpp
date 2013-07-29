@@ -722,7 +722,6 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clearSelection();
 
-    qDebug()<<"ItemPalette::selectItem "<<itemsToSelect<<" itemsToSkip"<<itemsToSkip;
     //update the browsing map and rebuild the icons
     QMap<int,bool> browsingMap = browsingStatus[groupName];
     browsingMap.clear();
@@ -737,7 +736,6 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
         if (itemsToSelect.contains(i)) {
             item->setSelected(true);
         }
-
     }
     browsingStatus.insert(groupName,browsingMap);
 
