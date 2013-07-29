@@ -1048,6 +1048,7 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 }
 
 void NeuroscopeApp::updateBrowsingStatus(){
+    qDebug()<<"void NeuroscopeApp::updateBrowsingStatus(){ ";
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette = 0;
         for(int i = 0; i<paletteTabsParent->count();++i){
@@ -2259,6 +2260,7 @@ void NeuroscopeApp::slotPaletteTabChange(int index){
         //Update the selected items of the current palette
         if(qobject_cast<ItemPalette*>(widget)){
             QString name = widget->objectName();
+            qDebug()<<" name "<<name;
             if(name.contains("clusterPanel")){
                 ItemPalette* clusterPalette = static_cast<ItemPalette*>(widget);
                 NeuroscopeView* view = activeView();
@@ -2270,10 +2272,9 @@ void NeuroscopeApp::slotPaletteTabChange(int index){
                 }
                 slotStateChanged("clusterTabState");
 
-                if(!clusterPalette->isBrowsingEnable()) {
+                if (!clusterPalette->isBrowsingEnable()) {
                     slotStateChanged("noClusterBrowsingState");
-                }
-                else{
+                } else {
                     slotStateChanged("clusterBrowsingState");
                 }
             }

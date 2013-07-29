@@ -79,6 +79,7 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
         return;
     if(event->button() == Qt::LeftButton && (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier)){
         emit mousePressWAltButton(this->objectName(),item);
+        return;
     } else if(event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(this->objectName(),item);
         emit mousePressMiddleButton(item);

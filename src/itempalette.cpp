@@ -540,7 +540,6 @@ void ItemPalette::slotMouseReleased(const QString& sourceGroupName){
 
 void ItemPalette::redrawItem(ItemIconView* iconView,int index, const QMap<int,bool>& browsingMap){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
-
     QListWidgetItem *item = iconView->item(index);
     if (!item)
         return;
@@ -598,7 +597,17 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
     if(!item->isSelected())
         return;
 
-    const int index = item->data(ItemIconView::INDEXICON).toInt();
+    int index = -1;
+    for(int i = 0; i < iconView->count();++i) {
+        if (iconView->item(i) == item) {
+            index = i;
+            break;
+        }
+    }
+    if (index == -1) {
+        return;
+    }
+    isInSelectItems = true;
     if(browsingMap[index]){
         browsingMap[index] = false;
         browsingStatus.insert(sourceGroup,browsingMap);
@@ -630,6 +639,7 @@ void ItemPalette::slotMousePressWAltButton(const QString& sourceGroup,QListWidge
         else
             emit eventsToBrowse();
     }
+    isInSelectItems = false;
 }
 
 void ItemPalette::changeBackgroundColor(const QColor& color){
