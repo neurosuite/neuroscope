@@ -2054,7 +2054,6 @@ void TraceView::drawChannelIdsAndGain(QPainter& painter){
     if (!multiColumns && (windowRectangle.left() >= xMargin)){
     }
     else{
-        qDebug()<<"void TraceView::drawChannelIdsAndGain(QPainter& painter){ ";
         QList<int> groupIds = shownGroupsChannels.keys();
         QList<int>::iterator iterator;
         for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
