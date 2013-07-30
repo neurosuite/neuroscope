@@ -161,17 +161,19 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
             channelOffsets.append(0);
 
     //The initial amplitude and factor for each channel.
-    if (gains.size() == 0)
+    if (gains.isEmpty()) {
         setGains(unitGain,acquisitionGain);
-    else{
+    } else {
         //Compute alpha: (3.traceVspace) / (Utheta . acquisitionGain)
         //Utheta: amplitude maximal of theta in milivolts, 0.4 mv
         alpha =  static_cast<float>(static_cast<float>(3 * traceVspace) /
                                     static_cast<float>(0.4 *  static_cast<float>(acquisitionGain)));
         //factor = alpha * (4/3)^gain
         for(int i = 0; i < nbChannels; ++i){
-            float Yfactor = static_cast<float>(alpha * pow(0.75,gains[i]));
-            channelFactors.append(Yfactor);
+            if (i<gains.count()) {
+               float Yfactor = static_cast<float>(alpha * pow(0.75,gains[i]));
+               channelFactors.append(Yfactor);
+            }
         }
     }
 
