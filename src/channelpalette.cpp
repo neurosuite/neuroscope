@@ -1580,6 +1580,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
     QPainter painter;
     ChannelIconView* iconView = iconviewDict[sourceGroup];
 
+    qDebug()<<" void ChannelPalette::moveChannels(const QList<int>& channelIds "<<after;
     //If the items have to be moved before the first item, insert them after the first item
     //and then move the first item after the others
     bool moveFirst = false;
@@ -1615,9 +1616,6 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         after = new ChannelIconViewItem(QIcon(pixmap),channelId);
         iconView->insertItem(afterIndex,after);
     }
-
-    //iconView->arrangeItemsInGrid();
-
     //Modify the entry in the map group-channel list
     QList<int> sourceChannels;
     for(int i=0; i<iconView->count();++i) {
