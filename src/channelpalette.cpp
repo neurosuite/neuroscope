@@ -2129,9 +2129,9 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
 void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index)
 {
+    QString afterId;
+    bool beforeFirst = false;
     if(destinationGroup == "0" ){
-        QString afterId;
-        bool beforeFirst = false;
         if(index == 0){
             beforeFirst = true;
         } else {
@@ -2139,7 +2139,18 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
         }
 
         emit channelsMovedToTrash(items,afterId,beforeFirst);
+    } else if ( sourceGroup == "0" ){
+        if(index == 0){
+            beforeFirst = true;
+        } else {
+            afterId = QString::number(index);
+        }
+
+        emit channelsMovedAroundInTrash(items,afterId,beforeFirst);
     }
     moveChannels(items,sourceGroup,destinationGroup, index);
+    //Inform the application that the spike groups have been modified (use to warn the user at the end of the session)
+    emit groupModified();
+
     update();
 }
