@@ -154,14 +154,8 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             ChannelIconViewItem *item = new ChannelIconViewItem(this);
             stream >> *item;
             channelIds.prepend(item->text().toInt());
-            delete item;
         }
         if (moveAllGroup) {
-            const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
-            for (int i=0; i< numberOfItems; ++i) {
-                ChannelIconViewItem *item = new ChannelIconViewItem(this);
-                stream >> *item;
-            }
             emit removeGroup(sourceGroupName);
             //emit channelsMoved(objectName(), /*item(index)*/0);
             return true;
@@ -172,8 +166,8 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             //Find last item
             posItem = item(count()-1);
         }
-        emit channelsMoved(objectName(), posItem);
-        emit channelsMoved(channelIds, sourceGroupName, posItem);
+        //emit channelsMoved(objectName(), posItem);
+        //emit channelsMoved(channelIds, sourceGroupName, posItem);
 
     } else {
         //Same group
