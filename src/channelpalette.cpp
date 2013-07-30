@@ -1327,7 +1327,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds)
 
 }
 
-void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup){
+void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup, int index){
     QList<int> targetChannels = (*groupsChannels)[targetGroup.toInt()];
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
@@ -1356,8 +1356,12 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(*iterator);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-            new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator),targetIconView);
-
+            if (index != -1) {
+                ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
+                targetIconView->insertItem(index, item);
+            } else {
+                new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator), targetIconView);
+            }
             //Update the group color
             if(type == DISPLAY)
                 channelColors->setGroupColor(*iterator,groupColor);
@@ -2132,13 +2136,5 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
 void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index)
 {
-    qDebug()<<" sourceGroup"<<sourceGroup<<" destinationGroup"<<destinationGroup<<" index "<<index;
-    ChannelIconView* iconViewSource = iconviewDict[sourceGroup];
-    ChannelIconView* iconViewDestination = iconviewDict[destinationGroup];
-
-    Q_FOREACH(int item, items) {
-        QList<QListWidgetItem*> lst = iconViewSource->findItems(QString::number(item),Qt::MatchExactly);
-        QListWidgetItem * t = iconViewSource->takeItem(iconViewSource->row(lst.first()));
-        iconViewDestination->insertItem(index, t);
-    }
+    moveChannels(items,sourceGroup,destinationGroup, index);
 }
