@@ -177,6 +177,11 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
 
     } else {
         //Same group
+        if (moveAllGroup) {
+            //don't move it.
+            return false;
+        }
+
         QList<int> channelIds;
         for (int i=0; i< numberOfItems; ++i) {
             ChannelIconViewItem *item = new ChannelIconViewItem(this);
@@ -185,23 +190,11 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             delete item;
         }
 
-        if (moveAllGroup) {
-            const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
-            for (int i=0; i< numberOfItems; ++i) {
-                ChannelIconViewItem *item = new ChannelIconViewItem(this);
-                stream >> *item;
-            }
-            emit removeGroup(sourceGroupName);
-            //emit channelsMoved(objectName(), /*item(index)*/0);
-            return true;
-        }
-
         QListWidgetItem *posItem = item(index);
         if (!posItem) {
             //Find last item
             posItem = item(count()-1);
         }
-        //emit channelsMoved(objectName(), posItem);
         emit channelsMoved(channelIds, sourceGroupName, posItem);
     }
     return true;
@@ -214,7 +207,6 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     if (item == 0L)
         return;
 
-    qDebug()<<"void ChannelIconView::mousePressEvent(QMouseEvent* event) ";
     //  if (event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
     //   !(event->modifiers() & Qt::ControlModifier)){
     //    emit moussePressWoModificators(this->name());
