@@ -124,11 +124,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     if((resolution == 12) | (resolution == 14) | (resolution == 16)){
         Array<short> retrieveData(nbSamples,nbChannels);
         off_t nbValues = nbSamples * nbChannels;
-
         // Is this a Neuralynx file?
         int p = fileName.lastIndexOf(".ncs");
         if ( p != -1 )
         {
+            qDebug()<<"NCS";
             /// Modified by M.Zugaro to read Neuralynx ncs format
 
             // Neuralynx headers
@@ -242,43 +242,43 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         }
         else
         {
-            FILE* dataFile = fopen(fileName.toLatin1(),"rb");
-            if(dataFile == NULL){
-                //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
+            QFile dataFile(fileName);
+            if (!dataFile.open(QIODevice::ReadOnly)) {
                 data.setSize(0,0);
                 emit dataReady(data,initiator);
                 return;
             }
-            //go to the startInRecordingUnits position
-            off_t position = static_cast<off_t>(static_cast<off_t>(startInRecordingUnits)* static_cast<off_t>(nbChannels));
-            //C++ code:  dataFile.seekg(static_cast<off_t>(position * sizeof(short)),ios::beg);
-            fseeko64(dataFile,static_cast<off_t>(position * sizeof(short)),SEEK_SET);
-            // copy the data into retrieveData.
-            //C++ code: dataFile.read((char*)(&(retrieveData[0])),sizeof(short) * nbValues);
-            off_t nbRead = fread((char*)(&(retrieveData[0])),sizeof(short),nbValues,dataFile);
 
-            if(nbRead != nbValues){
+            off_t position = static_cast<off_t>(static_cast<off_t>(startInRecordingUnits)* static_cast<off_t>(nbChannels));
+
+            dataFile.seek(position * sizeof(short));
+            off_t nbRead = 0;
+            for (int i = 0; i < nbValues; ++i) {
+                nbRead += dataFile.read(reinterpret_cast<char*>(&retrieveData[i]), sizeof(short));
+            }
+
+            // copy the data into retrieveData.
+            if(nbRead != nbValues*sizeof(short)){
                 //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
                 data.setSize(0,0);
-                fclose(dataFile);
+                dataFile.close();
                 emit dataReady(data,initiator);
                 return;
             }
-            fclose(dataFile);
+            dataFile.close();
         }
         //Apply the offset if need it,convert to dataType and store the values in data.
         if(offset != 0){
             for(off_t i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
             }
-        }
-        else{
+        } else {
+
             for(off_t i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]);
             }
         }
-    }
-    else if(resolution == 32){
+    } else if(resolution == 32) {
         Array<dataType> retrieveData(nbSamples,nbChannels);
         FILE* dataFile = fopen(fileName.toLatin1(),"rb");
         if(dataFile == NULL){
