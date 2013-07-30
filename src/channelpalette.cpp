@@ -288,7 +288,6 @@ void ChannelPalette::hideChannels()
     //Change the status show/hide of the selected channels
     updateShowHideStatus(false);
 
-    qDebug()<<" getShowHideChannels(false) :"<<getShowHideChannels(false)<<" getShowHideChannels(true)"<<getShowHideChannels(true);
     emit updateHideChannels(getShowHideChannels(false));
     emit updateShownChannels(getShowHideChannels(true));
 }
@@ -1272,7 +1271,6 @@ void ChannelPalette::selectAllChannels(){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
-    qDebug()<<" ChannelPalette::selectAllChannels(){";
     //unselect all the items first
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
     while (iteratordict.hasNext()) {
@@ -1524,7 +1522,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-        QListWidgetItem *item = new ChannelIconViewItem(QIcon(pixmap),channelId);
+        ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelId);
         targetIconView->insertItem(targetIconView->row(after)+1,item);
     }
 
