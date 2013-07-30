@@ -123,7 +123,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     //Depending on the acquisition system resolution, the data are store as short or long
     if((resolution == 12) | (resolution == 14) | (resolution == 16)){
         Array<short> retrieveData(nbSamples,nbChannels);
-        off_t nbValues = nbSamples * nbChannels;
+        qint64 nbValues = nbSamples * nbChannels;
         // Is this a Neuralynx file?
         int p = fileName.lastIndexOf(".ncs");
         if ( p != -1 )
@@ -141,14 +141,14 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             // Determine offset in ncs file
             int64_t	firstRecord = startInRecordingUnits/nSamplesPerRecord;
             int		offsetInFirstRecord = startInRecordingUnits-firstRecord*nSamplesPerRecord;
-            off_t		position = (off_t)(sizeof(fileHeader)+firstRecord*recordSize+sizeof(recordHeader)+offsetInFirstRecord*sizeof(int16_t));
+            qint64		position = (qint64)(sizeof(fileHeader)+firstRecord*recordSize+sizeof(recordHeader)+offsetInFirstRecord*sizeof(int16_t));
 
             // Data will be read starting somewhere in the first record (not necessarily at the beginning), proceeding with
             // a number of complete records, and ending somwhere in the last record (not necessarily at the end)
             int		inFirstRecord = nSamplesPerRecord-offsetInFirstRecord;
             int64_t	nRecords = (nbSamples-inFirstRecord)/nSamplesPerRecord;
             int		inLastRecord = nbSamples-nRecords*nSamplesPerRecord-inFirstRecord-1;
-            off_t		nRead;
+            qint64		nRead;
 
             int p = fileName.lastIndexOf(".");
             QString baseName = fileName;
@@ -249,10 +249,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 return;
             }
 
-            off_t position = static_cast<off_t>(static_cast<off_t>(startInRecordingUnits)* static_cast<off_t>(nbChannels));
+            qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
             dataFile.seek(position * sizeof(short));
-            off_t nbRead = 0;
+            qint64 nbRead = 0;
             for (int i = 0; i < nbValues; ++i) {
                 nbRead += dataFile.read(reinterpret_cast<char*>(&retrieveData[i]), sizeof(short));
             }
@@ -269,12 +269,12 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         }
         //Apply the offset if need it,convert to dataType and store the values in data.
         if(offset != 0){
-            for(off_t i = 0; i < nbValues; ++i){
+            for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
             }
         } else {
 
-            for(off_t i = 0; i < nbValues; ++i){
+            for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]);
             }
         }
@@ -287,11 +287,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             return;
         }
         Array<dataType> retrieveData(nbSamples,nbChannels);
-        off_t nbValues = nbSamples * nbChannels;
-        off_t position = static_cast<off_t>(static_cast<off_t>(startInRecordingUnits)* static_cast<off_t>(nbChannels));
+        qint64 nbValues = nbSamples * nbChannels;
+        qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
         dataFile.seek(position * sizeof(short));
-        off_t nbRead = 0;
+        qint64 nbRead = 0;
         for (int i = 0; i < nbValues; ++i) {
             nbRead += dataFile.read(reinterpret_cast<char*>(&retrieveData[i]), sizeof(short));
         }
@@ -306,11 +306,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         }
         //Apply the offset if need it and store the values in data.
         if(offset != 0){
-            for(off_t i = 0; i < nbValues; ++i)
+            for(qint64 i = 0; i < nbValues; ++i)
                 data[i] = retrieveData[i] - static_cast<dataType>(offset);
         }
         else{
-            for(off_t i = 0; i < nbValues; ++i){
+            for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = static_cast<dataType>(retrieveData[i]);
             }
         }
@@ -341,7 +341,7 @@ void TracesProvider::computeRecordingLength(){
 
  // get the length of the file:
  dataFile.seekg (0, ios::end);
- off_t fileLength = dataFile.tellg();
+ qint64 fileLength = dataFile.tellg();
  dataFile.close();*/
 
     QFile f(fileName);
