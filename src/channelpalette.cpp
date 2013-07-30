@@ -881,6 +881,9 @@ void ChannelPalette::createGroup(int id){
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     connect(group,SIGNAL(dragObjectMoved(QPoint)),this, SLOT(slotDragLabeltMoved(QPoint)));
 
+    connect(iconView, SIGNAL(moveListItem(QList<int>,QString,QString,int)),
+            SLOT(slotMoveListItem(QList<int>,QString,QString,int)));
+
 
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
         moveTrashesToBottom();
@@ -2125,4 +2128,17 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
+}
+
+void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index)
+{
+    qDebug()<<" sourceGroup"<<sourceGroup<<" destinationGroup"<<destinationGroup<<" index "<<index;
+    ChannelIconView* iconViewSource = iconviewDict[sourceGroup];
+    ChannelIconView* iconViewDestination = iconviewDict[destinationGroup];
+
+    Q_FOREACH(int item, items) {
+        QList<QListWidgetItem*> lst = iconViewSource->findItems(QString::number(item),Qt::MatchExactly);
+        QListWidgetItem * t = iconViewSource->takeItem(iconViewSource->row(lst.first()));
+        iconViewDestination->insertItem(index, t);
+    }
 }
