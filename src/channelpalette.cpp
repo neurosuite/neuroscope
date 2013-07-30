@@ -863,7 +863,6 @@ void ChannelPalette::createGroup(int id){
     spaceWidget->show();
     verticalContainer->setStretchFactor(spaceWidget,2);
 
-    connect(iconView, SIGNAL(removeGroup(QString)), SLOT(slotRemoveGroup(QString)));
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QListWidgetItem*)),this, SLOT(slotMousePressMiddleButton(QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
@@ -887,12 +886,6 @@ void ChannelPalette::createGroup(int id){
 
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
         moveTrashesToBottom();
-}
-#include <QTimer>
-void ChannelPalette::slotRemoveGroup(const QString &name)
-{
-    isGroupToRemove = true;
-    QTimer::singleShot(100, this, SLOT(update()));
 }
 
 void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destination){  
@@ -2136,5 +2129,17 @@ void ChannelPalette::trashChannels(int destinationGroup){
 
 void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index)
 {
+    if(destinationGroup == "0" ){
+        QString afterId;
+        bool beforeFirst = false;
+        if(index == 0){
+            beforeFirst = true;
+        } else {
+            afterId = QString::number(index);
+        }
+
+        emit channelsMovedToTrash(items,afterId,beforeFirst);
+    }
     moveChannels(items,sourceGroup,destinationGroup, index);
+    update();
 }
