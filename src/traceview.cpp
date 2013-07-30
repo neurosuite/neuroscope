@@ -439,9 +439,11 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     if (verticalLines || raster || waveforms){
         QList<int> toRemove;
         QMap<int, QList<int> >::Iterator providersIterator;
-        for(providersIterator = selectedClusters.begin(); providersIterator != selectedClusters.end(); ++providersIterator){
-            if (static_cast< QList<int> >(providersIterator.value()).isEmpty())
+        QMap<int, QList<int> >::Iterator providersIteratorEnd(selectedClusters.end());
+        for(providersIterator = selectedClusters.begin(); providersIterator != providersIteratorEnd; ++providersIterator){
+            if (providersIterator.value().isEmpty()) {
                 toRemove.append(providersIterator.key());
+            }
         }
 
         QList<int>::iterator toRemoveIterator;
@@ -449,8 +451,6 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
             selectedClusters.remove(*toRemoveIterator);
             delete clustersData.take(QString::number(*toRemoveIterator));
         }
-
-
 
         QHashIterator<QString, ClusterData*> iterator(clustersData);
         while (iterator.hasNext()) {
