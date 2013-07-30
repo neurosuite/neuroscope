@@ -1186,7 +1186,6 @@ void ChannelPalette::moveChannels(int targetGroup){
 
 
 void ChannelPalette::deleteEmptyGroups(){  
-    qDebug()<<" void ChannelPalette::deleteEmptyGroups(){  ************************************************";
     QList<int> deletedGroups;
     //First store the group to delete
     QHashIterator<QString, ChannelIconView*> iteratordict(iconviewDict);
@@ -1555,9 +1554,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
     isGroupToRemove = true;
 
     //If the channels have been moved to the trash inform the other palette.
-    qDebug()<<" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs"<<targetGroup<<" objetcName"<<objectName();
     if(targetGroup == "0") {
-        qDebug()<<" emit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         emit channelsMovedToTrash(movedChannels,afterId,beforeFirst);
     }
     update();
@@ -1659,7 +1656,6 @@ void ChannelPalette::slotChannelsMoved(const QList<int>& channelIds, const QStri
 
 void ChannelPalette::discardChannels()
 {
-    qDebug()<<" sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
     trashChannels(0);
 }
 
@@ -1994,7 +1990,6 @@ void ChannelPalette::discardSpikeChannels(){
 
 
 void ChannelPalette::trashChannels(int destinationGroup){
-    qDebug()<<" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxChannelPalette::trashChannels"<<objectName();
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
     isInSelectItems = true;
 
@@ -2018,7 +2013,6 @@ void ChannelPalette::trashChannels(int destinationGroup){
         }
         trash = iconviewDict["-1"];
     }
-    qDebug()<<" xxxxxxxxxxxxxxxxxxxx";
     emit paletteResized(viewport()->width(),labelSize);
 
     //Get the destination group colors to later update the group colors of the moved channels, default is blue
