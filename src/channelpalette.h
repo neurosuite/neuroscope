@@ -159,7 +159,7 @@ protected Q_SLOTS:
     void paintEvent (QPaintEvent*);
     void slotDragLabeltMoved(const QPoint& position){ensureVisible(position.x(),position.y());}
 
-    void slotMoveListItem(const QList<int> &, const QString& sourceGroup,const QString& destinationGroup,int index);
+    void slotMoveListItem(const QList<int> &, const QString& sourceGroup, const QString& destinationGroup, int index, bool moveAll);
     
 Q_SIGNALS:
     void singleChangeColor(int selectedChannel);

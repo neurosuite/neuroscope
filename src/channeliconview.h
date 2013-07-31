@@ -74,7 +74,7 @@ Q_SIGNALS:
     void dropLabel(int sourceId,int targetId,int start,int destination);
 
     void removeGroup(const QString &name);
-    void moveListItem(const QList<int> &listId, const QString &sourceGroupName, const QString &destGroupName, int index);
+    void moveListItem(const QList<int> &listId, const QString &sourceGroupName, const QString &destGroupName, int index, bool moveAll);
 
 protected:
     void contentsWheelEvent(QWheelEvent* event){event->accept();}

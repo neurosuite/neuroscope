@@ -157,7 +157,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             delete item;
         }
         if (!channelIds.isEmpty()) {
-            emit moveListItem(channelIds, sourceGroupName, objectName(), index);
+            emit moveListItem(channelIds, sourceGroupName, objectName(), index, moveAllGroup);
         }
     } else {
         //Same group

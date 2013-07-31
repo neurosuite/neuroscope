@@ -880,8 +880,8 @@ void ChannelPalette::createGroup(int id){
     connect(spaceWidget,SIGNAL(dropLabel(int,int,int,int)),this, SLOT(groupToMove(int,int,int,int)));
     connect(group,SIGNAL(dragObjectMoved(QPoint)),this, SLOT(slotDragLabeltMoved(QPoint)));
 
-    connect(iconView, SIGNAL(moveListItem(QList<int>,QString,QString,int)),
-            SLOT(slotMoveListItem(QList<int>,QString,QString,int)));
+    connect(iconView, SIGNAL(moveListItem(QList<int>,QString,QString,int, bool)),
+            SLOT(slotMoveListItem(QList<int>,QString,QString,int, bool)));
 
 
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
@@ -2127,7 +2127,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
     isInSelectItems = false;
 }
 
-void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index)
+void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index, bool moveAll)
 {
     QString afterId;
     bool beforeFirst = false;
