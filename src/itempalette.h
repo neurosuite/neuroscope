@@ -127,6 +127,7 @@ protected Q_SLOTS:
     void resizeEvent(QResizeEvent* event);
     void paintEvent ( QPaintEvent*ainter);
     void slotMouseReleased(const QString &sourceGroupName);
+    void slotRowInsered();
 
 Q_SIGNALS:
     void colorChanged(int item, const QString &groupName);

@@ -66,6 +66,7 @@ ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mod
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setLineWidth(1);
     setSortingEnabled(true);
+    connect(model(), SIGNAL(rowsInserted(QModelIndex, int,int)), this, SIGNAL(rowInsered()));
 }
 
 void ItemIconView::wheelEvent ( QWheelEvent * event )

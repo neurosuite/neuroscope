@@ -817,10 +817,16 @@ void ItemPalette::createGroup(const QString &id)
     connect(iconView,SIGNAL(mouseReleased(QString)),this, SLOT(slotMouseReleased(QString)));
 
     connect(label,SIGNAL(leftClickOnLabel(QString,bool,bool)),this, SLOT(slotMousePressed(QString,bool,bool)));
+    connect(iconView, SIGNAL(rowInsered()), SLOT(slotRowInsered()));
 
     orderTheGroups();
     emit paletteResized(viewport()->width(),labelSize);
     update();
+}
+
+void ItemPalette::slotRowInsered()
+{
+    emit paletteResized(viewport()->width(),labelSize);
 }
 
 void ItemPalette::removeGroup(const QString &groupName){
