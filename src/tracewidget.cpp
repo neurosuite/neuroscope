@@ -148,7 +148,6 @@ void TraceWidget::setGreyScale(bool grey)
     view.setGreyScale(grey);
 }
 
-
 void TraceWidget::initSelectionWidgets()
 {
     QHBoxLayout *lay = new QHBoxLayout;
