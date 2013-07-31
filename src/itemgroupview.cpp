@@ -49,8 +49,6 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
     palette.setColor(foregroundRole(), legendColor);
     setPalette(palette);
 
-    adjustSize();
-
     setAcceptDrops(true);
 }
 
