@@ -1285,6 +1285,9 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
 
         //Draw the waveforms on top of the trace
         ItemColors* colors = providerItemColors[providerName];
+        if (!clustersData[providerName])
+            return;
+
         Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
         int nbSpikes = currentData.nbOfColumns();
         QList<int> clusterList = selectedClusters[clusterFileId];
