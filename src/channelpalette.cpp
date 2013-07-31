@@ -884,9 +884,16 @@ void ChannelPalette::createGroup(int id){
     connect(iconView, SIGNAL(moveListItem(QList<int>,QString,QString,int, bool)),
             SLOT(slotMoveListItem(QList<int>,QString,QString,int, bool)));
 
+    connect(iconView, SIGNAL(rowInsered()), SLOT(slotRowInsered()));
+
 
     if(id != 0 && id != -1 && (iconviewDict.contains("0")  || iconviewDict.contains("-1") ))
         moveTrashesToBottom();
+}
+
+void ChannelPalette::slotRowInsered()
+{
+    emit paletteResized(viewport()->width(),labelSize);
 }
 
 void ChannelPalette::groupToMove(int sourceId,int targetId,int start, int destination){  

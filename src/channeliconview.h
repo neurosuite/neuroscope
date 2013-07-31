@@ -75,6 +75,7 @@ Q_SIGNALS:
 
     void removeGroup(const QString &name);
     void moveListItem(const QList<int> &listId, const QString &sourceGroupName, const QString &destGroupName, int index, bool moveAll);
+    void rowInsered();
 
 protected:
     void contentsWheelEvent(QWheelEvent* event){event->accept();}

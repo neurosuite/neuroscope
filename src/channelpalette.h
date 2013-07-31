@@ -107,6 +107,7 @@ public:
 
     
 public Q_SLOTS:
+    void slotRowInsered();
     void changeColor(QListWidgetItem *item, bool single = true);
     /**Creates a new group and fill it with the selected channels.
     */

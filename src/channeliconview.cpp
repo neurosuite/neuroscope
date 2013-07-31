@@ -72,7 +72,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-    connect(model(), SIGNAL(rowsInserted(QModelIndex, int,int)), this, SLOT(slotRowInsered()));
+    connect(model(), SIGNAL(rowsInserted(QModelIndex, int,int)), this, SIGNAL(rowInsered()));
 }
 
 void ChannelIconView::slotRowInsered()
