@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("neuroscope");
 
     QApplication app(argc, argv);
+    QApplication::setGraphicsSystem("raster");
     QString file;
     QStringList args = QApplication::arguments();
     QString channelNb;
@@ -43,7 +44,6 @@ int main(int argc, char *argv[])
     QString amplification;
     QString screenGain;
     QString timeWindow;
-    QString stylename;
     //TODO Qt5.2 use QCommandLineParser
     for (int i = 1, n = args.size(); i < n; ++i) {
         const QString arg = args.at(i);
