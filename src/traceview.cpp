@@ -410,7 +410,7 @@ void TraceView::updateClusterData(bool active){
         while (iterator2.hasNext()) {
             iterator2.next();
             if (iterator2.key() != clusterProviderToSkip){
-                static_cast<ClustersProvider*>(clusterProviders[iterator.key()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
+                static_cast<ClustersProvider*>(clusterProviders[iterator2.key()])->requestData(startTime,endTime,this,startTimeInRecordingUnits);
             }
             else
                 clusterProviderToSkip.clear();
