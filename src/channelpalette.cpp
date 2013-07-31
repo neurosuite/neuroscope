@@ -150,6 +150,7 @@ void ChannelPalette::resizeEvent(QResizeEvent* event){
     //Make the viewport to have the visible size (size of the scrollview)
     viewport()->resize(event->size());
     QScrollArea::resizeEvent(event);
+    emit paletteResized(viewport()->width(),labelSize);
 }
 
 void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups){
