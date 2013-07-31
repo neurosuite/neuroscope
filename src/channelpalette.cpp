@@ -1320,7 +1320,7 @@ void ChannelPalette::removeChannelsFromTrash(const QList<int>& channelIds)
 
 }
 
-void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup, int index){
+void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup, int index, bool moveAll){
     QList<int> targetChannels = (*groupsChannels)[targetGroup.toInt()];
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
@@ -1376,8 +1376,10 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
 
     //The source is empty now
     if(sourceIconView->count() == 0){
-        if(type == DISPLAY)
-            deleteEmptyGroups();//the drag has been done in the spike palette
+        if(type == DISPLAY)  {
+            if (!moveAll)
+                deleteEmptyGroups();//the drag has been done in the spike palette
+        }
         else{
             //When all the channels of a group have been remove by a drag-drop it can not be suppress immediately
             //(the mouse is still in the iconView area). To make sure the group is suppress, a pair of variables (isGroupToRemove,groupToRemove)
@@ -2126,7 +2128,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
 }
-
+#include <QTimer>
 void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index, bool moveAll)
 {
     QString afterId;
@@ -2148,9 +2150,12 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
 
         emit channelsMovedAroundInTrash(items,afterId,beforeFirst);
     }
-    moveChannels(items,sourceGroup,destinationGroup, index);
+    moveChannels(items,sourceGroup,destinationGroup, index, moveAll);
     //Inform the application that the spike groups have been modified (use to warn the user at the end of the session)
     emit groupModified();
 
     update();
+    if (moveAll) {
+        QTimer::singleShot(100, this, SLOT(deleteEmptyGroups()));
+    }
 }

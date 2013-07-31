@@ -258,7 +258,7 @@ private:
     void moveChannels(const QList<int>& channelIds, const QString &sourceGroup, QListWidgetItem *after);
 
     /**Channels moved to an empty group.*/
-    void moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup, int index = -1);
+    void moveChannels(const QList<int>& channelIds, const QString &sourceGroup, const QString &targetGroup, int index = -1, bool moveAll = false);
 
     /**Moves channels to either the trash group or the unspecified group in the spike palette.
     * @param destinationGroup the id of the group of destination.
