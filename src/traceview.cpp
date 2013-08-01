@@ -3749,9 +3749,10 @@ void TraceView::skipStatusChanged(const QList<int>& skippedChannels){
 
 void TraceView::clusterColorUpdate(const QColor &c, const QString &name, int clusterId, bool active){
     //redraw everything
+    qDebug()<<" clusterID"<<clusterId;
+    qDebug()<<" cluster providerItemColors"<<providerItemColors[name]->numberOfItems();
     ItemColors* colors = providerItemColors[name];
     colors->setColor(clusterId, c,ItemColors::BY_INDEX);
-    qDebug()<<" cluster providerItemColors"<<providerItemColors[name]->numberOfItems();
     if (active){
         drawContentsMode = REDRAW ;
         update();
@@ -3946,7 +3947,7 @@ void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QL
 
 void TraceView::eventColorUpdate(const QColor &c, const  QString &name,int eventId,bool active){
     ItemColors* colors = providerItemColors[name];
-    colors->setColor(eventId-1, c,ItemColors::BY_INDEX);
+    colors->setColor(eventId, c,ItemColors::BY_INDEX);
     if (active){
         drawContentsMode = REDRAW ;
         update();
