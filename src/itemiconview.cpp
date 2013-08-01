@@ -85,6 +85,7 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
     } else if(event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(this->objectName(),item);
         emit mousePressMiddleButton(item);
+        return;
     }
     QListWidget::mousePressEvent(event);
 }
