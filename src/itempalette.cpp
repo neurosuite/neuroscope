@@ -723,6 +723,7 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
     QMap<int,bool> browsingMap = browsingStatus[groupName];
     browsingMap.clear();
     QListWidgetItem *item = 0;
+    QListWidgetItem *lastSelectedItem = 0;
     for(int i=0;i<iconView->count();++i) {
         item = iconView->item(i);
         int realValue = item->data(ItemIconView::INDEXICON).toInt();
@@ -733,6 +734,7 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
         redrawItem(iconView,i,browsingMap);
         if (itemsToSelect.contains(realValue)) {
             item->setSelected(true);
+            lastSelectedItem = item;
         }
 
     }
@@ -741,8 +743,8 @@ void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsTo
     iconView->blockSignals(false);
 
     //Last item in selection gets focus if it exists
-    if(!itemsToSelect.isEmpty())
-        iconView->setCurrentItem(item);
+    if(itemsToSelect.isEmpty())
+        iconView->setCurrentItem(lastSelectedItem);
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
 }
