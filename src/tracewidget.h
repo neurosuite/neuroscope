@@ -209,14 +209,14 @@ public Q_SLOTS:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  clusterColorUpdate(const QString &name,int clusterId,bool active){view.clusterColorUpdate(name,clusterId,active);}
+    void  clusterColorUpdate(const QColor &color, const QString &name,int clusterId,bool active){view.clusterColorUpdate(color, name,clusterId,active);}
 
     /**Changes the color of a event.
   * @param name name use to identified the event provider containing the updated event.
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  eventColorUpdate(const QString &name,int eventId,bool active){view.eventColorUpdate(name,eventId,active);}
+    void  eventColorUpdate(const QColor &color, const QString &name,int eventId,bool active){view.eventColorUpdate(color, name,eventId,active);}
 
     /**Changes the color of a group of channels.
   * @param groupId id of the group for which the color have been changed.

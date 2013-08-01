@@ -156,14 +156,14 @@ public:
     * @param clusterId id of the cluster to redraw.
     * @param activeView the view in which the change has to be immediate.
     */
-    void clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView);
+    void clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView, const QColor&);
 
     /**Changes the color of a event.
     * @param providerName identifier of the event provider containing the updated cluster.
     * @param eventId id of the event to redraw.
     * @param activeView the view in which the change has to be immediate.
     */
-    void eventColorUpdate(const QString &providerName, int eventId, NeuroscopeView* activeView);
+    void eventColorUpdate(const QColor &color, const QString &providerName, int eventId, NeuroscopeView* activeView);
 
     /**Changes the color of a group of channels.
     * @param groupId id of the group for which the color have been changed.

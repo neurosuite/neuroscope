@@ -565,7 +565,7 @@ private Q_SLOTS:
    * @param clusterId id of the cluster which has had its color changed.
    * @param groupName identifier of the file containing the cluster to update.
    */
-    void slotClusterColorUpdate(int clusterId,const QString &groupName);
+    void slotClusterColorUpdate(int clusterId, const QString &groupName, const QColor &color);
 
     /**Updates the active display with the clusters selected in the cluster palette.
    *@param selection map given the list of the selected clusters by cluster file identified.
@@ -582,7 +582,7 @@ private Q_SLOTS:
    * @param eventId id of the event which has had its color changed.
    * @param groupName identifier of the file containing the event to update.
    */
-    void slotEventColorUpdate(int eventId, const QString &groupName);
+    void slotEventColorUpdate(int eventId, const QString &groupName, const QColor &color);
 
     /**Updates the active display with the events selected in the event palette.
    *@param selection map given the list of the selected events by event file identified.

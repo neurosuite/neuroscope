@@ -130,7 +130,7 @@ protected Q_SLOTS:
     void slotRowInsered();
 
 Q_SIGNALS:
-    void colorChanged(int item, const QString &groupName);
+    void colorChanged(int item, const QString &groupName, const QColor&);
     void updateShownItems(const QMap<QString,QList<int> >& selectedItems);
     void paletteResized(int parentWidth,int labelSize);
     void selectedGroupChanged(const QString &eventGroupName);

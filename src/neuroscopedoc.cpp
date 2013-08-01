@@ -2032,12 +2032,12 @@ void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activ
     providerUrls.remove(providerName);
 }
 
-void NeuroscopeDoc::clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView){
+void NeuroscopeDoc::clusterColorUpdate(const QString &providerName,int clusterId,NeuroscopeView* activeView, const QColor &color){
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
-        if(view != activeView) view->clusterColorUpdate(providerName,clusterId,false);
-        else view->clusterColorUpdate(providerName,clusterId,true);
+        if(view != activeView) view->clusterColorUpdate(color, providerName,clusterId,false);
+        else view->clusterColorUpdate(color, providerName,clusterId,true);
     }
 
     //Ask the active view to take the modification into account immediately
@@ -2242,16 +2242,15 @@ void NeuroscopeDoc::removeEventFile(const QString& providerName,NeuroscopeView* 
     providerUrls.remove(providerName);
 }
 
-void NeuroscopeDoc::eventColorUpdate(const QString& providerName,int eventId,NeuroscopeView* activeView){
+void NeuroscopeDoc::eventColorUpdate(const QColor &color, const QString& providerName,int eventId,NeuroscopeView* activeView){
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
 
-        qDebug()<<" :::::::::::::::::::::::::::::::::"<<eventId<<" providerName"<<providerName;
         if(view != activeView)
-            view->eventColorUpdate(providerName,eventId,false);
+            view->eventColorUpdate(color, providerName,eventId,false);
         else
-            view->eventColorUpdate(providerName,eventId,true);
+            view->eventColorUpdate(color, providerName,eventId,true);
     }
 
     //Ask the active view to take the modification into account immediately

@@ -2807,7 +2807,7 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
     connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
     //Palette connections
-    connect(clusterPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotClusterColorUpdate(int,QString)));
+    connect(clusterPalette, SIGNAL(colorChanged(int,QString,QColor)), this, SLOT(slotClusterColorUpdate(int,QString, QColor)));
     connect(clusterPalette, SIGNAL(updateShownItems(QMap<QString,QList<int> >)), this, SLOT(slotUpdateShownClusters(QMap<QString,QList<int> >)));
     connect(clusterPalette, SIGNAL(updateItemsToSkip(QString,QList<int>)), this, SLOT(slotUpdateClustersToSkip(QString,QList<int>)));
     connect(clusterPalette,SIGNAL(noClustersToBrowse()),this, SLOT(slotNoClustersToBrowse()));
@@ -2840,12 +2840,14 @@ void NeuroscopeApp::addClusterFile(const QString& clusterFileId){
 }
 
 
-void NeuroscopeApp::slotClusterColorUpdate(int clusterId,const QString &providerName){
+void NeuroscopeApp::slotClusterColorUpdate(int clusterId,const QString &providerName, const QColor &color){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
+    qDebug()<<" dsssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
     if(qobject_cast<ItemPalette*>(current) && name.contains("clusterPanel")){
         NeuroscopeView* view = activeView();
-        doc->clusterColorUpdate(providerName,clusterId,view);
+        qDebug()<<" providerName"<<providerName<<" clusterId "<<clusterId<<" color"<<color;
+        doc->clusterColorUpdate(providerName,clusterId,view, color);
     }
 
 }
@@ -3007,7 +3009,7 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
 
     //Palette connections
-    connect(eventPalette, SIGNAL(colorChanged(int,QString)), this, SLOT(slotEventColorUpdate(int,QString)));
+    connect(eventPalette, SIGNAL(colorChanged(int,QString,QColor)), this, SLOT(slotEventColorUpdate(int,QString,QColor)));
     connect(eventPalette, SIGNAL(updateShownItems(QMap<QString,QList<int> >)), this, SLOT(slotUpdateShownEvents(QMap<QString,QList<int> >)));
     connect(eventPalette, SIGNAL(selectedGroupChanged(QString)), this, SLOT(slotEventGroupSelected(QString)));
     connect(eventPalette, SIGNAL(updateItemsToSkip(QString,QList<int>)), this, SLOT(slotUpdateEventsToSkip(QString,QList<int>)));
@@ -3048,12 +3050,12 @@ void NeuroscopeApp::addEventFile(const QString& eventFileId){
     }
 }
 
-void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName){
+void NeuroscopeApp::slotEventColorUpdate(int eventId, const QString& providerName, const QColor &color){
     QWidget* current = paletteTabsParent->currentWidget();
     QString name = current->objectName();
     if(qobject_cast<ItemPalette*>(current) && name.contains("eventPanel")){
         NeuroscopeView* view = activeView();
-        doc->eventColorUpdate(providerName,eventId,view);
+        doc->eventColorUpdate(color, providerName,eventId,view);
     }
 }
 

@@ -411,7 +411,7 @@ public:
   * @param clusterId id of the cluster to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  clusterColorUpdate(const QString &name,int clusterId,bool active){emit clusterColorUpdated(name,clusterId,active);}
+    void  clusterColorUpdate(const QColor & color, const QString &name,int clusterId,bool active){emit clusterColorUpdated(color, name,clusterId,active);}
 
     /**Hides the cluster waveforms on top of the traces but keep the setting of displaying or hidding them.*/
     void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false);}
@@ -445,7 +445,7 @@ public:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void  eventColorUpdate(const QString &name,int eventId,bool active);
+    void  eventColorUpdate(const QColor &color, const QString &name, int eventId, bool active);
     /**Retrieves the next event.*/
     void showNextEvent(){
         emit nextEvent();
@@ -717,7 +717,7 @@ Q_SIGNALS:
     void newSamplingRate(qlonglong recordingLength);
     void clusterProviderRemoved(const QString &name,bool active);
     void showClusters(const QString& name,const QList<int>& clustersToShow);
-    void clusterColorUpdated(const QString &name,int clusterId,bool active);
+    void clusterColorUpdated(const QColor &color, const QString &name,int clusterId,bool active);
     void nextCluster();
     void previousCluster();
     void print(QPainter& printPainter,int width, int height, const QString &filePath,bool whiteBackground);
@@ -725,7 +725,7 @@ Q_SIGNALS:
                           QList<int>& eventsToShow,const QList<int>& eventsToSkip);
     void eventProviderRemoved(const QString &name,bool active,bool lastFile);
     void showEvents(const QString &name,QList<int>& eventsToShow);
-    void eventColorUpdated(const QString &name,int eventId,bool active);
+    void eventColorUpdated(const QColor &color,const QString &name,int eventId,bool active);
     void nextEvent();
     void previousEvent();
     void eventModified(QString providerName,int selectedEventId,double time,double newTime);

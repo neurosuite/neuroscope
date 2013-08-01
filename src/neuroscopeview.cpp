@@ -105,13 +105,13 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
             SLOT(addClusterProvider(ClustersProvider*,QString,ItemColors*,bool,QList<int>&,QMap<int,QList<int> >*,QMap<int,int>*,int,int,QList<int>)));
     connect(this,SIGNAL(clusterProviderRemoved(QString,bool)),traceWidget,SLOT(removeClusterProvider(QString,bool)));
     connect(this,SIGNAL(showClusters(QString,QList<int>)),traceWidget,SLOT(showClusters(QString,QList<int>)));
-    connect(this,SIGNAL(clusterColorUpdated(QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QString,int,bool)));
+    connect(this,SIGNAL(clusterColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(clusterColorUpdate(QColor,QString,int,bool)));
     connect(this,SIGNAL(print(QPainter&,int,int,QString,bool)),traceWidget,SLOT(print(QPainter&,int,int,QString,bool)));
     connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),traceWidget,
             SLOT(addEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)));
     connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),traceWidget,SLOT(removeEventProvider(QString,bool)));
     connect(this,SIGNAL(showEvents(QString,QList<int>&)),traceWidget,SLOT(showEvents(QString,QList<int>&)));
-    connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QString,int,bool)));
+    connect(this,SIGNAL(eventColorUpdated(QColor,QString,int,bool)),traceWidget,SLOT(eventColorUpdate(QColor,QString,int,bool)));
     connect(this,SIGNAL(nextEvent()),traceWidget,SLOT(showNextEvent()));
     connect(this,SIGNAL(previousEvent()),traceWidget,SLOT(showPreviousEvent()));
     connect(traceWidget,SIGNAL(eventModified(QString,int,double,double)),this, SLOT(slotEventModified(QString,int,double,double)));
@@ -506,9 +506,9 @@ void NeuroscopeView::slotChannelsSelected(const QList<int>& selectedIds){
     emit channelsSelected(selectedIds);
 }
 
-void  NeuroscopeView::eventColorUpdate(const QString &name,int eventId,bool active)
+void  NeuroscopeView::eventColorUpdate(const QColor &color, const QString &name,int eventId,bool active)
 {
-    emit eventColorUpdated(name,eventId,active);
+    emit eventColorUpdated(color, name,eventId,active);
 }
 
 void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)

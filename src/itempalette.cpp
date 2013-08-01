@@ -696,7 +696,7 @@ void ItemPalette::changeColor(QListWidgetItem* item, const QString& groupName){
         item->setData(ItemIconView::Color, result);
 
         //As soon a color changes a signal is emitted.
-        emit colorChanged(item->data(ItemIconView::INDEXICON).toInt(),groupName);
+        emit colorChanged(item->data(ItemIconView::INDEXICON).toInt(),groupName, result);
     }
 }
 
