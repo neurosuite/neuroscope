@@ -3748,6 +3748,7 @@ void TraceView::clusterColorUpdate(const QColor &c, const QString &name, int clu
     //redraw everything
     ItemColors* colors = providerItemColors[name];
     colors->setColor(clusterId, c,ItemColors::BY_INDEX);
+    qDebug()<<" cluster providerItemColors"<<providerItemColors[name]->numberOfItems();
     if (active){
         drawContentsMode = REDRAW ;
         update();
@@ -3846,7 +3847,7 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider,QString name,Ite
 
     updateNoneBrowsingEventList(name,eventsToSkip);
 
-    if (eventsToShow.size() != 0){
+    if (!eventsToShow.isEmpty()){
         QList<int> events;
         QList<int>::iterator shownEventsIterator;
         for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
@@ -3944,7 +3945,8 @@ void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QL
 void TraceView::eventColorUpdate(const QColor &c, const  QString &name,int eventId,bool active){
     qDebug()<<" eventId"<<eventId<<" name"<<name;
     ItemColors* colors = providerItemColors[name];
-    colors->setColor(eventId, c,ItemColors::BY_INDEX);
+    qDebug()<<" providerItemColors"<<providerItemColors[name]->numberOfItems();
+    colors->setColor(eventId-1, c,ItemColors::BY_INDEX);
     if (active){
         drawContentsMode = REDRAW ;
         update();
