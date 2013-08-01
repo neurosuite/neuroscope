@@ -674,7 +674,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         drawTimeLine(&p);
     }
 
-    if (mode == SELECT_EVENT && !selectedEvent.first.isEmpty()) {
+    if (mode == SELECT_EVENT && !selectedEvent.first.isEmpty() && !m_selectPoint.isNull()) {
         //set the window (part of the world I want to show)
         QRect r((QRect)window);
         p.setViewport(viewport);
@@ -688,7 +688,7 @@ void TraceView::paintEvent ( QPaintEvent*){
         p.setBrush(Qt::NoBrush);
         int top = r.top();
         int bottom = r.bottom();
-        p.drawLine(m_currentPoint.x(),top,m_currentPoint.x(),bottom);
+        p.drawLine(m_selectPoint.x(),top,m_selectPoint.x(),bottom);
     }
 
     if (mMoveSelectChannel) {
@@ -2424,6 +2424,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
             //draw the new line
             previousDragAbscissa = x;
         }
+        m_selectPoint = QPoint(currentAbscissa, 0);
         m_currentPoint = QPoint(currentAbscissa, 0);
         update();
 
@@ -3056,6 +3057,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             selectedEvent.second = 0;
             startEventDragging = true;
             drawContentsMode = REDRAW;
+            m_selectPoint = QPoint();
             //Redraw
             update();
         }
