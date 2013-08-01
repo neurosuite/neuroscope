@@ -170,7 +170,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         for (int i=0; i< numberOfItems; ++i) {
             ChannelIconViewItem *item = new ChannelIconViewItem(this);
             stream >> *item;
-            channelIds.prepend(item->text().toInt());
+            channelIds.append(item->text().toInt());
             delete item;
         }
 
@@ -179,6 +179,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
             //Find last item
             posItem = item(count()-1);
         }
+        qDebug()<<" posItem"<<posItem;
         emit channelsMoved(channelIds, sourceGroupName, posItem);
     }
     return true;

@@ -1598,6 +1598,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         after = iconView->item(0);
         moveFirst = true;
     }
+    int afterIndex = iconView->row(after);
     for(iterator = channelIds.begin(); iterator != channelIds.end(); ++iterator){
         //Delete the item corresponding to the channel Id
         QList<QListWidgetItem*>lstItem = iconView->findItems(QString::number(*iterator),Qt::MatchExactly);
@@ -1608,9 +1609,11 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(*iterator);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-            const int afterIndex = iconView->row(after);
+            qDebug()<<" afterIndex"<<afterIndex;
             after = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
             iconView->insertItem(afterIndex,after);
+            afterIndex++;
+
         }
     }
     if(moveFirst){
@@ -1949,7 +1952,7 @@ void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,boo
         }
     }
     else
-        painter.fillRect(0,0,12,12,color);
+        painter.fillRect(0,0,14,14,color);
     painter.end();
 }
 
