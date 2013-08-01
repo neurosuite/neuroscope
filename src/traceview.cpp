@@ -2643,7 +2643,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                         QList<int> eventList = iterator.value();
                         QString providerName = iterator.key();
 
-                        if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
+                        if (eventList.isEmpty() || eventsData[providerName] == 0)
+                            continue;
                         Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
                         Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
                         int nbEvents = currentData.nbOfColumns();
@@ -3925,7 +3926,6 @@ void  TraceView::updateEvents(const QString& providerName,QList<int>& eventsToSh
         eventData = new EventData();
         eventsData.insert(providerName,eventData);
     }
-    qDebug()<<" updateEvents "<<providerName;
     if (!eventProvidersToUpdate.contains(providerName))
         eventProvidersToUpdate.append(providerName);
     if (active)
@@ -3943,9 +3943,7 @@ void TraceView::updateNoneBrowsingEventList(const QString& providerName,const QL
 }
 
 void TraceView::eventColorUpdate(const QColor &c, const  QString &name,int eventId,bool active){
-    qDebug()<<" eventId"<<eventId<<" name"<<name;
     ItemColors* colors = providerItemColors[name];
-    qDebug()<<" providerItemColors"<<providerItemColors[name]->numberOfItems();
     colors->setColor(eventId-1, c,ItemColors::BY_INDEX);
     if (active){
         drawContentsMode = REDRAW ;
