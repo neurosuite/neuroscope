@@ -2286,6 +2286,7 @@ void NeuroscopeApp::slotPaletteTabChange(int index){
                 for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
                     const QList<int>* selectedEvents = view->getSelectedEvents(*iterator);
                     const QList<int>* skippedEventIds = view->getEventsNotUsedForBrowsing(*iterator);
+                    qDebug()<<" selectedEvents"<<selectedEvents<<" skippedEventIds"<<skippedEventIds;
                     eventPalette->selectItems(*iterator,*selectedEvents,*skippedEventIds);
                 }
                 slotStateChanged("eventTabState");

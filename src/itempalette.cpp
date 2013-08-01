@@ -712,26 +712,33 @@ void ItemPalette::languageChange()
 
 void ItemPalette::selectItems(const QString& groupName,const QList<int> &itemsToSelect,const QList<int> &itemsToSkip){
     //Set isInSelectItems to true to prevent the emission of signals due to selectionChange
+    if (isInSelectItems)
+        return;
     isInSelectItems = true;
     ItemIconView* iconView = iconviewDict[groupName];
     iconView->clearSelection();
 
+    iconView->blockSignals(true);
     //update the browsing map and rebuild the icons
     QMap<int,bool> browsingMap = browsingStatus[groupName];
     browsingMap.clear();
     QListWidgetItem *item = 0;
     for(int i=0;i<iconView->count();++i) {
         item = iconView->item(i);
-        if(itemsToSkip.contains(item->data(ItemIconView::INDEXICON).toInt()))
+        int realValue = item->data(ItemIconView::INDEXICON).toInt();
+        if(itemsToSkip.contains(realValue))
             browsingMap.insert(i,false);
         else
             browsingMap.insert(i,true);
         redrawItem(iconView,i,browsingMap);
-        if (itemsToSelect.contains(i)) {
+        if (itemsToSelect.contains(realValue)) {
             item->setSelected(true);
         }
+
     }
     browsingStatus.insert(groupName,browsingMap);
+
+    iconView->blockSignals(false);
 
     //Last item in selection gets focus if it exists
     if(!itemsToSelect.isEmpty())
