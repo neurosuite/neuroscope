@@ -541,7 +541,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index, const QMap<int,bo
     isInSelectItems = true;
     bool browsingStatus = browsingMap[index];
     //Recreate the item
-    QPixmap pixmap(14,14);
+    QPixmap pixmap(12,12);
     pixmap.fill(backgroundColor);
     QColor color = qvariant_cast<QColor>(item->data(ItemIconView::Color));
     QPainter painter;
