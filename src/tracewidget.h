@@ -114,13 +114,19 @@ public:
     }
 
     /// Added by M.Zugaro to enable automatic forward paging
-    void page();
-    void accelerate();
-    void decelerate();
+    bool isStill();
+
+Q_SIGNALS:
+	
+    /// Added by M.Zugaro to enable automatic forward paging
+    void stopped();
 
 public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
+    void page();
+    void accelerate();
+    void decelerate();
     void advance();
     void stop();
 

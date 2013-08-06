@@ -480,12 +480,14 @@ void NeuroscopeApp::initActions()
     mPage->setCheckable(true);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 
-    mAccelerate = new QAction(tr("Accelerate"), this);
+	 mAccelerate = traceMenu->addAction(tr("Accelerate"));
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
+    mAccelerate->setEnabled(false);
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
-    mDecelerate = new QAction(tr("Decelerate"), this);
+    mDecelerate = traceMenu->addAction(tr("Decelerate"));
     mDecelerate->setShortcut(Qt::CTRL + Qt::Key_Down);
+    mDecelerate->setEnabled(false);
     connect(mDecelerate,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
@@ -884,6 +886,9 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
     connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
     connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
+	 
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
 
     //Keep track of the number of displays
     displayCount ++;
@@ -2205,6 +2210,9 @@ void NeuroscopeApp::slotTabChange(int index){
     select = activeView->isSelectionTool();
     const QList<int> selectedChannels = activeView->getSelectedChannels();
 
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 if ( isStill() ) slotStateChanged("pageOffState"); else slotStateChanged("pageOnState");
+	 
     QWidget *channelPalette = paletteTabsParent->currentWidget();
 
     if(qobject_cast<ChannelPalette*>(channelPalette)){
@@ -2526,6 +2534,8 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
         connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
         connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
+		  /// Added by M.Zugaro to enable automatic forward paging
+		  connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
 
         view->installEventFilter(this);
 
@@ -3577,6 +3587,14 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     } else if(state == QLatin1String("emptyUndoState")) {
         mUndo->setEnabled(false);
         mRedo->setEnabled(true);
+    } else if(state == QLatin1String("pageOnState")) {
+        mPage->setChecked(true);
+        mAccelerate->setEnabled(true);
+        mDecelerate->setEnabled(true);
+    } else if(state == QLatin1String("pageOffState")) {
+        mPage->setChecked(false);
+        mAccelerate->setEnabled(false);
+        mDecelerate->setEnabled(false);
 
     } else {
         qDebug()<<" unknown state "<<state;

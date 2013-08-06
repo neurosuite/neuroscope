@@ -69,6 +69,8 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
                                   waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
+	 /// Added by M.Zugaro to enable automatic forward paging
+    connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
 
     mainDock->setWidget(traceWidget);
 

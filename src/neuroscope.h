@@ -191,10 +191,19 @@ public:
    */
     inline bool isApositionFileLoaded()const{return isPositionFileLoaded;}
 
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 bool isStill() { return ( !activeView() || activeView()->isStill() ); }
+
+private Q_SLOTS:
+
+    /// Added by M.Zugaro to enable automatic forward paging
+    void neuroscopeViewStopped() { slotStateChanged("pageOffState"); }
+
 public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
-    void page() {	if( activeView()) activeView()->page(); }
+    void page() { if ( isStill() ) slotStateChanged("pageOnState"); else slotStateChanged("pageOffState"); activeView()->page(); }
+    void stop() { if( activeView() ) { activeView()->stop(); slotStateChanged("pageOffState"); } }
     void accelerate() {	if( activeView()) activeView()->accelerate(); }
     void decelerate() {	if( activeView()) activeView()->decelerate(); }
 

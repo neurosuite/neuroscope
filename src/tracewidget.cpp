@@ -91,12 +91,17 @@ void TraceWidget::page()
         timer->start(pageTime);
 }
 
+bool TraceWidget::isStill()
+{
+	return ! ( timer != NULL && timer->isActive() );
+}
+
 void TraceWidget::stop()
 {
 	if ( timer->isActive() )
 	{
-		timer->stop();
-		//mPage->setChecked(false);
+			timer->stop();
+			emit stopped();
 	}
 }
 
@@ -122,6 +127,12 @@ void TraceWidget::decelerate()
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::advance()
 {
+	 // Temporarily disconnect so that changes to scrollbar and time boxes do not automatically stop paging!
+	 disconnect(startMinute,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    disconnect(startSecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    disconnect(startMilisecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    disconnect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+	 
     // Because data files are expected to have grown, update recording length,
     // as well as spin box and scroll bar in the view
     view.updateRecordingLength();
@@ -141,8 +152,16 @@ void TraceWidget::advance()
     updateView = true;
     //Inform the traceView
     view.displayTimeFrame(startTime,timeWindow);
+	 
     //Inform listener of the modification
     emit updateStartAndDuration(startTime,timeWindow);
+	 
+	 // Reconnect
+	 connect(startMinute,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    connect(startSecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    connect(startMilisecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+	 
     timer->start(pageTime); // restart timer
 }
 

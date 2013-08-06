@@ -99,11 +99,6 @@ public:
     /** Destructor for the main view. */
     ~NeuroscopeView();
 
-    /// Added by M.Zugaro to enable automatic forward paging
-    void page() { traceWidget->page(); }
-    void accelerate() { traceWidget->accelerate(); }
-    void decelerate() { traceWidget->decelerate(); }
-
     /**Contains the implementation for printing functionality.
     * @param pPrinter pointer on the printer object.
     * @param filePath path of the opened document.
@@ -598,7 +593,27 @@ public:
   */
     int isEventsInPositionView()const{return eventsInPositionView;}
 
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 bool isStill() { return ( traceWidget == NULL || traceWidget->isStill() ); }
+
+private Q_SLOTS:
+	
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 void traceWidgetStopped() { emit stopped(); }
+
+Q_SIGNALS:
+
+	 /// Added by M.Zugaro to enable automatic forward paging
+    void stopped();
+    
 public Q_SLOTS:
+
+	 /// Added by M.Zugaro to enable automatic forward paging
+    void page() { traceWidget->page(); }
+    void stop() { traceWidget->stop(); }
+    void accelerate() { traceWidget->accelerate(); }
+    void decelerate() { traceWidget->decelerate(); }
+	 
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
