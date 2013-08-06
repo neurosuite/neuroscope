@@ -703,6 +703,9 @@ private:
     /**True if the TraceView has to be updated, false otherwise.*/
     bool updateView;
 
+    /**Pointer to the status bar of the application.*/
+    QStatusBar* statusBar;
+
     //////////Functions/////////////
 
     /**

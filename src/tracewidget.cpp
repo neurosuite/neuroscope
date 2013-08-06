@@ -45,7 +45,8 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     startTime(startTime),
     validator(this),
     isInit(true),
-    updateView(true)
+    updateView(true),
+    statusBar(statusBar)
 {
 
     QVBoxLayout *lay = new QVBoxLayout;
@@ -88,7 +89,10 @@ void TraceWidget::page()
     if ( timer->isActive() )
         timer->stop();
     else
+	 {
         timer->start(pageTime);
+		  statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
+	 }
 }
 
 bool TraceWidget::isStill()
@@ -111,7 +115,7 @@ void TraceWidget::accelerate()
         return;
     pageTime -= 125;
     if ( pageTime < 0 ) pageTime = 0;
-    qDebug() << "page time: " << pageTime << endl;
+    statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
     timer->start(pageTime);
 }
 
@@ -120,7 +124,7 @@ void TraceWidget::decelerate()
     if ( !timer->isActive() ) return;
     pageTime += 125;
     if ( pageTime > 1000 ) pageTime = 1000;
-    qDebug() << "page time: " << pageTime << endl;
+    statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
     timer->start(pageTime);
 }
 
