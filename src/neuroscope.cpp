@@ -476,8 +476,8 @@ void NeuroscopeApp::initActions()
     /// Added by M.Zugaro to enable automatic forward paging
     traceMenu->addSeparator();
     mPage = traceMenu->addAction(tr("Auto-advance to end of recording"));
-	 qDebug("page");
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
+    mPage->setCheckable(true);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 
     mAccelerate = new QAction(tr("Accelerate"), this);

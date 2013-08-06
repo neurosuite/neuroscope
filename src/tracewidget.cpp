@@ -93,8 +93,11 @@ void TraceWidget::page()
 
 void TraceWidget::stop()
 {
-    if ( timer->isActive() )
-        timer->stop();
+	if ( timer->isActive() )
+	{
+		timer->stop();
+		mPage->setChecked(false);
+	}
 }
 
 void TraceWidget::accelerate()
