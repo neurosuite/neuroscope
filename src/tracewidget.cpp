@@ -96,7 +96,7 @@ void TraceWidget::stop()
 	if ( timer->isActive() )
 	{
 		timer->stop();
-		mPage->setChecked(false);
+		//mPage->setChecked(false);
 	}
 }
 
