@@ -91,6 +91,12 @@ void TraceWidget::page()
         timer->start(pageTime);
 }
 
+void TraceWidget::stop()
+{
+    if ( timer->isActive() )
+        timer->stop();
+}
+
 void TraceWidget::accelerate()
 {
     if ( !timer->isActive() )
@@ -217,6 +223,11 @@ void TraceWidget::initSelectionWidgets()
     connect(startMinute,SIGNAL(editingFinished()),this, SLOT(slotStartMinuteTimeUpdated()));
     connect(startSecond,SIGNAL(editingFinished()),this, SLOT(slotStartSecondTimeUpdated()));
     connect(startMilisecond,SIGNAL(editingFinished()),this, SLOT(slotStartMilisecondTimeUpdated()));
+
+	 /// Added by M.Zugaro to enable automatic forward paging
+	 connect(startMinute,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    connect(startSecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
+    connect(startMilisecond,SIGNAL(valueChanged(int)),this, SLOT(stop()));
 #endif
     connect(duration,SIGNAL(returnPressed()),this, SLOT(slotDurationUpdated()));
 
@@ -236,6 +247,7 @@ void TraceWidget::initSelectionWidgets()
     scrollBar->setValue(startTime);
     connect(scrollBar,SIGNAL(sliderReleased()),this, SLOT(slotScrollBarUpdated()));
     connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(slotScrollBarUpdated()));
+    connect(scrollBar,SIGNAL(valueChanged(int)),this, SLOT(stop()));
 
     //enable the user to use the keyboard to interact with the scrollbar.
     scrollBar->setMouseTracking(false);

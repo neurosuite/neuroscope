@@ -473,10 +473,10 @@ void NeuroscopeApp::initActions()
 
     showHideLabels->setChecked(false);
 
-
-
     /// Added by M.Zugaro to enable automatic forward paging
-    mPage = new QAction(tr("Page"),this);
+    traceMenu->addSeparator();
+    mPage = traceMenu->addAction(tr("Auto-advance to end of recording"));
+	 qDebug("page");
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 

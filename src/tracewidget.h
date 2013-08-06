@@ -122,6 +122,7 @@ public Q_SLOTS:
 
     /// Added by M.Zugaro to enable automatic forward paging
     void advance();
+    void stop();
 
     /**Changes the color of the background.*/
     void changeBackgroundColor(const QColor &color);
