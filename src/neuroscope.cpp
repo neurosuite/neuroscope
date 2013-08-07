@@ -1245,7 +1245,7 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Opening file..."));
 
     const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
-                                                   tr("Data File (*.dat);;EEG File (*.eeg);;Filter File (*.fil);;All files (*.*)") );
+                                                   tr("Data File (*.dat *.lfp *.eeg *.fil);;All files (*.*)") );
     if(!url.isEmpty())
     {
         openDocumentFile(url);
