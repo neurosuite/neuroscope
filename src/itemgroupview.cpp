@@ -65,7 +65,7 @@ void ItemGroupView::setIconView(ItemIconView *view){
 void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
     if ((iconView->size().width() != 1 && width() != parentWidth) || init) {
         init = false;
-        setFixedWidth(parentWidth);
+        setFixedWidth(parentWidth-3);
         int viewfuturWidth = parentWidth - labelSize - 6;//give so space on the right
         iconView->setNewWidth(viewfuturWidth);
 

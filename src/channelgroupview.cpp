@@ -60,7 +60,7 @@ void ChannelGroupView::reAdjustSize(int parentWidth,int labelSize)
         init = false;
         int futurWidth = parentWidth ;
 
-        setFixedWidth(futurWidth);
+        setFixedWidth(futurWidth-3);
         int viewfuturWidth = width() - labelSize - 6;//give so space on the right
         iconView->setNewWidth(viewfuturWidth);
 
