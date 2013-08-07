@@ -202,3 +202,26 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     }
     QListWidget::mousePressEvent(event);
 }
+
+void ChannelIconView::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Right) {
+        QListWidgetItem *c = currentItem();
+        if (c) {
+            const int i = row(c);
+            if (i < count()-1) {
+                setCurrentRow(i+1);
+            }
+        }
+    } else if (event->key() == Qt::Key_Left) {
+        QListWidgetItem *c = currentItem();
+        if (c) {
+            const int i = row(c);
+            if (i > 0) {
+                setCurrentRow(i-1);
+            }
+        }
+    } else {
+        QListWidget::keyPressEvent(event);
+    }
+}

@@ -78,6 +78,7 @@ Q_SIGNALS:
     void rowInsered();
 
 protected:
+    void keyPressEvent(QKeyEvent *event);
     void contentsWheelEvent(QWheelEvent* event){event->accept();}
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent ( QWheelEvent * e );

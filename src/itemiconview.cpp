@@ -107,3 +107,26 @@ QSize ItemIconView::sizeHint() const
     const int height = rectForIndex(model()->index(model()->rowCount() - 1, 0)).bottom() + 5;
     return QSize(width(), height);
 }
+
+void ItemIconView::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Right) {
+        QListWidgetItem *c = currentItem();
+        if (c) {
+            const int i = row(c);
+            if (i < count()-1) {
+                setCurrentRow(i+1);
+            }
+        }
+    } else if (event->key() == Qt::Key_Left) {
+        QListWidgetItem *c = currentItem();
+        if (c) {
+            const int i = row(c);
+            if (i > 0) {
+                setCurrentRow(i-1);
+            }
+        }
+    } else {
+        QListWidget::keyPressEvent(event);
+    }
+}

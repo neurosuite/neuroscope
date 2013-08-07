@@ -51,6 +51,7 @@ protected:
     void mousePressEvent ( QMouseEvent * event );
     void wheelEvent ( QWheelEvent * e );
     void mouseReleaseEvent ( QMouseEvent * event );
+    void keyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
     void mousePressWoModificators(const QString &sourceGroup);
