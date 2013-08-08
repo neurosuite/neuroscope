@@ -1312,7 +1312,7 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                             QList<int> clusterIds;
                                             QDomNode clustersNode = fileElement.firstChild(); // try to convert the node to an element.
                                             while(!clustersNode.isNull()) {
-                                                QDomElement clustersElement = fileNode.toElement();
+                                                QDomElement clustersElement = clustersNode.toElement();
                                                 if (!clustersElement.isNull()) {
                                                     tag = clustersElement.tagName();
                                                     if (tag == FILE_URL) {
