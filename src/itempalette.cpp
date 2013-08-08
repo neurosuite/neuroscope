@@ -552,7 +552,7 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index, const QMap<int,bo
     } else {
 
         QPolygon polygon(4);
-        polygon.putPoints(0,3,0,0,14,0,7,14);
+        polygon.putPoints(0,3,0,0,12,0,6,12);
         painter.setPen(color);
         painter.setBrush(color);
         painter.drawPolygon(polygon);
