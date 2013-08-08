@@ -27,9 +27,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QImage>
-#include <QFileDialog>
 #include <QCheckBox> 
-#include <QFileDialog>
 
 
 //include files for the application

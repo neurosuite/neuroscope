@@ -1244,10 +1244,13 @@ void NeuroscopeApp::slotFileOpen()
 {
     slotStatusMsg(tr("Opening file..."));
 
-    const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."),QString(),
+    QSettings settings;
+    const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."), settings.value("CurrentDirectory").toString(),
                                                    tr("Data File (*.dat *.lfp *.eeg *.fil);;All files (*.*)") );
     if(!url.isEmpty())
     {
+        QDir CurrentDir;
+        settings.setValue("CurrentDirectory", CurrentDir.absoluteFilePath(url));
         openDocumentFile(url);
     }
 
@@ -1257,10 +1260,13 @@ void NeuroscopeApp::slotFileOpen()
 void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
-    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."),QString(),
+    QSettings settings;
+    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."), settings.value("CurrentDirectory").toString(),
                                                          tr("Cluster File (*.clu.*)"));
     if(!urls.isEmpty())
     {
+        QDir CurrentDir;
+        settings.setValue("CurrentDirectory", CurrentDir.absoluteFilePath(urls.first()));
         loadClusterFiles(urls);
     }
 
@@ -1271,10 +1277,13 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
-    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."),QString(),
+    QSettings settings;
+    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."), settings.value("CurrentDirectory").toString(),
                                                          tr("Event File (*.evt*)"));
     if(!urls.isEmpty())
     {
+        QDir CurrentDir;
+        settings.setValue("CurrentDirectory", CurrentDir.absoluteFilePath(urls.first()));
         loadEventFiles(urls);
     }
 
@@ -1284,10 +1293,13 @@ void NeuroscopeApp::slotLoadEventFiles(){
 void NeuroscopeApp::slotLoadPositionFile(){
     slotStatusMsg(tr("Loading position file..."));
 
-    QString url=QFileDialog::getOpenFileName(this, tr("Open position File..."),QString(),
+    QSettings settings;
+    QString url=QFileDialog::getOpenFileName(this, tr("Open position File..."), settings.value("CurrentDirectory").toString(),
                                              tr("All Files (*.*)") );
     if(!url.isEmpty())
     {
+        QDir CurrentDir;
+        settings.setValue("CurrentDirectory", CurrentDir.absoluteFilePath(url));
         loadPositionFile(url);
     }
 

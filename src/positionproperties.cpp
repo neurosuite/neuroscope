@@ -19,6 +19,7 @@
 
 //QT includes
 #include <QIcon>
+#include <QFileDialog>
 
 #include <QPixmap>
 
