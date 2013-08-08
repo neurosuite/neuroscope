@@ -1053,7 +1053,6 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 }
 
 void NeuroscopeApp::updateBrowsingStatus(){
-    qDebug()<<"void NeuroscopeApp::updateBrowsingStatus(){ ";
     if(!clusterFileList.isEmpty()){
         ItemPalette* palette = 0;
         for(int i = 0; i<paletteTabsParent->count();++i){
