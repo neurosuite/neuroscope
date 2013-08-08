@@ -1930,7 +1930,7 @@ void ChannelPalette::setEditMode(bool edition){
 }
 
 void ChannelPalette::drawItem(QPainter& painter,QPixmap* pixmap,QColor color,bool show,bool skip){
-    pixmap->fill(backgroundColor);
+    pixmap->fill(Qt::transparent);
     painter.begin(pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     if(greyScale){
