@@ -119,11 +119,10 @@ void ItemIconView::keyPressEvent(QKeyEvent *event)
                 if (hasShiftPressed) {
                     QListWidgetItem *nextItem = item(i+1);
                     if(nextItem->isSelected()) {
-                        //c->setSelected(false);
+                        c->setSelected(false);
                     } else {
                         c->setSelected(true);
                         nextItem->setSelected(true);
-                        setCurrentItem(nextItem);
                     }
                     setCurrentItem(nextItem);
                 } else {
@@ -140,7 +139,7 @@ void ItemIconView::keyPressEvent(QKeyEvent *event)
                 if (hasShiftPressed) {
                     QListWidgetItem *nextItem = item(i-1);
                     if(nextItem->isSelected()) {
-                        //c->setSelected();
+                        c->setSelected(false);
                     } else {
                         c->setSelected(true);
                         nextItem->setSelected(true);
