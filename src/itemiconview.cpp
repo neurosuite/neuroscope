@@ -110,12 +110,26 @@ QSize ItemIconView::sizeHint() const
 
 void ItemIconView::keyPressEvent(QKeyEvent *event)
 {
+    const bool hasShiftPressed = event->modifiers() & Qt::ShiftModifier;
     if (event->key() == Qt::Key_Right) {
         QListWidgetItem *c = currentItem();
         if (c) {
             const int i = row(c);
             if (i < count()-1) {
-                setCurrentRow(i+1);
+                if (hasShiftPressed) {
+                    QListWidgetItem *nextItem = item(i+1);
+                    if(nextItem->isSelected()) {
+                        //c->setSelected(false);
+                    } else {
+                        c->setSelected(true);
+                        nextItem->setSelected(true);
+                        setCurrentItem(nextItem);
+                    }
+                    setCurrentItem(nextItem);
+                } else {
+                    clearSelection();
+                    setCurrentRow(i+1);
+                }
             }
         }
     } else if (event->key() == Qt::Key_Left) {
@@ -123,7 +137,19 @@ void ItemIconView::keyPressEvent(QKeyEvent *event)
         if (c) {
             const int i = row(c);
             if (i > 0) {
-                setCurrentRow(i-1);
+                if (hasShiftPressed) {
+                    QListWidgetItem *nextItem = item(i-1);
+                    if(nextItem->isSelected()) {
+                        //c->setSelected();
+                    } else {
+                        c->setSelected(true);
+                        nextItem->setSelected(true);
+                    }
+                    setCurrentItem(nextItem);
+                } else {
+                    clearSelection();
+                    setCurrentRow(i-1);
+                }
             }
         }
     } else {
