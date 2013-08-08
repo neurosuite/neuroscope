@@ -542,16 +542,18 @@ void ItemPalette::redrawItem(ItemIconView* iconView,int index, const QMap<int,bo
     bool browsingStatus = browsingMap[index];
     //Recreate the item
     QPixmap pixmap(12,12);
-    pixmap.fill(backgroundColor);
+    pixmap.fill(Qt::transparent);
     QColor color = qvariant_cast<QColor>(item->data(ItemIconView::Color));
     QPainter painter;
     painter.begin(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     if(!browsingStatus){
         painter.fillRect(0,0,12,12,color);
     } else {
 
         QPolygon polygon(4);
         polygon.putPoints(0,3,0,0,14,0,7,14);
+        painter.setPen(color);
         painter.setBrush(color);
         painter.drawPolygon(polygon);
     }
