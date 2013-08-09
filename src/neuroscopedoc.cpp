@@ -1792,16 +1792,19 @@ void NeuroscopeDoc::synchronize(){
     spikeGroupsChannels.clear();
 
     QMap<int,int>::Iterator iterator;
-    for(iterator = displayChannelsGroups.begin(); iterator != displayChannelsGroups.end(); ++iterator){
+    QMap<int,int>::ConstIterator end(displayChannelsGroups.end());
+    for(iterator = displayChannelsGroups.begin(); iterator != end; ++iterator){
         //set the color for the spike group to the one for the display group.
         QColor color = channelColorList->groupColor(iterator.key());
         channelColorList->setSpikeGroupColor(iterator.key(),color);
         channelsSpikeGroups.insert(iterator.key(),iterator.value());
+        qDebug()<<"iterator.key() "<<iterator.key()<<"iterator.value() "<<iterator.value();
     }
 
     QMap<int, QList<int> >::Iterator iterator2;
     for(iterator2 = displayGroupsChannels.begin(); iterator2 != displayGroupsChannels.end(); ++iterator2){
         spikeGroupsChannels.insert(iterator2.key(),iterator2.value());
+        qDebug()<<"spike group iterator.key() "<<iterator2.key()<<"iterator.value() "<<iterator2.value();
     }
 }
 

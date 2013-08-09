@@ -38,7 +38,7 @@
 #include <QList>
 #include <QLabel>
 #include <QResizeEvent>
-
+#include <QTimer>
 
 
 ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bool edition,QWidget* parent,const char* name)
@@ -1678,7 +1678,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     if(!iconviewDict.contains("0")){
         createGroup(0);
         moveTrashesToBottom();
-    }else{
+    } else {
         QList<int> trashChannels = (*groupsChannels)[0];
         if(!trashChannels.isEmpty()){
             if(type == DISPLAY)
@@ -1699,11 +1699,12 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
     QHashIterator<QString, ChannelIconView*> it(iconviewDict);
     while (it.hasNext()) {
         it.next();
-        if(it.key() == "0"){
+        //Trash
+        if(it.key() == QLatin1String("0")) {
             for(int i=0; i<it.value()->count();++i) {
                 QListWidgetItem *item = it.value()->item(i);
-                int channelId = item->text().toInt();
-                if(channelsToDiscard.contains(channelId)){
+                const int channelId = item->text().toInt();
+                if(channelsToDiscard.contains(channelId)) {
                     channelsShowHideStatus[channelId] = false;
                     //Update the icon
                     QPixmap pixmap(14,14);
@@ -1792,6 +1793,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         if(!lstItem.isEmpty()) {
             after = lstItem.first();
         }
+        qDebug() <<" after "<<after;
     }
 
     //Get the destination group color to later update the group color of the moved channels, default is blue
@@ -1826,6 +1828,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         const int index = trash->row(after);
         ChannelIconViewItem *newItem = new ChannelIconViewItem(QIcon(pixmap),QString::number(*channelIterator));
         trash->insertItem(index+1, newItem);
+        qDebug()<<" insertITem"<<index + 1;
 
 
         //new ChannelIconViewItem(trash,after,QString::number(*channelIterator),pixmap);
@@ -2134,7 +2137,7 @@ void ChannelPalette::trashChannels(int destinationGroup){
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
 }
-#include <QTimer>
+
 void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& sourceGroup,const QString& destinationGroup,int index, bool moveAll)
 {
     QString afterId;
@@ -2143,15 +2146,24 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
         if(index == 0){
             beforeFirst = true;
         } else {
-            afterId = QString::number(index);
+            ChannelIconView* trash = iconviewDict["0"];
+            QListWidgetItem *item = trash->item(index);
+            if (item)
+                afterId = item->text();
+            else
+                afterId = "";
         }
 
+        qDebug()<<" beforeFirst"<<beforeFirst<<" afterId"<<afterId;
         emit channelsMovedToTrash(items,afterId,beforeFirst);
     } else if ( sourceGroup == "0" ){
         if(index == 0){
             beforeFirst = true;
         } else {
-            afterId = QString::number(index);
+            ChannelIconView* iconView = iconviewDict[destinationGroup];
+            QListWidgetItem *item = iconView->item(index);
+            if (item)
+                afterId = item->text();
         }
 
         emit channelsMovedAroundInTrash(items,afterId,beforeFirst);
