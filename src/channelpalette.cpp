@@ -1352,10 +1352,12 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
         QList<QListWidgetItem*>lstItem = sourceIconView->findItems(QString::number(*iterator),Qt::MatchExactly);
         if(!lstItem.isEmpty()) {
             delete lstItem.first();
-
             //Add an item to the target group.
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(*iterator);
+            if(targetGroup == "0")
+                channelsShowHideStatus[*iterator] = false;
+
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
             if (index != -1) {
                 ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
@@ -2142,7 +2144,7 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
 {
     QString afterId;
     bool beforeFirst = false;
-    if(destinationGroup == "0" ){
+    if(destinationGroup == QLatin1String("0") ){
         if(index == 0){
             beforeFirst = true;
         } else {
@@ -2156,7 +2158,7 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
 
         qDebug()<<" beforeFirst"<<beforeFirst<<" afterId"<<afterId;
         emit channelsMovedToTrash(items,afterId,beforeFirst);
-    } else if ( sourceGroup == "0" ){
+    } else if ( sourceGroup == QLatin1String("0") ){
         if(index == 0){
             beforeFirst = true;
         } else {
@@ -2166,13 +2168,12 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
                 afterId = item->text();
         }
 
-        emit channelsMovedAroundInTrash(items,afterId,beforeFirst);
+        emit channelsMovedAroundInTrash(items, afterId, beforeFirst);
     }
     moveChannels(items,sourceGroup,destinationGroup, index, moveAll);
     //Inform the application that the spike groups have been modified (use to warn the user at the end of the session)
     emit groupModified();
 
-    update();
     if (moveAll) {
         QTimer::singleShot(100, this, SLOT(deleteEmptyGroups()));
     }
