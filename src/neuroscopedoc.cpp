@@ -323,14 +323,14 @@ int NeuroscopeDoc::openDocument(const QString& url)
     fileParts = fileName.split(".", QString::SkipEmptyParts);
     baseName = fileParts[0];
     for(uint i = 1;i < fileParts.count() - 1; ++i)
-        baseName += "." + fileParts.at(i);
-    QString sessionFile = baseName + ".nrs";
+        baseName += QLatin1Char('.') + fileParts.at(i);
+    QString sessionFile = baseName + QLatin1String(".nrs");
     sessionUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() + sessionFile;
 
     extension = fileParts.at(fileParts.count() - 1);
 
     //Look up in the parameter file
-    const QString parFileUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() +baseName +".xml";
+    const QString parFileUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() +baseName +QLatin1String(".xml");
     parameterUrl = parFileUrl;
     
     QFileInfo parFileInfo = QFileInfo(parFileUrl);
@@ -1246,7 +1246,7 @@ void NeuroscopeDoc::computeClusterFilesMapping(){
         else displayGroupsClusterFile.insert(iterator.key(),clusterFileList);
     }
 }
-#include <QDebug>
+
 void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     //Get the file video information
     if(reader.getRotation() != 0) {
@@ -1256,9 +1256,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         flip = reader.getFlip();
     }
 
-    qDebug()<<" 55555555555555555555555555555555555555555555555555555555555";
     QList<SessionFile> filesToLoad = reader.getFilesToLoad();
-    qDebug()<<" filesToLoad"<<filesToLoad.count();
     QStringList loadedClusterFiles;
     QStringList loadedEventFiles;
     QString loadedPositionFile;
@@ -1372,7 +1370,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         selectedClusters.remove(fileUrl);
                         skippedClusters.remove(fileUrl);
                         QString fileName = QFileInfo(fileUrl).fileName();
-                        fileUrl = sessionUrl + QDir::separator() + fileName;
+                        fileUrl = QFileInfo(sessionUrl).absolutePath() + QDir::separator() + fileName;
                         selectedClusters.insert(fileUrl,ids);
                         skippedClusters.insert(fileUrl,skippedIds);
                     }
@@ -1392,7 +1390,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         selectedEvents.remove(fileUrl);
                         skippedEvents.remove(fileUrl);
                         QString fileName = QFileInfo(fileUrl).fileName();
-                        fileUrl = sessionUrl + QDir::separator() + fileName;
+                        fileUrl = QFileInfo(sessionUrl).absolutePath() + QDir::separator() + fileName;
                         selectedEvents.insert(fileUrl,ids);
                         skippedEvents.insert(fileUrl,skippedIds);
                     }
@@ -1417,7 +1415,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                     QFileInfo fileInfo = QFileInfo(fileUrl).absolutePath();
                     if(!fileInfo.exists()){
                         QString fileName = QFileInfo(fileUrl).fileName();
-                        fileUrl = sessionUrl+QDir::separator() + fileName;
+                        fileUrl = QFileInfo(sessionUrl).absolutePath()+QDir::separator() + fileName;
                     }
 
                     //Create the transformedBackground
@@ -1900,7 +1898,6 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
 
     return OK;
 }
-#include <QDebug>
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
