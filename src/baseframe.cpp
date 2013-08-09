@@ -45,6 +45,7 @@ BaseFrame:: BaseFrame(int Xborder,int Yborder,QWidget* parent,const QString &nam
     setFrameStyle(QFrame::Box|QFrame::Plain);
 
     changeColor(backgroundColor);
+    setFocusPolicy(Qt::NoFocus);
 
 
     //Set the minimum size to ensure that the frame rectangle may never be null or invalid.

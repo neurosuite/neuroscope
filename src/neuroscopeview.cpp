@@ -73,6 +73,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
 
     mainDock->setWidget(traceWidget);
+    mainDock->setFocusPolicy(Qt::NoFocus);
 
     //Set Connection(s) common to all widgets.
     connect(this,SIGNAL(updateContents()),traceWidget,SLOT(updateContents()));
