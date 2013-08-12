@@ -2729,8 +2729,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                 if (mSelectedChannels.contains(selectedChannel)){
                                     mSelectedChannels.removeAll(selectedChannel);
                                     deselectedChannels.append(selectedChannel);
-                                }
-                                else{
+                                } else {
                                     mSelectedChannels.append(selectedChannel);
                                     currentlySelectedChannels.append(selectedChannel);
                                 }
@@ -2748,8 +2747,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                         mSelectedChannels.append(selectedChannel);
                                         currentlySelectedChannels.append(selectedChannel);
                                     }
-                                }
-                                else{
+                                } else {
                                     int previousOrdinate = channelsStartingOrdinate[previousChannelId];
                                     int currentOrdinate = channelsStartingOrdinate[selectedChannel];
                                     int min = previousOrdinate;
@@ -2770,8 +2768,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                                         }
                                     }
                                 }
-                            }
-                            else{
+                            } else {
                                 //TO DO
                             }
                         }
@@ -2969,7 +2966,11 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 }//mode != SELECT_EVENT
             }//single column
             if (mode == SELECT){
-                mSelectedChannels = currentlySelectedChannels;
+                Q_FOREACH(int i, currentlySelectedChannels) {
+                    if (!mSelectedChannels.contains(i)) {
+                        mSelectedChannels.append(i);
+                    }
+                }
                 mDeselectedChannels = deselectedChannels;
                 update();
             }
