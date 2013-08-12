@@ -1590,7 +1590,10 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds, cons
 void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after){
     QList<int>::const_iterator iterator;
     QPainter painter;
+    qDebug()<<" sourceGroup"<<sourceGroup<<" channelIds"<<channelIds<<" after :"<<after;
+
     ChannelIconView* iconView = iconviewDict[sourceGroup];
+    qDebug()<<" iconView "<<iconView;
 
     qDebug()<<" void ChannelPalette::moveChannels(const QList<int>& channelIds "<<after;
     //If the items have to be moved before the first item, insert them after the first item
@@ -1627,6 +1630,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
+        qDebug()<<" after :"<<after<<" iconView"<<iconView;
         const int afterIndex = iconView->row(after);
         after = new ChannelIconViewItem(QIcon(pixmap),channelId);
         iconView->insertItem(afterIndex,after);
@@ -2157,6 +2161,7 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
         qDebug()<<" beforeFirst"<<beforeFirst<<" afterId"<<afterId;
         emit channelsMovedToTrash(items,afterId,beforeFirst);
     } else if ( sourceGroup == QLatin1String("0") ){
+        qDebug()<<"sourceGroup == trash ";
         if(index == 0){
             beforeFirst = true;
         } else {
@@ -2208,7 +2213,6 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
                 channelsShowHideStatus[*iterator] = false;
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-            qDebug()<<" index "<<index;
             if (index!=-1) {
                 ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
                 targetIconView->insertItem(index, item);
@@ -2230,6 +2234,10 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
         }
     }
 
+    if (sourceGroup == "0") {
+        emit channelsRemovedFromTrash(channelIds);
+    }
+
     //Modify the entry in the map group-channel list
     groupsChannels->remove(targetGroup.toInt());
     qDebug()<<" targetChannels"<<targetChannels;
@@ -2242,15 +2250,13 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
         if(type == DISPLAY)  {
             if (!moveAll)
                 deleteEmptyGroups();//the drag has been done in the spike palette
-        }
-        else{
+        } else {
             //When all the channels of a group have been remove by a drag-drop it can not be suppress immediately
             //(the mouse is still in the iconView area). To make sure the group is suppress, a pair of variables (isGroupToRemove,groupToRemove)
             //is set to inform that a group has to be suppress and a repaint of the palette is asked (update()).
             isGroupToRemove = true;
         }
-    }
-    else{
+    } else{
         //Modify the entries in the map group-channel list
         groupsChannels->remove(sourceGroup.toInt());
         groupsChannels->insert(sourceGroup.toInt(),sourceChannels);

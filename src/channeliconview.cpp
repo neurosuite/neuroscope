@@ -75,6 +75,12 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     connect(model(), SIGNAL(rowsInserted(QModelIndex, int,int)), this, SIGNAL(rowInsered()));
 }
 
+
+ChannelIconView::~ChannelIconView()
+{
+    qDebug()<<" void ChannelIconView::~ChannelIconView()*******************"<<this;
+}
+
 void ChannelIconView::slotRowInsered()
 {
     adjustSize();
@@ -155,7 +161,8 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
         for (int i=0; i< numberOfItems; ++i) {
             ChannelIconViewItem *item = new ChannelIconViewItem(this);
             stream >> *item;
-            channelIds.prepend(item->text().toInt());
+            channelIds.append(item->text().toInt());
+            qDebug()<<" channelIds"<<channelIds;
             delete item;
         }
         if (!channelIds.isEmpty()) {
