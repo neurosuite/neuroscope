@@ -61,7 +61,7 @@ int EventsProvider::loadData(){
     //Get the number of events
     nbEvents = Utilities::getNbLines(fileName);
 
-    qDebug()<<"nbEvents "<<nbEvents<<endl;
+    //qDebug()<<"nbEvents "<<nbEvents<<endl;
 
     if(nbEvents == -1){
         events.setSize(0,0);

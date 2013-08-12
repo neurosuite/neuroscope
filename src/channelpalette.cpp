@@ -1631,7 +1631,6 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId.toInt());
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId.toInt()],channelsSkipStatus[channelId.toInt()]);
-        qDebug()<<" after :"<<after<<" iconView"<<iconView;
         const int afterIndex = iconView->row(after);
         after = new ChannelIconViewItem(QIcon(pixmap),channelId);
         iconView->insertItem(afterIndex,after);
@@ -1835,7 +1834,6 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         const int index = trash->row(after);
         ChannelIconViewItem *newItem = new ChannelIconViewItem(QIcon(pixmap),QString::number(*channelIterator));
         trash->insertItem(index+1, newItem);
-        qDebug()<<" insertITem"<<index + 1;
 
 
         //new ChannelIconViewItem(trash,after,QString::number(*channelIterator),pixmap);
@@ -2159,10 +2157,8 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
                 afterId = item->text();
         }
 
-        qDebug()<<" beforeFirst"<<beforeFirst<<" afterId"<<afterId;
         emit channelsMovedToTrash(items,afterId,beforeFirst);
     } else if ( sourceGroup == QLatin1String("0") ){
-        qDebug()<<"sourceGroup == trash ";
         if(index == 0){
             beforeFirst = true;
         } else {

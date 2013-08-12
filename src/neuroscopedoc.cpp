@@ -1798,13 +1798,11 @@ void NeuroscopeDoc::synchronize(){
         QColor color = channelColorList->groupColor(iterator.key());
         channelColorList->setSpikeGroupColor(iterator.key(),color);
         channelsSpikeGroups.insert(iterator.key(),iterator.value());
-        qDebug()<<"iterator.key() "<<iterator.key()<<"iterator.value() "<<iterator.value();
     }
 
     QMap<int, QList<int> >::Iterator iterator2;
     for(iterator2 = displayGroupsChannels.begin(); iterator2 != displayGroupsChannels.end(); ++iterator2){
         spikeGroupsChannels.insert(iterator2.key(),iterator2.value());
-        qDebug()<<"spike group iterator.key() "<<iterator2.key()<<"iterator.value() "<<iterator2.value();
     }
 }
 
@@ -1832,7 +1830,8 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
     //Check that the selected file is a cluster file
     QString fileName = clusterUrl;
-    if(fileName.indexOf(".clu") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".clu") == -1)
+        return INCORRECT_FILE;
 
     ClustersProvider* clustersProvider = new ClustersProvider(clusterUrl,datSamplingRate,samplingRate,tracesProvider->getTotalNbSamples(),clusterPosition);
     QString name = clustersProvider->getName();
@@ -1957,16 +1956,14 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
                                                   ", therefore this file will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return MISSING_FILE;
-    }
-    else if(returnStatus == ClustersProvider::COUNT_ERROR){
+    } else if(returnStatus == ClustersProvider::COUNT_ERROR) {
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
         QMessageBox::critical (0, tr("Error!"),tr("The number of spikes of the requested file %1 could not be determined."
                                                   " Therefore this file will not be loaded.").arg(clusterUrl));
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         return CREATION_ERROR;
-    }
-    else if(returnStatus == ClustersProvider::INCORRECT_CONTENT){
+    } else if(returnStatus == ClustersProvider::INCORRECT_CONTENT) {
         delete clustersProvider;
         QApplication::restoreOverrideCursor();
         QMessageBox::critical (0, tr("Error!"),tr("The number of spikes read in the requested file %1 or the corresponding time file (.res) does not correspond to number of spikes computed."
@@ -2036,8 +2033,10 @@ void NeuroscopeDoc::clusterColorUpdate(const QString &providerName,int clusterId
     //Notify all the views of the modification
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
-        if(view != activeView) view->clusterColorUpdate(color, providerName,clusterId,false);
-        else view->clusterColorUpdate(color, providerName,clusterId,true);
+        if(view != activeView)
+            view->clusterColorUpdate(color, providerName,clusterId,false);
+        else
+            view->clusterColorUpdate(color, providerName,clusterId,true);
     }
 
     //Ask the active view to take the modification into account immediately
@@ -2057,7 +2056,8 @@ void NeuroscopeDoc::setClusterPosition(int position){
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(QString eventUrl,NeuroscopeView*activeView){
     //Check that the selected file is a event file
     QString fileName = eventUrl;
-    if(fileName.indexOf(".evt") == -1) return INCORRECT_FILE;
+    if(fileName.indexOf(".evt") == -1)
+        return INCORRECT_FILE;
 
     EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
     QString name = eventsProvider->getName();

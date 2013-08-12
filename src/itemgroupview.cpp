@@ -26,7 +26,6 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
       mLabel(0),
       init(true)
 {
-    qDebug()<<" ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)";
     mLayout = new QHBoxLayout;
     mLayout->setMargin(0);
     mLayout->setSpacing(0);

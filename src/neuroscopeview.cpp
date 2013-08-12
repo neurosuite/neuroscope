@@ -249,7 +249,6 @@ void NeuroscopeView::shownClustersUpdate(const QString &name, const QList<int>& 
     for(iterator = clustersToShow.constBegin(); iterator != iteratorEnd; ++iterator){
         currentSelectedClusters->append(*iterator);
     }
-    qDebug()<<" void NeuroscopeView::shownClustersUpdate(const QString &name, const QList<int>& clustersToShow){*********************"<<clustersToShow;
     emit showClusters(name,*currentSelectedClusters);
 
     //Show all the enclosed widgets of the dockWindows.
@@ -277,7 +276,6 @@ void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QStri
     for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator)
         currentSelectedEvents->append(*shownEventsIterator);
 
-    qDebug()<<" void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider,const QString &name,ItemColors* eventColors,bool active,"<<name;
     selectedEvents.insert(name,currentSelectedEvents);
 
 
@@ -384,7 +382,6 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
 
     if(selectedEvents.contains(providerName)){
         QList<int>* currentSelectedEvents = selectedEvents.take(providerName);
-        qDebug()<<" currentSelectedEvents"<<currentSelectedEvents;
         QList<int>* newSelectedEventsIds = new QList<int>();
         QList<int>::iterator iterator;
 
@@ -407,7 +404,6 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
             }
         }
 
-        qDebug()<<" newSelectedEventsIds ******************************************************"<<(*newSelectedEventsIds);
         selectedEvents.insert(providerName,newSelectedEventsIds);
         delete currentSelectedEvents;
 
@@ -418,10 +414,12 @@ void NeuroscopeView::updateSelectedEventsIds(const QString& providerName,QMap<in
 }
 
 void NeuroscopeView::removePositionProvider(const QString& name,bool active){
-    if(positionView != 0L) removePositionView();
+    if(positionView != 0L)
+        removePositionView();
 
     //Show all the enclosed widgets of the dockWindows.
-    if(active) showAllWidgets();
+    if(active)
+        showAllWidgets();
 }
 
 void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,const QImage& backgroundImage,const QColor& backgroundColor,long startTime,long duration,int width,int height,bool showEvents){
@@ -516,7 +514,6 @@ void  NeuroscopeView::eventColorUpdate(const QColor &color, const QString &name,
 
 void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)
 {
-    qDebug()<<" void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)";
     //update the list of selected channels
     selectedChannels.clear();
     selectedChannels = selectedIds;
@@ -525,7 +522,6 @@ void NeuroscopeView::setSelectedChannels(const QList<int>& selectedIds)
 
 void NeuroscopeView::selectChannels(const QList<int>& selectedIds)
 {
-    qDebug()<<" void NeuroscopeView::selectChannels(const QList<int>& selectedIds)"<<selectedIds;
     selectedChannels.clear();
     selectedChannels=selectedIds;
     emit channelsToBeSelected(selectedIds);
@@ -553,7 +549,6 @@ const QList<int>* NeuroscopeView::getSelectedClusters(const QString& name) const
 
 const QList<int>* NeuroscopeView::getSelectedEvents(const QString& name) const
 {
-    qDebug()<<" selectedEvents[name]"<<(*selectedEvents[name]);
     return selectedEvents[name];
 }
 
