@@ -137,7 +137,8 @@ void ChannelPalette::paintEvent ( QPaintEvent*){
     //(the mouse is still in the iconView area). To make sure the groups are suppressed, isGroupToRemove
     //is set to inform that empty groups have to be suppressed and a repaint of the palette is asked.
     if(isGroupToRemove){
-        deleteEmptyGroups();
+        QTimer::singleShot(100, this, SLOT(deleteEmptyGroups()));
+        //deleteEmptyGroups();
         isGroupToRemove = false;
         //Inform the application that the groups have been modified
         emit groupModified();
@@ -2237,16 +2238,15 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
 
     //Modify the entry in the map group-channel list
     groupsChannels->remove(targetGroup.toInt());
-    qDebug()<<" targetChannels"<<targetChannels;
     groupsChannels->insert(targetGroup.toInt(),targetChannels);
-    //targetIconView->arrangeItemsInGrid();
 
 
     //The source is empty now
     if(sourceIconView->count() == 0){
         if(type == DISPLAY)  {
-            if (!moveAll)
+            if (!moveAll) {
                 deleteEmptyGroups();//the drag has been done in the spike palette
+            }
         } else {
             //When all the channels of a group have been remove by a drag-drop it can not be suppress immediately
             //(the mouse is still in the iconView area). To make sure the group is suppress, a pair of variables (isGroupToRemove,groupToRemove)
