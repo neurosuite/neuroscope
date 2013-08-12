@@ -204,9 +204,9 @@ void ClustersProvider::requestData(long startTime,long endTime,QObject* initiato
 void ClustersProvider::retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits){
     Array<dataType> data;
 
-    qDebug()<<" in retrieveData, startTime " <<startTime<<" endTime " <<endTime<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits;
+    //qDebug()<<" in retrieveData, startTime " <<startTime<<" endTime " <<endTime<<" startTimeInRecordingUnits "<<startTimeInRecordingUnits;
 
-    qDebug()<<" in retrieveData, fileMaxTime " <<fileMaxTime<<" samplingRate " <<samplingRate;
+    //qDebug()<<" in retrieveData, fileMaxTime " <<fileMaxTime<<" samplingRate " <<samplingRate;
 
 
     if(startTime > fileMaxTime){
