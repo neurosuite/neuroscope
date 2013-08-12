@@ -2234,9 +2234,6 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
         }
     }
 
-    if (sourceGroup == "0") {
-        emit channelsRemovedFromTrash(channelIds);
-    }
 
     //Modify the entry in the map group-channel list
     groupsChannels->remove(targetGroup.toInt());
@@ -2267,5 +2264,9 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
 
     if(iconviewDict.contains("0") || iconviewDict.contains("-1"))
         moveTrashesToBottom();
+    if (sourceGroup == "0") {
+        emit channelsRemovedFromTrash(channelIds);
+    }
+
     update();
 }
