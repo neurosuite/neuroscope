@@ -2212,9 +2212,11 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
             if (index!=-1) {
                 ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
                 targetIconView->insertItem(index, item);
+                targetChannels.insert(index,*iterator);
                 index++;
             } else {
                 new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator), targetIconView);
+                targetChannels.append(*iterator);
             }
             //Update the group color
             if(type == DISPLAY)
@@ -2223,7 +2225,6 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
                 channelColors->setSpikeGroupColor(*iterator,groupColor);
 
             //KDAB: verify sourceChannels.erase(iterator);
-            targetChannels.append(*iterator);
             channelsGroups->remove(*iterator);
             channelsGroups->insert(*iterator,targetGroup.toInt());
         }
@@ -2231,6 +2232,7 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
 
     //Modify the entry in the map group-channel list
     groupsChannels->remove(targetGroup.toInt());
+    qDebug()<<" targetChannels"<<targetChannels;
     groupsChannels->insert(targetGroup.toInt(),targetChannels);
     //targetIconView->arrangeItemsInGrid();
 
