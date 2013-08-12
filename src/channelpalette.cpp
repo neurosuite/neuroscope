@@ -1333,7 +1333,6 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
     QList<int> sourceChannels = (*groupsChannels)[sourceGroup.toInt()];
 
     QList<int>::const_iterator iterator;
-    QPainter painter;
     ChannelIconView* sourceIconView = iconviewDict[sourceGroup];
     ChannelIconView* targetIconView = iconviewDict[targetGroup];
 
@@ -1357,7 +1356,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
             QColor color = channelColors->color(*iterator);
             if(targetGroup == "0")
                 channelsShowHideStatus[*iterator] = false;
-
+            QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
             if (index != -1) {
                 ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
@@ -2152,8 +2151,6 @@ void ChannelPalette::slotMoveListItem(const QList<int> &items, const QString& so
             QListWidgetItem *item = trash->item(index);
             if (item)
                 afterId = item->text();
-            else
-                afterId = "";
         }
 
         qDebug()<<" beforeFirst"<<beforeFirst<<" afterId"<<afterId;
