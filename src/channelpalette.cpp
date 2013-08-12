@@ -1371,7 +1371,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
             else
                 channelColors->setSpikeGroupColor(*iterator,groupColor);
 
-            //KDAB: verify sourceChannels.erase(iterator);
+            sourceChannels.removeAll(*iterator);
             targetChannels.append(*iterator);
             channelsGroups->remove(*iterator);
             channelsGroups->insert(*iterator,targetGroup.toInt());
@@ -2224,7 +2224,7 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
             else
                 channelColors->setSpikeGroupColor(*iterator,groupColor);
 
-            //KDAB: verify sourceChannels.erase(iterator);
+            sourceChannels.removeAll(*iterator);
             channelsGroups->remove(*iterator);
             channelsGroups->insert(*iterator,targetGroup.toInt());
         }
