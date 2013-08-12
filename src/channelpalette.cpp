@@ -1353,7 +1353,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
             delete lstItem.first();
             //Add an item to the target group.
             QPixmap pixmap(14,14);
-            QColor color = channelColors->color(*iterator);
+            QColor color = channelColors->color(*iterator);            
             if(targetGroup == "0")
                 channelsShowHideStatus[*iterator] = false;
             QPainter painter;

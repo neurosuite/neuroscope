@@ -2969,8 +2969,6 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 }//mode != SELECT_EVENT
             }//single column
             if (mode == SELECT){
-                mDeselectedChannels.clear();
-                mSelectedChannels.clear();
                 mSelectedChannels = currentlySelectedChannels;
                 mDeselectedChannels = deselectedChannels;
                 update();
