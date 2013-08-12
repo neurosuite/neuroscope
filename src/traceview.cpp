@@ -2717,7 +2717,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             }
                             else{
                                 mSelectedChannels.removeAll(selectedChannel);
-                                if (!mSelectedChannels.isEmpty()) alreadySelected = true;
+                                if (!mSelectedChannels.isEmpty())
+                                    alreadySelected = true;
                             }
                         }
 
@@ -3008,8 +3009,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                 drawContentsMode = REDRAW;
                 //Redraw
                 update();
-            }
-            else{
+            } else {
                 //deselect all the channels except the last one.
                 if (alreadySelected){
                     int channelId = mSelectedChannels[mSelectedChannels.size() - 1];
@@ -3247,7 +3247,6 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 void TraceView::selectChannels(const QList<int>& selectedIds){
     qDebug()<<" void TraceView::selectChannels(const QList<int>& selectedIds){";
     if ((mSelectedChannels.size() == 0 && selectedIds.size() == 0)) return;
-
     //Unhighlight the currently selected traces which are not selected any more
     mDeselectedChannels.clear();
     QList<int>::iterator it;

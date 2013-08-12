@@ -169,7 +169,7 @@ public Q_SLOTS:
     /** Informs listener that the channels @p selectedIds have been selected.
   * @param selectedIds the list of channels selected by the user in a view.
   */
-    void slotChannelsSelected(const QList<int>& selectedIds) {emit channelsSelected(selectedIds);}
+    void slotChannelsSelected(const QList<int>& selectedIds);
 
     /**Change the current mode, call by a selection of a tool.
   * @param selectedMode new mode of drawing.

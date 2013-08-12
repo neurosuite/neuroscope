@@ -726,3 +726,9 @@ void TraceWidget::showLabels(bool show)
 {
     view.showHideLabels(show);
 }
+
+void TraceWidget::slotChannelsSelected(const QList<int>& selectedIds)
+{
+    emit channelsSelected(selectedIds);
+}
+
