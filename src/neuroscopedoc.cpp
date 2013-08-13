@@ -1815,9 +1815,11 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
     //In none edit mode, the shown channels becom the selected ones.
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
+        //qDebug()<<" activeView"<<activeView<<" view"<<view;
         if(view != activeView){
+            //qDebug()<<" view->channels()"<<view->channels();
             view->setMode(TraceView::ZOOM,false);
-            view->setSelectedChannels(view->channels());
+            //view->setSelectedChannels(view->channels());
         }
         else{
             view->setMode(TraceView::ZOOM,true);
