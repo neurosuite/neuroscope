@@ -1434,7 +1434,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         }
                     }
 
-                    OpenSaveCreateReturnMessage status = loadPositionFile(QFileInfo(fileUrl).absolutePath());
+                    OpenSaveCreateReturnMessage status = loadPositionFile(fileUrl);
                     if(status == OK){
                         loadedPositionFile = lastLoadedProvider;
                         if(!backgroundImage.isEmpty() || (backgroundImage.isEmpty() && drawPositionsOnBackground))
@@ -2629,7 +2629,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const QString& fileUrl){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const QString& fileUrl) {
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionUrl = fileUrl;
     QString positionFileName = positionUrl;
