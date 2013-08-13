@@ -68,7 +68,7 @@ void ItemGroupView::reAdjustSize(int parentWidth,int labelSize){
         if (futurWidth<0)
             return;
         setFixedWidth(futurWidth);
-        int viewfuturWidth = parentWidth - labelSize - 6;//give so space on the right
+        int viewfuturWidth = parentWidth - labelSize - 16;//give so space on the right
         if(viewfuturWidth < 0)
             return;
 
