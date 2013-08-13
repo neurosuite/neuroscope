@@ -27,7 +27,13 @@
 
 
 PositionsProvider::PositionsProvider(const QString &fileUrl, double samplingRate, int width, int height, int rotation, int flip):
-    DataProvider(fileUrl),samplingRate(samplingRate),width(width),height(height),rotation(rotation),flip(flip) {
+    DataProvider(fileUrl),
+    samplingRate(samplingRate),
+    width(width),
+    height(height),
+    rotation(rotation),
+    flip(flip)
+{
 
     name = fileUrl;
 }
@@ -74,7 +80,7 @@ int PositionsProvider::loadData(){
 
     //Set the size of the Arrays containing the positions using the first line.
     firstLine = firstLine.simplified();
-    QStringList lineParts = firstLine.split(" ", QString::SkipEmptyParts);
+    QStringList lineParts = firstLine.split(QLatin1String(" "), QString::SkipEmptyParts);
     nbCoordinates = lineParts.count();
     dataType k = nbCoordinates;
     positions.setSize(nbPositions,nbCoordinates);

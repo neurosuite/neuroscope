@@ -249,7 +249,9 @@ void PositionView::drawPositions(QPainter& painter){
                 index = index + 2;
             }
             painter.setBrush(Qt::NoBrush);
-            painter.setPen(lineColor);
+            QPen linePen(lineColor);
+            linePen.setCosmetic(true);
+            painter.setPen(linePen);
 
             int pointCount = (nbPointsInPolygon == -1) ?  polygon.size() : nbPointsInPolygon;
 
@@ -258,7 +260,9 @@ void PositionView::drawPositions(QPainter& painter){
             painter.setPen(Qt::red);//first point red
             painter.setBrush(Qt::red);
             painter.drawEllipse(data(i,1)-1,data(i,2)-1,2,2);
-            painter.setPen(Qt::green);//other points green
+            QPen lineGreen(Qt::green);
+            lineGreen.setCosmetic(true);
+            painter.setPen(lineGreen);//other points green
             painter.setBrush(Qt::green);
             for(int j = 3;j<nbCoordinates;j=j+2){
                 painter.drawEllipse(data(i,j)-1,data(i,j+1)-1,2,2);
@@ -275,7 +279,9 @@ void PositionView::drawPositions(QPainter& painter){
             }
             index = index + 2;
         }
-        painter.setPen(Qt::white);
+        QPen lineWhite(Qt::white);
+        lineWhite.setCosmetic(true);
+        painter.setPen(lineWhite);
         painter.setBrush(Qt::NoBrush);
         int pointCount = (nbPointsInPolygon == -1) ?  polygon.size() : nbPointsInPolygon;
 
@@ -283,7 +289,9 @@ void PositionView::drawPositions(QPainter& painter){
 
 
         painter.setBrush(Qt::red);
-        painter.setPen(Qt::black);
+        QPen lineBlack(Qt::black);
+        lineBlack.setCosmetic(true);
+        painter.setPen(lineBlack);
         painter.drawEllipse(data(nbPoints,1)-4,data(nbPoints,2)-4,8,8);
         painter.setBrush(Qt::green);
         painter.setPen(Qt::black);

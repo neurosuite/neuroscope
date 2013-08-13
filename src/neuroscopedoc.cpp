@@ -2633,7 +2633,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadPositionFile(const
     //get the sampling rate for the given position file extension, if there is none already set, use the default
     QString positionUrl = fileUrl;
     QString positionFileName = positionUrl;
-    QStringList fileParts = positionFileName.split(".", QString::SkipEmptyParts);
+    QStringList fileParts = positionFileName.split(QLatin1String("."), QString::SkipEmptyParts);
     if(fileParts.count() < 2)
         return INCORRECT_FILE;
     positionFileExtension = fileParts[fileParts.count() - 1];

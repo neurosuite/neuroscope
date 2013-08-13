@@ -1898,13 +1898,15 @@ void ChannelPalette::setEditMode(bool edition){
     if(edition)
         channelsShowHideStatus.clear();
 
+    qDebug()<<" channelsShowHideStatus"<<channelsShowHideStatus;
+
     //Update the item icons
     QPainter painter;
     QMap<int,int>::Iterator iterator;
     QList<int> selectedIds;
 
     for(iterator = channelsGroups->begin(); iterator != channelsGroups->end(); ++iterator){
-        int groupId = (*channelsGroups)[iterator.key()];
+        const int groupId = (*channelsGroups)[iterator.key()];
         ChannelIconView* iconView = iconviewDict[QString::number(groupId)];
         QList<QListWidgetItem*>lstItem = iconView->findItems(QString::number(iterator.key()),Qt::MatchExactly);
         if(!lstItem.isEmpty()) {
@@ -1915,6 +1917,7 @@ void ChannelPalette::setEditMode(bool edition){
                 channelsShowHideStatus.insert(iterator.key(),selected);
             } else {
                 selected = channelsShowHideStatus[iterator.key()];
+                qDebug()<<" iterator.key()"<<iterator.key()<<" selected"<<selected;
             }
             QIcon icon = item->icon();
             QPixmap pixmap(icon.pixmap(QSize(14,14)).size());
@@ -1927,6 +1930,7 @@ void ChannelPalette::setEditMode(bool edition){
     }
 
     selectChannels(selectedIds);
+    qDebug()<<"void ChannelPalette::setEditMode "<<this<<" edition"<<edition<<" selectedIds"<<selectedIds;
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
