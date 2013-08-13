@@ -27,13 +27,12 @@
 #include "neuroscope.h"
 int main(int argc, char *argv[])
 {
-
+    QApplication::setGraphicsSystem("raster");
     QApplication::setOrganizationName("sourceforge");
     QApplication::setOrganizationDomain("sourceforge.net");
     QApplication::setApplicationName("neuroscope");
 
     QApplication app(argc, argv);
-    QApplication::setGraphicsSystem("raster");
     QString file;
     QStringList args = QApplication::arguments();
     QString channelNb;
