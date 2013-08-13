@@ -152,7 +152,8 @@ void PositionView::updatePositionInformation(int width, int height, const QImage
     }
     else{
         drawContentsMode = REDRAW;
-        if(active) update();
+        if(active)
+            update();
     }
 }
 
@@ -353,7 +354,8 @@ void PositionView::print(QPainter& printPainter,int width, int height,bool white
     printPainter.setWindow(r.left(),r.top(),r.width()-1,r.height()-1);//hack because Qt QRect is used differently in this function
     printPainter.setViewport(viewport);
 
-    if(whiteBackground && backgroundForPrinting.isNull()) printPainter.fillRect(back,Qt::white);
+    if(whiteBackground && backgroundForPrinting.isNull())
+        printPainter.fillRect(back,Qt::white);
     if(!whiteBackground && background.isNull()){
         QColor color = palette().color(backgroundRole());
         printPainter.fillRect(back,color);
@@ -377,11 +379,13 @@ void PositionView::dataAvailable(QHash<QString, EventData*>& eventsData,QMap<QSt
     //Update the list of selected events.
     this->selectedEvents.clear();
     QMap<QString, QList<int> >::Iterator providersIterator;
-    for(providersIterator = selectedEvents.begin(); providersIterator != selectedEvents.end(); ++providersIterator){
+    QMap<QString, QList<int> >::Iterator providersEnd(selectedEvents.end());
+    for(providersIterator = selectedEvents.begin(); providersIterator != providersEnd; ++providersIterator){
         QList<int> eventsToShow = static_cast< QList<int> >(providersIterator.value());
         QList<int> events;
         QList<int>::iterator shownEventsIterator;
-        for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != eventsToShow.end(); ++shownEventsIterator){
+        QList<int>::iterator shownEnd(eventsToShow.end());
+        for(shownEventsIterator = eventsToShow.begin(); shownEventsIterator != shownEnd; ++shownEventsIterator){
             events.append(*shownEventsIterator);
         }
         this->selectedEvents.insert(providersIterator.key(),events);
@@ -445,10 +449,11 @@ void PositionView::drawEvents(QPainter& painter){
     QPen pen;
     pen.setWidth(3);
     QMap<QString, QList<int> >::Iterator iterator;
-    for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
+    QMap<QString, QList<int> >::Iterator end(selectedEvents.end());
+    for(iterator = selectedEvents.begin(); iterator != end; ++iterator){
         QList<int> eventList = iterator.value();
         QString providerName = iterator.key();
-        if(eventList.size() == 0 || eventsData[providerName] == 0)
+        if(eventList.isEmpty() || eventsData[providerName] == 0)
             continue;
         ItemColors* colors = providerItemColors[providerName];
         Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getPositions();
@@ -469,7 +474,6 @@ void PositionView::drawEvents(QPainter& painter){
 }
 
 void PositionView::eventColorUpdate(const QString &name, int eventId, bool active){
-    qDebug()<<" active "<<active <<" name"<<name<<" eventId"<<eventId;
     if(active){
         drawContentsMode = REDRAW ;
         update();

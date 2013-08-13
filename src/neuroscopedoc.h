@@ -559,7 +559,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(QString eventUrl,NeuroscopeView* activeView);
+    OpenSaveCreateReturnMessage loadEventFile(const QString &eventUrl,NeuroscopeView* activeView);
 
     /**Loads the event file store in the session file and identified by @p eventUrl.
     * @param eventUrl url of the event file to load.
@@ -568,7 +568,7 @@ public:
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(QString eventUrl,QMap<EventDescription,QColor>& itemColors,QDateTime lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadEventFile(const QString &eventUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
 
     /**Removes the event provider corresponding to the identifier @p providerName
     * from the list of providers.
@@ -589,7 +589,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @param clustersToHide list of clusters to not show.
     */
-    void showAllClustersExcept(ItemPalette* clusterPalette,NeuroscopeView* activeView,QList<int> clustersToHide);
+    void showAllClustersExcept(ItemPalette* clusterPalette, NeuroscopeView* activeView, const QList<int> &clustersToHide);
 
     /**Updates the selection of clusters to be shown by hiding all the clusters.
     * @param clusterPalette the palette containing the clusters to be shown.
@@ -659,7 +659,7 @@ public:
     * @param providerName identifier of the event file.
     * @return list of the event descriptions.
     */
-    QList<EventDescription> eventIds(QString providerName);
+    QList<EventDescription> eventIds(const QString &providerName);
 
 
     /**Sets the information used to display spike waveforms.
@@ -696,7 +696,7 @@ public:
    * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    * @param activeView the view in which the change has been made.
    */
-    void setPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,
+    void setPositionInformation(double videoSamplingRate, int width, int height, const QString &backgroundImage,
                                 int rotation,int flip,bool positionsBackground,NeuroscopeView* activeView);
 
     /**Sets the default information used to display the animal position.
@@ -708,7 +708,7 @@ public:
    * @param flip video image flip orientation, 0 stands for none, 1 for vertical and 2 for horizontal.
    * @param positionsBackground true if the all the positions contain in the position file have to be drawn on the background, false otherwise.
    */
-    void setDefaultPositionInformation(double videoSamplingRate, int width, int height, QString backgroundImage,int rotation,int flip,bool positionsBackground);
+    void setDefaultPositionInformation(double videoSamplingRate, int width, int height, const QString &backgroundImage,int rotation,int flip,bool positionsBackground);
 
     /**Gets the video sampling rate.
    * @return current video sampling rate.
@@ -806,7 +806,7 @@ public:
    * @param whiteBackground true if the skipped channels should be colored in white, false otherwise.
    * @param backgroundColor current background color.
    */
-    void updateSkippedChannelColors(bool whiteBackground,QColor backgroundColor);
+    void updateSkippedChannelColors(bool whiteBackground, const QColor &backgroundColor);
 
     /**Informs the views that the list of skipped channel has changed.*/
     void updateSkipStatus();

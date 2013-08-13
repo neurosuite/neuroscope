@@ -216,7 +216,8 @@ void NeuroscopeView::setClusterProvider(ClustersProvider* clustersProvider,QStri
                                         QMap<int,int>* channelsSpikeGroups,int nbSamplesBefore,int nbSamplesAfter,const QList<int>& clustersToSkip){
     QList<int>* currentSelectedClusters = new QList<int>();
     QList<int>::iterator shownClustersIterator;
-    for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != clustersToShow.end(); ++shownClustersIterator)
+    QList<int>::iterator shownClustersIteratorEnd(clustersToShow.end());
+    for(shownClustersIterator = clustersToShow.begin(); shownClustersIterator != shownClustersIteratorEnd; ++shownClustersIterator)
         currentSelectedClusters->append(*shownClustersIterator);
 
     selectedClusters.insert(name,currentSelectedClusters);

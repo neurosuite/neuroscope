@@ -267,7 +267,7 @@ public:
 
     /**Triggers the increase of the amplitude of the selected channels.
    */
-    void increaseSelectedChannelsAmplitude(const QList<int> selectedIds){
+    void increaseSelectedChannelsAmplitude(const QList<int> &selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
@@ -279,7 +279,7 @@ public:
 
     /**Triggers the decrease of the amplitude of the selected channels.
    */
-    void decreaseSelectedChannelsAmplitude(const QList<int> selectedIds){
+    void decreaseSelectedChannelsAmplitude(const QList<int> &selectedIds){
         //update the list of selected channels
         selectedChannels.clear();
         QList<int>::const_iterator selectedIterator;
@@ -635,7 +635,7 @@ public Q_SLOTS:
   * @param time initial time of the modified event.
   * @param newTime new time of the modified event.
   */
-    void slotEventModified(QString providerName,int selectedEventId,double time,double newTime){
+    void slotEventModified(const QString &providerName,int selectedEventId,double time,double newTime){
         emit eventModified(providerName,selectedEventId,time,newTime);
         emit updateEventDisplay();
     }
@@ -645,7 +645,7 @@ public Q_SLOTS:
   * @param selectedEventId id of the removed event.
   * @param time initial time of the removed event.
   */
-    void slotEventRemoved(QString providerName,int selectedEventId,double time){
+    void slotEventRemoved(const QString &providerName,int selectedEventId,double time){
         emit eventRemoved(providerName,selectedEventId,time);
         emit updateEventDisplay();
     }
@@ -655,7 +655,7 @@ public Q_SLOTS:
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    void slotEventAdded(QString providerName,QString addedEventDescription,double time){
+    void slotEventAdded(const QString &providerName, const QString &addedEventDescription,double time){
         emit eventAdded(providerName,addedEventDescription,time);
     }
 
@@ -676,7 +676,7 @@ public Q_SLOTS:
   * @param newOrientation true if the image has been transformed (rotate and or flip), false otherwise.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updatePositionInformation(int width, int height,QImage backgroundImage,bool newOrientation,bool active){
+    void updatePositionInformation(int width, int height, const QImage &backgroundImage,bool newOrientation,bool active){
         emit positionInformationUpdated(width,height,backgroundImage,newOrientation,active);
     }
 
@@ -695,12 +695,12 @@ public Q_SLOTS:
   * @param traceBackgroundImage image to be used as background.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateTraceBackgroundImage(QImage traceBackgroundImage,bool active){emit traceBackgroundImageUpdate(traceBackgroundImage,active);}
+    void updateTraceBackgroundImage(const QImage &traceBackgroundImage,bool active){emit traceBackgroundImageUpdate(traceBackgroundImage,active);}
 
 
 
 Q_SIGNALS:
-    void changeBackgroundColor(QColor color);
+    void changeBackgroundColor(const QColor& color);
     void updateContents();
     void greyScale(bool geyScale);
     void clusterWaveformsDisplay(bool waveforms);
@@ -743,27 +743,27 @@ Q_SIGNALS:
     void eventColorUpdated(const QColor &color,const QString &name,int eventId,bool active);
     void nextEvent();
     void previousEvent();
-    void eventModified(QString providerName,int selectedEventId,double time,double newTime);
-    void updateEvents(bool active,QString providerName,double time,double newTime);
+    void eventModified(const QString &providerName,int selectedEventId,double time,double newTime);
+    void updateEvents(bool active, const QString &providerName,double time,double newTime);
     void eventToRemove();
-    void eventRemoved(QString providerName,int selectedEventId,double time);
-    void updateEvents(bool active,QString providerName,double time);
-    void newEventProperties(QString providerName,QString eventId);
-    void eventAdded(QString providerName,QString addedEventDescription,double time);
-    void updateEvents(QString providerName,QList<int>& eventsToShow,bool active);
+    void eventRemoved(const QString &providerName,int selectedEventId,double time);
+    void updateEvents(bool active, const QString &providerName,double time);
+    void newEventProperties(const QString &providerName,QString eventId);
+    void eventAdded(const QString &providerName,QString addedEventDescription,double time);
+    void updateEvents(const QString &providerName,QList<int>& eventsToShow,bool active);
     void waveformInformationUpdated(int nbSamplesBefore,int nbSamplesAfter,bool active);
     void positionInformationUpdated(int width, int height,QImage backgroundImage,bool newOrientation,bool active);
     void timeChanged(long start,long duration);
     void positionViewClosed();
     void clusterProviderUpdated(bool active);
-    void noneBrowsingClusterListUpdated(QString providerName,const QList<int>& clustersToNotBrowse);
-    void noneBrowsingEventListUpdated(QString providerName,const QList<int>& eventsToNotBrowse);
+    void noneBrowsingClusterListUpdated(const QString &providerName,const QList<int>& clustersToNotBrowse);
+    void noneBrowsingEventListUpdated(const QString &providerName,const QList<int>& eventsToNotBrowse);
     void skipStatusChanged(const QList<int>& skippedChannels);
     void decreaseTheRasterHeight();
     void increaseTheRasterHeight();
     void updateEventDisplay();
     void eventsShownInPositionView(bool shown);
-    void traceBackgroundImageUpdate(QImage traceBackgroundImage,bool active);
+    void traceBackgroundImageUpdate(const QImage &traceBackgroundImage,bool active);
 
 private:
 
