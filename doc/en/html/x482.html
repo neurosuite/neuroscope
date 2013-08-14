@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Discarding Noise and Artefacts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Trace View"
+HREF="x368.html"><LINK
+REL="NEXT"
+TITLE="Grouping and Reshaping Clusters"
+HREF="x539.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x368.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x539.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="discarding"
+>2.5. Discarding Noise and Artefacts</A
+></H1
+><P
+>&#13;Typically, the first step in sorting spike clusters involves discarding bad clusters, i.e. clusters that contain either multi-unit signals of low amplitude (noise) or electrical signals produced by the experimental setup (artefacts).
+</P
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Overview Dipslay</SPAN
+> is ideal for this. Start by selecting the first cluster in the <SPAN
+CLASS="guilabel"
+>Cluster Panel</SPAN
+>. By combining information displayed in the three views, you can easily determine if this cluster contains well-isolated action potentials, noise, or artefacts:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;action potentials emitted by a well-isolated neuron have a characteristic V-shaped waveform and their autocorrelogram has a stereotypical shape with a clear refractory period (in the previous <A
+HREF="c50.html#fig-overview"
+>Figure</A
+>, the autocorrelogram of cluster 10 is typical of a hippocampal pyramidal cell, while that of cluster 17 is typical of a hippocampal interneuron);
+</P
+></LI
+><LI
+><P
+>&#13;noise has a low amplitude and although its auto-correlogram looks somewhat like that of a well-isolated neuron, it lacks a refractory period;
+</P
+></LI
+><LI
+><P
+> artefacts usually have a high amplitude and their waveforms and auto-correlograms look very different from those of neuronal signals.
+</P
+></LI
+></UL
+><P
+>&#13;If the cluster contains artefacts, delete it by selecting <SPAN
+CLASS="guimenu"
+>Action</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Delete Artefact Cluster(s)</SPAN
+> or by clicking on the red trash icon <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/delete_artefact.png"></SPAN
+></SPAN
+>. This will move all the spikes to cluster 0 (which by convention contains all artefacts). If the cluster contains noise, delete it by selecting <SPAN
+CLASS="guimenu"
+>Action</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Delete Noise Cluster(s)</SPAN
+> or by clicking on the grey trash icon <SPAN
+CLASS="guiicon"
+>&#13; 	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/delete_noise.png"></SPAN
+></SPAN
+>. This will move all the spikes to cluster 1 (which by convention contains the noise). Otherwise, move on to the next cluster.
+</P
+><P
+>&#13;Once the bad clusters have been removed, you may wish to renumber the remaining clusters in sequence: to do this, select <SPAN
+CLASS="guimenu"
+>Actions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Renumber Clusters</SPAN
+>.
+</P
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;All these operations can be undone: simply select <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Undo</SPAN
+> to revert to the previous state. Conversely, after cancelling an operation selecting <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Redo</SPAN
+> will apply the changes again. To set the number of operations that can be undone, see the <A
+HREF="c835.html#settings-general"
+>General Settings</A
+>.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;One very convenient way to speed up these operations is to use the keyboard shortcuts: press <B
+CLASS="keycap"
+>Shift</B
+>-<B
+CLASS="keycap"
+>DEL</B
+> to delete artefacts, <B
+CLASS="keycap"
+>DEL</B
+> to delete noise, or the <B
+CLASS="keycap"
+>Right Arrow</B
+> to move on to the next cluster (deleting a cluster also automatically moves on to the next cluster).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x368.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x539.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Trace View</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Grouping and Reshaping Clusters</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,319 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Using Klusters</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Introduction"
+HREF="c41.html"><LINK
+REL="NEXT"
+TITLE="Views and Displays"
+HREF="x108.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c41.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x108.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="using-klusters"
+></A
+>Chapter 2. Using Klusters</H1
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="starting"
+>2.1. Starting a New Session</A
+></H1
+><P
+>&#13;To start editing a file, select <SPAN
+CLASS="guimenu"
+>File</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Open</SPAN
+>. In the <SPAN
+CLASS="guilabel"
+>Open</SPAN
+> dialog, you can select any type of data file (<TT
+CLASS="filename"
+>clu</TT
+>, <TT
+CLASS="filename"
+>fet</TT
+>, <TT
+CLASS="filename"
+>spk</TT
+>, or <TT
+CLASS="filename"
+>par</TT
+>: see <A
+HREF="c916.html"
+>File Formats</A
+>).
+</P
+><P
+>&#13;A session can also be started from the command line, by typing:
+</P
+><PRE
+CLASS="screen"
+>&#13;<SAMP
+CLASS="prompt"
+>%</SAMP
+> <KBD
+CLASS="userinput"
+>klusters</KBD
+> <TT
+CLASS="replaceable"
+><I
+>filename</I
+></TT
+>
+</PRE
+><P
+>&#13;Once the data is loaded, the main window should look like this:
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Overview.png"></P
+></DIV
+>
+</P
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Cluster Panel</SPAN
+> (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>left</I
+></SPAN
+>) lists all the cluster IDs already defined in the cluster file. Clusters can be selected by clicking on the colored squares. Use <B
+CLASS="keycap"
+>Shift</B
+> or <B
+CLASS="keycap"
+>CTRL</B
+> for multiple selections (see the <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+> menu for more choices).
+</P
+><P
+>&#13;The rest of the <SPAN
+CLASS="guilabel"
+>Main Window</SPAN
+> shows an <SPAN
+CLASS="guilabel"
+>Overview Display</SPAN
+> of the data. This is one of several kinds of display that <SPAN
+CLASS="application"
+>Klusters</SPAN
+> uses to present the data. It actually combines three views: a <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+> displaying spikes in the <ACRONYM
+CLASS="acronym"
+>PCA</ACRONYM
+> feature space (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>left</I
+></SPAN
+>), a <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+> (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>top right</I
+></SPAN
+>), and a <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+> displaying auto- and cross-correlograms (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>bottom right</I
+></SPAN
+>).
+</P
+><P
+>&#13;Notice that each cluster has its own color: the same color is consistently used in the <SPAN
+CLASS="guilabel"
+>Cluster Panel</SPAN
+>, the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>, and the <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>. This makes it easy to quickly identify a given cluster across different views. If you wish to change the color of a cluster (e.g. when simultaneously displaying several clusters with similar colors), middle-click on the corresponding colored square in the <SPAN
+CLASS="guilabel"
+>Cluster Panel</SPAN
+> to open the <SPAN
+CLASS="guilabel"
+>Color Chooser</SPAN
+>. As soon as you validate your new choice, all views will be updated accordingly (but see <A
+HREF="x782.html"
+>Using <SPAN
+CLASS="application"
+>Klusters</SPAN
+> over a Slow Network Connection</A
+>).
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Keep in mind that working on large files requires a large amount of RAM and a powerful CPU.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c41.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x108.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introduction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Views and Displays</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

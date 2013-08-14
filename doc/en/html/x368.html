@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Trace View</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Cluster View, Waveform View, Correlation View"
+HREF="x178.html"><LINK
+REL="NEXT"
+TITLE="Discarding Noise and Artefacts"
+HREF="x482.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x178.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x482.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="trace-view"
+>2.4. Trace View</A
+></H1
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+> displays spikes on the wide-band signals. This view is available only if the wide-band data file (<TT
+CLASS="filename"
+>.dat</TT
+> file, see <A
+HREF="c916.html"
+>Data File</A
+>) is present in the same directory as the other files.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;This feature requires additional information available only in the <ACRONYM
+CLASS="acronym"
+>XML</ACRONYM
+> parameter file, and cannot be activated when using the obsolete flat text parameter files (see <A
+HREF="x972.html"
+>data format</A
+>).
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/TraceView.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN388"
+>2.4.1. Browsing Wide-Band Data</A
+></H2
+><P
+>&#13;There are several ways to navigate through the data:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;To move to a particular point in the data, enter the corresponding time in the <SPAN
+CLASS="guilabel"
+>Start time</SPAN
+> text boxes (below the traces). Time is typically entered in minutes, seconds and milliseconds. Alternatively, you can use cumulative seconds or milliseconds: for instance, entering <TT
+CLASS="filename"
+>0 min 180 s 0 ms</TT
+>, or <TT
+CLASS="filename"
+>0 min 0 s 180000 ms</TT
+> is equivalent to entering <TT
+CLASS="filename"
+>3 min 0 s 0 ms</TT
+>.
+</P
+></LI
+><LI
+><P
+>&#13;To modify the duration of the time window shown in the display (1 s by default), change the value in the <SPAN
+CLASS="guilabel"
+>Duration</SPAN
+> text box (below the traces). This value can be doubled by hitting the <B
+CLASS="keycap"
+>+</B
+> key, or divided by two by hitting the <B
+CLASS="keycap"
+>-</B
+> key.
+</P
+></LI
+><LI
+><P
+>&#13;To display the next time window, click on the scroll bar below the traces, in the empty space on the right side of the slider. You can also hit the <B
+CLASS="keycap"
+>Page Down</B
+> key. Similarly, clicking on the left side of the slider, or hitting the <B
+CLASS="keycap"
+>Page Up</B
+> key, displays the previous time window.
+</P
+></LI
+><LI
+><P
+>&#13;To move by smaller amounts, click on the arrows of the scroll bar, or hit <B
+CLASS="keycap"
+>Left Arrow</B
+> or <B
+CLASS="keycap"
+>Right Arrow</B
+>.
+</P
+></LI
+><LI
+><P
+>&#13;To move to the beginning or the end of the data, hit the <B
+CLASS="keycap"
+>Home</B
+> or <B
+CLASS="keycap"
+>End</B
+> keys, respectively.
+</P
+></LI
+><LI
+><P
+>&#13;Dragging the slider in the scroll bar is another way to move within the data.
+</P
+></LI
+></UL
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;The shortcut keys described above will not work if the focus is in one of the text boxes below the traces. This is because in this case the shortcuts are applied to the text boxes rather than to the display (e.g. hitting the <B
+CLASS="keycap"
+>End</B
+> key will move the insertion point to the end of the text). To activate the navigation shortcut keys, move the focus elsewhere, for instance by clicking on the scroll bar.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;Similar to the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, the <SPAN
+CLASS="guilabel"
+>Zoom</SPAN
+> tool can be used to enlarge a selected area of the view (see <A
+HREF="x539.html"
+>Grouping and Reshaping Clusters</A
+>). However, here you cannot zoom out in single steps.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN424"
+>2.4.2. Browsing Unit Activity</A
+></H2
+><P
+>&#13;Pyramidal or granule cells typically fire at low rates. Thus, when examining their firing patterns, you may sometimes find it difficult to locate those epochs when the neurons discharge. <SPAN
+CLASS="application"
+>Klusters</SPAN
+> provides a mechanism to easily 'browse' spikes, i.e. to automatically move the time window to the previous or next spike fired by one or more neurons. Now, choose <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Previous Spike</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/backCluster.png"></SPAN
+>
+</SPAN
+> to move the time window to the previous spike fired by one of the selected clusters, or choose <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Next Spike</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/forwardCluster.png"></SPAN
+>
+</SPAN
+> to move the time window to the next spike.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN450"
+>2.4.3. Adjusting Channel Amplitudes</A
+></H2
+><P
+>&#13;Channel amplitudes can be adjusted by selecting <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase Channel Amplitudes</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease Channel Amplitudes</SPAN
+>.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN459"
+>2.4.4. Labels</A
+></H2
+><P
+>&#13;Labels provide information about the traces: the ID of the corresponding channel, and the current amplitude. Labels can be showed by selecting <SPAN
+CLASS="guimenu"
+>Traces</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Show Labels</SPAN
+> (selecting this menu item a second time will toggle its status and hide the labels).</P
+><P
+>&#13;Amplitudes are described as follows. By convention, 'x1' corresponds to 0.2  mV/cm. Thus, an amplitude of 'x0.38' corresponds to 0.076 mV/cm.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN466"
+>2.4.5. Setting the Start Time from a Cluster View</A
+></H2
+><P
+>&#13;Suppose you are inspecting a cluster as a function of time in a <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, and you notice that it has certain interesting characteristics (e.g. increased firing rate) at a particular point in time. You may want to look at the corresponding wide-band signals. This can be achieved by selecting <SPAN
+CLASS="guimenu"
+>Action</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Select time</SPAN
+> or by clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/time_tool.png"></SPAN
+></SPAN
+> and then clicking in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+> at the time point you wish to inspect, as shown in the above screenshot.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x178.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x482.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Cluster View, Waveform View, Correlation View</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Discarding Noise and Artefacts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

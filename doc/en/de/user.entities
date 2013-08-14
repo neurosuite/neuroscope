@@ -1,0 +1,50 @@
+<!-- This file contains entities (only!) to make authoring/translating
+     a document easier.  They are necessarily language-specific.
+     In the case of name clashes, entities in this file always lose.
+     Keep the entities simple, but _always_ provide them with full markup.
+     Please keep the entities sorted on the name: it will avoid duplicate
+     names (which if they occur will cost you a _lot_ of time)
+ -->
+
+<!ENTITY Alt    "<keycap>Alt</keycap>">
+<!ENTITY Backspace	"<keycap>R&uuml;cktaste</keycap>">
+<!ENTITY cdrom	'<hardware>CD-ROM-Laufwerk</hardware>'>
+<!ENTITY Ctrl   "<keycap>Strg</keycap>">
+<!ENTITY dpi	'<acronym>dpi</acronym>'>
+<!ENTITY eg	'<abbrev>z.&nbsp;B.</abbrev>'> 
+<!ENTITY Enter	"<keycap>Eingabe</keycap>">
+<!ENTITY Esc    "<keycap>Esc</keycap>">
+<!ENTITY etc    "<abbrev>usw.</abbrev>">
+<!ENTITY FAQ	'<acronym>FAQ</acronym>'>
+<!ENTITY ie     "<abbrev>d.&nbsp;h.</abbrev>">
+<!ENTITY infocenter	"<application>Infozentrum</application>">
+<!ENTITY kcc "<application>&kde;-Kontrollzentrum</application>" ><!-- kcc -->
+<!ENTITY kcontrolcenter "<application>&kde;-Kontrollzentrum</application>">
+<!ENTITY kde "K-Arbeitsumgebung" ><!-- kde -->
+<!ENTITY khelpcenter-de "<application>&kde;-Hilfezentrum</application>" >
+<!ENTITY kicon	"<guiicon>
+<inlinemediaobject>
+ <objectinfo><title>K-Symbol von &kde;</title></objectinfo>
+ <imageobject><imagedata fileref='common/kmenu.png' format='PNG'/></imageobject>
+ <textobject><phrase>K</phrase></textobject>
+</inlinemediaobject>
+</guiicon>-Symbol"><!-- kicon -->
+<!ENTITY kmenu  "<guimenu>K</guimenu>-Men&uuml;"> <!-- kmenu -->
+<!ENTITY kwm    "<application>kwm</application>">
+<!ENTITY LMB    "<mousebutton>linke</mousebutton> Maustaste">
+<!ENTITY LMBn   "<mousebutton>linken</mousebutton> Maustaste">
+<!ENTITY LMBr   "<mousebutton>linker</mousebutton> Maustaste">
+<!ENTITY MMB    "<mousebutton>mittlere</mousebutton> Maustaste">
+<!ENTITY MMBn   "<mousebutton>mittleren</mousebutton> Maustaste">
+<!ENTITY MMBr   "<mousebutton>mittlerer</mousebutton> Maustaste">
+<!ENTITY mondphase "<application>Mondphase</application>"> <!-- kmoon -->
+<!ENTITY OS     "Betriebssystem">
+<!ENTITY partman "<application>KDE-Partitionsmanager</application>">
+<!ENTITY RMB    "<mousebutton>rechte</mousebutton> Maustaste">
+<!ENTITY RMBn   "<mousebutton>rechten</mousebutton> Maustaste">
+<!ENTITY RMBr   "<mousebutton>rechter</mousebutton> Maustaste">
+<!ENTITY Shift  "<keycap>Umschalt</keycap>">
+<!ENTITY systemsettings	"<application>Systemeinstellungen</application>">
+<!ENTITY systemtray "<application>Systemabschnitt</application>">
+<!ENTITY Tab 	"<keycap>Tab</keycap>"> <!-- Tab -->
+

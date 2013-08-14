@@ -1,0 +1,372 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Settings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Printing and Exporting"
+HREF="x808.html"><LINK
+REL="NEXT"
+TITLE="File Formats"
+HREF="c916.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x808.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c916.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="settings"
+></A
+>Chapter 3. Settings</H1
+><P
+>&#13;Selecting <SPAN
+CLASS="guimenu"
+>Settings</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Configure klusters</SPAN
+> will open the <SPAN
+CLASS="guilabel"
+>Settings Dialog</SPAN
+>. This lets you configure several default behaviors of <SPAN
+CLASS="application"
+>Klusters</SPAN
+>.
+</P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="settings-general"
+></A
+><SPAN
+CLASS="guilabel"
+>General</SPAN
+></DT
+><DD
+><P
+>In this page, you can configure the following:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Crash and recovery</SPAN
+>. To protect your data in the unfortunate event of a crash, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> can periodically save a hidden recovery copy of your data. Normally, this recovery file is deleted when you close the cluster file or quit the application. But if <SPAN
+CLASS="application"
+>Klusters</SPAN
+> crashes, the recovery file remains on the disk and the next time you start working on the same data, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> will find the recovery file and propose to use it instead of the presumably less up-to-date cluster file. If you choose to do so, the cluster file will be renamed (the date will be appended to its name) and the recovery file will become the new cluster file. This setting lets you enable or disable this feature and, if enabled, choose how often the data should be saved to the recovery file.
+</P
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Notice that this is different from an auto-save feature, in that it is still your responsibility to save your work: remember that the recovery file is normally deleted when you close the cluster file or quit the application.</I
+></SPAN
+> The advantage of this mechanism is that you keep control of when the data is actually saved to the cluster file, thus reducing the risk of saving erroneous modifications.
+</P
+><P
+>&#13;</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Undo</SPAN
+>. You can set the maximum number of changes that can be undone. Be aware that the ability to undo an operation requires that an additional copy of the data be kept in memory: thus for large data files, increasing this value will significantly increase the memory load.
+</P
+><P
+>&#13;</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Reclustering</SPAN
+>. This allows you to choose the reclustering program and set its parameters. The default program is Kenneth D. Harris' <A
+HREF="http://klustakwik.sourceforge.net"
+TARGET="_top"
+><SPAN
+CLASS="application"
+>KlustaKwik</SPAN
+></A
+>&#62;. Alternative programs can be used, provided they also accept a feature file as their input and produce a cluster file with the same base name and electrode group ID (see <A
+HREF="c916.html"
+>Data Files</A
+> for more information). Another possibility is to use a <SPAN
+CLASS="application"
+>shell</SPAN
+> script, e.g. to move the temporary file where <SPAN
+CLASS="application"
+>Klusters</SPAN
+> stores the features for the selected clusters to a more powerful server, process the data, and then move the newly created cluster file back to your workstation.
+</P
+><P
+>&#13;</P
+><P
+>&#13;Three variables are provided to help you build the command line: <KBD
+CLASS="userinput"
+>%fileBaseName</KBD
+>, <KBD
+CLASS="userinput"
+>%electrodeGroupID</KBD
+>, and <KBD
+CLASS="userinput"
+>%features</KBD
+>. These are automatically set by <SPAN
+CLASS="application"
+>Klusters</SPAN
+> to match the default values for the currently edited file: <KBD
+CLASS="userinput"
+>%fileBaseName</KBD
+> will be replaced with the base name of the temporary feature file (see note below), and <KBD
+CLASS="userinput"
+>%electrodeGroupID</KBD
+> will be replaced with the tetrode or shank ID. Finally, <KBD
+CLASS="userinput"
+>%features</KBD
+> will be replaced with an ensemble of boolean values (flags) indicating which features should be used by the reclustering program, namely all features except the user-defined features. As an example, assume that the data was recorded from a tetrode and that the feature file contains three principal components for each electrode, as well as four additional user-defined values (e.g. spike height, width, etc.) and time. Then, <KBD
+CLASS="userinput"
+>%features</KBD
+> will be replaced with <KBD
+CLASS="userinput"
+>11111111111100001</KBD
+>, which reads:
+</P
+><P
+>&#13;<PRE
+CLASS="programlisting"
+>&#13;1  use 1st principal component for electrode 1
+1  use 2nd principal component for electrode 1
+1  use 3rd principal component for electrode 1
+1  use 1st principal component for electrode 2
+...
+1  use 3rd principal component for electrode 4
+0  do not use 1st user-defined feature
+0  do not use 2nd user-defined feature
+0  do not use 3rd user-defined feature
+0  do not use 4th user-defined feature
+1  use time
+</PRE
+>
+</P
+><P
+>&#13;Although the example above is for a tetrode with three principal components per electrode, in general the actual value for the <KBD
+CLASS="userinput"
+>%features</KBD
+> variable is set dynamically based on the information provided by the parameter file. You can also decide not to use this variable and supply your custom flags instead.
+</P
+><P
+>&#13;</P
+><P
+>&#13;Note on <KBD
+CLASS="userinput"
+>%fileBaseName</KBD
+>: Assuming that the base name for your data files is <TT
+CLASS="filename"
+>CS210904</TT
+> and that clusters 2, 4 and 7 are selected for reclustering, <KBD
+CLASS="userinput"
+>%fileBaseName</KBD
+> will be replaced with a value such as <TT
+CLASS="filename"
+>CS210904-[2-4-7]-02.13.2004-18.54</TT
+> (the date and time are appended after the list of clusters). Although the temporary feature and cluster files are automatically deleted when automatic reclustering completes, depending on the reclustering program this base name may also be used for additional outputs such as log files.
+</P
+><P
+>&#13;</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Background color</SPAN
+>. This setting affects all views.
+</P
+></LI
+></UL
+></DD
+><DT
+><A
+NAME="settings-clusters"
+></A
+><SPAN
+CLASS="guilabel"
+>Cluster view</SPAN
+></DT
+><DD
+><P
+>When time is selected as one of the projection dimensions in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, thin lines are drawn at regular time intervals. This options enables you to change the default time interval.
+</P
+></DD
+><DT
+><A
+NAME="settings-waveforms"
+></A
+><SPAN
+CLASS="guilabel"
+>Waveform view</SPAN
+></DT
+><DD
+><P
+>The following items can be configured:</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Waveform gain</SPAN
+>. This determines the initial vertical scale for the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>.
+</P
+></LI
+><LI
+><P
+>&#13;<SPAN
+CLASS="guilabel"
+>Channel positions</SPAN
+>. This allows you to decide in which order individual electrodes are displayed in the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>. This is most useful for multisite silicon probes.
+</P
+></LI
+></UL
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x808.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c916.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Printing and Exporting</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>File Formats</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

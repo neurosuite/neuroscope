@@ -1,0 +1,556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Parameter Files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="File Formats"
+HREF="c916.html"><LINK
+REL="PREVIOUS"
+TITLE="File Formats"
+HREF="c916.html"><LINK
+REL="NEXT"
+TITLE="Menu Entries"
+HREF="c1059.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c916.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. File Formats</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1059.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="parameter_files"
+>4.2. Parameter Files</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="parameter-file"
+>4.2.1. The Parameter File</A
+></H2
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>base.xml</TT
+>
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>XML</ACRONYM
+>
+</P
+><P
+>&#13;The parameter file is a generic file which contains information required by many related programs; <SPAN
+CLASS="application"
+>Klusters</SPAN
+> only needs a subset of this information. Note for advanced users: the schema describing the parameter file can be found in the source archive (<TT
+CLASS="filename"
+>src/parameter.xsd</TT
+>). Here is an example:
+<PRE
+CLASS="programlisting"
+>&#13;
+&#60;parameters creator="par2xml" version="1.0" &#62;	
+  &#60;acquisitionSystem&#62;
+    &#60;nBits&#62;16&#60;/nBits&#62;
+    &#60;nChannels&#62;16&#60;/nChannels&#62;
+    &#60;samplingRate&#62;20000&#60;/samplingRate&#62;
+    &#60;voltageRange&#62;20&#60;/voltageRange&#62;
+    &#60;amplification&#62;1000&#60;/amplification&#62;
+    &#60;offset&#62;0&#60;/offset&#62;
+  &#60;/acquisitionSystem&#62;
+  &#60;fieldPotentials&#62;
+    &#60;lfpSamplingRate&#62;1250&#60;/lfpSamplingRate&#62;
+  &#60;/fieldPotentials&#62;
+  &#60;anatomicalDescription&#62;
+    &#60;channelGroups&#62;
+      &#60;group&#62;
+        &#60;channel&#62;0&#60;/channel&#62;
+        &#60;channel&#62;2&#60;/channel&#62;
+        &#60;channel&#62;7&#60;/channel&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channel&#62;3&#60;/channel&#62;
+        &#60;channel&#62;4&#60;/channel&#62;
+        &#60;channel&#62;5&#60;/channel&#62;
+        &#60;channel&#62;6&#60;/channel&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channel&#62;8&#60;/channel&#62;
+        &#60;channel&#62;10&#60;/channel&#62;
+        &#60;channel&#62;15&#60;/channel&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channel&#62;11&#60;/channel&#62;
+        &#60;channel&#62;12&#60;/channel&#62;
+        &#60;channel&#62;13&#60;/channel&#62;
+        &#60;channel&#62;14&#60;/channel&#62;
+      &#60;/group&#62;
+    &#60;/channelGroups&#62;
+  &#60;/anatomicalDescription&#62;
+  &#60;spikeDetection&#62;
+    &#60;channelGroups&#62;
+      &#60;group&#62;
+        &#60;channels&#62;
+          &#60;channel&#62;0&#60;/channel&#62;
+          &#60;channel&#62;2&#60;/channel&#62;
+          &#60;channel&#62;7&#60;/channel&#62;
+        &#60;/channels&#62;
+        &#60;nSamples&#62;32&#60;/nSamples&#62;
+        &#60;peakSampleIndex&#62;16&#60;/peakSampleIndex&#62;
+        &#60;nFeatures&#62;4&#60;/nFeatures&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channels&#62;
+          &#60;channel&#62;3&#60;/channel&#62;
+          &#60;channel&#62;4&#60;/channel&#62;
+          &#60;channel&#62;5&#60;/channel&#62;
+          &#60;channel&#62;6&#60;/channel&#62;
+        &#60;/channels&#62;
+        &#60;nSamples&#62;32&#60;/nSamples&#62;
+        &#60;peakSampleIndex&#62;16&#60;/peakSampleIndex&#62;
+        &#60;nFeatures&#62;3&#60;/nFeatures&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channels&#62;
+          &#60;channel&#62;8&#60;/channel&#62;
+          &#60;channel&#62;10&#60;/channel&#62;
+          &#60;channel&#62;15&#60;/channel&#62;
+        &#60;/channels&#62;
+        &#60;nSamples&#62;32&#60;/nSamples&#62;
+        &#60;peakSampleIndex&#62;16&#60;/peakSampleIndex&#62;
+        &#60;nFeatures&#62;4&#60;/nFeatures&#62;
+      &#60;/group&#62;
+      &#60;group&#62;
+        &#60;channels&#62;
+          &#60;channel&#62;11&#60;/channel&#62;
+          &#60;channel&#62;12&#60;/channel&#62;
+          &#60;channel&#62;13&#60;/channel&#62;
+          &#60;channel&#62;14&#60;/channel&#62;
+        &#60;/channels&#62;
+        &#60;nSamples&#62;32&#60;/nSamples&#62;
+        &#60;peakSampleIndex&#62;16&#60;/peakSampleIndex&#62;
+        &#60;nFeatures&#62;3&#60;/nFeatures&#62;
+      &#60;/group&#62;
+    &#60;/channelGroups&#62;
+  &#60;/spikeDetection&#62;
+&#60;/parameters&#62;
+
+</PRE
+>
+</P
+><P
+>&#13;As mentioned earlier, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> belongs to a larger framework for neurophysiological data analysis, also comprising  <A
+HREF="http://neuroscope.sourceforge.net"
+TARGET="_top"
+><SPAN
+CLASS="application"
+>NeuroScope</SPAN
+></A
+>. If you use <SPAN
+CLASS="application"
+>NeuroScope</SPAN
+> to create your spike extraction groups, a basic parameter file will be created for you and you will only need to add the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>nSamples</I
+></SPAN
+>, <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>peakSampleIndex</I
+></SPAN
+> and <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>nFeatures</I
+></SPAN
+> tags.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;Obsolete flat text parameter files (see <A
+HREF="x972.html#obsolete-parameter-files"
+>the following section</A
+>) can easily be converted into an <ACRONYM
+CLASS="acronym"
+>XML</ACRONYM
+> parameter file, using <SPAN
+CLASS="application"
+>par2xml</SPAN
+> (type <B
+CLASS="command"
+>par2xml --help</B
+> for details). This is included in the archive <TT
+CLASS="filename"
+>parameters.tar.gz</TT
+> and can be downloaded from <A
+HREF="http://klusters.sourceforge.net"
+TARGET="_top"
+><SPAN
+CLASS="application"
+>Klusters</SPAN
+>'s website</A
+>.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;Most tags are self-explanatory, but some tags may need clarification:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;voltageRange: the total voltage range, e.g. if the system is set to ±5V, the range is 10V.
+</P
+></LI
+><LI
+><P
+>&#13;offset: some acquisition systems record the data with a fixed offset; this can be specified here so that <SPAN
+CLASS="application"
+>Klusters</SPAN
+> can recenter all the channel traces in the <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+>.
+</P
+></LI
+><LI
+><P
+>&#13;lfpSamplingRate (not used by <SPAN
+CLASS="application"
+>Klusters</SPAN
+>): sampling rate for local field Potentials (EEG).
+</P
+></LI
+><LI
+><P
+>&#13;anatomicalDescription (not used by <SPAN
+CLASS="application"
+>Klusters</SPAN
+>): lists channel groups according to their anatomical locations.
+</P
+></LI
+><LI
+><P
+>&#13;spikeDetection: lists channel groups used for spike extraction.
+</P
+></LI
+><LI
+><P
+>&#13;nSamples: number of samples in each waveform.
+</P
+></LI
+><LI
+><P
+>&#13;peakSampleIndex: sample index of the peak in each waveform.
+</P
+></LI
+><LI
+><P
+>&#13;nFeatures: number of principal components (features) per electrode.
+</P
+></LI
+></UL
+><P
+>&#13;Each <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>group</I
+></SPAN
+> tag inside the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>spikeDetection</I
+></SPAN
+> tag identifies a group of electrodes used for spike extraction and sorting. Notice that the order of these <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>group</I
+></SPAN
+> tags is relevant: the first tag describes the first electrode group (i.e., files <TT
+CLASS="filename"
+>base.clu.1</TT
+>, <TT
+CLASS="filename"
+>base.fet.1</TT
+> and <TT
+CLASS="filename"
+>base.spk.1</TT
+>), the second tag describes the second electrode group (i.e., files <TT
+CLASS="filename"
+>base.clu.2</TT
+>, etc.) and so on. When loading wide-band signals recorded from a group of electrodes in <SPAN
+CLASS="application"
+>Klusters</SPAN
+>, the traces appear in the <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+> in the same order as the channels are listed in the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>channels</I
+></SPAN
+> tag.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="obsolete-parameter-files"
+>4.2.2. Obsolete Parameter Files</A
+></H2
+><P
+>&#13;Starting from version 1.5, the parameter file format was changed from two flat text files to the single <ACRONYM
+CLASS="acronym"
+>XML</ACRONYM
+> file described in the previous section (as mentioned in the documentation for previous versions of <SPAN
+CLASS="application"
+>Klusters</SPAN
+>, the flat text format was temporary - it was mostly used for backwards compatibility with legacy software - and destined to be replaced with a more flexible one). However, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> is backward compatible and can still read these parameter files, which are described in the following paragraphs.
+</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="general-parameter-file"
+>4.2.2.1. The General Parameter File</A
+></H3
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>base.par</TT
+>
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The general parameter file is a generic file used by a number of programs. <SPAN
+CLASS="application"
+>Klusters</SPAN
+> needs only a subset of the information provided. Here is an example:
+<PRE
+CLASS="programlisting"
+>&#13;16 16          # total number of electrodes, resolution of the acquisition system (in bits)
+50 800         # sampling interval (in microseconds), high-pass filter frequency (in Hz)
+4              # number of electrode groups
+4 0 1 2 3      # number of electrodes for the 1st group, electrode IDs
+4 4 5 6 7      # number of electrodes for the 2nd group, electrode IDs
+3 8 9 10       # number of electrodes for the 3rd group, electrode IDs (in this example, electrode 11 was discarded)
+4 12 13 14 15  # number of electrodes for the 4th group, electrode IDs
+</PRE
+>
+Only the first 3 lines are mandatory for <SPAN
+CLASS="application"
+>Klusters</SPAN
+>. The high-pass filter frequency is not used at the moment (a value of 0 can be used if not known).
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="specific-parameter-file"
+>4.2.2.2. The Specific Parameter File</A
+></H3
+><P
+>&#13;Generic file name: <TT
+CLASS="filename"
+>base.par.n</TT
+>
+</P
+><P
+>&#13;Format: <ACRONYM
+CLASS="acronym"
+>ASCII</ACRONYM
+>
+</P
+><P
+>&#13;The specific parameter file is a generic file used by a number of programs. It describes addidional parameters for a given electrode group. Again, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> needs only a subset of the information provided. Here is an example:
+<PRE
+CLASS="programlisting"
+>&#13;16 4 50     # total number of electrodes, number of electrodes for this group,  sampling interval (in microseconds)
+0 1 2 3     # electrode IDs
+10 2        # refractory sample index after detection, RMS integration window length
+90          # approximate firing frequency in Hz
+16 8        # number of samples in each waveform, sample index of the peak
+12 6        # window length to realign the spikes, sample index of the peak (detection program)
+4 4         # number of samples (before and after the peak) to use for reconstruction and features
+3 16        # number of principal components (features) per electrode, number of samples used for the PCA
+800.        # high pass filter frequency (in Hz)
+</PRE
+>
+All 9 lines are expected in this file, but only lines 1, 4, 5, and 8 are actually used at the moment (for unused parameters, a value of 0 can be used).
+</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c916.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1059.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>File Formats</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c916.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Menu Entries</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

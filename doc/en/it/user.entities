@@ -1,0 +1,49 @@
+<!-- This file contains entities (only!) to make authoring/translating
+     a document easier.  They are necessarily language-specific.
+     In the case of name clashes, entities in this file always lose.
+     Keep the entities simple, but _always_ provide them with full markup.
+     Please keep the entities sorted on the name: it will avoid duplicate
+     names (which if they occur will cost you a _lot_ of time)
+ -->
+
+<!ENTITY Alt	"<keycap>Alt</keycap>">
+<!ENTITY Backspace	"<keycap>Backspace</keycap>">
+<!ENTITY cdrom	"<hardware>unit&agrave; CD-ROM</hardware>">
+<!ENTITY Ctrl	"<keycap>Ctrl</keycap>">
+<!ENTITY dpi	"<acronym>dpi</acronym>">
+<!ENTITY eg	"<abbrev>ad es.</abbrev>">
+<!ENTITY Enter	"<keycap>Invio</keycap>">
+<!ENTITY Esc	"<keycap>Esc</keycap>">
+<!ENTITY etc	"<abbrev>ecc.</abbrev>">
+<!ENTITY FAQ	"<acronym>FAQ</acronym>">
+<!ENTITY ie	"cio&egrave;">
+<!ENTITY infocenter	"<application>Centro d'informazione</application>">
+<!ENTITY kcontrolcenter	"<application>Centro di controllo di &kde;</application>">
+<!ENTITY kicon	"<guiicon>
+<inlinemediaobject>
+ <objectinfo><title>icona K di &kde;</title></objectinfo>
+ <imageobject><imagedata fileref='common/kmenu.png' format='PNG'/></imageobject>
+ <textobject><phrase>K</phrase></textobject>
+</inlinemediaobject>
+</guiicon> icon"><!-- if image is localised, then entityref should be used 
+                      instead of fileref -->
+<!ENTITY kmenu  "menu <guimenu>K</guimenu>">
+<!ENTITY LMB    "tasto <mousebutton>sinistro</mousebutton> del mouse">
+<!ENTITY MMB    "tasto <mousebutton>centrale</mousebutton> del mouse">
+<!ENTITY OS     "sistema operativo"><!-- <acronym>OS</acronym>-->
+<!ENTITY RMB    "tasto <mousebutton>destro</mousebutton> del mouse">
+<!ENTITY Shift	"<keycap>Shift</keycap>">
+<!ENTITY systemsettings   "<application>Impostazioni di sistema</application>">
+<!ENTITY systemtray "<application>vassoio di sistema</application>">
+<!ENTITY Tab	"<keycap>Tab</keycap>">
+<!--                                                     -->
+<!-- Note (EB): you can translate the entity names as well:
+     &cioe;
+     &ecc;
+     &TSM; &TCM; &TDM;
+     etc. -->
+<!--                                                     -->
+
+<!-- Entit&agrave; aggiunte dai traduttori -->
+
+<!ENTITY teamit "la squadra di traduzione in italiano di &kde;">

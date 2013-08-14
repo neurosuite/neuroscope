@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Grouping and Reshaping Clusters</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Discarding Noise and Artefacts"
+HREF="x482.html"><LINK
+REL="NEXT"
+TITLE="Grouping Assistant"
+HREF="x638.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x482.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x638.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="grouping-reshaping"
+>2.6. Grouping and Reshaping Clusters</A
+></H1
+><P
+>&#13;After deleting noise and artefact clusters, you may want to reshape individual clusters or group two or more clusters. <SPAN
+CLASS="application"
+>Klusters</SPAN
+> provides many tools to help you do this:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;To zoom on a particular area in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Zoom</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/zoom_tool.png"></SPAN
+>
+</SPAN
+>. Now click on the center of the area you wish to enlarge. Alternatively, you can select the area to enlarge (click and hold the left button, then drag the mouse to select the area). Holding <B
+CLASS="keycap"
+>Shift</B
+> while clicking will zoom out. Double-clicking will bring the zoom level back to the initial state.
+</P
+></LI
+><LI
+><P
+>&#13;To create a new cluster, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>New Cluster</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/new_cluster.png"></SPAN
+>
+ </SPAN
+>. Use this tool to draw a polygon in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>: click the left button to add a point to the polygon, the right button to remove the last point, or the middle button to automatically close the polygon. Closing the polygon creates a new cluster containing all points enclosed in the polygon.
+</P
+></LI
+><LI
+><P
+>&#13;To split existing clusters, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Split Clusters</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/new_clusters.png"></SPAN
+>
+</SPAN
+>. Use this tool to draw a polygon in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>. Each cluster that intersects with the polygon will be split into two clusters, one containing all points enclosed in the polygon, the other one containing the remaining points.
+</P
+></LI
+><LI
+><P
+>&#13;To selectively delete spikes rather than entire clusters, select <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Delete Noisy Spikes</SPAN
+> (resp. <SPAN
+CLASS="guimenu"
+>Tools</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Delete Artefact Spikes</SPAN
+>) or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/delete_noise_tool.png"></SPAN
+></SPAN
+> (resp. on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/delete_artefact_tool.png"></SPAN
+>
+	</SPAN
+>). Use this tool to draw a polygon in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>. All points lying within the polygon will be deleted (i.e. moved to cluster 0 or 1).
+</P
+></LI
+><LI
+><P
+>&#13;To group all currently displayed clusters, select <SPAN
+CLASS="guimenu"
+>Actions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Group Clusters</SPAN
+> or click on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/group.png"></SPAN
+></SPAN
+>. This will create a new cluster containing all the currently visible spikes.
+</P
+></LI
+></UL
+><P
+>&#13;Once you are done, you may wish to renumber the clusters in sequence: this can be done by selecting <SPAN
+CLASS="guimenu"
+>Actions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Renumber Clusters</SPAN
+>.
+</P
+><DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;All these operations can be undone: simply select <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Undo</SPAN
+> to revert to the previous state. Conversely, after cancelling an operation selecting <SPAN
+CLASS="guimenu"
+>Edit</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Redo</SPAN
+> will apply the changes again. To set the number of operations that can be undone, see the <A
+HREF="c835.html#settings-general"
+>General Settings</A
+>.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x482.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x638.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Discarding Noise and Artefacts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Grouping Assistant</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

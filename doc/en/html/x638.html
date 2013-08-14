@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Grouping Assistant</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Grouping and Reshaping Clusters"
+HREF="x539.html"><LINK
+REL="NEXT"
+TITLE="Automatic Reclustering"
+HREF="x705.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x539.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x705.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="grouping-assistant"
+>2.7. Grouping Assistant</A
+></H1
+><P
+>&#13;Once the bad clusters have been removed and the good ones have been reshaped if appropriate, the next step is to group all clusters that contain spikes emitted by the same neuron. This is often necessary because good automatic cluster cutting programs tend to produce slightly over-clustered data (a safer behavior than the alternative production of under-clustered data). <SPAN
+CLASS="application"
+>Klusters</SPAN
+> provides a feature to help you find similar clusters. Select <SPAN
+CLASS="guimenu"
+>Displays</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Grouping Assistant Display</SPAN
+>. In addition to the <SPAN
+CLASS="guilabel"
+>Cluster</SPAN
+>, <SPAN
+CLASS="guilabel"
+>Waveform</SPAN
+> and <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>s, this display also contains an <SPAN
+CLASS="guilabel"
+>Error Matrix View</SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/GroupingAssistant.png"></P
+></DIV
+>
+</P
+><P
+>&#13;Each element in the matrix indicates how likely it is that the two clusters corresponding to the row and column of the element contain spikes from the same neuron. Probabilities are represented using a continuous color code ranging from blue (low probability) to red (high probability, p&#62;=0.1). Moving the mouse over a particular matrix element will display the exact probability value in the <SPAN
+CLASS="guilabel"
+>Status Bar</SPAN
+>. Note that in some rare cases where a cluster contains very few spikes, the probabilities cannot be computed and thus the matrix elements will appear in black.
+</P
+><P
+>&#13;Now select a pair of potentially similar clusters by clicking on the corresponding element in the error matrix: the two clusters are shown in the <SPAN
+CLASS="guilabel"
+>Cluster</SPAN
+>, <SPAN
+CLASS="guilabel"
+>Waveform</SPAN
+> and <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>s. To display more than two clusters at once, hold <B
+CLASS="keycap"
+>CTRL</B
+> while clicking.
+</P
+><P
+>&#13;If the clusters clearly appear to contain spikes from a single neuron, group them by selecting <SPAN
+CLASS="guimenu"
+>Actions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Group Clusters</SPAN
+> or clicking on <SPAN
+CLASS="guiicon"
+><SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/group.png"></SPAN
+></SPAN
+>.
+</P
+><P
+>&#13;As a result of grouping two or more clusters, the <SPAN
+CLASS="guilabel"
+>Error Matrix</SPAN
+> is no longer up-to-date. Ideally, it should be automatically recomputed. However, computing the <SPAN
+CLASS="guilabel"
+>Error Matrix</SPAN
+> is a lengthy process, especially when there is a large number of clusters. Rather than repeatedly waiting for the matrix to be updated after each change you make, you may wish to be able to investigate several cases before manually triggering an update. This makes sense because only the matrix elements for those clusters that you modify are out of sync after a change.
+</P
+><P
+>&#13;For these reasons, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> will not automatically recompute the <SPAN
+CLASS="guilabel"
+>Error Matrix</SPAN
+> for you. Instead, it will indicate that the matrix is no longer up-to-date by enclosing it in a red rectangle. It is then up to you to manually trigger the update when you see fit, by selecting <SPAN
+CLASS="guimenu"
+>Actions</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Update Error Matrix</SPAN
+> or clicking on <SPAN
+CLASS="guiicon"
+>&#13;	<SPAN
+CLASS="inlinemediaobject"
+><IMG
+SRC="Images/grouping_assistant_update.png"></SPAN
+></SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/GroupingAssistant-Change.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x539.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x705.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Grouping and Reshaping Clusters</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Automatic Reclustering</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

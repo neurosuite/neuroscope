@@ -1,0 +1,41 @@
+<!-- This file contains entities (only!) to make authoring/translating
+     a document easier.  They are necessarily language-specific.
+     In the case of name clashes, entities in this file always lose.
+     Keep the entities simple, but _always_ provide them with full markup.
+     Please keep the entities sorted on the name: it will avoid duplicate
+     names (which if they occur will cost you a _lot_ of time)
+ -->
+
+<!ENTITY kcontrol "<application>Центр управления &kde;</application>" ><!-- kde help -->
+<!ENTITY khelpcenter "<application>Центр справки &kde;</application>" ><!-- khelpcenter -->
+<!ENTITY LMB    "<mousebutton>левая</mousebutton> кнопка мыши">
+<!ENTITY MMB    "<mousebutton>средняя</mousebutton> кнопка мыши">
+<!ENTITY RMB    "<mousebutton>правая</mousebutton> кнопка мыши">
+
+<!ENTITY dpi    '<acronym>dpi</acronym>'>
+<!ENTITY etc    "<abbrev>и т.д.</abbrev>">
+<!ENTITY FAQ    '<acronym>FAQ</acronym>'>
+
+<!-- Temporary hack - please translate to Russian:
+
+     (you may adapt the entity's name to transliterated Russian as well)
+-->
+<!ENTITY kcontrolcenter	"<application>&kde; Control Center</application>">
+<!ENTITY kicon	"<guiicon>
+<inlinemediaobject>
+ <objectinfo><title>K-нопка</title></objectinfo>
+ <imageobject><imagedata fileref='common/kmenu.png' format='PNG'/></imageobject>
+ <textobject><phrase>K</phrase></textobject>
+</inlinemediaobject>
+</guiicon> icon"><!-- if image is localised, then entityref should be used 
+                      instead of fileref -->
+<!ENTITY kmenu  "<guimenu>K</guimenu>-меню">
+<!ENTITY Shift  "<keycap>Shift</keycap>">
+<!ENTITY Alt    "<keycap>Alt</keycap>">
+<!ENTITY Tab    "<keycap>Tab</keycap>">
+<!ENTITY Esc    "<keycap>Esc</keycap>">
+<!ENTITY Enter  "<keycap>Enter</keycap>">
+<!ENTITY OS     "ОС">
+<!ENTITY Ctrl   "<keycap>Ctrl</keycap>">
+<!ENTITY eg     "<abbrev>например</abbrev>">
+<!ENTITY ie     "<abbrev>т.е.</abbrev>">

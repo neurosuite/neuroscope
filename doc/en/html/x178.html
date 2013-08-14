@@ -1,0 +1,568 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Cluster View, Waveform View, Correlation View</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Views and Displays"
+HREF="x108.html"><LINK
+REL="NEXT"
+TITLE="Trace View"
+HREF="x368.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x108.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x368.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="views"
+>2.3. Cluster View, Waveform View, Correlation View</A
+></H1
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Cluster</SPAN
+>, <SPAN
+CLASS="guilabel"
+>Waveform</SPAN
+> and <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>s can be configured in the <SPAN
+CLASS="guilabel"
+>Parameter Bar</SPAN
+> shown below. Note that all the specific options discussed in the following sections are available in any display where a given view is present.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Parameters-Default.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN195"
+>2.3.1. The Cluster View</A
+></H2
+><P
+>&#13;This view displays a two-dimensional projection of the data in the <ACRONYM
+CLASS="acronym"
+>PCA</ACRONYM
+> feature space. The <SPAN
+CLASS="guilabel"
+>x</SPAN
+> and <SPAN
+CLASS="guilabel"
+>y</SPAN
+> dimensions can be selected in the <SPAN
+CLASS="guilabel"
+>Features</SPAN
+> spin boxes in the <SPAN
+CLASS="guilabel"
+>Parameter Bar</SPAN
+>. The <SPAN
+CLASS="guilabel"
+>x</SPAN
+> and <SPAN
+CLASS="guilabel"
+>y</SPAN
+> axes are drawn as thin grey lines.
+</P
+><P
+>&#13;The highest dimension corresponds to time. Displaying clusters across time is very useful to assess cell isolation drift. When time is selected as one of the projection dimensions, thin lines are drawn at regular time intervals (60 s by default, but this can be <A
+HREF="c835.html#settings-clusters"
+>configured</A
+>).
+</P
+><P
+>&#13;When moving the mouse over the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, the pointer coordinates in feature space are shown in the status bar.
+</P
+><P
+>&#13;The various tools available to modify the clusters displayed in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+> are described in <A
+HREF="x539.html"
+>Grouping and Reshaping Clusters</A
+>.
+</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;If the display contains more than one <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, changes to the <SPAN
+CLASS="guilabel"
+>x</SPAN
+> and <SPAN
+CLASS="guilabel"
+>y</SPAN
+> dimensions only apply to the currently active <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>. To activate another <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, simply click in its content area or on its top bar.
+</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN219"
+>2.3.2. The Waveform View</A
+></H2
+><P
+>&#13;This view displays the waveforms of a subset of the spikes evenly spaced in time over the whole recording. The default number of spikes displayed is 100, but this can be changed in the <SPAN
+CLASS="guilabel"
+>Waveforms</SPAN
+> spin box in the <SPAN
+CLASS="guilabel"
+>Parameter Bar</SPAN
+>. It is also possible to show all spikes recorded within a given time frame: select <SPAN
+CLASS="guimenu"
+>Waveforms</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Time Frame</SPAN
+>. In the <SPAN
+CLASS="guilabel"
+>Parameter Bar</SPAN
+>, the <SPAN
+CLASS="guilabel"
+>Waveforms</SPAN
+> spin box is now replaced with a <SPAN
+CLASS="guilabel"
+>Start time</SPAN
+> spin box and a <SPAN
+CLASS="guilabel"
+>Duration</SPAN
+> text box, where you can define the time frame you wish to see.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Parameters-TimeFrame.png"></P
+></DIV
+>
+</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN241"
+>2.3.2.1. Changing the Vertical Scale</A
+></H3
+><P
+>&#13;As in the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, the <A
+HREF="x539.html"
+>zoom tool</A
+> can be used to zoom on a particular portion of the view. An additional way to improve the display is to change the vertical scale using <SPAN
+CLASS="guimenu"
+>Waveforms</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase Amplitude</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Waveforms</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease Amplitude</SPAN
+>. This will modify the vertical axis of all currently displayed waveforms as shown in the example below.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Waveform-Scale.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN262"
+>2.3.2.2. Overlay</A
+></H3
+><P
+>&#13;By default, different clusters are shown side by side in the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>. However, in order to more easily compare two or more clusters (e.g. to decide whether they should be merged) it is also possible to show them one on top of the other. Select <SPAN
+CLASS="guimenu"
+>Waveforms</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Overlay</SPAN
+> to activate this mode.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Waveform-Overlay.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN279"
+>2.3.2.3. Mean and Standard Deviation</A
+></H3
+><P
+>&#13;<SPAN
+CLASS="application"
+>Klusters</SPAN
+> provides yet another way to display spike waveforms: rather than showing a number of individual waveforms, it is possible to display the mean and standard deviation for each cluster. Select <SPAN
+CLASS="guimenu"
+>Waveforms</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Mean and Standard Deviation</SPAN
+>. This will draw three curves for each cluster: a continuous curve showing the mean, and two dashed curves showing the mean plus or minus one standard deviation.
+</P
+><P
+>&#13;Note that the mean and standard deviation are estimated using the selected subset of waveforms (see <A
+HREF="x178.html#subset"
+>above</A
+>).
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/Waveform-Mean.png"></P
+></DIV
+>
+</P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN298"
+>2.3.3. The Correlation View</A
+></H2
+><P
+>&#13;This view displays the auto- and cross-correlations of all selected clusters. By default, the histograms have 1 ms bins and include spikes occurring within plus or minus 30 ms around each spike from the reference cluster. This can be modified using the <SPAN
+CLASS="guilabel"
+>Bin size</SPAN
+> and <SPAN
+CLASS="guilabel"
+>Duration</SPAN
+> text boxes in the <SPAN
+CLASS="guilabel"
+>Parameter Bar</SPAN
+>.
+</P
+><P
+>&#13;Tick marks on the <SPAN
+CLASS="guilabel"
+>x</SPAN
+> axis are spaced as follows:
+</P
+><P
+></P
+><UL
+><LI
+><P
+> every 5 ms for durations up to 30 ms,</P
+></LI
+><LI
+><P
+> every 10 ms for durations from 31 ms to 100 ms,</P
+></LI
+><LI
+><P
+> every 20 ms for durations above 100 ms.</P
+></LI
+></UL
+><P
+>&#13;When moving the mouse over the <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>, the corresponding time in the underlying correlogram is shown in the status bar, together with the IDs for the corresponding clusters.
+</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN315"
+>2.3.3.1. Showing or Hiding the Asymptote Line</A
+></H3
+><P
+>&#13;Beneath each auto-correlogram is a small box indicating the average firing rate of the putative neuron. This is also shown graphically as a dotted line on top of the histogram, referred to as the <SPAN
+CLASS="guilabel"
+>Asymptote Line</SPAN
+>. The purpose of this information is two-folded: not only does it allow you to distinguish a well isolated neuron with a medium to high firing rate from a group of sparse action potentials with a low firing rate, it is also very useful to estimate how noisy a given cluster is, i.e. what fraction of its spikes belong to other neurons. Spikes belonging to different neurons show up in the refractory period, but their proportion may appear deceptively low when compared to the 'shoulders' of the auto-correlogram. The proper way to estimate how clean a cluster is, is to compare the bins in the refractory period with the average firing rate of the neuron: these bins should represent as small as possible a proportion of the average firing rate. This is where the <SPAN
+CLASS="guilabel"
+>Asymptote Line</SPAN
+> is useful (the <A
+HREF="x539.html"
+>zoom tool</A
+> can also help here). Besides, the correlograms can be scaled by their asymptotic value (see <A
+HREF="x178.html#scale-modes"
+>Vertical Scale Modes</A
+>).
+</P
+><P
+>&#13;However, if you wish to hide this information, for instance when displaying large numbers of clusters simultaneously, select <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Asymptote Line</SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/XCorrelation-Asymptote.png"></P
+></DIV
+>
+</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="scale-modes"
+>2.3.3.2. Vertical Scale Modes</A
+></H3
+><P
+>&#13;Similar to the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>, the vertical scale can be changed using <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Increase Amplitude</SPAN
+> or <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Decrease Amplitude</SPAN
+>. This will modify the vertical axis of all currently displayed correlograms (see <A
+HREF="x178.html#fig-scale"
+>this Figure</A
+>).
+</P
+><P
+>&#13;The <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+> offers additional scale modes. Each correlogram can be independently scaled either by its own maximum (default mode, also activated when selecting <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Scale by Maximum</SPAN
+>), or by its asymptotic value (activated when selecting <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Scale by Asymptote</SPAN
+>). It is also possible to use the same scale for all correlograms, thus making it easier to compare the respective firing rates: select <SPAN
+CLASS="guimenu"
+>Correlations</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Uniform Scale</SPAN
+>.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/XCorrelation-Raw.png"></P
+></DIV
+>
+</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x108.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x368.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Views and Displays</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Trace View</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

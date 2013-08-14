@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Views and Displays</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="The Klusters Handbook"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="PREVIOUS"
+TITLE="Using Klusters"
+HREF="c50.html"><LINK
+REL="NEXT"
+TITLE="Cluster View, Waveform View, Correlation View"
+HREF="x178.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>The Klusters Handbook</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c50.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Using Klusters</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x178.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="views-displays"
+>2.2. Views and Displays</A
+></H1
+><P
+>&#13;The previous section introduced the <SPAN
+CLASS="guilabel"
+>Overview Display</SPAN
+> as an example of the different kinds of displays that <SPAN
+CLASS="application"
+>Klusters</SPAN
+> uses to present the data. More generally, displays are combinations of one or more individual views showing the same subset of the data, and appear as separate tabs in the main window. Using several displays at once can be useful to examine different subsets of the data in parallel.
+</P
+><P
+>&#13;Five kinds of views are available:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>, which displays spikes in a two-dimensional projection of the <ACRONYM
+CLASS="acronym"
+>PCA</ACRONYM
+> feature space,</P
+></LI
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+>, which displays the spike waveforms,</P
+></LI
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>, which displays auto- and cross-correlograms,</P
+></LI
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Trace View</SPAN
+>, which displays spikes on the wide-band signals,</P
+></LI
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Error Matrix View</SPAN
+>, which helps you correct overclustering.</P
+></LI
+></UL
+><P
+>&#13;<SPAN
+CLASS="application"
+>Klusters</SPAN
+> provides several predefined types of single-view and multiple-view displays, listed in the <SPAN
+CLASS="guimenu"
+>Displays</SPAN
+> menu. Multiple-view displays include:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Overview Display</SPAN
+>, which combines a <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>,
+a <SPAN
+CLASS="guilabel"
+>Waveform View</SPAN
+> and a <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+> to help sort out good clusters from clusters containing mostly noise or artefacts,</P
+></LI
+><LI
+><P
+>the <SPAN
+CLASS="guilabel"
+>Grouping Assistant Display</SPAN
+> which combines all of the above
+and an <SPAN
+CLASS="guilabel"
+>Error Matrix View</SPAN
+> to help correct overclustering generally resulting from automatic cluster cutting.</P
+></LI
+></UL
+><P
+>&#13;In addition to the predefined displays, <SPAN
+CLASS="application"
+>Klusters</SPAN
+> enables you to dynamically compose your own custom displays. You can modify the content of a display by adding or removing views. To add a view, click the right button in one of the views. This will bring up the <SPAN
+CLASS="guilabel"
+>Add a View</SPAN
+> popup menu and allow you to select the type of view to add. The new view will be added just bellow the view where you clicked. To remove a view, simply click on the cross at the top right corner of the view.
+</P
+><P
+>&#13;Besides, individual views can be moved around inside the display: click on the top bar of the view, then while still holding the mouse button, drag the view to its new location (indicated as an outline) and release the mouse.
+</P
+><P
+>&#13;Although these functionalities provide for a lot of flexibility, there are still two limitations on what you can do within a single display:
+</P
+><P
+></P
+><UL
+><LI
+><P
+>All the views will always show the same clusters. Use separate displays if you wish to see different subsets of the data in parallel.</P
+></LI
+><LI
+><P
+>You can only include one view of each kind. There are exceptions, however. You can have as many <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>s or <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>s as you wish, and you can only have one single <SPAN
+CLASS="guilabel"
+>Error Matrix View</SPAN
+> across all the displays. Displaying several <SPAN
+CLASS="guilabel"
+>Cluster View</SPAN
+>s at once enables you to simultaneously examine clusters in different projection planes (e.g. first principal component versus time, first principal component versus second principal component, etc.). Similarly, displaying several <SPAN
+CLASS="guilabel"
+>Correlation View</SPAN
+>s allows you to examine spike train properties at different time scales. </P
+></LI
+></UL
+><P
+>&#13;After you have modified the contents of a display to fit your needs, you may wish to change its title (the label of the tab) to reflect your changes. Select <SPAN
+CLASS="guimenu"
+>Displays</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Rename Active Display</SPAN
+> (<B
+CLASS="keycap"
+>Ctrl</B
+>-<B
+CLASS="keycap"
+>R</B
+>). This will bring up a dialog where you can type the new title for the currently active display.
+</P
+><P
+>&#13;<DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="Images/MultipleProjections.png"></P
+></DIV
+>
+</P
+><P
+>&#13;The views are further described in the following sections.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x178.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Using Klusters</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c50.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Cluster View, Waveform View, Correlation View</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

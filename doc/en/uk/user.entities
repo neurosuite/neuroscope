@@ -1,0 +1,39 @@
+<!-- This file contains entities (only!) to make authoring/translating
+     a document easier.  They are necessarily language-specific.
+     In the case of name clashes, entities in this file always lose.
+     Keep the entities simple, but _always_ provide them with full markup.
+     Please keep the entities sorted on the name: it will avoid duplicate
+     names (which if they occur will cost you a _lot_ of time)
+ -->
+
+<!ENTITY Alt	"<keycap>Alt</keycap>">
+<!ENTITY Backspace	"<keycap>Backspace</keycap>">
+<!ENTITY cdrom	'<hardware>пристрій для читання CD-ROM</hardware>'>
+<!ENTITY Ctrl	"<keycap>Ctrl</keycap>">
+<!ENTITY dpi	'<acronym>т/д</acronym>'>
+<!ENTITY eg     "<abbrev>напр.,</abbrev>">
+<!ENTITY Enter	"<keycap>Enter</keycap>">
+<!ENTITY Esc	"<keycap>Esc</keycap>">
+<!ENTITY etc    "<abbrev>тощо</abbrev>">
+<!ENTITY FAQ	'<acronym>ЧаП</acronym>'>
+<!ENTITY ie     "<abbrev>тобто</abbrev>">
+<!ENTITY infocenter	"<application>Центр довідки</application>">
+<!ENTITY kcontrolcenter	"<application>Центр керування &kde;</application>">
+<!ENTITY kicon	"<guiicon>
+<inlinemediaobject>
+ <objectinfo><title>K-піктограма &kde;</title></objectinfo>
+ <imageobject><imagedata fileref='common/kmenu.png' format='PNG'/></imageobject>
+ <textobject><phrase>K</phrase></textobject>
+</inlinemediaobject>
+</guiicon> icon"><!-- if image is localised, then entityref should be used 
+                      instead of fileref -->
+<!ENTITY kmenu  "<guimenu>K-меню</guimenu>">
+<!ENTITY LMB    "<mousebutton>ліва</mousebutton> кнопка мишки">
+<!ENTITY MMB    "<mousebutton>середня</mousebutton> кнопка мишки">
+<!ENTITY OS	"операційна система"><!-- <acronym>OS</acronym>-->
+<!ENTITY partman "<application>Інструмент керування розділами KDE</application>">
+<!ENTITY RMB    "<mousebutton>права</mousebutton> кнопка мишки">
+<!ENTITY Shift	"<keycap>Shift</keycap>">
+<!ENTITY systemsettings	"<application>Системні параметри</application>">
+<!ENTITY systemtray "<application>системний лоток</application>">
+<!ENTITY Tab	"<keycap>Tab</keycap>">

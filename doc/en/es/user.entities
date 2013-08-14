@@ -1,0 +1,45 @@
+<!-- This file contains entities (only!) to make authoring/translating
+     a document easier.  They are necessarily language-specific.
+     In the case of name clashes, entities in this file always lose.
+     Keep the entities simple, but _always_ provide them with full markup.
+     Please keep the entities sorted on the name: it will avoid duplicate
+     names (which if they occur will cost you a _lot_ of time)
+ -->
+
+<!ENTITY Alt "<keycap>Alt</keycap>">
+<!ENTITY amarok "<application>amaroK</application>">
+<!ENTITY Backspace "<keycap>Retroceso</keycap>">
+<!ENTITY cdrom  "<hardware>CD-ROM</hardware>">
+<!ENTITY Ctrl "<keycap>Ctrl</keycap>">
+<!ENTITY digikam "<application>digiKam</application>">
+<!ENTITY dpi    "<acronym>ppp</acronym>">
+<!ENTITY eg     "<abbrev>p. ej.</abbrev>" ><!-- eg -->
+<!ENTITY Enter "<keycap>Intro</keycap>">
+<!ENTITY Esc "<keycap>Esc</keycap>">
+<!ENTITY etc    "<abbrev>etc.</abbrev>">
+<!ENTITY FAQ    "<acronym>PFs</acronym>">
+<!ENTITY ie     "es decir" ><!-- ie -->
+<!ENTITY kcc "<application>Centro de control de KDE</application>" ><!-- kcc -->
+<!ENTITY kcontrolcenter "<application>Centro de control de &kde;</application>">
+<!ENTITY khelpcenter "<application>Centro de ayuda</application>" >
+<!ENTITY kicon  '<guiicon>
+<inlinemediaobject>
+ <objectinfo><title>El icono K de &kde;</title></objectinfo>
+ <imageobject><imagedata fileref="common/kmenu.png" format="PNG"/></imageobject>
+ <textobject><phrase>K</phrase></textobject>
+</inlinemediaobject>
+   </guiicon> icon'><!-- if image is localised, then entityref should be used instead of fileref -->
+<!ENTITY kiosktool "<application>Herramienta de administración KIOSK</application>">
+<!ENTITY konversation "<application>Konversation</application>">
+<!ENTITY kubuntu "<application>Kubuntu</application>">
+<!ENTITY kmenu  "menú <guimenu>K</guimenu>">
+<!ENTITY liloconfig "Configuración de LILO">
+<!ENTITY LMB    "<mousebutton>botón izquierdo</mousebutton>">
+<!ENTITY MMB    "<mousebutton>botón central</mousebutton>">
+<!ENTITY OS "Sistema operativo">
+<!ENTITY RMB    "<mousebutton>botón derecho</mousebutton>">
+<!ENTITY Shift "<keycap>Mayúsculas</keycap>">
+<!ENTITY systemsettings "<application>Preferencias del sistema</application>">
+<!ENTITY Tab  "<keycap>Tab</keycap>">
+<!ENTITY TODO "Pendiente">
+<!ENTITY X-Windows      "Sistema de ventanas X">
