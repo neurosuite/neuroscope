@@ -1461,12 +1461,11 @@ void NeuroscopeApp::slotFileClose(){
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             //Remove the display from the group of tabs
-            while(true){
-                DockArea* current = static_cast<DockArea*>(tabsParent->widget(0));
-                tabsParent->removeTab(tabsParent->indexOf(current));
-                delete current;
-                if(tabsParent->count()==0)
-                    break;
+            disconnect(tabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotTabChange(int)));
+            for (int i = tabsParent->count()-1; i>=0; --i) {
+                QWidget *w = tabsParent->widget(i);
+                tabsParent->removeTab(tabsParent->indexOf(w));
+                delete w;
             }
 
             //remove the cluster and event palettes if any
