@@ -10,6 +10,8 @@ option(
   ON
 )
 
+option(REGENERATE_DOC "Enable if you want to regenerate doc need kde4" OFF)
+
 # try Qt5 first, and prefer that (if found), but only if not disabled via option
 if(NOT ENFORCE_QT4_BUILD)
   find_package(Qt5Core QUIET)
@@ -38,6 +40,7 @@ if(Qt5Core_FOUND)
 # Qt4
 else()
   MESSAGE(STATUS "use qt4 version")
+  find_package(KDE4)
   find_package(Qt4 ${QT_MIN_VERSION} REQUIRED QtCore QtGui)
 
   include(${QT_USE_FILE})
