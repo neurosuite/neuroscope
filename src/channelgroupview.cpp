@@ -49,6 +49,9 @@ ChannelGroupView::ChannelGroupView(bool drag,const QColor& backgroundColor,QWidg
         legendColor = Qt::white;
 
     palette.setColor(QPalette::Text, legendColor);
+    palette.setColor(QPalette::HighlightedText, legendColor);
+
+    setPalette(palette);
     adjustSize();
 
     setAcceptDrops(true);

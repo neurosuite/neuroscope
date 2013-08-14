@@ -57,6 +57,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
         legendColor = Qt::white;
 
     palette.setColor(QPalette::Text, legendColor);
+    palette.setColor(QPalette::HighlightedText, legendColor);
     setPalette(palette);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
