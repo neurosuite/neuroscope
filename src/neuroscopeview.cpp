@@ -448,7 +448,7 @@ void NeuroscopeView::addPositionView(PositionsProvider* positionsProvider,const 
     connect(traceWidget,SIGNAL(eventsAvailable(QHash<QString, EventData*>&,QMap<QString, QList<int> >&,
                                                QHash<QString, ItemColors*>&,QObject*,double)),positionView,SLOT(dataAvailable(QHash<QString,EventData*>&,QMap<QString,QList<int> >&,QHash<QString,ItemColors*>&,QObject*,double)));
     connect(this,SIGNAL(updateEventDisplay()),positionView,SLOT(updateEventDisplay()));
-    connect(this,SIGNAL(eventColorUpdated(QString,int,bool)),positionView,SLOT(eventColorUpdate(QString,int,bool)));
+    connect(this,SIGNAL(eventColorUpdated(QColor,QString,int,bool)),positionView,SLOT(eventColorUpdate(QColor,QString,int,bool)));
     connect(this,SIGNAL(updateDrawing()),positionView, SLOT(updateDrawing()));
     connect(this,SIGNAL(newEventProvider(EventsProvider*,QString,ItemColors*,bool,QList<int>&,QList<int>)),positionView,SLOT(addEventProvider()));
     connect(this,SIGNAL(eventProviderRemoved(QString,bool,bool)),positionView,SLOT(removeEventProvider(QString,bool,bool)));

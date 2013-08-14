@@ -120,7 +120,7 @@ public Q_SLOTS:
   * @param eventId id of the event to redraw.
   * @param active true if the view is the active one, false otherwise.
   */
-    void eventColorUpdate(const QString& name,int eventId,bool active);
+    void eventColorUpdate(const QColor &color, const QString& name, int eventId, bool active);
 
     /**Update the information presented in the view.*/
     void updateDrawing(){
