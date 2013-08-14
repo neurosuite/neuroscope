@@ -467,12 +467,7 @@ public:
     }
 
     /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
-    bool isCurrentFileAdatFile(){
-        if(extension == "dat")
-            return true;
-        else
-            return false;
-    }
+    bool isCurrentFileAdatFile() const;
 
     /**Returns the base name of the document (common name for all the files). */
     QString documentBaseName() const {return baseName;}
@@ -795,11 +790,7 @@ public:
    * @return a QImage which is a transform copy of this image (he original QImage is not changed) or an null image if the animal trajectory
    * is not currently set.
    */
-    QImage getWhiteTrajectoryBackground(){
-        if(!drawPositionsOnBackground)
-            return QImage();
-        return transformBackgroundImage(true);
-    }
+    QImage getWhiteTrajectoryBackground();
 
 
     /**Updates the color of the skipped channels to either white or background color.

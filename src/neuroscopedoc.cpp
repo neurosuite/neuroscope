@@ -2775,3 +2775,15 @@ void NeuroscopeDoc::resetDefaultOffsets(){
         channelDefaultOffsets.insert(i,0);
 }
 
+bool NeuroscopeDoc::isCurrentFileAdatFile() const{
+    if(extension == "dat")
+        return true;
+    else
+        return false;
+}
+
+QImage NeuroscopeDoc::getWhiteTrajectoryBackground() {
+    if(!drawPositionsOnBackground)
+        return QImage();
+    return transformBackgroundImage(true);
+}
