@@ -832,7 +832,7 @@ void ChannelPalette::createGroup(int id){
     label->setFont(f);
     label->adjustSize();
 
-    ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize+5,15*2,edit,group,QString::number(id));
+    ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize+7,15*2,edit,group,QString::number(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     if(iconviewDict.count() >= 1){
         if(iconviewDict.contains("1") ){
