@@ -2458,13 +2458,8 @@ void NeuroscopeApp::slotDisplayClose(){
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             //remove the cluster and event palettes if any
-            while(paletteTabsParent->count() > 2){
-                QDockWidget* current = static_cast<QDockWidget*>(paletteTabsParent->widget(0));
-                if((qobject_cast<ChannelPalette*>(current))){
-                    current = static_cast<QDockWidget*>(paletteTabsParent->widget(1));
-                    if(qobject_cast<ChannelPalette*>(current->widget()))
-                        current = static_cast<QDockWidget*>(paletteTabsParent->widget(2));
-                }
+            for(int i = paletteTabsParent->count()-1; i>=2; --i) {
+                QWidget *current = paletteTabsParent->widget(i);
                 paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
                 delete current;
             }
