@@ -2471,7 +2471,7 @@ void NeuroscopeApp::slotDisplayClose(){
             paletteTabsParent->hide();
             doc->closeDocument();
             //Delete the view
-            delete mainDock;
+            delete tabsParent->currentWidget();
             mainDock = 0L;
 
             resetState();
