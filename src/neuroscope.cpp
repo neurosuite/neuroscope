@@ -2463,7 +2463,7 @@ void NeuroscopeApp::slotDisplayClose(){
                 paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
                 delete current;
             }
-
+            disconnect(tabsParent,0,0,0);
             //reset the channel palettes and hide the channel panels
             spikeChannelPalette->reset();
             displayChannelPalette->reset();
