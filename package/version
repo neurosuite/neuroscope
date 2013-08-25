@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Version
-name=$(basename $(cd .. && pwd))
-version=1.99.1

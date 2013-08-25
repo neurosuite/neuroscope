@@ -210,6 +210,7 @@ add_subdirectory(doc)
 
 INCLUDE(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "neuroscope")
+set(CPACK_PACKAGE_DESCRIPTION "NeuroScope is an advanced viewer for electrophysiological and behavioral data: it can display local field potentials (LFPs), neuronal spikes, behavioral events, as well as the position of the animal in the environment. It also features limited editing capabilities.")
 set(CPACK_PACKAGE_NAME "neuroscope" )
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "99")
