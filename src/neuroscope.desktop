@@ -1,9 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
-MimeType=Application;application/data-file;application/eeg-file;application/filter-file;application/neuroscope-session
 Type=Application
-Exec=neuroscope %u 
-Icon=neuroscope.png
-DocPath=neuroscope/index.html
-Terminal=0
 Name=Neuroscope
+GenericName=Viewer for neurophysiological and behavioral data
+Comment=
+Icon=neuroscope
+Exec=neuroscope %u
+MimeType=application/nphys-dat;application/nphys-fil;application/nphys-lfp;application/nphys-eeg;
+Categories=Qt;Education;Science;
