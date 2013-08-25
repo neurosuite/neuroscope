@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+
+	<!-- 	Preprocessing -->
+	
+	<mime-type type="application/nphys-nrs">
+		<comment>Neuroscope session file</comment>
+		<comment xml:lang="fr">fichier de session de Neuroscope</comment>
+		<glob pattern="*.nrs"/>
+	</mime-type>
+	
+</mime-info>

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ -x "`which update-mime-database 2>/dev/null`" ]
+then
+	update-mime-database /usr/share/mime
+fi
+
+if [ -x "`which update-icon-caches 2>/dev/null`" ]
+then
+	update-icon-caches /usr/share/icons/hicolor
+fi

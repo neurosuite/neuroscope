@@ -66,5 +66,11 @@ install(FILES hi32-app-neuroscope.png DESTINATION share/icons/hicolor/32x32/apps
 install(FILES hi48-app-neuroscope.png DESTINATION share/icons/hicolor/48x48/apps/ RENAME neuroscope.png)
 install(FILES hi64-app-neuroscope.png DESTINATION share/icons/hicolor/64x64/apps/ RENAME neuroscope.png)
 
+install(FILES hi16-nphys-nrs.png DESTINATION share/icons/hicolor/16x16/mimetypes/ RENAME application-nphys-nrs.png)
+install(FILES hi22-nphys-nrs.png DESTINATION share/icons/hicolor/22x22/mimetypes/ RENAME application-nphys-nrs.png)
+install(FILES hi32-nphys-nrs.png DESTINATION share/icons/hicolor/32x32/mimetypes/ RENAME application-nphys-nrs.png)
+install(FILES hi48-nphys-nrs.png DESTINATION share/icons/hicolor/48x48/mimetypes/ RENAME application-nphys-nrs.png)
+install(FILES hi64-nphys-nrs.png DESTINATION share/icons/hicolor/64x64/mimetypes/ RENAME application-nphys-nrs.png)
+
 install(FILES neuroscope.desktop DESTINATION share/applications/)
-install(FILES data-file.desktop eeg-file.desktop neuroscope-session.desktop filter-file.desktop DESTINATION share/mimetypes)
+install(FILES neuroscope.xml DESTINATION share/mime/packages/)
