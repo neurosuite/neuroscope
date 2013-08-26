@@ -22,7 +22,13 @@ fi
 libs=$(ldd $binary | sed -r -e 's_.*=> ([^ ]*) .*_\1_' -e 's_[\t ]*(/[^ ]*) .*_\1_')
 
 # List corresponding packages
-packages="$(dpkg -S $libs | cut -f 1 -d : | sort | uniq)"
+if [ -x "$(which dpkg 2>/dev/null)" ]
+then
+	packages="$(dpkg -S $libs 2>/dev/null | cut -f 1 -d : | sort | uniq)"
+elif [ -x "$(which rpm 2>/dev/null)" ]
+then
+	packages="$(rpm -qf $libs 2>/dev/null | cut -f 1 -d : | sort | uniq)"
+fi
 
 # Format package list for checkinstall CLI
 packages=$(echo -e $packages | sed 's/ /, /g')
