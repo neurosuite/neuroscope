@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$1" = "configure" ] && [ -x "`which update-mime-database 2>/dev/null`" ]
+if [ -x "`which update-mime-database 2>/dev/null`" ]
 then
 	update-mime-database /usr/share/mime
 fi
