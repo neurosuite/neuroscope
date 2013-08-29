@@ -32,6 +32,6 @@ endif(DOCBOOK2HTML_EXECUTABLE)
 endif()
 
 file(GLOB _html ${CMAKE_CURRENT_SOURCE_DIR}/en/html/*.html)
-install(FILES ${_html} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/neuroscope/HTML/en)
+install(FILES ${_html} DESTINATION share/doc/neuroscope/HTML/en)
 
 

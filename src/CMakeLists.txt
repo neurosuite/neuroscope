@@ -49,7 +49,7 @@ set(neuroscope_UI  propertieslayout.ui prefdefaultslayout.ui positionpropertiesl
 
 qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
-add_executable(neuroscope ${neuroscope_SRCS} )
+add_executable(neuroscope WIN32 ${neuroscope_SRCS} )
 
 
 if(Qt5Core_FOUND)
