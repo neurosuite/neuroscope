@@ -269,7 +269,7 @@ if(UNIX)
 
     # >>> TEMPLATE CODE FOR ADDITIONAL DEBIAN-LIKE DISTRIBUTIONS <<<
 
-    #if(DISTRIBUTION STREQUAL "Ubuntu")
+    #elseif(DISTRIBUTION STREQUAL "Ubuntu")
     #
     #  # Set Ubuntu-specific information (see http://www.cmake.org/Wiki/CMake:CPackPackageGenerators)
     #  if(ARCHITECTURE MATCHES ".*x86_64.*")
