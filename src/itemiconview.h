@@ -30,6 +30,11 @@
 /**Utilitary class used to build the cluster and event palettes.
   *@author Lynn Hazan
   */
+class ItemWidgetItem : public QListWidgetItem {
+public:
+    explicit ItemWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = 0, int type = Type);
+    virtual bool operator<(const QListWidgetItem &other) const;
+};
 
 class ItemIconView : public QListWidget {
     Q_OBJECT

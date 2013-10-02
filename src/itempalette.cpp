@@ -183,7 +183,7 @@ void ItemPalette::updateItemList(const QString& groupName, ItemColors* itemColor
         painter.end();
         QIcon icon;
         icon.addPixmap(pix);
-        QListWidgetItem *item  = new QListWidgetItem(icon, itemColors->itemLabel(i), iconView);
+        ItemWidgetItem *item  = new ItemWidgetItem(icon, itemColors->itemLabel(i), iconView);
         item->setData(ItemIconView::Color,col);
         item->setData(ItemIconView::INDEXICON, itemColors->itemId(i));
     }

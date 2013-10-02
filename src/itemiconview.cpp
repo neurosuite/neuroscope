@@ -24,6 +24,25 @@
 #include <QDebug>
 #include <QFrame>
 
+ItemWidgetItem::ItemWidgetItem(const QIcon &icon, const QString &text, QListWidget *view, int type)
+    : QListWidgetItem(icon, text, view, type)
+{
+
+}
+
+bool ItemWidgetItem::operator<(const QListWidgetItem &other) const
+{
+    bool v1Ok;
+    bool v2Ok;
+    const int v1 = data(Qt::DisplayRole).toInt(&v1Ok);
+    const int v2 = other.data(Qt::DisplayRole).toInt(&v2Ok);
+    if (v1Ok && v2Ok) {
+        return v1 < v2;
+    } else {
+       return QListWidgetItem::operator <(other);
+    }
+}
+
 
 ItemIconView::ItemIconView(const QColor& backgroundColor,QListView::ViewMode mode,int gridX,int gridY,QWidget* parent, const QString& name):
     QListWidget(parent)
