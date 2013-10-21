@@ -2347,6 +2347,7 @@ void NeuroscopeDoc::eventAdded(const QString &providerName,const QString &addEve
                 view->updateEventsAfterAddition(providerName,addedEventId,time,false);
             else
                 view->updateEventsAfterAddition(providerName,addedEventId,time,true);
+
         }
     }
     else newEventDescriptionCreated = false;

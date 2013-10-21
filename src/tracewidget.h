@@ -457,9 +457,7 @@ public Q_SLOTS:
   * @param addedEventDescription description of the added event.
   * @param time time of the added event.
   */
-    void slotEventAdded(const QString &providerName,const QString& addedEventDescription,double time){
-        emit eventAdded(providerName,addedEventDescription,time);
-    }
+    void slotEventAdded(const QString &providerName,const QString& addedEventDescription,double time);
 
     /**Updates the event data provided by @p providerName due to the addition of an event.
   * @param providerName name use to identified the event provider containing the modified event.

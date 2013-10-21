@@ -732,3 +732,7 @@ void TraceWidget::slotChannelsSelected(const QList<int>& selectedIds)
     emit channelsSelected(selectedIds);
 }
 
+void TraceWidget::slotEventAdded(const QString &providerName,const QString& addedEventDescription,double time){
+    emit eventAdded(providerName,addedEventDescription,time);
+}
+
