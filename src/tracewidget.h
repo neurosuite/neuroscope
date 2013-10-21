@@ -438,11 +438,7 @@ public Q_SLOTS:
   * @param time initial time of the removed event.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(bool active,const QString& providerName,double time){
-        long eventTime = static_cast<long>(floor(0.5 + time));
-        if((eventTime >= startTime  && eventTime <= (startTime + timeWindow)))
-            view.updateEvents(providerName,active);
-    }
+    void updateEvents(bool active,const QString& providerName,double time);
 
     /**Informs the traceView of the properties for the next event to be added.
   * @param providerName name use to identified the event provider which will contain the added event.
@@ -464,9 +460,7 @@ public Q_SLOTS:
   * @param eventsToShow new list of events to be shown.
   * @param active true if the view is the active one, false otherwise.
   */
-    void updateEvents(const QString& providerName,QList<int>& eventsToShow,bool active){
-        view.updateEvents(providerName,eventsToShow,active);
-    }
+    void updateEvents(const QString& providerName,QList<int>& eventsToShow,bool active);
 
     /** Updates the description of a spike waveform.
   * @param nbSamplesBefore number of samples contained in the waveform of a spike before the sample of the peak.

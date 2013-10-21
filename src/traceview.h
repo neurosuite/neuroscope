@@ -288,7 +288,7 @@ public:
   */
     void removeEventProvider(const QString &name, bool active);
 
-    /**
+    /**updateEvents
   * Updates the list of events shown with @p eventsToShow for the event provider identified
   * by @p name.
   * @param name name use to identified the event provider containing the events to show.

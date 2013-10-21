@@ -263,7 +263,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
     if (clustersData.isEmpty() && eventsData.isEmpty()){
         changeCursor();
         //Everything has to be redraw
-        repaint();
+        update();
     }
     //Check if the cluster and event data are available
     else{
@@ -288,7 +288,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
             changeCursor();
 
             //Everything has to be redraw
-            repaint();
+            update();
         }
     }
 
