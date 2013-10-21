@@ -256,7 +256,6 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
 
     this->data = data;
     dataReady = true;
-
     updateWindow();
 
     //The following code was done in case of threads, without thread the trace data arrive always last
@@ -3077,6 +3076,7 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
             eventBeingModified = false;
             //notify everybody of the modification
             emit eventAdded(eventProvider,eventDescriptionToCreate,time);
+            return;
         }
     }
 
