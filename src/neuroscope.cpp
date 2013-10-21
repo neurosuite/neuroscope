@@ -1078,7 +1078,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
         }
     }
     if(!eventFileList.isEmpty()){
-        ItemPalette* palette;
+        ItemPalette* palette=0;
         for(int i = 0; i<paletteTabsParent->count();++i){
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
@@ -1088,6 +1088,8 @@ void NeuroscopeApp::updateBrowsingStatus(){
             }
         }
 
+        if (!palette) 
+            return;
         NeuroscopeView* view = activeView();
         QStringList::iterator iterator;
         for(iterator = eventFileList.begin(); iterator != eventFileList.end(); ++iterator){
