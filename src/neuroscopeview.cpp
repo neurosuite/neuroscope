@@ -557,3 +557,7 @@ void NeuroscopeView::removeEvent(){
     emit eventToRemove();
     emit updateEventDisplay();
 }
+
+void NeuroscopeView::slotEventAdded(const QString &providerName, const QString &addedEventDescription,double time){
+    emit eventAdded(providerName,addedEventDescription,time);
+}
