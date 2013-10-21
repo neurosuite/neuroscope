@@ -741,7 +741,6 @@ void TraceWidget::updateEvents(const QString& providerName,QList<int>& eventsToS
 }
 
 void TraceWidget::updateEvents(bool active,const QString& providerName,double time){
-    qDebug()<<" void TraceWidget::updateEvents(bool active,const QString& providerName,double time){";
     long eventTime = static_cast<long>(floor(0.5 + time));
     if((eventTime >= startTime  && eventTime <= (startTime + timeWindow)))
         view.updateEvents(providerName,active);
