@@ -2270,3 +2270,27 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
 
     update();
 }
+
+void ChannelPalette:mousePressEvent(QMouseEvent* e)
+{
+    if(e->button() == Qt::LeftButton) {
+        QPoint firstClick = QWidget::mapToGlobal(e->pos());
+        QString information = parent()->objectName();
+        information.append(QString::fromLatin1("-%1").arg(firstClick.y()));
+
+        QDrag *drag = new QDrag(this);
+        QMimeData *mimeData = new QMimeData;
+
+        mimeData->setText(information);
+        drag->setMimeData(mimeData);
+        Qt::DropAction dropAction = drag->exec();
+        e->accept();
+
+        emit leftClickOnLabel(parent()->objectName());
+    }
+    else if(e->button() == Qt::MidButton){
+        emit middleClickOnLabel(parent()->objectName());
+    }
+}
+
+
