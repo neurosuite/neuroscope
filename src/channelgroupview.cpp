@@ -17,6 +17,7 @@
 
 #include "channelgroupview.h"
 #include "channeliconview.h"
+#include "channelmimedata.h"
 #include <QListWidget>
 #include <QLabel>
 #include <QMimeData>
@@ -90,10 +91,9 @@ void ChannelGroupView::dropEvent(QDropEvent* event)
         event->ignore();
         return;
     }
-    if(event->mimeData()->hasText()){
-        QString information = event->mimeData()->text();
-        const int groupSource = information.section("-",0,0).toInt();
-        const int start = information.section("-",1,1).toInt();
+    if (ChannelMimeData::hasInformation(event->mimeData())) {
+        int groupSource, start;
+        ChannelMimeData::getInformation(event->mimeData(), &groupSource, &start);
         const QString groupTarget = this->objectName();
         emit dropLabel(groupSource,groupTarget.toInt(),start,QWidget::mapToGlobal(event->pos()).y());
     }
@@ -105,8 +105,9 @@ void ChannelGroupView::dragEnterEvent(QDragEnterEvent* event){
         return;
     }
 
-    if (event->mimeData()->hasText())
+    if (ChannelMimeData::hasInformation(event->mimeData())) {
         event->acceptProposedAction();
+    }
     //Enable the parent (ChannelPalette) to ensure that the current group is visible (will scroll if need it)
     emit dragObjectMoved(QWidget::mapToParent(event->pos()));
 }

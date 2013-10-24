@@ -20,7 +20,7 @@
 // application specific includes
 #include "channelpalette.h"
 #include "channelcolors.h"
-
+#include "channelmimedata.h"
 
 // include files for Qt
 #include <QVariant>
@@ -2275,13 +2275,10 @@ void GroupLabel::mousePressEvent(QMouseEvent* e)
 {
     if(e->button() == Qt::LeftButton) {
         QPoint firstClick = QWidget::mapToGlobal(e->pos());
-        QString information = parent()->objectName();
-        information.append(QString::fromLatin1("-%1").arg(firstClick.y()));
 
         QDrag *drag = new QDrag(this);
-        QMimeData *mimeData = new QMimeData;
-
-        mimeData->setText(information);
+        ChannelMimeData *mimeData = new ChannelMimeData;
+        mimeData->setInformation(parent()->objectName().toInt(), firstClick.y());
         drag->setMimeData(mimeData);
         Qt::DropAction dropAction = drag->exec();
         e->accept();
@@ -2293,4 +2290,28 @@ void GroupLabel::mousePressEvent(QMouseEvent* e)
     }
 }
 
+void SpaceWidget::dropEvent(QDropEvent *event)
+{
+  if(event->source() == 0 || !drag){
+    event->ignore();
+    return;
+  }
+  if (ChannelMimeData::hasInformation(event->mimeData())) {
+    int groupSource, start;
+    ChannelMimeData::getInformation(event->mimeData(), &groupSource, &start);
+    //to inform that the target is the SpaceWidget, put -2 as the target group.
+    emit dropLabel(groupSource,-2,start,QWidget::mapToGlobal(event->pos()).y());
+  }
+}
+
+void SpaceWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+  if(event->source() == 0 || !drag){
+    event->ignore();
+    return;
+  }
+  if (ChannelMimeData::hasInformation(event->mimeData())) {
+    event->acceptProposedAction();
+  }
+}
 

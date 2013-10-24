@@ -290,28 +290,9 @@ public:
         setAcceptDrops(true);
     }
 
-    void dropEvent(QDropEvent* event){
-        if(event->source() == 0 || !drag){
-            event->ignore();
-            return;
-        }
-        if(event->mimeData()->hasText()){
-            const QString information = event->mimeData()->text();
-            const int groupSource = information.section("-",0,0).toInt();
-            const int start = information.section("-",1,1).toInt();
-            //to inform that the target is the SpaceWidget, put -2 as the target group.
-            emit dropLabel(groupSource,-2,start,QWidget::mapToGlobal(event->pos()).y());
-        }
-    }
+    void dropEvent(QDropEvent* event);
 
-    void dragEnterEvent(QDragEnterEvent* event){
-        if(event->source() == 0 || !drag){
-            event->ignore();
-            return;
-        }
-        if (event->mimeData()->hasText())
-            event->acceptProposedAction();
-    }
+    void dragEnterEvent(QDragEnterEvent* event);
 
 public Q_SLOTS:
     void setDragAndDrop(bool dragDrop){drag = dragDrop;}

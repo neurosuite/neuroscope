@@ -7,6 +7,7 @@ set(neuroscope_SRCS
 	channelgroupview.cpp 
 	channeliconview.cpp 
 	channelpalette.cpp 
+	channelmimedata.cpp
 	clustercolors.cpp 
 	clusterproperties.cpp 
 	clustersprovider.cpp 
