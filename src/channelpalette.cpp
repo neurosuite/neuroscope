@@ -2271,7 +2271,7 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
     update();
 }
 
-void ChannelPalette:mousePressEvent(QMouseEvent* e)
+void GroupLabel::mousePressEvent(QMouseEvent* e)
 {
     if(e->button() == Qt::LeftButton) {
         QPoint firstClick = QWidget::mapToGlobal(e->pos());
