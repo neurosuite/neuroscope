@@ -17,21 +17,23 @@
 
 #include "channelmimedata.h"
 
+static const char* s_mimetype = "application/x-channelinformation";
 
 void ChannelMimeData::setInformation(int groupSource, int mouseY)
 {
-  const QString information = QString::fromLatin1("%1-%2").arg(groupSource).arg(mouseY);
-  setText(information);
+  const QByteArray information = QByteArray::number(groupSource) + '/' + QByteArray::number(mouseY);
+  setData(QString::fromLatin1(s_mimetype), information);
 }
 
 bool ChannelMimeData::hasInformation(const QMimeData *mimeData)
 {
-  return mimeData->hasText();
+  return mimeData->hasFormat(s_mimetype);
 }
 
 void ChannelMimeData::getInformation(const QMimeData *mimeData, int *groupSource, int *mouseY)
 {
-  const QString information = mimeData->text();
-  *groupSource = information.section("-",0,0).toInt();
-  *mouseY = information.section("-",1,1).toInt();
+  const QByteArray information = mimeData->data(s_mimetype);
+  const int pos = information.indexOf('/');
+  *groupSource = information.left(pos).toInt();
+  *mouseY = information.mid(pos+1).toInt();
 }
