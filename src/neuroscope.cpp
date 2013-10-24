@@ -75,7 +75,6 @@ NeuroscopeApp::NeuroscopeApp()
     ,initialTimeWindow(0)
     ,undoRedoInprocess(false)
     ,isPositionFileLoaded(false)
-    ,printer(0)
 {
     setObjectName("NeuroScope");
     initView();
@@ -107,7 +106,6 @@ NeuroscopeApp::~NeuroscopeApp()
 {
     //Clear the memory by deleting all the pointers
     delete doc;
-    delete printer;
 }
 
 
@@ -1494,15 +1492,13 @@ void NeuroscopeApp::slotFilePrint()
 {
     slotStatusMsg(tr("Printing..."));
 
-    //Prepare the actions
-    if(!printer)
-        printer = new QPrinter();
+    QPrinter printer;
 
 
-    printer->setOrientation(QPrinter::Landscape);
-    printer->setColorMode(QPrinter::Color);
+    printer.setOrientation(QPrinter::Landscape);
+    printer.setColorMode(QPrinter::Color);
 
-    QPrintDialog dialog(printer, this);
+    QPrintDialog dialog(&printer, this);
     if (dialog.exec())
     {
         //retrieve the backgroundColor setting from KPrinter object, //1 <=> white background
@@ -1511,11 +1507,11 @@ void NeuroscopeApp::slotFilePrint()
         if(useWhiteColorDuringPrinting) {
             //update the color of the skipped channels to white
             doc->updateSkippedChannelColors(true,backgroundColor);
-            view->print(printer,filePath,true);
+            view->print(&printer,filePath,true);
             //update the color of the skipped channels to the background color
             doc->updateSkippedChannelColors(false,backgroundColor);
         } else {
-            view->print(printer,filePath,false);
+            view->print(&printer,filePath,false);
         }
     }
 

@@ -843,9 +843,6 @@ private:
     /**Initial time window in miliseconds read on the command line.*/
     long initialTimeWindow;
 
-    /**The printer instance */
-    QPrinter* printer;
-
     /**List storing the identifiers of the opened cluster files.*/
     QStringList clusterFileList;
     
