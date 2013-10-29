@@ -252,13 +252,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
             dataFile.seek(position * sizeof(short));
-            qint64 nbRead = 0;
-            for (int i = 0; i < nbValues; ++i) {
-                nbRead += dataFile.read(reinterpret_cast<char*>(&retrieveData[i]), sizeof(short));
-            }
+            qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(short) * nbValues);
 
             // copy the data into retrieveData.
-            if(nbRead != nbValues*sizeof(short)){
+            if(nbRead != qint64(nbValues*sizeof(short))){
                 //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
                 data.setSize(0,0);
                 dataFile.close();
@@ -291,13 +288,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
         dataFile.seek(position * sizeof(short));
-        qint64 nbRead = 0;
-        for (int i = 0; i < nbValues; ++i) {
-            nbRead += dataFile.read(reinterpret_cast<char*>(&retrieveData[i]), sizeof(short));
-        }
+        qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(short) * nbValues);
 
         // copy the data into retrieveData.
-        if(nbRead != nbValues*sizeof(short)){
+        if(nbRead != qint64(nbValues*sizeof(short))){
             //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
             data.setSize(0,0);
             dataFile.close();
