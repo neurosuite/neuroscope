@@ -34,4 +34,7 @@ endif()
 file(GLOB _html ${CMAKE_CURRENT_SOURCE_DIR}/en/html/*.html)
 install(FILES ${_html} DESTINATION share/doc/neuroscope/HTML/en)
 
+file(GLOB _image ${CMAKE_CURRENT_SOURCE_DIR}/en/Images/*.png)
+
+install(FILES ${_image} DESTINATION share/doc/neuroscope/HTML/en/Images)
 
