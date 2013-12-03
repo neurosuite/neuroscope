@@ -1375,14 +1375,12 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
                 pen.setCosmetic(true);
                 painter.setPen(pen);
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
-            }//highlight
-            else{
+            } else{
                 //erase the previous trace
                 QPen pen(palette().color(backgroundRole()),2);
                 pen.setCosmetic(true);
                 painter.setPen(pen);
                 drawTrace(painter,limit,basePosition,X,*iterator,nbSamplesToDraw);
-
                 //redraw the trace
                 pen.setColor(color);
                 pen.setWidth(1);
@@ -1551,7 +1549,7 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     painter.end();
 
     //Draw the double buffer (pixmap) by copying it into the widget device.
-    update();
+    //update();
 
 }
 
