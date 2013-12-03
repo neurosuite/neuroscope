@@ -19,11 +19,11 @@
 #define CHANNELICONVIEW_H
 
 //QT include files
-#include <qwidget.h>
+#include <QWidget>
 #include <QPainter>
 #include <QListWidget>
 #include <QListWidgetItem>
-#include <qwidget.h>
+#include <QWidget>
 
 #include <QMouseEvent>
 #include <QList>

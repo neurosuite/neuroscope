@@ -19,7 +19,7 @@
 #define CLUSTERPROPERTIES_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <QLineEdit>
 #include <QValidator>
 #include <QLabel>

@@ -24,7 +24,7 @@
 #include <types.h>
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 
 //include files for c/c++ libraries
 #include <math.h>

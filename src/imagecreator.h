@@ -21,7 +21,7 @@
 #define IMAGECREATOR_H
 
 // include files for Qt
-#include <qwidget.h>
+#include <QWidget>
 #include <QPixmap>
 #include <QImage>
 #include <QPainter>

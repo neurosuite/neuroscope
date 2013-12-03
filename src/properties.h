@@ -19,7 +19,7 @@
 #define PROPERTIES_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <QComboBox>
 #include <qspinbox.h>
 #include <QPushButton>

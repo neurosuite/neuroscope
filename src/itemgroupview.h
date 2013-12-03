@@ -18,7 +18,7 @@
 #ifndef ITEMGROUPVIEW_H
 #define ITEMGROUPVIEW_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <QHBoxLayout>
 #include <QDebug>
 class ItemIconView;

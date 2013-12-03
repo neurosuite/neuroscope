@@ -26,7 +26,7 @@
 
 //include files for QT
 #include <QList>
-#include <qmap.h>
+#include <QMap>
 #include <qdom.h> 
 
 // forward declaration

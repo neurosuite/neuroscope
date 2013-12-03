@@ -19,7 +19,7 @@
 #define PREFDIALOG_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 
 #include <qpagedialog.h>
 

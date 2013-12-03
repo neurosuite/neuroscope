@@ -19,7 +19,7 @@
 #define TRACEWIDGET_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <qspinbox.h>
 #include <QValidator>
 #include <QLineEdit>

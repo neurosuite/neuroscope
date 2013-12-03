@@ -20,7 +20,7 @@
 // include files for QT
 #include <QDir>
 #include <QCursor>
-#include <qinputdialog.h>
+#include <QInputDialog>
 
 #include <QPixmap>
 #include <QList>

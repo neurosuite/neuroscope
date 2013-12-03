@@ -17,7 +17,7 @@
 
 // include files for Qt
 #include <QDir>
-#include <qwidget.h>
+#include <QWidget>
 #include <QPixmap>
 #include <QImage>
 #include <QRegExp>

@@ -25,7 +25,7 @@
 #include <dockarea.h>
 
 // include files for Qt
-#include <qwidget.h>
+#include <QWidget>
 #include <QHash>
 #include <QImage>
 #include <QPrinter>

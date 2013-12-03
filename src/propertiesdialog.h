@@ -19,7 +19,7 @@
 #define PROPERTIESDIALOG_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 
 #include <QDialog>
 

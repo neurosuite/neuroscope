@@ -19,9 +19,9 @@
 
 //QT include files
 #include <QVariant>
-#include <qwidget.h>
+#include <QWidget>
 #include <QHash>
-#include <qmap.h>
+#include <QMap>
 #include <QLabel>
 #include <QCursor>
 #include <QPainter>

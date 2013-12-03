@@ -19,7 +19,7 @@
 #define PREFGENERAL_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <QComboBox>
 #include <QCheckBox> 
 #include <qspinbox.h>

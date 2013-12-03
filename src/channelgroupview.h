@@ -18,7 +18,7 @@
 #ifndef CHANNELGROUPVIEW_H
 #define CHANNELGROUPVIEW_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <QObject> 
 #include <QPainter>
 

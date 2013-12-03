@@ -19,7 +19,7 @@
 #define BASEFRAME_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <QFrame>
 #include <QCursor>
 

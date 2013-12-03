@@ -26,7 +26,7 @@
 
 
 // include files for QT
-#include <qmap.h>
+#include <QMap>
 #include <QList>
 #include <QPainter>
 #include <QPrinter>

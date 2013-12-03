@@ -19,9 +19,9 @@
 #define ITEMICONVIEW_H
 
 //QT include files
-#include <qwidget.h>
+#include <QWidget>
 #include <QListWidget>
-#include <qwidget.h>
+#include <QWidget>
 
 #include <QMouseEvent>
 #include <QWheelEvent>

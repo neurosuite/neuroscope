@@ -19,7 +19,7 @@
 #define TRACEVIEW_H
 
 // include files for QT
-#include <qwidget.h>
+#include <QWidget>
 #include <QPixmap>
 #include <QHash>
 #include <QPair>
