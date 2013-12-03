@@ -59,7 +59,7 @@ void Configuration::read() {
     nbChannels = settings.value("nbChannels",nbChannelsDefault).toInt();
     datSamplingRate = settings.value("datSamplingRate",datSamplingRateDefault).toDouble();
     eegSamplingRate = settings.value("eegSamplingRate",eegSamplingRateDefault).toDouble();
-    backgroundColor = settings.value("backgroundColor",&backgroundColorDefault).value<QColor>();
+    backgroundColor = settings.value("backgroundColor",backgroundColorDefault).value<QColor>();
     displayPaletteHeaders = settings.value("displayPaletteHeaders",displayPaletteHeadersDefault).toBool();
     offset = settings.value("offset",offsetDefault).toInt();
     resolutionIndex = settings.value("resolutionIndex",resolutionIndexDefault).toInt();
