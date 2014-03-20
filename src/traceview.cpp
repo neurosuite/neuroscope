@@ -647,6 +647,10 @@ void TraceView::paintEvent ( QPaintEvent*){
             if (background.isNull())
                 doublebuffer.fill(palette().color(backgroundRole()));
 
+            // Force FastDraw (src/gui/painting/qcosmeticstroker.cpp)
+            painter.setClipRect(painter.window());
+            painter.setClipping(true);
+
             //Paint all the traces in the shownChannels list (in the double buffer,on top of the background image or the background color )
             drawTraces(painter);
 
