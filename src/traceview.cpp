@@ -2537,6 +2537,12 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
     BaseFrame::mouseMoveEvent(event);
 }
 
+void TraceView::resizeEvent(QResizeEvent *event)
+{
+    drawContentsMode = REDRAW;
+    resized = true;
+}
+
 void TraceView::mousePressEvent(QMouseEvent* event){
     if (event->button() == Qt::LeftButton){
 

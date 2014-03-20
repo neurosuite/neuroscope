@@ -518,10 +518,7 @@ protected:
   * The window is recomputed.
   * @param event resize event.
   */
-    void resizeEvent(QResizeEvent* event){
-        drawContentsMode = REDRAW;
-        resized = true;
-    }
+    void resizeEvent(QResizeEvent* event);
 
     /**The view responds to a mouse click.
   * @param event mouse release event.
