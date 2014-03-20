@@ -28,6 +28,7 @@
 // include files for QT
 #include <QMap>
 #include <QList>
+#include <QTime>
 #include <QPainter>
 #include <QPrinter>
 
@@ -526,7 +527,15 @@ void TraceView::showHideLabels(bool show){
     update();
 }
 
+// Timing code (CDF-111)
+#define ENABLE_TIMING 0
+
 void TraceView::paintEvent ( QPaintEvent*){
+#if ENABLE_TIMING
+    QTime dt; dt.start();
+    bool fullDraw = false;
+#endif
+
     bool isInitAndResized = false;
     if (isInit){
         if (resized){
@@ -654,6 +663,10 @@ void TraceView::paintEvent ( QPaintEvent*){
 
             //Closes the painter on the double buffer
             painter.end();
+
+#if ENABLE_TIMING
+            fullDraw = true;
+#endif
         }
 
         //Back to the default
@@ -736,6 +749,16 @@ void TraceView::paintEvent ( QPaintEvent*){
         drawContentsMode = REDRAW;
         update();
     }
+#if ENABLE_TIMING
+    const int elapsed = dt.elapsed();
+    if (fullDraw) {
+        static int s_total = 0;
+        static int s_num = 0;
+        s_total += elapsed;
+        ++s_num;
+        qDebug() << "painting traces took" << elapsed << "ms" << "average:" << (s_total/s_num) << "ms";
+    }
+#endif
 }
 
 void TraceView::setMultiColumns(bool multiple){
