@@ -80,7 +80,6 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
 
 ChannelIconView::~ChannelIconView()
 {
-    qDebug()<<" void ChannelIconView::~ChannelIconView()*******************"<<this;
 }
 
 void ChannelIconView::slotRowInsered()
