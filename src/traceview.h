@@ -70,6 +70,7 @@ public:
   * @param channelColors a pointer on the list of colors for the channels.
   * @param groupsChannels a pointer on the map given the list of channels for each group.
   * @param channelsGroups a pointer on the map given to which group each channel belongs.
+  * @param autocenterChannels whether all channels should be autocentered around their offset.
   * @param channelOffsets a reference on the list containing the offset for each channel.
   * @param gains a reference on the list of the exponents used to compute the drawing gain for each channel.
   * @param skippedChannels list of skipped channels.
@@ -90,7 +91,7 @@ public:
     TraceView(TracesProvider& tracesProvider, bool greyScale, bool multiColumns, bool verticalLines,
               bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int unitGain, int acquisitionGain, long start, long timeFrameWidth,
               ChannelColors* channelColors, QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
-              QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor& backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
+              bool autocenterChannels, QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor& backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
               int minSize = 500, int maxSize = 4000, int windowTopLeft = -500, int windowBottomRight = 1001, int border = 0);
 
 

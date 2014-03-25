@@ -848,6 +848,7 @@ Q_SIGNALS:
    * @param showLabels true if labels are displayed next to the traces, false otherwise.
    * @param multipleColumns true if the traces are diplay on several columns,false otherwise.
    * @param greyMode true if the channels are displayed in grey-scale, false otherwise.
+   * @param autocenterChannels whether channels should be centered around their offset.
    * @param offsets list containing the offset for each channel.
    * @param channelGains list of the exponents used to compute the drawing gain for each channel.
    * @param selectedChannels list of the selected channels.
@@ -860,7 +861,7 @@ Q_SIGNALS:
    * @param showEventsInPositionView 1 if events are displayed in the PositionView, 0 otherwise.
    */
     void loadFirstDisplay(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,
-                          bool multipleColumns,bool greyMode,QList<int> offsets,QList<int> channelGains,
+                          bool multipleColumns,bool greyMode,bool autocenterChannels,QList<int> offsets,QList<int> channelGains,
                           QList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
                           bool showEventsInPositionView);
 

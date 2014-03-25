@@ -550,8 +550,8 @@ void NeuroscopeApp::initActions()
 
     //Custom connections
     connect(doc, SIGNAL(noSession(QMap<int,int>&,QMap<int,bool>&)),this, SLOT(slotDefaultSetUp(QMap<int,int>&,QMap<int,bool>&)));
-    connect(doc, SIGNAL(loadFirstDisplay(QList<int>*,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
-            SLOT(slotSetUp(QList<int>*,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
+    connect(doc, SIGNAL(loadFirstDisplay(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
+            SLOT(slotSetUp(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
 
     connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
     connect(spikeChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
@@ -856,8 +856,9 @@ void NeuroscopeApp::initializePreferences(){
     useWhiteColorDuringPrinting = configuration().getUseWhiteColorDuringPrinting();
 }
 
-void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
-                                QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight,long duration,long startTime,QString tabLabel)
+void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterChannels,QList<int> offsets,
+										  QList<int> channelGains,QList<int> selectedChannels,QMap<int,bool>& skipStatus,
+										  int rasterHeight,long duration,long startTime,QString tabLabel)
 {
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
@@ -871,7 +872,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
                                               doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
                                               clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
-                                              doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),
+                                              doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
                                               offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay");
 
     view->installEventFilter(this);
@@ -1921,14 +1922,14 @@ void NeuroscopeApp::slotDefaultSetUp(QMap<int,int>& channelDefaultOffsets,QMap<i
     QList<int> channelGains;
     QList<int> selectedChannels;
     if(initialTimeWindow != 0)
-        initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus,initialTimeWindow);
+        initDisplay(channelsToDisplay,false,offsets,channelGains,selectedChannels,skipStatus,initialTimeWindow);
     else
-        initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus);
+        initDisplay(channelsToDisplay,false,offsets,channelGains,selectedChannels,skipStatus);
 
 }
 
 void NeuroscopeApp::slotSetUp(QList<int>* channelsToDisplay, bool verticalLines, bool raster, bool waveforms, bool showLabels, bool multipleColumns,
-                              bool greyMode, QList<int> offsets, QList<int> channelGains, QList<int> selectedChannels,
+                              bool greyMode, bool autocenterChannels,QList<int> offsets, QList<int> channelGains, QList<int> selectedChannels,
                               QMap<int,bool>& skipStatus, long startTime, long duration, const QString &tabLabel, bool positionView, int rasterHeight, bool showEventsInPositionView){
 
     isInit = true; //prevent the KToggleAction to trigger during initialisation
@@ -1944,7 +1945,7 @@ void NeuroscopeApp::slotSetUp(QList<int>* channelsToDisplay, bool verticalLines,
 
     isInit = false; //now a change in a KToggleAction will trigger an update of the display
 
-    initDisplay(channelsToDisplay,offsets,channelGains,selectedChannels,skipStatus,rasterHeight,duration,startTime,tabLabel);
+    initDisplay(channelsToDisplay,autocenterChannels,offsets,channelGains,selectedChannels,skipStatus,rasterHeight,duration,startTime,tabLabel);
 }
 
 
@@ -2493,6 +2494,7 @@ void NeuroscopeApp::slotNewDisplay(){
     for(iterator = currentChannels.begin(); iterator != currentChannels.end(); ++iterator)
         channelList->append(*iterator);
 
+	 bool autocenterChannels = activeView()->getAutocenterChannels();
     QList<int> offsets = activeView()->getChannelOffset();
     QList<int> channelGains = activeView()->getGains();
     QList<int> selectedChannels = activeView()->getSelectedChannels();
@@ -2501,7 +2503,7 @@ void NeuroscopeApp::slotNewDisplay(){
     int rasterHeight = activeView()->getRasterHeight();
 
     createDisplay(channelList,clusterVerticalLines->isChecked(),clusterRaster->isChecked(),clusterWaveforms->isChecked(),
-                  showHideLabels->isChecked(),displayMode->isChecked(),greyScale->isChecked(),offsets,channelGains,selectedChannels,startTime,
+                  showHideLabels->isChecked(),displayMode->isChecked(),greyScale->isChecked(),autocenterChannels,offsets,channelGains,selectedChannels,startTime,
                   duration,rasterHeight);
 
     //informs the new view of the list of providers
@@ -2509,7 +2511,7 @@ void NeuroscopeApp::slotNewDisplay(){
     doc->setProviders(view);
 }
 
-void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,bool greyMode,
+void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLines,bool raster,bool waveforms,bool showLabels,bool multipleColumns,bool greyMode,bool autocenterChannels,
                                   QList<int> offsets,QList<int> channelGains,QList<int> selectedChannels,long startTime,long duration,int rasterHeight, QString tabLabel){
     if(mainDock){
         if(tabLabel.isEmpty())
@@ -2517,7 +2519,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
-                                                  doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),
+                                                  doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
                                                   offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),mainDock,
                                                   "TracesDisplay");
 

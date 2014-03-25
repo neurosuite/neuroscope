@@ -152,6 +152,7 @@ public:
    greyScale = 0;
    startTime = 0;
    timeWindow = 50;
+   autocenterChannels = false;
    isPositionView = false;
    rasterHeight = -1;
    areEventsInPositionView = false;
@@ -217,6 +218,11 @@ public:
   */
   inline void setSelectedSpikeFiles(QList<QString> files){shownSpikeFiles = files;};
 
+   /**Sets the channel autocenter status.
+  * @param autocenterChannels whether channels should be centered around their offset.
+  */
+  inline void setAutocenterChannels(bool autocenterChannels){this->autocenterChannels = autocenterChannels;};
+    
    /**Sets the list of TracePosition.
   * @param positions list of TracePosition.
   */
@@ -307,6 +313,11 @@ public:
   */
   inline QList<QString> getSelectedSpikeFiles() const{return shownSpikeFiles;};
 
+   /**Gets the channel autocenter status.
+  * @param autocenterChannels whether channels should be centered around their offset.
+  */
+  inline bool getAutocenterChannels(){return autocenterChannels;};
+    
   /**Gets the list of TracePosition.
   * @return list of TracePosition.
   */
@@ -381,6 +392,9 @@ private:
   
   /**List of the spike files shown in the display (without cluster file associated).*/
   QList<QString> shownSpikeFiles;
+
+  /**Channel autocenter status.*/
+  bool autocenterChannels;
 
   /**List of TracePosition.*/
   QList<TracePosition> positions;

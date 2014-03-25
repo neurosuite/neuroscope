@@ -81,6 +81,7 @@ public:
      * @param channelColors a pointer on the list of colors for the channels.
      * @param groupsChannels a pointer on the map given the list of channels for each group.
      * @param channelsGroups a pointer on the map given to which group each channel belongs.
+     * @param autocenterChannels whether all channels should be autocentered around their offset.
      * @param offsets list containing the offset for each channel.
      * @param channelGains list of the exponents used to compute the drawing gain for each channel.
      * @param selected list of the currently selected channels.
@@ -94,7 +95,7 @@ public:
                    TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
                    bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
                    QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                   QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,const QString& backgroundImagePath,
+                   bool autocenterChannels, QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,const QString& backgroundImagePath,
                    QWidget *parent = 0, const char *name=0);
     /** Destructor for the main view. */
     ~NeuroscopeView();
@@ -323,6 +324,11 @@ public:
     }
 
 
+    /** Returns true if all channels should be centered around their offset.
+   * @return whether channels should be centered around their offset.
+   */
+    const bool getAutocenterChannels() const{return autocenterChannels;}
+
     /** Returns the list containing the offset for each channel.
    * @return the list of the offsets.
    */
@@ -409,7 +415,7 @@ public:
     void  clusterColorUpdate(const QColor & color, const QString &name,int clusterId,bool active){emit clusterColorUpdated(color, name,clusterId,active);}
 
     /**Hides the cluster waveforms on top of the traces but keep the setting of displaying or hidding them.*/
-    void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false);}
+    void ignoreWaveformInformation(){ emit clusterWaveformsDisplay(false); }
 
     /**Retrieves the next cluster.*/
     void showNextCluster(){emit nextCluster();}
@@ -794,9 +800,12 @@ private:
     /**True if the selected tool is the selection one, false otherwise.*/
     bool selectMode;
 
+    /**Whether channels should be centered around their offset.*/
+    bool autocenterChannels;
+
     /**List containing the offset for each channel.*/
     QList<int> channelOffsets;
-
+	 
     /**List of the exponents used to compute the drawing gain for each channel.
  */
     QList<int> gains;

@@ -1292,6 +1292,9 @@ QList<DisplayInformation> NeuroscopeXmlReader::getDisplayInformation(){
                                         } else if(tag == GREYSCALE){
                                             int greyScale = fileElement.text().toInt();
                                             displayInformation.setGreyScale(greyScale);
+                                        } else if(tag == AUTOCENTER_CHANNELS){
+                                            bool autocenterChannels = fileElement.text().toInt();
+                                            displayInformation.setAutocenterChannels(autocenterChannels);
                                         } else if(tag == POSITIONVIEW){
                                             int positionView = fileElement.text().toInt();
                                             displayInformation.setPositionView(positionView);

@@ -426,7 +426,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 if(reader.getVersion().isEmpty() || reader.getVersion() == "1.2.2"){
                     if(isCommandLineProperties){
                         QApplication::restoreOverrideCursor();
-                        QMessageBox::information(0, tr("Warning!"),tr("A session file has be found, the command line "
+                        QMessageBox::information(0, tr("Warning!"),tr("A session file has been found, the command line "
                                                                       "information will be discarded and the session file information will be used instead."));
                         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                     }
@@ -706,7 +706,9 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::saveSession(){
         /* QValueList<QString> files;
   displayInformation.setSelectedSpikeFiles(files)*/
 
-        //loop on all the channels to store their gain and offsets
+        displayInformation.setAutocenterChannels(view->getAutocenterChannels());
+
+		  //loop on all the channels to store their gain and offsets
         QList<TracePosition> tracePositions;
 
         const QList<int>& offsets = view->getChannelOffset();
@@ -1268,8 +1270,8 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     bool first = true;
     QList<DisplayInformation>::ConstIterator iterator;
     QList<DisplayInformation>::ConstIterator end(displayList.constEnd());
-    for(iterator = displayList.constBegin(); iterator != end; ++iterator) {
-        QList<int> offsets;
+   for(iterator = displayList.constBegin(); iterator != end; ++iterator) {
+		  QList<int> offsets;
         QList<int> channelGains;
         QList<int>* channelsToDisplay = new QList<int>();
         QList<int> selectedChannels;
@@ -1280,6 +1282,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
 
         //Get the information store in DisplayInformation
         DisplayInformation::mode presentationMode = static_cast<DisplayInformation>(*iterator).getMode();
+        bool autocenterChannels = static_cast<DisplayInformation>(*iterator).getAutocenterChannels();
         long startTime = static_cast<DisplayInformation>(*iterator).getStartTime();
         long duration = static_cast<DisplayInformation>(*iterator).getTimeWindow();
         bool greyMode = static_cast<DisplayInformation>(*iterator).getGreyScale();
@@ -1347,7 +1350,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
         if(first){
             first = false;
 
-            emit loadFirstDisplay(channelsToDisplay,verticalLines,raster,waveforms,showLabels,multipleColumns,greyMode,offsets,
+            emit loadFirstDisplay(channelsToDisplay,verticalLines,raster,waveforms,showLabels,multipleColumns,greyMode,autocenterChannels,offsets,
                                   channelGains,selectedChannels,skipStatus,startTime,duration,tabLabel,isAPositionView,rasterHeight,showEventsInPositionView);
 
             //Now that the channel palettes are created, load the files and create the palettes
@@ -1445,7 +1448,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
             }
         } else {
             static_cast<NeuroscopeApp*>(parent)->createDisplay(channelsToDisplay,verticalLines,raster,waveforms,showLabels,multipleColumns,
-                                                                greyMode,offsets,channelGains,selectedChannels,startTime,duration,rasterHeight,tabLabel);
+                                                                greyMode,autocenterChannels,offsets,channelGains,selectedChannels,startTime,duration,rasterHeight,tabLabel);
         }
 
 

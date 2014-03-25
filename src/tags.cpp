@@ -116,6 +116,7 @@ extern const QString MULTIPLE_COLUMNS = "multipleColumns";
 extern const QString START_TIME = "startTime";
 extern const QString DURATION = "duration";
 extern const QString GREYSCALE = "greyScale";
+extern const QString AUTOCENTER_CHANNELS = "autocenterChannels";
 extern const QString POSITIONVIEW = "positionView";
 extern const QString SHOWEVENTS = "showEvents";
 extern const QString SPIKE_PRESENTATION = "spikePresentation";

@@ -181,6 +181,8 @@ extern const QString DURATION;
 extern const QString MULTIPLE_COLUMNS;
 /**Tag for the greyScale element included in the display element.*/
 extern const QString GREYSCALE;
+/**Tag for the autocenter element included in the display element.*/
+extern const QString AUTOCENTER_CHANNELS;
 /**Tag for the positionView element included in the display element.*/
 extern const QString POSITIONVIEW;
 /**Tag for the showEvents element included in the display element.*/

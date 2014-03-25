@@ -143,6 +143,7 @@ void SessionXmlWriter::setDisplayInformation(const QList<DisplayInformation>& di
         int presentationMode = static_cast<DisplayInformation>(*iterator).getMode();
         int rasterHeight = static_cast<DisplayInformation>(*iterator).getRasterHeight();
         int greyScale = static_cast<DisplayInformation>(*iterator).getGreyScale();
+        bool autocenterChannels = static_cast<DisplayInformation>(*iterator).getAutocenterChannels();
         int positionView = static_cast<DisplayInformation>(*iterator).isAPositionView();
         int showEvents = static_cast<DisplayInformation>(*iterator).isEventsDisplayedInPositionView();
         QList<DisplayInformation::spikeDisplayType> spikeDisplayTypes = static_cast<DisplayInformation>(*iterator).getSpikeDisplayTypes();
@@ -189,6 +190,12 @@ void SessionXmlWriter::setDisplayInformation(const QList<DisplayInformation>& di
         QDomText greyScaleValue = doc.createTextNode(QString::number(greyScale));
         greyScaleElement.appendChild(greyScaleValue);
         displayElement.appendChild(greyScaleElement);
+
+        //info on the channel autocenter status
+        QDomElement autocenterChannelsElement = doc.createElement(AUTOCENTER_CHANNELS);
+        QDomText autocenterChannelsValue = doc.createTextNode(QString::number(autocenterChannels));
+        autocenterChannelsElement.appendChild(autocenterChannelsValue);
+        displayElement.appendChild(autocenterChannelsElement);
 
         //info on the PositionView
         QDomElement positionViewElement = doc.createElement(POSITIONVIEW);

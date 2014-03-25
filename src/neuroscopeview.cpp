@@ -35,11 +35,11 @@ class EventData;
 NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, long startTime, long duration, const QColor &backgroundColor, int wflags, QStatusBar* statusBar, QList<int>* channelsToDisplay,
                                bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
                                bool raster, bool waveforms, bool labelsDisplay, int unitGain, int acquisitionGain, ChannelColors* channelColors,
-                               QMap<int,QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
+                               QMap<int,QList<int> >* groupsChannels, QMap<int,int>* channelsGroups, bool autocenterChannels,
                                QList<int> offsets, QList<int> channelGains, QList<int> selected, QMap<int,bool> skipStatus, int rasterHeight, const QString &backgroundImagePath, QWidget* parent, const char* name):
     DockArea(parent)
   ,shownChannels(channelsToDisplay),mainWindow(mainWindow),greyScaleMode(greyScale),
-    multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),
+    multiColumns(multiColumns),verticalLines(verticalLines),raster(raster),waveforms(waveforms),selectMode(false),autocenterChannels(autocenterChannels),
     channelOffsets(),gains(),selectedChannels(),tabLabel(label),startTime(startTime),timeWindow(duration),
     labelsDisplay(labelsDisplay),isPositionFileShown(false),positionView(0L),eventsInPositionView(false), positionsDockWidget(0){
 
@@ -67,7 +67,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
-                                  waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,
+                                  waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
 	 /// Added by M.Zugaro to enable automatic forward paging
     connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));

@@ -49,7 +49,7 @@ const int TraceView::YMARGIN = 0;
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
                      bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
                      ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
-                     QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
+                     bool autocenterChannels,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
                      const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                      int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
     BaseFrame(10,0,parent,name,backgroundColor,minSize,maxSize,windowTopLeft,windowBottomRight,border),
@@ -61,7 +61,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     raster(raster),
     waveforms(waveforms),
     dataReady(false),data(),
-    autocenterChannels(true),
+    autocenterChannels(autocenterChannels),
     channelOffsets(channelOffsets),
     gains(gains),
     channelColors(channelColors),
