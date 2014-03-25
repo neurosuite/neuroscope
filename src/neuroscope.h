@@ -565,6 +565,9 @@ private Q_SLOTS:
    */
     void slotSessionSaveAs();
 
+    /**Enables or disables automatic channel centering around offsets.*/
+    void slotAutocenterChannels();
+
     /**Enables or disables the display of labels next to the traces.*/
     void slotShowLabels();
 
@@ -687,6 +690,7 @@ private:
     QAction* clusterRaster;
     QAction* clusterWaveforms;
     QAction* editMode;
+    QAction* autocenterChannels;
     QAction* showHideLabels;
     QAction* calibrationBar;
     QMenu* addEventPopup;

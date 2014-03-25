@@ -461,6 +461,14 @@ void NeuroscopeApp::initActions()
     connect(mSetDefaultOffsetToZero,SIGNAL(triggered()), this,SLOT(slotResetDefaultOffsets()));
 
     traceMenu->addSeparator();
+    autocenterChannels = traceMenu->addAction(tr("Autocenter Channels"));
+    autocenterChannels->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
+    autocenterChannels->setCheckable(true);
+    connect(autocenterChannels,SIGNAL(triggered()), this,SLOT(slotAutocenterChannels()));
+
+    autocenterChannels->setChecked(false);
+
+    traceMenu->addSeparator();
     showHideLabels = traceMenu->addAction(tr("Show &Labels"));
     showHideLabels->setShortcut(Qt::CTRL + Qt::Key_L);
     showHideLabels->setCheckable(true);
@@ -468,7 +476,7 @@ void NeuroscopeApp::initActions()
 
     showHideLabels->setChecked(false);
 
-    /// Added by M.Zugaro to enable automatic forward paging
+	 /// Added by M.Zugaro to enable automatic forward paging
     traceMenu->addSeparator();
     mPage = traceMenu->addAction(tr("Auto-advance to end of recording"));
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
@@ -477,12 +485,10 @@ void NeuroscopeApp::initActions()
 
 	 mAccelerate = traceMenu->addAction(tr("Accelerate"));
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
-    mAccelerate->setEnabled(false);
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
     mDecelerate = traceMenu->addAction(tr("Decelerate"));
     mDecelerate->setShortcut(Qt::CTRL + Qt::Key_Down);
-    mDecelerate->setEnabled(false);
     connect(mDecelerate,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
@@ -1939,6 +1945,7 @@ void NeuroscopeApp::slotSetUp(QList<int>* channelsToDisplay, bool verticalLines,
     clusterWaveforms->setChecked(waveforms);
     greyScale->setChecked(greyMode);
     displayMode->setChecked(multipleColumns);
+    this->autocenterChannels->setChecked(autocenterChannels);
     showHideLabels->setChecked(showLabels);
     positionViewToggle->setChecked(positionView);
     this->showEventsInPositionView->setChecked(showEventsInPositionView);
@@ -2066,6 +2073,11 @@ void NeuroscopeApp::slotSelectAllWO01(){
 void NeuroscopeApp::slotDisplayMode(){
     NeuroscopeView* view = activeView();
     view->setMultiColumns(displayMode->isChecked());
+}
+
+void NeuroscopeApp::slotAutocenterChannels(){
+    NeuroscopeView* view = activeView();
+    view->setAutocenterChannels(autocenterChannels->isChecked());
 }
 
 void NeuroscopeApp::slotShowLabels(){
@@ -2197,6 +2209,7 @@ void NeuroscopeApp::slotTabChange(int index){
         slotStateChanged("noClusterRasterState");
     }
     clusterWaveforms->setChecked(activeView->getClusterWaveforms());
+    autocenterChannels->setChecked(activeView->getAutocenterChannels());
     showHideLabels->setChecked(activeView->getLabelStatus());
     positionViewToggle->setChecked(activeView->isPositionView());
     showEventsInPositionView->setChecked(activeView->isEventsInPositionView());
@@ -3350,7 +3363,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         displayMode->setEnabled(false);
         showEventsInPositionView->setEnabled(false);
         mMoveToNewGroup->setEnabled(false);
+        autocenterChannels->setEnabled(false);
         showHideLabels->setEnabled(false);
+        mPage->setEnabled(false);
+        mAccelerate->setEnabled(false);
+        mDecelerate->setEnabled(false);
         editMode->setEnabled(false);
         mMeasureTool->setEnabled(false);
         mSelectTool->setEnabled(false);
@@ -3410,7 +3427,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
         calibrationBar->setEnabled(true);
         displayMode->setEnabled(true);
         mMoveToNewGroup->setEnabled(true);
+        autocenterChannels->setEnabled(true);
         showHideLabels->setEnabled(true);
+        mPage->setEnabled(true);
+        mAccelerate->setEnabled(true);
+        mDecelerate->setEnabled(true);
         editMode->setEnabled(true);
         mMeasureTool->setEnabled(true);
         mSelectTool->setEnabled(true);

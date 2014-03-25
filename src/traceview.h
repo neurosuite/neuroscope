@@ -218,7 +218,12 @@ public:
     /**Resets the state of the view.*/
     void reset();
 
-    /**Shows or hide the labels next to the channels displaying the channel id and the gain.
+    /**Enables or disables automatic channel centering around offsets.
+  * @param show true if the autocentering is on, false otherwise.
+  */
+    void setAutocenterChannels(bool status);
+
+    /**Shows or hides the labels next to the channels displaying the channel id and the gain.
   * @param show true if the labels have to be shown, false otherwise.
   */
     void showHideLabels(bool show);
@@ -570,7 +575,7 @@ private:
 
     /**Autocenter channels.*/
     bool autocenterChannels;
-	 
+
     /**List containing the offset for each channel.*/
     QList<int>& channelOffsets;
 

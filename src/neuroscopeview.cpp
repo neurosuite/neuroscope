@@ -101,6 +101,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     connect(this,SIGNAL(drawTraces()),traceWidget,SLOT(drawTraces()));
     connect(this,SIGNAL(reset()),traceWidget,SLOT(reset()));
     connect(traceWidget,SIGNAL(updateStartAndDuration(long,long)),this, SLOT(setStartAndDuration(long,long)));
+    connect(this,SIGNAL(autocenterChannelsChanged(bool)),traceWidget, SLOT(setAutocenterChannels(bool)));
     connect(this,SIGNAL(showLabels(bool)),traceWidget, SLOT(showLabels(bool)));
     connect(this,SIGNAL(displayCalibration(bool,bool)),traceWidget, SLOT(showCalibration(bool,bool)));
     connect(this,SIGNAL(newSamplingRate(qlonglong)),traceWidget,SLOT(samplingRateModified(qlonglong)));
@@ -535,6 +536,12 @@ void NeuroscopeView::setMode(BaseFrame::Mode selectedMode,bool active)
     else
         selectMode = false;
     emit modeToSet(selectedMode,active);
+}
+
+void NeuroscopeView::setAutocenterChannels(bool status)
+{
+    autocenterChannels = status;
+    emit autocenterChannelsChanged(status);
 }
 
 void NeuroscopeView::showLabelsUpdate(bool status)

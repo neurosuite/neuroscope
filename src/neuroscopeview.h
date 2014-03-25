@@ -369,6 +369,11 @@ public:
   */
     long getTimeWindow()const {return timeWindow;}
 
+    /**Enables or disables automatic channel centering around offsets.
+  * @param status true if autocentering is on, false otherwise.
+  */
+    void setAutocenterChannels(bool status);
+
     /**Displays or hides the labels next to the traces.
   * @param status true if the labels have to be drawn, false otherwise.
   */
@@ -603,7 +608,7 @@ public:
 	 bool isStill() { return ( traceWidget == NULL || traceWidget->isStill() ); }
 
 private Q_SLOTS:
-	
+
 	 /// Added by M.Zugaro to enable automatic forward paging
 	 void traceWidgetStopped() { emit stopped(); }
 
@@ -611,7 +616,7 @@ Q_SIGNALS:
 
 	 /// Added by M.Zugaro to enable automatic forward paging
     void stopped();
-    
+
 public Q_SLOTS:
 
 	 /// Added by M.Zugaro to enable automatic forward paging
@@ -619,7 +624,7 @@ public Q_SLOTS:
     void stop() { traceWidget->stop(); }
     void accelerate() { traceWidget->accelerate(); }
     void decelerate() { traceWidget->decelerate(); }
-	 
+
     /** Informs listener that the channels @p selectedIds have been selected.
     * @param selectedIds the list of channels selected by the user in a view.
     */
@@ -728,6 +733,7 @@ Q_SIGNALS:
     void resetChannelGains(const QList<int>& selectedChannels);
     void drawTraces();
     void reset();
+    void autocenterChannelsChanged(bool status);
     void showLabels(bool show);
     void displayCalibration(bool show,bool active);
     void newClusterProvider(ClustersProvider* clustersProvider,QString name,ItemColors* clusterColors,bool active,
@@ -805,7 +811,7 @@ private:
 
     /**List containing the offset for each channel.*/
     QList<int> channelOffsets;
-	 
+
     /**List of the exponents used to compute the drawing gain for each channel.
  */
     QList<int> gains;

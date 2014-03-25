@@ -49,14 +49,14 @@ public:
   };
 
   inline SessionFile(QUrl url,type fileType,QDateTime modification):fileUrl(url),fileType(fileType),fileModification(modification){};
-  
+
   inline ~SessionFile(){};
 
   /**Sets the url of the file.
   * @param url url of the file.
   */
   inline void setUrl(QUrl url){fileUrl = url;};
-  
+
   /**Sets the type of the file (see SessionFile#type).
   * @param fileType type of the file.
   */
@@ -72,7 +72,7 @@ public:
   * @param color color of the item.
   */
   inline void setItemColor(EventDescription itemId,QString color){
-   itemColors.insert(itemId,QColor(color)); 
+   itemColors.insert(itemId,QColor(color));
   };
 
   /**Sets the url of the background image.
@@ -81,7 +81,7 @@ public:
   */
   inline void setBackgroundPath(QString path){imagePath = path;};
 
-  
+
   /**Gets the url of the file.
   * @return url of the file.
   */
@@ -101,14 +101,14 @@ public:
   * @return map given the color of each item.
   */
   inline QMap<EventDescription,QColor> getItemColors() const{return itemColors;};
-  
+
   /**Gets the url of the background image.
   * @return url of the background image.
-  * obsolete: the background image information is now store in an other class.  
+  * obsolete: the background image information is now store in an other class.
   */
   inline QString getBackgroundPath() const{return imagePath;};
-  
-  
+
+
 private:
   /**Url of the file.*/
   QUrl fileUrl;
@@ -174,20 +174,20 @@ public:
   * @param height height of the rasters.
   */
   inline void setRasterHeight(int height){rasterHeight = height;};
-  
+
   /**Sets the grey-scale value.
   * @param value 1 if the grey-scale is used to the view 0, otherwise.
   */
   inline void setGreyScale(int value){greyScale = value;};
 
   /**Sets the selected clusters by cluster file.
-  * @param clusterFile cluster file url.  
+  * @param clusterFile cluster file url.
   * @param clusterIds list of selected cluster ids.
   */
   inline void setSelectedClusters(const QString& clusterFile,const QList<int>& clusterIds){
     selectedClusters.insert(clusterFile,clusterIds);
   };
-  
+
   /**Sets the selected events by event file.
   * @param eventFile event file url.
   * @param eventIds list of selected eventIds.
@@ -222,12 +222,12 @@ public:
   * @param autocenterChannels whether channels should be centered around their offset.
   */
   inline void setAutocenterChannels(bool autocenterChannels){this->autocenterChannels = autocenterChannels;};
-    
+
    /**Sets the list of TracePosition.
   * @param positions list of TracePosition.
   */
   inline void setPositions(QList<TracePosition> positions){this->positions = positions;};
-    
+
   /**Sets the list of channel ids shown in the display.
   * @param ids list of channel ids.
   */
@@ -242,7 +242,7 @@ public:
   * @param start starting time.
   */
   inline void setStartTime(long start){startTime = start;};
-  
+
   /**Sets the time window in miliseconds
   * @param duration time window.
   */
@@ -257,17 +257,17 @@ public:
   * @param value 1 if the labels are displayed in the view, 0 otherwise.
   */
   inline void setLabelStatus(int value){labelStatus = value;};
-  
+
   /**Sets if a PositionView is displayed.
   * @param present 1 if a PositionView is displayed in the view, 0 otherwise.
   */
   inline void setPositionView(int present){isPositionView = present;};
-  
+
   /**Sets if events are displayed in the PositionView.
   * @param shown 1 if events are displayed in the PositionView, 0 otherwise.
   */
   inline void setEventsInPositionView(int shown){areEventsInPositionView = shown;};
-  
+
   /**Gets the list of type of spike display used (see DisplayInformation#displayType).
   * @return list of types of spike display.
   */
@@ -282,12 +282,12 @@ public:
   * @return height of the rasters.
   */
   inline int getRasterHeight() const{return rasterHeight;};
-  
+
   /**Gets the grey-scale value.
   * @return grey-scale value, 1 if the grey-scale is used to the view 0 otherwise.
   */
   inline int getGreyScale() const{return greyScale;};
-  
+
   /**Gets the selected clusters by cluster file.
   * @return map of the cluster file url with the list of selected clusterIds.
   */
@@ -317,7 +317,7 @@ public:
   * @param autocenterChannels whether channels should be centered around their offset.
   */
   inline bool getAutocenterChannels(){return autocenterChannels;};
-    
+
   /**Gets the list of TracePosition.
   * @return list of TracePosition.
   */
@@ -336,13 +336,13 @@ public:
   /** Gets the label for the display when in tab page mode.
   * @return the new label for the display.
   */
-  inline QString getTabLabel()const{return tabLabel;};  
+  inline QString getTabLabel()const{return tabLabel;};
 
   /**Gets if the information as if the labels next to the traces have to be displayed.
   * @return 1 if the labels are displayed in the view, 0 otherwise.
   */
   inline int getLabelStatus()const {return labelStatus;};
-  
+
   /**Gets the starting time in miliseconds.
   * @return starting time.
   */
@@ -357,21 +357,21 @@ public:
   * @return 1 if a PositionView is displayed in the view, 0 otherwise.
   */
   inline int isAPositionView()const{return isPositionView;};
-  
-  
+
+
  /**Returns if events are displayed in the PositionView.
   * @return 1 if events are displayed in the PositionView, 0 otherwise.
   */
   inline int isEventsDisplayedInPositionView()const{return areEventsInPositionView;};
-  
-  
+
+
 private:
   /**List of the display types.*/
   QList<spikeDisplayType> spikeDisplayTypes;
 
   /**Mode of presentation.*/
   mode presentationMode;
-  
+
   /**Height of the rasters.*/
   int rasterHeight;
 
@@ -389,7 +389,7 @@ private:
 
   /**Map of the event file paths with the list of selected eventIds to skip while browsing.*/
   QMap<QString, QList<int> > skippedEvents;
-  
+
   /**List of the spike files shown in the display (without cluster file associated).*/
   QList<QString> shownSpikeFiles;
 
@@ -421,7 +421,7 @@ private:
   int isPositionView;
 
   /**1 if events are display in the PositionView, 0 otherwise.*/
-  int areEventsInPositionView;  
+  int areEventsInPositionView;
 };
 
 /**
@@ -433,11 +433,11 @@ public:
 
   inline ChannelDescription(){
    id = 0;
-   color = QColor(Qt::black); 
+   color = QColor(Qt::black);
   };
 
   inline ChannelDescription(int id,QString color):id(id){
-   setColor(color); 
+   setColor(color);
   };
 
   inline ~ChannelDescription(){};
@@ -461,7 +461,7 @@ public:
   * @param colorName name of the color in the format "#RRGGBB".
   */
   inline void setSpikeGroupColor(QString colorName){spikeGroupColor = QColor(colorName);};
-  
+
   /**Gets the channel id.
   * @return channel id.
   */
@@ -481,7 +481,7 @@ public:
   * @return name of the color in the format "#RRGGBB".
   */
   inline QColor getSpikeGroupColor() const{return spikeGroupColor;};
-    
+
 private:
   /**Channel id*/
   int id;
@@ -494,7 +494,7 @@ private:
 
   /**Spike group color for the channel.*/
   QColor spikeGroupColor;
-  
+
 };
 
 /**
@@ -506,13 +506,13 @@ public:
 
   inline TracePosition(){
    id = 0;
-   offset = 0;    
+   offset = 0;
   };
 
   inline TracePosition(int id,int offset):id(id),offset(offset){};
-  
+
   inline ~TracePosition(){};
-  
+
   /**Sets the channel id.
   * @param channelId channel id.
   */
@@ -542,7 +542,7 @@ public:
   * @return gain.
   */
   inline int getGain() const{return gain;};
-  
+
 private:
   /**Channel id*/
   int id;
@@ -552,7 +552,7 @@ private:
 
   /**Gain used to display the channel.*/
   int gain;
-  
+
 };
 
 

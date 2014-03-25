@@ -510,6 +510,14 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
     tracesProvider.requestData(startTime,endTime,this,startTimeInRecordingUnits);
 }
 
+void TraceView::setAutocenterChannels(bool status){
+    autocenterChannels = status;
+
+    //Everything has to be redraw
+    updateWindow();
+    update();
+}
+
 void TraceView::showHideLabels(bool show){
     showLabels = show;
 
@@ -1663,9 +1671,8 @@ void TraceView::drawTraces(QPainter& painter){
 					 if (autocenterChannels){
 						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
 						 m /= nbSamples;
-						 qDebug()<<" TraceView::drawTraces(all) y=" << y << " m=" << m;
 					 }
-					 
+
 					 int position = -y + m + channelOffsets.at(channelId);
                 positions.append(position);
                 channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors.at(channelId)));
@@ -1893,14 +1900,13 @@ void TraceView::drawTraces(QPainter& painter){
             int y = Y;
             for(int j = 0; j < currentNbChannels; ++j){
                 int channelId = channelIds[j];
-					 
+
 					 int m = 0;
 					 if (autocenterChannels){
 						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
 						 m /= nbSamples;
-						 qDebug()<<" TraceView::drawTraces(all) y=" << y << " m=" << m;
 					 }
-					 
+
                 int position = -y + m + channelOffsets[channelId];
                 positions.append(position);
                 channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
@@ -2872,7 +2878,7 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 }
                 else{
                     QList<int> groupIds = shownGroupsChannels.keys();
-                    
+
                     if (shownGroupsChannels.isEmpty() )
                        return;
                     QList<int> firstGroup = shownGroupsChannels[groupIds[0]];

@@ -288,6 +288,11 @@ public Q_SLOTS:
     /**Informs the view to reset its state.*/
     void reset(){view.reset();}
 
+    /**Informs the view to enable or disable automatic channel centering around offsets.
+  * @param show true if the autocentering is on, false otherwise.
+  */
+    void setAutocenterChannels(bool status);
+
     /**Informs the view to show or hide the labels display next to the traces.
   * @param show true if the labels have to be shown, false otherwise.
   */

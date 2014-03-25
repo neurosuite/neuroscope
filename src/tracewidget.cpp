@@ -722,6 +722,11 @@ void TraceWidget::setMode(BaseFrame::Mode selectedMode,bool active)
     view.setMode(selectedMode,active);
 }
 
+void TraceWidget::setAutocenterChannels(bool status)
+{
+    view.setAutocenterChannels(status);
+}
+
 void TraceWidget::showLabels(bool show)
 {
     view.showHideLabels(show);
