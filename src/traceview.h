@@ -567,6 +567,9 @@ private:
     /**Array containing the traces data.*/
     Array<dataType> data;
 
+    /**Autocenter channels.*/
+    bool autocenterChannels;
+	 
     /**List containing the offset for each channel.*/
     QList<int>& channelOffsets;
 

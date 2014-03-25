@@ -61,6 +61,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     raster(raster),
     waveforms(waveforms),
     dataReady(false),data(),
+    autocenterChannels(true),
     channelOffsets(channelOffsets),
     gains(gains),
     channelColors(channelColors),
@@ -729,8 +730,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             //if the channel is skipped, do no draw it
             if (skippedChannels.contains(*channelIterator ))
                 continue;
-
-            int initialBasePosition = channelsStartingOrdinate[*channelIterator] +  static_cast<long>(data(1,*channelIterator + 1) * channelFactors[*channelIterator]);
+				int initialBasePosition = channelsStartingOrdinate[*channelIterator] +  static_cast<long>(data(1,*channelIterator + 1) * channelFactors[*channelIterator]);
             //draw the new trace
             int X = channelsStartingAbscissa[*channelIterator];
             int delta = m_currentPoint.y() - lastClickOrdinate;
@@ -1658,7 +1658,15 @@ void TraceView::drawTraces(QPainter& painter){
             int y = Y;
             for(int j = 0; j < currentNbChannels; ++j){
                 const int channelId = channelIds.at(j);
-                int position = -y + channelOffsets.at(channelId);
+
+					 int m = 0;
+					 if (autocenterChannels){
+						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
+						 m /= nbSamples;
+						 qDebug()<<" TraceView::drawTraces(all) y=" << y << " m=" << m;
+					 }
+					 
+					 int position = -y + m + channelOffsets.at(channelId);
                 positions.append(position);
                 channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors.at(channelId)));
                 channelsStartingAbscissa.insert(channelId,X);
@@ -1885,7 +1893,15 @@ void TraceView::drawTraces(QPainter& painter){
             int y = Y;
             for(int j = 0; j < currentNbChannels; ++j){
                 int channelId = channelIds[j];
-                int position = -y + channelOffsets[channelId];
+					 
+					 int m = 0;
+					 if (autocenterChannels){
+						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
+						 m /= nbSamples;
+						 qDebug()<<" TraceView::drawTraces(all) y=" << y << " m=" << m;
+					 }
+					 
+                int position = -y + m + channelOffsets[channelId];
                 positions.append(position);
                 channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
                 channelsStartingAbscissa.insert(channelId,X0);
