@@ -648,11 +648,15 @@ void TraceView::paintEvent ( QPaintEvent*){
                 doublebuffer.fill(palette().color(backgroundRole()));
 
             // Force FastDraw (src/gui/painting/qcosmeticstroker.cpp)
+            painter.save();
             painter.setClipRect(painter.window());
             painter.setClipping(true);
 
             //Paint all the traces in the shownChannels list (in the double buffer,on top of the background image or the background color )
             drawTraces(painter);
+
+            // Remove clipping otherwise labels don't show up
+            painter.restore();
 
             //reset transformation due to setWindow and setViewport
             painter.resetMatrix() ;
