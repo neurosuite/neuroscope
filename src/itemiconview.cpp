@@ -111,6 +111,12 @@ void ItemIconView::mousePressEvent ( QMouseEvent * event )
     QListWidget::mousePressEvent(event);
 }
 
+void ItemIconView::mouseMoveEvent(QMouseEvent *event)
+{
+    // No rectangular selection please
+    return;
+}
+
 void ItemIconView::mouseReleaseEvent ( QMouseEvent * event ) {
     QListWidget::mouseReleaseEvent(event);
     emit mouseReleased(this->objectName());
