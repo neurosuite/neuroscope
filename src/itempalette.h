@@ -125,7 +125,6 @@ protected Q_SLOTS:
     void slotClickRedraw();
     void languageChange();
     void resizeEvent(QResizeEvent* event);
-    void paintEvent ( QPaintEvent*ainter);
     void slotMouseReleased(const QString &sourceGroupName);
     void slotRowInsered();
 
@@ -183,9 +182,6 @@ private:
     /**Stores the items that have to be redrawn.*/
     QMap<QString, QList<int> > needRedrawing;
 
-    /**True if icon pixmaps have to be updated, false otherwise.*/
-    bool updateIconPixmap;
-    
     /**Stores the selection status of each group. The selection status is true if all the group items have been selected by a click on the group label, false otherwise.*/
     QMap<QString,bool> selectionStatus;
     
@@ -222,6 +218,10 @@ private:
     * @param groupName the group to be selected.
     */
     void selectGroupLabel(const QString& groupName);
+
+    /** Updates the items that need redrawing
+     */
+    void updateIconPixmaps();
 };
 
 /**

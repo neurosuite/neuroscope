@@ -45,8 +45,7 @@ ItemPalette::ItemPalette(PaletteType type, const QColor &backgroundColor, QWidge
       backgroundColor(backgroundColor),
       isInSelectItems(false),
       spaceWidget(0L),
-      type(type),
-      updateIconPixmap(false)
+      type(type)
 {
     setObjectName(name);
     setWidgetResizable(true);
@@ -96,38 +95,38 @@ ItemPalette::~ItemPalette()
 }
 
 
-void ItemPalette::paintEvent ( QPaintEvent*){
-    if(updateIconPixmap){
-        QMap<QString,QList<int> > selected = selectedItems();
-        //update the icons if need it
-        QMap<QString,QList<int> >::Iterator it;
-        QMap<QString,QList<int> >::Iterator end(needRedrawing.end());
-        for(it = needRedrawing.begin(); it != end; ++it){
-            QList<int> items = it.value();
-            QString  groupName = it.key();
-            QMap<int,bool> browsingMap = browsingStatus[groupName];
-            ItemIconView* iconView = iconviewDict[groupName];
+void ItemPalette::updateIconPixmaps()
+{
+    if (needRedrawing.isEmpty())
+        return;
 
-            QList<int> selectedItems = selected[groupName];
+    const QMap<QString,QList<int> > selected = selectedItems();
+    //update the icons if need it
+    QMap<QString,QList<int> >::const_iterator it;
+    const QMap<QString,QList<int> >::const_iterator end(needRedrawing.end());
+    for(it = needRedrawing.begin(); it != end; ++it){
+        QList<int> items = it.value();
+        QString  groupName = it.key();
+        QMap<int,bool> browsingMap = browsingStatus[groupName];
+        ItemIconView* iconView = iconviewDict[groupName];
 
-            //redraw the items which have been modified
-            QList<int>::iterator iterator;
-            for(iterator = items.begin(); iterator != items.end(); ++iterator){
-                redrawItem(iconView,*iterator,browsingMap);
-            }
+        QList<int> selectedItems = selected[groupName];
 
-            //In order to avoid problems when double clicking, all the icons of the iconview are redrawn
-            if(items.isEmpty() && selectedItems.size() == 1){
-                for(int i = 0; i < iconView->count();++i){
-                    redrawItem(iconView,i,browsingMap);
-                }
-            }
+        //redraw the items which have been modified
+        QList<int>::iterator iterator;
+        for(iterator = items.begin(); iterator != items.end(); ++iterator){
+            redrawItem(iconView,*iterator,browsingMap);
         }
 
-        needRedrawing.clear();
-        updateIconPixmap = false;
+        //In order to avoid problems when double clicking, all the icons of the iconview are redrawn
+        if(items.isEmpty() && selectedItems.size() == 1){
+            for(int i = 0; i < iconView->count();++i){
+                redrawItem(iconView,i,browsingMap);
+            }
+        }
     }
-    emit paletteResized(viewport()->width(),labelSize);
+
+    needRedrawing.clear();
 }
 
 void ItemPalette::resizeEvent(QResizeEvent* event){
@@ -395,64 +394,63 @@ const QMap<QString,QList<int> > ItemPalette::selectedItems(){
 }
 
 void ItemPalette::slotClickRedraw(){
-    if(!isInSelectItems){
-        bool browsingEnable = false;
-        bool needToBeUpdated = false;
-        QMap<QString,QList<int> > selection;
-        QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
-        while (iterator.hasNext()) {
-            iterator.next();
-            QString groupName = iterator.key();
-            QMap<int,bool> browsingMap = browsingStatus[groupName];
-            QList<int> selectedItems;
-            QList<int> itemsToSkip;
-            QList<int> itemsToRedraw;
-            for(int i = 0 ; i<iterator.value()->count(); ++i ){
-                QListWidgetItem *item = iterator.value()->item(i);
-                if(item->isSelected()){
-                    selectedItems.append(item->data(ItemIconView::INDEXICON).toInt());
-                    if(!browsingMap[i])
-                        itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
-                    else
-                        browsingEnable = true;
-                }
-                else{
-                    if(browsingMap[i]){
-                        browsingMap[i] = false;
-                        itemsToRedraw.append(i);
-                        needToBeUpdated = true;
-                    }
+    if(isInSelectItems)
+        return;
+
+    bool browsingEnable = false;
+    bool needToBeUpdated = false;
+    QMap<QString,QList<int> > selection;
+    QHashIterator<QString, ItemIconView*> iterator(iconviewDict);
+    while (iterator.hasNext()) {
+        iterator.next();
+        QString groupName = iterator.key();
+        QMap<int,bool> browsingMap = browsingStatus[groupName];
+        QList<int> selectedItems;
+        QList<int> itemsToSkip;
+        QList<int> itemsToRedraw;
+        for(int i = 0 ; i<iterator.value()->count(); ++i ){
+            QListWidgetItem *item = iterator.value()->item(i);
+            if(item->isSelected()){
+                selectedItems.append(item->data(ItemIconView::INDEXICON).toInt());
+                if(!browsingMap[i])
                     itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
-                }
+                else
+                    browsingEnable = true;
             }
-            selection.insert(groupName,selectedItems);
-            browsingStatus.insert(groupName,browsingMap);
-            needRedrawing.insert(groupName,itemsToRedraw);
-
-            emit updateItemsToSkip(groupName,itemsToSkip);
+            else{
+                if(browsingMap[i]){
+                    browsingMap[i] = false;
+                    itemsToRedraw.append(i);
+                    needToBeUpdated = true;
+                }
+                itemsToSkip.append(item->data(ItemIconView::INDEXICON).toInt());
+            }
         }
+        selection.insert(groupName,selectedItems);
+        browsingStatus.insert(groupName,browsingMap);
+        needRedrawing.insert(groupName,itemsToRedraw);
 
-        if(!browsingEnable){
-            if(type == CLUSTER)
-                emit noClustersToBrowse();
-            else
-                emit noEventsToBrowse();
-        } else {
-            if(type == CLUSTER)
-                emit clustersToBrowse();
-            else
-                emit eventsToBrowse();
-        }
-
-        emit updateShownItems(selection);
-
-        if(needToBeUpdated){
-            updateIconPixmap = true;
-            update();
-        }
+        emit updateItemsToSkip(groupName,itemsToSkip);
     }
+
+    if(!browsingEnable){
+        if(type == CLUSTER)
+            emit noClustersToBrowse();
+        else
+            emit noEventsToBrowse();
+    } else {
+        if(type == CLUSTER)
+            emit clustersToBrowse();
+        else
+            emit eventsToBrowse();
+    }
+
+    emit updateShownItems(selection);
+
+    updateIconPixmaps();
 }
 
+// this is dead code
 void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
 
     ItemIconView* iconView = iconviewDict[sourceGroup];
@@ -524,11 +522,10 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
     }
 }
 
-void ItemPalette::slotMouseReleased(const QString& sourceGroupName){
-    if(!needRedrawing.isEmpty()){
-        updateIconPixmap = true;
-        update();
-    }
+void ItemPalette::slotMouseReleased(const QString& sourceGroupName)
+{
+    Q_UNUSED(sourceGroupName);
+    updateIconPixmaps();
 }
 
 
