@@ -200,11 +200,6 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
     if (item == 0L)
         return;
 
-    //  if (event->button() == Qt::LeftButton && !(event->modifiers() & Qt::ShiftModifier) &&
-    //   !(event->modifiers() & Qt::ControlModifier)){
-    //    emit moussePressWoModificators(this->name());
-    //  }
-
     if (event->button() == Qt::MiddleButton) {
         emit mousePressMiddleButton(item);
     }

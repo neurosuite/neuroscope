@@ -451,6 +451,7 @@ void ItemPalette::slotClickRedraw(){
 }
 
 // this is dead code
+#if 0
 void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
 
     ItemIconView* iconView = iconviewDict[sourceGroup];
@@ -521,6 +522,7 @@ void ItemPalette::slotMousePressWoModificators(const QString& sourceGroup){
         }
     }
 }
+#endif
 
 void ItemPalette::slotMouseReleased(const QString& sourceGroupName)
 {
@@ -821,7 +823,6 @@ void ItemPalette::createGroup(const QString &id)
     connect(iconView,SIGNAL(itemSelectionChanged()),this, SLOT(slotClickRedraw()));
     connect(iconView,SIGNAL(mousePressMiddleButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressed(QString,QListWidgetItem*)));
     connect(this,SIGNAL(paletteResized(int,int)),group,SLOT(reAdjustSize(int,int)));
-    connect(iconView,SIGNAL(mousePressWoModificators(QString)),this, SLOT(slotMousePressWoModificators(QString)));
     connect(iconView,SIGNAL(mousePressWAltButton(QString,QListWidgetItem*)),this, SLOT(slotMousePressWAltButton(QString,QListWidgetItem*)));
     connect(iconView,SIGNAL(mouseReleased(QString)),this, SLOT(slotMouseReleased(QString)));
 
