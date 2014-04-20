@@ -1545,43 +1545,8 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
 
     //Draw channel ids and amplitude on the left side.
     if (showLabels){
-        QFont f("Helvetica",8);
-        painter.setFont(f);
-        painter.setPen(colorLegend); //set the color for the legends.
-        QRect windowRectangle((QRect)window);
-        for(iterator = channels.constBegin();iterator != channels.constEnd();++iterator){
-            //if the channel is skipped, do no draw it
-            if (skippedChannels.contains(*iterator)) continue;
-
-            int position = channelsStartingOrdinate[*iterator];
-            int abscissa = channelsStartingAbscissa[*iterator];
-            QRect r;
-            QRect rHighlight;
-            //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
-            //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport.
-            if (windowRectangle.left() != 0){
-                r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
-                rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
-            } else {
-                r = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
-                rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
-            }
-            const float gain = channelDisplayGains.at(*iterator);
-            if (highlight)
-                painter.fillRect(rHighlight,palette().highlight());
-            else
-                painter.fillRect(rHighlight,palette().color(backgroundRole()));
-            painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString::fromLatin1("%1 x%2").arg(*iterator).arg(gain,0,'f',2));
-        }
+        drawChannelGain(painter, channels, true);
     }
-
-
-    //Closes the painter on the double buffer
-    painter.end();
-
-    //Draw the double buffer (pixmap) by copying it into the widget device.
-    //update();
-
 }
 
 void TraceView::drawTraces(QPainter& painter){
@@ -2076,44 +2041,53 @@ void TraceView::drawTraces(QPainter& painter){
 
 }
 
-void TraceView::drawChannelIdsAndGain(QPainter& painter){
+void TraceView::drawChannelGain(QPainter& painter, const QList<int>& channels, bool enableSkipping)
+{
     QFont f("Helvetica",8);
     painter.setFont(f);
     painter.setPen(colorLegend); //set the color for the legends.
     QRect windowRectangle((QRect)window);
+    QList<int>::const_iterator channelIterator;
+    for(channelIterator = channels.begin(); channelIterator != channels.end(); ++channelIterator){
+        //if the channel is skipped, do no draw it
+        if (enableSkipping && skippedChannels.contains(*channelIterator))
+            continue;
 
+        int position = channelsStartingOrdinate[*channelIterator];
+        int abscissa = channelsStartingAbscissa[*channelIterator];
+        QRect r;
+        QRect rHighlight;
+        //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
+        //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport.
+        if (windowRectangle.left() != 0){
+            r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
+            rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
+        }
+        else{
+            r = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
+            rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
+        }
+        const float gain = channelDisplayGains.at(*channelIterator);
+        if (mSelectedChannels.contains(*channelIterator))
+            painter.fillRect(rHighlight,palette().highlight());
+        else
+            painter.fillRect(rHighlight,palette().color(backgroundRole()));
+        const QString text = QString("%1 x%2").arg(*channelIterator).arg(gain,0,'f',2);
+        //qDebug() << "drawChannelGains: drawing text" << text << "at" << r;
+        painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, text);
+    }
+}
+
+void TraceView::drawChannelIdsAndGain(QPainter& painter){
+    QRect windowRectangle(window);
     if (!multiColumns && (windowRectangle.left() >= xMargin)){
     }
     else{
         QList<int> groupIds = shownGroupsChannels.keys();
         QList<int>::iterator iterator;
         for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-            QList<int> channelIds = shownGroupsChannels[*iterator];
-            QList<int>::iterator channelIterator;
-            for(channelIterator = channelIds.begin(); channelIterator != channelIds.end(); ++channelIterator){
-                //if the channel is skipped, do no draw it
-                // if (skippedChannels.contains(*channelIterator )) continue;
-
-                int position = channelsStartingOrdinate[*channelIterator];
-                int abscissa = channelsStartingAbscissa[*channelIterator];
-                QRect r;
-                QRect rHighlight;
-                //If the view was zoomed and the left margin (where the ids and gains of the channels of the first group are displayed) is not
-                //shown (r.left() != 0), the coordinates have to be adjusted. Indeed, this margin is outside the world but in the viewport.
-                if (windowRectangle.left() != 0){
-                    r = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
-                    rHighlight = QRect(worldToViewport(abscissa,position).x() - xMargin,worldToViewport(abscissa,position).y(),xMargin - 4,12);
-                }
-                else{
-                    r = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,worldToViewportHeight(traceVspace + Yspace));
-                    rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
-                }
-                float gain = channelDisplayGains[*channelIterator];
-                if (mSelectedChannels.contains(*channelIterator))
-                    painter.fillRect(rHighlight,palette().highlight());
-                else painter.fillRect(rHighlight,palette().color(backgroundRole()));
-                painter.drawText(r,Qt::AlignHCenter | Qt::AlignTop,QString("%1 x%2").arg(*channelIterator).arg(gain,0,'f',2));
-            }
+            QList<int> channels = shownGroupsChannels[*iterator];
+            drawChannelGain(painter, channels, false /*no idea why skipping was commented out*/);
         }
         if (raster){
             //Draw the cluster labels

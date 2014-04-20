@@ -1040,6 +1040,14 @@ private:
  */
     void drawChannelIdsAndGain(QPainter& painter);
 
+    /**
+     * Draws the amplitude for each channel.
+     * @param painter painter on which to draw the information.
+     * @param channels channels for which to draw the information
+     * @param enableSkipping whether to honour skippedChannels
+     */
+    void drawChannelGain(QPainter& painter, const QList<int>& channels, bool enableSkipping);
+
     /**Computes the channelDisplayGains.*/
     void computeChannelDisplayGain();
 
