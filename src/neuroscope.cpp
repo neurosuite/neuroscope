@@ -1117,9 +1117,8 @@ void NeuroscopeApp::slotGroupsModified(){
 
 bool NeuroscopeApp::queryClose()
 {
-
-    //call when the kDockMainWindow will be close
-    if(doc == 0 || !doc->isADocumentToClose())  {
+    //call when the mainwindow will be closed
+    if (doc == 0 || !doc->isADocumentToClose())  {
         return true;
     } else {
         QApplication::restoreOverrideCursor();
@@ -1227,11 +1226,6 @@ bool NeuroscopeApp::queryClose()
             return false;
         }
     }
-}
-
-bool NeuroscopeApp::queryExit()
-{
-    return true;
 }
 
 /////////////////////////////////////////////////////////////////////

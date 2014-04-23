@@ -284,16 +284,10 @@ protected:
     void initDisplay(QList<int>* channelsToDisplay,QList<int> offsets,QList<int> channelGains,
                      QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = QString());
     
-    /** queryClose is called by KDocMainWindow call just before being closed.
+    /**
+     * queryClose is called by closeEvent
      */
-    virtual bool queryClose();
-    
-    /** queryExit is called by KDocMainWindow when the last window of the application is going to be closed during the closeEvent().
-     * Its purpose is purely to prepare the application (with possible user interaction)
-     * so it can safely be closed later (without user interaction).
-     */
-    virtual bool queryExit();
-    
+    bool queryClose();
     
     void customEvent (QEvent* event);
     void closeEvent(QCloseEvent *event);
