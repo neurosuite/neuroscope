@@ -156,11 +156,13 @@ protected Q_SLOTS:
     virtual void languageChange();
     virtual void createGroup(int id);
     virtual void setChannelLists();
-    virtual void resizeEvent(QResizeEvent* event);
-    void paintEvent (QPaintEvent*);
     void slotDragLabeltMoved(const QPoint& position){ensureVisible(position.x(),position.y());}
 
     void slotMoveListItem(const QList<int> &, const QString& sourceGroup, const QString& destinationGroup, int index, bool moveAll);
+
+protected:
+    void resizeEvent(QResizeEvent* event);
+    void paintEvent(QPaintEvent* event);
     
 Q_SIGNALS:
     void singleChangeColor(int selectedChannel);
