@@ -1032,11 +1032,12 @@ void TraceView::updateWindow(){
     maxZoomReached = false;
     zoomFactor = 0;
 
-    int nbGps = shownGroupsChannels.count();
-    int nbShownchannels = shownChannels.size();
-    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+    const int nbGps = shownGroupsChannels.count();
+    const int nbShownchannels = shownChannels.size();
+    const int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+    //qDebug() << Q_FUNC_INFO << "nbSamples=" << nbSamples << "multiColumns=" << multiColumns << "isInit=" << isInit;
 
-    //int oldXshift = Xshift;
+    const int oldXshift = Xshift;
 
     //traces presented on a single column
     if (!multiColumns){
@@ -1055,14 +1056,14 @@ void TraceView::updateWindow(){
         int nbYspaces = 0;
         QMap<int, QList<int> >::Iterator iterator;
         for(iterator = shownGroupsChannels.begin(); iterator != shownGroupsChannels.end(); ++iterator){
-            int currentNbChannels = static_cast<QList<int> >(iterator.value()).size();
+            int currentNbChannels = iterator.value().size();
             nbYspaces += (currentNbChannels - 1);
         }
 
         nbClusters = 0;
         QMap<int, QList<int> >::Iterator clustersIterator;
         for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
-            int currentNbClusters = static_cast<QList<int> >(clustersIterator.value()).size();
+            int currentNbClusters = clustersIterator.value().size();
             nbClusters += currentNbClusters;
         }
 
@@ -1086,7 +1087,8 @@ void TraceView::updateWindow(){
     //traces presented on multiple columns
     else{
         if (!isInit){
-            if (nbSamples < viewport.width() || printState) downSampling = 1;
+            if (nbSamples < viewport.width() || printState)
+                downSampling = 1;
             else{
                 int nbGroups = shownGroupsChannels.count();
                 if (nbGroups == 0) {
@@ -1107,19 +1109,18 @@ void TraceView::updateWindow(){
         XGroupSpace = viewportToWorldWidth(xMargin);
         abscissaMax = 2 * borderX + (nbSamplesToDraw -1) * Xstep * nbGps + (nbGps - 1) * XGroupSpace;
         Xshift = (nbSamplesToDraw - 1) * Xstep + XGroupSpace;
+        //qDebug() << Q_FUNC_INFO << this << "XGroupSpace =" << XGroupSpace << "Xshift =" << (nbSamplesToDraw - 1) << "*" << Xstep << "+" << XGroupSpace << "=" << Xshift;
 
         int maxNbChannels = 0;
-        QMap<int, QList<int> >::Iterator iterator;
-        for(iterator = shownGroupsChannels.begin(); iterator != shownGroupsChannels.end(); ++iterator){
-            int currentNbChannels = static_cast<QList<int> >(iterator.value()).size();
-            if (currentNbChannels > maxNbChannels)
-                maxNbChannels = currentNbChannels;
+        for (QMap<int, QList<int> >::const_iterator iterator = shownGroupsChannels.constBegin();
+               iterator != shownGroupsChannels.constEnd(); ++iterator){
+            maxNbChannels = qMax(maxNbChannels, iterator.value().size());
         }
 
         nbClusters = 0;
-        QMap<int, QList<int> >::Iterator clustersIterator;
-        for(clustersIterator = selectedClusters.begin(); clustersIterator != selectedClusters.end(); ++clustersIterator){
-            int currentNbClusters = static_cast<QList<int> >(clustersIterator.value()).size();
+        QMap<int, QList<int> >::const_iterator clustersIterator;
+        for(clustersIterator = selectedClusters.constBegin(); clustersIterator != selectedClusters.constEnd(); ++clustersIterator){
+            int currentNbClusters = clustersIterator.value().size();
             nbClusters += currentNbClusters;
         }
 
@@ -1129,18 +1130,19 @@ void TraceView::updateWindow(){
 
             //Compute the maximum number of clusters which will be drawn beneath a group
             QList<int> groupIds = shownGroupsChannels.keys();
-            QList<int>::iterator iterator;
+            QList<int>::const_iterator iterator;
             for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
                 int currentNbClusters = 0;
                 QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
-                QList<int>::iterator spikeGroupIterator;
+                QList<int>::const_iterator spikeGroupIterator;
                 for(spikeGroupIterator = clusterFileList.begin(); spikeGroupIterator != clusterFileList.end(); ++spikeGroupIterator){
                     if (selectedClusters.contains(*spikeGroupIterator)){
-                        QList<int> selection = static_cast<QList<int> >(selectedClusters[*spikeGroupIterator]);
+                        QList<int> selection = selectedClusters[*spikeGroupIterator];
                         currentNbClusters += selection.size();
                     }
                 }
-                if (currentNbClusters > maxNbClusters) maxNbClusters = currentNbClusters;
+                if (currentNbClusters > maxNbClusters)
+                    maxNbClusters = currentNbClusters;
             }
 
             int rasterTotalHeight = YTracesRasterSeparator + maxNbClusters * rasterHeight + (maxNbClusters - 1) * YRasterSpace;
@@ -1161,11 +1163,10 @@ void TraceView::updateWindow(){
     //Set the window
     window = ZoomWindow(QRect(QPoint(abscissaMin,ordinateMin),QPoint(abscissaMax,ordinateMax)));
 
-
     if (columnDisplayChanged || groupsChanged){
         columnDisplayChanged = false;
         groupsChanged = false;
-        updateWindow();
+        updateWindow(); // recurse
     }
 
     //Certain variables used to compute the window in multicolumns mode depend on the size of the previous window and viewport rectangles.
