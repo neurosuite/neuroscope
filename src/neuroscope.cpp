@@ -97,7 +97,7 @@ NeuroscopeApp::NeuroscopeApp()
     initActions();
 
 
-    //Disable some actions at startup (see the neuroscope.rc file)
+    //Disable some actions at startup
     slotStateChanged("initState");
     resize(800,600);
 }
@@ -925,7 +925,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
 
-    //Enable some actions now that a document is open (see the klustersui.rc file)
+    //Enable some actions now that a document is open
     slotStateChanged("documentState");
     slotStateChanged("displayChannelState");
     if(clusterRaster->isChecked()) {
@@ -1903,7 +1903,7 @@ void NeuroscopeApp::resetState(){
     currentNbRedo = 0;
 
 
-    //Disable some actions when no document is open (see the klustersui.rc file)
+    //Disable some actions when no document is open
     slotStateChanged("initState");
     setWindowTitle(QString());
 }
@@ -2236,7 +2236,7 @@ void NeuroscopeApp::slotTabChange(int index){
 
 void NeuroscopeApp::slotPaletteTabChange(int index){
     //Update the show/hide status of the inactive palette
-    //Disable some actions when no document is open (see the klustersui.rc file)
+    //Disable some actions when no document is open
     QWidget *widget = paletteTabsParent->widget(index);
     if(qobject_cast<ChannelPalette*>(widget)){
         if(editMode->isChecked()){
