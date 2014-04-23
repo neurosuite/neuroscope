@@ -43,6 +43,7 @@ class ChannelPalette;
 class ItemPalette;
 class QRecentFileAction;
 class QExtendTabWidget;
+class QSplitter;
 
 /**
   * The Neuroscope main window and central class. It sets up the main
@@ -662,6 +663,9 @@ private Q_SLOTS:
 private:
     void readSettings();
     void initView();
+
+    QSplitter *mainSplitter;
+
     /** Doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
      */

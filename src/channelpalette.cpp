@@ -74,6 +74,7 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     setPalette(palette);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFrameStyle(QFrame::NoFrame);
     QWidget *w = new QWidget;
     verticalContainer = new QVBoxLayout;
     w->setLayout(verticalContainer);

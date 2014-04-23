@@ -111,15 +111,12 @@ NeuroscopeApp::~NeuroscopeApp()
 
 void NeuroscopeApp::initView()
 {
-    QSplitter *splitter = new QSplitter;
-    paletteTabsParent = new QTabWidget();
-    splitter->addWidget(paletteTabsParent);
-    tabsParent = new QExtendTabWidget(this);
-    splitter->addWidget(tabsParent);
-    setCentralWidget(splitter);
-    QList<int> size;
-    size <<150<<1000;
-    splitter->setSizes(size);
+    mainSplitter = new QSplitter(this);
+    paletteTabsParent = new QTabWidget(mainSplitter);
+    mainSplitter->addWidget(paletteTabsParent);
+    tabsParent = new QExtendTabWidget(mainSplitter);
+    mainSplitter->addWidget(tabsParent);
+    setCentralWidget(mainSplitter);
 }
 
 
@@ -934,6 +931,10 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,QList<int> offsets
     else{
         slotStateChanged("noClusterRasterState");
     }
+
+    QList<int> size;
+    size << 180 << mainSplitter->width() - 180;
+    mainSplitter->setSizes(size);
 }
 
 void NeuroscopeApp::openDocumentFile(const QString& url)
