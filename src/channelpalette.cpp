@@ -148,8 +148,6 @@ void ChannelPalette::paintEvent ( QPaintEvent*){
 }
 
 void ChannelPalette::resizeEvent(QResizeEvent* event){
-    //Make the viewport to have the visible size (size of the scrollview)
-    viewport()->resize(event->size());
     QScrollArea::resizeEvent(event);
     emit paletteResized(viewport()->width(),labelSize);
 }
