@@ -128,7 +128,7 @@ void NeuroscopeApp::initActions()
     //Custom actions and menus
 
     //File Menu
-    QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
     mOpenAction = fileMenu->addAction(tr("&Open..."));
     mOpenAction->setShortcut(QKeySequence::Open);
     mOpenAction->setIcon(QPixmap(":/shared-icons/document-open"));
@@ -172,7 +172,7 @@ void NeuroscopeApp::initActions()
     fileMenu->addSeparator();
 
 
-    mPrintAction = fileMenu->addAction(tr("Print"));
+    mPrintAction = fileMenu->addAction(tr("&Print"));
     mPrintAction->setIcon(QPixmap(":/shared-icons/document-print"));
     mPrintAction->setShortcut(QKeySequence::Print);
     connect(mPrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
@@ -209,7 +209,7 @@ void NeuroscopeApp::initActions()
 
 
     //Edit menu
-    QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
+    QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
 
     mUndo = editMenu->addAction(tr("Undo"));
     mUndo->setIcon(QPixmap(":/shared-icons/edit-undo"));
@@ -246,7 +246,7 @@ void NeuroscopeApp::initActions()
     editMode->setChecked(true);
 
     //Tools menu
-    QMenu *toolMenu = menuBar()->addMenu(tr("Tool"));
+    QMenu *toolMenu = menuBar()->addMenu(tr("T&ool"));
     mZoomTool = toolMenu->addAction(tr("Zoom"));
     mZoomTool->setIcon(QIcon(":/icons/zoom_tool"));
     mZoomTool->setShortcut(Qt::Key_Z);
@@ -542,7 +542,7 @@ void NeuroscopeApp::initActions()
     connect(mPreferenceAction,SIGNAL(triggered()), this,SLOT(executePreferencesDlg()));
 
     //Help menu
-    QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
+    QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
     QAction *handbook = helpMenu->addAction(tr("Handbook"));
     handbook->setShortcut(Qt::Key_F1);
     connect(handbook,SIGNAL(triggered()), this,SLOT(slotHanbook()));
