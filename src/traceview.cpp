@@ -141,6 +141,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
     borderX = 0;
     Xstep = 1;
+    Xshift = 1;
     timeStepUnit = timeStep = static_cast<float>(static_cast<float>(1000) / static_cast<float>(samplingRate));
     traceVspace = 100;
     Yspace = traceVspace/10;
