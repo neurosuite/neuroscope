@@ -589,7 +589,9 @@ void TraceView::paintEvent ( QPaintEvent*){
         return;
     }
     QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
+    // See comment in drawTraces about Antialiasing
+    //p.setRenderHint(QPainter::Antialiasing);
+
     if (drawContentsMode == REDRAW && dataReady){
         QRect contentsRec = contentsRect();
         QRect r((QRect)window);
@@ -681,10 +683,6 @@ void TraceView::paintEvent ( QPaintEvent*){
         //Back to the default
         drawContentsMode = REFRESH;
     }
-    if (!mSelectedChannels.isEmpty())
-        drawTraces(mSelectedChannels,true);
-    if (!mDeselectedChannels.isEmpty())
-        drawTraces(mDeselectedChannels,false);
 
     //if drawContentsMode == REFRESH, we reuse the double buffer (pixmap)
 
@@ -1361,7 +1359,10 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
 
 }
 
-void TraceView::drawTraces( const QList<int>& channels,bool highlight){
+void TraceView::drawTraces( const QList<int>& channels,bool highlight)
+{
+    //qDebug() << Q_FUNC_INFO << channels << "selected=" << highlight;
+
     QRect r((QRect)window);
 
     //Create a painter to paint on the double buffer
@@ -1374,7 +1375,10 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     //By default, the viewport is the same as the device's rectangle (contentsRec), taking a smaller
     //one will ensure that the legends (cluster ids) will not ovelap a correlogram.
     painter.setViewport(viewport);
-    painter.setRenderHint(QPainter::Antialiasing);
+
+    // Enabling antialiasing cannot be done so easily. Selecting an already-selected channel makes it fuzzy,
+    // since drawTraces() is called again for that channel. More care has to be taken first.
+    //painter.setRenderHint(QPainter::Antialiasing);
 
 
     //Paint the selected channels
@@ -1552,6 +1556,8 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight){
     if (showLabels){
         drawChannelGain(painter, channels, true);
     }
+
+    update();
 }
 
 void TraceView::drawTraces(QPainter& painter){
@@ -2073,10 +2079,11 @@ void TraceView::drawChannelGain(QPainter& painter, const QList<int>& channels, b
             rHighlight = QRect(worldToViewport(abscissa,position).x() + 4,worldToViewport(abscissa,position).y(),xMargin - 4,12);
         }
         const float gain = channelDisplayGains.at(*channelIterator);
-        if (mSelectedChannels.contains(*channelIterator))
+        if (mSelectedChannels.contains(*channelIterator)) {
             painter.fillRect(rHighlight,palette().highlight());
-        else
+        } else {
             painter.fillRect(rHighlight,palette().color(backgroundRole()));
+        }
         const QString text = QString("%1 x%2").arg(*channelIterator).arg(gain,0,'f',2);
         //qDebug() << "drawChannelGains: drawing text" << text << "at" << r;
         painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, text);
@@ -2907,7 +2914,6 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                             if (!mSelectedChannels.contains(selectedChannel) || skippedChannels.contains(selectedChannel)){
                                 alreadySelected = false;
                                 QList<int>::iterator it;
-
                                 for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
                                     deselectedChannels.append(*it);
                                 mSelectedChannels.clear();
@@ -2979,13 +2985,8 @@ void TraceView::mousePressEvent(QMouseEvent* event){
                 }//mode != SELECT_EVENT
             }//single column
             if (mode == SELECT){
-                Q_FOREACH(int i, currentlySelectedChannels) {
-                    if (!mSelectedChannels.contains(i)) {
-                        mSelectedChannels.append(i);
-                    }
-                }
-                mDeselectedChannels = deselectedChannels;
-                update();
+                drawTraces(currentlySelectedChannels,true);
+                drawTraces(deselectedChannels,false);
             }
             else if (mode == SELECT_EVENT){
                 if (!deselectedEvent.first.isEmpty())
@@ -3027,13 +3028,13 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
                     int channelId = mSelectedChannels[mSelectedChannels.size() - 1];
                     mSelectedChannels.removeAll(channelId);
 
-                    mDeselectedChannels.clear();
+                    QList<int> deselectedChannels;
                     QList<int>::iterator it;
                     for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
-                        mDeselectedChannels.append(*it);
+                        deselectedChannels.append(*it);
 
                     mSelectedChannels.clear();
-                    update();
+                    drawTraces(deselectedChannels,false);
                     mSelectedChannels.append(channelId);
                     emit channelsSelected(mSelectedChannels);
                 }
@@ -3258,37 +3259,42 @@ void TraceView::mouseReleaseEvent(QMouseEvent* event){
 }
 
 void TraceView::selectChannels(const QList<int>& selectedIds){
-    qDebug()<<" void TraceView::selectChannels(const QList<int>& selectedIds){";
-    if ((mSelectedChannels.size() == 0 && selectedIds.size() == 0)) return;
+    qDebug() << Q_FUNC_INFO << selectedIds;
+    if ((mSelectedChannels.size() == 0 && selectedIds.size() == 0))
+        return;
+
     //Unhighlight the currently selected traces which are not selected any more
-    mDeselectedChannels.clear();
+    QList<int> deselectedChannels;
     QList<int>::iterator it;
     for(it = mSelectedChannels.begin();it != mSelectedChannels.end();++it)
         if (!selectedIds.contains(*it) && shownChannels.contains(*it))
-            mDeselectedChannels.append(*it);
+            deselectedChannels.append(*it);
 
 
-    //Highlight the newly selected traces
-    mSelectedChannels.clear();
+    // Highlight the newly selected traces
+    QList<int> newlySelectedChannels;
     QList<int>::const_iterator iterator;
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
-        if (!mSelectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
+        if(!mSelectedChannels.contains(*iterator) && shownChannels.contains(*iterator)){
             //if the channel is skipped, do no draw it
-            if (!skippedChannels.contains(*iterator))
-                mSelectedChannels.append(*iterator);
+            if(!skippedChannels.contains(*iterator))
+                newlySelectedChannels.append(*iterator);
         }
     }
 
     //Update the list of selected channels
+    // (do this now so that drawChannelIdsAndGain, called by drawTraces, sees it correctly)
     mSelectedChannels.clear();
 
     //the skipped channels are not selected
     for(iterator = selectedIds.begin(); iterator != selectedIds.end(); ++iterator){
-        if (shownChannels.contains(*iterator) && !skippedChannels.contains(*iterator))
+        if(shownChannels.contains(*iterator) && !skippedChannels.contains(*iterator))
             mSelectedChannels.append(*iterator);
     }
+    //qDebug() << Q_FUNC_INFO << "now mSelectedChannels=" << mSelectedChannels;
 
-    update();
+    drawTraces(deselectedChannels,false);
+    drawTraces(newlySelectedChannels,true);
 }
 
 
@@ -4283,17 +4289,16 @@ void TraceView::channelColorUpdate(int channelId,bool active){
     //Loop on all the shown groups to find if channelId is currently displayed
     QList<int> groupIds = shownGroupsChannels.keys();
     QList<int>::iterator iterator;
-    mSelectedChannels.clear();
-    mDeselectedChannels.clear();
     for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
         QList<int> channelIds = shownGroupsChannels[*iterator];
         if (channelIds.contains(channelId)){
             if (active){
+                QList<int> channels;
+                channels.append(channelId);
                 if (mode == SELECT)
-                    mSelectedChannels.append(channelId);
+                    drawTraces(channels,true);
                 else
-                    mDeselectedChannels.append(channelId);
-                update();
+                    drawTraces(channels,false);
                 break;
             }
             else{

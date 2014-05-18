@@ -1087,8 +1087,6 @@ private:
 
     void changeCursor();
 
-    QList<int> mDeselectedChannels;
-
     QPoint m_currentPoint;
     QPoint m_selectPoint;
     bool mMoveSelectChannel;
