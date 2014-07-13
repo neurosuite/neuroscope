@@ -1,16 +1,32 @@
-project(neuroscope)
+project(neuroscope CXX)
+
+set(NEUROSCOPE_VERSION_MAJOR "2")
+set(NEUROSCOPE_VERSION_MINOR "0")
+set(NEUROSCOPE_VERSION_PATCH "0")
+set(NEUROSCOPE_VERSION "${NEUROSCOPE_VERSION_MAJOR}.${NEUROSCOPE_VERSION_MINOR}.${NEUROSCOPE_VERSION_PATCH}")
+
 cmake_minimum_required(VERSION 2.8.6)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 set (QT_MIN_VERSION "4.8.0")
 
-option(
-  ENFORCE_QT4_BUILD
-  "Enable if you want to enfore a build with Qt4"
-  ON
-)
+option(ENFORCE_QT4_BUILD
+       "Enable if you want to enfore a build with Qt4"
+       ON)
 
-option(REGENERATE_DOC "Enable if you want to regenerate doc need kde4" OFF)
+option(REGENERATE_DOC
+       "Enable if you want to regenerate doc need kde4"
+       OFF)
+
+if(APPLE)
+  option(USE_MACOSX_BUNDLE
+         "Enable this if you want to produce an .app bundle."
+         OFF)
+endif(APPLE)
+
+if(USE_MACOSX_BUNDLE)
+  MESSAGE(STATUS "Creating .app bundle.")
+endif()
 
 # try Qt5 first, and prefer that (if found), but only if not disabled via option
 if(NOT ENFORCE_QT4_BUILD)
@@ -179,13 +195,26 @@ if (CMAKE_C_COMPILER MATCHES "icc")
 
 endif (CMAKE_C_COMPILER MATCHES "icc")
 
-# Adjust code on OS X since file operation are always 64bit there.
 if(APPLE)
+  # Adjust code on OS X since file operation are always 64bit there.
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dfseeko64=fseeko")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dfseeko64=fseeko")
 
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dftello64=ftello")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dftello64=ftello")
+
+  # Set bundle parameters
+  if(USE_MACOSX_BUNDLE)
+      set(CMAKE_INSTALL_PREFIX "/Applications")
+
+      set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} ${KLUSTERS_VERSION}")
+      set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_NAME} ${KLUSTERS_VERSION}")
+      set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${KLUSTERS_VERSION}")
+      set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${KLUSTERS_VERSION}")
+      set(MACOSX_BUNDLE_ICON_FILE "neuroscope.icns")
+      set(MACOSX_BUNDLE_GUI_IDENTIFIER "net.sourceforge.neuroscope")
+      set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
+  endif()
 endif()
 
 
@@ -198,6 +227,14 @@ endif()
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+if(USE_MACOSX_BUNDLE)
+  set(KLUSTERS_DOC_INSTALL_PREFIX  "../../..")
+  set(KLUSTERS_DOC_PREFIX "neuroscope.app/Contents/Documentation")
+else()
+  set(KLUSTERS_DOC_INSTALL_PREFIX  "..")
+  set(KLUSTERS_DOC_PREFIX "share/doc/neuroscope/HTML/en")
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-neuroscope.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-neuroscope.h )
 
@@ -236,9 +273,16 @@ if(WIN32)
 endif()
 if(UNIX)
   if(APPLE)
-    set( CPACK_GENERATOR "ZIP" )
-    set( CPACK_DMG_VOLUME_NAME "neuroscope" )
-    set( CPACK_SYSTEM_NAME "OSX" )
+    set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}-${NEUROSCOPE_VERSION}")
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${NEUROSCOPE_VERSION}")
+    set(CPACK_SYSTEM_NAME "OSX")
+
+    if(USE_MACOSX_BUNDLE)
+      set(CPACK_GENERATOR "DragNDrop")
+      set(CPACK_DMG_FORMAT "UDBZ")
+    else()
+      set(CPACK_GENERATOR "ZIP")
+    endif()
   else()
     set(CPACK_GENERATOR "TBZ2") # for testing mostly, we probably want STGZ or RPM/DEB
     set(CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")

@@ -80,7 +80,7 @@ PropertiesDialog::~PropertiesDialog(){
 void PropertiesDialog::slotHelp()
 {
     QHelpViewer *helpDialog = new QHelpViewer(this);
-    helpDialog->setHtml(NEUROSCOPE_DOC_PATH + QLatin1String("index.html"));
+    helpDialog->setHtml(QApplication::applicationDirPath() + NEUROSCOPE_DOC_PATH + QLatin1String("index.html"));
     helpDialog->setAttribute( Qt::WA_DeleteOnClose );
     helpDialog->show();
 

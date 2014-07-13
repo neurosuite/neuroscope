@@ -23,18 +23,17 @@ endmacro (CREATE_HTML_DOC)
 
 
 if (KDE4_FOUND)
-find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html )
-if(DOCBOOK2HTML_EXECUTABLE)
-   if (REGENERATE_DOC)
-     add_subdirectory(en)
-   endif()
-endif(DOCBOOK2HTML_EXECUTABLE)
-endif()
+   find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html )
+   if(DOCBOOK2HTML_EXECUTABLE)
+      if (REGENERATE_DOC)
+         add_subdirectory(en)
+      endif(REGENERATE_DOC)
+   endif(DOCBOOK2HTML_EXECUTABLE)
+endif(KDE4_FOUND)
 
 file(GLOB _html ${CMAKE_CURRENT_SOURCE_DIR}/en/html/*.html)
-install(FILES ${_html} DESTINATION share/doc/neuroscope/HTML/en)
+install(FILES ${_html} DESTINATION ${KLUSTERS_DOC_PREFIX})
 
 file(GLOB _image ${CMAKE_CURRENT_SOURCE_DIR}/en/Images/*.png)
-
-install(FILES ${_image} DESTINATION share/doc/neuroscope/HTML/en/Images)
+install(FILES ${_image} DESTINATION ${KLUSTERS_DOC_PREFIX}/Images)
 
