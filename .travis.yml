@@ -1,24 +1,23 @@
 language: cpp
 
-before_install:
-    - sudo apt-get update
+before_install: sudo apt-get update
 
-install: 
-    - sudo apt-get install -y libqt4-dev
-    - git clone https://github.com/neurosuite/libneurosuite.git
-    - cd libneurosuite
-    - cmake .
-    - make
-    - sudo make install
-    - cd ..
+install:
+  - sudo apt-get install -y libqt4-dev
+  - git clone https://github.com/neurosuite/libneurosuite.git
+  - cd libneurosuite
+  - cmake .
+  - make
+  - sudo make install
+  - cd ..
 
 script: cmake . && cpack
 
 deploy:
   provider: releases
   api_key:
-    secure: g7mlT2O4PfBMp5TqPKp1NEuCPrupFEEwdv3AUO0hWPYwAZ+KzV5E7NEPcRZ8tKDEVbxTDZp/+8mdt+LGh31WIEd0zzPlpMsdvKZtln5XGD0B5J8Ghti3jzrdW9fMYWCaosc9w4BCQDF+BS4qHDwv1fMCyq3R4zi3nxB2WgVgMvI=
+    secure: LdMU6bfPozM1sD+k/GVcTbmh+tlDuLzyQKbS38+3KOYhoVFVlOA2d1vymDI8BmQ66xSYa6yGBZ3Zu3MbV+aiukSNMp+QnS4q0mySxq7iUNdhEAI9a9GcljYvxo/Oj3BeJpksX6JgIhZK06wnafb1E6jdh6i1d+DldMK36PjMeVg=
   file_glob: true
-  file: libklustersshared_*.deb
+  file: neuroscope_*.deb
   on:
     tags: true
