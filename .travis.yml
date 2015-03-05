@@ -1,0 +1,24 @@
+language: cpp
+
+before_install:
+    - sudo apt-get update
+
+install: 
+    - sudo apt-get install -y libqt4-dev
+    - git clone https://github.com/neurosuite/libneurosuite.git
+    - cd libneurosuite
+    - cmake .
+    - make
+    - sudo make install
+    - cd ..
+
+script: cmake . && cpack
+
+deploy:
+  provider: releases
+  api_key:
+    secure: g7mlT2O4PfBMp5TqPKp1NEuCPrupFEEwdv3AUO0hWPYwAZ+KzV5E7NEPcRZ8tKDEVbxTDZp/+8mdt+LGh31WIEd0zzPlpMsdvKZtln5XGD0B5J8Ghti3jzrdW9fMYWCaosc9w4BCQDF+BS4qHDwv1fMCyq3R4zi3nxB2WgVgMvI=
+  file_glob: true
+  file: libklustersshared_*.deb
+  on:
+    tags: true
