@@ -56,22 +56,31 @@ else()
 	add_executable(neuroscope WIN32 ${neuroscope_SRCS})
 endif()
 
-
 if(Qt5Core_FOUND)
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml ${Qt5WebKitWidgets_LIBRARIES})
+  # Since Qt5WebKitWidgets is optional, we use the old variable here that will not throw an error if not set.
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::WinMain ${Qt5WebKitWidgets_LIBRARIES})
 else(Qt5Core_FOUND)
   target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY})
 endif()
 
+if(WIN32)
+	install(TARGETS neuroscope DESTINATION bin)
 
-if(USE_MACOSX_BUNDLE)
+	# Use fix_bundle to install qt libraries
+	set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/neuroscope.exe") # paths to executables
+	set(DIRS "${QTDIR}/lib;${QTDIR}/bin") # directories to search for prerequisites
+	
+	INSTALL(CODE "include(BundleUtilities)
+	              fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+elseif(USE_MACOSX_BUNDLE)
 	install(TARGETS neuroscope DESTINATION ".")
 
 	set(MACOSX_BUNDLE_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/neuroscope.app/Contents/Resources")
 	set(MACOSX_BUNDLE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/neuroscope.icns")
 	execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${MACOSX_BUNDLE_RESOURCES})
 	execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${MACOSX_BUNDLE_ICON} ${MACOSX_BUNDLE_RESOURCES})
-
+	
+	# Use DeployQt4 to install qt libraries
     include(DeployQt4)
     install_qt4_executable("neuroscope.app")
 else()
@@ -92,5 +101,6 @@ else()
 	install(FILES neuroscope.desktop DESTINATION share/applications/)
 	install(FILES neuroscope.xml DESTINATION share/mime/packages/)
 endif()
+
 
 

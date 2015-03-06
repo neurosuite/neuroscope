@@ -15,7 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <sys/time.h>
+#ifndef _TIMER_H_
+#define _TIMER_H_
+
+#ifdef _MSC_VER
+  #include "gettimeofday.h"
+#else
+  #include <sys/time.h>
+#endif
 
 static struct timeval tv0;
 
@@ -35,3 +42,5 @@ inline float Timer()
   float time = (tv.tv_sec+msec)-(tv0.tv_sec+msec0);
   return time;
 }
+
+#endif

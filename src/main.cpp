@@ -26,8 +26,11 @@
 //Application specific include files
 #include "neuroscope.h"
 int main(int argc, char *argv[])
-{
-    QApplication::setGraphicsSystem("raster");
+{    
+    // QApplication::setGraphicsSystem() was removed from Qt5
+    #if QT_VERSION < 0x050000 
+      QApplication::setGraphicsSystem("raster");
+    #endif
     QApplication::setOrganizationName("sourceforge");
     QApplication::setOrganizationDomain("sourceforge.net");
     QApplication::setApplicationName("neuroscope");

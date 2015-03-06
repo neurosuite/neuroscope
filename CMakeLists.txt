@@ -37,6 +37,7 @@ if(Qt5Core_FOUND)
   find_package(Qt5Gui REQUIRED)
   find_package(Qt5Widgets REQUIRED)
   find_package(Qt5Xml REQUIRED)
+  find_package(Qt5PrintSupport REQUIRED)
 
   find_package(Qt5WebKitWidgets 5.0.2 QUIET)
 
@@ -219,10 +220,11 @@ endif()
 
 
 if (MSVC)
-   set (KDE4_ENABLE_EXCEPTIONS -EHsc)
-   # Qt disables the native wchar_t type, do it too to avoid linking issues
-   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
-
+  set (KDE4_ENABLE_EXCEPTIONS -EHsc)
+  # Qt disables the native wchar_t type, do it too to avoid linking issues
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
+  add_definitions(/Dfseeko64=_fseeki64)
+  add_definitions(/DNOMINMAX)
 endif()
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
@@ -255,15 +257,13 @@ set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "neuroscope")
 set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 if(WIN32)
-  install(FILES ${LIBKLUSTERSSHARED_DLL_DIR}/libklustersshared.dll DESTINATION bin)
-  set (QT_QTCORE_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtCore4.dll)
-  set (QT_QTGUI_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtGui4.dll)
-  set (QT_QTNETWORK_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtNetwork4.dll)
-  set (QT_QTWEBKIT_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtWebKit4.dll)
-  set (QT_QTXML_LIBRARY ${QT_LIBRARY_DIR}/../bin/QtXml4.dll)
-  install(FILES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${QT_QTXML_LIBRARY} DESTINATION bin)
-  find_path(MINGW_DIR libstdc++-6.dll)
-  install(FILES ${MINGW_DIR}/libgcc_s_dw2-1.dll ${MINGW_DIR}/libstdc++-6.dll ${MINGW_DIR}/mingwm10.dll DESTINATION bin)
+  install(FILES ${LIBKLUSTERSSHARED_DLL_DIR}/${LIBKLUSTERSSHARED_LIBRARY}.dll DESTINATION bin)
+    
+  if(MINGW)
+	find_path(MINGW_DIR libstdc++-6.dll)
+    install(FILES ${MINGW_DIR}/libgcc_s_dw2-1.dll ${MINGW_DIR}/libstdc++-6.dll ${MINGW_DIR}/mingwm10.dll DESTINATION bin)
+  endif(MINGW)
+
   set(CPACK_GENERATOR "NSIS")
   set(CPACK_PACKAGE_EXECUTABLES "neuroscope" "Neuroscope")
   set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/GPL-3.0.txt)

@@ -27,6 +27,9 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFileInfo>
+ 
+// include c/c++ headers
+#include <cstdint>
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
     : DataProvider(fileUrl),
