@@ -2648,8 +2648,8 @@ void NeuroscopeApp::slotIncreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
     QWidget *current = paletteTabsParent->currentWidget();
 
-    ChannelPalette* channelPalette = 0;
-    if( channelPalette = qobject_cast<ChannelPalette*>(current)){
+    ChannelPalette* channelPalette = qobject_cast<ChannelPalette*>(current);
+    if(channelPalette){
         activeView()->increaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else
@@ -2662,8 +2662,8 @@ void NeuroscopeApp::slotDecreaseSelectedChannelsAmplitude(){
     //Get the active palette if any.
     QWidget *current = paletteTabsParent->currentWidget();
 
-    ChannelPalette* channelPalette = 0;
-    if( channelPalette = qobject_cast<ChannelPalette*>(current)){
+    ChannelPalette* channelPalette = qobject_cast<ChannelPalette*>(current);
+    if(channelPalette){
         activeView()->decreaseSelectedChannelsAmplitude(channelPalette->selectedChannels());
     }
     else

@@ -2736,8 +2736,8 @@ void NeuroscopeDoc::setDefaultPositionInformation(double videoSamplingRate, int 
         this->rotation = rotation;
         this->flip = flip;
         this->backgroundImage = backgroundImage;
-        this->videoWidth = videoWidth;
-        this->videoHeight = videoHeight;
+        this->videoWidth = width;
+        this->videoHeight = height;
         drawPositionsOnBackground = positionsBackground;
     }
 }
