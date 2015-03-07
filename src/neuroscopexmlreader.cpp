@@ -297,10 +297,10 @@ int NeuroscopeXmlReader::getVoltageRange() const{
                 QDomElement e = n.toElement(); // try to convert the node to an element.
                 if(!e.isNull()) {
                     QString tag = e.tagName();
-                    if (tag == NEUROSCOPE) {
-                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
-                        if (!video.isNull()) {
-                            QDomNode b = video.firstChild();
+                    if (tag == ACQUISITION) {
+                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
+                        if (!acquisition.isNull()) {
+                            QDomNode b = acquisition.firstChild();
                             while(!b.isNull()) {
                                 QDomElement w = b.toElement();
                                 if(!w.isNull()) {
@@ -359,10 +359,10 @@ int NeuroscopeXmlReader::getAmplification() const{
                 QDomElement e = n.toElement(); // try to convert the node to an element.
                 if(!e.isNull()) {
                     QString tag = e.tagName();
-                    if (tag == NEUROSCOPE) {
-                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
-                        if (!video.isNull()) {
-                            QDomNode b = video.firstChild();
+                    if (tag == ACQUISITION) {
+                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
+                        if (!acquisition.isNull()) {
+                            QDomNode b = acquisition.firstChild();
                             while(!b.isNull()) {
                                 QDomElement w = b.toElement();
                                 if(!w.isNull()) {
@@ -421,10 +421,10 @@ int NeuroscopeXmlReader::getOffset()const{
                 QDomElement e = n.toElement(); // try to convert the node to an element.
                 if(!e.isNull()) {
                     QString tag = e.tagName();
-                    if (tag == NEUROSCOPE) {
-                        QDomNode video = e.firstChildElement(ACQUISITION); // try to convert the node to an element.
-                        if (!video.isNull()) {
-                            QDomNode b = video.firstChild();
+                    if (tag == ACQUISITION) {
+                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
+                        if (!acquisition.isNull()) {
+                            QDomNode b = acquisition.firstChild();
                             while(!b.isNull()) {
                                 QDomElement w = b.toElement();
                                 if(!w.isNull()) {
