@@ -229,16 +229,6 @@ public:
    */
     int getInitialOffset()const{return initialOffset;}
 
-    /**Gets the acquisition system gains.
-   * @return current acquisition gain.
-   */
-    int getAcquisitionGain()const{return acquisitionGain;}
-
-    /**Gets the current gain based on the screen gain and the acquisition system gain.
-   * @return current gain.
-   */
-    int getGain()const{return gain;}
-
     /**Gets the voltage range of the acquisition system in volts for the current document.
    * @return current voltage range.
    */
@@ -282,13 +272,7 @@ public:
    * @param amplificationDefault default amplification of the acquisition system.
    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels.
    */
-    void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
-        acquisitionGainDefault = static_cast<int>(0.5 +
-                                                  static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolutionDefault))
-                                                                     / static_cast<float>(voltageRangeDefault * 1000))
-                                                  * amplificationDefault);
-
-        gainDefault = static_cast<int>(0.5 + screenGainDefault * acquisitionGainDefault);
+    void setDefaultGains(int voltageRangeDefault, int amplificationDefault, float screenGainDefault){
         this->voltageRangeDefault = voltageRangeDefault;
         this->amplificationDefault = amplificationDefault;
         this->screenGainDefault = screenGainDefault;
@@ -297,41 +281,17 @@ public:
     /**Sets the voltage range of the acquisition system in volts for the current document.
    * @param range current voltage range.
    */
-    void setVoltageRange(int range){
-        voltageRange = range;
-        acquisitionGain = static_cast<int>(0.5 +
-                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                              / static_cast<float>(voltageRange * 1000))
-                                           * amplification);
-
-        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-    }
+   void setVoltageRange(int range);
 
     /**Sets the amplification of the acquisition system for the current document.
    * @param amplification current amplification.
    */
-    void setAmplification(int amplification){
-        this->amplification = amplification;
-        acquisitionGain = static_cast<int>(0.5 +
-                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                              / static_cast<float>(voltageRange * 1000))
-                                           * amplification);
-
-        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-    }
+    void setAmplification(int amplification);
 
     /**Sets the screen gain in milivolts by centimeters used to display the field potentiels for the current document.
    * @param gain current screen gain.
    */
-    void setScreenGain(float gain){
-        screenGain = gain;
-        acquisitionGain = static_cast<int>(0.5 +
-                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                              / static_cast<float>(voltageRange * 1000))
-                                           * amplification);
-
-        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
-    }
+    void setScreenGain(float gain);
 
     /**Sets the default initial offset for all the traces.
    * @param offset initial offset.
@@ -457,13 +417,6 @@ public:
         this->rotation = rotation;
         this->flip = flip;
         drawPositionsOnBackground = positionsBackground;
-
-        acquisitionGain = static_cast<int>(0.5 +
-                                           static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                              / static_cast<float>(voltageRange * 1000))
-                                           * amplification);
-
-        gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
     }
 
     /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
@@ -896,12 +849,6 @@ private:
     /**Initial offset for all the traces.*/
     int initialOffset;
 
-    /**Gain which takes the screen gain into account.*/
-    int gain;
-
-    /**Acquisition system gain.*/
-    int acquisitionGain;
-
     /**Screen gain in milivolts by centimeters used to display the field potentiels.*/
     float screenGain;
 
@@ -932,12 +879,6 @@ private:
     /**Default initial offset for all the traces.*/
     int initialOffsetDefault;
 
-    /**Default gain.*/
-    int gainDefault;
-
-    /**Default acquisition system gain.*/
-    int acquisitionGainDefault;
-    
     /**Default screen gain in milivolts by centimeters used to display the field potentiels.*/
     float screenGainDefault;
 

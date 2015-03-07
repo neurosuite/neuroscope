@@ -64,7 +64,6 @@ public:
   * @param labelsDisplay true if labels are drawn next to the traces, false otherwise.
   * @param channelsToDisplay  a reference on the list of channel to be shown at the opening of the view.
   * @param gain initial gain use to draw the traces in the TraceView.
-  * @param acquisitionGain acquisition gain.
   * @param channelColors a pointer on the list of colors for the channels.
   * @param groupsChannels a pointer on the map given the list of channels for each group.
   * @param channelsGroups a pointer on the map given to which group each channel belongs.
@@ -87,7 +86,7 @@ public:
   * @param border size of the border between the frame and the contents.
   */
     TraceWidget(long startTime, long duration, bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
-                bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int gain, int acquisitionGain, ChannelColors* channelColors,
+                bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, float gain, ChannelColors* channelColors,
                 QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups, bool autocenterChannels, QList<int>& channelOffsets,
                 QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor &backgroundColor = Qt::black,
                 QStatusBar* statusBar = 0L, int minSize = 0, int maxSize = 4000, int windowTopLeft = -500,
@@ -250,11 +249,10 @@ public Q_SLOTS:
   */
     void decreaseSelectedChannelsAmplitude(const QList<int>& channelIds){view.decreaseSelectedChannelsAmplitude(channelIds);}
 
-    /**Sets the unit gain and the acquisition system gain.
+    /**Sets the unit gain.
   * @param gain initial gain use to draw the traces in the TraceView.
-  * @param acquisitionGain acquisition gain.
   */
-    void setGains(int gain,int acquisitionGain){view.setGains(gain,acquisitionGain);}
+    void setGain(float gain){view.setGains(gain);}
 
     /**Update the information presented in the view if need it.*/
     void updateDrawing(){view.updateDrawing();}

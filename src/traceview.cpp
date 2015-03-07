@@ -45,9 +45,10 @@
 
 const int TraceView::XMARGIN = 50;
 const int TraceView::YMARGIN = 0;
+const float TraceView::U_THETA = 400.0f;
 
 TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiColumns,bool verticalLines,
-                     bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int unitGain,int acquisitionGain,long start,long timeFrameWidth,
+                     bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay, float screenGain,long start,long timeFrameWidth,
                      ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
                      bool autocenterChannels,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,int rasterHeight,const QImage& backgroundImage,QWidget* parent,
                      const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
@@ -69,8 +70,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
     channelsGroups(channelsGroups),
     doublebuffer(),
     background(backgroundImage),
-    acquisitionGain(acquisitionGain),
-    unitGain(unitGain),
+    screenGain(screenGain),
     xMargin(10),
     yMargin(0),
     columnDisplayChanged(false),
@@ -165,13 +165,11 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
     //The initial amplitude and factor for each channel.
     if (gains.isEmpty()) {
-        setGains(unitGain,acquisitionGain);
+        setGains(screenGain);
     } else {
-        //Compute alpha: (3.traceVspace) / (Utheta . acquisitionGain)
-        //Utheta: amplitude maximal of theta in milivolts, 0.4 mv
-        alpha =  static_cast<float>(static_cast<float>(3 * traceVspace) /
-                                    static_cast<float>(0.4 *  static_cast<float>(acquisitionGain)));
-        //factor = alpha * (4/3)^gain
+        //Compute alpha: (3 . traceVspace) / U_theta
+        alpha =  (3.0f * traceVspace) / U_THETA;
+        //factor = alpha * (3/4)^gain
         for(int i = 0; i < nbChannels; ++i){
             if (i<gains.count()) {
                float Yfactor = static_cast<float>(alpha * pow(0.75,gains[i]));
@@ -829,7 +827,7 @@ void TraceView::resetOffsets(const QMap<int,int>& selectedChannelDefaultOffsets)
 
 
 void TraceView::resetGains(const QList<int>& selectedChannels){
-    //factor = alpha * (4/3)^gain, gain equals 0 at the begining
+    //factor = alpha * (3/4)^gain, gain equals 0 at the begining
 
     QList<int>::const_iterator iterator;
     for(iterator = selectedChannels.begin(); iterator != selectedChannels.end(); ++iterator){
@@ -914,16 +912,13 @@ void TraceView::groupsModified(bool active){
         update();
 }
 
-void TraceView::setGains(int gain,int acquisitionGain){
-    unitGain = gain;
-    this->acquisitionGain = acquisitionGain;
+void TraceView::setGains(float gain){
+    screenGain = gain;
 
-    //Compute alpha: (3.traceVspace) / (Utheta . acquisitionGain)
-    //Utheta: amplitude maximal of theta in milivolts, 0.4 mv
-    alpha =  static_cast<float>(static_cast<float>(3 * traceVspace) /
-                                static_cast<float>(0.4 *  static_cast<float>(acquisitionGain)));
+    //Compute alpha: (3.traceVspace) / (Utheta)
+    alpha = (3.0f * traceVspace) / U_THETA;
 
-    //factor = alpha * (4/3)^gain, gain equals 0 at the begining
+    //factor = alpha * (3/4)^gain, gain equals 0 at the begining
     gains.clear();
     channelFactors.clear();
 
@@ -941,11 +936,11 @@ void TraceView::setGains(int gain,int acquisitionGain){
 
 
 void TraceView::computeChannelDisplayGain(){
-    // Those gains are computed as (unitGain.alpha / screenResolution) .(world-viewport height ratio) .channelFactor).
+    // Those gains are computed as (screenGain.alpha / screenResolution) .(world-viewport height ratio) .channelFactor).
     QRectF r((QRectF)window);
 
     qreal heightRatio = viewport.height() / r.height();
-    qreal beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
+    qreal beta = static_cast<float>((screenGain * 1000 * alpha) / static_cast<float>(screenResolution)) * heightRatio;
 
     channelDisplayGains.clear();
 
@@ -956,10 +951,10 @@ void TraceView::computeChannelDisplayGain(){
 }
 
 void TraceView::computeChannelDisplayGain(const QList<int>& channelIds){
-    // Those gains are computed as (unitGain.alpha / screenResolution) .(world-viewport height ratio) .0.75^gain[i]).
+    // Those gains are computed as (screenGain.alpha / screenResolution) .(world-viewport height ratio) .0.75^gain[i]).
     QRect r((QRect)window);
     float heightRatio = static_cast<float>(static_cast<float>(viewport.height()) / static_cast<float>(r.height()));
-    float beta = static_cast<float>((static_cast<float>(unitGain) * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
+    float beta = static_cast<float>((screenGain * 1000 * alpha)/ static_cast<float>(screenResolution)) * heightRatio;
 
     for(int i = 0; i < channelIds.size(); ++i){
         int channelId = channelIds.at(i);
@@ -970,7 +965,7 @@ void TraceView::computeChannelDisplayGain(const QList<int>& channelIds){
 void TraceView::increaseAllAmplitude(){
     //Increases the ordinate scale resulting in
     //an reduction of the traces in the ordinate direction.
-    //factor = traceVspace / ((4/3)^gain * unitGain)
+    //factor = traceVspace / ((3/4)^gain * screenGain)
     for(int i = 0; i < nbChannels; ++i){
         gains[i]--;
         channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains.at(i)));
@@ -987,7 +982,7 @@ void TraceView::increaseAllAmplitude(){
 void TraceView::decreaseAllAmplitude(){
     //Decreases the ordinate scale resulting in
     //an enlargement of the traces in the ordinate direction.
-    //factor = traceVspace / ((4/3)^gain * unitGain)
+    //factor = traceVspace / ((3/4)^gain * screenGain)
     for(int i = 0; i < nbChannels; ++i){
         ++gains[i];
         channelFactors[i] = static_cast<float>(alpha * pow(0.75,gains.at(i)));
@@ -1573,7 +1568,6 @@ void TraceView::drawTraces(QPainter& painter){
     int limit = viewportToWorldHeight(1);
     int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
     int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
-    qDebug()<<"nbSamplesToDraw "<<nbSamplesToDraw;
 
     //traces presented on multiple columns
     if (multiColumns){
@@ -2319,7 +2313,7 @@ void TraceView::mouseMoveEvent(QMouseEvent* event){
 
 
         int delta = current.y() - lastClickOrdinate;
-        float voltage = (delta/channelFactors[channelforVoltageComputation])/acquisitionGain;
+        float voltage = (delta/channelFactors[channelforVoltageComputation]) / 1000.0f;
         message.append(tr(" Voltage: %1").arg(QString("%1 mV").arg(fabs(voltage),0,'f',2)));
     }
     else{
@@ -3338,7 +3332,7 @@ void TraceView::reset(){
     for(int i = 0; i < nbChannels; ++i) channelOffsets.append(0);
 
     //Set the initial amplitude and factor for each channel.
-    setGains(unitGain,acquisitionGain);
+    setGains(screenGain);
 
     //Get the data.
     // tracesProvider.requestData(startTime,endTime,this,startTimeInRecordingUnits);
@@ -3351,8 +3345,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     painter.setPen(colorLegend); //set the color for the legends.
 
     //Calibration scale, is meaningful only if all the channels have the same amplification. Take the channel 0 as the provider
-    int nbRU = static_cast<int>(unitGain * channelFactors[0]);
-    float screenGain = static_cast<float>(static_cast<float>(unitGain)/static_cast<float>(acquisitionGain));
+    int nbRU = static_cast<int>(screenGain * 1000 * channelFactors[0]);
     float gain = channelDisplayGains[0];
 
     QFontInfo fontInfo = QFontInfo(f);
@@ -3363,7 +3356,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     QPoint p2(viewport.right() - labelSize,viewport.bottom() - 30 - worldToViewportHeight(nbRU));
     painter.drawLine(p1,p2);
     QPoint pTextVoltage(viewport.right() - fontInfo.pixelSize() * 11,viewport.bottom() - 30);
-    painter.drawText(pTextVoltage,tr("%1 mV (x%2)").arg(screenGain,0,'f',1).arg(gain,0,'f',2));
+    painter.drawText(pTextVoltage,tr("%1 mV (x%2)").arg(screenGain, 0,'f',1).arg(gain, 0,'f',2));
 
     //draw the time calibration bar (a 20iest of the timeframe)
     long timeFrameWidth = endTime - startTime;

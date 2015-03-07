@@ -95,15 +95,7 @@ NeuroscopeDoc::NeuroscopeDoc(QWidget* parent, ChannelPalette& displayChannelPale
     voltageRange = voltageRangeDefault;
     amplification = amplificationDefault;
     screenGain = screenGainDefault;
-    acquisitionGainDefault = static_cast<int>(0.5 +
-                                              static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolutionDefault))
-                                                                 / static_cast<float>(voltageRangeDefault * 1000))
-                                              * amplificationDefault);
 
-    gainDefault = static_cast<int>(0.5 + screenGainDefault * acquisitionGainDefault);
-
-    gain = gainDefault;
-    acquisitionGain = acquisitionGainDefault;
     resolution = resolutionDefault;
     this->initialOffset = initialOffsetDefault;
     this->nbSamples = nbSamplesDefault;
@@ -196,8 +188,6 @@ void NeuroscopeDoc::closeDocument()
     voltageRange = voltageRangeDefault;
     amplification = amplificationDefault;
     screenGain = screenGainDefault;
-    gain = gainDefault;
-    acquisitionGainDefault = acquisitionGainDefault;
     resolution = resolutionDefault;
     initialOffset = initialOffsetDefault;
     isCommandLineProperties = false;
@@ -403,7 +393,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
         }
 
         //Create the tracesProvider with the information gather before.
-        tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
+        tracesProvider = new TracesProvider(docUrl, channelNb, resolution, voltageRange, amplification, samplingRate, initialOffset);
 
         //Is there a session file?
         if(sessionFileExist) {
@@ -468,7 +458,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 }
 
                 //Create the tracesProvider with the information gather before.
-                tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
+                tracesProvider = new TracesProvider(docUrl, channelNb, resolution, voltageRange, amplification, samplingRate, initialOffset);
 
                 //Load the session information
                 loadSession(reader);
@@ -497,7 +487,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 extensionSamplingRates.insert(extension,samplingRate);
 
             //Create the tracesProvider with the information gather before.
-            tracesProvider = new TracesProvider(docUrl,channelNb,resolution,samplingRate,initialOffset);
+            tracesProvider = new TracesProvider(docUrl, channelNb, resolution, voltageRange, amplification, samplingRate, initialOffset);
 
             //No group of channels exist, put all the channels in the same group (1 for the display palette and
             //-1 (the trash group) for the spike palette) and assign them the same blue color.
@@ -515,12 +505,6 @@ int NeuroscopeDoc::openDocument(const QString& url)
             displayGroupsChannels.insert(1,groupOne);
             spikeGroupsChannels.insert(-1,groupOne);
 
-            acquisitionGain = static_cast<int>(0.5 +
-                                               static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                                  / static_cast<float>(voltageRange * 1000))
-                                               * amplification);
-
-            gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
         }
     }
 
@@ -892,28 +876,97 @@ void NeuroscopeDoc::setInitialOffset(int offset){
     }
 }
 
-void NeuroscopeDoc::setGains(int voltageRange,int amplification,float screenGain){  
-    this->voltageRange = voltageRange;
+void NeuroscopeDoc::setVoltageRange(int range) {
+    this->voltageRange = range;
+
+    if(tracesProvider){
+        //Inform the tracesProvider
+        tracesProvider->setVoltageRange(range);
+
+        //Get the active view and make it the first to take the modification into account.
+        NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
+        activeView->documentFeaturesModified();
+
+        //Notify all the views of the modification
+
+        for(int i = 0; i<viewList->count(); ++i) {
+            NeuroscopeView* view = viewList->at(i);
+            if(view != activeView) view->documentFeaturesModified();
+        }
+
+        //Ask the active view to take the modification into account immediately
+        activeView->updateViewContents();
+    }
+}
+
+void NeuroscopeDoc::setAmplification(int amplification){
     this->amplification = amplification;
+
+    if(tracesProvider){
+        //Inform the tracesProvider
+        tracesProvider->setAmplification(amplification);
+
+        //Get the active view and make it the first to take the modification into account.
+        NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
+        activeView->documentFeaturesModified();
+
+        //Notify all the views of the modification
+
+        for(int i = 0; i<viewList->count(); ++i) {
+            NeuroscopeView* view = viewList->at(i);
+            if(view != activeView) view->documentFeaturesModified();
+        }
+
+        //Ask the active view to take the modification into account immediately
+        activeView->updateViewContents();
+    }
+}
+
+
+void NeuroscopeDoc::setScreenGain(float screenGain){
     this->screenGain = screenGain;
-
-    acquisitionGain = static_cast<int>(0.5 +
-                                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                          / static_cast<float>(voltageRange * 1000))
-                                       * amplification);
-
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
 
     if(tracesProvider){
         //Get the active view and make it the first to take the modification into account.
         NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
-        activeView->setGains(gain,acquisitionGain);
+        activeView->setGains(screenGain);
 
         //Notify all the views of the modification
         for(int i = 0; i<viewList->count(); ++i) {
             NeuroscopeView* view = viewList->at(i);
 
-            if(view != activeView) view->setGains(gain,acquisitionGain);
+            if(view != activeView) view->setGains(screenGain);
+        }
+
+        //Ask the active view to take the modification into account immediately
+        activeView->updateViewContents();
+    }
+
+}
+
+void NeuroscopeDoc::setGains(int voltageRange, int amplification, float screenGain){
+    this->voltageRange = voltageRange;
+    this->amplification = amplification;
+    this->screenGain = screenGain;
+
+    if(tracesProvider){
+        //Inform the tracesProvider
+        tracesProvider->setAmplification(amplification);
+        tracesProvider->setVoltageRange(voltageRange);
+
+        //Get the active view and make it the first to take the modification into account.
+        NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
+        activeView->setGains(screenGain);
+        activeView->documentFeaturesModified();
+
+        //Notify all the views of the modification
+        for(int i = 0; i<viewList->count(); ++i) {
+            NeuroscopeView* view = viewList->at(i);
+
+            if(view != activeView) {
+                view->setGains(screenGain);
+                view->documentFeaturesModified();
+            }
         }
 
         //Ask the active view to take the modification into account immediately
@@ -1072,18 +1125,26 @@ void NeuroscopeDoc::setChannelNb(int nb){
 void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     int resolutionRead = reader.getResolution();
     if(resolutionRead != 0) resolution = resolutionRead;
+
     int channelNbRead = reader.getNbChannels();
     if(channelNbRead != 0) channelNb = channelNbRead;
+
     double datSamplingRateRead = reader.getSamplingRate();
     if(datSamplingRateRead != 0) datSamplingRate =  datSamplingRateRead;
-    upsamplingRate = reader.getUpsamplingRate();
+
     double eegSamplingRateRead = reader.getLfpInformation();
     if(eegSamplingRateRead != 0) eegSamplingRate = eegSamplingRateRead;
+
+
+    upsamplingRate = reader.getUpsamplingRate();
+
     //the sampling rate for the video is store in the section file extension/sampling rate
     int videoWidthRead = reader.getVideoWidth();
     if(videoWidthRead != 0) videoWidth = videoWidthRead;
+
     int videoHeightRead = reader.getVideoHeight();
     if(videoHeightRead != 0) videoHeight = videoHeightRead;
+
     drawPositionsOnBackground = reader.getTrajectory();
 
     //The background image information is stored in the parameter file starting with the version 1.2.3
@@ -1124,11 +1185,6 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
     //Neuroscope for the moment uses a unique amplification for all the channels
     if(reader.getAmplification() != 0) amplification = reader.getAmplification();
     if(reader.getOffset() != 0) initialOffset = reader.getOffset();
-
-    acquisitionGain = static_cast<int>(0.5 +
-                                       static_cast<float>(pow(static_cast<double>(2),static_cast<double>(resolution))
-                                                          / static_cast<float>(voltageRange * 1000))
-                                       * amplification);
 
     reader.getAnatomicalDescription(channelNb,displayChannelsGroups,displayGroupsChannels,skipStatus);
 
@@ -1194,7 +1250,6 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
 
     if(reader.getScreenGain() != 0)
         screenGain = reader.getScreenGain();
-    gain = static_cast<int>(0.5 + screenGain * acquisitionGain);
 
     //For the moment Neuroscope stores it own values for the nbSamples and the peakSampleIndex inside the specific neuroscope tag.
     //Therefore Neuroscope uses the same values for all the groups
