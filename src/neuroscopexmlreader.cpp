@@ -298,20 +298,17 @@ int NeuroscopeXmlReader::getVoltageRange() const{
                 if(!e.isNull()) {
                     QString tag = e.tagName();
                     if (tag == ACQUISITION) {
-                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
-                        if (!acquisition.isNull()) {
-                            QDomNode b = acquisition.firstChild();
-                            while(!b.isNull()) {
-                                QDomElement w = b.toElement();
-                                if(!w.isNull()) {
-                                    tag = w.tagName();
-                                    if (tag == VOLTAGE_RANGE) {
-                                        range =  w.text().toInt();
-                                        return range;
-                                    }
+                        QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                        while(!acquisition.isNull()) {
+                            QDomElement w = acquisition.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == VOLTAGE_RANGE) {
+                                    range =  w.text().toInt();
+                                    return range;
                                 }
-                                b = b.nextSibling();
                             }
+                            acquisition = acquisition.nextSibling();
                         }
                     }
                 }
@@ -360,20 +357,17 @@ int NeuroscopeXmlReader::getAmplification() const{
                 if(!e.isNull()) {
                     QString tag = e.tagName();
                     if (tag == ACQUISITION) {
-                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
-                        if (!acquisition.isNull()) {
-                            QDomNode b = acquisition.firstChild();
-                            while(!b.isNull()) {
-                                QDomElement w = b.toElement();
-                                if(!w.isNull()) {
-                                    tag = w.tagName();
-                                    if (tag == AMPLIFICATION) {
-                                        amplification =  w.text().toInt();
-                                        return amplification;
-                                    }
+                        QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                        while(!acquisition.isNull()) {
+                            QDomElement w = acquisition.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == AMPLIFICATION) {
+                                    amplification =  w.text().toInt();
+                                    return amplification;
                                 }
-                                b = b.nextSibling();
                             }
+                            acquisition = acquisition.nextSibling();
                         }
                     }
                 }
@@ -422,20 +416,17 @@ int NeuroscopeXmlReader::getOffset()const{
                 if(!e.isNull()) {
                     QString tag = e.tagName();
                     if (tag == ACQUISITION) {
-                        QDomNode acquisition = e.firstChildElement(); // try to convert the node to an element.
-                        if (!acquisition.isNull()) {
-                            QDomNode b = acquisition.firstChild();
-                            while(!b.isNull()) {
-                                QDomElement w = b.toElement();
-                                if(!w.isNull()) {
-                                    tag = w.tagName();
-                                    if (tag == OFFSET) {
-                                        offset =  w.text().toInt();
-                                        return offset;
-                                    }
+                        QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
+                        while(!acquisition.isNull()) {
+                            QDomElement w = acquisition.toElement();
+                            if(!w.isNull()) {
+                                tag = w.tagName();
+                                if (tag == OFFSET) {
+                                    offset =  w.text().toInt();
+                                    return offset;
                                 }
-                                b = b.nextSibling();
                             }
+                            acquisition = acquisition.nextSibling();
                         }
                     }
                 }
