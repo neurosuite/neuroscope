@@ -131,7 +131,7 @@ public:
   * @return number of samples in the given time frame.
   * @param startTimeInRecordingUnits begining of the time frame from which the data have been retrieved, given in recording units.
   */
-    dataType getNbSamples(long startTime,long endTime,long startTimeInRecordingUnits);
+    virtual dataType getNbSamples(long startTime,long endTime,long startTimeInRecordingUnits);
 
     /**Returns the total number of samples in recorded contained in the file identified by fileUrl.*/
     long getTotalNbSamples();

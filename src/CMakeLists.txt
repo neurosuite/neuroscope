@@ -29,6 +29,7 @@ set(neuroscope_SRCS
 	propertiesdialog.cpp
 	tags.cpp
 	tracesprovider.cpp
+	nsxtracesprovider.cpp
 	traceview.cpp
 	tracewidget.cpp
 	sessionxmlwriter.cpp

@@ -33,6 +33,7 @@
 #include "neuroscope.h"
 #include "neuroscopeview.h"
 #include "tracesprovider.h"
+#include "nsxtracesprovider.h"
 #include "traceview.h"
 #include "channelcolors.h"
 #include "neuroscopexmlreader.h"
@@ -243,6 +244,60 @@ int NeuroscopeDoc::openDocument(const QString& url)
     qDebug()<<" int NeuroscopeDoc::openDocument(const QString& url)"<<url;
     channelColorList = new ChannelColors();
     docUrl = url;
+    QFileInfo urlFileInfo(url);
+    QString fileName = urlFileInfo.fileName();
+
+    // First we check if this is a Blackrock NSX file
+     if(fileName.contains(QRegExp("\\.ns\\d"))) {
+        NSXTracesProvider* nsxTracesProvider = new NSXTracesProvider(url);
+
+        if(!nsxTracesProvider->init()) {
+            return OPEN_ERROR;
+        }
+
+        this->tracesProvider = nsxTracesProvider;
+
+        // Warn user if command line properties were used
+        if(this->isCommandLineProperties){
+            QApplication::restoreOverrideCursor();
+            QMessageBox::information(0, tr("Warning!"),tr("You are opening a NSX file, the command line information will be discarded."));
+            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        }
+
+        // Extract important information from file
+        this->channelNb = nsxTracesProvider->getNbChannels();
+        this->samplingRate = nsxTracesProvider->getSamplingRate();
+        this->resolution = 16;
+
+        //extensionSamplingRates.insert(extension,samplingRate);
+
+        //No group of channels exist, put all the channels in the same group (1 for the display palette and
+        //-1 (the trash group) for the spike palette) and assign them the same blue color.
+        //Build the channelColorList and channelDefaultOffsets (default is 0)
+        QColor color;
+        QList<int> groupOne;
+        color.setHsv(210,255,255);
+        for(int i = 0; i < channelNb; ++i){
+            channelColorList->append(i,color);
+            displayChannelsGroups.insert(i,1);
+            channelsSpikeGroups.insert(i,-1);
+            groupOne.append(i);
+            channelDefaultOffsets.insert(i,0);
+        }
+        displayGroupsChannels.insert(1,groupOne);
+        spikeGroupsChannels.insert(-1,groupOne);
+
+        //if skipStatus is empty, set the default status to 0
+        if(skipStatus.isEmpty()){
+            for(int i = 0; i < channelNb; ++i)
+                skipStatus.insert(i,false);
+        }
+
+        //Use the channel default offsets
+        emit noSession(channelDefaultOffsets,skipStatus);
+
+        return OK;
+    }
 
     //We look for the general information:
     // - the type of file: dat or eeg
@@ -269,8 +324,6 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
 
     bool sessionFileExist = false;
-    QFileInfo urlFileInfo(url);
-    QString fileName = urlFileInfo.fileName();
     QStringList fileParts = fileName.split(QLatin1Char('.'), QString::SkipEmptyParts);
     if(fileParts.count() < 2)
         return INCORRECT_FILE;
