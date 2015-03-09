@@ -95,7 +95,7 @@ public:
     /**Loads the event ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status
   */
-    int loadData();
+    virtual int loadData();
 
     /**Returns the number of events in the event file the provider provides the data for
   * @return number of events.
@@ -167,6 +167,9 @@ public:
     /**Initializes the provider as it is the provider of a new empty event file.*/
     void initializeEmptyProvider();
 
+    /** Updates mapping saved in eventIds and idsDescriptions as well as descriptionLength based on loaded data. */
+    void updateMappingAndDescriptionLength();
+
     /**Updates the sampling rate for the current document.
   * @param rate sampling rate.
   */
@@ -232,7 +235,7 @@ Q_SIGNALS:
   */
     void eventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
 
-private:
+protected:
 
     /**Provider's name.*/
     QString name;

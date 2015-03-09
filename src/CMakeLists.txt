@@ -14,6 +14,7 @@ set(neuroscope_SRCS
 	configuration.cpp
 	dataprovider.cpp
 	eventsprovider.cpp
+	neveventsprovider.cpp
 	itemgroupview.cpp
 	itemiconview.cpp
 	itempalette.cpp

@@ -33,6 +33,84 @@ typedef struct {
   int16_t milliseconds;
 } WindowsSystemTime;
 
+// NEV file data structure
+typedef struct {
+  char file_type[8]; // “NEURALEV”
+  uint16_t file_spec; // e.g. 0x0202 = Spec 2.2
+  uint16_t flags; // Bit0: waveform pure 16bit
+  uint32_t header_size;
+  uint32_t data_package_size;
+  uint32_t global_time_resolution; // counts per minute
+  uint32_t waveform_time_resolution; // counts per minute
+  WindowsSystemTime time_origin;
+  char application[32]; // name of program that created this file.
+  char comment[256];
+  uint32_t extension_count;
+} NEVBasicHeader;
+
+typedef struct {
+  char id[8];
+  char data[24];
+} NEVExtensionHeader;
+
+#define NEVDigitalSerialID  0x0
+//      NEVSpikeID          0x1 - 0x800
+#define NEVConfigurationID  0xFFFB
+#define NEVButtonID         0xFFFC
+#define NEVTrackingID       0xFFFD
+#define NEVVideoSyncID      0xFFFE
+#define NEVCommentID        0xFFFF
+#define NEVContinuationID   0xFFFFFFFF
+
+typedef struct {
+  uint32_t timestamp;
+  uint16_t id;
+} NEVDataHeader;
+
+typedef struct {
+  uint8_t reason; // bit 0 = digital change, bit 7 = serial
+  uint8_t reserved;
+  uint16_t input;
+} NEVDigitalSerialData;
+
+typedef struct {
+  uint8_t unit_class; // 0 = unclassified, 1-16 unit, 255 = noise
+  uint8_t reserved;
+  // Followed by uint8_t waveform[size - 8];
+} NEVSpikeDataHeader;
+
+typedef struct {
+  uint16_t type; // 0 = normal, 1 = critical;
+  // Followed by char change[size - 8];
+} NEVConfigurationDataHeader;
+
+typedef struct {
+  uint16_t trigger; // 0 = undefined, 1 = press, 2 = reset
+} NEVButtonData;
+
+typedef struct {
+  uint16_t file_number;
+  uint32_t frame_number;
+  uint32_t elapsed_time;
+  uint32_t video_source;
+} NEVVideoSyncData;
+
+typedef struct {
+  uint16_t parent_id;
+  uint16_t node_id;
+  uint16_t node_count;
+  uint16_t point_count;
+  // Followed by uint16_t points[size - 14]
+} NEVTrackingDataHeader;
+
+typedef struct {
+  uint8_t char_set; // 0 = Ansi, 1 = UTF-16
+  uint8_t reserved;
+  uint32_t color; // RGBA
+  // Followed by char comment[size - 12];
+} NEVCommentDataHeader;
+
+
 // NSX file data structure
 typedef struct {
   char file_type[8]; // “NEURALCD” or “NEURALSG”.

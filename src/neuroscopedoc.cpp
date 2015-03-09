@@ -42,6 +42,8 @@
 #include "sessionxmlwriter.h"
 #include "sessionInformation.h"
 #include "clustersprovider.h"
+#include "eventsprovider.h"
+#include "neveventsprovider.h"
 #include "itemcolors.h"
 #include "itempalette.h"
 #include "positionsprovider.h"
@@ -2165,13 +2167,17 @@ void NeuroscopeDoc::setClusterPosition(int position){
     }
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QString &eventUrl,NeuroscopeView*activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QString &eventUrl, NeuroscopeView*activeView){
     //Check that the selected file is a event file
     QString fileName = eventUrl;
-    if(fileName.indexOf(".evt") == -1)
+    EventsProvider* eventsProvider(NULL);
+    if(fileName.indexOf(".nev") != -1) {
+        eventsProvider = new NEVEventsProvider(eventUrl, eventPosition);
+    } else if(fileName.indexOf(".evt") != -1){
+        eventsProvider = new EventsProvider(eventUrl, samplingRate, eventPosition);
+    } else {
         return INCORRECT_FILE;
-
-    EventsProvider* eventsProvider = new EventsProvider(eventUrl,samplingRate,eventPosition);
+    }
     QString name = eventsProvider->getName();
 
     //The name should contains 3 characters with at least one none digit character.
