@@ -26,3 +26,5 @@ deploy:
   auth_token:
     secure: EXhNFaenjWWXzb3LfmmZ+sEiDUmcG9ct9pYJkiL3Yd0S+HoiXJgrxR3rwtqmVcQ5
   artifact: neuroscope-*-win64.exe
+  on:
+    appveyor_repo_tag: true
