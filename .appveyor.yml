@@ -1,0 +1,28 @@
+version: v2.0.0-{branch}-{build}
+
+os: MinGW
+
+environment:
+    NSIS_ROOT: C:\nsis
+    QTDIR: C:\Qt\5.4\msvc2013_64_opengl
+    CMAKE_GENERATOR: Visual Studio 12 Win64
+
+install:
+    - appveyor DownloadFile "http://sunet.dl.sourceforge.net/project/nsis/NSIS 2/2.46/nsis-2.46-setup.exe" -FileName nsissetup.exe
+    - nsissetup /S /D=%NSIS_ROOT%
+    - set PATH=%PATH%;%QTDIR%/bin;%NSIS_ROOT%
+    - git clone https://github.com/neurosuite/libneurosuite.git
+    - cd libneurosuite
+    - cmake -DENFORCE_QT4_BUILD=OFF -G "%CMAKE_GENERATOR%" .
+    - cmake --build . --target INSTALL
+    - cd ..
+
+build_script:
+    - cmake -DENFORCE_QT4_BUILD=OFF -DLibKlustersShared_DIR="C:/Program Files/libklustersshared/lib/cmake/LibKlustersShared/" -G "%CMAKE_GENERATOR%" .
+    - cmake --build . --target PACKAGE
+
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: EXhNFaenjWWXzb3LfmmZ+sEiDUmcG9ct9pYJkiL3Yd0S+HoiXJgrxR3rwtqmVcQ5
+  artifact: neuroscope-*-win64.exe
