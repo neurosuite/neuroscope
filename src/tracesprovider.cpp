@@ -29,7 +29,7 @@
 #include <QFileInfo>
  
 // include c/c++ headers
-#include <cstdint>
+#include <stdint.h>
 
 TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
     : DataProvider(fileUrl),
