@@ -17,7 +17,7 @@
 #define _BLACKROCK_H_
 
 // include c/c++ headers
-#include <cstdint>
+#include <stdint.h>
 
 #pragma pack(push, 1)
 

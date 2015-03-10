@@ -16,7 +16,7 @@
 #include "nsxtracesprovider.h"
 
 #include <QFile>
-#include <cstring>
+#include <stdint.h>
 
 
 const int NSXTracesProvider::NSX_RESOLUTION = 16;
