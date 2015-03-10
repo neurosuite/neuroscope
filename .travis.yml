@@ -11,7 +11,7 @@ install:
   - sudo make install
   - cd ..
 
-script: cmake . && cpack
+script: cmake . && make && cpack
 
 deploy:
   provider: releases
