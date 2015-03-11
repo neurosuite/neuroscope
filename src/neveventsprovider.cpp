@@ -21,6 +21,11 @@ NEVEventsProvider::NEVEventsProvider(const QString &fileUrl, int position) : Eve
     this->fileName = fileUrl;
 }
 
+NEVEventsProvider::~NEVEventsProvider() {
+    if(this->extensionHeaders)
+        delete[] this->extensionHeaders;
+}
+
 int NEVEventsProvider::loadData(){
     // Empty previous data
     events.setSize(0,0);

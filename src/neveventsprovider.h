@@ -24,6 +24,7 @@ class NEVEventsProvider : public EventsProvider  {
 
 public:
     NEVEventsProvider(const QString &fileUrl, int position);
+    ~NEVEventsProvider();
 
     /**Loads the event ids and the corresponding spike time.
     * @return an loadReturnMessage enum giving the load status

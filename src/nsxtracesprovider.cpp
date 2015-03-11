@@ -23,7 +23,7 @@ const int NSXTracesProvider::NSX_RESOLUTION = 16;
 const int NSXTracesProvider::NSX_OFFSET = 0;
 
 NSXTracesProvider::NSXTracesProvider(const QString &fileName)
-    : TracesProvider(fileName, -1, NSX_RESOLUTION, 0, 0, 0, NSX_OFFSET), initialized(false) {
+    : TracesProvider(fileName, -1, NSX_RESOLUTION, 0, 0, 0, NSX_OFFSET), initialized(false), extensionHeaders(NULL), dataFilePos(-1) {
 }
 
 NSXTracesProvider::~NSXTracesProvider() {
