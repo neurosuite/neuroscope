@@ -1,4 +1,4 @@
-version: v2.0.0-{branch}-{build}
+version: v2.0.1-{branch}-{build}
 
 os: MinGW
 
