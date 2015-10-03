@@ -1,6 +1,7 @@
 /***************************************************************************
-                          nsxtracesprovider.h  -  description
+                          blackrock.h  -  description
                              -------------------
+    purpose              : Structs used to parse Blackrock NSX and NEV binary files
     copyright            : (C) 2015 by Florian Franzen
  ***************************************************************************/
 
@@ -118,7 +119,7 @@ typedef struct {
   uint32_t header_size;
   char label[16];
   char comment[256];
-  uint32_t sampling_period; // sampling period e.g. w1 = 30ks, 10ks = 3
+  uint32_t sampling_period; // sampling period e.g. 1 for 30ks, 3 for 10ks
   uint32_t time_resolution; // (counts per second) of the global clock used to index the time samples of the individual data packet entries.
   WindowsSystemTime time_origin;
   uint32_t channel_count;
