@@ -1,5 +1,5 @@
 /***************************************************************************
-                          nsxtracesprovider.h  -  description
+                          nsxtracesprovider.cpp  -  description
                              -------------------
     copyright            : (C) 2015 by Florian Franzen
  ***************************************************************************/
@@ -93,8 +93,6 @@ long NSXTracesProvider::getNbSamples(long start, long end, long startInRecording
     // Check if startInRecordingUnits was supplied, else compute it.
     if(startInRecordingUnits == 0)
         startInRecordingUnits = this->samplingRate * start / 1000.0;
-
-    long fileOffset = startInRecordingUnits * this->nbChannels * sizeof(int16_t);
 
     // The caller should have check that we do not go over the end of the file.
     // The recording starts at time equals 0 and ends at length of the file minus one.
