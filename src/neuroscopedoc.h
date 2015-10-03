@@ -114,6 +114,13 @@ public:
     */
     int openDocument(const QString& url);
 
+#ifdef WITH_NETWORK
+    /** Open network stream.
+    * @return true on sucess, false otherwise.
+    */
+    bool openStream();
+#endif
+
     /**Saves the current session: displays, spike, cluster, event files opened and selected clusters and events.
     * It also saves the relevant changes in the parameter files (creating one if there is none).
      @return an OpenSaveCreateReturnMessage enum giving the saving status.

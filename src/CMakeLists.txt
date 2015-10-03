@@ -52,17 +52,21 @@ set(neuroscope_UI  propertieslayout.ui prefdefaultslayout.ui positionpropertiesl
 
 qt4_wrap_ui(neuroscope_SRCS ${neuroscope_UI})
 
+if(WITH_NETWORK)
+	set(NETWORK_SRCS cerebustraceprovider.cpp)
+endif(WITH_NETWORK)
+
 if(USE_MACOSX_BUNDLE)
-	add_executable(neuroscope MACOSX_BUNDLE ${neuroscope_SRCS})
+	add_executable(neuroscope MACOSX_BUNDLE ${neuroscope_SRCS} ${NETWORK_SRCS})
 else()
-	add_executable(neuroscope WIN32 ${neuroscope_SRCS})
+	add_executable(neuroscope WIN32 ${neuroscope_SRCS} ${NETWORK_SRCS})
 endif()
 
 if(Qt5Core_FOUND)
   # Since Qt5WebKitWidgets is optional, we use the old variable here that will not throw an error if not set.
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::WinMain ${Qt5WebKitWidgets_LIBRARIES})
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::WinMain ${Qt5WebKitWidgets_LIBRARIES} ${CBSDK_LIBRARY})
 else(Qt5Core_FOUND)
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY})
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${CBSDK_LIBRARY})
 endif()
 
 if(WIN32)
@@ -70,8 +74,8 @@ if(WIN32)
 
 	# Use fix_bundle to install qt libraries
 	set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/neuroscope.exe") # paths to executables
-	set(DIRS "${QTDIR}/lib;${QTDIR}/bin") # directories to search for prerequisites
-	
+	set(DIRS "${QTDIR}/lib;${QTDIR}/bin;$ENV{CBDIR};$ENV{CBDIR}/cbsdk/lib;$ENV{MATLAB_ROOT}/bin/win64") # directories to search for prerequisites
+
 	INSTALL(CODE "include(BundleUtilities)
 	              fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
 elseif(USE_MACOSX_BUNDLE)

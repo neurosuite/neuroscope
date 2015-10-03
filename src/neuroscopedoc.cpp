@@ -50,6 +50,9 @@
 #include "imagecreator.h"
 #include "utilities.h"
 
+#ifdef WITH_NETWORK
+#include "cerebustraceprovider.h"
+#endif
 
 extern QString version;
 
@@ -576,6 +579,84 @@ int NeuroscopeDoc::openDocument(const QString& url)
     qDebug()<<" NeuroscopeDoc::openDocument END FINISH";
     return OK;
 }
+
+#ifdef WITH_NETWORK
+bool NeuroscopeDoc::openStream() {
+    // Let user choose sampling rate
+    QStringList items;
+    items << "30 000 Hz" << "10 000 Hz" << "2000 Hz" << "1000 Hz" << "500 Hz";
+
+    CerebusTracesProvider::SamplingGroup mapping[5] = {
+        CerebusTracesProvider::RATE_30k,
+        CerebusTracesProvider::RATE_10k,
+        CerebusTracesProvider::RATE_2K,
+        CerebusTracesProvider::RATE_1K,
+        CerebusTracesProvider::RATE_500
+    };
+
+    bool ok;
+	int answer = items.indexOf(QInputDialog::getItem(0, tr("Network Stream"),
+														tr("Please choose the sampling group to be displayed."),
+														items,
+														0, // current
+														false, //editable
+														&ok));
+
+	if (!ok || answer < 0)
+        return false;
+
+    channelColorList = new ChannelColors();
+    docUrl = "";
+
+	CerebusTracesProvider* cerebusTracesProvider = new CerebusTracesProvider(mapping[answer]);
+
+    if(!cerebusTracesProvider->init()) {
+        QMessageBox::critical(0, tr("Error!"), tr("Could not open network stream: %1").arg(QString::fromStdString(cerebusTracesProvider->getLastErrorMessage())));
+        return false;
+    }
+
+  this->tracesProvider = cerebusTracesProvider;
+
+  // Warn user if command line properties were used
+  if(this->isCommandLineProperties){
+      QApplication::restoreOverrideCursor();
+      QMessageBox::information(0, tr("Warning!"),tr("You are opening a network stream, all supplied command line options will be discarded."));
+      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  }
+
+  // Extract important information from file
+  this->channelNb = cerebusTracesProvider->getNbChannels();
+  this->samplingRate = cerebusTracesProvider->getSamplingRate();
+  this->resolution = 16;
+
+  //No group of channels exist, put all the channels in the same group (1 for the display palette and
+  //-1 (the trash group) for the spike palette) and assign them the same blue color.
+  //Build the channelColorList and channelDefaultOffsets (default is 0)
+  QColor color;
+  QList<int> groupOne;
+  color.setHsv(210,255,255);
+  for(int i = 0; i < channelNb; ++i){
+      channelColorList->append(i, color);
+      displayChannelsGroups.insert(i, 1);
+      channelsSpikeGroups.insert(i, -1);
+      groupOne.append(i);
+      channelDefaultOffsets.insert(i, 0);
+  }
+  displayGroupsChannels.insert(1, groupOne);
+  spikeGroupsChannels.insert(-1, groupOne);
+
+  //if skipStatus is empty, set the default status to 0
+  if(skipStatus.isEmpty()){
+      for(int i = 0; i < channelNb; ++i)
+          skipStatus.insert(i, false);
+  }
+
+  //Use the channel default offsets
+  emit noSession(channelDefaultOffsets, skipStatus);
+
+  return true;
+}
+#endif
 
 bool NeuroscopeDoc::saveEventFiles(){
     QMap<QString,QString>::ConstIterator iterator;

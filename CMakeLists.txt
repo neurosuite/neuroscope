@@ -14,6 +14,10 @@ option(ENFORCE_QT4_BUILD
        "Enable if you want to enfore a build with Qt4"
        ON)
 
+option(WITH_NETWORK
+      "Enable if you want Cerebus UDP supports"
+      OFF)
+
 option(REGENERATE_DOC
        "Enable if you want to regenerate doc need kde4"
        OFF)
@@ -75,6 +79,12 @@ set( QT_USE_XML TRUE)
 
 # tell cmake where to search for Qt/KDE headers:
 include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
+
+if(WITH_NETWORK)
+  find_package(CBSDK REQUIRED)
+  add_definitions(-DWITH_NETWORK)
+  include_directories(${CBSDK_INCLUDE_PATH})
+endif(WITH_NETWORK)
 
 # This macro is for internal use only
 # Return the directories present in gcc's include path.

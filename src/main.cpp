@@ -46,14 +46,14 @@ int main(int argc, char *argv[])
     QString amplification;
     QString screenGain;
     QString timeWindow;
+    bool streamMode = false;
     //TODO Qt5.2 use QCommandLineParser
     for (int i = 1, n = args.size(); i < n; ++i) {
         const QString arg = args.at(i);
         if (arg == "-h" || arg == "--help" || arg == "-help") {
-            qWarning() << "Usage: " << qPrintable(args.at(0))
-                       << " [file]"
-                       << "\n\n"
-                       << "Arguments:\n"
+            qWarning() << "Usage: " << qPrintable(args.at(0)) << " [file]\n"
+                       << "\n"
+                       << "Optional settings:\n"
                        << "  -r, --resolution        Resolution of the acquisition system.\n"
                        << "  -c, --nbChannels        Number of channels.\n"
                        << "  -o, --offset            Initial offset.\n"
@@ -62,37 +62,49 @@ int main(int argc, char *argv[])
                        << "  -g, --screenGain        Screen gain.\n"
                        << "  -s, --samplingRate      Sampling rate.\n"
                        << "  -t, --timeWindow        Initial time window (in miliseconds).\n"
+                       << "\n"
+                       << "Optional flags:\n"
+            #if WITH_NETWORK
+                       << "  -n, --stream            Open network stream instead of file.\n"
+            #endif
                        << "  -h, --help              print this help\n";
             return 1;
         }
 
         bool handled = true;
-         if (i < n - 1) {
-             if (arg == "-r" || arg == "--resolution" || arg == "-resolution")
+         if (i < n - 1) { // Parameter value flags
+             if (arg == "-r" || arg == "--resolution" || arg == "-resolution") {
                  resolution = args.at(++i);
-             else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels") {
+             } else if (arg == "-c" || arg == "--nbChannels" || arg == "-nbChannels") {
                  channelNb = args.at(++i);
-             }
-             else if (arg == "o-" || arg == "--offset" || arg == "-offset")
+             } else if (arg == "-o" || arg == "--offset" || arg == "-offset") {
                   offset = args.at(++i);
-             else if (arg == "-m" || arg == "--voltageRange" || arg == "-voltageRange")
+             } else if (arg == "-m" || arg == "--voltageRange" || arg == "-voltageRange") {
                   voltageRange = args.at(++i);
-             else if (arg == "-a" || arg == "--amplification" || arg == "-amplification")
+             } else if (arg == "-a" || arg == "--amplification" || arg == "-amplification") {
                   amplification = args.at(++i);
-             else if (arg == "-g" || arg == "--screenGain" || arg == "-screenGain")
+             } else if (arg == "-g" || arg == "--screenGain" || arg == "-screenGain") {
                   screenGain = args.at(++i);
-             else if (arg == "-s" || arg == "--samplingRate" || arg == "-samplingRate")
+             } else if (arg == "-s" || arg == "--samplingRate" || arg == "-samplingRate") {
                   SR = args.at(++i);
-             else if (arg == "-t" || arg == "--timeWindow" || arg == "-timeWindow")
+             } else if (arg == "-t" || arg == "--timeWindow" || arg == "-timeWindow") {
                   timeWindow = args.at(++i);
-             else
+            } else {
                  handled = false;
-
+            }
          } else {
+#ifdef WITH_NETWORK
+             if (arg == "-n" || arg == "--stream" || arg == "-stream") {
+                 streamMode = true;
+             } else {
+#endif
                  handled = false;
+#ifdef WITH_NETWORK
+             }
+#endif
          }
          // Nothing know. Treat it as path.
-         if (!handled || (n == 2) )
+         if (!handled)
              file = args.at(i);
     }
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
@@ -101,21 +113,27 @@ int main(int argc, char *argv[])
                                   screenGain,timeWindow);
 
     neuroscope->show();
-    if (!file.isEmpty()) {
-        QFileInfo fInfo(file);
-        if (file.startsWith(QLatin1String("-")) ) {
-            qWarning() << "it's not a filename :"<<file;
-        } else if(fInfo.isRelative()) {
-            const QString url = QDir::currentPath().append("/") + file;
-            neuroscope->openDocumentFile(url);
-        } else {
-            neuroscope->openDocumentFile(file);
-        } 
+#ifdef WITH_NETWORK
+    if (streamMode) {
+        neuroscope->openDocumentStream();
+    } else {
+#endif
+        if (!file.isEmpty()) {
+            QFileInfo fInfo(file);
+            if (file.startsWith(QLatin1String("-")) ) {
+                qWarning() << "it's not a filename :"<<file;
+            } else if(fInfo.isRelative()) {
+                const QString url = QDir::currentPath().append("/") + file;
+                neuroscope->openDocumentFile(url);
+            } else {
+                neuroscope->openDocumentFile(file);
+            }
+        }
+#ifdef WITH_NETWORK
     }
-
+#endif
 
     const int ret = app.exec();
     delete neuroscope;
     return ret;
-}  
-
+}

@@ -131,6 +131,11 @@ void NeuroscopeApp::initActions()
     mOpenAction->setIcon(QPixmap(":/shared-icons/document-open"));
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
 
+#ifdef WITH_NETWORK
+    mStreamAction = fileMenu->addAction(tr("Open network stream..."));
+    connect(mStreamAction, SIGNAL(triggered()), this, SLOT(slotStreamOpen()));
+#endif WITH_NETWORK
+
     mFileOpenRecent = new QRecentFileAction(this);
     QSettings settings;
     mFileOpenRecent->setRecentFiles(settings.value(QLatin1String("Recent Files"),QStringList()).toStringList());
@@ -1052,6 +1057,41 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     slotStatusMsg(tr("Ready."));
 }
 
+#ifdef WITH_NETWORK
+void NeuroscopeApp::openDocumentStream()
+{
+    slotStatusMsg(tr("Opening stream..."));
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    //If no document is open already, open the document asked.
+    if(!mainDock){
+        displayCount = 0;
+
+        if(!doc->openStream()) {
+            QApplication::restoreOverrideCursor();
+            QMessageBox::critical (this, tr("Error!"), tr("Could not open network stream."));
+
+            doc->closeDocument();
+            resetState();
+            return;
+        }
+
+        //update the spike and event browsing status
+        updateBrowsingStatus();
+
+        setWindowTitle("Network Stream");
+        QApplication::restoreOverrideCursor();
+    } else {
+        // ToDo: Check if we are already in streaming mode
+        if (!QProcess::startDetached("neuroscope", QStringList() << "-n")) {
+            QMessageBox::critical(this, tr("Neuroscope"),tr("neuroscope can not be launch"));
+        }
+        QApplication::restoreOverrideCursor();
+    }
+    slotStatusMsg(tr("Ready."));
+}
+#endif WITH_NETWORK
 
 NeuroscopeDoc* NeuroscopeApp::getDocument() const
 {
@@ -1257,6 +1297,17 @@ void NeuroscopeApp::slotFileOpen()
 
     slotStatusMsg(tr("Ready."));
 }
+
+#ifdef WITH_NETWORK
+void NeuroscopeApp::slotStreamOpen()
+{
+    slotStatusMsg(tr("Opening network stream..."));
+
+    openDocumentStream();
+
+    slotStatusMsg(tr("Ready."));
+}
+#endif WITH_NETWORK
 
 void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
