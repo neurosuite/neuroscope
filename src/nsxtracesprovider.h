@@ -38,7 +38,7 @@ public:
     * @param fileUrl the url of the file containing the data provided by this class.
     */
     NSXTracesProvider(const QString &fileUrl);
-    ~NSXTracesProvider();
+	virtual ~NSXTracesProvider();
 
     /**Sets the number of channels corresponding to the file identified by fileUrl.
     * @param nb the number of channels.

@@ -43,7 +43,7 @@ public:
   * @param offset offset to apply to the data contained in the file identified by fileUrl.
   */
     TracesProvider(const QString &fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset);
-    ~TracesProvider();
+    virtual ~TracesProvider();
 
     /// Added by M.Zugaro to enable automatic forward paging
     void updateRecordingLength() { computeRecordingLength(); }
