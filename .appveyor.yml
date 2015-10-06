@@ -3,13 +3,12 @@ version: v2.0.1-{branch}-{build}
 os: MinGW
 
 environment:
-    NSIS_ROOT: C:\nsis
+    NSIS_ROOT: C:\Program Files (x86)\NSIS
     QTDIR: C:\Qt\5.4\msvc2013_64_opengl
     CMAKE_GENERATOR: Visual Studio 12 Win64
 
 install:
-    - appveyor DownloadFile "http://sunet.dl.sourceforge.net/project/nsis/NSIS 2/2.46/nsis-2.46-setup.exe" -FileName nsissetup.exe
-    - nsissetup /S /D=%NSIS_ROOT%
+    - choco install nsis -pre
     - set PATH=%PATH%;%QTDIR%/bin;%NSIS_ROOT%
     - git clone https://github.com/neurosuite/libneurosuite.git
     - cd libneurosuite
