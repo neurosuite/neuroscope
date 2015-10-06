@@ -1,4 +1,4 @@
-version: v2.0.0-{branch}-{build}
+version: v2.0.1-{branch}-{build}
 
 os: MinGW
 
@@ -21,10 +21,15 @@ build_script:
     - cmake -DENFORCE_QT4_BUILD=OFF -DLibKlustersShared_DIR="C:/Program Files/libklustersshared/lib/cmake/LibKlustersShared/" -G "%CMAKE_GENERATOR%" .
     - cmake --build . --target PACKAGE
 
+test: off
+
+artifacts:
+  - path: neuroscope-*-win64.exe
+    name: NSIS Installer
+
 deploy:
 - provider: GitHub
   auth_token:
     secure: EXhNFaenjWWXzb3LfmmZ+sEiDUmcG9ct9pYJkiL3Yd0S+HoiXJgrxR3rwtqmVcQ5
-  artifact: neuroscope-*-win64.exe
   on:
     appveyor_repo_tag: true
