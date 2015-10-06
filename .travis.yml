@@ -1,9 +1,16 @@
 language: cpp
 
-before_install: sudo apt-get update
+os:
+  - linux
+  - osx
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
 
 install:
-  - sudo apt-get install -y libqt4-dev
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -y libqt4-dev; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt; fi
   - git clone https://github.com/neurosuite/libneurosuite.git
   - cd libneurosuite
   - cmake .
@@ -11,13 +18,21 @@ install:
   - sudo make install
   - cd ..
 
-script: cmake . && make && cpack
+script:
+  - mkdir build && cd build
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then cmake ..;  fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cmake -DUSE_MACOSX_BUNDLE=ON ..; fi
+  - make && cpack
+
+before_deploy:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export RELEASE_PKG_FILE=$(ls neuroscope_*.deb);  fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export RELEASE_PKG_FILE=$(ls neuroscope_*.dmg);  fi
 
 deploy:
   provider: releases
   api_key:
     secure: LdMU6bfPozM1sD+k/GVcTbmh+tlDuLzyQKbS38+3KOYhoVFVlOA2d1vymDI8BmQ66xSYa6yGBZ3Zu3MbV+aiukSNMp+QnS4q0mySxq7iUNdhEAI9a9GcljYvxo/Oj3BeJpksX6JgIhZK06wnafb1E6jdh6i1d+DldMK36PjMeVg=
   file_glob: true
-  file: neuroscope_*.deb
+  file: "${RELEASE_PKG_FILE}"
   on:
     tags: true
