@@ -64,17 +64,21 @@ endif()
 
 if(Qt5Core_FOUND)
   # Since Qt5WebKitWidgets is optional, we use the old variable here that will not throw an error if not set.
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::WinMain ${Qt5WebKitWidgets_LIBRARIES} ${CBSDK_LIBRARY})
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} Qt5::Widgets Qt5::Xml Qt5::PrintSupport Qt5::WinMain ${Qt5WebKitWidgets_LIBRARIES})
 else(Qt5Core_FOUND)
-  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY} ${CBSDK_LIBRARY})
+  target_link_libraries( neuroscope ${LIBKLUSTERSSHARED_LIBRARY} ${QT_LIBRARIES} ${QT_QTXML_LIBRARY})
 endif()
+
+if(WITH_NETWORK)
+	 target_link_libraries(neuroscope cbsdk)
+endif(WITH_NETWORK)
 
 if(WIN32)
 	install(TARGETS neuroscope DESTINATION bin)
 
 	# Use fix_bundle to install qt libraries
 	set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/neuroscope.exe") # paths to executables
-	set(DIRS "${QTDIR}/lib;${QTDIR}/bin;$ENV{CBDIR};$ENV{CBDIR}/cbsdk/lib;$ENV{MATLAB_ROOT}/bin/win64") # directories to search for prerequisites
+	set(DIRS "${QTDIR}/lib;${QTDIR}/bin;${cbsdk_DIR}/../lib") # directories to search for prerequisites
 
 	INSTALL(CODE "include(BundleUtilities)
 	              fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")

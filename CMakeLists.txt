@@ -81,9 +81,8 @@ set( QT_USE_XML TRUE)
 include_directories(${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTXML_INCLUDE_DIR} ${LIBKLUSTERSSHARED_INCLUDE_DIR})
 
 if(WITH_NETWORK)
-  find_package(CBSDK REQUIRED)
-  add_definitions(-DWITH_NETWORK)
-  include_directories(${CBSDK_INCLUDE_PATH})
+  find_package(cbsdk REQUIRED CONFIG)
+  add_definitions(-DWITH_NETWORK -DNO_AFX)
 endif(WITH_NETWORK)
 
 # This macro is for internal use only
