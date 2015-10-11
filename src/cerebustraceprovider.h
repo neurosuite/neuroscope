@@ -21,12 +21,10 @@
 #include <QtDebug>
 
 // Include cerebus sdk
-#define NO_AFX // Disable AFX includes
 #include <cbsdk.h>
 
 // Include project files
 #include "tracesprovider.h"
-#include "samplehistory.h"
 #include "types.h"
 
 

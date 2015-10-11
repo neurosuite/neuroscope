@@ -54,7 +54,7 @@ bool CerebusTracesProvider::init() {
 		return false;
 
 	// Get number of channels in sampling group
-	this->lastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, this->group, (UINT32 *)&this->nbChannels, NULL);
+	this->lastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, this->group, (UINT32 *) &this->nbChannels, NULL);
 
 	if (this->lastResult != CBSDKRESULT_SUCCESS) {
 		cbSdkClose(CEREBUS_INSTANCE);
@@ -69,7 +69,7 @@ bool CerebusTracesProvider::init() {
 	}
 
 	// Get the list of channels in this sample group
-	this->channels = new unsigned int[this->nbChannels];
+	this->channels = new UINT32[this->nbChannels];
 	this->lastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, this->group, NULL, this->channels);
 
 	if (this->lastResult != CBSDKRESULT_SUCCESS) {
@@ -343,8 +343,10 @@ std::string CerebusTracesProvider::getLastErrorMessage() {
 
 bool CerebusTracesProvider::retrieveScaling() {
 	// Delete old scaling data if there is any
-	if (this->scales)
+	if (this->scales) {
 		delete[] this->scales;
+		this->scales = NULL;
+	}
 
 	// Get scaling for each channel of group
 	this->scales = new cbSCALING[this->nbChannels];
