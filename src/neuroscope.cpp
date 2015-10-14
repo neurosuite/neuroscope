@@ -1287,7 +1287,7 @@ void NeuroscopeApp::slotFileOpen()
 
     QSettings settings;
     const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."), settings.value("CurrentDirectory").toString(),
-                                                   tr("Data File (*.dat *.lfp *.eeg *.fil);;Blackrock File (*.ns2 *.ns3 *.ns5 *.ns6);;All files (*.*)") );
+                                                   tr("Data File (*.dat *.lfp *.eeg *.fil);;Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6);;All files (*.*)") );
     if(!url.isEmpty())
     {
         QDir CurrentDir;
