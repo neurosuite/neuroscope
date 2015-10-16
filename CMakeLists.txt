@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 2.8.11)
 set(PROJECT_VERSION_MAJOR "2")
 set(PROJECT_VERSION_MINOR "0")
 set(PROJECT_VERSION_PATCH "1")
-set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+set(PROJECT_VERSION
+    "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+)
 
 # Supported config flags
 option(WITH_QT4
@@ -34,7 +36,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Neurosuite library config
 ################################################################################
 find_package(neurosuite 2.0.0 REQUIRED)
-include(NeurosuiteHelpers)
 
 ################################################################################
 # QT Configurations
@@ -134,8 +135,10 @@ add_subdirectory(doc)
 ################################################################################
 # CPack configuration
 ################################################################################
+include(PackNeurosuite)
 # Init CPack variables
-neurosuite_cpack_init(${PROJECT_VERSION}
+neurosuite_cpack_init(${PROJECT_NAME}
+                      ${PROJECT_VERSION}
                       "Florian Franzen <FlorianFranzen@gmail.com"
                       "Viewer for neurophysiological and behavioral data"
                        "${CMAKE_CURRENT_SOURCE_DIR}/cpack/description")
