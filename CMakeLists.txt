@@ -1,5 +1,5 @@
 project(neuroscope CXX)
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 2.8.12)
 
 set(PROJECT_VERSION_MAJOR "2")
 set(PROJECT_VERSION_MINOR "0")
@@ -31,6 +31,9 @@ endif(APPLE)
 # CMake config
 ################################################################################
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Include our own module dir, so we can use package configs for cmake v3.0.0
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 ################################################################################
 # Neurosuite library config

@@ -4,7 +4,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
     if [ "$QT_VERSION" = "qt5" ]; then
         sudo add-apt-repository -y ppa:beineri/opt-qt55
     fi
-    sudo add-apt-repository -y ppa:george-edison55/precise-backports
+    sudo add-apt-repository -y ppa:smspillaz/cmake-2.8.12
     sudo apt-get update
     sudo apt-get install -y cmake cmake-data
 
