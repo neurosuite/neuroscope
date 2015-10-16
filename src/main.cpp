@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
                        << "  -t, --timeWindow        Initial time window (in miliseconds).\n"
                        << "\n"
                        << "Optional flags:\n"
-            #if WITH_NETWORK
+            #if WITH_CEREBUS
                        << "  -n, --stream            Open network stream instead of file.\n"
             #endif
                        << "  -h, --help              print this help\n";
@@ -93,13 +93,13 @@ int main(int argc, char *argv[])
                  handled = false;
             }
          } else {
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
              if (arg == "-n" || arg == "--stream" || arg == "-stream") {
                  streamMode = true;
              } else {
 #endif
                  handled = false;
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
              }
 #endif
          }
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
                                   screenGain,timeWindow);
 
     neuroscope->show();
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     if (streamMode) {
         neuroscope->openDocumentStream();
     } else {
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
                 neuroscope->openDocumentFile(file);
             }
         }
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     }
 #endif
 

@@ -68,12 +68,12 @@ public:
     */
     void openDocumentFile(const QString& url=QString());
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     /** Open a stream, only one document (file or stream) at the time allowed.
     * Asking for a new one will open a new instance of the application with it.
     */
     void openDocumentStream();
-#endif WITH_NETWORK
+#endif
 
     /** Returns a pointer to the current document connected to the NeuroscopeApp instance and is used by
      * the View class to access the document object's methods
@@ -309,10 +309,10 @@ private Q_SLOTS:
     /**Open a file and load it into the document.*/
     void slotFileOpen();
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     /**Open a network stream as a document. */
     void slotStreamOpen();
-#endif WITH_NETWORK
+#endif
 
     /**Loads one or multiple cluster files.*/
     void slotLoadClusterFiles();
@@ -764,9 +764,9 @@ private:
     QAction* mSaveAsAction;
     QAction* mCloseAction;
     QAction* mOpenAction;
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     QAction* mStreamAction;
-#endif WITH_NETWORK
+#endif
     QAction* mUndo;
     QAction* mRedo;
     QAction* mViewStatusBar;

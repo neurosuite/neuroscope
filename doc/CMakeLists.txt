@@ -1,4 +1,3 @@
-project(neuroscope-doc)
 macro (CREATE_HTML_DOC _docbook _dir )
    get_filename_component(_input ${_docbook} ABSOLUTE)
    get_filename_component(_base ${_input} NAME)
@@ -20,20 +19,12 @@ macro (CREATE_HTML_DOC _docbook _dir )
 
 endmacro (CREATE_HTML_DOC)
 
-
-
-if (KDE4_FOUND)
-   find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html )
-   if(DOCBOOK2HTML_EXECUTABLE)
-      if (REGENERATE_DOC)
-         add_subdirectory(en)
-      endif(REGENERATE_DOC)
-   endif(DOCBOOK2HTML_EXECUTABLE)
-endif(KDE4_FOUND)
+if (REGENERATE_DOC)
+    add_subdirectory(en)
+endif(REGENERATE_DOC)
 
 file(GLOB _html ${CMAKE_CURRENT_SOURCE_DIR}/en/html/*.html)
 install(FILES ${_html} DESTINATION ${KLUSTERS_DOC_PREFIX})
 
 file(GLOB _image ${CMAKE_CURRENT_SOURCE_DIR}/en/Images/*.png)
 install(FILES ${_image} DESTINATION ${KLUSTERS_DOC_PREFIX}/Images)
-

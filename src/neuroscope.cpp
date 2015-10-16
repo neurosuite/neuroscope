@@ -131,10 +131,10 @@ void NeuroscopeApp::initActions()
     mOpenAction->setIcon(QPixmap(":/shared-icons/document-open"));
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     mStreamAction = fileMenu->addAction(tr("Open network stream..."));
     connect(mStreamAction, SIGNAL(triggered()), this, SLOT(slotStreamOpen()));
-#endif WITH_NETWORK
+#endif
 
     mFileOpenRecent = new QRecentFileAction(this);
     QSettings settings;
@@ -1057,7 +1057,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     slotStatusMsg(tr("Ready."));
 }
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
 void NeuroscopeApp::openDocumentStream()
 {
     slotStatusMsg(tr("Opening stream..."));
@@ -1091,7 +1091,7 @@ void NeuroscopeApp::openDocumentStream()
     }
     slotStatusMsg(tr("Ready."));
 }
-#endif WITH_NETWORK
+#endif
 
 NeuroscopeDoc* NeuroscopeApp::getDocument() const
 {
@@ -1298,7 +1298,7 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Ready."));
 }
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
 void NeuroscopeApp::slotStreamOpen()
 {
     slotStatusMsg(tr("Opening network stream..."));
@@ -1307,7 +1307,7 @@ void NeuroscopeApp::slotStreamOpen()
 
     slotStatusMsg(tr("Ready."));
 }
-#endif WITH_NETWORK
+#endif
 
 void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));

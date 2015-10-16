@@ -1,1 +1,0 @@
-project(neuroscope-po)

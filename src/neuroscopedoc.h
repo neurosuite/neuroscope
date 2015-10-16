@@ -114,7 +114,7 @@ public:
     */
     int openDocument(const QString& url);
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
     /** Open network stream.
     * @return true on sucess, false otherwise.
     */

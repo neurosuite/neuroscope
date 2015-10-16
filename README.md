@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/neurosuite/neuroscope.svg?branch=master)](https://travis-ci.org/neurosuite/neuroscope)
 
-NeuroScope
+Neuroscope
 ==========
 
 NeuroScope is an advanced viewer for electrophysiological and behavioral data (with limited editing capabilities): it can display local field potentials (EEG), neuronal spikes, behavioral events, and the position of the animal in the environment.

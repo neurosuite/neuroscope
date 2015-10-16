@@ -50,7 +50,7 @@
 #include "imagecreator.h"
 #include "utilities.h"
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
 #include "cerebustraceprovider.h"
 #endif
 
@@ -580,7 +580,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     return OK;
 }
 
-#ifdef WITH_NETWORK
+#ifdef WITH_CEREBUS
 bool NeuroscopeDoc::openStream() {
     // Let user choose sampling rate
     QStringList items;
