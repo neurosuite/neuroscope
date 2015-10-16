@@ -18,6 +18,7 @@
 
 // Include Qt Library files
 #include <QObject>
+#include <QMutex>
 #include <QtDebug>
 
 // Include cerebus sdk

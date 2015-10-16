@@ -62,7 +62,6 @@ bool CerebusTracesProvider::init() {
 	}
 
 	if (this->nbChannels == 0) {
-		qDebug() << "No channels in sampling group.";
 		this->lastResult = CBSDKRESULT_EMPTYSAMPLINGGROUP;
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
