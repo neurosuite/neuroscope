@@ -102,7 +102,7 @@ endif()
 if(WIN32)
     install(TARGETS neuroscope DESTINATION bin)
 
-    include(DelployNeurosuite)
+    include(DeployNeurosuite)
     install_neurosuite_dependencies(
         "bin/neuroscope.exe"
     )
@@ -123,7 +123,7 @@ elseif(APPBUNDLE)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${MACOSX_BUNDLE_ICON} ${MACOSX_BUNDLE_RESOURCES}
     )
 
-    include(DelployNeurosuite)
+    include(DeployNeurosuite)
     install_neurosuite_dependencies(
         "neuroscope.app"
     )
