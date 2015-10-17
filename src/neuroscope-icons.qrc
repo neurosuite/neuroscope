@@ -4,6 +4,7 @@
         <file>icons/anatomy.png</file>
         <file>icons/backCluster.png</file>
         <file>icons/backEvent.png</file>
+        <file>icons/cerebus.png</file>
         <file>icons/clusters.png</file>
         <file>icons/new_group.png</file>
         <file>icons/remove.png</file>
@@ -25,5 +26,8 @@
         <file>icons/trash.png</file>
         <file>icons/zoom_tool.png</file>
         <file>icons/measure_tool.png</file>
+        <file>icons/media-playback-start.png</file>
+        <file>icons/media-playback-pause.png</file>
+        <file>icons/media-seek-forward.png</file>
     </qresource>
 </RCC>

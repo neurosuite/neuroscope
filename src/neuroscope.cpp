@@ -133,6 +133,7 @@ void NeuroscopeApp::initActions()
 
 #ifdef WITH_CEREBUS
     mStreamAction = fileMenu->addAction(tr("Open network stream..."));
+    mStreamAction->setIcon(QPixmap(":/icons/cerebus"));
     connect(mStreamAction, SIGNAL(triggered()), this, SLOT(slotStreamOpen()));
 #endif
 
@@ -485,10 +486,11 @@ void NeuroscopeApp::initActions()
     traceMenu->addSeparator();
     mPage = traceMenu->addAction(tr("Auto-advance to end of recording"));
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
+    mPage->setIcon(QPixmap(":/icons/media-seek-forward"));
     mPage->setCheckable(true);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 
-	 mAccelerate = traceMenu->addAction(tr("Accelerate"));
+	mAccelerate = traceMenu->addAction(tr("Accelerate"));
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
@@ -608,10 +610,15 @@ void NeuroscopeApp::initActions()
     mMainToolBar = new QToolBar;
     mMainToolBar->setObjectName("maintoolbar");
     mMainToolBar->addAction(mOpenAction);
+#ifdef WITH_CEREBUS
+    mMainToolBar->addAction(mStreamAction);
+#endif
     mMainToolBar->addAction(mSaveAction);
     mMainToolBar->addAction(mPrintAction);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(mUndo);
+    mMainToolBar->addAction(mPage);
+    mMainToolBar->addSeparator();
     mMainToolBar->addAction(mRedo);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(editMode);
