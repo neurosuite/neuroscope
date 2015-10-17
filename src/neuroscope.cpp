@@ -133,7 +133,7 @@ void NeuroscopeApp::initActions()
 
 #ifdef WITH_CEREBUS
     mStreamAction = fileMenu->addAction(tr("Open network stream..."));
-    mStreamAction->setIcon(QPixmap(":/icons/cerebus"));
+    mStreamAction->setIcon(QPixmap(":/icons/esd"));
     connect(mStreamAction, SIGNAL(triggered()), this, SLOT(slotStreamOpen()));
 #endif
 
