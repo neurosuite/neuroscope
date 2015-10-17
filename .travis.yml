@@ -25,4 +25,4 @@ deploy:
   file: "${RELEASE_PKG_FILE}"
   on:
     tags: true
-    condition: "-z $RELEASE_PKG_FILE"
+    condition: "-n $RELEASE_PKG_FILE"
