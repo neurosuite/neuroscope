@@ -31,7 +31,7 @@ build_script:
 test: off
 
 artifacts:
-  - path: "%APPVEYOR_BUILD_FOLDER%/build/neuroscope-*.exe"
+  - path: build\neuroscope-*.exe
     name: NSIS Installer
 
 deploy:
