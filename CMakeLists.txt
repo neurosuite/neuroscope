@@ -28,17 +28,25 @@ if(APPLE)
 endif(APPLE)
 
 ################################################################################
-# CMake config
+# CMake build environment
 ################################################################################
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Include our own module dir, so we can use package configs for cmake v3.0.0
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-################################################################################
-# Neurosuite library config
-################################################################################
-find_package(neurosuite 2.0.0 REQUIRED)
+if (MSVC)
+    # Qt disables the native wchar_t type, do it too to avoid linking issues
+    #set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
+    add_definitions(-Dfseeko64=_fseeki64)
+    add_definitions(-DNOMINMAX)
+endif()
+
+if(APPLE)
+    # Adjust code on OS X since file operation are always 64bit there.
+    add_definitions(-Dfseeko64=fseeko)
+    add_definitions(-Dftello64=ftello)
+endif()
 
 ################################################################################
 # QT Configurations
@@ -57,16 +65,9 @@ else()
 endif()
 
 ################################################################################
-# Documentation build config
+# Neurosuite library config
 ################################################################################
-if(REGENERATE_DOC)
-    find_package(KDE4 REQUIRED)
-    find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html)
-    if(NOT DOCBOOK2HTML_EXECUTABLE)
-        message(FATAL_ERROR
-                "Could not find docbook2html for documentation generation.")
-    endif(DOCBOOK2HTML_EXECUTABLE)
-endif()
+find_package(neurosuite 2.0.0 REQUIRED)
 
 ################################################################################
 # Blackrock Cerebus SDK config
@@ -77,42 +78,28 @@ if(WITH_CEREBUS)
 endif(WITH_CEREBUS)
 
 ################################################################################
-# OS X specific configs
+# .app bundle specific settings
 ################################################################################
 if(APPBUNDLE)
-    MESSAGE(STATUS "Creating .app bundle.")
-endif()
-
-if(APPLE)
-    # Adjust code on OS X since file operation are always 64bit there.
-    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dfseeko64=fseeko")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dfseeko64=fseeko")
-
-    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Dftello64=ftello")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dftello64=ftello")
-
-    # Set bundle parameters
-    if(APPBUNDLE)
-        set(CMAKE_INSTALL_PREFIX "/Applications")
-
-        set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-        set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_NAME} ${PROJECT_VERSION}")
-        set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-        set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
-        set(MACOSX_BUNDLE_ICON_FILE "neuroscope.icns")
-        set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.neurosuite.neuroscope")
-        set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
-    endif()
+    set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_NAME} ${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_ICON_FILE "neuroscope.icns")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.neurosuite.neuroscope")
 endif()
 
 ################################################################################
-# Microsoft Windows specific config
+# Documentation build config
 ################################################################################
-if (MSVC)
-    # Qt disables the native wchar_t type, do it too to avoid linking issues
-    #set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
-    add_definitions(/Dfseeko64=_fseeki64)
-    add_definitions(/DNOMINMAX)
+if(REGENERATE_DOC)
+   find_package(KDE4 REQUIRED)
+   find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html)
+   if(NOT DOCBOOK2HTML_EXECUTABLE)
+       message(FATAL_ERROR
+               "Could not find docbook2html for documentation generation.")
+   endif(DOCBOOK2HTML_EXECUTABLE)
 endif()
 
 ################################################################################
