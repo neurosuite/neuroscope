@@ -24,7 +24,7 @@ install:
 
 build_script:
     - mkdir build
-    - cb build
+    - cd build
     - cmake -D WITH_CEREBUS=ON -G "%CMAKE_GENERATOR%" ..
     - cmake --build . --target PACKAGE
 
