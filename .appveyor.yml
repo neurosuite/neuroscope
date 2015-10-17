@@ -1,34 +1,42 @@
 version: v2.0.1-{branch}-{build}
 
-os: MinGW
-
 environment:
-    NSIS_ROOT: C:\Program Files (x86)\NSIS
-    QTDIR: C:\Qt\5.4\msvc2013_64_opengl
+  NSIS_ROOT: C:\Program Files (x86)\NSIS
+  matrix:
+  - QTDIR: C:\Qt\5.5\msvc2013_64
     CMAKE_GENERATOR: Visual Studio 12 Win64
+  - QTDIR: C:\Qt\5.5\msvc2013
+    CMAKE_GENERATOR: Visual Studio 12
 
 install:
     - choco install nsis -pre
     - set PATH=%PATH%;%QTDIR%/bin;%NSIS_ROOT%
     - git clone https://github.com/neurosuite/libneurosuite.git
     - cd libneurosuite
-    - cmake -DENFORCE_QT4_BUILD=OFF -G "%CMAKE_GENERATOR%" .
+    - cmake -G "%CMAKE_GENERATOR%" .
+    - cmake --build . --target INSTALL
+    - cd ..
+    - git clone https://github.com/neurosuite/libcbsdk.git
+    - cd libcbsdk
+    - cmake -G "%CMAKE_GENERATOR%" .
     - cmake --build . --target INSTALL
     - cd ..
 
 build_script:
-    - cmake -DENFORCE_QT4_BUILD=OFF -DLibKlustersShared_DIR="C:/Program Files/libklustersshared/lib/cmake/LibKlustersShared/" -G "%CMAKE_GENERATOR%" .
+    - mkdir build
+    - cb build
+    - cmake -D WITH_CEREBUS=ON -G "%CMAKE_GENERATOR%" ..
     - cmake --build . --target PACKAGE
 
 test: off
 
 artifacts:
-  - path: neuroscope-*-win64.exe
+  - path: "%APPVEYOR_BUILD_FOLDER%/build/neuroscope-*.exe"
     name: NSIS Installer
 
 deploy:
-- provider: GitHub
-  auth_token:
-    secure: EXhNFaenjWWXzb3LfmmZ+sEiDUmcG9ct9pYJkiL3Yd0S+HoiXJgrxR3rwtqmVcQ5
-  on:
-    appveyor_repo_tag: true
+  - provider: GitHub
+    auth_token:
+      secure: L3YxjzNdS3PGjngFslfEMtvuWDL5Jf5ZmMGvt2mjT8xGN9f2U/k2SvQyZo78CB9F
+    on:
+      appveyor_repo_tag: true
