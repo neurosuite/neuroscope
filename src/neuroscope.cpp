@@ -1091,6 +1091,9 @@ void NeuroscopeApp::openDocumentStream()
         //update the spike and event browsing status
         updateBrowsingStatus();
 
+        // Start auto advance
+        page();
+
         setWindowTitle("Network Stream");
         QApplication::restoreOverrideCursor();
     } else {
