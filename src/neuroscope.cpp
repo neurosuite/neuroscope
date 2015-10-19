@@ -1081,8 +1081,6 @@ void NeuroscopeApp::openDocumentStream()
 
         if(!doc->openStream()) {
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical (this, tr("Error!"), tr("Could not open network stream."));
-
             doc->closeDocument();
             resetState();
             return;
