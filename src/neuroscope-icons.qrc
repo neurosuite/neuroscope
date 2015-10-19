@@ -29,5 +29,7 @@
         <file>icons/media-playback-start.png</file>
         <file>icons/media-playback-pause.png</file>
         <file>icons/media-seek-forward.png</file>
+        <file>icons/media-plus.png</file>
+        <file>icons/media-minus.png</file>
     </qresource>
 </RCC>

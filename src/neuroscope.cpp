@@ -492,10 +492,12 @@ void NeuroscopeApp::initActions()
 
 	mAccelerate = traceMenu->addAction(tr("Accelerate"));
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
+    mAccelerate->setIcon(QPixmap(":/icons/media-plus"));
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
     mDecelerate = traceMenu->addAction(tr("Decelerate"));
     mDecelerate->setShortcut(Qt::CTRL + Qt::Key_Down);
+    mDecelerate->setIcon(QPixmap(":/icons/media-minus"));
     connect(mDecelerate,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
@@ -617,9 +619,11 @@ void NeuroscopeApp::initActions()
     mMainToolBar->addAction(mPrintAction);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(mUndo);
-    mMainToolBar->addAction(mPage);
-    mMainToolBar->addSeparator();
     mMainToolBar->addAction(mRedo);
+    mMainToolBar->addSeparator();
+    mMainToolBar->addAction(mDecelerate);
+    mMainToolBar->addAction(mPage);
+    mMainToolBar->addAction(mAccelerate);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(editMode);
     addToolBar(mMainToolBar);
