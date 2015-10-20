@@ -10,25 +10,27 @@ const unsigned int CerebusTracesProvider::CEREBUS_INSTANCE = 0;
 const unsigned int CerebusTracesProvider::BUFFER_SIZE = 10;
 const unsigned int CerebusTracesProvider::SAMPLING_RATES[] = { 0, 500, 1000, 2000, 10000, 30000 };
 
-CerebusTracesProvider::CerebusTracesProvider(SamplingGroup sampling_group) :
+CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
 		TracesProvider("", -1, 0, 0, 0, 0, 0),
-		initialized(false),
-		position(0),
-		scales(NULL),
-		channels(NULL),
-		data(NULL),
-		group(sampling_group) {
+		mGroup(group),
+		mInitialized(false),
+		mScales(NULL),
+		mChannels(NULL),
+        mLiveData(NULL),
+        mLivePosition(NULL),
+        mViewData(NULL),
+        mViewPosition(NULL) {
 
 	// The sampling rate is hardwired to the sampling group
 	this->samplingRate = SAMPLING_RATES[group];
-	this->capacity = this->samplingRate * BUFFER_SIZE;
+	mCapacity = this->samplingRate * BUFFER_SIZE;
 
 	// The buffer always has the same size
 	this->length = 1000 * BUFFER_SIZE;
 }
 
 CerebusTracesProvider::~CerebusTracesProvider() {
-	if (this->initialized) {
+	if (mInitialized) {
 		// Disable callbacks first
 		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS);
 		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO);
@@ -37,125 +39,139 @@ CerebusTracesProvider::~CerebusTracesProvider() {
 		cbSdkClose(CEREBUS_INSTANCE);
 
 		// Free uninitalize internal structures
-		delete[] this->scales;
-		delete[] this->channels;
-		delete[] this->data;
+		delete[] mScales;
+		delete[] mChannels;
+        if(mViewData != mLiveData) {
+            // We are in paused mode
+            delete[] mViewData;
+            delete mViewPosition;
+        }
+        delete[] mLiveData;
+        delete mLivePosition;
 	}
 }
 
 bool CerebusTracesProvider::init() {
-	if (this->initialized)
+	if (mInitialized)
 		return true;
 
 	// Open connection to NSP
-	this->lastResult = cbSdkOpen(CEREBUS_INSTANCE);
+	mLastResult = cbSdkOpen(CEREBUS_INSTANCE);
 
-	if (this->lastResult != CBSDKRESULT_SUCCESS) 
+	if (mLastResult != CBSDKRESULT_SUCCESS)
 		return false;
 
 	// Get number of channels in sampling group
-	this->lastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, this->group, (UINT32 *) &this->nbChannels, NULL);
+	mLastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, mGroup, (UINT32 *) &this->nbChannels, NULL);
 
-	if (this->lastResult != CBSDKRESULT_SUCCESS) {
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
 	if (this->nbChannels == 0) {
-		this->lastResult = CBSDKRESULT_EMPTYSAMPLINGGROUP;
+		mLastResult = CBSDKRESULT_EMPTYSAMPLINGGROUP;
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
 	// Get the list of channels in this sample group
-	this->channels = new UINT32[this->nbChannels];
-	this->lastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, this->group, NULL, this->channels);
+	mChannels = new UINT32[this->nbChannels];
+	mLastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, mGroup, NULL, mChannels);
 
-	if (this->lastResult != CBSDKRESULT_SUCCESS) {
-		delete[] this->channels;
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
+		delete[] mChannels;
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
-	if (!this->retrieveScaling()) {
-		delete[] this->channels;
+	if (!retrieveScaling()) {
+		delete[] mChannels;
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
-	// Allocate sample buffer
-	this->data = new INT16[this->nbChannels * this->capacity];
-	memset(this->data, 0, this->nbChannels * this->capacity * sizeof(INT16));
+	// Allocate live sample buffer
+	mLiveData = new INT16[this->nbChannels * mCapacity];
+	memset(mLiveData, 0, this->nbChannels * mCapacity * sizeof(INT16));
+    mLivePosition = new size_t(0);
+
+    // Link view buffer to live sample buffer
+    mViewData = mLiveData;
+    mViewPosition = mLivePosition;
 
 	// Register data callback
-	this->mutex.lock();
-	this->lastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS, dataCallback, this);
+	mMutex.lock();
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS, dataCallback, this);
 
-	if (this->lastResult != CBSDKRESULT_SUCCESS) {
-		delete[] this->channels;
-		delete[] this->scales;
-		this->scales = NULL;
-		delete[] this->data;
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
+		delete[] mChannels;
+		delete[] mScales;
+		mScales = NULL;
+		delete[] mLiveData;
+        delete mLivePosition;
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
 	// Register config callback
-	this->lastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO, configCallback, this);
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO, configCallback, this);
 
-	if (this->lastResult != CBSDKRESULT_SUCCESS) {
-		delete[] this->channels;
-		delete[] this->scales;
-		this->scales = NULL;
-		delete[] this->data;
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
+		delete[] mChannels;
+		delete[] mScales;
+		mScales = NULL;
+		delete[] mLiveData;
+        delete mLivePosition;
 		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS);
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
 
-	this->initialized = true;
-	this->mutex.unlock();
+	mInitialized = true;
+	mMutex.unlock();
 	return true;
 }
 
 void CerebusTracesProvider::processData(const cbPKT_GROUP* package) {
 	// Ignore package if for different sampling group
-	if (package->type != this->group)
+	if (package->type != mGroup)
 		return;
 
-	this->mutex.lock();
+	mMutex.lock();
 	// Copy sampled to history
-	memcpy(this->data + (this->position * this->nbChannels), package->data, this->nbChannels * sizeof(INT16));
+	memcpy(mLiveData + ((*mLivePosition) * this->nbChannels), package->data, this->nbChannels * sizeof(INT16));
 
 	// Adjust position, wrap around if necessary.
-	this->position++;
-	if (this->position == this->capacity) this->position = 0;
-	this->mutex.unlock();
+	(*mLivePosition)++;
+	if ((*mLivePosition) == mCapacity) (*mLivePosition) = 0;
+	mMutex.unlock();
 }
 
 void CerebusTracesProvider::processConfig(const cbPKT_GROUPINFO* package) {
 	// Ignore package if for different sampling group or channel count did not change
-	if (package->group != this->group || (package->dlen - 8) == this->nbChannels)
+	if (package->group != mGroup || (package->dlen - 8) == this->nbChannels)
 		return;
 
-	mutex.lock();
+	mMutex.lock();
 	// Update channel count
 	this->nbChannels = (package->dlen - 8);
 
 	// Update channel list
-	delete[] this->channels;
-	this->channels = new UINT32[this->nbChannels];
-	memcpy(this->channels, package->list, this->nbChannels * sizeof(UINT32));
+	delete[] mChannels;
+	mChannels = new UINT32[this->nbChannels];
+	memcpy(mChannels, package->list, this->nbChannels * sizeof(UINT32));
 
 	// Update scaling
-	this->retrieveScaling();
+	retrieveScaling();
 
 	// Update buffer size
-	delete[] this->data;
-	this->data = new INT16[this->nbChannels * this->capacity];
-	memset(this->data, 0, this->nbChannels * this->capacity * sizeof(INT16));
+	delete[] mLiveData;
+	mLiveData = new INT16[this->nbChannels * mCapacity];
+	memset(mLiveData, 0, this->nbChannels * mCapacity * sizeof(INT16));
+    (*mLivePosition) = 0;
 
-	mutex.unlock();
+	mMutex.unlock();
 }
 
 void CerebusTracesProvider::dataCallback(UINT32 /*instance*/, const cbSdkPktType type, const void* data, void* object) {
@@ -194,7 +210,7 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 	Array<dataType> result;
 
 	// Abort if not initalized
-	if (!this->initialized) {
+	if (!mInitialized) {
 		emit dataReady(result, initiator);
 		return;
 	}
@@ -214,14 +230,14 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 	result.setSize(lengthInRecordingUnits, this->nbChannels);
 
 	// Get data from buffer.
-	mutex.lock();
+	mMutex.lock();
 	for (int channel = 0; channel < this->nbChannels; channel++) {
 		// Compute start in relation to current ringbuffer position
-		size_t offset = startInRecordingUnits + this->position;
+		size_t offset = startInRecordingUnits + (*mViewPosition);
 
 		// Determine unit data is saved in
 		int unit_correction = 0;
-		char* unit_string = this->scales[channel].anaunit;
+		char* unit_string = mScales[channel].anaunit;
 		if (!strncmp(unit_string, "uV", 16)) {
 			unit_correction = 1;
 		}
@@ -234,10 +250,10 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 		}
 
 		// Get all the values needed to translate measurement unit to uV
-		int min_digital = this->scales[channel].digmin;
-		int range_digital = this->scales[channel].digmax - min_digital;
-		int min_analog = this->scales[channel].anamin;
-		int range_analog = this->scales[channel].anamax - min_analog;
+		int min_digital = mScales[channel].digmin;
+		int range_digital = mScales[channel].digmax - min_digital;
+		int min_analog = mScales[channel].anamin;
+		int range_analog = mScales[channel].anamax - min_analog;
 
 		// TODO: Add gain (anagain) to calculation, as soon as blackrock documents how it is supposed to be used.
 
@@ -245,16 +261,16 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 		for (int i = 0; i < lengthInRecordingUnits; i++) {
 			size_t absolute_position = offset + i;
 			// Wrap around in case we reach end of buffer
-			if (absolute_position >= this->capacity) {
-				absolute_position -= this->capacity;
-				offset -= this->capacity;
+			if (absolute_position >= mCapacity) {
+				absolute_position -= mCapacity;
+				offset -= mCapacity;
 			}
 			// Scale data using channel scaling
 			size_t index = (absolute_position * this->nbChannels) + channel;
-			result(i + 1, channel + 1) = static_cast<dataType>((((static_cast<double>(this->data[index]) - min_digital) / range_digital) * range_analog + min_analog) * unit_correction);
+			result(i + 1, channel + 1) = static_cast<dataType>((((static_cast<double>(mViewData[index]) - min_digital) / range_digital) * range_analog + min_analog) * unit_correction);
 		}
 	}
-	mutex.unlock();
+	mMutex.unlock();
 
 	// Return data to initiator
 	emit dataReady(result, initiator);
@@ -265,7 +281,7 @@ void CerebusTracesProvider::computeRecordingLength(){
 }
 
 std::string CerebusTracesProvider::getLastErrorMessage() {
-	switch (this->lastResult) {
+	switch (mLastResult) {
 	case CBSDKRESULT_WARNCONVERT:
 		return "If file conversion is needed";
 	case CBSDKRESULT_WARNCLOSED:
@@ -342,27 +358,27 @@ std::string CerebusTracesProvider::getLastErrorMessage() {
 
 bool CerebusTracesProvider::retrieveScaling() {
 	// Delete old scaling data if there is any
-	if (this->scales) {
-		delete[] this->scales;
-		this->scales = NULL;
+	if (mScales) {
+		delete[] mScales;
+		mScales = NULL;
 	}
 
 	// Get scaling for each channel of group
-	this->scales = new cbSCALING[this->nbChannels];
+	mScales = new cbSCALING[this->nbChannels];
 
 	cbPKT_CHANINFO info;
 	for (unsigned int i = 0; i < this->nbChannels; i++)
 	{
-		this->lastResult = cbSdkGetChannelConfig(CEREBUS_INSTANCE, this->channels[i], &info);
+		mLastResult = cbSdkGetChannelConfig(CEREBUS_INSTANCE, mChannels[i], &info);
 
-		if (this->lastResult != CBSDKRESULT_SUCCESS) {
-			delete[] this->scales;
-			this->scales = NULL;
+		if (mLastResult != CBSDKRESULT_SUCCESS) {
+			delete[] mScales;
+			mScales = NULL;
 			return false;
 		}
 
 		// Copy only physcal input scaling for now
-		this->scales[i] = info.physcalin;
+		mScales[i] = info.physcalin;
 	}
 	return true;
 }

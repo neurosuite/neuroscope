@@ -141,26 +141,28 @@ private:
     static const unsigned int SAMPLING_RATES[6];
 
     // True if connection, buffers and callback were initialized
-    bool initialized;
+    bool mInitialized;
     // Sampling group to listen to
-    SamplingGroup group;
+    SamplingGroup mGroup;
     // List of scalings for each channel
-    cbSCALING* scales;
+    cbSCALING* mScales;
     // List of NSP channel numbers we are listing to
-    UINT32* channels;
+    UINT32* mChannels;
 
     // Capacity of buffer (see data and paused_data)
-    size_t capacity;
+    size_t mCapacity;
 
     // Return value of last CBSDK library call
-    int lastResult;
+    int mLastResult;
 
     // Data storage mutex
-    QMutex mutex;
+    QMutex mMutex;
 
-    // Live data Storage
-    INT16* data;
-    size_t position;
+    // Data storage
+    INT16* mLiveData;
+    size_t* mLivePosition;
+    INT16* mViewData;
+    size_t* mViewPosition;
 
     // Update channel scaling by querying NSP
     bool retrieveScaling();
