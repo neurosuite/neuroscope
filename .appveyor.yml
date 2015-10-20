@@ -26,7 +26,7 @@ build_script:
     - mkdir build
     - cd build
     - cmake -D WITH_CEREBUS=ON -G "%CMAKE_GENERATOR%" ..
-    - cmake --build . --target PACKAGE
+    - cmake --build . --target PACKAGE --config Release
 
 test: off
 
