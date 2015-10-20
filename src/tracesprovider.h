@@ -136,6 +136,17 @@ public:
     /**Returns the total number of samples in recorded contained in the file identified by fileUrl.*/
     long getTotalNbSamples();
 
+public Q_SLOTS:
+    /** Called when paging is started.
+     * Usefull for trace providers that have live data sources.
+     */
+    virtual void slotPagingStarted() {};
+
+    /** Called when paging is stopped.
+    * Usefull for trace providers that have live data sources.
+    */
+    virtual void slotPagingStopped() {};
+
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param data array of data in uV (number of channels X number of samples).

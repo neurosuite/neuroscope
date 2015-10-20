@@ -72,6 +72,12 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     connect(&view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
     connect(&view,SIGNAL(eventsAvailable(QHash<QString,EventData*>&,QMap<QString,QList<int> >&,QHash<QString,ItemColors*>&,QObject*,double)),this, SLOT(slotEventsAvailable(QHash<QString,EventData*>&,QMap<QString,QList<int> >&,QHash<QString,ItemColors*>&,QObject*,double)));
 
+    // Inform trace provider about paging changes
+    connect(this, SIGNAL(pagingStarted()),
+            &tracesProvider, SLOT(slotPagingStarted()));
+    connect(this, SIGNAL(pagingStopped()),
+            &tracesProvider, SLOT(slotPagingStopped()));
+
     isInit = false;
     /// Added by M.Zugaro to enable automatic forward paging
     timer = new QTimer(this);

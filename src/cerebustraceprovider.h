@@ -124,6 +124,19 @@ public:
         qDebug() << "Cerebus NSP used. Ignoring setAmplification(" << value << ")";
     }
 
+    /** Called when paging is started.
+     *  Recouples the buffer that is updated with the one that is
+     *  viewed/returened.
+     *  This essentially unpauses the signal being played and shows the
+     *  live signal again.
+     */
+    virtual void slotPagingStarted();
+
+    /** Called when paging is stopped.
+    * Decouples the buffer that is viewed/returned from the one updated.
+    * This essentialy pauses the signal that is being displayed.
+    */
+    virtual void slotPagingStopped();
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.

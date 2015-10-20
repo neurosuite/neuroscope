@@ -280,6 +280,38 @@ void CerebusTracesProvider::computeRecordingLength(){
 	// Do not do anything here, the buffer size is always the same.
 }
 
+
+void CerebusTracesProvider::slotPagingStarted() {
+    // We are already showing live data.
+    if(mLiveData == mViewData)
+        return;
+
+    mMutex.lock();
+
+    // Use the same buffer for new and displayed samples
+    delete[] mViewData;
+    delete mViewPosition;
+    mViewData = mLiveData;
+    mViewPosition = mLivePosition;
+
+	mMutex.unlock();
+}
+
+void CerebusTracesProvider::slotPagingStopped() {
+    // Check if we are already paused.
+    if(mLiveData != mViewData)
+        return;
+
+    mMutex.lock();
+
+    // Write all new data to a new empty buffer.
+    mLiveData = new INT16[this->nbChannels * mCapacity];
+    memset(mLiveData, 0, this->nbChannels * mCapacity * sizeof(INT16));
+    mLivePosition = new size_t(0);
+
+	mMutex.unlock();
+}
+
 std::string CerebusTracesProvider::getLastErrorMessage() {
 	switch (mLastResult) {
 	case CBSDKRESULT_WARNCONVERT:
