@@ -99,7 +99,10 @@ public:
 
     /// Added by M.Zugaro to enable automatic forward paging
     qlonglong recordingLength() const { return length; }
-    void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
+    void updateRecordingLength() {
+        tracesProvider.updateRecordingLength();
+        length = tracesProvider.recordingLength();
+    }
 
     /**Enum to be use as a Mode.
   * <ul>

@@ -203,18 +203,42 @@ public:
 	 /// Added by M.Zugaro to enable automatic forward paging
 	 bool isStill() { return ( !activeView() || activeView()->isStill() ); }
 
-private Q_SLOTS:
-
-    /// Added by M.Zugaro to enable automatic forward paging
-    void neuroscopeViewStopped() { slotStateChanged("pageOffState"); }
-
 public Q_SLOTS:
 
-    /// Added by M.Zugaro to enable automatic forward paging
-    void page() { if ( isStill() ) slotStateChanged("pageOnState"); else slotStateChanged("pageOffState"); activeView()->page(); }
-    void stop() { if( activeView() ) { activeView()->stop(); slotStateChanged("pageOffState"); } }
-    void accelerate() {	if( activeView()) activeView()->accelerate(); }
-    void decelerate() {	if( activeView()) activeView()->decelerate(); }
+    /** Toggle paging (a.k.a. auto advance to end of recording) */
+    void page() {
+        if(activeView()) {
+            if(activeView()->isStill())
+                activeView()->page();
+            else
+                activeView()->stop();
+        } else {
+            // No view, no paging
+            slotStateChanged("pageOffState");
+        }
+    }
+
+    /** Stop paging */
+    void stop() {
+        if(activeView() ) {
+            activeView()->stop();
+        } else {
+            // No view, no paging
+            slotStateChanged("pageOffState");
+        }
+    }
+
+    /** Increase paging speed */
+    void accelerate() {
+        if(activeView())
+            activeView()->accelerate();
+    }
+
+    /** Decrease paging speed */
+    void decelerate() {
+        if(activeView())
+            activeView()->decelerate();
+    }
 
     /**Called when an event has been modified.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -677,6 +701,10 @@ private Q_SLOTS:
     void slotHanbook();
 
     void slotSaveRecentFiles();
+
+    /// Added by M.Zugaro to enable automatic forward paging
+    void neuroscopeViewStarted() { slotStateChanged("pageOnState"); }
+    void neuroscopeViewStopped() { slotStateChanged("pageOffState"); }
 
 private:
     void readSettings();

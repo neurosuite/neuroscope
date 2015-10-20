@@ -904,9 +904,12 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
     connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
     connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
     connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
-	 
-	 /// Added by M.Zugaro to enable automatic forward paging
-	 connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+	 // Listen to changes in automatic forward paging
+	 connect(view, SIGNAL(pagingStarted()),
+             this, SLOT(neuroscopeViewStarted()));
+	 connect(view, SIGNAL(pagingStopped()),
+             this, SLOT(neuroscopeViewStopped()));
 
     //Keep track of the number of displays
     displayCount ++;
@@ -2607,8 +2610,12 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
         connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
         connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
-		  /// Added by M.Zugaro to enable automatic forward paging
-		  connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+        // Listen to changes in automatic forward paging
+        connect(view, SIGNAL(pagingStarted()),
+                this, SLOT(neuroscopeViewStarted()));
+        connect(view, SIGNAL(pagingStopped()),
+                this, SLOT(neuroscopeViewStopped()));
 
         view->installEventFilter(this);
 

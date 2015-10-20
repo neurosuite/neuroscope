@@ -607,13 +607,19 @@ public:
 
 private Q_SLOTS:
 
-	 /// Added by M.Zugaro to enable automatic forward paging
-	 void traceWidgetStopped() { emit stopped(); }
+	 /** Forward paging started event info */
+	 void traceWidgetStarted() { emit pagingStarted(); }
+
+     /** Forward paging stopped event info */
+	 void traceWidgetStopped() { emit pagingStopped(); }
 
 Q_SIGNALS:
 
-	 /// Added by M.Zugaro to enable automatic forward paging
-    void stopped();
+    /** Emitted when paging in started */
+    void pagingStarted();
+
+    /** Emitted when paging in stopped */
+    void pagingStopped();
 
 public Q_SLOTS:
 

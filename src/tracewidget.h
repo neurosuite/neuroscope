@@ -117,9 +117,12 @@ public:
     bool isStill();
 
 Q_SIGNALS:
-	
-    /// Added by M.Zugaro to enable automatic forward paging
-    void stopped();
+
+    /** Emitted when paging in started */
+    void pagingStarted();
+
+    /** Emitted when paging in stopped */
+    void pagingStopped();
 
 public Q_SLOTS:
 

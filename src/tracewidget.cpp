@@ -85,27 +85,30 @@ TraceWidget::~TraceWidget(){
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::page()
 {
-    if ( timer->isActive() )
-        timer->stop();
-    else
-	 {
-        timer->start(pageTime);
-		  statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
-	 }
+    if(timer->isActive()) {
+		qDebug() << "Paging already running!";
+        return;
+    }
+
+   timer->start(pageTime);
+   emit pagingStarted();
+   statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
 }
 
 bool TraceWidget::isStill()
 {
-	return ! ( timer != NULL && timer->isActive() );
+	return timer == NULL || !timer->isActive();
 }
 
 void TraceWidget::stop()
 {
-	if ( timer->isActive() )
-	{
-			timer->stop();
-			emit stopped();
-	}
+	if (!timer->isActive()) {
+		qDebug() << "Paging is not running!";
+        return;
+    }
+
+    timer->stop();
+	emit pagingStopped();
 }
 
 void TraceWidget::accelerate()
