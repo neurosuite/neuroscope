@@ -10,19 +10,21 @@ env:
   - QT_VERSION=qt4
   - QT_VERSION=qt5
 
-install: source .travis/install.sh
+install:
+  - source .travis/install.sh
+  - source .travis/deploy.sh
 
 script: ./.travis/script.sh
-
-before_deploy: source .travis/deploy.sh
 
 deploy:
   provider: releases
   api_key:
     secure: LdMU6bfPozM1sD+k/GVcTbmh+tlDuLzyQKbS38+3KOYhoVFVlOA2d1vymDI8BmQ66xSYa6yGBZ3Zu3MbV+aiukSNMp+QnS4q0mySxq7iUNdhEAI9a9GcljYvxo/Oj3BeJpksX6JgIhZK06wnafb1E6jdh6i1d+DldMK36PjMeVg=
-  file_glob: true
   skip_cleanup: true
-  file: "${RELEASE_PKG_FILE}"
+  file_glob: true
+  file:
+    - build/neuroscope*.deb
+    - build/neuroscope*.dmg
   on:
     tags: true
-    condition: "-n $RELEASE_PKG_FILE"
+    condition: "$ENABLE_DEPLOYMENT = true"
