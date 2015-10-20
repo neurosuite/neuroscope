@@ -45,7 +45,9 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     validator(this),
     isInit(true),
     updateView(true),
-    statusBar(statusBar)
+    statusBar(statusBar),
+    timer(new QTimer(this)),
+    pageTime(500)
 {
 
     QVBoxLayout *lay = new QVBoxLayout;
@@ -79,10 +81,9 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
             &tracesProvider, SLOT(slotPagingStopped()));
 
     isInit = false;
-    /// Added by M.Zugaro to enable automatic forward paging
-    timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(advance()));
-    pageTime = 500;
+
+    // Configure auto advance timer
+    connect(timer, SIGNAL(timeout()), this, SLOT(advance()));
 }
 
 TraceWidget::~TraceWidget(){
@@ -91,10 +92,8 @@ TraceWidget::~TraceWidget(){
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::page()
 {
-    if(timer->isActive()) {
-		qDebug() << "Paging already running!";
+    if(!isStill())
         return;
-    }
 
    timer->start(pageTime);
    emit pagingStarted();
@@ -103,15 +102,13 @@ void TraceWidget::page()
 
 bool TraceWidget::isStill()
 {
-	return timer == NULL || !timer->isActive();
+	return !timer->isActive();
 }
 
 void TraceWidget::stop()
 {
-	if (!timer->isActive()) {
-		qDebug() << "Paging is not running!";
+	if (isStill())
         return;
-    }
 
     timer->stop();
 	emit pagingStopped();
@@ -119,8 +116,9 @@ void TraceWidget::stop()
 
 void TraceWidget::accelerate()
 {
-    if ( !timer->isActive() )
+    if (isStill())
         return;
+
     pageTime -= 125;
     if ( pageTime < 0 ) pageTime = 0;
     statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
@@ -129,7 +127,9 @@ void TraceWidget::accelerate()
 
 void TraceWidget::decelerate()
 {
-    if ( !timer->isActive() ) return;
+    if (isStill())
+        return;
+
     pageTime += 125;
     if ( pageTime > 1000 ) pageTime = 1000;
     statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
