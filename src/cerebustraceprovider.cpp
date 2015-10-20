@@ -6,12 +6,13 @@
 // TODO: Fix this ugly hack by implementing our own error return value.
 #define CBSDKRESULT_EMPTYSAMPLINGGROUP -50
 
+const int CerebusTracesProvider::CEREBUS_RESOLUTION = 16;
 const unsigned int CerebusTracesProvider::CEREBUS_INSTANCE = 0;
 const unsigned int CerebusTracesProvider::BUFFER_SIZE = 10;
 const unsigned int CerebusTracesProvider::SAMPLING_RATES[] = { 0, 500, 1000, 2000, 10000, 30000 };
 
 CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
-		TracesProvider("", -1, 0, 0, 0, 0, 0),
+		TracesProvider("", -1, CEREBUS_RESOLUTION, 0, 0, 0, 0),
 		mGroup(group),
 		mInitialized(false),
 		mScales(NULL),

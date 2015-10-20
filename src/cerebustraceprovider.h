@@ -146,6 +146,8 @@ Q_SIGNALS:
     void dataReady(Array<dataType>& data, QObject* initiator);
 
 private:
+    // Resolution of data packages received.
+    static const int CEREBUS_RESOLUTION ;
     // Default instance id to use to talk to CB SDK
     static const unsigned int CEREBUS_INSTANCE;
     // Length of buffer in seconds

@@ -272,7 +272,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
         // Extract important information from file
         this->channelNb = nsxTracesProvider->getNbChannels();
         this->samplingRate = nsxTracesProvider->getSamplingRate();
-        this->resolution = 16;
+        this->resolution = nsxTracesProvider->getResolution();;
 
         //extensionSamplingRates.insert(extension,samplingRate);
 
@@ -627,7 +627,7 @@ bool NeuroscopeDoc::openStream() {
   // Extract important information from file
   this->channelNb = cerebusTracesProvider->getNbChannels();
   this->samplingRate = cerebusTracesProvider->getSamplingRate();
-  this->resolution = 16;
+  this->resolution = cerebusTracesProvider->getResolution();
 
   //No group of channels exist, put all the channels in the same group (1 for the display palette and
   //-1 (the trash group) for the spike palette) and assign them the same blue color.
