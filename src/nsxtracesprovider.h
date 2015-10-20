@@ -99,13 +99,13 @@ private:
     static const int NSX_OFFSET;
 
     // Headers that are parsed from the file to open
-    NSXBasicHeader basicHeader;
-    NSXExtensionHeader* extensionHeaders;
-    NSXDataHeader dataHeader;
+    NSXBasicHeader mBasicHeader;
+    NSXExtensionHeader* mExtensionHeaders;
+    NSXDataHeader mDataHeader;
 
     // Start of first sample in first data package.
-    long dataFilePos;
-    bool initialized;
+    long mDataFilePos;
+    bool mInitialized;
 
     //Functions
 

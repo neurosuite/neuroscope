@@ -23,17 +23,17 @@ const int NSXTracesProvider::NSX_RESOLUTION = 16;
 const int NSXTracesProvider::NSX_OFFSET = 0;
 
 NSXTracesProvider::NSXTracesProvider(const QString &fileName)
-    : TracesProvider(fileName, -1, NSX_RESOLUTION, 0, 0, 0, NSX_OFFSET), initialized(false), extensionHeaders(NULL), dataFilePos(-1) {
+    : TracesProvider(fileName, -1, NSX_RESOLUTION, 0, 0, 0, NSX_OFFSET), mInitialized(false), mExtensionHeaders(NULL), mDataFilePos(-1) {
 }
 
 NSXTracesProvider::~NSXTracesProvider() {
-    if(this->initialized)
-        delete[] this->extensionHeaders;
+    if(mInitialized)
+        delete[] mExtensionHeaders;
 }
 
 bool NSXTracesProvider::init() {
     // Do not initialize twice
-    if(this->initialized)
+    if(mInitialized)
         return true;
 
     // Try to open file
@@ -44,7 +44,7 @@ bool NSXTracesProvider::init() {
 
     // Read basic header
     qint64 bytesToRead = sizeof(NSXBasicHeader);
-    qint64 bytesRead = dataFile.read(reinterpret_cast<char*>(&(this->basicHeader)), bytesToRead);
+    qint64 bytesRead = dataFile.read(reinterpret_cast<char*>(&(mBasicHeader)), bytesToRead);
 
     if(bytesToRead != bytesRead) {
         dataFile.close();
@@ -52,18 +52,18 @@ bool NSXTracesProvider::init() {
     }
 
     // Parse basic header
-    this->nbChannels = this->basicHeader.channel_count;
-    this->samplingRate = 30000.0 / this->basicHeader.sampling_period;
+    this->nbChannels = mBasicHeader.channel_count;
+    this->samplingRate = 30000.0 / mBasicHeader.sampling_period;
 
     // Read extension headers
-    this->extensionHeaders = new NSXExtensionHeader[this->nbChannels];
+    mExtensionHeaders = new NSXExtensionHeader[this->nbChannels];
 
     bytesToRead = sizeof(NSXExtensionHeader);
     for(int channel = 0; channel < this->nbChannels; channel++) {
-        bytesRead = dataFile.read(reinterpret_cast<char*>(this->extensionHeaders + channel), bytesToRead);
+        bytesRead = dataFile.read(reinterpret_cast<char*>(mExtensionHeaders + channel), bytesToRead);
 
         if(bytesToRead != bytesRead) {
-            delete[] this->extensionHeaders;
+            delete[] mExtensionHeaders;
             dataFile.close();
             return false;
         }
@@ -71,21 +71,21 @@ bool NSXTracesProvider::init() {
 
     // Read data header
     bytesToRead = sizeof(NSXDataHeader);
-    bytesRead = dataFile.read(reinterpret_cast<char *>(&this->dataHeader), bytesToRead);
+    bytesRead = dataFile.read(reinterpret_cast<char *>(&mDataHeader), bytesToRead);
 
     if(bytesToRead != bytesRead) {
-        delete[] this->extensionHeaders;
+        delete[] mExtensionHeaders;
         dataFile.close();
         return false;
     }
 
     // Save beginning of data block
-    this->dataFilePos = dataFile.pos();
+    mDataFilePos = dataFile.pos();
 
     // Close file and update recording length
     dataFile.close();
-    this->initialized = true;
-    this->computeRecordingLength();
+    mInitialized = true;
+    computeRecordingLength();
     return true;
 }
 
@@ -105,7 +105,7 @@ long NSXTracesProvider::getNbSamples(long start, long end, long startInRecording
 void NSXTracesProvider::retrieveData(long start, long end, QObject* initiator, long startInRecordingUnits) {
     Array<dataType> data;
 
-    if(!this->initialized) {
+    if(!mInitialized) {
         qDebug() << "no init!";
         emit dataReady(data,initiator);
         return;
@@ -132,7 +132,7 @@ void NSXTracesProvider::retrieveData(long start, long end, QObject* initiator, l
     long lengthInRecordingUnits = endInRecordingUnits - startInRecordingUnits;
 
     // Jump to position to read (skipping headers)
-    if(!dataFile.seek(this->dataFilePos + fileOffset)) {
+    if(!dataFile.seek(mDataFilePos + fileOffset)) {
         qDebug() << "cant skip!";
         dataFile.close();
         emit dataReady(data,initiator);
@@ -159,12 +159,12 @@ void NSXTracesProvider::retrieveData(long start, long end, QObject* initiator, l
     for(int channel = 0; channel < this->nbChannels; channel++) {
         // Determine unit data is saved in
         int unit_correction = 0;
-        if(!strncmp(this->extensionHeaders[channel].unit, "uV", 16)) {
+        if(!strncmp(mExtensionHeaders[channel].unit, "uV", 16)) {
             unit_correction = 1;
-        } else if(!strncmp(this->extensionHeaders[channel].unit, "mV", 16)) {
+        } else if(!strncmp(mExtensionHeaders[channel].unit, "mV", 16)) {
             unit_correction = 1000;
         } else {
-            qDebug() << "unknown unit: " << this->extensionHeaders[channel].unit;
+            qDebug() << "unknown unit: " << mExtensionHeaders[channel].unit;
             dataFile.close();
             data.setSize(0, 0);
             emit dataReady(data, initiator);
@@ -172,10 +172,10 @@ void NSXTracesProvider::retrieveData(long start, long end, QObject* initiator, l
         }
 
         // Get all the values needed to translate measurement unit to uV
-        int min_digital =  this->extensionHeaders[channel].min_digital_value;
-        int range_digital =  this->extensionHeaders[channel].max_digital_value - min_digital;
-        int min_analog =  this->extensionHeaders[channel].min_analog_value;
-        int range_analog =  this->extensionHeaders[channel].max_analog_value - min_analog;
+        int min_digital =  mExtensionHeaders[channel].min_digital_value;
+        int range_digital =  mExtensionHeaders[channel].max_digital_value - min_digital;
+        int min_analog =  mExtensionHeaders[channel].min_analog_value;
+        int range_analog =  mExtensionHeaders[channel].max_analog_value - min_analog;
 
         // Convert data
         for(int i = 1; i <= lengthInRecordingUnits; i++) {
@@ -190,10 +190,10 @@ void NSXTracesProvider::retrieveData(long start, long end, QObject* initiator, l
 
 void NSXTracesProvider::computeRecordingLength(){
     // We don't know the length if not initialized
-    if(!this->initialized) {
+    if(!mInitialized) {
         this->length = -1;
         return;
     }
 
-    this->length = (1000.0 * this->dataHeader.length) / this->samplingRate;
+    this->length = (1000.0 * mDataHeader.length) / this->samplingRate;
 }
