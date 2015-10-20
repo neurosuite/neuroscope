@@ -17,13 +17,13 @@
 
 #include <QtDebug>
 
-NEVEventsProvider::NEVEventsProvider(const QString &fileUrl, int position) : EventsProvider(".nev.evt", 0, position), extensionHeaders(NULL){
+NEVEventsProvider::NEVEventsProvider(const QString &fileUrl, int position) : EventsProvider(".nev.evt", 0, position), mExtensionHeaders(NULL){
     this->fileName = fileUrl;
 }
 
 NEVEventsProvider::~NEVEventsProvider() {
-    if(this->extensionHeaders)
-        delete[] this->extensionHeaders;
+    if(mExtensionHeaders)
+        delete[] mExtensionHeaders;
 }
 
 int NEVEventsProvider::loadData(){
@@ -39,23 +39,23 @@ int NEVEventsProvider::loadData(){
 
     // Read basic header
     qint64 bytesToRead = sizeof(NEVBasicHeader);
-    qint64 bytesRead = eventFile.read(reinterpret_cast<char*>(&(this->basicHeader)), bytesToRead);
+    qint64 bytesRead = eventFile.read(reinterpret_cast<char*>(&(mBasicHeader)), bytesToRead);
 
     if(bytesToRead != bytesRead) {
         eventFile.close();
         return INCORRECT_CONTENT;
     }
-    this->currentSamplingRate = this->basicHeader.global_time_resolution / 1000.0;
-    this->nbEvents = (eventFile.size() - this->basicHeader.header_size) / this->basicHeader.data_package_size;
+    this->currentSamplingRate = mBasicHeader.global_time_resolution / 1000.0;
+    this->nbEvents = (eventFile.size() - mBasicHeader.header_size) / mBasicHeader.data_package_size;
 
     // Read extension headers
-    if(this->extensionHeaders)
-        delete[] this->extensionHeaders;
-    this->extensionHeaders = new NEVExtensionHeader[this->basicHeader.extension_count];
+    if(mExtensionHeaders)
+        delete[] mExtensionHeaders;
+    mExtensionHeaders = new NEVExtensionHeader[mBasicHeader.extension_count];
 
     bytesToRead = sizeof(NEVExtensionHeader);
-    for(int extension = 0; extension < this->basicHeader.extension_count; extension++) {
-        bytesRead = eventFile.read(reinterpret_cast<char*>(this->extensionHeaders + extension), bytesToRead);
+    for(int extension = 0; extension < mBasicHeader.extension_count; extension++) {
+        bytesRead = eventFile.read(reinterpret_cast<char*>(mExtensionHeaders + extension), bytesToRead);
 
         if(bytesToRead != bytesRead) goto fail;
     }
@@ -91,7 +91,7 @@ int NEVEventsProvider::loadData(){
                     label = QString("digital data");
 
                 // Skip the padding
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVDigitalSerialData)
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
@@ -108,7 +108,7 @@ int NEVEventsProvider::loadData(){
                 }
 
                 // Skip the config change data
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVConfigurationDataHeader)
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
@@ -125,7 +125,7 @@ int NEVEventsProvider::loadData(){
                 }
 
                 // Skip the padding
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVButtonData)
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
@@ -138,7 +138,7 @@ int NEVEventsProvider::loadData(){
                 label = QString("tracking (p: %1 n: %1)").arg(trackingData.parent_id).arg(trackingData.node_id);
 
                 // Skip the tracking data points
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVTrackingDataHeader)
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
@@ -151,7 +151,7 @@ int NEVEventsProvider::loadData(){
                 label = QString("video sync (s: %1)").arg(syncData.video_source);
 
                 // Skip the padding
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVVideoSyncData)
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
@@ -159,7 +159,7 @@ int NEVEventsProvider::loadData(){
             case NEVCommentID:
                 label = EventDescription("comment");
 
-                if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
@@ -177,7 +177,7 @@ int NEVEventsProvider::loadData(){
                     }
 
                     // Skip waveform
-                    if(!eventFile.seek(eventFile.pos() + this->basicHeader.data_package_size
+                    if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
                                                        - sizeof(NEVSpikeDataHeader)
                                                        - sizeof(NEVDataHeader)))
                         goto fail;
@@ -208,8 +208,8 @@ int NEVEventsProvider::loadData(){
     return OK;
 
 fail:
-    delete[] this->extensionHeaders;
-    this->extensionHeaders = NULL;
+    delete[] mExtensionHeaders;
+    mExtensionHeaders = NULL;
     events.setSize(0,0);
     timeStamps.setSize(0,0);
     return INCORRECT_CONTENT;

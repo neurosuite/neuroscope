@@ -32,8 +32,8 @@ public:
     virtual int loadData();
 
 private:
-    NEVBasicHeader basicHeader;
-    NEVExtensionHeader* extensionHeaders;
+    NEVBasicHeader mBasicHeader;
+    NEVExtensionHeader* mExtensionHeaders;
 
     template <typename T>
     inline bool readStruct(QFile& file, T& s) {
