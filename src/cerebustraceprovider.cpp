@@ -4,7 +4,7 @@
 #include <QDebug>
 
 // TODO: Fix this ugly hack by implementing our own error return value.
-#define CBSDKRESULT_EMPTYSAMPLINGGROUP -31
+#define CBSDKRESULT_EMPTYSAMPLINGGROUP -50
 
 const unsigned int CerebusTracesProvider::CEREBUS_INSTANCE = 0;
 const unsigned int CerebusTracesProvider::BUFFER_SIZE = 10;
@@ -382,6 +382,10 @@ std::string CerebusTracesProvider::getLastErrorMessage() {
 		return "Resource is busy";
 	case CBSDKRESULT_ERROFFLINE:
 		return "Instrument is offline";
+    case CBSDKRESULT_INSTOUTDATED:
+        return "The instrument runs an outdated firmware version.";
+    case CBSDKRESULT_LIBOUTDATED:
+        return "Neuroscope uses an outdated version of libcbsdk.";
 	case CBSDKRESULT_EMPTYSAMPLINGGROUP:
 		return "No channels in selected sampling group.";
 	}
