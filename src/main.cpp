@@ -18,11 +18,14 @@
 
 #include "config-neuroscope.h"
 
+// include C++ include file
+#include <iostream>
+
 // include files for QT
 #include <QDir>
 #include <QString>
 #include <QApplication>
-#include <QDebug>
+
 //Application specific include files
 #include "neuroscope.h"
 int main(int argc, char *argv[])
@@ -51,7 +54,7 @@ int main(int argc, char *argv[])
     for (int i = 1, n = args.size(); i < n; ++i) {
         const QString arg = args.at(i);
         if (arg == "-h" || arg == "--help" || arg == "-help") {
-            qWarning() << "Usage: " << qPrintable(args.at(0)) << " [file]\n"
+            std::cerr  << "Usage: " << qPrintable(args.at(0)) << " [file]\n"
                        << "\n"
                        << "Optional settings:\n"
                        << "  -r, --resolution        Resolution of the acquisition system.\n"
@@ -120,9 +123,7 @@ int main(int argc, char *argv[])
 #endif
         if (!file.isEmpty()) {
             QFileInfo fInfo(file);
-            if (file.startsWith(QLatin1String("-")) ) {
-                qWarning() << "it's not a filename :"<<file;
-            } else if(fInfo.isRelative()) {
+            if(fInfo.isRelative()) {
                 const QString url = QDir::currentPath().append("/") + file;
                 neuroscope->openDocumentFile(url);
             } else {
