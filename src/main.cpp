@@ -70,8 +70,12 @@ int main(int argc, char *argv[])
             #if WITH_CEREBUS
                        << "  -n, --stream            Open network stream instead of file.\n"
             #endif
-                       << "  -h, --help              print this help\n";
+                       << "  -h, --help              print this help\n"
+                       << "  -v, --version           print version info\n";
             return 1;
+        } else if (arg == "-v" || arg == "--version"  || arg == "-version") {
+            std::cout << "NeuroScope " << NEUROSCOPE_VERSION << std::endl;
+            return 0;
         }
 
         bool handled = true;
