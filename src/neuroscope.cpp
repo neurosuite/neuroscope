@@ -1345,8 +1345,12 @@ void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
     QSettings settings;
-    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."), settings.value("CurrentDirectory").toString(),
-                                                         tr("Event File (*.evt*)"));
+    const QStringList urls = QFileDialog::getOpenFileNames(
+        this,
+        tr("Open Event Files..."),
+        settings.value("CurrentDirectory").toString(),
+        tr("Event File (*.evt*);;Blackrock File (*.nev);;All files (*.*)")
+    );
     if(!urls.isEmpty())
     {
         QDir CurrentDir;
