@@ -2,6 +2,7 @@ version: v2.1.0-{branch}-{build}
 
 environment:
   NSIS_ROOT: C:\Program Files (x86)\NSIS
+  CMAKE_TOOLKIT: v120_xp
   matrix:
   - QTDIR: C:\Qt\5.5\msvc2013_64
     CMAKE_GENERATOR: Visual Studio 12 Win64
@@ -13,19 +14,19 @@ install:
     - set PATH=%PATH%;%QTDIR%/bin;%NSIS_ROOT%
     - git clone https://github.com/neurosuite/libneurosuite.git
     - cd libneurosuite
-    - cmake -G "%CMAKE_GENERATOR%" .
+    - cmake -G "%CMAKE_GENERATOR%" -T "%CMAKE_TOOLKIT%" .
     - cmake --build . --target INSTALL --config Release
     - cd ..
     - git clone https://github.com/neurosuite/libcbsdk.git
     - cd libcbsdk
-    - cmake -G "%CMAKE_GENERATOR%" .
+    - cmake -G "%CMAKE_GENERATOR%" -T "%CMAKE_TOOLKIT%" .
     - cmake --build . --target INSTALL --config Release
     - cd ..
 
 build_script:
     - mkdir build
     - cd build
-    - cmake -D WITH_CEREBUS=ON -G "%CMAKE_GENERATOR%" ..
+    - cmake -D WITH_CEREBUS=ON -G "%CMAKE_GENERATOR%" -T "%CMAKE_TOOLKIT%" ..
     - cmake --build . --target PACKAGE --config Release
 
 test: off
