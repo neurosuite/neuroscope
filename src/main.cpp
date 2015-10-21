@@ -110,6 +110,12 @@ int main(int argc, char *argv[])
          if (!handled)
              file = args.at(i);
     }
+
+    if (file.startsWith(QLatin1String("-")) ) {
+        std::cerr << "The flag '" << file.toStdString() << "' is unknown or missing a parameter." << std::endl;
+        return 1;
+    }
+
     NeuroscopeApp* neuroscope = new NeuroscopeApp();
     neuroscope->setFileProperties(channelNb,SR,resolution,
                                   offset,voltageRange,amplification,
