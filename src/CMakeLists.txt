@@ -1,6 +1,7 @@
 ################################################################################
 # Build config
 ################################################################################
+# Normal C++ source files
 set(SOURCE_FILES
     main.cpp
     neuroscope.cpp
@@ -48,13 +49,20 @@ set(SOURCE_FILES
     propertieslayout.cpp
 )
 
+# windows resources
+if(WIN32)
+    list(APPEND SOURCE_FILES
+         neuroscope.rc)
+endif()
 
+# Qt resources
 if(WITH_QT4)
     qt4_add_resources(SOURCE_FILES neuroscope-icons.qrc)
 else()
     qt5_add_resources(SOURCE_FILES neuroscope-icons.qrc)
 endif()
 
+# Ui files
 set(UI_FILES
     propertieslayout.ui
     prefdefaultslayout.ui
@@ -69,12 +77,14 @@ else()
     qt5_wrap_ui(SOURCE_FILES ${UI_FILES})
 endif()
 
+# Optional C++ files
 if(WITH_CEREBUS)
     # Add network specific source files
     list(APPEND SOURCE_FILES
          cerebustraceprovider.cpp)
-endif(WITH_CEREBUS)
+endif()
 
+# Combine it all
 if(APPBUNDLE)
     add_executable(neuroscope MACOSX_BUNDLE ${SOURCE_FILES})
 else()
