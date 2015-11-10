@@ -46,10 +46,7 @@ class CerebusTracesProvider : public TracesProvider  {
 
 public:
     // Callback that reacts to new data
-    static void dataCallback(UINT32 instance, const cbSdkPktType type,  const void* data, void* object);
-
-    // Callback that reacts to configuration changes.
-    static void configCallback(UINT32 instance, const cbSdkPktType type,  const void* data, void* object);
+    static void packageCallback(UINT32 instance, const cbSdkPktType type,  const void* data, void* object);
 
     // Different sampling groups one can describe to
 	enum SamplingGroup {

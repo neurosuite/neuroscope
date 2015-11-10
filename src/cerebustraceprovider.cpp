@@ -103,7 +103,7 @@ bool CerebusTracesProvider::init() {
 
 	// Register data callback
 	mMutex.lock();
-	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS, dataCallback, this);
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS, packageCallback, this);
 
 	if (mLastResult != CBSDKRESULT_SUCCESS) {
 		delete[] mChannels;
@@ -116,7 +116,7 @@ bool CerebusTracesProvider::init() {
 	}
 
 	// Register config callback
-	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO, configCallback, this);
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO, packageCallback, this);
 
 	if (mLastResult != CBSDKRESULT_SUCCESS) {
 		delete[] mChannels;
@@ -175,22 +175,22 @@ void CerebusTracesProvider::processConfig(const cbPKT_GROUPINFO* package) {
 	mMutex.unlock();
 }
 
-void CerebusTracesProvider::dataCallback(UINT32 /*instance*/, const cbSdkPktType type, const void* data, void* object) {
+void CerebusTracesProvider::packageCallback(UINT32 /*instance*/, const cbSdkPktType type, const void* data, void* object) {
 	CerebusTracesProvider* provider = reinterpret_cast<CerebusTracesProvider*>(object);
 
-	// TODO: Take care of package lost here!
-	if (provider && type == cbSdkPkt_CONTINUOUS && data) {
-		provider->processData(reinterpret_cast<const cbPKT_GROUP *>(data));
-	}
-}
-
-void CerebusTracesProvider::configCallback(UINT32 /*instance*/, const cbSdkPktType type, const void* data, void* object) {
-	CerebusTracesProvider* provider = reinterpret_cast<CerebusTracesProvider*>(object);
-
-	// TODO: Take care of package lost here!
-	if (provider && type == cbSdkPkt_GROUPINFO && data) {
-		provider->processConfig(reinterpret_cast<const cbPKT_GROUPINFO *>(data));
-	}
+    if(provider && data) {
+        switch (type) {
+    	case cbSdkPkt_CONTINUOUS:
+            provider->processData(reinterpret_cast<const cbPKT_GROUP*>(data));
+            break;
+        case cbSdkPkt_GROUPINFO:
+    		provider->processConfig(reinterpret_cast<const cbPKT_GROUPINFO*>(data));
+            break;
+        case cbSdkPkt_PACKETLOST:
+            // TODO: Take care of package lost here!
+            break;
+        }
+    }
 }
 
 long CerebusTracesProvider::getNbSamples(long start, long end, long startInRecordingUnits) {
