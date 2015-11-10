@@ -15,6 +15,7 @@ CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
 		TracesProvider("", -1, CEREBUS_RESOLUTION, 0, 0, 0, 0),
 		mGroup(group),
 		mInitialized(false),
+		mReconfigured(false),
 		mScales(NULL),
 		mChannels(NULL),
         mLiveData(NULL),
@@ -86,10 +87,23 @@ bool CerebusTracesProvider::init() {
 		return false;
 	}
 
-	if (!retrieveScaling()) {
-		delete[] mChannels;
-		cbSdkClose(CEREBUS_INSTANCE);
-		return false;
+	// Get scaling for each channel of group
+	mScales = new cbSCALING[this->nbChannels];
+
+	cbPKT_CHANINFO info;
+	for (unsigned int i = 0; i < this->nbChannels; i++)
+	{
+		mLastResult = cbSdkGetChannelConfig(CEREBUS_INSTANCE, mChannels[i], &info);
+
+		if (mLastResult != CBSDKRESULT_SUCCESS) {
+			delete[] mChannels;
+			delete[] mScales;
+			cbSdkClose(CEREBUS_INSTANCE);
+			return false;
+		}
+
+		// Copy only physcal input scaling for now
+		mScales[i] = info.physcalin;
 	}
 
 	// Allocate live sample buffer
@@ -140,6 +154,12 @@ void CerebusTracesProvider::processData(const cbPKT_GROUP* package) {
 		return;
 
 	mMutex.lock();
+
+	// Channels were reconfigured, data size has changed and it is not save to copy data anymore.
+	if (mReconfigured) {
+		mMutex.unlock();
+		return;
+	}
 	// Copy sampled to history
 	memcpy(mLiveData + ((*mLivePosition) * this->nbChannels), package->data, this->nbChannels * sizeof(INT16));
 
@@ -151,26 +171,13 @@ void CerebusTracesProvider::processData(const cbPKT_GROUP* package) {
 
 void CerebusTracesProvider::processConfig(const cbPKT_GROUPINFO* package) {
 	// Ignore package if for different sampling group or channel count did not change
-	if (package->group != mGroup || (package->dlen - 8) == this->nbChannels)
+	if (package->group != mGroup)
 		return;
 
 	mMutex.lock();
-	// Update channel count
-	this->nbChannels = (package->dlen - 8);
 
-	// Update channel list
-	delete[] mChannels;
-	mChannels = new UINT32[this->nbChannels];
-	memcpy(mChannels, package->list, this->nbChannels * sizeof(UINT32));
-
-	// Update scaling
-	retrieveScaling();
-
-	// Update buffer size
-	delete[] mLiveData;
-	mLiveData = new INT16[this->nbChannels * mCapacity];
-	memset(mLiveData, 0, this->nbChannels * mCapacity * sizeof(INT16));
-    (*mLivePosition) = 0;
+	// Tell all threads that from now on the config has changed.
+	mReconfigured = true;
 
 	mMutex.unlock();
 }
@@ -227,11 +234,22 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 
 	long lengthInRecordingUnits = endInRecordingUnits - startInRecordingUnits;
 
+	// Data structered used past this line are accessed by multiple threads
+	mMutex.lock();
+
+	// If config was changed, this is the only way we can tell Neuroscope to abort.
+	// Make sure to only abort if not in pause mode!
+	if (mReconfigured && mViewTraceData == mLiveTraceData) {
+		mMutex.unlock();
+		qDebug() << "Recofiguration not supported. Please reopen connection.";
+		emit dataReady(result, initiator);
+		return;
+	}
+
 	// Allocate result array
 	result.setSize(lengthInRecordingUnits, this->nbChannels);
 
-	// Get data from buffer.
-	mMutex.lock();
+	// Copy and convert data from buffer.
 	for (int channel = 0; channel < this->nbChannels; channel++) {
 		// Compute start in relation to current ringbuffer position
 		size_t offset = startInRecordingUnits + (*mViewPosition);
@@ -391,31 +409,4 @@ std::string CerebusTracesProvider::getLastErrorMessage() {
 		return "No channels in selected sampling group.";
 	}
 	return "Unknown error code.";
-}
-
-bool CerebusTracesProvider::retrieveScaling() {
-	// Delete old scaling data if there is any
-	if (mScales) {
-		delete[] mScales;
-		mScales = NULL;
-	}
-
-	// Get scaling for each channel of group
-	mScales = new cbSCALING[this->nbChannels];
-
-	cbPKT_CHANINFO info;
-	for (unsigned int i = 0; i < this->nbChannels; i++)
-	{
-		mLastResult = cbSdkGetChannelConfig(CEREBUS_INSTANCE, mChannels[i], &info);
-
-		if (mLastResult != CBSDKRESULT_SUCCESS) {
-			delete[] mScales;
-			mScales = NULL;
-			return false;
-		}
-
-		// Copy only physcal input scaling for now
-		mScales[i] = info.physcalin;
-	}
-	return true;
 }

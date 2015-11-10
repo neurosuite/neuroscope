@@ -154,6 +154,9 @@ private:
 
     // True if connection, buffers and callback were initialized
     bool mInitialized;
+	// True if set of channels in sampling group were changed
+	bool mReconfigured;
+
     // Sampling group to listen to
     SamplingGroup mGroup;
     // List of scalings for each channel
@@ -175,9 +178,6 @@ private:
     size_t* mLivePosition;
     INT16* mViewData;
     size_t* mViewPosition;
-
-    // Update channel scaling by querying NSP
-    bool retrieveScaling();
 
     /**Retrieves the traces included in the time frame given by @p startTime and @p endTime.
     * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.
