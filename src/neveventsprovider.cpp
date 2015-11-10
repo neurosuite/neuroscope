@@ -1,5 +1,5 @@
 /***************************************************************************
-                          nsxtracesprovider.h  -  description
+                 neveventsprovider.cpp  -  description
                              -------------------
     copyright            : (C) 2015 by Florian Franzen
  ***************************************************************************/

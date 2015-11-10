@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cerebustracesprovider.h  -  description
+            cerebustracesprovider.h  -  description
                              -------------------
     copyright            : (C) 2015 by Florian Franzen
  ***************************************************************************/

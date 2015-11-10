@@ -1,7 +1,25 @@
-#include <string>
+/***************************************************************************
+            cerebustracesprovider.cpp  -  description
+                             -------------------
+    copyright            : (C) 2015 by Florian Franzen
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include "cerebustraceprovider.h"
+
+#include <string>
+
 #include <QDebug>
+
+#include "cerebusclustersprovider.h"
 
 // TODO: Fix this ugly hack by implementing our own error return value.
 #define CBSDKRESULT_EMPTYSAMPLINGGROUP -50
