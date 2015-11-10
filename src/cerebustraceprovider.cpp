@@ -33,11 +33,7 @@ CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
 
 CerebusTracesProvider::~CerebusTracesProvider() {
 	if (mInitialized) {
-		// Disable callbacks first
-		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS);
-		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO);
-
-		// Close network thread and connection
+		// Disabled callbacks, close network thread and connection
 		cbSdkClose(CEREBUS_INSTANCE);
 
 		// Free uninitalize internal structures
@@ -138,7 +134,6 @@ bool CerebusTracesProvider::init() {
 		mScales = NULL;
 		delete[] mLiveData;
         delete mLivePosition;
-		cbSdkUnRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_CONTINUOUS);
 		cbSdkClose(CEREBUS_INSTANCE);
 		return false;
 	}
