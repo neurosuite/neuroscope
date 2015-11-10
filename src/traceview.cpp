@@ -252,6 +252,7 @@ void TraceView::dataAvailable(Array<dataType>& data,QObject* initiator)
 
         QMessageBox::critical(this, tr("IO Error"),tr("An error has occured, the data file could not be opened or the file size is incorrect."));
         changeCursor();
+        emit dataError();
         return;
     }
 

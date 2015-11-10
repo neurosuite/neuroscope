@@ -80,6 +80,10 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     connect(this, SIGNAL(pagingStopped()),
             &tracesProvider, SLOT(slotPagingStopped()));
 
+    // Stop paging if IO error occures
+	connect(&view, SIGNAL(dataError()),
+            this, SLOT(stop()));
+
     isInit = false;
 
     // Configure auto advance timer

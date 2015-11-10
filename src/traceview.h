@@ -508,6 +508,9 @@ Q_SIGNALS:
     void eventAdded(QString providerName,QString addedEventDescription,double time);
     void eventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate);
 
+    // Emitted if dataAvailable(...) receives faulty data
+    void dataError();
+
 protected:
     /**
   * Draws the contents of the frame
