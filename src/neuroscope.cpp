@@ -2910,7 +2910,9 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
 
     slotStateChanged("clusterState");
     //Waveforms are allowed only for dat and fil files.
-    if(filePath.contains(".dat")||filePath.contains(".fil")) {
+    if(filePath.contains(".dat")
+    || filePath.contains(".fil")
+    || filePath.contains(".ns")) {
         slotStateChanged("datState");
     }
     else{
