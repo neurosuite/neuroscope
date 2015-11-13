@@ -1079,9 +1079,11 @@ void NeuroscopeApp::openDocumentStream()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //If no document is open already, open the document asked.
-    if(!mainDock){
-        displayCount = 0;
+    if(!mainDock) {
+        // Fix for file name based logic
+        this->filePath = "cerebus.nsx";
 
+        // Open stream
         if(!doc->openStream()) {
             QApplication::restoreOverrideCursor();
             doc->closeDocument();
