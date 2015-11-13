@@ -58,7 +58,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.
   */
-    void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
+    virtual void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
 
 
     /**Looks up for the first of the clusters included in the list @p selectedIds existing after the time @p startTime.
@@ -70,7 +70,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-    void requestNextClusterData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+    virtual void requestNextClusterData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator,long startTimeInRecordingUnits);
 
 
     /**Looks up for the first of the clusters included in the list @p selectedIds existing before the time @p endTime.
@@ -82,12 +82,12 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits starting time, in recording units, for the look up.
   */
-    void requestPreviousClusterData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
-    
+    virtual void requestPreviousClusterData(long startTime,long timeFrame,QList<int> selectedIds,QObject* initiator,long startTimeInRecordingUnits);
+
     /**Loads the cluster ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status
   */
-    int loadData();
+    virtual int loadData();
 
     /**Returns list of cluster Ids.
   * @return */
@@ -164,7 +164,7 @@ Q_SIGNALS:
   */
     void previousClusterDataReady(Array<dataType>& data,QObject* initiator,QString providerName,long startingTime,long startingTimeInRecordingUnits);
 
-private:
+protected:
 
     /**Provider's name.*/
     QString name;

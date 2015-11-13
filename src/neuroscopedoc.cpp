@@ -680,6 +680,66 @@ bool NeuroscopeDoc::openStream() {
         false // show events in position view
     );
 
+	// Get cluster providers
+    QList<ClustersProvider*> list = cerebusTracesProvider->getClusterProviders();
+
+    // Increase spike size
+    this->peakSampleIndex = 64;
+    this->nbSamples = 128;
+
+    for(QList<ClustersProvider*>::iterator providerIterator = list.begin();
+        providerIterator != list.end();
+        providerIterator++) {
+        // Get all needed properties from cluster provider
+        ClustersProvider* clustersProvider = *providerIterator;
+        QString name = clustersProvider->getName();
+        QList<int> clusterList = clustersProvider->clusterIdList();
+
+        // Add cluster provider to internal structure
+        lastLoadedProvider = name;
+        providers.insert(name, clustersProvider);
+        providerUrls.insert(name, QString("cerebus.") + name + QString(".nev"));
+
+        // Genereate cluster colors (based on color brewer)
+        ItemColors* clusterColors = new ItemColors();
+
+        // Unclassified
+        clusterColors->append(0, QColor::fromRgb(153, 153, 153)); // gray
+        // Classified
+        clusterColors->append(1, QColor::fromRgb(247, 129, 191)); // pink
+        clusterColors->append(2, QColor::fromRgb(166, 86, 40)); // brown
+        clusterColors->append(3, QColor::fromRgb(255, 255, 51)); // yellow
+        clusterColors->append(4, QColor::fromRgb(152, 78, 163)); // purple
+        clusterColors->append(5, QColor::fromRgb(77, 175, 74)); // green
+        // Artifacts
+        clusterColors->append(254, QColor::fromRgb(255, 127, 0)); // orange
+        // Noise
+        clusterColors->append(255, QColor::fromRgb(228, 26, 28)); // red
+
+        providerItemColors.insert(name, clusterColors);
+
+		// Compute which cluster files give data for a given anatomical group
+		computeClusterFilesMapping();
+
+        // Informs the views than there is a new cluster provider.
+        // There should be only one view, since we only created one display.
+        QList<int> skipList;
+        for(int i = 0; i < this->viewList->count(); ++i) {
+			this->viewList->at(i)->setClusterProvider(
+                clustersProvider,
+                name,
+                clusterColors,
+                true, // active
+                clusterList,
+                &(this->displayGroupsClusterFile),
+                &(this->channelsSpikeGroups),
+                this->peakSampleIndex - 1,
+                this->nbSamples - peakSampleIndex,
+                skipList
+            );
+        }
+
+	}
 
 	return true;
 }

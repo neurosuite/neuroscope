@@ -25,8 +25,9 @@
 #include <cbsdk.h>
 
 // Include project files
-#include "tracesprovider.h"
 #include "types.h"
+#include "tracesprovider.h"
+#include "clustersprovider.h"
 
 
 /** CerebusTracesProvider uses a Blackrock Cerebus NSP as data source.
@@ -69,6 +70,11 @@ public:
     */
     bool init();
 
+    /** Returns true if initialized */
+    bool isInitialized() {
+        return mInitialized;
+    }
+
     /**Computes the number of samples between @p start and @p end.
     * @param start begining of the time frame from which the data have been retrieved, given in milisecond.
     * @param end end of the time frame from which to retrieve the data, given in milisecond.
@@ -79,6 +85,9 @@ public:
 
     // Called by callback to add data to buffer.
     void processData(const cbPKT_GROUP* package);
+
+    // Called by callback to add spike event to buffer.
+    void processSpike(const cbPKT_SPK* package);
 
     // Called by callback to process configuration changes.
     void processConfig(const cbPKT_GROUPINFO* package);
@@ -130,10 +139,19 @@ public:
     virtual void slotPagingStarted();
 
     /** Called when paging is stopped.
-    * Decouples the buffer that is viewed/returned from the one updated.
-    * This essentialy pauses the signal that is being displayed.
-    */
+     * Decouples the buffer that is viewed/returned from the one updated.
+     * This essentialy pauses the signal that is being displayed.
+     */
     virtual void slotPagingStopped();
+
+    /** Create a cluster provider for each channel.
+     */
+    QList<ClustersProvider*> getClusterProviders();
+
+    /** Get cluster data for specific channel.
+     */
+    Array<dataType>* getClusterData(unsigned int channel, long start, long end);
+
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
@@ -147,7 +165,7 @@ private:
     static const int CEREBUS_RESOLUTION ;
     // Default instance id to use to talk to CB SDK
     static const unsigned int CEREBUS_INSTANCE;
-    // Length of buffer in seconds
+    // Length of buffer in seconds (for events it is assumed there is an event for every tick in that second)
     static const unsigned int BUFFER_SIZE;
     // Sampling rate of each sampling group
     static const unsigned int SAMPLING_RATES[6];
@@ -164,20 +182,33 @@ private:
     // List of NSP channel numbers we are listing to
     UINT32* mChannels;
 
-    // Capacity of buffer (see data and paused_data)
-    size_t mCapacity;
-
     // Return value of last CBSDK library call
     int mLastResult;
 
     // Data storage mutex
     QMutex mMutex;
 
-    // Data storage
-    INT16* mLiveData;
-    size_t* mLivePosition;
-    INT16* mViewData;
-    size_t* mViewPosition;
+    // Latest NSP system clock value
+    UINT32* mLiveTime;
+    UINT32* mViewTime;
+
+    // Capacity of buffers
+    size_t mTraceCapacity;
+    size_t mClusterCapacity;
+
+    // Continous data storage
+    INT16*  mLiveTraceData;
+    size_t* mLiveTracePosition;
+    INT16*  mViewTraceData;
+    size_t* mViewTracePosition;
+
+    // Spike event data storage
+    UINT32** mLiveClusterTime;
+    UINT8**  mLiveClusterID;
+    size_t** mLiveClusterPosition;
+    UINT32** mViewClusterTime;
+    UINT8**  mViewClusterID;
+    size_t** mViewClusterPosition;
 
     /**Retrieves the traces included in the time frame given by @p startTime and @p endTime.
     * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.

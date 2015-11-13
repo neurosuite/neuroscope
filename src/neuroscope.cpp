@@ -1091,8 +1091,14 @@ void NeuroscopeApp::openDocumentStream()
             return;
         }
 
-        //update the spike and event browsing status
-        updateBrowsingStatus();
+        // Set up cluster palette
+		int channelCount = this->doc->getChannelNb();
+		createClusterPalette("1");
+		for (int i = 2; i <= channelCount; i++)
+			addClusterFile(QString::number(i));
+
+		// Update the spike and event browsing status
+		updateBrowsingStatus();
 
         // Start auto advance
         page();
