@@ -605,56 +605,83 @@ bool NeuroscopeDoc::openStream() {
 	if (!ok || answer < 0)
         return false;
 
-    channelColorList = new ChannelColors();
-    docUrl = "";
+    CerebusTracesProvider::SamplingGroup group = mapping[answer];
 
-	CerebusTracesProvider* cerebusTracesProvider = new CerebusTracesProvider(mapping[answer]);
+    // Open network stream
+	CerebusTracesProvider* cerebusTracesProvider = new CerebusTracesProvider(group);
 
     if(!cerebusTracesProvider->init()) {
         QMessageBox::critical(0, tr("Error!"), tr("Could not open network stream: %1").arg(QString::fromStdString(cerebusTracesProvider->getLastErrorMessage())));
         return false;
     }
+    this->docUrl = "cerebus.nsx";
+    this->tracesProvider = cerebusTracesProvider;
 
-  this->tracesProvider = cerebusTracesProvider;
+    // Warn user if command line properties were used
+    if(this->isCommandLineProperties){
+        QApplication::restoreOverrideCursor();
+        QMessageBox::information(0, tr("Warning!"),tr("You are opening a network stream, all supplied command line options will be discarded."));
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    }
 
-  // Warn user if command line properties were used
-  if(this->isCommandLineProperties){
-      QApplication::restoreOverrideCursor();
-      QMessageBox::information(0, tr("Warning!"),tr("You are opening a network stream, all supplied command line options will be discarded."));
-      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  }
+    // Extract important information from stream
+    this->channelNb = cerebusTracesProvider->getNbChannels();
+    this->samplingRate = cerebusTracesProvider->getSamplingRate();
+    this->resolution = cerebusTracesProvider->getResolution();
 
-  // Extract important information from file
-  this->channelNb = cerebusTracesProvider->getNbChannels();
-  this->samplingRate = cerebusTracesProvider->getSamplingRate();
-  this->resolution = cerebusTracesProvider->getResolution();
+	// Set up display and spike groups
+	QList<int> displayGroup;
+	QColor color = QColor::fromRgb(55, 126, 184); // light blue
+    this->channelColorList = new ChannelColors();
+	for (int i = 0; i < channelNb; ++i){
+		// All channels have the same color, no offset and no skip status.
+		this->channelColorList->append(i, color);
+		this->channelDefaultOffsets.insert(i, 0);
+        this->skipStatus.insert(i, false);
 
-  //No group of channels exist, put all the channels in the same group (1 for the display palette and
-  //-1 (the trash group) for the spike palette) and assign them the same blue color.
-  //Build the channelColorList and channelDefaultOffsets (default is 0)
-  QColor color;
-  QList<int> groupOne;
-  color.setHsv(210,255,255);
-  for(int i = 0; i < channelNb; ++i){
-      channelColorList->append(i, color);
-      displayChannelsGroups.insert(i, 1);
-      channelsSpikeGroups.insert(i, -1);
-      groupOne.append(i);
-      channelDefaultOffsets.insert(i, 0);
-  }
-  displayGroupsChannels.insert(1, groupOne);
-  spikeGroupsChannels.insert(-1, groupOne);
+		// Put all channels in the same display group.
+		this->displayChannelsGroups.insert(i, 1);
+		displayGroup.append(i);
 
-  //if skipStatus is empty, set the default status to 0
-  if(skipStatus.isEmpty()){
-      for(int i = 0; i < channelNb; ++i)
-          skipStatus.insert(i, false);
-  }
+		// Put each channel in its own spiking group.
+		this->channelsSpikeGroups.insert(i, i + 1);
+		QList<int> group;
+		group.append(i);
+		this->spikeGroupsChannels.insert(i + 1, group);
+	}
+	this->displayGroupsChannels.insert(1, displayGroup);
 
-  //Use the channel default offsets
-  emit noSession(channelDefaultOffsets, skipStatus);
+    // Create the view with some sensible defaults
+    QList<int>* channelsToDisplay = new QList<int>(); // Yeah, I know! Why?
+    for(int i = 0 ; i < this->channelNb; ++i){
+        channelsToDisplay->append(i);
+    }
+    QList<int> channelOffsets = this->channelDefaultOffsets.values();
+    QList<int> channelGains;
+    QList<int> selectedChannels;
+    emit loadFirstDisplay(
+        channelsToDisplay,
+        false, // cluster vertical lines
+        false, // cluster raster
+        true, // cluster waveforms
+        false, // show label
+        false, // multiple columns
+        false, // gray mode
+        false, // autocenter channels
+        channelOffsets,
+        channelGains,
+        selectedChannels,
+        this->skipStatus,
+        0, // initial start time of trace view
+        1000, // initial window size of trace view
+        QString(), // tab label
+        false, // position view
+        -1, // raster height
+        false // show events in position view
+    );
 
-  return true;
+
+	return true;
 }
 #endif
 
