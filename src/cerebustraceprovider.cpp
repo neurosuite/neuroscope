@@ -52,7 +52,7 @@ CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
 	// The sampling rate is hardwired to the sampling group
 	this->samplingRate = SAMPLING_RATES[group];
 	mTraceCapacity = BUFFER_SIZE * this->samplingRate;
-    mClusterCapacity = BUFFER_SIZE * cbSdk_TICKS_PER_SECOND;
+    mEventCapacity = BUFFER_SIZE * cbSdk_TICKS_PER_SECOND;
 
 	// The buffer always has the same size
 	this->length = 1000 * BUFFER_SIZE;
@@ -210,10 +210,10 @@ bool CerebusTracesProvider::init() {
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
-        mLiveClusterTime[i] = new UINT32[mClusterCapacity];
-        memset(mLiveClusterTime[i], 0, mClusterCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT8[mClusterCapacity];
-        memset(mLiveClusterID[i], 0, mClusterCapacity * sizeof(UINT8));
+        mLiveClusterTime[i] = new UINT32[mEventCapacity];
+        memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
+        mLiveClusterID[i] = new UINT8[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
         mLiveClusterPosition[i] = new size_t(0);
     }
 
@@ -285,7 +285,7 @@ void CerebusTracesProvider::processSpike(const cbPKT_SPK* package) {
 
     // Adjust position, wrap around if necessary.
     (*mLiveClusterPosition[channelIndex])++;
-    if ((*mLiveClusterPosition[channelIndex]) == mClusterCapacity) {
+    if ((*mLiveClusterPosition[channelIndex]) == mEventCapacity) {
         (*mLiveClusterPosition[channelIndex]) = 0;
     }
 
@@ -483,10 +483,10 @@ void CerebusTracesProvider::slotPagingStopped() {
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
-        mLiveClusterTime[i] = new UINT32[mClusterCapacity];
-        memset(mLiveClusterTime[i], 0, mClusterCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT8[mClusterCapacity];
-        memset(mLiveClusterID[i], 0, mClusterCapacity * sizeof(UINT8));
+        mLiveClusterTime[i] = new UINT32[mEventCapacity];
+        memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
+        mLiveClusterID[i] = new UINT8[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
         mLiveClusterPosition[i] = new size_t(0);
     }
 
@@ -598,11 +598,9 @@ Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, lon
     long startInRecordingUnits = cbSdk_TICKS_PER_SECOND * start / 1000.0;
     long endInRecordingUnits   = cbSdk_TICKS_PER_SECOND * end / 1000.0;
 
-	long lengthInRecordingUnits = endInRecordingUnits - startInRecordingUnits;
-
     // Compute values in relation to end of window.
-    startInRecordingUnits -= mClusterCapacity;
-    endInRecordingUnits   -= mClusterCapacity;
+    startInRecordingUnits -= mEventCapacity;
+    endInRecordingUnits   -= mEventCapacity;
 
     Q_ASSERT(startInRecordingUnits <= 0);
     Q_ASSERT(endInRecordingUnits <= 0);
@@ -616,44 +614,45 @@ Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, lon
     startInRecordingUnits += (*mViewTime);
     endInRecordingUnits   += (*mViewTime);
 
-	// In the beginning or on clock overflow, etc. make sure we stay positive.
+	// In the beginning or on clock overflow make sure we stay positive.
 	if (startInRecordingUnits < 0)
 		startInRecordingUnits = 0;
 
     size_t endIndex = (*mViewClusterPosition[channel]);
     do {
-        if(endIndex == 0) endIndex = mClusterCapacity;
+        if(endIndex == 0) endIndex = mEventCapacity;
         endIndex--;
-
     } while(endIndex != (*mViewClusterPosition[channel]) &&
             mViewClusterTime[channel][endIndex] > endInRecordingUnits);
 	endIndex++;
 
     size_t startIndex = endIndex;
     do {
-        if(startIndex == 0) startIndex = mClusterCapacity;
+        if(startIndex == 0) startIndex = mEventCapacity;
         startIndex--;
     } while(startIndex != (*mViewClusterPosition[channel]) &&
             mViewClusterTime[channel][startIndex] > startInRecordingUnits);
-    //startIndex++;
+    startIndex++;
 
-    // Adjust result to number of events found
-    size_t spikeCount = mClusterCapacity + endIndex - startIndex;
-    if(spikeCount > mClusterCapacity)
-        spikeCount -= mClusterCapacity;
+    // Count spike event and wrapp around if needed.
+    size_t spikeCount = mEventCapacity + endIndex - startIndex;
+    if(spikeCount >= mEventCapacity)
+        spikeCount -= mEventCapacity;
 
+    // Abort if there are no spikes
     if(spikeCount == 0) {
         mMutex.unlock();
         return result;
     }
 
+    // Adjust result to number of events found
     result->setSize(2, spikeCount);
 
     size_t dataIndex = 0;
     if(startIndex <= endIndex) {
         // Adjust and copy timestamps
         for(size_t i = startIndex; i < endIndex; i++) {
-			(*result)[dataIndex++] = (lengthInRecordingUnits + mViewClusterTime[channel][i] - endInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
         for(size_t i = startIndex; i < endIndex; i++) {
@@ -661,14 +660,14 @@ Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, lon
         }
     } else {
         // Adjust and copy timestamps
-        for(size_t i = startIndex; i < mClusterCapacity; i++) {
-			(*result)[dataIndex++] = (lengthInRecordingUnits + mViewClusterTime[channel][i] - endInRecordingUnits) / clockToSampleRatio;
+        for(size_t i = startIndex; i < mEventCapacity; i++) {
+			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
         }
         for(size_t i = 0; i < endIndex; i++) {
-			(*result)[dataIndex++] = (lengthInRecordingUnits + mViewClusterTime[channel][i] - endInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
-        for(size_t i = startIndex; i < mClusterCapacity; i++) {
+        for(size_t i = startIndex; i < mEventCapacity; i++) {
             (*result)[dataIndex++] = mViewClusterID[channel][i];
         }
         for(size_t i = 0; i < endIndex; i++) {

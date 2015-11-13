@@ -194,7 +194,7 @@ private:
 
     // Capacity of buffers
     size_t mTraceCapacity;
-    size_t mClusterCapacity;
+    size_t mEventCapacity;
 
     // Continous data storage
     INT16*  mLiveTraceData;
