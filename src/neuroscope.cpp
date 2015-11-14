@@ -1097,6 +1097,10 @@ void NeuroscopeApp::openNetworkStream(CerebusTracesProvider::SamplingGroup group
 		for (int i = 2; i <= channelCount; i++)
 			addClusterFile(QString::number(i));
 
+        // Set up event palette
+        QString eventFileId = this->doc->lastLoadedProviderName();
+        createEventPalette(eventFileId);
+
 		// Update the spike and event browsing status
 		updateBrowsingStatus();
 

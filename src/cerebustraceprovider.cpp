@@ -20,6 +20,7 @@
 #include <QDebug>
 
 #include "cerebusclustersprovider.h"
+#include "cerebuseventsprovider.h"
 
 // TODO: Fix this ugly hack by implementing our own error return value.
 #define CBSDKRESULT_EMPTYSAMPLINGGROUP -50
@@ -47,7 +48,13 @@ CerebusTracesProvider::CerebusTracesProvider(SamplingGroup group) :
         mLiveClusterPosition(NULL),
         mViewClusterTime(NULL),
         mViewClusterID(NULL),
-        mViewClusterPosition(NULL) {
+        mViewClusterPosition(NULL),
+        mLiveEventTime(NULL),
+        mLiveEventID(NULL),
+        mLiveEventPosition(NULL),
+        mViewEventTime(NULL),
+        mViewEventID(NULL),
+        mViewEventPosition(NULL) {
 
 	// The sampling rate is hardwired to the sampling group
 	this->samplingRate = SAMPLING_RATES[group];
@@ -83,6 +90,10 @@ CerebusTracesProvider::~CerebusTracesProvider() {
             delete[] mViewClusterTime;
             delete[] mViewClusterID;
             delete[] mViewClusterPosition;
+
+            delete[] mViewEventTime;
+            delete[] mViewEventID;
+            delete mViewEventPosition;
         }
         delete mLiveTime;
 
@@ -98,6 +109,10 @@ CerebusTracesProvider::~CerebusTracesProvider() {
         delete[] mLiveClusterTime;
         delete[] mLiveClusterID;
         delete[] mLiveClusterPosition;
+
+        delete[] mLiveEventTime;
+        delete[] mLiveEventID;
+        delete[] mLiveEventPosition;
 	}
 }
 
@@ -177,6 +192,26 @@ bool CerebusTracesProvider::init() {
     	return false;
     }
 
+	// Register digital event callback
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_DIGITAL, packageCallback, this);
+
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
+		delete[] mChannels;
+		delete[] mScales;
+		cbSdkClose(CEREBUS_INSTANCE);
+		return false;
+	}
+
+	// Register serial event callback
+	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_SERIAL, packageCallback, this);
+
+	if (mLastResult != CBSDKRESULT_SUCCESS) {
+		delete[] mChannels;
+		delete[] mScales;
+		cbSdkClose(CEREBUS_INSTANCE);
+		return false;
+	}
+
 	// Register config callback
 	mLastResult = cbSdkRegisterCallback(CEREBUS_INSTANCE, CBSDKCALLBACK_GROUPINFO, packageCallback, this);
 
@@ -204,18 +239,25 @@ bool CerebusTracesProvider::init() {
 	memset(mLiveTraceData, 0, this->nbChannels * mTraceCapacity * sizeof(INT16));
     mLiveTracePosition = new size_t(0);
 
-    // Allocate live event buffer
+    // Allocate live spike event buffer
     mLiveClusterTime     = new UINT32*[this->nbChannels];
-    mLiveClusterID       = new UINT8*[this->nbChannels];
+    mLiveClusterID       = new UINT16*[this->nbChannels];
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
         mLiveClusterTime[i] = new UINT32[mEventCapacity];
         memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT8[mEventCapacity];
-        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
+        mLiveClusterID[i] = new UINT16[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT16));
         mLiveClusterPosition[i] = new size_t(0);
     }
+
+	// Allocate live digital event buffer
+	mLiveEventTime = new UINT32[mEventCapacity];
+	memset(mLiveEventTime, 0, mEventCapacity * sizeof(UINT32));
+	mLiveEventID = new UINT16[mEventCapacity];
+	memset(mLiveEventID, 0, mEventCapacity * sizeof(UINT16));
+	mLiveEventPosition = new size_t(0);
 
     // Link view buffer to live sample buffer
     mViewTime = mLiveTime;
@@ -226,6 +268,10 @@ bool CerebusTracesProvider::init() {
     mViewClusterTime = mLiveClusterTime;
     mViewClusterID = mLiveClusterID;
     mViewClusterPosition = mLiveClusterPosition;
+
+    mViewEventTime = mLiveEventTime;
+    mViewEventID = mLiveEventID;
+    mViewEventPosition = mLiveEventPosition;
 
     // We are done.
 	mInitialized = true;
@@ -292,6 +338,29 @@ void CerebusTracesProvider::processSpike(const cbPKT_SPK* package) {
 	mMutex.unlock();
 }
 
+void CerebusTracesProvider::processEvent(const cbPKT_DINP* package) {
+
+	mMutex.lock();
+
+	// Channels were reconfigured and we now might receive data from channels we don't know about.
+	// (No harm, but also no point to continue. We are going to abort soon anyway.)
+	if (mReconfigured) {
+		mMutex.unlock();
+		return;
+	}
+
+    // Safe time and channel of event
+    mLiveEventTime[*mLiveEventPosition] = package->time;
+    mLiveEventID[*mLiveEventPosition]   = package->chid;
+
+    (*mLiveEventPosition)++;
+    if ((*mLiveEventPosition) == mEventCapacity) {
+        (*mLiveEventPosition) = 0;
+    }
+
+    mMutex.unlock();
+}
+
 void CerebusTracesProvider::processConfig(const cbPKT_GROUPINFO* package) {
 	// Ignore package if for different sampling group or channel count did not change
 	if (package->group != mGroup)
@@ -316,6 +385,10 @@ void CerebusTracesProvider::packageCallback(UINT32 /*instance*/, const cbSdkPktT
         case cbSdkPkt_SPIKE:
     		provider->processSpike(reinterpret_cast<const cbPKT_SPK*>(data));
             break;
+		case cbSdkPkt_DIGITAL:
+		case cbSdkPkt_SERIAL:
+			provider->processEvent(reinterpret_cast<const cbPKT_DINP*>(data));
+			break;
         case cbSdkPkt_GROUPINFO:
     		provider->processConfig(reinterpret_cast<const cbPKT_GROUPINFO*>(data));
             break;
@@ -450,6 +523,9 @@ void CerebusTracesProvider::slotPagingStarted() {
     delete[] mViewClusterID;
     delete[] mViewClusterPosition;
 
+    delete[] mViewEventTime;
+    delete[] mViewEventID;
+    delete mViewEventPosition;
 
     // Use the same buffer for new and displayed samples
     mViewTime = mLiveTime;
@@ -460,6 +536,10 @@ void CerebusTracesProvider::slotPagingStarted() {
     mViewClusterTime = mLiveClusterTime;
     mViewClusterID = mLiveClusterID;
     mViewClusterPosition = mLiveClusterPosition;
+
+    mViewEventTime = mLiveEventTime;
+    mViewEventID = mLiveEventID;
+    mViewEventPosition = mLiveEventPosition;
 
 	mMutex.unlock();
 }
@@ -479,16 +559,22 @@ void CerebusTracesProvider::slotPagingStopped() {
     mLiveTracePosition = new size_t(0);
 
     mLiveClusterTime     = new UINT32*[this->nbChannels];
-    mLiveClusterID       = new UINT8*[this->nbChannels];
+    mLiveClusterID       = new UINT16*[this->nbChannels];
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
         mLiveClusterTime[i] = new UINT32[mEventCapacity];
         memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT8[mEventCapacity];
-        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
+        mLiveClusterID[i] = new UINT16[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT16));
         mLiveClusterPosition[i] = new size_t(0);
     }
+
+	mLiveEventTime = new UINT32[mEventCapacity];
+	memset(mLiveEventTime, 0, mEventCapacity * sizeof(UINT32));
+	mLiveEventID = new UINT16[mEventCapacity];
+	memset(mLiveEventID, 0, mEventCapacity * sizeof(UINT16));
+	mLiveEventPosition = new size_t(0);
 
 	mMutex.unlock();
 }
@@ -587,6 +673,33 @@ QList<ClustersProvider*> CerebusTracesProvider::getClusterProviders() {
 }
 
 Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, long start, long end) {
+	return getTimeStampedData(mViewClusterTime[channel],
+    						  mViewClusterID[channel],
+    						  mViewClusterPosition[channel],
+    						  start,
+    						  end);
+}
+
+EventsProvider* CerebusTracesProvider::getEventProvider() {
+    if(!mInitialized)
+        return NULL;
+
+    return new CerebusEventsProvider(this, this->samplingRate);
+}
+
+Array<dataType>* CerebusTracesProvider::getEventData(long start, long end) {
+	return getTimeStampedData(mViewEventTime,
+							  mViewEventID,
+							  mViewEventPosition,
+						 	  start,
+							  end);
+}
+
+Array<dataType>* CerebusTracesProvider::getTimeStampedData(UINT32* time,
+                                                           UINT16* id,
+                                                           size_t* position,
+                                                           long start,
+                                                           long end) {
     // The arrays assignment operator is broken, so returning a pointer is a quick fix.
 	Array<dataType>* result = new Array <dataType>;
 
@@ -618,64 +731,64 @@ Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, lon
 	if (startInRecordingUnits < 0)
 		startInRecordingUnits = 0;
 
-    size_t endIndex = (*mViewClusterPosition[channel]);
+    size_t endIndex = (*position);
     do {
         if(endIndex == 0) endIndex = mEventCapacity;
         endIndex--;
-    } while(endIndex != (*mViewClusterPosition[channel]) &&
-            mViewClusterTime[channel][endIndex] > endInRecordingUnits);
+    } while(endIndex != (*position) &&
+            time[endIndex] > endInRecordingUnits);
 	endIndex++;
 
     size_t startIndex = endIndex;
     do {
         if(startIndex == 0) startIndex = mEventCapacity;
         startIndex--;
-    } while(startIndex != (*mViewClusterPosition[channel]) &&
-            mViewClusterTime[channel][startIndex] > startInRecordingUnits);
+    } while(startIndex != (*position) &&
+            time[startIndex] > startInRecordingUnits);
     startIndex++;
 
     // Count spike event and wrapp around if needed.
-    size_t spikeCount = mEventCapacity + endIndex - startIndex;
-    if(spikeCount >= mEventCapacity)
-        spikeCount -= mEventCapacity;
+    size_t eventCount = mEventCapacity + endIndex - startIndex;
+    if(eventCount >= mEventCapacity)
+        eventCount -= mEventCapacity;
 
     // Abort if there are no spikes
-    if(spikeCount == 0) {
+    if(eventCount == 0) {
         mMutex.unlock();
         return result;
     }
 
     // Adjust result to number of events found
-    result->setSize(2, spikeCount);
+    result->setSize(2, eventCount);
 
     size_t dataIndex = 0;
     if(startIndex <= endIndex) {
         // Adjust and copy timestamps
         for(size_t i = startIndex; i < endIndex; i++) {
-			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
         for(size_t i = startIndex; i < endIndex; i++) {
-            (*result)[dataIndex++] = mViewClusterID[channel][i];
+            (*result)[dataIndex++] = id[i];
         }
     } else {
         // Adjust and copy timestamps
         for(size_t i = startIndex; i < mEventCapacity; i++) {
-			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         for(size_t i = 0; i < endIndex; i++) {
-			(*result)[dataIndex++] = (mViewClusterTime[channel][i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
         for(size_t i = startIndex; i < mEventCapacity; i++) {
-            (*result)[dataIndex++] = mViewClusterID[channel][i];
+            (*result)[dataIndex++] = id[i];
         }
         for(size_t i = 0; i < endIndex; i++) {
-            (*result)[dataIndex++] = mViewClusterID[channel][i];
+            (*result)[dataIndex++] = id[i];
         }
     }
 
-    Q_ASSERT(dataIndex == 2 * spikeCount);
+    Q_ASSERT(dataIndex == 2 * eventCount);
 
     mMutex.unlock();
 

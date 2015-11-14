@@ -655,9 +655,8 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
         false // show events in position view
     );
 
-	// Get cluster providers
+	// Integrate spike event data
     QList<ClustersProvider*> list = cerebusTracesProvider->getClusterProviders();
-
 
     // This a kind of ugly solution, but unless data providers are reworked, there is no proper place for this:
     QList<int> groupToPeakIndex;
@@ -722,6 +721,42 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
         }
 
 	}
+
+    // Integrate digital and serial event data
+    EventsProvider* eventsProvider = cerebusTracesProvider->getEventProvider();
+
+    QString name = eventsProvider->getName();
+
+    this->lastLoadedProvider = name;
+    this->lastEventProviderGridX = eventsProvider->getDescriptionLength();
+    this->providers.insert(name, eventsProvider);
+    this->providerUrls.insert(name, "cerebus.nev");
+
+    //Constructs the eventColorList and eventsToSkip
+    //An id is assign to each event, this id will be used internally in NeuroScope and in the session file.
+    ItemColors* eventColors = new ItemColors();
+    QList<int> eventsList;
+    QMap<EventDescription,int> eventMap = eventsProvider->eventDescriptionIdMap();
+    QMap<EventDescription,int>::Iterator it;
+    for(it = eventMap.begin(); it != eventMap.end(); ++it){
+		int hue = fmod(it.value() * 7.0, 36) * 10;
+		QColor color = QColor::fromHsv(hue, 255, 255);
+        eventColors->append(it.value(), it.key(), color);
+        eventsList.append(it.value());
+    }
+    this->providerItemColors.insert(name, eventColors);
+
+    // Informs the views than there is a new event provider.
+    // There should be only one view, since we only created one display.
+    QList<int> eventsToSkip;
+    for(int i = 0; i < viewList->count(); i++) {
+        viewList->at(i)->setEventProvider(eventsProvider,
+                                          name,
+                                          eventColors,
+                                          true,
+                                          eventsList,
+                                          eventsToSkip);
+    }
 
 	return true;
 }

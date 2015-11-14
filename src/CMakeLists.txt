@@ -82,7 +82,8 @@ if(WITH_CEREBUS)
     # Add network specific source files
     list(APPEND SOURCE_FILES
          cerebustraceprovider.cpp
-         cerebusclustersprovider.cpp)
+         cerebusclustersprovider.cpp
+         cerebuseventsprovider.cpp)
 endif()
 
 # Combine it all

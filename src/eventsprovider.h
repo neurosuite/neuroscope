@@ -69,7 +69,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.
   */
-    void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits = 0);
+    virtual void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits = 0);
 
     /**Looks up for the first of the events included in the list @p selectedIds existing after the time @p startTime.
   * All the events included in the time interval given by @p timeFrame are retrieved. The time interval start time is
@@ -79,7 +79,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-    void requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator);
+    virtual void requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator);
 
 
     /**Looks up for the first of the events included in the list @p selectedIds existing before the time @p endTime.
@@ -90,7 +90,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-    void requestPreviousEventData(long endTime,long timeFrame,QList<int> selectedIds,QObject* initiator);
+    virtual void requestPreviousEventData(long endTime,long timeFrame,QList<int> selectedIds,QObject* initiator);
 
     /**Loads the event ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status

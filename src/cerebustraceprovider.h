@@ -1,5 +1,5 @@
 /***************************************************************************
-            cerebustracesprovider.h  -  description
+				cerebustracesprovider.h  -  description
                              -------------------
     copyright            : (C) 2015 by Florian Franzen
  ***************************************************************************/
@@ -28,6 +28,7 @@
 #include "types.h"
 #include "tracesprovider.h"
 #include "clustersprovider.h"
+#include "eventsprovider.h"
 
 
 /** CerebusTracesProvider uses a Blackrock Cerebus NSP as data source.
@@ -89,6 +90,9 @@ public:
     // Called by callback to add spike event to buffer.
     void processSpike(const cbPKT_SPK* package);
 
+	// Called by callback to add digital and serial event to buffer.
+	void processEvent(const cbPKT_DINP* package);
+
     // Called by callback to process configuration changes.
     void processConfig(const cbPKT_GROUPINFO* package);
 
@@ -148,10 +152,17 @@ public:
      */
     QList<ClustersProvider*> getClusterProviders();
 
-    /** Get cluster data for specific channel.
+    /** Get cluster data for specific channel in time between @start and @end.
      */
     Array<dataType>* getClusterData(unsigned int channel, long start, long end);
 
+    /** Create a event provider for all event data.
+     */
+    EventsProvider* getEventProvider();
+
+    /** Get event data for all events between @start and @end.
+     */
+    Array<dataType>* getEventData(long start, long end);
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
@@ -204,11 +215,19 @@ private:
 
     // Spike event data storage
     UINT32** mLiveClusterTime;
-    UINT8**  mLiveClusterID;
+    UINT16**  mLiveClusterID; //UINT8
     size_t** mLiveClusterPosition;
     UINT32** mViewClusterTime;
-    UINT8**  mViewClusterID;
+    UINT16**  mViewClusterID; //UINT8
     size_t** mViewClusterPosition;
+
+    // Digital and serial event data storage
+    UINT32* mLiveEventTime;
+    UINT16* mLiveEventID;
+    size_t* mLiveEventPosition;
+    UINT32* mViewEventTime;
+    UINT16* mViewEventID;
+    size_t* mViewEventPosition;
 
     /**Retrieves the traces included in the time frame given by @p startTime and @p endTime.
     * @param startTime begining of the time frame from which to retrieve the data, given in milisecond.
@@ -220,6 +239,13 @@ private:
 
     /**Computes the total length of the document in miliseconds.*/
     virtual void computeRecordingLength();
+
+    /** Helper function that searches timestamps in buffer*/
+    Array<dataType>* getTimeStampedData(UINT32* time,
+                                        UINT16* id,
+                                        size_t* position,
+                                        long start,
+                                        long end);
 };
 
 #endif
