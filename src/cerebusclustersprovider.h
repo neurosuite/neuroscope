@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _NEVCLUSTERSPROVIDER_H_
-#define _NEVCLUSTERSPROVIDER_H_
+#ifndef _CEREBUSCLUSTERSPROVIDER_H_
+#define _CEREBUSCLUSTERSPROVIDER_H_
 
 #include "clustersprovider.h"
 #include "cerebustraceprovider.h"
@@ -23,7 +23,6 @@ class CerebusClustersProvider : public ClustersProvider  {
     Q_OBJECT
 
 public:
-    static const int CLUSTER_COUNT;
 
     CerebusClustersProvider(CerebusTracesProvider* source, unsigned int channel, int samplingRate);
     ~CerebusClustersProvider();

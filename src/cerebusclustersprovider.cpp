@@ -17,9 +17,6 @@
 
 #include <QDebug>
 
-// 0 = unclassified, 1 - cbMAXUNITS = actual units, 254 = artifact (unit + noise), 255 = background (noise)
-const int CerebusClustersProvider::CLUSTER_COUNT = cbMAXUNITS + 3;
-
 CerebusClustersProvider::CerebusClustersProvider(CerebusTracesProvider* source, unsigned int channel, int samplingRate) :
     ClustersProvider(QString("cerebus.%1.clu").arg(channel + 1), samplingRate, cbSdk_TICKS_PER_SECOND, 0),
     mDataProvider(source),
@@ -27,6 +24,7 @@ CerebusClustersProvider::CerebusClustersProvider(CerebusTracesProvider* source, 
 
     // Name referes to the group, which can not be zero, because zero is trash group.
     this->name = QString::number(mChannel + 1);
+    // 0 = unclassified, 1 - cbMAXUNITS = actual units, 254 = artifact (unit + noise), 255 = background (noise)
     this->clusterIds << 0 << 1 << 2 << 3 << 4 << 5 << 254 << 255;
 }
 
@@ -48,9 +46,9 @@ void CerebusClustersProvider::requestData(long start, long end, QObject* initiat
 }
 
 void CerebusClustersProvider::requestNextClusterData(long startTime, long timeFrame, const QList<int> &selectedIds, QObject* initiator, long startTimeInRecordingUnits) {
-    qDebug() << "requestNextClusterData(...) not supported yet.";
+    qCritical() << "requestNextClusterData(...) not supported yet.";
 }
 
 void CerebusClustersProvider::requestPreviousClusterData(long startTime, long timeFrame, QList<int> selectedIds, QObject* initiator, long startTimeInRecordingUnits) {
-    qDebug() << "requestPreviousClusterData(...) not supported yet.";
+    qCritical() << "requestPreviousClusterData(...) not supported yet.";
 }
