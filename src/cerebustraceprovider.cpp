@@ -368,7 +368,7 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 	// Make sure to only abort if not in pause mode!
 	if (mReconfigured && mViewTraceData == mLiveTraceData) {
 		mMutex.unlock();
-		qDebug() << "Recofiguration not supported. Please reopen connection.";
+		qCritical() << "Recofiguration not supported. Please reopen connection.";
 		emit dataReady(result, initiator);
 		return;
 	}
@@ -391,7 +391,7 @@ void CerebusTracesProvider::retrieveData(long start, long end, QObject* initiato
 			unit_correction = 1000;
 		}
 		else {
-			qWarning() << "unknown unit for channel " << channel << ": " << unit_string;
+			qWarning() << "Unknown unit for channel " << channel << ": " << unit_string;
 			continue;
 		}
 
