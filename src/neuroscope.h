@@ -35,6 +35,11 @@
 //application specific include files
 #include "neuroscopeview.h"
 
+#ifdef WITH_CEREBUS
+    #include "cerebustraceprovider.h" // For SamplingGroup
+#endif
+
+
 // forward declaration of the Neuroscope classes
 class NeuroscopeDoc;
 class PrefDialog;
@@ -72,7 +77,7 @@ public:
     /** Open a stream, only one document (file or stream) at the time allowed.
     * Asking for a new one will open a new instance of the application with it.
     */
-    void openDocumentStream();
+    void openNetworkStream(CerebusTracesProvider::SamplingGroup group);
 #endif
 
     /** Returns a pointer to the current document connected to the NeuroscopeApp instance and is used by

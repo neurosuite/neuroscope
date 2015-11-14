@@ -581,32 +581,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
 }
 
 #ifdef WITH_CEREBUS
-bool NeuroscopeDoc::openStream() {
-    // Let user choose sampling rate
-    QStringList items;
-    items << "30 000 Hz" << "10 000 Hz" << "2000 Hz" << "1000 Hz" << "500 Hz";
-
-    CerebusTracesProvider::SamplingGroup mapping[5] = {
-        CerebusTracesProvider::RATE_30k,
-        CerebusTracesProvider::RATE_10k,
-        CerebusTracesProvider::RATE_2K,
-        CerebusTracesProvider::RATE_1K,
-        CerebusTracesProvider::RATE_500
-    };
-
-    bool ok;
-	int answer = items.indexOf(QInputDialog::getItem(0, tr("Network Stream"),
-														tr("Please choose the sampling group to be displayed."),
-														items,
-														0, // current
-														false, //editable
-														&ok));
-
-	if (!ok || answer < 0)
-        return false;
-
-    CerebusTracesProvider::SamplingGroup group = mapping[answer];
-
+bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
     // Open network stream
 	CerebusTracesProvider* cerebusTracesProvider = new CerebusTracesProvider(group);
 

@@ -28,14 +28,14 @@
 
 #include <QEvent>
 
-
-
-
 //include files for the application
 #include "channelpalette.h"
 #include "dataprovider.h"
 #include "eventsprovider.h"
 
+#ifdef WITH_CEREBUS
+    #include "cerebustraceprovider.h" // For SamplingGroup
+#endif
 
 // forward declaration of the Neuroscope classes
 class NeuroscopeView;
@@ -118,7 +118,7 @@ public:
     /** Open network stream.
     * @return true on sucess, false otherwise.
     */
-    bool openStream();
+    bool openStream(CerebusTracesProvider::SamplingGroup group);
 #endif
 
     /**Saves the current session: displays, spike, cluster, event files opened and selected clusters and events.

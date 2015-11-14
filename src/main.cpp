@@ -96,19 +96,15 @@ int main(int argc, char *argv[])
                   SR = args.at(++i);
              } else if (arg == "-t" || arg == "--timeWindow" || arg == "-timeWindow") {
                   timeWindow = args.at(++i);
-            } else {
-                 handled = false;
-            }
-         } else {
 #ifdef WITH_CEREBUS
-             if (arg == "-n" || arg == "--stream" || arg == "-stream") {
+             } else if (arg == "-n" || arg == "--stream" || arg == "-stream") {
                  streamMode = true;
+#endif
              } else {
-#endif
                  handled = false;
-#ifdef WITH_CEREBUS
              }
-#endif
+         } else {
+             handled = false;
          }
          // Nothing know. Treat it as path.
          if (!handled)
@@ -128,7 +124,16 @@ int main(int argc, char *argv[])
     neuroscope->show();
 #ifdef WITH_CEREBUS
     if (streamMode) {
-        neuroscope->openDocumentStream();
+        if(!file.isEmpty()) {
+            int group = file.toInt();
+            if(group > 0 && group < 6) {
+    		    neuroscope->openNetworkStream(static_cast<CerebusTracesProvider::SamplingGroup>(group));
+            } else {
+                std::cerr << "Sampling group must be between 1 (500 samp/sec) and 5 (30k samp/sec)." << std::endl;
+            }
+        } else {
+            std::cerr << "Network stream mode expects a sampling group as file argument." << std::endl;
+        }
     } else {
 #endif
         if (!file.isEmpty()) {
