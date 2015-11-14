@@ -658,9 +658,16 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
 	// Get cluster providers
     QList<ClustersProvider*> list = cerebusTracesProvider->getClusterProviders();
 
-    // Increase spike size
-    this->peakSampleIndex = 64;
-    this->nbSamples = 128;
+
+    // This a kind of ugly solution, but unless data providers are reworked, there is no proper place for this:
+    QList<int> groupToPeakIndex;
+    groupToPeakIndex << 0 << 1 << 1 << 1 << 4 << 12;
+    QList<int> groupToSampelCount;
+    groupToSampelCount << 0 << 4 << 4 << 4 << 16 << 48;
+
+    // Set spike event sample count and peak postition
+	this->peakSampleIndex = groupToPeakIndex[group];
+	this->nbSamples = groupToSampelCount[group];
 
     for(QList<ClustersProvider*>::iterator providerIterator = list.begin();
         providerIterator != list.end();
