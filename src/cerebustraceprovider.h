@@ -215,10 +215,10 @@ private:
 
     // Spike event data storage
     UINT32** mLiveClusterTime;
-    UINT16**  mLiveClusterID; //UINT8
+    UINT8**  mLiveClusterID;
     size_t** mLiveClusterPosition;
     UINT32** mViewClusterTime;
-    UINT16**  mViewClusterID; //UINT8
+    UINT8**  mViewClusterID;
     size_t** mViewClusterPosition;
 
     // Digital and serial event data storage
@@ -241,9 +241,10 @@ private:
     virtual void computeRecordingLength();
 
     /** Helper function that searches timestamps in buffer*/
-    Array<dataType>* getTimeStampedData(UINT32* time,
-                                        UINT16* id,
-                                        size_t* position,
+    template <typename T>
+    Array<dataType>* getTimeStampedData(UINT32* timeBuffer,
+                                        T* dataBuffer,
+                                        size_t* bufferPosition,
                                         long start,
                                         long end);
 };

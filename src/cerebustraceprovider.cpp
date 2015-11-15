@@ -241,14 +241,14 @@ bool CerebusTracesProvider::init() {
 
     // Allocate live spike event buffer
     mLiveClusterTime     = new UINT32*[this->nbChannels];
-    mLiveClusterID       = new UINT16*[this->nbChannels];
+    mLiveClusterID       = new UINT8*[this->nbChannels];
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
         mLiveClusterTime[i] = new UINT32[mEventCapacity];
         memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT16[mEventCapacity];
-        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT16));
+        mLiveClusterID[i] = new UINT8[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
         mLiveClusterPosition[i] = new size_t(0);
     }
 
@@ -559,14 +559,14 @@ void CerebusTracesProvider::slotPagingStopped() {
     mLiveTracePosition = new size_t(0);
 
     mLiveClusterTime     = new UINT32*[this->nbChannels];
-    mLiveClusterID       = new UINT16*[this->nbChannels];
+    mLiveClusterID       = new UINT8*[this->nbChannels];
     mLiveClusterPosition = new size_t*[this->nbChannels];
 
     for(int i = 0; i < this->nbChannels; i++) {
         mLiveClusterTime[i] = new UINT32[mEventCapacity];
         memset(mLiveClusterTime[i], 0, mEventCapacity * sizeof(UINT32));
-        mLiveClusterID[i] = new UINT16[mEventCapacity];
-        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT16));
+        mLiveClusterID[i] = new UINT8[mEventCapacity];
+        memset(mLiveClusterID[i], 0, mEventCapacity * sizeof(UINT8));
         mLiveClusterPosition[i] = new size_t(0);
     }
 
@@ -673,11 +673,11 @@ QList<ClustersProvider*> CerebusTracesProvider::getClusterProviders() {
 }
 
 Array<dataType>* CerebusTracesProvider::getClusterData(unsigned int channel, long start, long end) {
-	return getTimeStampedData(mViewClusterTime[channel],
-    						  mViewClusterID[channel],
-    						  mViewClusterPosition[channel],
-    						  start,
-    						  end);
+	return getTimeStampedData<UINT8>(mViewClusterTime[channel],
+        						     mViewClusterID[channel],
+        						     mViewClusterPosition[channel],
+        						     start,
+        						     end);
 }
 
 EventsProvider* CerebusTracesProvider::getEventProvider() {
@@ -688,16 +688,17 @@ EventsProvider* CerebusTracesProvider::getEventProvider() {
 }
 
 Array<dataType>* CerebusTracesProvider::getEventData(long start, long end) {
-	return getTimeStampedData(mViewEventTime,
-							  mViewEventID,
-							  mViewEventPosition,
-						 	  start,
-							  end);
+	return getTimeStampedData<UINT16>(mViewEventTime,
+            						  mViewEventID,
+            						  mViewEventPosition,
+            					 	  start,
+            						  end);
 }
 
-Array<dataType>* CerebusTracesProvider::getTimeStampedData(UINT32* time,
-                                                           UINT16* id,
-                                                           size_t* position,
+template <typename T>
+Array<dataType>* CerebusTracesProvider::getTimeStampedData(UINT32* timeBuffer,
+                                                           T* dataBuffer,
+                                                           size_t* bufferPosition,
                                                            long start,
                                                            long end) {
     // The arrays assignment operator is broken, so returning a pointer is a quick fix.
@@ -730,21 +731,24 @@ Array<dataType>* CerebusTracesProvider::getTimeStampedData(UINT32* time,
 	// In the beginning or on clock overflow make sure we stay positive.
 	if (startInRecordingUnits < 0)
 		startInRecordingUnits = 0;
+	if (endInRecordingUnits < 0)
+		endInRecordingUnits = 0;
 
-    size_t endIndex = (*position);
+    // Linear search for start and end index.
+    size_t endIndex = (*bufferPosition);
     do {
         if(endIndex == 0) endIndex = mEventCapacity;
         endIndex--;
-    } while(endIndex != (*position) &&
-            time[endIndex] > endInRecordingUnits);
+    } while(endIndex != (*bufferPosition) &&
+            timeBuffer[endIndex] > endInRecordingUnits);
 	endIndex++;
 
     size_t startIndex = endIndex;
     do {
         if(startIndex == 0) startIndex = mEventCapacity;
         startIndex--;
-    } while(startIndex != (*position) &&
-            time[startIndex] > startInRecordingUnits);
+    } while(startIndex != (*bufferPosition) &&
+            timeBuffer[startIndex] >= startInRecordingUnits);
     startIndex++;
 
     // Count spike event and wrapp around if needed.
@@ -765,26 +769,26 @@ Array<dataType>* CerebusTracesProvider::getTimeStampedData(UINT32* time,
     if(startIndex <= endIndex) {
         // Adjust and copy timestamps
         for(size_t i = startIndex; i < endIndex; i++) {
-			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (timeBuffer[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
         for(size_t i = startIndex; i < endIndex; i++) {
-            (*result)[dataIndex++] = id[i];
+            (*result)[dataIndex++] = dataBuffer[i];
         }
     } else {
         // Adjust and copy timestamps
         for(size_t i = startIndex; i < mEventCapacity; i++) {
-			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (timeBuffer[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         for(size_t i = 0; i < endIndex; i++) {
-			(*result)[dataIndex++] = (time[i] - startInRecordingUnits) / clockToSampleRatio;
+			(*result)[dataIndex++] = (timeBuffer[i] - startInRecordingUnits) / clockToSampleRatio;
         }
         // Copy cluster ids
         for(size_t i = startIndex; i < mEventCapacity; i++) {
-            (*result)[dataIndex++] = id[i];
+            (*result)[dataIndex++] = dataBuffer[i];
         }
         for(size_t i = 0; i < endIndex; i++) {
-            (*result)[dataIndex++] = id[i];
+            (*result)[dataIndex++] = dataBuffer[i];
         }
     }
 
