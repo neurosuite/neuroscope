@@ -80,7 +80,7 @@ int NEVEventsProvider::loadData(){
         // Create proper label
         EventDescription label;
         switch(dataHeader.id) {
-            case NEVDigitalSerialID:
+            case NEVDigitalSerialDataID:
                 NEVDigitalSerialData digtalData;
                 if(!readStruct<NEVDigitalSerialData>(eventFile, digtalData))
                     goto fail;
@@ -96,7 +96,7 @@ int NEVEventsProvider::loadData(){
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
-            case NEVConfigurationID:
+            case NEVConfigurationDataID:
                 NEVConfigurationDataHeader configData;
                 if(!readStruct<NEVConfigurationDataHeader>(eventFile, configData))
                     goto fail;
@@ -113,7 +113,7 @@ int NEVEventsProvider::loadData(){
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
-            case NEVButtonID:
+            case NEVButtonDataID:
                 NEVButtonData buttonData;
                 if(!readStruct<NEVButtonData>(eventFile, buttonData))
                     goto fail;
@@ -130,7 +130,7 @@ int NEVEventsProvider::loadData(){
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
-            case NEVTrackingID:
+            case NEVTrackingDataID:
                 NEVTrackingDataHeader trackingData;
                 if(!readStruct<NEVTrackingDataHeader>(eventFile, trackingData))
                     goto fail;
@@ -143,12 +143,12 @@ int NEVEventsProvider::loadData(){
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
-            case NEVVideoSyncID:
+            case NEVVideoSyncDataID:
                 NEVVideoSyncData syncData;
                 if(!readStruct<NEVVideoSyncData>(eventFile, syncData))
                     goto fail;
 
-                label = QString("video sync (s: %1)").arg(syncData.video_source);
+                label = QString("video sync (s: %1)").arg(syncData.id);
 
                 // Skip the padding
                 if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
@@ -156,7 +156,7 @@ int NEVEventsProvider::loadData(){
                                                    - sizeof(NEVDataHeader)))
                     goto fail;
                 break;
-            case NEVCommentID:
+            case NEVCommentDataID:
                 label = EventDescription("comment");
 
                 if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
