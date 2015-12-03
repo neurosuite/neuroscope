@@ -27,7 +27,6 @@
 #include <QPainter>
 #include <QLayout>
 #include <QToolTip>
-#include <QDebug>
 
 #include <QPixmap>
 #include <QBitmap>
@@ -716,7 +715,6 @@ void ChannelPalette::changeColor(QListWidgetItem* item,bool single){
 
     //Get the channelColor associated with the item
     const QColor oldColor = channelColors->color(id);
-    qDebug()<<" void ChannelPalette::changeColor(QListWidgetItem* item,bool single){";
     QColor color = QColorDialog::getColor(oldColor,0);
     if(color.isValid()){
         if(single){
@@ -1358,7 +1356,6 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
                 channelsShowHideStatus[*iterator] = false;
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
-            qDebug()<<" index "<<index;
             if (index != -1) {
                 ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),QString::number(*iterator));
                 targetIconView->insertItem(index, item);
@@ -1590,12 +1587,9 @@ void ChannelPalette::trashChannelsMovedAround(const QList<int>& channelIds, cons
 void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after){
     QList<int>::const_iterator iterator;
     QPainter painter;
-    qDebug()<<" sourceGroup"<<sourceGroup<<" channelIds"<<channelIds<<" after :"<<after;
 
     ChannelIconView* iconView = iconviewDict[sourceGroup];
-    qDebug()<<" iconView "<<iconView;
 
-    qDebug()<<" void ChannelPalette::moveChannels(const QList<int>& channelIds "<<after;
     //If the items have to be moved before the first item, insert them after the first item
     //and then move the first item after the others
     bool moveFirst = false;
@@ -1674,7 +1668,6 @@ void ChannelPalette::discardChannels()
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
-    qDebug()<<" void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){ "<<objectName()<<" channelsToDiscard "<<channelsToDiscard;
     //Get the destination group color to later update the group color of the moved channels, default is blue
     QColor groupColor;
     groupColor.setHsv(210,255,255);
@@ -1784,7 +1777,6 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
 }
 
 void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const QString& afterId,bool beforeFirst){
-    qDebug()<<" void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const QString& afterId,bool beforeFirst){"<<this<<" channelsToDiscard"<<channelsToDiscard<<" afterid"<<afterId;
     QListWidgetItem* after = 0;
     ChannelIconView* trash = iconviewDict["0"];
     //If the items have to be moved before the first item, insert them after the first item
@@ -1798,7 +1790,6 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const Q
         if(!lstItem.isEmpty()) {
             after = lstItem.first();
         }
-        qDebug() <<" after "<<after;
     }
 
     //Get the destination group color to later update the group color of the moved channels, default is blue
@@ -1897,8 +1888,6 @@ void ChannelPalette::setEditMode(bool edition){
     if(edition)
         channelsShowHideStatus.clear();
 
-    qDebug()<<" channelsShowHideStatus"<<channelsShowHideStatus;
-
     //Update the item icons
     QPainter painter;
     QMap<int,int>::Iterator iterator;
@@ -1916,7 +1905,6 @@ void ChannelPalette::setEditMode(bool edition){
                 channelsShowHideStatus.insert(iterator.key(),selected);
             } else {
                 selected = channelsShowHideStatus[iterator.key()];
-                qDebug()<<" iterator.key()"<<iterator.key()<<" selected"<<selected;
             }
             QIcon icon = item->icon();
             QPixmap pixmap(icon.pixmap(QSize(14,14)).size());
@@ -1929,7 +1917,6 @@ void ChannelPalette::setEditMode(bool edition){
     }
 
     selectChannels(selectedIds);
-    qDebug()<<"void ChannelPalette::setEditMode "<<this<<" edition"<<edition<<" selectedIds"<<selectedIds;
 
     //reset isInSelectItems to false to enable again the the emission of signals due to selectionChange
     isInSelectItems = false;
