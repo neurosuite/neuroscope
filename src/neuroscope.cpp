@@ -593,10 +593,10 @@ void NeuroscopeApp::initActions()
     connect(spikeChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
 
 
-    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
-    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,int,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,int,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,int,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,int,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,int,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,int,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,int,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,int,bool)));
 
     connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),spikeChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
     connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),displayChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
@@ -924,9 +924,9 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
-    displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups());
+    displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),doc->getChannelLabels());
     displayChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
-    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
+    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups(),doc->getChannelLabels());
     spikeChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
     displayChannelPalette->setGreyScale(greyScale->isChecked());
     spikeChannelPalette->setGreyScale(greyScale->isChecked());
@@ -2718,7 +2718,7 @@ void NeuroscopeApp::slotSynchronize(){
     spikeChannelPalette->reset();
 
     //Update and show the spike Palette.
-    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
+    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups(),doc->getChannelLabels());
     spikeChannelPalette->updateShowHideStatus(displayChannelPalette->getShowHideChannels(true),true);
     spikeChannelPalette->update();
 
@@ -3805,4 +3805,3 @@ void NeuroscopeApp::slotEventsToBrowse()
 {
     slotStateChanged("eventBrowsingState");
 }
-

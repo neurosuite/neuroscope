@@ -219,6 +219,7 @@ void NeuroscopeDoc::closeDocument()
     channelsSpikeGroups.clear();
     displayGroupsChannels.clear();
     spikeGroupsChannels.clear();
+    channelLabels.clear();
     skipStatus.clear();
 
     //Variables used for cluster and event providers
@@ -287,6 +288,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
             displayChannelsGroups.insert(i,1);
             channelsSpikeGroups.insert(i,-1);
             groupOne.append(i);
+            channelLabels.insert(i,QString::number(i));
             channelDefaultOffsets.insert(i,0);
         }
         displayGroupsChannels.insert(1,groupOne);
@@ -558,6 +560,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 displayChannelsGroups.insert(i,1);
                 channelsSpikeGroups.insert(i,-1);
                 groupOne.append(i);
+                channelLabels.insert(i,QString::number(i));
                 channelDefaultOffsets.insert(i,0);
             }
             displayGroupsChannels.insert(1,groupOne);
@@ -616,6 +619,7 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
 
 		// Put all channels in the same display group.
 		this->displayChannelsGroups.insert(i, 1);
+        this->channelLabels.insert(i, QString::number(i));
 		displayGroup.append(i);
 
 		// Put each channel in its own spiking group.
@@ -1315,6 +1319,7 @@ void NeuroscopeDoc::setChannelNb(int nb){
         channelsSpikeGroups.clear();
         displayGroupsChannels.clear();
         spikeGroupsChannels.clear();
+        channelLabels.clear();
         channelColorList->removeAll();
         displayChannelPalette.reset();
         spikeChannelPalette.reset();
@@ -1328,15 +1333,16 @@ void NeuroscopeDoc::setChannelNb(int nb){
             displayChannelsGroups.insert(i,1);
             channelsSpikeGroups.insert(i,-1);
             groupOne.append(i);
+            channelLabels.insert(i,QString::number(i));
         }
         displayGroupsChannels.insert(1,groupOne);
         spikeGroupsChannels.insert(-1,groupOne);
 
 
         //Update and show the channel Palettes.
-        displayChannelPalette.createChannelLists(channelColorList,&displayGroupsChannels,&displayChannelsGroups);
+        displayChannelPalette.createChannelLists(channelColorList,&displayGroupsChannels,&displayChannelsGroups,&channelLabels);
         displayChannelPalette.updateShowHideStatus(groupOne,false);
-        spikeChannelPalette.createChannelLists(channelColorList,&spikeGroupsChannels,&channelsSpikeGroups);
+        spikeChannelPalette.createChannelLists(channelColorList,&spikeGroupsChannels,&channelsSpikeGroups,&channelLabels);
         spikeChannelPalette.updateShowHideStatus(groupOne,false);
 
         //Resize the panel
@@ -1472,6 +1478,11 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
             channelColorList->append(i,color);
         }
     }
+
+    // TODO: Save and load this to/from file
+    // Build channel label list
+    for(int i = 0; i < channelNb; ++i)
+        channelLabels.insert(i, QString::number(i));
 
     //Build the list of channel default offsets
     reader.getChannelDefaultOffset(channelDefaultOffsets);

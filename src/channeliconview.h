@@ -36,20 +36,35 @@
 class ChannelIconViewItem : public QListWidgetItem {
 public:
     ChannelIconViewItem( QListWidget *view = 0)
-        : QListWidgetItem(view)
+        : QListWidgetItem(view), mID(-1)
     {
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
-    ChannelIconViewItem(const QIcon &icon, const QString &text, QListWidget *view = 0)
-        : QListWidgetItem(icon, text, view)
+    ChannelIconViewItem(const QIcon &icon, const QString &text, int id, QListWidget *view = 0)
+        : QListWidgetItem(icon, text, view), mID(id)
     {
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
+    int getID() {
+        return mID;
+    }
+
+    friend QDataStream &operator<<(QDataStream &stream, const ChannelIconViewItem &item) {
+        stream << static_cast<const QListWidgetItem&>(item);
+        stream << item.mID;
+    }
+    friend QDataStream &operator>>(QDataStream &stream, ChannelIconViewItem &item) {
+        stream >> static_cast<QListWidgetItem&>(item);
+        stream >> item.mID;
+    }
+private:
+    int mID;
 };
+
 
 
 class ChannelIconView : public QListWidget  {
@@ -57,6 +72,9 @@ class ChannelIconView : public QListWidget  {
 public:
     explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const QString& name = QString());
     ~ChannelIconView();
+
+    // Like the findItems for labels but finds item by id.
+    QList<QListWidgetItem*> findItems(const int id) const;
 
     void setNewWidth(int width);
 
