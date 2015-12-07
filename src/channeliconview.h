@@ -53,13 +53,15 @@ public:
         return mID;
     }
 
-    friend QDataStream &operator<<(QDataStream &stream, const ChannelIconViewItem &item) {
+    friend QDataStream& operator<<(QDataStream& stream, const ChannelIconViewItem& item) {
         stream << static_cast<const QListWidgetItem&>(item);
         stream << item.mID;
+        return stream;
     }
-    friend QDataStream &operator>>(QDataStream &stream, ChannelIconViewItem &item) {
+    friend QDataStream& operator>>(QDataStream& stream, ChannelIconViewItem& item) {
         stream >> static_cast<QListWidgetItem&>(item);
         stream >> item.mID;
+        return stream;
     }
 private:
     int mID;
