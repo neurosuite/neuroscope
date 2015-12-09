@@ -134,6 +134,9 @@ public:
         qDebug() << "Cerebus NSP used. Ignoring setAmplification(" << value << ")";
     }
 
+    /** Return the labels of each channel as read from cerebus config. */
+    virtual QMap<int, QString> getLabels();
+
     /** Called when paging is started.
      *  Recouples the buffer that is updated with the one that is
      *  viewed/returened.
@@ -188,10 +191,13 @@ private:
 
     // Sampling group to listen to
     SamplingGroup mGroup;
-    // List of scalings for each channel
-    cbSCALING* mScales;
     // List of NSP channel numbers we are listing to
     UINT32* mChannels;
+
+    // List of scalings for each channel
+    cbSCALING* mScales;
+    // List of labels for each channel
+    QMap<int, QString> mLabels;
 
     // Return value of last CBSDK library call
     int mLastResult;

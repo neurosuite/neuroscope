@@ -136,6 +136,9 @@ public:
     /**Returns the total number of samples in recorded contained in the file identified by fileUrl.*/
     long getTotalNbSamples();
 
+    /** Return the label for each channel, by default just the ID of the channel. */
+    virtual QMap<int, QString> getLabels();
+
 public Q_SLOTS:
     /** Called when paging is started.
      * Usefull for trace providers that have live data sources.

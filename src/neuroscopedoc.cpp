@@ -274,6 +274,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
         this->channelNb = nsxTracesProvider->getNbChannels();
         this->samplingRate = nsxTracesProvider->getSamplingRate();
         this->resolution = nsxTracesProvider->getResolution();;
+        this->channelLabels = nsxTracesProvider->getLabels();
 
         //extensionSamplingRates.insert(extension,samplingRate);
 
@@ -288,7 +289,6 @@ int NeuroscopeDoc::openDocument(const QString& url)
             displayChannelsGroups.insert(i,1);
             channelsSpikeGroups.insert(i,-1);
             groupOne.append(i);
-            channelLabels.insert(i,QString::number(i));
             channelDefaultOffsets.insert(i,0);
         }
         displayGroupsChannels.insert(1,groupOne);
@@ -560,12 +560,12 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 displayChannelsGroups.insert(i,1);
                 channelsSpikeGroups.insert(i,-1);
                 groupOne.append(i);
-                channelLabels.insert(i,QString::number(i));
                 channelDefaultOffsets.insert(i,0);
             }
             displayGroupsChannels.insert(1,groupOne);
             spikeGroupsChannels.insert(-1,groupOne);
 
+            channelLabels = tracesProvider->getLabels();
         }
     }
 
@@ -606,6 +606,7 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
     this->channelNb = cerebusTracesProvider->getNbChannels();
     this->samplingRate = cerebusTracesProvider->getSamplingRate();
     this->resolution = cerebusTracesProvider->getResolution();
+    this->channelLabels = cerebusTracesProvider->getLabels();
 
 	// Set up display and spike groups
 	QList<int> displayGroup;
@@ -619,7 +620,6 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
 
 		// Put all channels in the same display group.
 		this->displayChannelsGroups.insert(i, 1);
-        this->channelLabels.insert(i, QString::number(i));
 		displayGroup.append(i);
 
 		// Put each channel in its own spiking group.
@@ -1333,11 +1333,11 @@ void NeuroscopeDoc::setChannelNb(int nb){
             displayChannelsGroups.insert(i,1);
             channelsSpikeGroups.insert(i,-1);
             groupOne.append(i);
-            channelLabels.insert(i,QString::number(i));
         }
         displayGroupsChannels.insert(1,groupOne);
         spikeGroupsChannels.insert(-1,groupOne);
 
+        channelLabels = tracesProvider->getLabels();
 
         //Update and show the channel Palettes.
         displayChannelPalette.createChannelLists(channelColorList,&displayGroupsChannels,&displayChannelsGroups,&channelLabels);
@@ -1479,7 +1479,7 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
         }
     }
 
-    // TODO: Save and load this to/from file
+    // TODO: Save and load this to/from file or trace provider
     // Build channel label list
     for(int i = 0; i < channelNb; ++i)
         channelLabels.insert(i, QString::number(i));
