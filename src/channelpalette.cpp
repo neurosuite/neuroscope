@@ -81,8 +81,12 @@ ChannelPalette::ChannelPalette(PaletteType type,const QColor& backgroundColor,bo
     setWidget(w);
     verticalContainer->setSpacing(5);
 
+    // Find out how many pixels our 8 point font occupies.
     QFont f("Helvetica",8);
     QFontInfo fontInfo = QFontInfo(f);
+    // 2 = Max. Num. of Digits in Group ID.
+    // Then again I am not sure why the font height is used for the width.
+    // It works because this value is a proportional to the ppi of the screen.
     labelSize = fontInfo.pixelSize() * 2;
 
     //Set the legend in the good language
@@ -831,7 +835,23 @@ void ChannelPalette::createGroup(int id){
     label->setFont(f);
     label->adjustSize();
 
-    ChannelIconView* iconView = new ChannelIconView(backgroundColor,labelSize+7,15*2,edit,group,QString::number(id));
+    // Find max label length
+    int maxLabelLength = 0;
+    QFontMetrics fm(QFont("Helvetica",8));
+    QMap<int, QString>::iterator i;
+    for (i = channelLabels->begin(); i != channelLabels->end(); i++) {
+        int currentLength = fm.width(i.value());
+        if(currentLength > maxLabelLength)
+            maxLabelLength = currentLength;
+    }
+
+    // Construct grid size based on icon size and text height and width.
+    int padding = 10;
+    int iconSize = 14;
+    int gridX = std::max(maxLabelLength, iconSize) + padding;
+    int gridY = iconSize + (labelSize / 2) + padding;
+
+    ChannelIconView* iconView = new ChannelIconView(backgroundColor,gridX,gridY,edit,group,QString::number(id));
     iconView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     if(iconviewDict.count() >= 1){
         if(iconviewDict.contains("1") ){
