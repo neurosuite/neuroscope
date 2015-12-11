@@ -34,37 +34,29 @@
   *@author Lynn Hazan
   */
 class ChannelIconViewItem : public QListWidgetItem {
+// TODO: Use Qt type() functionality, to make this cleaner.
 public:
     ChannelIconViewItem( QListWidget *view = 0)
-        : QListWidgetItem(view), mID(-1)
+        : QListWidgetItem(view)
     {
+        // Unknown id
+        setData(Qt::UserRole, -1);
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
     ChannelIconViewItem(const QIcon &icon, const QString &text, int id, QListWidget *view = 0)
-        : QListWidgetItem(icon, text, view), mID(id)
+        : QListWidgetItem(icon, text, view)
     {
+        // Save id under user role
+        setData(Qt::UserRole, id);
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
     int getID() {
-        return mID;
+        return data(Qt::UserRole).toInt();
     }
-
-    friend QDataStream& operator<<(QDataStream& stream, const ChannelIconViewItem& item) {
-        stream << static_cast<const QListWidgetItem&>(item);
-        stream << item.mID;
-        return stream;
-    }
-    friend QDataStream& operator>>(QDataStream& stream, ChannelIconViewItem& item) {
-        stream >> static_cast<QListWidgetItem&>(item);
-        stream >> item.mID;
-        return stream;
-    }
-private:
-    int mID;
 };
 
 
