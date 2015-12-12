@@ -20,6 +20,17 @@
 // include c/c++ headers
 #include <stdint.h>
 
+// incluse qt headers
+#include <QFile>
+
+/** Little helper function to read structs from QFiles in binary mode. */
+template <typename T>
+inline bool readStruct(QFile& file, T& s) {
+    qint64 bytesToRead = sizeof(T);
+    qint64 bytesRead = file.read(reinterpret_cast<char*>(&s), bytesToRead);
+    return (bytesToRead == bytesRead);
+}
+
 #pragma pack(push, 1)
 
 //  Shared data structures

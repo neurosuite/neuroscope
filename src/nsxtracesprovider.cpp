@@ -43,10 +43,7 @@ bool NSXTracesProvider::init() {
     }
 
     // Read basic header
-    qint64 bytesToRead = sizeof(NSXBasicHeader);
-    qint64 bytesRead = dataFile.read(reinterpret_cast<char*>(&(mBasicHeader)), bytesToRead);
-
-    if(bytesToRead != bytesRead) {
+    if(!readStruct<NSXBasicHeader>(dataFile, mBasicHeader)) {
         dataFile.close();
         return false;
     }
@@ -58,11 +55,8 @@ bool NSXTracesProvider::init() {
     // Read extension headers
     mExtensionHeaders = new NSXExtensionHeader[this->nbChannels];
 
-    bytesToRead = sizeof(NSXExtensionHeader);
     for(int channel = 0; channel < this->nbChannels; channel++) {
-        bytesRead = dataFile.read(reinterpret_cast<char*>(mExtensionHeaders + channel), bytesToRead);
-
-        if(bytesToRead != bytesRead) {
+        if(!readStruct<NSXExtensionHeader>(dataFile, mExtensionHeaders[channel])) {
             delete[] mExtensionHeaders;
             dataFile.close();
             return false;
@@ -70,10 +64,7 @@ bool NSXTracesProvider::init() {
     }
 
     // Read data header
-    bytesToRead = sizeof(NSXDataHeader);
-    bytesRead = dataFile.read(reinterpret_cast<char *>(&mDataHeader), bytesToRead);
-
-    if(bytesToRead != bytesRead) {
+    if(!readStruct<NSXDataHeader>(dataFile, mDataHeader)) {
         delete[] mExtensionHeaders;
         dataFile.close();
         return false;

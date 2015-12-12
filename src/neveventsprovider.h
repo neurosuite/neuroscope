@@ -34,13 +34,6 @@ public:
 private:
     NEVBasicHeader mBasicHeader;
     NEVExtensionHeader* mExtensionHeaders;
-
-    template <typename T>
-    inline bool readStruct(QFile& file, T& s) {
-        qint64 bytesToRead = sizeof(T);
-        qint64 bytesRead = file.read(reinterpret_cast<char*>(&s), bytesToRead);
-        return (bytesToRead == bytesRead);
-    }
 };
 
 #endif
