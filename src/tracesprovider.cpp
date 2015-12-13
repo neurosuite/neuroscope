@@ -27,7 +27,7 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFileInfo>
- 
+
 // include c/c++ headers
 #include <stdint.h>
 
@@ -400,11 +400,12 @@ long TracesProvider::getTotalNbSamples(){
     return static_cast<long>((length * samplingRate) / 1000);
 }
 
-QMap<int, QString> TracesProvider::getLabels() {
-    QMap<int, QString> labels;
+QStringList TracesProvider::getLabels() {
+    QStringList labels;
 
     for(int i = 0; i < this->nbChannels; i++) {
-        labels.insert(i, QString::number(i));
+        labels << QString::number(i);
     }
+
     return labels;
 }

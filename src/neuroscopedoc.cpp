@@ -1481,8 +1481,9 @@ void NeuroscopeDoc::loadDocumentInformation(NeuroscopeXmlReader reader){
 
     // TODO: Save and load this to/from file or trace provider
     // Build channel label list
+    channelLabels.clear();
     for(int i = 0; i < channelNb; ++i)
-        channelLabels.insert(i, QString::number(i));
+        channelLabels << QString::number(i);
 
     //Build the list of channel default offsets
     reader.getChannelDefaultOffset(channelDefaultOffsets);

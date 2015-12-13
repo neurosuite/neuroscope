@@ -138,7 +138,7 @@ public:
     long getTotalNbSamples();
 
     /** Return the label for each channel, by default just the ID of the channel. */
-    virtual QMap<int, QString> getLabels();
+    virtual QStringList getLabels();
 
 public Q_SLOTS:
     /** Called when paging is started.

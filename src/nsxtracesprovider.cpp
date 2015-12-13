@@ -189,11 +189,12 @@ void NSXTracesProvider::computeRecordingLength(){
     this->length = (1000.0 * mDataHeader.length) / this->samplingRate;
 }
 
-QMap<int, QString> NSXTracesProvider::getLabels() {
-    QMap<int, QString> labels;
+QStringList NSXTracesProvider::getLabels() {
+    QStringList labels;
 
     for(int i = 0; i < this->nbChannels; i++) {
-        labels.insert(i, QString(mExtensionHeaders[i].label));
+        labels << QString(mExtensionHeaders[i].label);
     }
+
     return labels;
 }

@@ -135,7 +135,7 @@ public:
     }
 
     /** Return the labels of each channel as read from cerebus config. */
-    virtual QMap<int, QString> getLabels();
+    virtual QStringList getLabels();
 
     /** Called when paging is started.
      *  Recouples the buffer that is updated with the one that is
@@ -197,7 +197,7 @@ private:
     // List of scalings for each channel
     cbSCALING* mScales;
     // List of labels for each channel
-    QMap<int, QString> mLabels;
+    QStringList mLabels;
 
     // Return value of last CBSDK library call
     int mLastResult;

@@ -156,7 +156,7 @@ void ChannelPalette::resizeEvent(QResizeEvent* event){
     emit paletteResized(viewport()->width(),labelSize);
 }
 
-void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups, QMap<int, QString>* channelLabels){
+void ChannelPalette::createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups, QStringList* channelLabels){
     //Assign the channelColors, groupsChannels and channelsGroups for future use.
     this->channelColors = channelColors;
     this->groupsChannels = groupsChannels;
@@ -199,7 +199,7 @@ void ChannelPalette::setChannelLists()
             drawItem(painter,&pixmap,color,false,false);
             QIcon icon(pixmap);
 
-            new ChannelIconViewItem(icon,channelLabels->value(channelId),channelId,iconviewDict[groupId]);
+            new ChannelIconViewItem(icon,channelLabels->at(channelId),channelId,iconviewDict[groupId]);
         }
     }
 }
@@ -838,9 +838,8 @@ void ChannelPalette::createGroup(int id){
     // Find max label length
     int maxLabelLength = 0;
     QFontMetrics fm(QFont("Helvetica",8));
-    QMap<int, QString>::iterator i;
-    for (i = channelLabels->begin(); i != channelLabels->end(); i++) {
-        int currentLength = fm.width(i.value());
+    for(int i = 0; i < channelLabels->size(); i++) {
+        int currentLength = fm.width(channelLabels->at(i));
         if(currentLength > maxLabelLength)
             maxLabelLength = currentLength;
     }
@@ -1380,10 +1379,10 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds, const QString &s
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
             if (index != -1) {
-                ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*iterator),*iterator);
+                ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*iterator),*iterator);
                 targetIconView->insertItem(index, item);
             } else {
-                new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*iterator),*iterator, targetIconView);
+                new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*iterator),*iterator, targetIconView);
             }
             //Update the group color
             if(type == DISPLAY)
@@ -1507,7 +1506,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
                     channelsShowHideStatus[channelId] = false;
                 drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
                 int index = targetIconView->row(after);
-                after = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(channelId),channelId);
+                after = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(channelId),channelId);
                 targetIconView->insertItem(index+1,after);
                 i = index + 1;
 
@@ -1552,7 +1551,7 @@ void ChannelPalette::slotChannelsMoved(const QString &targetGroup, QListWidgetIt
         QPixmap pixmap(14,14);
         QColor color = channelColors->color(channelId);
         drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-        ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(channelId),channelId);
+        ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(channelId),channelId);
         targetIconView->insertItem(targetIconView->row(after)+1,item);
     }
 
@@ -1630,7 +1629,7 @@ void ChannelPalette::moveChannels(const QList<int>& channelIds,const QString& so
             QPixmap pixmap(14,14);
             QColor color = channelColors->color(channelId);
             drawItem(painter,&pixmap,color,channelsShowHideStatus[channelId],channelsSkipStatus[channelId]);
-            after = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(channelId),channelId);
+            after = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(channelId),channelId);
             iconView->insertItem(afterIndex,after);
             afterIndex++;
         }
@@ -1772,7 +1771,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard){
             QColor color = channelColors->color(*channelIterator);
             channelsShowHideStatus[*channelIterator] = false;
             drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
-            new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*channelIterator),*channelIterator,trash);
+            new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*channelIterator),*channelIterator,trash);
 
             //Update the group color
             if(type == DISPLAY)
@@ -1843,7 +1842,7 @@ void ChannelPalette::discardChannels(const QList<int>& channelsToDiscard,const i
         drawItem(painter,&pixmap,color,false,channelsSkipStatus[*channelIterator]);
 
         const int index = trash->row(after);
-        ChannelIconViewItem *newItem = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*channelIterator),*channelIterator);
+        ChannelIconViewItem *newItem = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*channelIterator),*channelIterator);
         trash->insertItem(index+1, newItem);
 
 
@@ -2224,12 +2223,12 @@ void ChannelPalette::dragChannels(const QList<int>& channelIds, const QString &s
             QPainter painter;
             drawItem(painter,&pixmap,color,channelsShowHideStatus[*iterator],channelsSkipStatus[*iterator]);
             if (index!=-1) {
-                ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*iterator),*iterator);
+                ChannelIconViewItem *item = new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*iterator),*iterator);
                 targetIconView->insertItem(index, item);
                 targetChannels.insert(index,*iterator);
                 index++;
             } else {
-                new ChannelIconViewItem(QIcon(pixmap),channelLabels->value(*iterator),*iterator, targetIconView);
+                new ChannelIconViewItem(QIcon(pixmap),channelLabels->at(*iterator),*iterator, targetIconView);
                 targetChannels.append(*iterator);
             }
             //Update the group color

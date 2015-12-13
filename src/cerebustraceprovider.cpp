@@ -167,7 +167,7 @@ bool CerebusTracesProvider::init() {
 
 		// Copy only physcal input scaling for now
 		mScales[i] = info.physcalin;
-        mLabels.insert(i, QString(info.label));
+        mLabels << QString(info.label);
 	}
 
     // Lock mutex to initalize cross-thread data structure.
@@ -500,7 +500,7 @@ void CerebusTracesProvider::computeRecordingLength(){
 	// Do not do anything here, the buffer size is always the same.
 }
 
-QMap<int, QString> CerebusTracesProvider::getLabels() {
+QStringList CerebusTracesProvider::getLabels() {
     return mLabels;
 }
 

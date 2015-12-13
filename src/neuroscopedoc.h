@@ -346,7 +346,7 @@ public:
     TracesProvider& tracesDataProvider() const {return *tracesProvider;}
 
     /** Return reference tp the mapping between channel id and label */
-    QMap<int, QString>* getChannelLabels() {return &channelLabels;}
+    QStringList* getChannelLabels() { return &channelLabels; }
 
     /**Returns a reference on the Map given the correspondance between the channel ids and the display group ids.
    */
@@ -899,7 +899,7 @@ private:
     int amplificationDefault;
 
     /** Map of channel ids to channel labels */
-    QMap<int,QString> channelLabels;
+    QStringList channelLabels;
 
     /**Map given the correspondance between the channel ids and the display group ids.*/
     QMap<int,int> displayChannelsGroups;

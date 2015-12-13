@@ -77,7 +77,7 @@ public:
     * @param groupsChannels map given the list of channels for each group.
     * @param channelsGroups map given to which group each channel belongs.
     */
-    void createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups, QMap<int, QString>* channelLabels);
+    void createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups, QStringList* channelLabels);
 
     /**Selects the channels contain in @p selectedChannels.
     * @param selectedChannels list of channels to select.
@@ -210,7 +210,7 @@ private:
     QMap<int, QList<int> >* groupsChannels;
 
     /** Mapping between channel id and label */
-    QMap<int, QString>* channelLabels;
+    QStringList* channelLabels;
 
     int labelSize;
     

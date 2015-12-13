@@ -88,7 +88,7 @@ public:
     virtual long getNbSamples(long start, long end, long startInRecordingUnits);
 
     /** Return the labels of each channel as read from nsx file. */
-    virtual QMap<int, QString> getLabels();
+    virtual QStringList getLabels();
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
