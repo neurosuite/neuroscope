@@ -14,6 +14,7 @@ set(SOURCE_FILES
     clustercolors.cpp
     clusterproperties.cpp
     clustersprovider.cpp
+    nevclustersprovider.cpp
     configuration.cpp
     dataprovider.cpp
     eventsprovider.cpp

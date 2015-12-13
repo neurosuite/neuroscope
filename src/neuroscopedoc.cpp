@@ -42,6 +42,7 @@
 #include "sessionxmlwriter.h"
 #include "sessionInformation.h"
 #include "clustersprovider.h"
+#include "nevclustersprovider.h"
 #include "eventsprovider.h"
 #include "neveventsprovider.h"
 #include "itemcolors.h"
@@ -2139,11 +2140,81 @@ void NeuroscopeDoc::setNoneEditMode(NeuroscopeView* activeView){
 
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
-    //Check that the selected file is a cluster file
-    QString fileName = clusterUrl;
-    if(fileName.indexOf(".clu") == -1)
-        return INCORRECT_FILE;
+    if(clusterUrl.indexOf(".nev") != -1)
+        return loadNevClusterFile(clusterUrl, activeView);
 
+    if(clusterUrl.indexOf(".clu") != -1)
+        return loadCluClusterFile(clusterUrl, activeView);
+
+    return INCORRECT_FILE;
+}
+
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadNevClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
+    // Open file with appropiate provider
+    QList<NEVClustersProvider*> list = NEVClustersProvider::fromFile(clusterUrl,
+                                                                  this->channelLabels,
+                                                                  this->samplingRate,
+                                                                  this->tracesProvider->getTotalNbSamples(),
+                                                                  this->clusterPosition);
+
+    // Set spike event sample count and peak postition
+	this->peakSampleIndex = 12;
+	this->nbSamples = 48;
+
+    for(QList<NEVClustersProvider*>::iterator providerIterator = list.begin();
+        providerIterator != list.end();
+        providerIterator++) {
+        // Get all needed properties from cluster provider
+        NEVClustersProvider* clustersProvider = *providerIterator;
+        QString name = clustersProvider->getName();
+        QList<int> clusterList = clustersProvider->clusterIdList();
+
+        // Add cluster provider to internal structure
+        lastLoadedProvider = name;
+        providers.insert(name, clustersProvider);
+        providerUrls.insert(name, clusterUrl);
+
+        // Genereate cluster colors (based on color brewer)
+        ItemColors* clusterColors = new ItemColors();
+        QList<int> clustersToSkip;
+        //Constructs the clusterColorList and clustersToSkip
+        QList<int>::iterator it;
+        for(it = clusterList.begin(); it != clusterList.end(); ++it){
+            QColor color;
+            if(*it == 1) color.setHsv(0,0,220);//Cluster 1 is always gray
+            else if(*it == 0) color.setHsv(0,255,255);//Cluster 0 is always red
+            else color.setHsv(static_cast<int>(fmod(static_cast<double>(*it)*7,36))*10,255,255);
+            clusterColors->append(static_cast<int>(*it),color);
+            clustersToSkip.append(static_cast<int>(*it));
+        }
+        providerItemColors.insert(name, clusterColors);
+
+		// Compute which cluster files give data for a given anatomical group
+		computeClusterFilesMapping();
+
+        // Informs the views than there is a new cluster provider.
+        // There should be only one view, since we only created one display.
+        QList<int> clustersToShow;
+        for(int i = 0; i < this->viewList->count(); ++i) {
+			this->viewList->at(i)->setClusterProvider(
+                clustersProvider,
+                name,
+                clusterColors,
+                true, // active
+                clustersToShow,
+                &(this->displayGroupsClusterFile),
+                &(this->channelsSpikeGroups),
+                this->peakSampleIndex - 1,
+                this->nbSamples - peakSampleIndex,
+                clustersToSkip
+            );
+        }
+
+	}
+}
+
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadCluClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
+    // Open file with appropiate provider
     ClustersProvider* clustersProvider = new ClustersProvider(clusterUrl,datSamplingRate,samplingRate,tracesProvider->getTotalNbSamples(),clusterPosition);
     QString name = clustersProvider->getName();
 

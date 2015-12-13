@@ -1368,7 +1368,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 
     QSettings settings;
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."), settings.value("CurrentDirectory").toString(),
-                                                         tr("Cluster File (*.clu.*)"));
+                                                         tr("Cluster File (*.clu.*);;Blackrock File (*.nev);;All files (*.*)"));
     if(!urls.isEmpty())
     {
         QDir CurrentDir;
