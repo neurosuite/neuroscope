@@ -64,18 +64,19 @@ int NEVEventsProvider::loadData(){
 
     // Read data packages
     NEVDataHeader dataHeader;
-    timeStamps.setSize(1, this->nbEvents);
-    events.setSize(1, this->nbEvents);
-    for(long eventIndex = 0L; eventIndex < this->nbEvents; eventIndex++) {
+    Array<double> tempTimestamps(1, this->nbEvents);
+    pArray<EventDescription> tempDescription; //pArray is missing a constructor
+    tempDescription.setSize(1, this->nbEvents);
+    long eventIndex(0L);
+    long eventsSkipped(0L);
+    while(eventIndex + eventsSkipped < this->nbEvents) {
         if(!readStruct<NEVDataHeader>(eventFile, dataHeader))
             goto fail;
 
         if(dataHeader.timestamp == 0xFFFFFFFF){
-            qDebug() << "Continuation packages are not supported!";
+            qCritical() << "Continuation packages are not supported!";
             goto fail;
         }
-
-        timeStamps[eventIndex] = dataHeader.timestamp;
 
         // Create proper label
         EventDescription label;
@@ -165,30 +166,24 @@ int NEVEventsProvider::loadData(){
                 break;
             default:
                 if(dataHeader.id > 0 && dataHeader.id < 2049) {
-                    // Spike Event on channel dataHeader.id
-                    NEVSpikeDataHeader spikeData;
-                    if(!readStruct<NEVSpikeDataHeader>(eventFile, spikeData))
+                    // Skip spiking events, see NEVClustersProvider
+                    if(!eventFile.seek(eventFile.pos()
+                                       + mBasicHeader.data_package_size
+                                       - sizeof(NEVDataHeader))) {
                         goto fail;
-
-                    switch(spikeData.unit_class) {
-                        case 0:   label = QString("spike unclassified (e%1)").arg(dataHeader.id);                      break;
-                        case 255: label = QString("spike noise (e%1)").arg(dataHeader.id);                             break;
-                        default:  label = QString("spike unit %1 (e%2)").arg(spikeData.unit_class).arg(dataHeader.id); break;
                     }
-
-                    // Skip waveform
-                    if(!eventFile.seek(eventFile.pos() + mBasicHeader.data_package_size
-                                                       - sizeof(NEVSpikeDataHeader)
-                                                       - sizeof(NEVDataHeader)))
-                        goto fail;
+                    eventsSkipped++;
+                    continue;
                 } else {
                     qDebug() << "Unknown package id:" << dataHeader.id;
                     goto fail;
                 }
         }
 
-        // Save label for event
-        events[eventIndex] = label;
+        // Save time and label of event
+        tempTimestamps[eventIndex]  = dataHeader.timestamp;
+        tempDescription[eventIndex] = label;
+        eventIndex++;
 
         // Update event category count
         long eventCount = eventDescriptionCounter.contains(label) ? eventDescriptionCounter[label]: 0;
@@ -196,21 +191,30 @@ int NEVEventsProvider::loadData(){
     }
     eventFile.close();
 
+    // Now we know how many events were skipped, we can update the object
+    this->nbEvents -= eventsSkipped;
+
+    timeStamps.setSize(1, this->nbEvents);
+    events.setSize(1, this->nbEvents);
+
+    timeStamps.copySubset(tempTimestamps, this->nbEvents);
+    events.copySubset(tempDescription, this->nbEvents);
+
+    // Update internal struture
     this->updateMappingAndDescriptionLength();
 
     //Initialize the variables
     previousStartTime = 0;
     previousStartIndex = 1;
     previousEndIndex = this->nbEvents;
-    previousEndTime = static_cast<long>(floor(0.5 + this->timeStamps(1,this->nbEvents)));
+    previousEndTime = static_cast<long>(floor(0.5 + this->timeStamps(1, this->nbEvents)));
     fileMaxTime = previousEndTime;
 
     return OK;
 
 fail:
+    eventFile.close();
     delete[] mExtensionHeaders;
     mExtensionHeaders = NULL;
-    events.setSize(0,0);
-    timeStamps.setSize(0,0);
     return INCORRECT_CONTENT;
 }
