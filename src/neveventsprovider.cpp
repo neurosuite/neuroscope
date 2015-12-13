@@ -38,13 +38,11 @@ int NEVEventsProvider::loadData(){
     }
 
     // Read basic header
-    qint64 bytesToRead = sizeof(NEVBasicHeader);
-    qint64 bytesRead = eventFile.read(reinterpret_cast<char*>(&(mBasicHeader)), bytesToRead);
-
-    if(bytesToRead != bytesRead) {
+    if(!readStruct<NEVBasicHeader>(eventFile, mBasicHeader)) {
         eventFile.close();
         return INCORRECT_CONTENT;
     }
+
     this->currentSamplingRate = mBasicHeader.global_time_resolution / 1000.0;
     this->nbEvents = (eventFile.size() - mBasicHeader.header_size) / mBasicHeader.data_package_size;
 
@@ -53,11 +51,13 @@ int NEVEventsProvider::loadData(){
         delete[] mExtensionHeaders;
     mExtensionHeaders = new NEVExtensionHeader[mBasicHeader.extension_count];
 
-    bytesToRead = sizeof(NEVExtensionHeader);
     for(int extension = 0; extension < mBasicHeader.extension_count; extension++) {
-        bytesRead = eventFile.read(reinterpret_cast<char*>(mExtensionHeaders + extension), bytesToRead);
-
-        if(bytesToRead != bytesRead) goto fail;
+        if(!readStruct<NEVExtensionHeader>(eventFile, mExtensionHeaders[extension])) {
+            eventFile.close();
+            delete[] mExtensionHeaders;
+            mExtensionHeaders = NULL;
+            return INCORRECT_CONTENT;    
+        }
     }
 
     // Extension header information should be extracted here. Right now we do not use the information.
