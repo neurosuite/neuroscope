@@ -16,6 +16,8 @@
 #ifndef _NEVCLUSTERSPROVIDER_H_
 #define _NEVCLUSTERSPROVIDER_H_
 
+#include <QStringList>
+
 #include "blackrock.h"
 #include "clustersprovider.h"
 

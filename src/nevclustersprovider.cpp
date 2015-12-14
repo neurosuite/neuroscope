@@ -17,8 +17,7 @@
 
 #include <QtDebug>
 
-NEVClustersProvider::NEVClustersProvider(unsigned int channel,
-                                         Array<dataType>& data,
+NEVClustersProvider::NEVClustersProvider(unsigned int channel,Array<dataType>& data,
                                          int spikeCount,
                                          double samplingRate,
                                          double currentSamplingRate,
@@ -124,11 +123,11 @@ QList<NEVClustersProvider*> NEVClustersProvider::fromFile(const QString& fileUrl
     // Prepare data structure
     int channelCount = channelLabels.size();
 
-    int spikeCount[channelCount];
+    long* spikeCount = new long[channelCount];
 
-    Array<dataType>* data[channelCount];
+    QList<Array<dataType>*> data;
     for(int i = 0; i < channelCount; i++) {
-        data[i] = new Array<dataType>(2, eventCount);
+        data << new Array<dataType>(2, eventCount);
         spikeCount[i] = 0;
     }
 
@@ -182,6 +181,7 @@ QList<NEVClustersProvider*> NEVClustersProvider::fromFile(const QString& fileUrl
                                               position));
     }
 
+    delete[] spikeCount;
     for(int i = 0; i < channelCount; i++) {
         delete data[i];
     }
