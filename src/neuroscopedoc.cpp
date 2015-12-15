@@ -279,30 +279,35 @@ int NeuroscopeDoc::openDocument(const QString& url)
 
         //extensionSamplingRates.insert(extension,samplingRate);
 
-        //No group of channels exist, put all the channels in the same group (1 for the display palette and
-        //-1 (the trash group) for the spike palette) and assign them the same blue color.
-        //Build the channelColorList and channelDefaultOffsets (default is 0)
-        QColor color;
-        QList<int> groupOne;
-        color.setHsv(210,255,255);
-        for(int i = 0; i < channelNb; ++i){
-            channelColorList->append(i,color);
-            displayChannelsGroups.insert(i,1);
-            channelsSpikeGroups.insert(i,-1);
-            groupOne.append(i);
-            channelDefaultOffsets.insert(i,0);
-        }
-        displayGroupsChannels.insert(1,groupOne);
-        spikeGroupsChannels.insert(-1,groupOne);
+        // Set up display and spike groups
+        QList<int> displayGroup;
+        QColor color = QColor::fromHsv(210, 255, 255); // default blue
+        for (int i = 0; i < channelNb; ++i){
+          // All channels have the same color, no offset and no skip status.
+          this->channelColorList->append(i, color);
+          this->channelDefaultOffsets.insert(i, 0);
 
-        //if skipStatus is empty, set the default status to 0
+          // Put all channels in the same display group.
+          this->displayChannelsGroups.insert(i, 1);
+          displayGroup.append(i);
+
+          // Put each channel in its own spiking group.
+          this->channelsSpikeGroups.insert(i, i + 1);
+          QList<int> group;
+          group.append(i);
+          this->spikeGroupsChannels.insert(i + 1, group);
+        }
+        this->displayGroupsChannels.insert(1, displayGroup);
+
+
+        // If skipStatus is empty, set the default status to 0
         if(skipStatus.isEmpty()){
             for(int i = 0; i < channelNb; ++i)
                 skipStatus.insert(i,false);
         }
 
         //Use the channel default offsets
-        emit noSession(channelDefaultOffsets,skipStatus);
+        emit noSession(channelDefaultOffsets, skipStatus);
 
         return OK;
     }
@@ -383,7 +388,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
     //Look up in the parameter file
     const QString parFileUrl = QFileInfo(docUrl).absolutePath() + QDir::separator() +baseName +QLatin1String(".xml");
     parameterUrl = parFileUrl;
-    
+
     QFileInfo parFileInfo = QFileInfo(parFileUrl);
     QFileInfo sessionFileInfo = QFileInfo(sessionUrl);
 
@@ -1844,7 +1849,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
     }
 }
 
-void NeuroscopeDoc::setProviders(NeuroscopeView* activeView){  
+void NeuroscopeDoc::setProviders(NeuroscopeView* activeView){
     //the new view is the last one in the list of view (viewList)
     NeuroscopeView* newView = viewList->last();
     QHashIterator<QString, DataProvider*> i(providers);
@@ -2396,7 +2401,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
     return OK;
 }
 
-void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activeView){  
+void NeuroscopeDoc::removeClusterFile(QString providerName,NeuroscopeView* activeView){
     //Informs the views than the cluster provider will be removed.
     for(int i = 0; i<viewList->count(); ++i) {
         NeuroscopeView* view = viewList->at(i);
