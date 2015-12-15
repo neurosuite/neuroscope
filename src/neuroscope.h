@@ -19,7 +19,7 @@
 #define NEUROSCOPE_H
 
 
- 
+
 
 
 #include <QDockWidget>
@@ -199,7 +199,7 @@ public:
    * @return true if at least one cluster file is loaded, false otherwise.
    */
     inline bool isClusterFilesLoaded()const{return !clusterFileList.isEmpty();}
-    
+
     /**Tells if there is a position file loaded.
    * @return true a position file is loaded, false otherwise.
    */
@@ -322,15 +322,15 @@ protected:
     */
     void initDisplay(QList<int>* channelsToDisplay,bool autocenterChannels,QList<int> offsets,QList<int> channelGains,
                      QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = QString());
-    
+
     /**
      * queryClose is called by closeEvent
      */
     bool queryClose();
-    
+
     void customEvent (QEvent* event);
     void closeEvent(QCloseEvent *event);
-    
+
 private Q_SLOTS:
 
     void slotAbout();
@@ -346,15 +346,21 @@ private Q_SLOTS:
     /**Loads one or multiple cluster files.*/
     void slotLoadClusterFiles();
 
+    /** Updates view, because a new cluster file was loaded. */
+    void slotClusterFileLoaded(const QString& fileID);
+
     /**Closes the cluster file corresponding to the currently selected cluster group.*/
     void slotCloseClusterFile();
-    
+
     /**Loads one or multiple event files.*/
     void slotLoadEventFiles();
 
     /**Creates an empty event file.*/
     void slotCreateEventFile();
-    
+
+    /** Updates view, because a new event file was loaded or created. */
+    void slotEventFileLoaded(const QString& fileID);
+
     /**Closes the event file corresponding to the currently selected event group.*/
     void slotCloseEventFile();
 
@@ -363,7 +369,7 @@ private Q_SLOTS:
 
     /**Closes the position file.*/
     void slotClosePositionFile();
-    
+
     /**Opens a file from the recent files menu. */
     void slotFileOpenRecent(const QString& url);
 
@@ -371,7 +377,7 @@ private Q_SLOTS:
     * (number of channels, sampling rate of the dat file and eeg file).
     */
     void slotFileProperties();
-    
+
     /**If need it, warns the user that the spike groups have been modified, then closes the actual file and displayss.*/
     void slotFileClose();
 
@@ -399,7 +405,7 @@ private Q_SLOTS:
     *  have the same amplification.
     */
     void slotShowCalibration();
-    
+
     /**Changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar.
      */
@@ -409,7 +415,7 @@ private Q_SLOTS:
     /*Slots for the tools menu.*/
     /**Chooses the tool to select channels, enabling the user to select traces in order to move them.*/
     void slotSelect();
-    
+
     /**Chooses the zoom tool, enabling the user to zoom.*/
     void slotZoom();
 
@@ -420,7 +426,7 @@ private Q_SLOTS:
     /**Chooses the selection time tool, enabling the user to select a time frame (subset of the currently shown)
     * for which the traces are going to be displayed.*/
     void slotSelectTime();
-    
+
     /**Chooses the tool to select an event, enabling the user to select an event in order to move or delete it.*/
     void slotSelectEvent();
 
@@ -509,13 +515,13 @@ private Q_SLOTS:
     /**Selects all the clusters of the current palette except the clusters of artefact and noise
     * (clusters 0 and 1 respectively).*/
     void slotSelectAllWO01();
-    
+
     /**Sets the mode of presentation in the current display, single or multiple columns.*/
     void slotDisplayMode();
 
     /**Displays or hides vertical lines to show the clusters.*/
     void slotClustersVerticalLines();
-    
+
     /**Displays or hides a raster to show the clusters.*/
     void slotClustersRaster();
 
@@ -527,7 +533,7 @@ private Q_SLOTS:
 
     /**Triggers the moves of the selected channels to the discard spike group.*/
     void slotDiscardSpikeChannels();
-    
+
     /**The selected channels have been moved to the trash group.
     * @param discarded ids of the channels to move to the trash group.
     */
@@ -676,7 +682,7 @@ private Q_SLOTS:
    * @param clustersToSkip new list of clusters to skip while browsing
    */
     void slotUpdateClustersToSkip(const QString &groupName, const QList<int>& clustersToSkip);
-    
+
     /**Marks the selected channels has keeped.*/
     void slotKeepChannels();
 
@@ -742,7 +748,7 @@ private:
     QAction* addEventToolBarAction;
     QAction* positionViewToggle;
     QAction* showEventsInPositionView;
-    
+
     QAction* mProperties;
     QAction* mLoadClusterFiles;
     QAction* mLoadEventFiles;
@@ -824,7 +830,7 @@ private:
     * Inititalized in initItemPanel().
     */
     ChannelPalette* displayChannelPalette;
-    
+
     /**spikeChannelPalette is the Widget containing the channel list to create the spike groups.
     * Inititalized in initItemPanel().
     */
@@ -868,10 +874,10 @@ private:
 
     /**Flag to keep track of group modifications. */
     bool groupsModified;
-    
+
     /**Flag to keep track of color modifications. */
     bool colorModified;
-    
+
     /**Flag to keep track of event modifications. */
     bool eventsModified;
 
@@ -898,7 +904,7 @@ private:
 
     /**List storing the identifiers of the opened cluster files.*/
     QStringList clusterFileList;
-    
+
     /**List storing the identifiers of the opened event files.*/
     QStringList eventFileList;
 

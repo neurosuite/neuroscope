@@ -568,6 +568,12 @@ void NeuroscopeApp::initActions()
     connect(doc, SIGNAL(loadFirstDisplay(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
             SLOT(slotSetUp(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
 
+    connect(doc,  SIGNAL(clusterFileLoaded(const QString&)),
+            this, SLOT(slotClusterFileLoaded(const QString&)));
+
+    connect(doc,  SIGNAL(eventFileLoaded(const QString&)),
+            this, SLOT(slotEventFileLoaded(const QString&)));
+
     connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
     connect(spikeChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
     connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),spikeChannelPalette, SLOT(updateColor(int)));
@@ -1091,16 +1097,6 @@ void NeuroscopeApp::openNetworkStream(CerebusTracesProvider::SamplingGroup group
             return;
         }
 
-        // Set up cluster palette
-		int channelCount = this->doc->getChannelNb();
-		createClusterPalette("1");
-		for (int i = 2; i <= channelCount; i++)
-			addClusterFile(QString::number(i));
-
-        // Set up event palette
-        QString eventFileId = this->doc->lastLoadedProviderName();
-        createEventPalette(eventFileId);
-
 		// Update the spike and event browsing status
 		updateBrowsingStatus();
 
@@ -1163,7 +1159,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
             }
         }
 
-        if (!palette) 
+        if (!palette)
             return;
         NeuroscopeView* view = activeView();
         QStringList::iterator iterator;
@@ -1451,11 +1447,6 @@ void NeuroscopeApp::slotCreateEventFile(){
             QMessageBox::critical (this, tr("Error!"),tr("The selected file name is already opened."));
         }
         else{
-            const QString eventFileId = doc->lastLoadedProviderName();
-            if(eventFileList.isEmpty())
-                createEventPalette(eventFileId);
-            else
-                addEventFile(eventFileId);
             eventsModified = true;
             QApplication::restoreOverrideCursor();
         }
@@ -2334,7 +2325,7 @@ void NeuroscopeApp::slotTabChange(int index){
 
 	 /// Added by M.Zugaro to enable automatic forward paging
 	 if ( isStill() ) slotStateChanged("pageOffState"); else slotStateChanged("pageOnState");
-	 
+
     QWidget *channelPalette = paletteTabsParent->currentWidget();
 
     if(qobject_cast<ChannelPalette*>(channelPalette)){
@@ -2864,7 +2855,6 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
-    int counter = 0;
     QStringList::const_iterator iterator;
     for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
@@ -2906,15 +2896,17 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
-
-        //Create the cluster palette if need it
-        counter++;
-        QString clusterFileId = doc->lastLoadedProviderName();
-        if(clusterFileList.isEmpty() && counter == 1)
-            createClusterPalette(clusterFileId);
-        else addClusterFile(clusterFileId);
     }
     QApplication::restoreOverrideCursor();
+}
+
+/** Updates view, because a new cluster file was loaded. */
+void NeuroscopeApp::slotClusterFileLoaded(const QString& fileID) {
+    // Create the cluster palette if need it
+    if(clusterFileList.isEmpty())
+        createClusterPalette(fileID);
+    else
+        addClusterFile(fileID);
 }
 
 void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
@@ -3083,7 +3075,6 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
-    int counter = 0;
     QStringList::const_iterator iterator;
     for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
@@ -3118,18 +3109,17 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
-
-        //Create the event palette if need it
-        counter++;
-        QString eventFileId = doc->lastLoadedProviderName();
-        if(eventFileList.isEmpty() && counter == 1)
-            createEventPalette(eventFileId);
-        else
-            addEventFile(eventFileId);
     }
     QApplication::restoreOverrideCursor();
 }
 
+void NeuroscopeApp::slotEventFileLoaded(const QString& fileId) {
+    //Create the event palette if need it;
+    if(eventFileList.isEmpty())
+        createEventPalette(fileId);
+    else
+        addEventFile(fileId);
+}
 
 void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 

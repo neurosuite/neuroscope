@@ -687,7 +687,6 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
         QList<int> clusterList = clustersProvider->clusterIdList();
 
         // Add cluster provider to internal structure
-        lastLoadedProvider = name;
         providers.insert(name, clustersProvider);
         providerUrls.insert(name, QString("cerebus.") + name + QString(".nev"));
 
@@ -730,6 +729,7 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
             );
         }
 
+        emit clusterFileLoaded(name);
 	}
 
     // Integrate digital and serial event data
@@ -767,6 +767,7 @@ bool NeuroscopeDoc::openStream(CerebusTracesProvider::SamplingGroup group) {
                                           eventsList,
                                           eventsToSkip);
     }
+    emit eventFileLoaded(name);
 
 	return true;
 }
@@ -1690,7 +1691,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         selectedClusters.insert(fileUrl,ids);
                         skippedClusters.insert(fileUrl,skippedIds);
                     }
-                    OpenSaveCreateReturnMessage status = loadClusterFile(fileUrl,itemColors,lastModified,fistClusterFile);
+                    OpenSaveCreateReturnMessage status = loadClusterFileForSession(fileUrl,itemColors,lastModified,fistClusterFile);
                     if(status == OK){
                         loadedClusterFiles.append(lastLoadedProvider);
                         fistClusterFile = false;
@@ -1710,7 +1711,7 @@ void NeuroscopeDoc::loadSession(NeuroscopeXmlReader reader){
                         selectedEvents.insert(fileUrl,ids);
                         skippedEvents.insert(fileUrl,skippedIds);
                     }
-                    OpenSaveCreateReturnMessage status = loadEventFile(fileUrl,itemColors,lastModified,fistEventFile);
+                    OpenSaveCreateReturnMessage status = loadEventFileForSession(fileUrl,itemColors,lastModified,fistEventFile);
                     if(status == OK){
                         loadedEventFiles.append(lastLoadedProvider);
                         fistEventFile = false;
@@ -2175,7 +2176,6 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadNevClusterFile(con
         QList<int> clusterList = clustersProvider->clusterIdList();
 
         // Add cluster provider to internal structure
-        lastLoadedProvider = name;
         providers.insert(name, clustersProvider);
         providerUrls.insert(name, clusterUrl);
 
@@ -2214,8 +2214,10 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadNevClusterFile(con
                 clustersToSkip
             );
         }
-
+        emit clusterFileLoaded(name);
 	}
+
+    return OK;
 }
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadCluClusterFile(const QString &clusterUrl,NeuroscopeView* activeView){
@@ -2252,7 +2254,6 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadCluClusterFile(con
         return INCORRECT_CONTENT;
     }
 
-    lastLoadedProvider = name;
     providers.insert(name,clustersProvider);
     providerUrls.insert(name,clusterUrl);
 
@@ -2285,10 +2286,12 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadCluClusterFile(con
         else view->setClusterProvider(clustersProvider,name,clusterColors,true,clustersToShow,&displayGroupsClusterFile,&channelsSpikeGroups,peakSampleIndex - 1,nbSamples - peakSampleIndex,clustersToSkip);
     }
 
+    emit clusterFileLoaded(name);
+
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const QString &clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFileForSession(const QString &clusterUrl, QMap<EventDescription,QColor>& itemColors, const QDateTime &lastModified, bool firstFile){
     //Check that the selected file is a cluster file (should always be the case as the file has
     //already be loaded once).
     QString fileName = clusterUrl;
@@ -2393,6 +2396,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadClusterFile(const 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     }
 
+    // TODO: Use signals for this.
     if(firstFile) {
         static_cast<NeuroscopeApp*>(parent)->createClusterPalette(name);
     } else {
@@ -2478,7 +2482,6 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
         return INCORRECT_CONTENT;
     }
 
-    lastLoadedProvider = name;
     lastEventProviderGridX = eventsProvider->getDescriptionLength();
     providers.insert(name,eventsProvider);
     providerUrls.insert(name,eventUrl);
@@ -2511,10 +2514,12 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
         else view->setEventProvider(eventsProvider,name,eventColors,true,eventsToShow,eventsToSkip);
     }
 
+    emit eventFileLoaded(name);
+
     return OK;
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QString &eventUrl,QMap<EventDescription,QColor>& itemColors, const QDateTime& lastModified,bool firstFile){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFileForSession(const QString &eventUrl,QMap<EventDescription,QColor>& itemColors, const QDateTime& lastModified,bool firstFile){
     //Check that the selected file is a event file (should always be the case as the file has
     //already be loaded once).
     QString fileName = eventUrl;
@@ -2611,6 +2616,7 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
     connect(eventsProvider, SIGNAL(newEventDescriptionCreated(QString,QMap<int,int>,QMap<int,int>,QString)),this, SLOT(slotNewEventDescriptionCreated(QString,QMap<int,int>,QMap<int,int>,QString)));
     connect(eventsProvider, SIGNAL(eventDescriptionRemoved(QString,QMap<int,int>,QMap<int,int>,int,QString)),this, SLOT(slotEventDescriptionRemoved(QString,QMap<int,int>,QMap<int,int>,int,QString)));
 
+    // TODO: Use signals for this.
     if(firstFile) dynamic_cast<NeuroscopeApp*>(parent)->createEventPalette(name);
     else dynamic_cast<NeuroscopeApp*>(parent)->addEventFile(name);
 
@@ -2945,7 +2951,6 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(const 
         return ALREADY_OPENED;
     }
 
-    lastLoadedProvider = name;
     eventsProvider->initializeEmptyProvider();
     lastEventProviderGridX = eventsProvider->getDescriptionLength();
     providers.insert(name,eventsProvider);
@@ -2969,6 +2974,8 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::createEventFile(const 
         else
             view->setEventProvider(eventsProvider,name,eventColors,true,eventsToShow,eventsToSkip);
     }
+
+    emit eventFileLoaded(name);
 
     return OK;
 

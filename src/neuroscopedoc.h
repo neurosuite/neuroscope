@@ -466,10 +466,6 @@ public:
     */
     void showCalibration(bool show,NeuroscopeView* activeView);
 
-    /**Returns the name used to identified the last loaded provider.
-    */
-    QString lastLoadedProviderName() const {return lastLoadedProvider;}
-
     /**Returns the item color list for the given provider.
     * @param fileName name of the file containing the data of the provider.
     */
@@ -492,7 +488,7 @@ public:
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadClusterFile(const QString &clusterUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadClusterFileForSession(const QString &clusterUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
 
 
     /**Loads the position file and creates the position view in the current display.
@@ -529,7 +525,7 @@ public:
     * @param firstFile true if the file to load if the first one, false otherwise.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(const QString &eventUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
+    OpenSaveCreateReturnMessage loadEventFileForSession(const QString &eventUrl,QMap<EventDescription,QColor>& itemColors,const QDateTime &lastModified,bool firstFile);
 
     /**Removes the event provider corresponding to the identifier @p providerName
     * from the list of providers.
@@ -831,6 +827,16 @@ Q_SIGNALS:
                           QList<int> selectedChannels,QMap<int,bool>& skipStatus,long startTime,long duration,QString tabLabel,bool positionView,int rasterHeight,
                           bool showEventsInPositionView);
 
+    /** Emitted when cluster file was sucessfully loaded.
+     * @param fileId id of the file loaded.
+    */
+    void clusterFileLoaded(const QString& fileId);
+
+    /** Emitted when event file was sucessfully loaded.
+     * @param fileId id of the file loaded.
+    */
+    void eventFileLoaded(const QString& fileId);
+
 private:
     /** The list of the views currently connected to the document */
     QList<NeuroscopeView*>* viewList;
@@ -843,10 +849,10 @@ private:
 
     /**The url of the session file.*/
     QString sessionUrl;
-    
+
     /**The url of the parameter file.*/
     QString parameterUrl;
-    
+
     /**Reference on the channelPalette used to specify the traces display.*/
     ChannelPalette& displayChannelPalette;
 
@@ -924,7 +930,7 @@ private:
 
     /*Map given the of channels default offsets.*/
     QMap<int,int> channelDefaultOffsets;
-    
+
     /**Provider of the channels data.*/
     TracesProvider* tracesProvider;
 
@@ -942,7 +948,7 @@ private:
 
     /**Video acquisition sampling rate.*/
     double videoSamplingRate;
-    
+
     /**Number of samples in a spike waveform.*/
     int nbSamples;
 
@@ -957,13 +963,13 @@ private:
 
     /**Length for a spike*/
     float waveformLength;
-    
+
     /**Length corresponding to the index of peak of the spike.*/
     float indexLength;
-    
+
     /**Default length for a spike*/
     float waveformLengthDefault;
-    
+
     /**Default length corresponding to the index of peak of the spike.*/
     float indexLengthDefault;
 
@@ -1029,7 +1035,7 @@ private:
     int videoHeightDefault;
     /**Default background image for the position view.*/
     QString backgroundImageDefault;
-    
+
     /**Default background image for the trace view.*/
     QString traceBackgroundImageDefault;
 
@@ -1045,35 +1051,35 @@ private:
     int videoHeight;
     /**Background image for the position view.*/
     QString backgroundImage;
-    
+
     /**Background image for the trace view.*/
     QString traceBackgroundImage;
-    
+
     /**Angle of rotation of the video records.*/
     int rotation;
     /**Flip orientation of the video records.
     * 0 stands for none, 1 for vertical flip and 2 for horizontal flip.
     */
     int flip;
-    
+
     /**Transformed background image for the position view (rotated and or flip if need it).*/
     QImage transformedBackground;
-    
+
     /**True if the all the positions contain in the position file have to be drawn on the background image, false otherwise.*/
     bool drawPositionsOnBackground;
-    
+
     /**Default value for drawPositionsOnBackground.*/
     bool drawPositionsOnBackgroundDefault;
-    
+
     /**True if a position file has been opened at least one during the session (it can have been closed and not reopened), false otherwise.*/
     bool positionFileOpenOnce;
-    
+
     /**Extension of the opened position file.*/
     QString positionFileExtension;
-    
+
     /**Map between the channel and skip status.*/
     QMap<int,bool> skipStatus;
-    
+
     /**Upsampling rate used to create the spike file.*/
     double upsamplingRate;
 
