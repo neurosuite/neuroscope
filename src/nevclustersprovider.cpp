@@ -109,13 +109,13 @@ QList<NEVClustersProvider*> NEVClustersProvider::fromFile(const QString& fileUrl
         QMap<QString, int>::iterator id = channelLabelsToIds.find(channelLabels[i]);
         if(id == channelLabelsToIds.end()) {
             // Label could not be found in label header.
-            qCritical("Can not find label '%s' in nev file.", qUtf8Printable(channelLabels[i]));
+            qCritical("Can not find label '%s' in nev file.", channelLabels[i].toUtf8().constData());
             return result;
         }
         channelIds.append(id.value());
         if((++id).key() == channelLabels[i]) {
             // Only complain about duplicate labels if we are actually using them.
-            qCritical("Duplicate label '%s' found in nev file. Can not determine channel id correctly.", qUtf8Printable(channelLabels[i]));
+            qCritical("Duplicate label '%s' found in nev file. Can not determine channel id correctly.", channelLabels[i].toUtf8().constData());
             return result;
         }
     }
