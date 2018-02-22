@@ -46,7 +46,7 @@ script: ./.travis/script.sh
 deploy:
   provider: releases
   api_key:
-    secure: LdMU6bfPozM1sD+k/GVcTbmh+tlDuLzyQKbS38+3KOYhoVFVlOA2d1vymDI8BmQ66xSYa6yGBZ3Zu3MbV+aiukSNMp+QnS4q0mySxq7iUNdhEAI9a9GcljYvxo/Oj3BeJpksX6JgIhZK06wnafb1E6jdh6i1d+DldMK36PjMeVg=
+    secure: "TtNA74Zxji5UKKxXelf6erD9r1PbxKzW8bsf2sugANkWi/CBB1zOkxnuyTsHylwGL6R6WvagkGVHbNaYOfeR/DBQy4SRWBUnQ8ujByymIyIjGlUnvkYtTihW81SDrpoTYtYfok12HnqY+gTNvyfroTAHT3OBWcsb+m/jVh42Lwg="
   skip_cleanup: true
   file_glob: true
   file:
