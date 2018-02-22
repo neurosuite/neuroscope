@@ -192,7 +192,7 @@ private:
     // Sampling group to listen to
     SamplingGroup mGroup;
     // List of NSP channel numbers we are listing to
-    UINT32* mChannels;
+    UINT16* mChannels;
 
     // List of scalings for each channel
     cbSCALING* mScales;

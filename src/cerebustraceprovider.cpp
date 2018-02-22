@@ -141,7 +141,7 @@ bool CerebusTracesProvider::init() {
 	}
 
 	// Get the list of channels in this sample group
-	mChannels = new UINT32[this->nbChannels];
+	mChannels = new UINT16[this->nbChannels];
 	mLastResult = cbSdkGetSampleGroupList(CEREBUS_INSTANCE, 1, mGroup, NULL, mChannels);
 
 	if (mLastResult != CBSDKRESULT_SUCCESS) {
