@@ -1,18 +1,43 @@
 language: cpp
 
-sudo: required
+sudo: true
+dist: trusty
 
-os:
-  - linux
-  - osx
+matrix:
+  include:
+  - os: linux
+    env: QT_VERSION=qt4
+    compiler: clang
+    addons:
+      apt:
+        packages:
+          - libqt4-dev
+  - os: linux
+    env: QT_VERSION=qt4
+    compiler: gcc
+    addons:
+      apt:
+        packages:
+          - libqt4-dev
+  - os: linux
+    env: QT_VERSION=qt5 TRAVIS_DEPLOY=y
+    compiler: clang
+    addons:
+      apt:
+        packages:
+          - qtbase5-dev
+  - os: linux
+    env: QT_VERSION=qt5
+    compiler: gcc
+    addons:
+      apt:
+        packages:
+          - qtbase5-dev
+  - os: osx
+    env: QT_VERSION=qt5 TRAVIS_DEPLOY=y
+    compiler: clang
 
-env:
-  - QT_VERSION=qt4
-  - QT_VERSION=qt5
-
-install:
-  - source .travis/install.sh
-  - source .travis/deploy.sh
+install: source .travis/install.sh
 
 script: ./.travis/script.sh
 
@@ -27,4 +52,4 @@ deploy:
     - build/neuroscope*.dmg
   on:
     tags: true
-    condition: "$ENABLE_DEPLOYMENT = true"
+    condition: "$TRAVIS_DEPLOY = y"

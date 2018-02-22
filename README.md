@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/neurosuite/neuroscope.svg?branch=blackrock)](https://travis-ci.org/neurosuite/neuroscope)
-[![Build status](https://ci.appveyor.com/api/projects/status/tt4odeosy8ame1u8/branch/blackrock?svg=true)](https://ci.appveyor.com/project/FloFra/neuroscope/branch/blackrock)
+[![Build status](https://ci.appveyor.com/api/projects/status/00g6lmitve63gxpc/branch/blackrock?svg=true)](https://ci.appveyor.com/project/FlorianFranzen/neuroscope/branch/blackrock)
 
 Neuroscope
 ==========
