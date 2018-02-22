@@ -26,6 +26,7 @@ matrix:
       apt:
         packages:
           - qtbase5-dev
+          - libqt5webkit5-dev
   - os: linux
     env: QT_VERSION=qt5
     compiler: gcc
@@ -33,6 +34,7 @@ matrix:
       apt:
         packages:
           - qtbase5-dev
+          - libqt5webkit5-dev
   - os: osx
     env: QT_VERSION=qt5 TRAVIS_DEPLOY=y
     compiler: clang
