@@ -181,7 +181,7 @@ if(WITH_QT4)
     )
 else()
     neurosuite_cpack_ubuntu(
-        "${COMMON_DEPENDECIES}, libqt5widgets5, libqt5printsupport5, libqt5concurrent5, libqt5xml5, libqt5webkit5"
+        "${COMMON_DEPENDECIES}, libqt5widgets5, libqt5printsupport5, libqt5concurrent5, libqt5xml5, libqt5webkit5, libqt5sensors5, libqt5location5"
         "${CMAKE_CURRENT_SOURCE_DIR}/cpack"
     )
 endif()
