@@ -73,9 +73,7 @@ add_definitions(-DQT_USE_QSTRINGBUILDER)
 if(WITH_QT4)
     find_package(Qt4 "4.8.0" REQUIRED QtGui QtXml)
 else()
-    find_package(Qt5Widgets REQUIRED)
-    find_package(Qt5PrintSupport REQUIRED)
-    find_package(Qt5Xml REQUIRED)
+    find_package(Qt5 COMPONENTS Widgets PrintSupport Xml REQUIRED)
 endif()
 
 ################################################################################
