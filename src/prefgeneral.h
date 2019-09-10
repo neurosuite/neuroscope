@@ -33,7 +33,7 @@
 
 
 //include files for the application
-#include <prefgenerallayout.h>
+#include "prefgenerallayout.h"
 
 /**
   * Class representing the Neuroscope Configuration page of the Neuroscope preferences dialog.

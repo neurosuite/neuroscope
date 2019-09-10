@@ -63,8 +63,7 @@ public:
   * @param waveforms true if waveforms are drawn on top of the traces, false otherwise.
   * @param labelsDisplay true if labels are drawn next to the traces, false otherwise.
   * @param channelsToDisplay a reference on the list of channel to be shown at the opening of the view.
-  * @param unitGain initial gain use to draw the traces.
-  * @param acquisitionGain acquisition gain.
+  * @param screenGain initial gain use to draw the traces.
   * @param start starting time in miliseconds.
   * @param timeFrameWidth time window in miliseconds.
   * @param channelColors a pointer on the list of colors for the channels.
@@ -89,7 +88,7 @@ public:
   * @param border size of the border between the frame and the contents.
   */
     TraceView(TracesProvider& tracesProvider, bool greyScale, bool multiColumns, bool verticalLines,
-              bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, int unitGain, int acquisitionGain, long start, long timeFrameWidth,
+              bool raster, bool waveforms, bool labelsDisplay, QList<int>& channelsToDisplay, float screenGain, long start, long timeFrameWidth,
               ChannelColors* channelColors, QMap<int, QList<int> >* groupsChannels, QMap<int,int>* channelsGroups,
               bool autocenterChannels, QList<int>& channelOffsets, QList<int>& gains, const QList<int>& skippedChannels, int rasterHeight, const QImage &backgroundImage, QWidget* parent=0, const char* name=0, const QColor& backgroundColor = Qt::black, QStatusBar* statusBar = 0L,
               int minSize = 500, int maxSize = 4000, int windowTopLeft = -500, int windowBottomRight = 1001, int border = 0);
@@ -100,7 +99,10 @@ public:
 
     /// Added by M.Zugaro to enable automatic forward paging
     qlonglong recordingLength() const { return length; }
-    void updateRecordingLength() { tracesProvider.updateRecordingLength();length = tracesProvider.recordingLength(); }
+    void updateRecordingLength() {
+        tracesProvider.updateRecordingLength();
+        length = tracesProvider.recordingLength();
+    }
 
     /**Enum to be use as a Mode.
   * <ul>
@@ -167,11 +169,10 @@ public:
   */
     void decreaseSelectedChannelsAmplitude(const QList<int>& channelIds);
 
-    /**Sets the unit gain and the acquisition system gain.
+    /**Sets the gains for each channels.
   * @param gain initial gain use to draw the traces in the TraceView.
-  * @param acquisitionGain acquisition gain.
   */
-    void setGains(int gain,int acquisitionGain);
+    void setGains(float gain);
 
     /**Changes the color of a channel.
   * @param channelId id of the channel to redraw.
@@ -507,6 +508,9 @@ Q_SIGNALS:
     void eventAdded(QString providerName,QString addedEventDescription,double time);
     void eventsAvailable(QHash<QString, EventData*>& eventsData,QMap<QString, QList<int> >& selectedEvents,QHash<QString, ItemColors*>& providerItemColors,QObject* initiator,double samplingRate);
 
+    // Emitted if dataAvailable(...) receives faulty data
+    void dataError();
+
 protected:
     /**
   * Draws the contents of the frame
@@ -542,6 +546,8 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent* event);
 
 private:
+    // Amplitude maximal of theta in microvolts, e.g. 400 uV
+    static const float U_THETA;
 
     /**True if the the colors are in grey-scale*/
     bool greyScaleMode;
@@ -580,13 +586,13 @@ private:
     QList<int>& channelOffsets;
 
     /**List of the factors use to calculate the ordinate value to been drawn.
-  * The factor equals 0.75 raised to the power of the gain (Yworld = alpha.factor.Ydata).
-  */
+    * The factor equals 0.75 raised to the power of the gain (Yworld = alpha.factor.Ydata).
+    */
     QList<float> channelFactors;
 
     /**List of the exponents used to compute the drawing gain for each channel.
-  * The actual gain is 0.75 raised to the power of gain.
-  */
+    * The actual gain is 0.75 raised to the power of gain.
+    */
     QList<int>& gains;
 
     /**Size in pixels corresponding to the vertical space allocated to a trace.*/
@@ -595,7 +601,7 @@ private:
     /**Number of channels used to record the data.*/
     int nbChannels;
 
-    /**Position of the peak among the points decribing waveforms.*/
+    /**Position of the peak among the points describing waveforms.*/
     int peakPositionInWaveform;
 
     /**Number of points used to describe a waveform.*/
@@ -695,20 +701,17 @@ private:
     /**Time in milisseconds corresponding to a step between two samples.*/
     float timeStepUnit;
 
-    /**Acquisition system gain in recording unit by milivolts.*/
-    int acquisitionGain;
+    /**Unit gain in mV by centimeters.*/
+    float screenGain;
 
-    /**Unit gain in recording unit by centimeters.*/
-    int unitGain;
-
-    /**Factor, in pixels by recording units, to convert the data in recording units to data
-  * in pixels of the world (Yworld = alpha.factor.Ydata).
-  * This factor is computed using the amplitude maximal of theta and the acquisition system gain.
-  */
+    /**Factor, in pixels by uV, to convert the data in uV to data
+    * in pixels of the world (Yworld = alpha.factor.Ydata).
+    * This factor is computed using the amplitude maximal of theta U_THETA.
+    */
     float alpha;
 
     /**List of the gains display next to each drawn channel.
-  */
+    */
     QList<float> channelDisplayGains;
 
     int nbClusters;

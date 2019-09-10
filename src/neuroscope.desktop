@@ -5,5 +5,5 @@ GenericName=Viewer for neurophysiological and behavioral data
 Comment=
 Icon=neuroscope
 Exec=neuroscope %u
-MimeType=application/nphys-dat;application/nphys-fil;application/nphys-lfp;application/nphys-eeg;application/nphys-nrs;
+MimeType=application/nphys-dat;application/nphys-fil;application/nphys-lfp;application/nphys-eeg;application/nphys-nrs;application/nphys-ns1;application/nphys-ns2;application/nphys-ns3;application/nphys-ns4;application/nphys-ns4;application/nphys-ns5;application/nphys-ns6;application/nphys-nev;
 Categories=Qt;Education;Science;

@@ -25,7 +25,7 @@
 #include <QLabel>
 
 //include files for the application
-#include <clusterpropertieslayout.h>
+#include "clusterpropertieslayout.h"
 
 /** Class representing the NeuroScope cluster preferences tab contained in NeuroScope Defaults Configuration page of the Neuroscope preferences dialog and in the properties dialog.
   *@author Lynn Hazan

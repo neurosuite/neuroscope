@@ -32,7 +32,7 @@
 
 
 //include files for the application
-#include <propertieslayout.h>
+#include "propertieslayout.h"
 
 
 

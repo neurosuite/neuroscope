@@ -19,12 +19,13 @@
 #define TRACESPROVIDER_H
 
 //include files for the application
-#include <dataprovider.h>
+#include "dataprovider.h"
 #include <array.h>
 #include <types.h>
 
 // include files for QT
 #include <QObject>
+#include <QStringList>
 
 /**Class providing the row recorded data (contained in a .dat or .eeg file).
   *@author Lynn Hazan
@@ -42,8 +43,8 @@ public:
   * @param samplingRate sampling rate used to record the data contained in the file identified by fileUrl.
   * @param offset offset to apply to the data contained in the file identified by fileUrl.
   */
-    TracesProvider(const QString &fileUrl, int nbChannels, int resolution, double samplingRate, int offset);
-    ~TracesProvider();
+    TracesProvider(const QString &fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset);
+    virtual ~TracesProvider();
 
     /// Added by M.Zugaro to enable automatic forward paging
     void updateRecordingLength() { computeRecordingLength(); }
@@ -59,7 +60,7 @@ public:
     /**Sets the number of channels corresponding to the file identified by fileUrl.
   * @param nb the number of channels.
   */
-    void setNbChannels(int nb){
+    virtual void setNbChannels(int nb){
         nbChannels = nb;
         computeRecordingLength();
     }
@@ -67,7 +68,7 @@ public:
     /**Sets the resolution used to record the data contained in the file identified by fileUrl.
   * @param res resolution.
   */
-    void setResolution(int res){
+   virtual void setResolution(int res){
         resolution = res;
         computeRecordingLength();
     }
@@ -75,9 +76,23 @@ public:
     /**Sets the sampling rate used to record the data contained in the file identified by fileUrl.
   * @param rate the sampling rate.
   */
-    void setSamplingRate(double rate){
+    virtual void setSamplingRate(double rate){
         samplingRate = rate;
         computeRecordingLength();
+    }
+
+    /**Sets the voltage range used to record the data contained in the file identified by fileUrl.
+  * @param range the voltage range.
+  */
+    virtual void setVoltageRange(int range){
+      voltageRange = range;
+    }
+
+    /**Sets the amplification used to record the data contained in the file identified by fileUrl.
+  * @param value the amplification.
+  */
+    virtual void setAmplification(int value){
+      amplification = value;
     }
 
     /**Sets the offset to apply to the data contained in the file identified by fileUrl.
@@ -97,6 +112,13 @@ public:
   */
     double getSamplingRate() const {return samplingRate;}
 
+    /**Returns the voltage range used to record the data contained in the file identified by fileUrl.
+  */
+    double getVoltageRange() const {return voltageRange;}
+
+    /**Returns the amplification used to record the data contained in the file identified by fileUrl.  */
+    double getAmplification() const {return amplification;}
+
     /**Returns the offset to apply to the data contained in the file identified by fileUrl.
   */
     int getOffset() const {return offset;}
@@ -110,24 +132,44 @@ public:
   * @return number of samples in the given time frame.
   * @param startTimeInRecordingUnits begining of the time frame from which the data have been retrieved, given in recording units.
   */
-    dataType getNbSamples(long startTime,long endTime,long startTimeInRecordingUnits);
+    virtual dataType getNbSamples(long startTime,long endTime,long startTimeInRecordingUnits);
 
     /**Returns the total number of samples in recorded contained in the file identified by fileUrl.*/
     long getTotalNbSamples();
 
+    /** Return the label for each channel, by default just the ID of the channel. */
+    virtual QStringList getLabels();
+
+public Q_SLOTS:
+    /** Called when paging is started.
+     * Usefull for trace providers that have live data sources.
+     */
+    virtual void slotPagingStarted() {};
+
+    /** Called when paging is stopped.
+    * Usefull for trace providers that have live data sources.
+    */
+    virtual void slotPagingStopped() {};
+
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
-  * @param data array of data (number of channels X number of samples).
+  * @param data array of data in uV (number of channels X number of samples).
   * @param initiator instance requesting the data.
   */
-    void dataReady(Array<dataType>& data,QObject* initiator);
+    void dataReady(Array<dataType>& data, QObject* initiator);
 
-private:
+protected:
     /**Number of channels used to record the data.*/
     int nbChannels;
 
     /**Resolution of the acquisition system used to record the data.*/
     int resolution;
+
+    /**Voltage range of acquisition system used to record the data*/
+    int voltageRange;
+
+    /**Amplification of acquisition system used to record the data*/
+    int amplification;
 
     /**Sampling rate used to record the data.*/
     double samplingRate;
@@ -146,11 +188,14 @@ private:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.
   */
-    void retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
+    virtual void retrieveData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits);
 
     /**Computes the total length of the document in miliseconds.*/
-    void computeRecordingLength();
+    virtual void computeRecordingLength();
 
+    static inline dataType round(double d) {
+      return static_cast<dataType>( (d > 0.0) ? d + 0.5 : d - 0.5);
+    }
 };
 
 #endif

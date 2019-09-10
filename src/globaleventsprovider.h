@@ -26,7 +26,7 @@
 #include <QList>
 #include <QMap>
 //include files for the application
-#include <dataprovider.h>
+#include "dataprovider.h"
 #include <types.h>
 #include "eventdata.h"
 

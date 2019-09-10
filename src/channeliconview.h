@@ -34,22 +34,31 @@
   *@author Lynn Hazan
   */
 class ChannelIconViewItem : public QListWidgetItem {
+// TODO: Use Qt type() functionality, to make this cleaner.
 public:
     ChannelIconViewItem( QListWidget *view = 0)
         : QListWidgetItem(view)
     {
+        // Unknown id
+        setData(Qt::UserRole, -1);
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
-    ChannelIconViewItem(const QIcon &icon, const QString &text, QListWidget *view = 0)
+    ChannelIconViewItem(const QIcon &icon, const QString &text, int id, QListWidget *view = 0)
         : QListWidgetItem(icon, text, view)
     {
+        // Save id under user role
+        setData(Qt::UserRole, id);
         // Drop between items, not onto items
         setFlags(flags() | (Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled));
     }
 
+    int getID() {
+        return data(Qt::UserRole).toInt();
+    }
 };
+
 
 
 class ChannelIconView : public QListWidget  {
@@ -57,6 +66,9 @@ class ChannelIconView : public QListWidget  {
 public:
     explicit ChannelIconView(const QColor& backgroundColor,int gridX,int gridY,bool edit,QWidget* parent = 0,const QString& name = QString());
     ~ChannelIconView();
+
+    // Like the findItems for labels but finds item by id.
+    QList<QListWidgetItem*> findItems(const int id) const;
 
     void setNewWidth(int width);
 

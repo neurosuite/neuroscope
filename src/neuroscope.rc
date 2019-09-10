@@ -1,0 +1,2 @@
+// Set executable icon
+IDI_ICON1    ICON    "neuroscope.ico"

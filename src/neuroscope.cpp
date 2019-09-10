@@ -14,7 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 #include "config-neuroscope.h"
 
 // include files for QT
@@ -130,6 +129,12 @@ void NeuroscopeApp::initActions()
     mOpenAction->setShortcut(QKeySequence::Open);
     mOpenAction->setIcon(QPixmap(":/shared-icons/document-open"));
     connect(mOpenAction, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
+
+#ifdef WITH_CEREBUS
+    mStreamAction = fileMenu->addAction(tr("Open network stream..."));
+    mStreamAction->setIcon(QPixmap(":/icons/esd"));
+    connect(mStreamAction, SIGNAL(triggered()), this, SLOT(slotStreamOpen()));
+#endif
 
     mFileOpenRecent = new QRecentFileAction(this);
     QSettings settings;
@@ -480,15 +485,18 @@ void NeuroscopeApp::initActions()
     traceMenu->addSeparator();
     mPage = traceMenu->addAction(tr("Auto-advance to end of recording"));
     mPage->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Space);
+    mPage->setIcon(QPixmap(":/icons/media-seek-forward"));
     mPage->setCheckable(true);
     connect(mPage,SIGNAL(triggered()), this,SLOT(page()));
 
-	 mAccelerate = traceMenu->addAction(tr("Accelerate"));
+	mAccelerate = traceMenu->addAction(tr("Accelerate"));
     mAccelerate->setShortcut(Qt::CTRL + Qt::Key_Up);
+    mAccelerate->setIcon(QPixmap(":/icons/media-plus"));
     connect(mAccelerate,SIGNAL(triggered()), this,SLOT(accelerate()));
 
     mDecelerate = traceMenu->addAction(tr("Decelerate"));
     mDecelerate->setShortcut(Qt::CTRL + Qt::Key_Down);
+    mDecelerate->setIcon(QPixmap(":/icons/media-minus"));
     connect(mDecelerate,SIGNAL(triggered()), this,SLOT(decelerate()));
 
 
@@ -559,6 +567,12 @@ void NeuroscopeApp::initActions()
     connect(doc, SIGNAL(loadFirstDisplay(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)),this,
             SLOT(slotSetUp(QList<int>*,bool,bool,bool,bool,bool,bool,bool,QList<int>,QList<int>,QList<int>,QMap<int,bool>&,long,long,QString,bool,int,bool)));
 
+    connect(doc,  SIGNAL(clusterFileLoaded(const QString&)),
+            this, SLOT(slotClusterFileLoaded(const QString&)));
+
+    connect(doc,  SIGNAL(eventFileLoaded(const QString&)),
+            this, SLOT(slotEventFileLoaded(const QString&)));
+
     connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
     connect(spikeChannelPalette, SIGNAL(singleChangeColor(int)),this, SLOT(slotSingleChannelColorUpdate(int)));
     connect(displayChannelPalette, SIGNAL(singleChangeColor(int)),spikeChannelPalette, SLOT(updateColor(int)));
@@ -584,10 +598,10 @@ void NeuroscopeApp::initActions()
     connect(spikeChannelPalette, SIGNAL(channelsDiscarded(QList<int>)),this, SLOT(slotChannelsDiscarded(QList<int>)));
 
 
-    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,QString,bool)));
-    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
-    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,QString,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,QString,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,int,bool)),spikeChannelPalette, SLOT(discardChannels(QList<int>,int,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedToTrash(QList<int>,int,bool)),displayChannelPalette, SLOT(discardChannels(QList<int>,int,bool)));
+    connect(displayChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,int,bool)),spikeChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,int,bool)));
+    connect(spikeChannelPalette, SIGNAL(channelsMovedAroundInTrash(QList<int>,int,bool)),displayChannelPalette, SLOT(trashChannelsMovedAround(QList<int>,int,bool)));
 
     connect(displayChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),spikeChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
     connect(spikeChannelPalette, SIGNAL(channelsRemovedFromTrash(QList<int>)),displayChannelPalette, SLOT(removeChannelsFromTrash(QList<int>)));
@@ -603,11 +617,18 @@ void NeuroscopeApp::initActions()
     mMainToolBar = new QToolBar;
     mMainToolBar->setObjectName("maintoolbar");
     mMainToolBar->addAction(mOpenAction);
+#ifdef WITH_CEREBUS
+    mMainToolBar->addAction(mStreamAction);
+#endif
     mMainToolBar->addAction(mSaveAction);
     mMainToolBar->addAction(mPrintAction);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(mUndo);
     mMainToolBar->addAction(mRedo);
+    mMainToolBar->addSeparator();
+    mMainToolBar->addAction(mDecelerate);
+    mMainToolBar->addAction(mPage);
+    mMainToolBar->addAction(mAccelerate);
     mMainToolBar->addSeparator();
     mMainToolBar->addAction(editMode);
     addToolBar(mMainToolBar);
@@ -877,7 +898,7 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
 
     NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,greyScale->isChecked(),
                                               doc->tracesDataProvider(),displayMode->isChecked(),clusterVerticalLines->isChecked(),
-                                              clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getGain(),doc->getAcquisitionGain(),
+                                              clusterRaster->isChecked(),clusterWaveforms->isChecked(),showHideLabels->isChecked(),doc->getScreenGain(),
                                               doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
                                               offsets,channelGains,selectedChannels,skipStatus,rasterHeight,doc->getTraceBackgroundImage(),mainDock,"TracesDisplay");
 
@@ -888,9 +909,12 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
     connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
     connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
     connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
-	 
-	 /// Added by M.Zugaro to enable automatic forward paging
-	 connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+	 // Listen to changes in automatic forward paging
+	 connect(view, SIGNAL(pagingStarted()),
+             this, SLOT(neuroscopeViewStarted()));
+	 connect(view, SIGNAL(pagingStopped()),
+             this, SLOT(neuroscopeViewStopped()));
 
     //Keep track of the number of displays
     displayCount ++;
@@ -905,9 +929,9 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay,bool autocenterCha
 
     //Initialize and dock the displayPanel
     //Create the channel lists and select the channels which will be drawn
-    displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups());
+    displayChannelPalette->createChannelLists(doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),doc->getChannelLabels());
     displayChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
-    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
+    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups(),doc->getChannelLabels());
     spikeChannelPalette->updateShowHideStatus(*channelsToDisplay,true);
     displayChannelPalette->setGreyScale(greyScale->isChecked());
     spikeChannelPalette->setGreyScale(greyScale->isChecked());
@@ -1052,6 +1076,46 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
     slotStatusMsg(tr("Ready."));
 }
 
+#ifdef WITH_CEREBUS
+void NeuroscopeApp::openNetworkStream(CerebusTracesProvider::SamplingGroup group)
+{
+    slotStatusMsg(tr("Opening stream..."));
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    //If no document is open already, open the document asked.
+    if(!mainDock) {
+        // Fix for file name based logic
+        this->filePath = "cerebus.nsx";
+
+        // Open stream
+        if(!doc->openStream(group)) {
+            QApplication::restoreOverrideCursor();
+            doc->closeDocument();
+            resetState();
+            return;
+        }
+
+		// Update the spike and event browsing status
+		updateBrowsingStatus();
+
+        // Start auto advance
+        page();
+
+        setWindowTitle("Network Stream");
+        QApplication::restoreOverrideCursor();
+    } else {
+        // ToDo: Check if we are already in streaming mode
+        if (!QProcess::startDetached("neuroscope", QStringList()
+                                                   << "-n"
+                                                   << QString::number(group))) {
+            QMessageBox::critical(this, tr("Neuroscope"),tr("neuroscope can not be launch"));
+        }
+        QApplication::restoreOverrideCursor();
+    }
+    slotStatusMsg(tr("Ready."));
+}
+#endif
 
 NeuroscopeDoc* NeuroscopeApp::getDocument() const
 {
@@ -1094,7 +1158,7 @@ void NeuroscopeApp::updateBrowsingStatus(){
             }
         }
 
-        if (!palette) 
+        if (!palette)
             return;
         NeuroscopeView* view = activeView();
         QStringList::iterator iterator;
@@ -1246,8 +1310,12 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Opening file..."));
 
     QSettings settings;
-    const QString url=QFileDialog::getOpenFileName(this, tr("Open File..."), settings.value("CurrentDirectory").toString(),
-                                                   tr("Data File (*.dat *.lfp *.eeg *.fil);;All files (*.*)") );
+    const QString url=QFileDialog::getOpenFileName(
+        this,
+        tr("Open File..."),
+        settings.value("CurrentDirectory").toString(),
+        tr("Data File (*.dat *.lfp *.eeg *.fil);;Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6);;All files (*.*)")
+    );
     if(!url.isEmpty())
     {
         QDir CurrentDir;
@@ -1258,12 +1326,44 @@ void NeuroscopeApp::slotFileOpen()
     slotStatusMsg(tr("Ready."));
 }
 
+#ifdef WITH_CEREBUS
+void NeuroscopeApp::slotStreamOpen()
+{
+    slotStatusMsg(tr("Opening network stream..."));
+
+    // Let user choose sampling rate
+    QStringList items;
+    items << "30 000 Hz" << "10 000 Hz" << "2000 Hz" << "1000 Hz" << "500 Hz";
+
+    CerebusTracesProvider::SamplingGroup mapping[5] = {
+        CerebusTracesProvider::RATE_30k,
+        CerebusTracesProvider::RATE_10k,
+        CerebusTracesProvider::RATE_2K,
+        CerebusTracesProvider::RATE_1K,
+        CerebusTracesProvider::RATE_500
+    };
+
+    bool ok;
+    int answer = items.indexOf(QInputDialog::getItem(0, tr("Network Stream"),
+                                                        tr("Please choose the sampling group to be displayed."),
+                                                        items,
+                                                        0, // current
+                                                        false, //editable
+                                                        &ok));
+
+    if (ok && answer >= 0)
+        openNetworkStream(mapping[answer]);
+
+    slotStatusMsg(tr("Ready."));
+}
+#endif
+
 void NeuroscopeApp::slotLoadClusterFiles(){
     slotStatusMsg(tr("Loading cluster file(s)..."));
 
     QSettings settings;
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."), settings.value("CurrentDirectory").toString(),
-                                                         tr("Cluster File (*.clu.*)"));
+                                                         tr("Cluster File (*.clu.*);;Blackrock File (*.nev);;All files (*.*)"));
     if(!urls.isEmpty())
     {
         QDir CurrentDir;
@@ -1279,8 +1379,12 @@ void NeuroscopeApp::slotLoadEventFiles(){
     slotStatusMsg(tr("Loading event file(s)..."));
 
     QSettings settings;
-    const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Event Files..."), settings.value("CurrentDirectory").toString(),
-                                                         tr("Event File (*.evt*)"));
+    const QStringList urls = QFileDialog::getOpenFileNames(
+        this,
+        tr("Open Event Files..."),
+        settings.value("CurrentDirectory").toString(),
+        tr("Event File (*.evt*);;Blackrock File (*.nev);;All files (*.*)")
+    );
     if(!urls.isEmpty())
     {
         QDir CurrentDir;
@@ -1342,11 +1446,6 @@ void NeuroscopeApp::slotCreateEventFile(){
             QMessageBox::critical (this, tr("Error!"),tr("The selected file name is already opened."));
         }
         else{
-            const QString eventFileId = doc->lastLoadedProviderName();
-            if(eventFileList.isEmpty())
-                createEventPalette(eventFileId);
-            else
-                addEventFile(eventFileId);
             eventsModified = true;
             QApplication::restoreOverrideCursor();
         }
@@ -2225,7 +2324,7 @@ void NeuroscopeApp::slotTabChange(int index){
 
 	 /// Added by M.Zugaro to enable automatic forward paging
 	 if ( isStill() ) slotStateChanged("pageOffState"); else slotStateChanged("pageOnState");
-	 
+
     QWidget *channelPalette = paletteTabsParent->currentWidget();
 
     if(qobject_cast<ChannelPalette*>(channelPalette)){
@@ -2532,7 +2631,7 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
 
         NeuroscopeView* view = new NeuroscopeView(*this,tabLabel,startTime,duration,backgroundColor,Qt::WA_DeleteOnClose,statusBar(),channelsToDisplay,
                                                   greyMode,doc->tracesDataProvider(),multipleColumns,verticalLines,raster,waveforms,showLabels,
-                                                  doc->getGain(),doc->getAcquisitionGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
+                                                  doc->getScreenGain(),doc->channelColors(),doc->getDisplayGroupsChannels(),doc->getDisplayChannelsGroups(),autocenterChannels,
                                                   offsets,channelGains,selectedChannels,displayChannelPalette->getSkipStatus(),rasterHeight,doc->getTraceBackgroundImage(),mainDock,
                                                   "TracesDisplay");
 
@@ -2544,8 +2643,12 @@ void NeuroscopeApp::createDisplay(QList<int>* channelsToDisplay,bool verticalLin
         connect(view,SIGNAL(eventRemoved(QString,int,double)),this, SLOT(slotEventRemoved(QString,int,double)));
         connect(view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
         connect(view,SIGNAL(positionViewClosed()),this, SLOT(positionViewClosed()));
-		  /// Added by M.Zugaro to enable automatic forward paging
-		  connect(view,SIGNAL(stopped()),this,SLOT(neuroscopeViewStopped()));
+
+        // Listen to changes in automatic forward paging
+        connect(view, SIGNAL(pagingStarted()),
+                this, SLOT(neuroscopeViewStarted()));
+        connect(view, SIGNAL(pagingStopped()),
+                this, SLOT(neuroscopeViewStopped()));
 
         view->installEventFilter(this);
 
@@ -2605,7 +2708,7 @@ void NeuroscopeApp::slotSynchronize(){
     spikeChannelPalette->reset();
 
     //Update and show the spike Palette.
-    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups());
+    spikeChannelPalette->createChannelLists(doc->channelColors(),doc->getSpikeGroupsChannels(),doc->getChannelsSpikeGroups(),doc->getChannelLabels());
     spikeChannelPalette->updateShowHideStatus(displayChannelPalette->getShowHideChannels(true),true);
     spikeChannelPalette->update();
 
@@ -2751,7 +2854,6 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
-    int counter = 0;
     QStringList::const_iterator iterator;
     for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
@@ -2793,15 +2895,17 @@ void NeuroscopeApp::loadClusterFiles(const QStringList &urls){
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
-
-        //Create the cluster palette if need it
-        counter++;
-        QString clusterFileId = doc->lastLoadedProviderName();
-        if(clusterFileList.isEmpty() && counter == 1)
-            createClusterPalette(clusterFileId);
-        else addClusterFile(clusterFileId);
     }
     QApplication::restoreOverrideCursor();
+}
+
+/** Updates view, because a new cluster file was loaded. */
+void NeuroscopeApp::slotClusterFileLoaded(const QString& fileID) {
+    // Create the cluster palette if need it
+    if(clusterFileList.isEmpty())
+        createClusterPalette(fileID);
+    else
+        addClusterFile(fileID);
 }
 
 void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
@@ -2836,7 +2940,9 @@ void NeuroscopeApp::createClusterPalette(const QString& clusterFileId)
 
     slotStateChanged("clusterState");
     //Waveforms are allowed only for dat and fil files.
-    if(filePath.contains(".dat")||filePath.contains(".fil")) {
+    if(filePath.contains(".dat")
+    || filePath.contains(".fil")
+    || filePath.contains(".ns")) {
         slotStateChanged("datState");
     }
     else{
@@ -2968,7 +3074,6 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files
-    int counter = 0;
     QStringList::const_iterator iterator;
     for(iterator = urls.constBegin();iterator != urls.constEnd();++iterator){
         //Create the provider
@@ -3003,18 +3108,17 @@ void NeuroscopeApp::loadEventFiles(const QStringList& urls){
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             continue;
         }
-
-        //Create the event palette if need it
-        counter++;
-        QString eventFileId = doc->lastLoadedProviderName();
-        if(eventFileList.isEmpty() && counter == 1)
-            createEventPalette(eventFileId);
-        else
-            addEventFile(eventFileId);
     }
     QApplication::restoreOverrideCursor();
 }
 
+void NeuroscopeApp::slotEventFileLoaded(const QString& fileId) {
+    //Create the event palette if need it;
+    if(eventFileList.isEmpty())
+        createEventPalette(fileId);
+    else
+        addEventFile(fileId);
+}
 
 void NeuroscopeApp::createEventPalette(const QString& eventFileId){
 
@@ -3690,4 +3794,3 @@ void NeuroscopeApp::slotEventsToBrowse()
 {
     slotStateChanged("eventBrowsingState");
 }
-

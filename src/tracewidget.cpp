@@ -32,21 +32,22 @@
 #include <QTimer>
 
 TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
-                         bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay,int gain,int acquisitionGain,
-                         ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,
+                         bool raster,bool waveforms,bool labelsDisplay,QList<int>& channelsToDisplay, float gain, ChannelColors* channelColors, QMap<int, QList<int> >* groupsChannels,
                          QMap<int,int>* channelsGroups,bool autocenterChannels,QList<int>& channelOffsets,QList<int>& gains,const QList<int>& skippedChannels,
                          int rasterHeight,const QImage& backgroundImage,QWidget* parent,
                          const char* name,const QColor& backgroundColor,QStatusBar* statusBar,
                          int minSize,int maxSize,int windowTopLeft,int windowBottomRight,int border):
    QWidget(parent),timeWindow(duration),
-    view(tracesProvider,greyScale,multiColumns,verticalLines,raster,waveforms,labelsDisplay,channelsToDisplay,gain,acquisitionGain,
+    view(tracesProvider,greyScale,multiColumns,verticalLines,raster,waveforms,labelsDisplay,channelsToDisplay,gain,
          startTime,timeWindow,channelColors,groupsChannels,channelsGroups,autocenterChannels,channelOffsets,gains,skippedChannels,rasterHeight,backgroundImage,this,name,
          backgroundColor,statusBar,minSize,maxSize,windowTopLeft,windowBottomRight,border),
     startTime(startTime),
     validator(this),
     isInit(true),
     updateView(true),
-    statusBar(statusBar)
+    statusBar(statusBar),
+    timer(new QTimer(this)),
+    pageTime(500)
 {
 
     QVBoxLayout *lay = new QVBoxLayout;
@@ -73,11 +74,20 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     connect(&view,SIGNAL(eventAdded(QString,QString,double)),this, SLOT(slotEventAdded(QString,QString,double)));
     connect(&view,SIGNAL(eventsAvailable(QHash<QString,EventData*>&,QMap<QString,QList<int> >&,QHash<QString,ItemColors*>&,QObject*,double)),this, SLOT(slotEventsAvailable(QHash<QString,EventData*>&,QMap<QString,QList<int> >&,QHash<QString,ItemColors*>&,QObject*,double)));
 
+    // Inform trace provider about paging changes
+    connect(this, SIGNAL(pagingStarted()),
+            &tracesProvider, SLOT(slotPagingStarted()));
+    connect(this, SIGNAL(pagingStopped()),
+            &tracesProvider, SLOT(slotPagingStopped()));
+
+    // Stop paging if IO error occures
+	connect(&view, SIGNAL(dataError()),
+            this, SLOT(stop()));
+
     isInit = false;
-    /// Added by M.Zugaro to enable automatic forward paging
-    timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(advance()));
-    pageTime = 500;
+
+    // Configure auto advance timer
+    connect(timer, SIGNAL(timeout()), this, SLOT(advance()));
 }
 
 TraceWidget::~TraceWidget(){
@@ -86,33 +96,33 @@ TraceWidget::~TraceWidget(){
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::page()
 {
-    if ( timer->isActive() )
-        timer->stop();
-    else
-	 {
-        timer->start(pageTime);
-		  statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
-	 }
+    if(!isStill())
+        return;
+
+   timer->start(pageTime);
+   emit pagingStarted();
+   statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
 }
 
 bool TraceWidget::isStill()
 {
-	return ! ( timer != NULL && timer->isActive() );
+	return !timer->isActive();
 }
 
 void TraceWidget::stop()
 {
-	if ( timer->isActive() )
-	{
-			timer->stop();
-			emit stopped();
-	}
+	if (isStill())
+        return;
+
+    timer->stop();
+	emit pagingStopped();
 }
 
 void TraceWidget::accelerate()
 {
-    if ( !timer->isActive() )
+    if (isStill())
         return;
+
     pageTime -= 125;
     if ( pageTime < 0 ) pageTime = 0;
     statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
@@ -121,7 +131,9 @@ void TraceWidget::accelerate()
 
 void TraceWidget::decelerate()
 {
-    if ( !timer->isActive() ) return;
+    if (isStill())
+        return;
+
     pageTime += 125;
     if ( pageTime > 1000 ) pageTime = 1000;
     statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));

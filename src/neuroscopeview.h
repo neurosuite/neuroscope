@@ -76,8 +76,7 @@ public:
      * @param raster true if a raster is drawn to show the clusters, false otherwise
      * @param waveforms true if waveforms are drawn on top of the traces, false otherwise.
      * @param labelsDisplay true if labels are drawn next to the traces, false otherwise.
-     * @param unitGain initial gain use to draw the traces in the TraceView.
-     * @param acquisitionGain acquisition gain.
+     * @param screenGain initial screen gain used to draw the traces in the TraceView.
      * @param channelColors a pointer on the list of colors for the channels.
      * @param groupsChannels a pointer on the map given the list of channels for each group.
      * @param channelsGroups a pointer on the map given to which group each channel belongs.
@@ -93,7 +92,7 @@ public:
      */
     NeuroscopeView(NeuroscopeApp& mainWindow,const QString& label,long startTime,long duration,const QColor& backgroundColor,int wflags,QStatusBar * statusBar,QList<int>* channelsToDisplay,bool greyScale,
                    TracesProvider& tracesProvider,bool multiColumns,bool verticalLines,
-                   bool raster,bool waveforms,bool labelsDisplay,int unitGain,int acquisitionGain,ChannelColors* channelColors,
+                   bool raster,bool waveforms,bool labelsDisplay, float screenGain, ChannelColors* channelColors,
                    QMap<int,QList<int> >* groupsChannels,QMap<int,int>* channelsGroups,
                    bool autocenterChannels, QList<int> offsets,QList<int> channelGains,QList<int> selected,QMap<int,bool> skipStatus,int rasterHeight,const QString& backgroundImagePath,
                    QWidget *parent = 0, const char *name=0);
@@ -107,12 +106,11 @@ public:
     */
     void print(QPrinter* pPrinter,const QString& filePath,bool whiteBackground);
 
-    /**Sets the unit gain and the acquisition system gain.
-    * @param gain initial gain use to draw the traces in the TraceView.
-    * @param acquisitionGain acquisition gain.
+    /**Sets the unit screen gain.
+    * @param screenGain initial gain use to draw the traces in the TraceView.
     */
-    void setGains(int gain,int acquisitionGain ){
-        emit updateGains(gain,acquisitionGain);
+    void setGains(float screenGain){
+        emit updateScreenGain(screenGain);
         emit drawTraces();
     }
 
@@ -609,13 +607,19 @@ public:
 
 private Q_SLOTS:
 
-	 /// Added by M.Zugaro to enable automatic forward paging
-	 void traceWidgetStopped() { emit stopped(); }
+	 /** Forward paging started event info */
+	 void traceWidgetStarted() { emit pagingStarted(); }
+
+     /** Forward paging stopped event info */
+	 void traceWidgetStopped() { emit pagingStopped(); }
 
 Q_SIGNALS:
 
-	 /// Added by M.Zugaro to enable automatic forward paging
-    void stopped();
+    /** Emitted when paging in started */
+    void pagingStarted();
+
+    /** Emitted when paging in stopped */
+    void pagingStopped();
 
 public Q_SLOTS:
 
@@ -725,7 +729,7 @@ Q_SIGNALS:
     void decreaseAllAmplitude();
     void increaseAmplitude(const QList<int>& selectedIds);
     void decreaseAmplitude(const QList<int>& selectedIds);
-    void updateGains(int gain,int acquisitionGain);
+    void updateScreenGain(float screenGain);
     void updateDrawing();
     void groupsHaveBeenModified(bool);
     void channelsToBeSelected(const QList<int>& selectedIds);

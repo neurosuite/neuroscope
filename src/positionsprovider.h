@@ -19,7 +19,7 @@
 #define POSITIONSPROVIDER_H
 
 //include files for the application
-#include <dataprovider.h>
+#include "dataprovider.h"
 #include <array.h>
 #include <types.h>
 

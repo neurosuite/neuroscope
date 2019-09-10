@@ -19,7 +19,7 @@
 #define EVENTSPROVIDER_H
 
 //include files for the application
-#include <dataprovider.h>
+#include "dataprovider.h"
 #include <array.h>
 #include <types.h>
 
@@ -69,7 +69,7 @@ public:
   * @param initiator instance requesting the data.
   * @param startTimeInRecordingUnits begining of the time interval from which to retrieve the data in recording units.
   */
-    void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits = 0);
+    virtual void requestData(long startTime,long endTime,QObject* initiator,long startTimeInRecordingUnits = 0);
 
     /**Looks up for the first of the events included in the list @p selectedIds existing after the time @p startTime.
   * All the events included in the time interval given by @p timeFrame are retrieved. The time interval start time is
@@ -79,7 +79,7 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-    void requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator);
+    virtual void requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator);
 
 
     /**Looks up for the first of the events included in the list @p selectedIds existing before the time @p endTime.
@@ -90,12 +90,12 @@ public:
   * @param selectedIds list of event ids to look up for.
   * @param initiator instance requesting the data.
   */
-    void requestPreviousEventData(long endTime,long timeFrame,QList<int> selectedIds,QObject* initiator);
+    virtual void requestPreviousEventData(long endTime,long timeFrame,QList<int> selectedIds,QObject* initiator);
 
     /**Loads the event ids and the corresponding spike time.
   * @return an loadReturnMessage enum giving the load status
   */
-    int loadData();
+    virtual int loadData();
 
     /**Returns the number of events in the event file the provider provides the data for
   * @return number of events.
@@ -167,6 +167,9 @@ public:
     /**Initializes the provider as it is the provider of a new empty event file.*/
     void initializeEmptyProvider();
 
+    /** Updates mapping saved in eventIds and idsDescriptions as well as descriptionLength based on loaded data. */
+    void updateMappingAndDescriptionLength();
+
     /**Updates the sampling rate for the current document.
   * @param rate sampling rate.
   */
@@ -232,7 +235,7 @@ Q_SIGNALS:
   */
     void eventDescriptionRemoved(QString providerName,QMap<int,int> oldNewEventIds,QMap<int,int> newOldEventIds,int eventIdToRemove,QString eventDescriptionToRemove);
 
-private:
+protected:
 
     /**Provider's name.*/
     QString name;

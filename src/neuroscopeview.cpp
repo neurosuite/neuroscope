@@ -34,7 +34,7 @@ class EventData;
 
 NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, long startTime, long duration, const QColor &backgroundColor, int wflags, QStatusBar* statusBar, QList<int>* channelsToDisplay,
                                bool greyScale, TracesProvider& tracesProvider, bool multiColumns, bool verticalLines,
-                               bool raster, bool waveforms, bool labelsDisplay, int unitGain, int acquisitionGain, ChannelColors* channelColors,
+                               bool raster, bool waveforms, bool labelsDisplay, float screenGain, ChannelColors* channelColors,
                                QMap<int,QList<int> >* groupsChannels, QMap<int,int>* channelsGroups, bool autocenterChannels,
                                QList<int> offsets, QList<int> channelGains, QList<int> selected, QMap<int,bool> skipStatus, int rasterHeight, const QString &backgroundImagePath, QWidget* parent, const char* name):
     DockArea(parent)
@@ -67,10 +67,14 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     addDockWidget(Qt::RightDockWidgetArea,mainDock);
 
     traceWidget = new TraceWidget(startTime,duration,greyScale,tracesProvider,multiColumns,verticalLines,raster,
-                                  waveforms,labelsDisplay,*shownChannels,unitGain,acquisitionGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
+                                  waveforms,labelsDisplay,*shownChannels,screenGain,channelColors,groupsChannels,channelsGroups,autocenterChannels,
                                   channelOffsets,gains,skippedChannels,rasterHeight,QImage(backgroundImagePath),mainDock,"traces",backgroundColor,statusBar,5);
-	 /// Added by M.Zugaro to enable automatic forward paging
-    connect(traceWidget,SIGNAL(stopped()),this,SLOT(traceWidgetStopped()));
+
+	// Forward paging events
+    connect(traceWidget, SIGNAL(pagingStarted()),
+            this,        SLOT(traceWidgetStarted()));
+    connect(traceWidget, SIGNAL(pagingStopped()),
+            this,        SLOT(traceWidgetStopped()));
 
     mainDock->setWidget(traceWidget);
     mainDock->setFocusPolicy(Qt::NoFocus);
@@ -92,7 +96,7 @@ NeuroscopeView::NeuroscopeView(NeuroscopeApp& mainWindow, const QString &label, 
     connect(this,SIGNAL(decreaseAllAmplitude()),traceWidget,SLOT(decreaseAllChannelsAmplitude()));
     connect(this,SIGNAL(increaseAmplitude(QList<int>)),traceWidget,SLOT(increaseSelectedChannelsAmplitude(QList<int>)));
     connect(this,SIGNAL(decreaseAmplitude(QList<int>)),traceWidget,SLOT(decreaseSelectedChannelsAmplitude(QList<int>)));
-    connect(this,SIGNAL(updateGains(int,int)),traceWidget,SLOT(setGains(int,int)));
+    connect(this,SIGNAL(updateScreenGain(float)),traceWidget,SLOT(setGain(float)));
     connect(this,SIGNAL(updateDrawing()),traceWidget, SLOT(updateDrawing()));
     connect(this,SIGNAL(groupsHaveBeenModified(bool)),traceWidget, SLOT(groupsModified(bool)));
     connect(this,SIGNAL(channelsToBeSelected(QList<int>)),traceWidget,SLOT(selectChannels(QList<int>)));

@@ -113,6 +113,20 @@ int EventsProvider::loadData(){
         return INCORRECT_CONTENT;
     }
 
+    updateMappingAndDescriptionLength();
+
+    //Initialize the variables
+    previousStartTime = 0;
+    previousStartIndex = 1;
+    previousEndIndex = nbEvents;
+    previousEndTime = static_cast<long>(floor(0.5 + timeStamps(1,nbEvents)));
+    fileMaxTime = previousEndTime;
+
+    return OK;
+}
+
+
+void EventsProvider::updateMappingAndDescriptionLength() {
     //Assign an id to each event description
     //The iterator iterates on the keys sorted
     QMap<EventDescription,int>::Iterator iterator;
@@ -140,15 +154,6 @@ int EventsProvider::loadData(){
     descriptionLength = static_cast<int>(qMin((mean + stdVar),maxSize));
     //Be sure that the length is minimum 2 digits
     descriptionLength = qMax(descriptionLength,2);
-
-    //Initialize the variables
-    previousStartTime = 0;
-    previousStartIndex = 1;
-    previousEndIndex = nbEvents;
-    previousEndTime = static_cast<long>(floor(0.5 + timeStamps(1,nbEvents)));
-    fileMaxTime = previousEndTime;
-
-    return OK;
 }
 
 void EventsProvider::initializeEmptyProvider(){

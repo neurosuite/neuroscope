@@ -82,6 +82,18 @@ ChannelIconView::~ChannelIconView()
 {
 }
 
+QList<QListWidgetItem *> ChannelIconView::findItems(const int id) const {
+    QList<QListWidgetItem *> matchedItems;
+
+    for(unsigned int row = 0; row < count(); row++) {
+        ChannelIconViewItem* channelItem = static_cast<ChannelIconViewItem*>(item(row));
+        if(channelItem->getID() == id)
+            matchedItems.append(channelItem);
+    }
+    return matchedItems;
+}
+
+
 void ChannelIconView::slotRowInsered()
 {
     adjustSize();
@@ -97,8 +109,8 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
     QByteArray data;
     //For the moment just one item
     QDataStream stream(&data, QIODevice::WriteOnly);
-    Q_FOREACH(QListWidgetItem *item, items) {
-        stream << *item;
+    Q_FOREACH(QListWidgetItem* item, items) {
+        stream << *static_cast<ChannelIconViewItem*>(item);
     }
 
     mimedata->setData("application/x-channeliconview", data);
@@ -132,7 +144,7 @@ void ChannelIconView::wheelEvent ( QWheelEvent * event )
     event->accept();
 }
 
-bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::DropAction action)
+bool ChannelIconView::dropMimeData(int index, const QMimeData* mimeData, Qt::DropAction action)
 {
     Q_UNUSED(action);
 
@@ -148,22 +160,19 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
     if (data.isEmpty())
         return false;
 
-    qDebug()<<" index "<<index;
-
-    const QString sourceGroupName = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
     QDataStream stream(data);
-    const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
+
     const int numberOfItems = mimeData->data("application/x-channeliconview-number-item").toInt();
+    const QString sourceGroupName = QString::fromUtf8(mimeData->data("application/x-channeliconview-name"));
+    const bool moveAllGroup = (mimeData->data("application/x-channeliconview-move-all-channels") == "true");
 
     if (sourceGroupName!= objectName()) {
         //TODO this part is buggy
         QList<int> channelIds;
         for (int i=0; i< numberOfItems; ++i) {
-            ChannelIconViewItem *item = new ChannelIconViewItem(this);
-            stream >> *item;
-            channelIds.append(item->text().toInt());
-            qDebug()<<" channelIds"<<channelIds;
-            delete item;
+            ChannelIconViewItem sentItem(this);
+            stream >> sentItem;
+            channelIds.append(sentItem.getID());
         }
         if (!channelIds.isEmpty()) {
             emit moveListItem(channelIds, sourceGroupName, objectName(), index, moveAllGroup);
@@ -177,10 +186,9 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData * mimeData, Qt::Dr
 
         QList<int> channelIds;
         for (int i=0; i< numberOfItems; ++i) {
-            ChannelIconViewItem *item = new ChannelIconViewItem(this);
-            stream >> *item;
-            channelIds.append(item->text().toInt());
-            delete item;
+            ChannelIconViewItem sentItem(this);
+            stream >> sentItem;
+            channelIds.append(sentItem.getID());
         }
 
         QListWidgetItem *posItem = item(index);

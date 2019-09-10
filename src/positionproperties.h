@@ -31,7 +31,7 @@
 
 
 //include files for the application
-#include <positionpropertieslayout.h>
+#include "positionpropertieslayout.h"
 
 /**Class representing the NeuroScope position preferences tab contained in the preferences or properties dialogs.
   *@author Lynn Hazan

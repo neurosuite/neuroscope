@@ -228,7 +228,7 @@
   <customwidget>
    <class>QGroupBox</class>
    <extends>QGroupBox</extends>
-   <header>Qt3Support/QGroupBox</header>
+   <header>QGroupBox</header>
    <container>1</container>
   </customwidget>
   <customwidget>

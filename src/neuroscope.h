@@ -19,7 +19,7 @@
 #define NEUROSCOPE_H
 
 
- 
+
 
 
 #include <QDockWidget>
@@ -34,6 +34,11 @@
 #include <QMainWindow>
 //application specific include files
 #include "neuroscopeview.h"
+
+#ifdef WITH_CEREBUS
+    #include "cerebustraceprovider.h" // For SamplingGroup
+#endif
+
 
 // forward declaration of the Neuroscope classes
 class NeuroscopeDoc;
@@ -67,7 +72,14 @@ public:
     * Asking for a new one will open a new instance of the application with it.
     */
     void openDocumentFile(const QString& url=QString());
-    
+
+#ifdef WITH_CEREBUS
+    /** Open a stream, only one document (file or stream) at the time allowed.
+    * Asking for a new one will open a new instance of the application with it.
+    */
+    void openNetworkStream(CerebusTracesProvider::SamplingGroup group);
+#endif
+
     /** Returns a pointer to the current document connected to the NeuroscopeApp instance and is used by
      * the View class to access the document object's methods
      */
@@ -187,7 +199,7 @@ public:
    * @return true if at least one cluster file is loaded, false otherwise.
    */
     inline bool isClusterFilesLoaded()const{return !clusterFileList.isEmpty();}
-    
+
     /**Tells if there is a position file loaded.
    * @return true a position file is loaded, false otherwise.
    */
@@ -196,18 +208,42 @@ public:
 	 /// Added by M.Zugaro to enable automatic forward paging
 	 bool isStill() { return ( !activeView() || activeView()->isStill() ); }
 
-private Q_SLOTS:
-
-    /// Added by M.Zugaro to enable automatic forward paging
-    void neuroscopeViewStopped() { slotStateChanged("pageOffState"); }
-
 public Q_SLOTS:
 
-    /// Added by M.Zugaro to enable automatic forward paging
-    void page() { if ( isStill() ) slotStateChanged("pageOnState"); else slotStateChanged("pageOffState"); activeView()->page(); }
-    void stop() { if( activeView() ) { activeView()->stop(); slotStateChanged("pageOffState"); } }
-    void accelerate() {	if( activeView()) activeView()->accelerate(); }
-    void decelerate() {	if( activeView()) activeView()->decelerate(); }
+    /** Toggle paging (a.k.a. auto advance to end of recording) */
+    void page() {
+        if(activeView()) {
+            if(activeView()->isStill())
+                activeView()->page();
+            else
+                activeView()->stop();
+        } else {
+            // No view, no paging
+            slotStateChanged("pageOffState");
+        }
+    }
+
+    /** Stop paging */
+    void stop() {
+        if(activeView() ) {
+            activeView()->stop();
+        } else {
+            // No view, no paging
+            slotStateChanged("pageOffState");
+        }
+    }
+
+    /** Increase paging speed */
+    void accelerate() {
+        if(activeView())
+            activeView()->accelerate();
+    }
+
+    /** Decrease paging speed */
+    void decelerate() {
+        if(activeView())
+            activeView()->decelerate();
+    }
 
     /**Called when an event has been modified.
   * @param providerName name use to identified the event provider containing the modified event.
@@ -286,15 +322,15 @@ protected:
     */
     void initDisplay(QList<int>* channelsToDisplay,bool autocenterChannels,QList<int> offsets,QList<int> channelGains,
                      QList<int> selectedChannels,QMap<int,bool>& skipStatus,int rasterHeight=-1,long duration = 1000,long startTime = 0,QString tabLabel = QString());
-    
+
     /**
      * queryClose is called by closeEvent
      */
     bool queryClose();
-    
+
     void customEvent (QEvent* event);
     void closeEvent(QCloseEvent *event);
-    
+
 private Q_SLOTS:
 
     void slotAbout();
@@ -302,18 +338,29 @@ private Q_SLOTS:
     /**Open a file and load it into the document.*/
     void slotFileOpen();
 
+#ifdef WITH_CEREBUS
+    /**Open a network stream as a document. */
+    void slotStreamOpen();
+#endif
+
     /**Loads one or multiple cluster files.*/
     void slotLoadClusterFiles();
 
+    /** Updates view, because a new cluster file was loaded. */
+    void slotClusterFileLoaded(const QString& fileID);
+
     /**Closes the cluster file corresponding to the currently selected cluster group.*/
     void slotCloseClusterFile();
-    
+
     /**Loads one or multiple event files.*/
     void slotLoadEventFiles();
 
     /**Creates an empty event file.*/
     void slotCreateEventFile();
-    
+
+    /** Updates view, because a new event file was loaded or created. */
+    void slotEventFileLoaded(const QString& fileID);
+
     /**Closes the event file corresponding to the currently selected event group.*/
     void slotCloseEventFile();
 
@@ -322,7 +369,7 @@ private Q_SLOTS:
 
     /**Closes the position file.*/
     void slotClosePositionFile();
-    
+
     /**Opens a file from the recent files menu. */
     void slotFileOpenRecent(const QString& url);
 
@@ -330,7 +377,7 @@ private Q_SLOTS:
     * (number of channels, sampling rate of the dat file and eeg file).
     */
     void slotFileProperties();
-    
+
     /**If need it, warns the user that the spike groups have been modified, then closes the actual file and displayss.*/
     void slotFileClose();
 
@@ -358,7 +405,7 @@ private Q_SLOTS:
     *  have the same amplification.
     */
     void slotShowCalibration();
-    
+
     /**Changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar.
      */
@@ -368,7 +415,7 @@ private Q_SLOTS:
     /*Slots for the tools menu.*/
     /**Chooses the tool to select channels, enabling the user to select traces in order to move them.*/
     void slotSelect();
-    
+
     /**Chooses the zoom tool, enabling the user to zoom.*/
     void slotZoom();
 
@@ -379,7 +426,7 @@ private Q_SLOTS:
     /**Chooses the selection time tool, enabling the user to select a time frame (subset of the currently shown)
     * for which the traces are going to be displayed.*/
     void slotSelectTime();
-    
+
     /**Chooses the tool to select an event, enabling the user to select an event in order to move or delete it.*/
     void slotSelectEvent();
 
@@ -468,13 +515,13 @@ private Q_SLOTS:
     /**Selects all the clusters of the current palette except the clusters of artefact and noise
     * (clusters 0 and 1 respectively).*/
     void slotSelectAllWO01();
-    
+
     /**Sets the mode of presentation in the current display, single or multiple columns.*/
     void slotDisplayMode();
 
     /**Displays or hides vertical lines to show the clusters.*/
     void slotClustersVerticalLines();
-    
+
     /**Displays or hides a raster to show the clusters.*/
     void slotClustersRaster();
 
@@ -486,7 +533,7 @@ private Q_SLOTS:
 
     /**Triggers the moves of the selected channels to the discard spike group.*/
     void slotDiscardSpikeChannels();
-    
+
     /**The selected channels have been moved to the trash group.
     * @param discarded ids of the channels to move to the trash group.
     */
@@ -635,7 +682,7 @@ private Q_SLOTS:
    * @param clustersToSkip new list of clusters to skip while browsing
    */
     void slotUpdateClustersToSkip(const QString &groupName, const QList<int>& clustersToSkip);
-    
+
     /**Marks the selected channels has keeped.*/
     void slotKeepChannels();
 
@@ -665,6 +712,10 @@ private Q_SLOTS:
     void slotHanbook();
 
     void slotSaveRecentFiles();
+
+    /// Added by M.Zugaro to enable automatic forward paging
+    void neuroscopeViewStarted() { slotStateChanged("pageOnState"); }
+    void neuroscopeViewStopped() { slotStateChanged("pageOffState"); }
 
 private:
     void readSettings();
@@ -697,7 +748,7 @@ private:
     QAction* addEventToolBarAction;
     QAction* positionViewToggle;
     QAction* showEventsInPositionView;
-    
+
     QAction* mProperties;
     QAction* mLoadClusterFiles;
     QAction* mLoadEventFiles;
@@ -752,6 +803,9 @@ private:
     QAction* mSaveAsAction;
     QAction* mCloseAction;
     QAction* mOpenAction;
+#ifdef WITH_CEREBUS
+    QAction* mStreamAction;
+#endif
     QAction* mUndo;
     QAction* mRedo;
     QAction* mViewStatusBar;
@@ -776,7 +830,7 @@ private:
     * Inititalized in initItemPanel().
     */
     ChannelPalette* displayChannelPalette;
-    
+
     /**spikeChannelPalette is the Widget containing the channel list to create the spike groups.
     * Inititalized in initItemPanel().
     */
@@ -820,10 +874,10 @@ private:
 
     /**Flag to keep track of group modifications. */
     bool groupsModified;
-    
+
     /**Flag to keep track of color modifications. */
     bool colorModified;
-    
+
     /**Flag to keep track of event modifications. */
     bool eventsModified;
 
@@ -850,7 +904,7 @@ private:
 
     /**List storing the identifiers of the opened cluster files.*/
     QStringList clusterFileList;
-    
+
     /**List storing the identifiers of the opened event files.*/
     QStringList eventFileList;
 

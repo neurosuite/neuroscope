@@ -27,14 +27,29 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QFileInfo>
- 
+
 // include c/c++ headers
 #include <stdint.h>
 
-TracesProvider::TracesProvider(const QString& fileUrl,int nbChannels,int resolution,double samplingRate,int offset)
+//include files for c/c++ libraries
+#include <math.h>
+
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+#define fseeko64(stream, offset, whence) _fseeki64(stream, offset, whence)
+#define ftello64(stream) _ftelli64(stream)
+#else
+#define fseeko(stream, offset, whence) fseeko64(stream, offset, whence)
+#define ftello(stream) ftello64(stream)
+#endif
+
+
+
+TracesProvider::TracesProvider(const QString &fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset)
     : DataProvider(fileUrl),
       nbChannels(nbChannels),
       resolution(resolution),
+      voltageRange(voltageRange),
+      amplification(amplification),
       samplingRate(samplingRate),
       offset(offset)
 {
@@ -123,9 +138,12 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     //data will contain the final values.
     data.setSize(nbSamples,nbChannels);
 
+    // Compute acquisition gain
+    double acquisitionGain = (voltageRange * 1000000) / (pow(2.0, resolution) * amplification);
+
     //Depending on the acquisition system resolution, the data are store as short or long
     if((resolution == 12) | (resolution == 14) | (resolution == 16)){
-        Array<short> retrieveData(nbSamples,nbChannels);
+        Array<int16_t> retrieveData(nbSamples,nbChannels);
         qint64 nbValues = nbSamples * nbChannels;
         // Is this a Neuralynx file?
         int p = fileName.lastIndexOf(".ncs");
@@ -254,11 +272,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
 
             qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
-            dataFile.seek(position * sizeof(short));
-            qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(short) * nbValues);
+            dataFile.seek(position * sizeof(int16_t));
+            qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(int16_t) * nbValues);
 
             // copy the data into retrieveData.
-            if(nbRead != qint64(nbValues*sizeof(short))){
+            if(nbRead != qint64(nbValues*sizeof(int16_t))){
                 //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
                 data.setSize(0,0);
                 dataFile.close();
@@ -270,12 +288,12 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         //Apply the offset if need it,convert to dataType and store the values in data.
         if(offset != 0){
             for(qint64 i = 0; i < nbValues; ++i){
-                data[i] = static_cast<dataType>(retrieveData[i]) - static_cast<dataType>(offset);
+                data[i] = round(static_cast<dataType>(retrieveData[i]) - offset * acquisitionGain);
             }
         } else {
 
             for(qint64 i = 0; i < nbValues; ++i){
-                data[i] = static_cast<dataType>(retrieveData[i]);
+                data[i] = round(static_cast<dataType>(retrieveData[i]) * acquisitionGain);
             }
         }
     } else if(resolution == 32) {
@@ -290,11 +308,11 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         qint64 nbValues = nbSamples * nbChannels;
         qint64 position = static_cast<qint64>(static_cast<qint64>(startInRecordingUnits)* static_cast<qint64>(nbChannels));
 
-        dataFile.seek(position * sizeof(short));
-        qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(short) * nbValues);
+        dataFile.seek(position * sizeof(int32_t));
+        qint64 nbRead = dataFile.read(reinterpret_cast<char*>(&retrieveData[0]), sizeof(int32_t) * nbValues);
 
         // copy the data into retrieveData.
-        if(nbRead != qint64(nbValues*sizeof(short))){
+        if(nbRead != qint64(nbValues*sizeof(int32_t))){
             //emit the signal with an empty array, the reciever will take care of it, given a message to the user.
             data.setSize(0,0);
             dataFile.close();
@@ -304,17 +322,16 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         //Apply the offset if need it and store the values in data.
         if(offset != 0){
             for(qint64 i = 0; i < nbValues; ++i)
-                data[i] = retrieveData[i] - static_cast<dataType>(offset);
+                data[i] = round(retrieveData[i] - offset * acquisitionGain);
         }
         else{
             for(qint64 i = 0; i < nbValues; ++i){
-                data[i] = static_cast<dataType>(retrieveData[i]);
+                data[i] = round(retrieveData[i] * acquisitionGain);
             }
         }
         //The data have been retrieve, close the file.
         dataFile.close();
     }
-
 
     //Send the information to the receiver.
     emit dataReady(data,initiator);
@@ -391,4 +408,14 @@ void TracesProvider::computeRecordingLength(){
 
 long TracesProvider::getTotalNbSamples(){
     return static_cast<long>((length * samplingRate) / 1000);
+}
+
+QStringList TracesProvider::getLabels() {
+    QStringList labels;
+
+    for(int i = 0; i < this->nbChannels; i++) {
+        labels << QString::number(i);
+    }
+
+    return labels;
 }

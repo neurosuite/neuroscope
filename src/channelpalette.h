@@ -77,7 +77,7 @@ public:
     * @param groupsChannels map given the list of channels for each group.
     * @param channelsGroups map given to which group each channel belongs.
     */
-    void createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups);
+    void createChannelLists(ChannelColors* channelColors,QMap<int, QList<int> >* groupsChannels,QMap<int,int>* channelsGroups, QStringList* channelLabels);
 
     /**Selects the channels contain in @p selectedChannels.
     * @param selectedChannels list of channels to select.
@@ -121,10 +121,10 @@ public Q_SLOTS:
     void slotChannelsMoved(const QString& targetGroup, QListWidgetItem *after);
     /**Channels moved around in a group.*/
     void slotChannelsMoved(const QList<int>& channelIds,const QString& sourceGroup,QListWidgetItem* after);
-    void trashChannelsMovedAround(const QList<int>& channelIds,const QString& afterId,bool beforeFirst);
+    void trashChannelsMovedAround(const QList<int>& channelIds,const int afterId,bool beforeFirst);
     void discardChannels();
     void discardChannels(const QList<int>& channelsToDiscard);
-    void discardChannels(const QList<int>& channelsToDiscard, const QString &afterId, bool beforeFirst);
+    void discardChannels(const QList<int>& channelsToDiscard, const int afterID, bool beforeFirst);
     void discardSpikeChannels();
     void showChannels();
     void hideChannels();
@@ -174,8 +174,8 @@ Q_SIGNALS:
     void channelsDiscarded(const QList<int>& discarded);
     void setDragAndDrop(bool dragAndDrop);
     void groupModified();
-    void channelsMovedToTrash(const QList<int> &channelIds, const QString &afterId,bool beforeFirst);
-    void channelsMovedAroundInTrash(const QList<int>& channelsToDiscard,QString afterId,bool beforeFirst);
+    void channelsMovedToTrash(const QList<int> &channelIds, const int afterId,bool beforeFirst);
+    void channelsMovedAroundInTrash(const QList<int>& channelsToDiscard,int afterId,bool beforeFirst);
     void channelsRemovedFromTrash(const QList<int>& channelIds);
     void channelsSelected(const QList<int>& selectedChannels);
     
@@ -208,6 +208,9 @@ private:
     *Pointer to the variable belonging to NeuroscopeDoc.
     */
     QMap<int, QList<int> >* groupsChannels;
+
+    /** Mapping between channel id and label */
+    QStringList* channelLabels;
 
     int labelSize;
     
