@@ -426,7 +426,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
                 qDebug()<<" reader.getVersion()"<<reader.getVersion();
                 if(reader.getVersion().isEmpty() || reader.getVersion() == QLatin1String("1.2.2"))
                     extensionSamplingRates = reader.getSampleRateByExtension();
-                qDebug()<<"extensionSamplingRates"<<extensionSamplingRates;
+                qDebug()<<"extensionSamplingRates Session"<<extensionSamplingRates;
             } else {
                 qDebug()<<" NeuroscopeDoc::openDocument PARSE_ERROR 2";
                 return PARSE_ERROR;

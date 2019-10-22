@@ -68,7 +68,7 @@ int ClustersProvider::loadData(){
     //Get the number of spikes
     nbSpikes = Utilities::getNbLines(timeFilePath);
 
-    qDebug()<<"nbSpikes "<<nbSpikes;
+    qDebug()<<"nbSpikes debug "<<nbSpikes;
 
     if(nbSpikes == -1){
         clusters.setSize(0,0);

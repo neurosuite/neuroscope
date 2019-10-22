@@ -1456,6 +1456,12 @@ void NeuroscopeApp::slotCreateEventFile(){
 void NeuroscopeApp::slotFileOpenRecent(const QString& url){
     slotStatusMsg(tr("Opening file..."));
 
+    // RHM Added these 4 lines to test and then removed them
+    //QSettings settings;
+    //QDir CurrentDir;
+    //QString qs = CurrentDir.absoluteFilePath(url);
+    //settings.setValue("CurrentDirectory", CurrentDir.absoluteFilePath(url));
+
     openDocumentFile(url);
 
     slotStatusMsg(tr("Ready."));

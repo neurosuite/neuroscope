@@ -192,18 +192,32 @@ else:win32:CONFIG(debug, debug|release){
   DEPENDPATH += $$PWD/../../Cerebus/libcbsdk/build/src/debug
 }
 
+#win32:CONFIG(release, debug|release){
+##D:\Gigs\Neurosuite\libneurosuite\build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug
+#LIBS += -LD:/Gigs/Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
+#}
+#else:win32:CONFIG(debug, debug|release){
+#LIBS += -LD:/Gigs/Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
+#}
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
-else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
+#else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
 
 INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
 DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/debug/ -llibneurosuite
-else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/ -llibneurosuite
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/debug/ -llibneurosuite
+#else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/ -llibneurosuite
 
 INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
 DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
+else:unix: LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
+
+INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
+DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
