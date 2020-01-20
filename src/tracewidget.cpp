@@ -87,7 +87,7 @@ TraceWidget::TraceWidget(long startTime,long duration,bool greyScale,TracesProvi
     isInit = false;
 
     // Configure auto advance timer
-    connect(timer, SIGNAL(timeout()), this, SLOT(advance()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(advance()));
 }
 
 TraceWidget::~TraceWidget(){
@@ -96,13 +96,16 @@ TraceWidget::~TraceWidget(){
 /// Added by M.Zugaro to enable automatic forward paging
 void TraceWidget::page()
 {
-    if(!isStill())
+    if(!isStill()) {
+        // RHM !!!! should we add this here? timer->stop();
+        //timer->stop();
         return;
+    }
 
-   timer->start(pageTime);
+        timer->start(pageTime);
    emit pagingStarted();
-   statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
-}
+		  statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
+	 }
 
 bool TraceWidget::isStill()
 {
@@ -114,15 +117,14 @@ void TraceWidget::stop()
 	if (isStill())
         return;
 
-    timer->stop();
+			timer->stop();
 	emit pagingStopped();
-}
+	}
 
 void TraceWidget::accelerate()
 {
     if (isStill())
         return;
-
     pageTime -= 125;
     if ( pageTime < 0 ) pageTime = 0;
     statusBar->showMessage(tr("Auto-advance every %1 ms").arg(pageTime));
@@ -577,6 +579,11 @@ void TraceWidget::slotStartMilisecondTimeUpdated(){
 }
 
 void TraceWidget::slotScrollBarUpdated(){
+    //QObject* obj = sender(); // !!! RHM debugging
+    //QString name = QString(obj->metaObject()->className());
+    // QScrollBar
+
+
     if(!isInit && updateView){
         //Modify updateView to prevent the spinboxes to trigger a changeEvent while been updated.
         updateView = false;

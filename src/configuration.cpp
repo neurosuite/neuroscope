@@ -21,7 +21,7 @@
 #include "configuration.h"
 
 
-const float  Configuration::screenGainDefault = 0.2; //half theta amplitude (0.4 ms)
+const float  Configuration::screenGainDefault = 0.2f; //half theta amplitude (0.4 ms)
 const int  Configuration::voltageRangeDefault = 20;//+-10 volts
 const int  Configuration::amplificationDefault = 1000;
 const int  Configuration::nbChannelsDefault = 32;

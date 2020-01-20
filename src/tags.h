@@ -224,6 +224,13 @@ extern const QString CHANNEL_POSITION;
 /**Tag for the gain element included in the channelPosition element.*/
 extern const QString GAIN;
 
+
+/**Tag for Neurodata Without Borders files that point to the data. Added by Robert H. Moore (RHM) */
+extern const QString NWB_DATASET_NAME;
+
+/**Tag for Neurodata Without Borders files that point to the data. Added by Robert H. Moore (RHM) */
+extern const QString NWB_SAMPLING_NAME;
+
 }
 
 #endif

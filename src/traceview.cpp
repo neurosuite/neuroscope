@@ -499,11 +499,12 @@ void TraceView::displayTimeFrame(long start,long timeFrameWidth){
         QHashIterator<QString, EventData*> iterator2(eventsData);
         while (iterator2.hasNext()) {
             iterator2.next();
-            if (iterator2.key() != eventProviderToSkip){
+            if (iterator2.key() != eventProviderToSkip){            
                 static_cast<EventsProvider*>(eventProviders[iterator2.key()])->requestData(startTime,endTime,this);
             }
             else eventProviderToSkip.clear();
         }
+
     }
 
     tracesProvider.requestData(startTime,endTime,this,startTimeInRecordingUnits);
@@ -662,6 +663,7 @@ void TraceView::paintEvent ( QPaintEvent*){
             painter.save();
             painter.setClipRect(painter.window());
             painter.setClipping(true);
+
 
             //Paint all the traces in the shownChannels list (in the double buffer,on top of the background image or the background color )
             drawTraces(painter);
@@ -1564,273 +1566,21 @@ void TraceView::drawTraces( const QList<int>& channels,bool highlight)
     update();
 }
 
-void TraceView::drawTraces(QPainter& painter){
-    channelsStartingOrdinate.clear();
-    int limit = viewportToWorldHeight(1);
-    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
-    int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
 
-    //traces presented on multiple columns
-    if (multiColumns){
-        //The abscissa of the system coordinate center for the current channel
-        int X = X0;
-        //The ordinate of the system coordinate center for the current channel
-        int Y = Y0;
-
-        //Start at the top of the view.
-
-        //Loop on all the groups (one by column)
-        clustersOrder.clear();
-        rasterOrdinates.clear();
-        rasterAbscisses.clear();
-        QList<int> groupIds = shownGroupsChannels.keys();
-        QList<int>::iterator iterator;
-        for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-
-            //Draw events
-            if (!selectedEvents.isEmpty()){
-                QRect windowRectangle((QRect)window);
-                int top = windowRectangle.top();
-                int bottom = windowRectangle.bottom();
-                QPen pen(Qt::DotLine);
-                pen.setCosmetic(true);
-
-                QMap<QString, QList<int> >::Iterator iterator;
-                for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
-                    QList<int> eventList = iterator.value();
-                    QString providerName = iterator.key();
-                    if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
-                    ItemColors* colors = providerItemColors[providerName];
-                    Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
-                    Array<int>& currentIds = static_cast<EventData*>(eventsData[providerName])->getIds();
-                    int nbEvents = currentData.nbOfColumns();
-                    for(int i = 1; i <= nbEvents;++i){
-                        dataType index = currentData(1,i);
-                        int eventId = currentIds(1,i);
-                        if (eventList.contains(eventId)){
-                            QColor color = colors->color(eventId);
-                            pen.setColor(color);
-                            pen.setCosmetic(true);
-                            painter.setPen(pen);
-                            int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                            painter.drawLine(abscissa,top,abscissa,bottom);
-                        }
-                    }
-                }
-            }//events
-            if (verticalLines && nbClusters != 0){
-                QRect windowRectangle((QRect)window);
-                int top = windowRectangle.top();
-                int bottom = windowRectangle.bottom();
-                QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
-
-                QMap<int,QList<int> >::Iterator selectedIterator;
-                for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
-                    //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
-                    if (!clusterFileList.contains(selectedIterator.key())) continue;
-                    QString providerName = QString::number(selectedIterator.key());
-                    if (clustersData[providerName] == 0)
-                        continue;
-
-                    ItemColors* colors = providerItemColors[providerName];
-                    Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
-                    int nbSpikes = currentData.nbOfColumns();
-                    QList<int> clusterList = selectedIterator.value();
-                    QList<int>::iterator clusterIterator;
-                    for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
-                        QColor color = colors->color(*clusterIterator);
-                        QPen pen(color);
-                        pen.setCosmetic(true);
-                        painter.setPen(pen);
-                        for(int i = 1; i <= nbSpikes;++i){
-                            dataType index = currentData(1,i);
-                            dataType clusterId = currentData(2,i);
-                            if (clusterId == *clusterIterator){
-                                int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                                painter.drawLine(abscissa,top,abscissa,bottom);
-                            }
-                        }
-                    }
-                }
-            }//verticalLines
-
-            QList<int> channelIds = shownGroupsChannels[*iterator];
-            int currentNbChannels = channelIds.size();
-
-            QList<int> positions;
-            int y = Y;
-            for(int j = 0; j < currentNbChannels; ++j){
-                const int channelId = channelIds.at(j);
-
-					 int m = 0;
-					 if (autocenterChannels){
-						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
-						 m /= nbSamples;
-					 }
-
-					 int position = -y + m + channelOffsets.at(channelId);
-                positions.append(position);
-                channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors.at(channelId)));
-                channelsStartingAbscissa.insert(channelId,X);
-                y -= Yshift;
-            }
-
-            for(int j = 0; j < currentNbChannels; ++j){
-                const int channelId = channelIds.at(j);
-                //The abscissa of the system coordinate center for the current channel
-                int x = 0;
-
-                //if the channel is skipped, do no draw it
-                if (skippedChannels.contains(channelId)) continue;
-
-                QColor color = channelColors->color(channelId);
-
-                if (greyScaleMode){
-                    int greyvalue = qGray(color.rgb());
-                    color.setHsv(0,0,greyvalue);
-                }
-                QPen pen(color,1);
-                if (mSelectedChannels.contains(channelId))
-                    pen.setWidth(2);
-                pen.setCosmetic(true);
-                painter.setPen(pen);
-
-                if (downSampling != 1){
-                    drawTrace(painter,limit,positions.at(j),X,channelId,nbSamplesToDraw);
-                }
-                else{
-                    bool areClustersToDraw = false;
-                    int clusterFileId = 0;
-                    QString providerName;
-                    if (!clusterProviders.isEmpty()){
-                        areClustersToDraw = true;
-                        clusterFileId = (*channelClusterFiles)[channelId];
-                        providerName = QString::number(clusterFileId);
-                        if (clustersData.contains(providerName))
-                            areClustersToDraw = true;
-                    }
-
-                    if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-                        QPolygon trace(nbSamples);
-                        for(int i = 0; i < nbSamples;++i){
-                            int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
-                            trace.setPoint(i,X + x,y);
-                            x += Xstep;
-                        }
-                        painter.drawPolyline(trace);
-                    }
-                    else{
-                        //Array containing 3 lines: sample index, abscissa and ordinate
-                        Array<dataType> traceInfo(3,nbSamples);
-                        QPolygon trace(nbSamples);
-                        for(int i = 1; i <= nbSamples;++i){
-                            int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
-                            trace.setPoint(i - 1,X + x,y);
-                            traceInfo(1,i) = i;
-                            traceInfo(2,i) = X + x;
-                            traceInfo(3,i) = y;
-                            x += Xstep;
-                        }
-                        painter.drawPolyline(trace);
-
-                        //Draw the waveforms on top of the trace
-                        ItemColors* colors = providerItemColors[providerName];
-                        Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
-                        int nbSpikes = currentData.nbOfColumns();
-                        QList<int> clusterList = selectedClusters[clusterFileId];
-                        int currentIndex = 1;
-
-                        for(int i = 1; i < nbSpikes + 1;++i){
-                            dataType index = currentData(1,i);
-                            int firstIndex = qMax(1L,index - nbSamplesBefore);
-                            int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
-                            int nbWaveformSamples = lastIndex - firstIndex + 1;
-                            dataType clusterId = currentData(2,i);
-
-                            if (clusterList.contains(clusterId)){
-                                QColor color = colors->color(clusterId);
-                                QPen pen(color,1);
-                                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
-                                pen.setCosmetic(true);
-                                painter.setPen(pen);
-
-                                for(int j = currentIndex; j <= nbSamples;++j){
-                                    if (firstIndex > traceInfo(1,j)) continue;//case 1
-                                    else if (firstIndex == traceInfo(1,j)){//case 2
-                                        QPolygon trace(nbWaveformSamples);
-                                        int pos = 0;
-                                        for(int k = firstIndex;k<= lastIndex;++k){
-                                            trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
-                                            pos++;
-                                        }
-                                        painter.drawPolyline(trace);
-                                        currentIndex = firstIndex;
-                                        break;
-                                    }
-                                }//loop on samples to draw
-                            }
-                        }//loop on spikes
-                    }//else waveform
-                }
-            }
-
-            //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
-            if (raster && nbClusters != 0){
-                int y = Y0Raster;
-
-                QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
-
-                QMap<int,QList<int> >::Iterator selectedIterator;
-                for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
-                    //Only draw rasters for clusters contained in a cluster file containing data for channels of the current group
-                    if (!clusterFileList.contains(selectedIterator.key())) continue;
-                    QList<int> clusterList = selectedIterator.value();
-                    if (clusterList.size() == 0) continue;
-                    QString providerName = QString::number(selectedIterator.key());
-                    ItemColors* colors = providerItemColors[providerName];
-                    Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
-                    int nbSpikes = currentData.nbOfColumns();
-                    QList<int>::iterator clusterIterator;
-                    for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
-                        const QString identifier = QString::fromLatin1("%1-%2").arg(providerName).arg(*clusterIterator);
-
-
-                        clustersOrder.append(identifier);
-                        rasterOrdinates.append(-y);
-                        rasterAbscisses.append(X);
-                        QColor color = colors->color(*clusterIterator);
-                        QPen pen(color);
-                        pen.setCosmetic(true);
-                        painter.setPen(pen);
-                        int bottom = y - rasterHeight;
-                        for(int i = 1; i <= nbSpikes;++i){
-                            dataType index = currentData(1,i);
-                            dataType clusterId = currentData(2,i);
-                            if (clusterId == *clusterIterator){
-                                int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                                painter.drawLine(abscissa,-y,abscissa,-bottom);
-                            }
-                        }
-                        y -= (rasterHeight + YRasterSpace);
-                    }
-                }
-            }//raster
-            X += Xshift;
-        }//groups (<=> columns)
-    }//multicolumns
-    //traces presented on a single column
-    else{
+void TraceView::drawTracesDrawEvents(QPainter& painter, int X, bool bIsMulti){
         //Draw events
         if (!selectedEvents.isEmpty()){
             QRect windowRectangle((QRect)window);
             int top = windowRectangle.top();
             int bottom = windowRectangle.bottom();
             QPen pen(Qt::DotLine);
+            if (bIsMulti)
+                pen.setCosmetic(true);
+
             QMap<QString, QList<int> >::Iterator iterator;
             for(iterator = selectedEvents.begin(); iterator != selectedEvents.end(); ++iterator){
                 QList<int> eventList = iterator.value();
                 QString providerName = iterator.key();
-
                 if (eventList.size() == 0 || eventsData[providerName] == 0) continue;
                 ItemColors* colors = providerItemColors[providerName];
                 Array<dataType>& currentData = static_cast<EventData*>(eventsData[providerName])->getTimes();
@@ -1844,24 +1594,255 @@ void TraceView::drawTraces(QPainter& painter){
                         pen.setColor(color);
                         pen.setCosmetic(true);
                         painter.setPen(pen);
-                        int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
+                        int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
                         painter.drawLine(abscissa,top,abscissa,bottom);
                     }
                 }
             }
         }//events
+}
 
-        //Draw clusters on vertical lines
+
+void TraceView::drawTracesMultiColumns(QPainter& painter, int limit, int nbSamples, int nbSamplesToDraw){
+    //The abscissa of the system coordinate center for the current channel
+    int X = X0;
+    //The ordinate of the system coordinate center for the current channel
+    int Y = Y0;
+
+    //Start at the top of the view.
+
+    //Loop on all the groups (one by column)
+    clustersOrder.clear();
+    rasterOrdinates.clear();
+    rasterAbscisses.clear();
+    QList<int> groupIds = shownGroupsChannels.keys();
+    QList<int>::iterator iterator;
+    for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
+
+        //Draw events
+        drawTracesDrawEvents(painter, X, true);
+
         if (verticalLines && nbClusters != 0){
             QRect windowRectangle((QRect)window);
             int top = windowRectangle.top();
             int bottom = windowRectangle.bottom();
-            QHashIterator<QString, ClusterData*> iterator(clustersData);
-            while (iterator.hasNext()) {
-                iterator.next();
-                ItemColors* colors = providerItemColors[iterator.key()];
-                QList<int> clusterList = selectedClusters[iterator.key().toInt()];
+            QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
+
+            QMap<int,QList<int> >::Iterator selectedIterator;
+            for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
+                //Only draw vertical lines for clusters contained in a cluster file containing data for channels of the current group
+                if (!clusterFileList.contains(selectedIterator.key())) continue;
+                QString providerName = QString::number(selectedIterator.key());
+                if (clustersData[providerName] == 0)
+                    continue;
+
+                ItemColors* colors = providerItemColors[providerName];
+                Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
+                int nbSpikes = currentData.nbOfColumns();
+                QList<int> clusterList = selectedIterator.value();
+                QList<int>::iterator clusterIterator;
+                for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
+                    QColor color = colors->color(*clusterIterator);
+                    QPen pen(color);
+                    pen.setCosmetic(true);
+                    painter.setPen(pen);
+                    for(int i = 1; i <= nbSpikes;++i){
+                        dataType index = currentData(1,i);
+                        dataType clusterId = currentData(2,i);
+                        if (clusterId == *clusterIterator){
+                            int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
+                            painter.drawLine(abscissa,top,abscissa,bottom);
+                        }
+                    }
+                }
+            }
+        }//verticalLines
+
+        QList<int> channelIds = shownGroupsChannels[*iterator];
+        int currentNbChannels = channelIds.size();
+
+        QList<int> positions;
+        int y = Y;
+        for(int j = 0; j < currentNbChannels; ++j){
+            const int channelId = channelIds.at(j);
+
+                 int m = 0;
+                 if (autocenterChannels){
+                     for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
+                     m /= nbSamples;
+                 }
+
+                 int position = -y + m + channelOffsets.at(channelId);
+            positions.append(position);
+            channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors.at(channelId)));
+            channelsStartingAbscissa.insert(channelId,X);
+            y -= Yshift;
+        }
+
+        for(int j = 0; j < currentNbChannels; ++j){
+            const int channelId = channelIds.at(j);
+            //The abscissa of the system coordinate center for the current channel
+            int x = 0;
+
+            //if the channel is skipped, do no draw it
+            if (skippedChannels.contains(channelId)) continue;
+
+            QColor color = channelColors->color(channelId);
+
+            if (greyScaleMode){
+                int greyvalue = qGray(color.rgb());
+                color.setHsv(0,0,greyvalue);
+            }
+            QPen pen(color,1);
+            if (mSelectedChannels.contains(channelId))
+                pen.setWidth(2);
+            pen.setCosmetic(true);
+            painter.setPen(pen);
+
+            if (downSampling != 1){
+                drawTrace(painter,limit,positions.at(j),X,channelId,nbSamplesToDraw);
+            }
+            else{
+                bool areClustersToDraw = false;
+                int clusterFileId = 0;
+                QString providerName;
+                if (!clusterProviders.isEmpty()){
+                    areClustersToDraw = true;
+                    clusterFileId = (*channelClusterFiles)[channelId];
+                    providerName = QString::number(clusterFileId);
+                    if (clustersData.contains(providerName))
+                        areClustersToDraw = true;
+                }
+
+                if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+                    QPolygon trace(nbSamples);
+                    for(int i = 0; i < nbSamples;++i){
+                        int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
+                        trace.setPoint(i,X + x,y);
+                        x += Xstep;
+                    }
+                    painter.drawPolyline(trace);
+                }
+                else{
+                    //Array containing 3 lines: sample index, abscissa and ordinate
+                    Array<dataType> traceInfo(3,nbSamples);
+                    QPolygon trace(nbSamples);
+                    for(int i = 1; i <= nbSamples;++i){
+                        int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
+                        trace.setPoint(i - 1,X + x,y);
+                        traceInfo(1,i) = i;
+                        traceInfo(2,i) = X + x;
+                        traceInfo(3,i) = y;
+                        x += Xstep;
+                    }
+                    painter.drawPolyline(trace);
+
+                    //Draw the waveforms on top of the trace
+                    ItemColors* colors = providerItemColors[providerName];
+                    Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
+                    int nbSpikes = currentData.nbOfColumns();
+                    QList<int> clusterList = selectedClusters[clusterFileId];
+                    int currentIndex = 1;
+
+                    for(int i = 1; i < nbSpikes + 1;++i){
+                        dataType index = currentData(1,i);
+                        int firstIndex = qMax(1L,index - nbSamplesBefore);
+                        int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
+                        int nbWaveformSamples = lastIndex - firstIndex + 1;
+                        dataType clusterId = currentData(2,i);
+
+                        if (clusterList.contains(clusterId)){
+                            QColor color = colors->color(clusterId);
+                            QPen pen(color,1);
+                            if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
+                            pen.setCosmetic(true);
+                            painter.setPen(pen);
+
+                            for(int j = currentIndex; j <= nbSamples;++j){
+                                if (firstIndex > traceInfo(1,j)) continue;//case 1
+                                else if (firstIndex == traceInfo(1,j)){//case 2
+                                    QPolygon trace(nbWaveformSamples);
+                                    int pos = 0;
+                                    for(int k = firstIndex;k<= lastIndex;++k){
+                                        trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
+                                        pos++;
+                                    }
+                                    painter.drawPolyline(trace);
+                                    currentIndex = firstIndex;
+                                    break;
+                                }
+                            }//loop on samples to draw
+                        }
+                    }//loop on spikes
+                }//else waveform
+            }
+        }
+
+        //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
+        if (raster && nbClusters != 0){
+            int y = Y0Raster;
+
+            QList<int> clusterFileList = (*groupClusterFiles)[*iterator];
+
+            QMap<int,QList<int> >::Iterator selectedIterator;
+            for(selectedIterator = selectedClusters.begin(); selectedIterator != selectedClusters.end(); ++selectedIterator){
+                //Only draw rasters for clusters contained in a cluster file containing data for channels of the current group
+                if (!clusterFileList.contains(selectedIterator.key())) continue;
+                QList<int> clusterList = selectedIterator.value();
+                if (clusterList.size() == 0) continue;
+                QString providerName = QString::number(selectedIterator.key());
+                ItemColors* colors = providerItemColors[providerName];
+                Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
+                int nbSpikes = currentData.nbOfColumns();
+                QList<int>::iterator clusterIterator;
+                for(clusterIterator = clusterList.begin(); clusterIterator != clusterList.end(); ++clusterIterator){
+                    const QString identifier = QString::fromLatin1("%1-%2").arg(providerName).arg(*clusterIterator);
+
+
+                    clustersOrder.append(identifier);
+                    rasterOrdinates.append(-y);
+                    rasterAbscisses.append(X);
+                    QColor color = colors->color(*clusterIterator);
+                    QPen pen(color);
+                    pen.setCosmetic(true);
+                    painter.setPen(pen);
+                    int bottom = y - rasterHeight;
+                    for(int i = 1; i <= nbSpikes;++i){
+                        dataType index = currentData(1,i);
+                        dataType clusterId = currentData(2,i);
+                        if (clusterId == *clusterIterator){
+                            int abscissa = X + static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
+                            painter.drawLine(abscissa,-y,abscissa,-bottom);
+                        }
+                    }
+                    y -= (rasterHeight + YRasterSpace);
+                }
+            }
+        }//raster
+        X += Xshift;
+    }//groups (<=> columns)
+
+}
+
+void TraceView::drawTracesSingleColumn(QPainter& painter, int limit, int nbSamples, int nbSamplesToDraw){
+    //Draw events
+    drawTracesDrawEvents(painter, 0, false);
+
+    //Draw clusters on vertical lines
+    if (verticalLines && nbClusters != 0){
+        QRect windowRectangle((QRect)window);
+        int top = windowRectangle.top();
+        int bottom = windowRectangle.bottom();
+        QHashIterator<QString, ClusterData*> iterator(clustersData);
+        while (iterator.hasNext()) {
+            iterator.next();
+            ItemColors* colors = providerItemColors[iterator.key()];
+            QList<int> clusterList = selectedClusters[iterator.key().toInt()];
+            if (iterator.value() != 0)
+            {
+
                 Array<dataType>& currentData = iterator.value()->getData();
+
                 int nbSpikes = currentData.nbOfColumns();
 
                 for(int i = 1; i < nbSpikes + 1;++i){
@@ -1878,193 +1859,209 @@ void TraceView::drawTraces(QPainter& painter){
                     }
                 }
             }
-        }//verticalLines
+        }
+    }//verticalLines
 
-        //The ordinate of the system coordinate center for the current channel
-        int Y = Y0;
-        //Start at the top of the view.
+    //The ordinate of the system coordinate center for the current channel
+    int Y = Y0;
+    //Start at the top of the view.
 
-        //Loop on all the groups
-        QList<int> groupIds = shownGroupsChannels.keys();
-        QList<int>::iterator iterator;
-        for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
-            QList<int> channelIds = shownGroupsChannels[*iterator];
-            int currentNbChannels = channelIds.size();
+    //Loop on all the groups
+    QList<int> groupIds = shownGroupsChannels.keys();
+    QList<int>::iterator iterator;
+    for(iterator = groupIds.begin(); iterator != groupIds.end(); ++iterator){
+        QList<int> channelIds = shownGroupsChannels[*iterator];
+        int currentNbChannels = channelIds.size();
 
-            QList<int> positions;
-            int y = Y;
-            for(int j = 0; j < currentNbChannels; ++j){
-                int channelId = channelIds[j];
+        QList<int> positions;
+        int y = Y;
+        for(int j = 0; j < currentNbChannels; ++j){
+            int channelId = channelIds[j];
 
-					 int m = 0;
-					 if (autocenterChannels){
-						 for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
-						 m /= nbSamples;
-					 }
+                 int m = 0;
+                 if (autocenterChannels){
+                     for (int i = 1;i <= nbSamples;++i) m += static_cast<long>(data(i,channelId + 1) * channelFactors.at(channelId));
+                     m /= nbSamples;
+                 }
 
-                int position = -y + m + channelOffsets[channelId];
-                positions.append(position);
-                channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
-                channelsStartingAbscissa.insert(channelId,X0);
-                y -= Yshift;
+            int position = -y + m + channelOffsets[channelId];
+            positions.append(position);
+            channelsStartingOrdinate.insert(channelId,position - static_cast<long>(data(1,channelId + 1) * channelFactors[channelId]));
+            channelsStartingAbscissa.insert(channelId,X0);
+            y -= Yshift;
+        }
+
+
+        for(int j = 0; j < currentNbChannels; ++j){
+            int channelId = channelIds[j];
+
+            //if the channel is skipped, do no draw it
+            if (skippedChannels.contains(channelId)) continue;
+
+            //The abscissa of the system coordinate center for the current channel
+            int X = X0;
+
+            //Get the color associated with the channel and set the color to use to this color
+            QColor color = channelColors->color(channelId);
+            if (greyScaleMode){
+                int greyvalue = qGray(color.rgb());
+                color.setHsv(0,0,greyvalue);
             }
+            QPen pen(color,1);
+            if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
+            pen.setCosmetic(true);
+            painter.setPen(pen);
 
+            if (downSampling != 1){
+                drawTrace(painter,limit,positions[j],X,channelId,nbSamplesToDraw);
+            }
+            else{
+                bool areClustersToDraw = false;
+                int clusterFileId = 0;
+                QString providerName;
 
-            for(int j = 0; j < currentNbChannels; ++j){
-                int channelId = channelIds[j];
-
-                //if the channel is skipped, do no draw it
-                if (skippedChannels.contains(channelId)) continue;
-
-                //The abscissa of the system coordinate center for the current channel
-                int X = X0;
-
-                //Get the color associated with the channel and set the color to use to this color
-                QColor color = channelColors->color(channelId);
-                if (greyScaleMode){
-                    int greyvalue = qGray(color.rgb());
-                    color.setHsv(0,0,greyvalue);
+                if (!clusterProviders.isEmpty()){
+                    areClustersToDraw = true;
+                    clusterFileId = (*channelClusterFiles)[channelId];
+                    providerName = QString::number(clusterFileId);
+                    if (clustersData.contains(providerName))
+                        areClustersToDraw = true;
                 }
-                QPen pen(color,1);
-                if (mSelectedChannels.contains(channelId)) pen.setWidth(2);
-                pen.setCosmetic(true);
-                painter.setPen(pen);
 
-                if (downSampling != 1){
-                    drawTrace(painter,limit,positions[j],X,channelId,nbSamplesToDraw);
+                if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+                    QPolygon trace(nbSamples);
+                    for(int i = 0; i < nbSamples;++i){
+                        int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
+                        trace.setPoint(i,X,y);
+                        X += Xstep;
+                    }
+                    painter.drawPolyline(trace);
                 }
                 else{
-                    bool areClustersToDraw = false;
-                    int clusterFileId = 0;
-                    QString providerName;
-
-                    if (!clusterProviders.isEmpty()){
-                        areClustersToDraw = true;
-                        clusterFileId = (*channelClusterFiles)[channelId];
-                        providerName = QString::number(clusterFileId);
-                        if (clustersData.contains(providerName))
-                            areClustersToDraw = true;
+                    //Array containing 3 lines: sample index, abscissa and ordinate
+                    Array<dataType> traceInfo(3,nbSamples);
+                    QPolygon trace(nbSamples);
+                    for(int i = 1; i <= nbSamples;++i){
+                        int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
+                        trace.setPoint(i - 1,X,y);
+                        traceInfo(1,i) = i;
+                        traceInfo(2,i) = X;
+                        traceInfo(3,i) = y;
+                        X += Xstep;
                     }
+                    painter.drawPolyline(trace);
 
-                    if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
-                        QPolygon trace(nbSamples);
-                        for(int i = 0; i < nbSamples;++i){
-                            int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
-                            trace.setPoint(i,X,y);
-                            X += Xstep;
-                        }
-                        painter.drawPolyline(trace);
-                    }
-                    else{
-                        //Array containing 3 lines: sample index, abscissa and ordinate
-                        Array<dataType> traceInfo(3,nbSamples);
-                        QPolygon trace(nbSamples);
-                        for(int i = 1; i <= nbSamples;++i){
-                            int y = positions[j] - static_cast<long>(data(i,channelId + 1) * channelFactors[channelId]);
-                            trace.setPoint(i - 1,X,y);
-                            traceInfo(1,i) = i;
-                            traceInfo(2,i) = X;
-                            traceInfo(3,i) = y;
-                            X += Xstep;
-                        }
-                        painter.drawPolyline(trace);
+                    //Draw the waveforms on top of the trace
+                    ItemColors* colors = providerItemColors[providerName];
 
-                        //Draw the waveforms on top of the trace
-                        ItemColors* colors = providerItemColors[providerName];
+                    Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
+                    int nbSpikes = currentData.nbOfColumns();
+                    QList<int> clusterList = selectedClusters[clusterFileId];
+                    int currentIndex = 1;
 
-                        Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
-                        int nbSpikes = currentData.nbOfColumns();
-                        QList<int> clusterList = selectedClusters[clusterFileId];
-                        int currentIndex = 1;
-
-                        for(int i = 1; i < nbSpikes + 1;++i){
-                            dataType index = currentData(1,i);
-                            int firstIndex = qMax(1L,index - nbSamplesBefore);
-                            int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
-                            int nbWaveformSamples = lastIndex - firstIndex + 1;
-                            dataType clusterId = currentData(2,i);
-
-                            if (clusterList.contains(clusterId)){
-                                QColor color = colors->color(clusterId);
-                                QPen pen(color,1);
-
-                                if (mSelectedChannels.contains(channelId))
-                                    pen.setWidth(2);
-                                pen.setCosmetic(true);
-                                painter.setPen(pen);
-
-                                for(int j = currentIndex; j <= nbSamples;++j){
-                                    if (firstIndex > traceInfo(1,j)) continue;//case 1
-                                    else if (firstIndex == traceInfo(1,j)){//case 2
-                                        QPolygon trace(nbWaveformSamples);
-                                        int pos = 0;
-                                        for(int k = firstIndex;k<= lastIndex;++k){
-                                            trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
-                                            pos++;
-                                        }
-                                        painter.drawPolyline(trace);
-                                        currentIndex = firstIndex;
-                                        break;
-                                    }
-                                }//loop on samples to draw
-                            }
-                        }//loop on spikes
-                    }//else waveform
-                }
-
-            }
-
-            Y -= (currentNbChannels * traceVspace + (currentNbChannels -1) * Yspace);
-            Y -= YGroupSpace;
-        }//groups
-
-        clustersOrder.clear();
-        rasterOrdinates.clear();
-        rasterAbscisses.clear();
-
-        //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
-        if (raster && nbClusters != 0){
-            Y = Y0Raster;
-
-            QMap<int,QList<int> >::Iterator iterator;
-            for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
-                qDebug()<<" selectedClusters.begin()"<<*iterator;
-                QList<int> clusterList = iterator.value();
-                if (clusterList.isEmpty())
-                    continue;
-                QString providerName = QString::number(iterator.key());
-                qDebug()<<" providerName "<<providerName;
-                ItemColors* colors = providerItemColors[providerName];
-                qDebug()<<" clustersData[providerName]"<<clustersData[providerName];
-                Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
-                int nbSpikes = currentData.nbOfColumns();
-                QList<int>::iterator clusterIterator;
-                QList<int>::iterator clusterIteratorEnd(clusterList.end());
-                for(clusterIterator = clusterList.begin(); clusterIterator != clusterIteratorEnd; ++clusterIterator){
-                    const QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
-
-                    qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
-
-                    clustersOrder.append(identifier);
-                    rasterOrdinates.append(-Y);
-                    rasterAbscisses.append(0);
-                    QColor color = colors->color(*clusterIterator);
-                    QPen pen(color);
-                    pen.setCosmetic(true);
-                    painter.setPen(pen);
-                    int bottom = Y - rasterHeight;
                     for(int i = 1; i < nbSpikes + 1;++i){
                         dataType index = currentData(1,i);
+                        int firstIndex = qMax(1L,index - nbSamplesBefore);
+                        int lastIndex = qMin((long)nbSamples,index + nbSamplesAfter);
+                        int nbWaveformSamples = lastIndex - firstIndex + 1;
                         dataType clusterId = currentData(2,i);
-                        if (clusterId == *clusterIterator){
-                            int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
-                            painter.drawLine(abscissa,-Y,abscissa,-bottom);
+
+                        if (clusterList.contains(clusterId)){
+                            QColor color = colors->color(clusterId);
+                            QPen pen(color,1);
+
+                            if (mSelectedChannels.contains(channelId))
+                                pen.setWidth(2);
+                            pen.setCosmetic(true);
+                            painter.setPen(pen);
+
+                            for(int j = currentIndex; j <= nbSamples;++j){
+                                if (firstIndex > traceInfo(1,j)) continue;//case 1
+                                else if (firstIndex == traceInfo(1,j)){//case 2
+                                    QPolygon trace(nbWaveformSamples);
+                                    int pos = 0;
+                                    for(int k = firstIndex;k<= lastIndex;++k){
+                                        trace.setPoint(pos,traceInfo(2,k),traceInfo(3,k));
+                                        pos++;
+                                    }
+                                    painter.drawPolyline(trace);
+                                    currentIndex = firstIndex;
+                                    break;
+                                }
+                            }//loop on samples to draw
                         }
-                    }
-                    Y -= (rasterHeight + YRasterSpace);
-                }
+                    }//loop on spikes
+                }//else waveform
             }
-        }//raster
+
+        }
+
+        Y -= (currentNbChannels * traceVspace + (currentNbChannels -1) * Yspace);
+        Y -= YGroupSpace;
+    }//groups
+
+    clustersOrder.clear();
+    rasterOrdinates.clear();
+    rasterAbscisses.clear();
+
+    //Loop on all the selected clusters (first on the cluster files containing selected clusters) if the raster is asked.
+    if (raster && nbClusters != 0){
+        Y = Y0Raster;
+
+        QMap<int,QList<int> >::Iterator iterator;
+        for(iterator = selectedClusters.begin(); iterator != selectedClusters.end(); ++iterator){
+            qDebug()<<" selectedClusters.begin()"<<*iterator;
+            QList<int> clusterList = iterator.value();
+            if (clusterList.isEmpty())
+                continue;
+            QString providerName = QString::number(iterator.key());
+            qDebug()<<" providerName "<<providerName;
+            ItemColors* colors = providerItemColors[providerName];
+            qDebug()<<" clustersData[providerName]"<<clustersData[providerName];
+            Array<dataType>& currentData = static_cast<ClusterData*>(clustersData[providerName])->getData();
+            int nbSpikes = currentData.nbOfColumns();
+            QList<int>::iterator clusterIterator;
+            QList<int>::iterator clusterIteratorEnd(clusterList.end());
+            for(clusterIterator = clusterList.begin(); clusterIterator != clusterIteratorEnd; ++clusterIterator){
+                const QString identifier = QString("%1-%2").arg(providerName).arg(*clusterIterator);
+
+                qDebug()<<" *** identifier " <<identifier<<" nbSpikes " <<nbSpikes ;
+
+                clustersOrder.append(identifier);
+                rasterOrdinates.append(-Y);
+                rasterAbscisses.append(0);
+                QColor color = colors->color(*clusterIterator);
+                QPen pen(color);
+                pen.setCosmetic(true);
+                painter.setPen(pen);
+                int bottom = Y - rasterHeight;
+                for(int i = 1; i < nbSpikes + 1;++i){
+                    dataType index = currentData(1,i);
+                    dataType clusterId = currentData(2,i);
+                    if (clusterId == *clusterIterator){
+                        int abscissa = static_cast<int>(0.5 + (static_cast<float>(index) / downSampling));
+                        painter.drawLine(abscissa,-Y,abscissa,-bottom);
+                    }
+                }
+                Y -= (rasterHeight + YRasterSpace);
+            }
+        }
+    }//raster
+}
+
+void TraceView::drawTraces(QPainter& painter){
+    channelsStartingOrdinate.clear();
+    int limit = viewportToWorldHeight(1);
+    int nbSamples = tracesProvider.getNbSamples(startTime,endTime,startTimeInRecordingUnits);
+    int nbSamplesToDraw = static_cast<int>(floor(0.5 + static_cast<float>(nbSamples)/downSampling));
+
+    //traces presented on multiple columns
+    if (multiColumns){
+        drawTracesMultiColumns(painter, limit, nbSamples, nbSamplesToDraw);
+    }//multicolumns
+    //traces presented on a single column
+    else{
+        drawTracesSingleColumn(painter, limit, nbSamples, nbSamplesToDraw);
     }//single column
 
 }
@@ -3357,7 +3354,7 @@ void TraceView::drawCalibrationScale(QPainter& painter){
     QPoint p2(viewport.right() - labelSize,viewport.bottom() - 30 - worldToViewportHeight(nbRU));
     painter.drawLine(p1,p2);
     QPoint pTextVoltage(viewport.right() - fontInfo.pixelSize() * 11,viewport.bottom() - 30);
-    painter.drawText(pTextVoltage,tr("%1 mV (x%2)").arg(screenGain, 0,'f',1).arg(gain, 0,'f',2));
+    painter.drawText(pTextVoltage,tr("%1 mV (x%2)").arg(screenGain,0,'f',1).arg(gain,0,'f',2));
 
     //draw the time calibration bar (a 20iest of the timeframe)
     long timeFrameWidth = endTime - startTime;

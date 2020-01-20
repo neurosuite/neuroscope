@@ -144,19 +144,19 @@ public Q_SLOTS:
     /** Called when paging is started.
      * Usefull for trace providers that have live data sources.
      */
-    virtual void slotPagingStarted() {};
+    virtual void slotPagingStarted() {}
 
     /** Called when paging is stopped.
     * Usefull for trace providers that have live data sources.
     */
-    virtual void slotPagingStopped() {};
+    virtual void slotPagingStopped() {}
 
 Q_SIGNALS:
     /**Signals that the data have been retrieved.
   * @param data array of data in uV (number of channels X number of samples).
   * @param initiator instance requesting the data.
   */
-    void dataReady(Array<dataType>& data, QObject* initiator);
+    virtual void dataReady(Array<dataType>& data, QObject* initiator);
 
 protected:
     /**Number of channels used to record the data.*/

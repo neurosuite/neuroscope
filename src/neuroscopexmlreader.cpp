@@ -69,6 +69,72 @@ void NeuroscopeXmlReader::closeFile(){
     readVersion.clear();
 }
 
+// RHM
+QString NeuroscopeXmlReader::getGenericText(QString qsTag, QString defaultTextIn)const {
+    qDebug() << "getGenericText()" << " " << qsTag << "\n";
+    QString defaultText = defaultTextIn;
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while (!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if (!e.isNull()) {
+                QString tag = e.tagName();
+                qDebug() << tag << " " << qsTag << "\n";
+                if (tag == qsTag) {
+                    defaultText = e.text();
+                    return defaultText;
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return defaultText;
+}
+
+
+// RHM
+QString NeuroscopeXmlReader::getNWBSamplingName()const {
+    QString SamplingName = "/processing/ecephys/LFP/lfp/starting_time";
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while (!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if (!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NWB_SAMPLING_NAME) {
+                    SamplingName = e.text();
+                    return SamplingName;
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return SamplingName;
+}
+
+// RHM
+QString NeuroscopeXmlReader::getNWBDataSetName()const {
+    QString DataSetName = "/processing/ecephys/LFP/lfp/data";
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while (!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if (!e.isNull()) {
+                QString tag = e.tagName();
+                if (tag == NWB_DATASET_NAME) {
+                    DataSetName = e.text();
+                    return DataSetName;
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return DataSetName;
+}
+
 
 int NeuroscopeXmlReader::getResolution()const{
     int resolution = 0;
@@ -301,13 +367,13 @@ int NeuroscopeXmlReader::getVoltageRange() const{
                         QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
                         while(!acquisition.isNull()) {
                             QDomElement w = acquisition.toElement();
-                            if(!w.isNull()) {
-                                tag = w.tagName();
-                                if (tag == VOLTAGE_RANGE) {
-                                    range =  w.text().toInt();
-                                    return range;
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == VOLTAGE_RANGE) {
+                                        range =  w.text().toInt();
+                                        return range;
+                                    }
                                 }
-                            }
                             acquisition = acquisition.nextSibling();
                         }
                     }
@@ -360,13 +426,13 @@ int NeuroscopeXmlReader::getAmplification() const{
                         QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
                         while(!acquisition.isNull()) {
                             QDomElement w = acquisition.toElement();
-                            if(!w.isNull()) {
-                                tag = w.tagName();
-                                if (tag == AMPLIFICATION) {
-                                    amplification =  w.text().toInt();
-                                    return amplification;
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == AMPLIFICATION) {
+                                        amplification =  w.text().toInt();
+                                        return amplification;
+                                    }
                                 }
-                            }
                             acquisition = acquisition.nextSibling();
                         }
                     }
@@ -419,13 +485,13 @@ int NeuroscopeXmlReader::getOffset()const{
                         QDomNode acquisition = e.firstChild(); // try to convert the node to an element.
                         while(!acquisition.isNull()) {
                             QDomElement w = acquisition.toElement();
-                            if(!w.isNull()) {
-                                tag = w.tagName();
-                                if (tag == OFFSET) {
-                                    offset =  w.text().toInt();
-                                    return offset;
+                                if(!w.isNull()) {
+                                    tag = w.tagName();
+                                    if (tag == OFFSET) {
+                                        offset =  w.text().toInt();
+                                        return offset;
+                                    }
                                 }
-                            }
                             acquisition = acquisition.nextSibling();
                         }
                     }

@@ -14,6 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "sessionInformation.h"
 
 #ifndef NEUROSCOPEDOC_H
 #define NEUROSCOPEDOC_H
@@ -27,6 +28,9 @@
 #include <QList>
 
 #include <QEvent>
+#include <QFileDialog>
+
+
 
 //include files for the application
 #include "channelpalette.h"
@@ -36,6 +40,8 @@
 #ifdef WITH_CEREBUS
     #include "cerebustraceprovider.h" // For SamplingGroup
 #endif
+
+#include "neuroscopexmlreader.h"
 
 // forward declaration of the Neuroscope classes
 class NeuroscopeView;
@@ -236,6 +242,7 @@ public:
    */
     int getInitialOffset()const{return initialOffset;}
 
+
     /**Gets the voltage range of the acquisition system in volts for the current document.
    * @return current voltage range.
    */
@@ -279,7 +286,7 @@ public:
    * @param amplificationDefault default amplification of the acquisition system.
    * @param screenGainDefault default screen gain in milivolts by centimeters used to display the field potentiels.
    */
-    void setDefaultGains(int voltageRangeDefault, int amplificationDefault, float screenGainDefault){
+    void setDefaultGains(int voltageRangeDefault,int amplificationDefault,float screenGainDefault){
         this->voltageRangeDefault = voltageRangeDefault;
         this->amplificationDefault = amplificationDefault;
         this->screenGainDefault = screenGainDefault;
@@ -427,6 +434,7 @@ public:
         this->rotation = rotation;
         this->flip = flip;
         drawPositionsOnBackground = positionsBackground;
+
     }
 
     /**Returns true if the current opened file is a dat file (intial recorded file), false otherwise.*/
@@ -466,6 +474,7 @@ public:
     */
     void showCalibration(bool show,NeuroscopeView* activeView);
 
+
     /**Returns the item color list for the given provider.
     * @param fileName name of the file containing the data of the provider.
     */
@@ -479,7 +488,7 @@ public:
     OpenSaveCreateReturnMessage loadClusterFile(const QString &clusterUrl,NeuroscopeView* activeView);
     OpenSaveCreateReturnMessage loadNevClusterFile(const QString &clusterUrl,NeuroscopeView* activeView);
     OpenSaveCreateReturnMessage loadCluClusterFile(const QString &clusterUrl,NeuroscopeView* activeView);
-
+    OpenSaveCreateReturnMessage loadNWBClusterFile(const QString &clusterUrl,NeuroscopeView* activeView);
 
     /**Loads the cluster file store in the session file and identified by @p clusterUrl.
     * @param clusterUrl url of the cluster file to load.
@@ -775,6 +784,77 @@ public:
     /**Returns a reference on the the map given the of channels default offsets.*/
      const QMap<int,int>& getChannelDefaultOffsets()const{return channelDefaultOffsets;}
 
+private:
+    // 25 March Robert H. Moore
+    void confirmParams();
+    int openNWBDocument(const QString& url);
+    int openNSXDocument(const QString& url);
+    int treatParamSessionFile(QString fileName, QStringList fileParts, QFileInfo urlFileInfo);
+    void warnCommandLineProp(QString trWarning);
+    int readParameterFile(const QString& parFileUrl);
+    int readSessionFileSampling(const QString& sessionUrl);
+    int getNonDatSampling();
+    QColor makeClusterColor(int iGroup, bool bLinear=true);
+    int setClusterColors(ItemColors* clusterColors, QList<int> &clustersToSkip, QList<int> &clusterList, QString name);
+    void getAssociatedFileNames();
+    bool bIsNearZero(double dVal);
+    bool bAreNearlyEqual(double dVal1, double dVal2);
+    void makeOneBlueGroup();
+    void setSpikePresentationInfo(bool &verticalLines, bool &raster, bool &waveforms, const QList<DisplayInformation::spikeDisplayType> &spikeDisplayTypes);
+    int openDocumentHasParam(bool sessionFileExist);
+    int openDocumentNoParamHasSession();
+    int openDocumentNoParamNoSession();
+
+    void fillGains_Offsets(QList<int> &channelGains, QList<int> &offsets, const QList<TracePosition> positions);
+    QList<int>* getChannelsToDisplay(const QList<int> &channelIds);
+    QList<int> getSelectedChannels(const QList<int> &selectedChannelIds);
+    void loadSessionFirstFileCluster(QString fileUrl,
+                                QMap<QString, QList<int> > &selectedClusters,
+                                QMap<QString, QList<int> > &skippedClusters,
+                                QMap<EventDescription,QColor> &itemColors,
+                                const QDateTime &lastModified,
+                                bool &fistClusterFile,
+                                QStringList &loadedClusterFiles);
+    void loadSessionFirstFileEvents(QString fileUrl,
+                               QMap<QString, QList<int> > &selectedEvents,
+                               QMap<QString, QList<int> > &skippedEvents,
+                               QMap<EventDescription,QColor> &itemColors,
+                               const QDateTime &lastModified,
+                               bool &fistEventFile,
+                               QStringList &loadedEventFiles,
+                               QString sessionUrl,
+                               QMap< QString, QMap<EventDescription,int> > &loadedEventItems);
+    void loadSessionFirstFilePositions(QString fileUrl,
+                                  QString sessionUrl,
+                                  NeuroscopeXmlReader reader,
+                                  SessionFile &sessionFile,
+                                  QString loadedPositionFile);
+    void LoadSessionClusterFiles(QStringList &loadedClusterFiles,
+                                 QMap<QString, QList<int> > &selectedClusters,
+                                 QMap<QString, QList<int> > &skippedClusters,
+                                 NeuroscopeView* view );
+    void loadSessionEventFiles(QStringList &loadedEventFiles,
+                               QMap<QString, QList<int> > &selectedEvents,
+                               QMap<QString, QList<int> > &skippedEvents,
+                               QMap< QString, QMap<EventDescription,int> > &loadedEventItems,
+                               NeuroscopeView* view);
+    void  loadSessionPositionFile(QString loadedPositionFile,
+                                   bool isAPositionView,
+                                   long startTime,
+                                   long duration,
+                                   bool showEventsInPositionView,
+                                   NeuroscopeView* view);
+
+    QString qsAddAbsolutePathIfNeeded(QString qsFileName);
+    void BuildChannelColorList(QList<ChannelDescription> &colorsList);
+    double dGetNonZeroVal(double dTest, double dDefault);
+    int iGetNonZeroVal(int iTryVal, int iDefault);
+    QString qsGetNonDashParameter(NeuroscopeXmlReader::fileType ft, QString qsTryVal, QString qsDefault);
+    QList<int> qlGetClusterFileList(QList<int> &anatomicalList);
+#ifdef TRASH
+int openDocumentNotUsed(const QString& url);
+#endif
+
 public Q_SLOTS:
 
     /**Updates the event palette and the views after the creation of a new event description.
@@ -849,10 +929,10 @@ private:
 
     /**The url of the session file.*/
     QString sessionUrl;
-
+    
     /**The url of the parameter file.*/
     QString parameterUrl;
-
+    
     /**Reference on the channelPalette used to specify the traces display.*/
     ChannelPalette& displayChannelPalette;
 
@@ -867,6 +947,7 @@ private:
 
     /**Initial offset for all the traces.*/
     int initialOffset;
+
 
     /**Screen gain in milivolts by centimeters used to display the field potentiels.*/
     float screenGain;
@@ -898,6 +979,7 @@ private:
     /**Default initial offset for all the traces.*/
     int initialOffsetDefault;
 
+    
     /**Default screen gain in milivolts by centimeters used to display the field potentiels.*/
     float screenGainDefault;
 
@@ -930,7 +1012,7 @@ private:
 
     /*Map given the of channels default offsets.*/
     QMap<int,int> channelDefaultOffsets;
-
+    
     /**Provider of the channels data.*/
     TracesProvider* tracesProvider;
 
@@ -948,7 +1030,7 @@ private:
 
     /**Video acquisition sampling rate.*/
     double videoSamplingRate;
-
+    
     /**Number of samples in a spike waveform.*/
     int nbSamples;
 
@@ -963,13 +1045,13 @@ private:
 
     /**Length for a spike*/
     float waveformLength;
-
+    
     /**Length corresponding to the index of peak of the spike.*/
     float indexLength;
-
+    
     /**Default length for a spike*/
     float waveformLengthDefault;
-
+    
     /**Default length corresponding to the index of peak of the spike.*/
     float indexLengthDefault;
 
@@ -1035,7 +1117,7 @@ private:
     int videoHeightDefault;
     /**Default background image for the position view.*/
     QString backgroundImageDefault;
-
+    
     /**Default background image for the trace view.*/
     QString traceBackgroundImageDefault;
 
@@ -1051,35 +1133,35 @@ private:
     int videoHeight;
     /**Background image for the position view.*/
     QString backgroundImage;
-
+    
     /**Background image for the trace view.*/
     QString traceBackgroundImage;
-
+    
     /**Angle of rotation of the video records.*/
     int rotation;
     /**Flip orientation of the video records.
     * 0 stands for none, 1 for vertical flip and 2 for horizontal flip.
     */
     int flip;
-
+    
     /**Transformed background image for the position view (rotated and or flip if need it).*/
     QImage transformedBackground;
-
+    
     /**True if the all the positions contain in the position file have to be drawn on the background image, false otherwise.*/
     bool drawPositionsOnBackground;
-
+    
     /**Default value for drawPositionsOnBackground.*/
     bool drawPositionsOnBackgroundDefault;
-
+    
     /**True if a position file has been opened at least one during the session (it can have been closed and not reopened), false otherwise.*/
     bool positionFileOpenOnce;
-
+    
     /**Extension of the opened position file.*/
     QString positionFileExtension;
-
+    
     /**Map between the channel and skip status.*/
     QMap<int,bool> skipStatus;
-
+    
     /**Upsampling rate used to create the spike file.*/
     double upsamplingRate;
 
@@ -1104,6 +1186,10 @@ private:
     * @return a QImage which is a transform copy of this image. The original QImage is not changed.
     */
     QImage transformBackgroundImage(bool useWhiteBackground = false);
+
+
+    void nwbGetColors(QMap<int, QList<int> >& colorMapList, QMap<int, int>& chanGroupMap, int channelNb, std::string hsFileName);
+
 
 };
 

@@ -156,7 +156,7 @@ QDomNode ParameterXmlModifier::findDirectChild(const QString& childName,const QS
         // the node really is an element and has the right tag.
         if(child.isElement() && child.nodeName() == childName){
             QDomNodeList list = child.childNodes();
-            for(uint i=0;i<list.count();++i){
+            for(int i=0;i<list.count();++i){
                 QDomNode grandChild = list.item(i);
                 if(grandChild.isElement() && grandChild.nodeName() == grandChildName){
                     QDomNode textNode = grandChild.firstChild();

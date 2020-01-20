@@ -57,19 +57,19 @@
 
 
 NeuroscopeApp::NeuroscopeApp()
-    :QMainWindow(0)
-    ,prefDialog(0L)
+    :QMainWindow(nullptr /*0*/)
+    ,prefDialog(nullptr /*0L*/)
     ,displayCount(0)
-    ,mainDock(0)
-    ,spikeChannelPalette(0)
-    ,tabsParent(0L)
-    ,paletteTabsParent(0L),
+    ,mainDock(nullptr /*0*/)
+    ,spikeChannelPalette(nullptr /*0*/)
+    ,tabsParent(nullptr /*0L*/)
+    ,paletteTabsParent(nullptr /*0L*/),
       isInit(true)
     ,groupsModified(false)
     ,colorModified(false)
     ,eventsModified(false)
     ,initialOffsetDefault(0)
-    ,propertiesDialog(0L)
+    ,propertiesDialog(nullptr /*0L*/)
     ,select(false)
     ,initialTimeWindow(0)
     ,undoRedoInprocess(false)
@@ -697,7 +697,7 @@ void NeuroscopeApp::initItemPanel(){
     paletteTabsParent->hide();
 }
 void NeuroscopeApp::executePreferencesDlg(){
-    if(prefDialog == 0L){
+    if(prefDialog == nullptr /*0L*/){
         prefDialog = new PrefDialog(this);
         // connect to the "settingsChanged" signal
         connect(prefDialog,SIGNAL(settingsChanged()),this,SLOT(applyPreferences()));
@@ -1124,7 +1124,7 @@ NeuroscopeDoc* NeuroscopeApp::getDocument() const
 
 void NeuroscopeApp::updateBrowsingStatus(){
     if(!clusterFileList.isEmpty()){
-        ItemPalette* palette = 0;
+        ItemPalette* palette = nullptr /*0*/;
         for(int i = 0; i<paletteTabsParent->count();++i){
             QWidget* current = paletteTabsParent->widget(i);
             QString name = current->objectName();
@@ -1314,7 +1314,7 @@ void NeuroscopeApp::slotFileOpen()
         this,
         tr("Open File..."),
         settings.value("CurrentDirectory").toString(),
-        tr("Data File (*.dat *.lfp *.eeg *.fil);;Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6);;All files (*.*)")
+        tr("Data File (*.dat *.lfp *.eeg *.fil *.nwb);;Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6);;All files (*.*)")
     );
     if(!url.isEmpty())
     {
@@ -1363,7 +1363,7 @@ void NeuroscopeApp::slotLoadClusterFiles(){
 
     QSettings settings;
     const QStringList urls=QFileDialog::getOpenFileNames(this, tr("Open Cluster Files..."), settings.value("CurrentDirectory").toString(),
-                                                         tr("Cluster File (*.clu.*);;Blackrock File (*.nev);;All files (*.*)"));
+                                                         tr("Cluster File (*.clu.*);;Blackrock File (*.nev);;NWB File (*.nwb);;All files (*.*)"));
     if(!urls.isEmpty())
     {
         QDir CurrentDir;
@@ -1383,7 +1383,7 @@ void NeuroscopeApp::slotLoadEventFiles(){
         this,
         tr("Open Event Files..."),
         settings.value("CurrentDirectory").toString(),
-        tr("Event File (*.evt*);;Blackrock File (*.nev);;All files (*.*)")
+        tr("Event File (*.evt*);;Blackrock File (*.nev);;NWB Event File (*.nwb);;All files (*.*)")
     );
     if(!urls.isEmpty())
     {
@@ -3152,8 +3152,8 @@ void NeuroscopeApp::createEventPalette(const QString& eventFileId){
     eventPalette->createItemList(doc->providerColorList(eventFileId),eventFileId,doc->getLastEventProviderGridX());
 
     //Disconnect the previous connection
-    if(paletteTabsParent != NULL)
-        disconnect(paletteTabsParent,0,0,0);
+    if(paletteTabsParent != nullptr /*NULL*/)
+        disconnect(paletteTabsParent,0,nullptr /*0*/,nullptr /*0*/);
 
     connect(paletteTabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotPaletteTabChange(int)));
 
@@ -3358,7 +3358,7 @@ void NeuroscopeApp::slotAddEventButtonActivated(QAction *act){
 }
 
 ItemPalette* NeuroscopeApp::getEventPalette(){
-    ItemPalette* eventPalette = 0L;
+    ItemPalette* eventPalette = nullptr /*0L*/;
 
     for(int i = 0; i< paletteTabsParent->count();++i){
         QWidget* current = paletteTabsParent->widget(i);

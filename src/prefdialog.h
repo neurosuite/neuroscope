@@ -21,7 +21,7 @@
 // include files for QT
 #include <QWidget>
 
-#include "qpagedialog.h"
+#include <qpagedialog.h>
 
 class PrefGeneral;
 class PrefDefaults;

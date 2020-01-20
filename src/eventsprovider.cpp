@@ -105,6 +105,8 @@ int EventsProvider::loadData(){
     eventFile.close();
     qDebug()<< "Loading evt file into memory: "<<Timer() << endl;
 
+    // RHM Comment. Consider splitting this function up into 2-parts here. 1) Read file. 2) Fill out data structures.
+
 
     //The number of events read has to be coherent with the number of events read.
     if(lineCounter != nbEvents){
@@ -176,7 +178,137 @@ void EventsProvider::requestData(long startTime,long endTime,QObject* initiator,
     retrieveData(startTime,endTime,initiator);
 }
 
+///
+/// \brief bBoundsChanged
+/// \param lower_bound
+/// \param upper_bound
+/// \return
+/// function to return true if the two input parameters differ from the previous call
+bool bBoundsChanged(long lower_bound, long upper_bound)
+{
+    static long prev_lower;
+    static long prev_upper;
+
+    if ((prev_lower==lower_bound) && (prev_upper==upper_bound))
+        return false;
+
+    prev_lower = lower_bound;
+    prev_upper = upper_bound;
+    return true;
+}
+
+///
+/// \brief lGetLowerBound() Return the first index location in Array A that falls after the lTarget value
+/// \param lower_bound index for first position in Array to search
+/// \param upper_bound index for last position in Array to search
+/// \param lTarget start time for window
+/// \param A
+/// \return
+///Return the first index location in Array A that falls after the lTarget value
+/// We assume that A is sorted in ascending order
+/// A bisection search method is used.
+/// Note: we multiply the values in A by 1000 to get milliseconds. They may be comming in as seconds?
+long lGetLowerBound(long lower_bound, long upper_bound, long lTarget, Array<double> &A)
+{
+    bBoundsChanged(lower_bound, upper_bound); // initialize some static variables
+
+    while ((lower_bound < upper_bound))
+    {
+        long mid = (upper_bound + lower_bound)/2;
+        if (lTarget <= A(1,mid)*1000) {
+            upper_bound = mid;
+        }
+        else {
+            lower_bound= mid+1;
+        }
+
+        // if the boundaries do not change, then we are finished
+        if (!bBoundsChanged(lower_bound, upper_bound))
+            break;
+    }
+    return upper_bound;
+}
+
+long lGetUpperBound(long lower_bound, long upper_bound, long lTarget, Array<double> &A)
+{
+    bBoundsChanged(lower_bound, upper_bound); // initialize some static variables
+
+    while  (lower_bound < upper_bound)
+    {
+        long mid = (lower_bound + upper_bound)/2 + 1;
+        if (lTarget < A(1,mid)*1000)
+            upper_bound = mid-1;
+        else
+            lower_bound = mid;
+
+        // if the boundaries do not change, then we are finished
+        if (!bBoundsChanged(lower_bound, upper_bound))
+            break;
+    }
+    return lower_bound;
+}
+
 void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator){   
+
+    // This is a faster method that uses a bisection search
+    //long lLower = lGetLowerBound(1, nbEvents, startTime, timeStamps);
+    //long lUpper = lGetUpperBound(1, nbEvents, endTime, timeStamps);
+    //QList<long> EventsInRange;
+    //for (long lIndex =lLower; lIndex <= lUpper; lIndex++)
+    //    EventsInRange.append(lIndex);
+    //qDebug() << "window limits " << startTime << " " << endTime << "\n";
+    //qDebug() << "index limits " << lLower << " " << lUpper << "\n";
+    //for (int jj=1; jj <= nbEvents; ++jj)
+    //    qDebug() << "time stamps " << jj << " " << timeStamps(1, jj) << " ";
+    // End of faster method
+
+
+    // Make a list of all event indices that fall inside the display window
+    // This is a slow search, but it fixed an old bug.
+    QList<long> EventsInRange;
+    for (long lIndex =1; lIndex <= nbEvents; lIndex++)
+    {
+        // Convert from seconds to milliseconds using 1000
+        long time = static_cast<long>(floor(0.5 + timeStamps(1,lIndex)* 1000));
+        if (time >= startTime && time <= endTime )
+        {
+            EventsInRange.append(lIndex);
+        }
+    }
+
+    long nSizeEventsInRange = EventsInRange.count();
+
+    //Store the information for the next request
+    previousStartTime = startTime;
+    previousStartIndex = (nSizeEventsInRange > 0) ? EventsInRange.first() : 1;
+
+    previousEndTime = endTime;
+    previousEndIndex = (nSizeEventsInRange > 1) ? EventsInRange.last() : 1;
+
+    // Now transfer the times that are in range to the stored list
+
+    //look up for the event ids and indexes.
+    Array<dataType> times;
+    Array<int> ids;
+    times.setSize(1,nSizeEventsInRange);
+    ids.setSize(1, nSizeEventsInRange);
+
+    long count = 0;
+    for (long lIndex : EventsInRange)
+    {
+        count++;
+        double dDiff = (timeStamps(1,lIndex)*1000 - static_cast<double>(startTime))/1000.0;
+        times(1,count)     = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 + dDiff * currentSamplingRate))),0L);
+        //times(1,count + 1) = qMax(static_cast<dataType>(floor(static_cast<float>(0.5 +(timeStamps(1,startIndex) - static_cast<double>(startTime)) * currentSamplingRate))),0L);
+        ids(1,count) = eventIds[events(1,lIndex)];
+    }
+
+    //Send the information to the receiver.
+    emit dataReady(times,ids,initiator,name);
+}
+
+#ifdef TRASH
+void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator){
     Array<dataType> times;
     Array<int> ids;
 
@@ -186,6 +318,9 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
         return;
     }
     if(endTime > fileMaxTime) endTime = fileMaxTime;
+
+ //   for (int jj=1; jj <= nbEvents; ++jj)
+ //       qDebug() << "time stamps " << jj << " " << timeStamps(1, jj) << " ";
 
     long startIndex = previousStartIndex;
     long endIndex = previousEndIndex;
@@ -197,6 +332,7 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
     if((startTime != previousStartTime) && (startTime != previousEndTime)){
         if(startTime == 0){
             startIndex = 1;
+
             if(endTime <= previousStartTime) endIndex = previousStartIndex;
             else if(endTime <= previousEndTime) endIndex = previousEndIndex;
             else if(endTime > previousEndTime) endIndex = nbEvents;
@@ -204,12 +340,14 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
         if(startTime < previousStartTime){
             startIndex = static_cast<int>(previousStartIndex / 2);
             if(startIndex <= 0) startIndex = 1;
+
             if(endTime <= previousStartTime) endIndex = previousStartIndex;
             else if(endTime <= previousEndTime) endIndex = previousEndIndex;
             else if(endTime > previousEndTime) endIndex = nbEvents;
         }
         else if(startTime < previousEndTime && startTime > previousStartTime){
             startIndex = previousStartIndex + static_cast<int>((previousEndIndex - previousStartIndex + 1)/ 2);
+
             if(endTime <= previousEndTime) endIndex = previousEndIndex;
             else if(endTime > previousEndTime) endIndex = nbEvents;
         }
@@ -233,7 +371,7 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 }
                 newEndIndex = previousStart;
             }
-            else{
+            else{ // time is < startTime
                 newStartIndex = newStartIndex + ((newEndIndex - newStartIndex + 1) / 2);
                 if(newStartIndex > nbEvents){
                     newStartIndex = nbEvents;
@@ -333,6 +471,11 @@ void EventsProvider::retrieveData(long startTime,long endTime,QObject* initiator
     //Send the information to the receiver.
     emit dataReady(finalTimes,finalIds,initiator,name);
 }
+#endif
+
+
+
+
 
 void EventsProvider::requestNextEventData(long startTime,long timeFrame,const QList<int> &selectedIds,QObject* initiator){
     long initialStartTime = startTime;

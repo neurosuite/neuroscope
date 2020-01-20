@@ -852,11 +852,13 @@ void ItemPalette::removeGroup(const QString &groupName){
     //a group must always be selected.
     if(selected == groupName){
         if(type == CLUSTER && !clusterGroupList.isEmpty()){
-            qSort(clusterGroupList);
+            //qSort(clusterGroupList);
+            std::sort(clusterGroupList.begin(), clusterGroupList.end());
             selectGroupLabel(QString::number(clusterGroupList.at(0)));
         }
         else if(type == EVENT && !itemGroupList.isEmpty()){
-            qSort(itemGroupList);
+            //qSort(itemGroupList);
+            std::sort(itemGroupList.begin(), itemGroupList.end());
             selectGroupLabel(itemGroupList.at(0));
         }
         else  selected.clear();//never reach
@@ -866,12 +868,14 @@ void ItemPalette::removeGroup(const QString &groupName){
 
 void ItemPalette::selectGroup(const QString& groupName){
     if(type == CLUSTER && !clusterGroupList.isEmpty()){
-        qSort(clusterGroupList);
+        //qSort(clusterGroupList);
+        std::sort(clusterGroupList.begin(), clusterGroupList.end());
         if(clusterGroupList.contains(groupName.toInt())) selectGroupLabel(groupName);
         else selectGroupLabel(QString::number(clusterGroupList.at(0)));
     }
     else if(type == EVENT && !itemGroupList.isEmpty()){
-        qSort(itemGroupList);
+        //qSort(itemGroupList);
+        std::sort(itemGroupList.begin(), itemGroupList.end());
         if(itemGroupList.contains(groupName)) selectGroupLabel(groupName);
         else selectGroupLabel(itemGroupList.at(0));
     }
@@ -954,12 +958,14 @@ void ItemPalette::orderTheGroups(){
     }
 
     if(type == CLUSTER) {
-        qSort(clusterGroupList);
+        //qSort(clusterGroupList);
+        std::sort(clusterGroupList.begin(), clusterGroupList.end());
         QList<int>::iterator iterator;
         for(iterator = clusterGroupList.begin(); iterator != clusterGroupList.end(); ++iterator)
             verticalContainer->addWidget(itemGroupViewDict[QString::number(*iterator)]);
     } else {
-        qSort(itemGroupList);
+        //qSort(itemGroupList);
+        std::sort(itemGroupList.begin(), itemGroupList.end());
         QStringList::iterator iterator;
         for(iterator = itemGroupList.begin(); iterator != itemGroupList.end(); ++iterator)
             verticalContainer->addWidget(itemGroupViewDict[*iterator]);

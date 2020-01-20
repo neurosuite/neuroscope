@@ -223,6 +223,14 @@ public:
   */
     NeuroscopeXmlReader::fileType getType()const{return type;}
 
+
+    /** Get the Neurodata Without Borders File Locations */
+    /** Added by Robert H. Moore (RHM) */
+    QString getNWBSamplingName() const;
+    QString getNWBDataSetName() const;
+    QString getGenericText(QString qsTag, QString defaultTextIn) const;
+
+
 private:
     fileType type;
     QString readVersion;

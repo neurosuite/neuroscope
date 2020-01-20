@@ -52,7 +52,7 @@ ChannelIconView::ChannelIconView(const QColor& backgroundColor, int gridX, int g
     int v;
     backgroundColor.getHsv(&h,&s,&v);
     QColor legendColor;
-    if (s <= 80 && v >= 240 || (s <= 40 && v >= 220))
+    if ((s <= 80 && v >= 240) || (s <= 40 && v >= 220))
         legendColor = Qt::black;
     else
         legendColor = Qt::white;
@@ -85,7 +85,7 @@ ChannelIconView::~ChannelIconView()
 QList<QListWidgetItem *> ChannelIconView::findItems(const int id) const {
     QList<QListWidgetItem *> matchedItems;
 
-    for(unsigned int row = 0; row < count(); row++) {
+    for(int row = 0; row < count(); row++) {
         ChannelIconViewItem* channelItem = static_cast<ChannelIconViewItem*>(item(row));
         if(channelItem->getID() == id)
             matchedItems.append(channelItem);
@@ -103,7 +103,7 @@ void ChannelIconView::slotRowInsered()
 QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
 {
     if (items.isEmpty())
-        return 0;
+        return nullptr /*0*/;
     QMimeData* mimedata = new QMimeData();
 
     QByteArray data;
@@ -205,7 +205,7 @@ void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
     //If the user did not clicked on an item, ignore the click
     QListWidgetItem* item = itemAt(event->pos());
-    if (item == 0L)
+    if (item == nullptr/*0L*/)
         return;
 
     if (event->button() == Qt::MiddleButton) {

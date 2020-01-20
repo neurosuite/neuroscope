@@ -90,7 +90,7 @@ QList<NEVClustersProvider*> NEVClustersProvider::fromFile(const QString& fileUrl
     // Read extension headers and extract label mapping
     QMap<QString, int> channelLabelsToIds;
     NEVExtensionHeader extensionHeader;
-    for(int extension = 0; extension < basicHeader.extension_count; extension++) {
+    for(unsigned int extension = 0; extension < basicHeader.extension_count; extension++) {
         if(!readStruct<NEVExtensionHeader>(clusterFile, extensionHeader)) {
             clusterFile.close();
             return result;

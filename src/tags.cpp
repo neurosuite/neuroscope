@@ -143,5 +143,11 @@ extern const QString CHANNEL_POSITION = "channelPosition";
 //Tag included in CHANNEL_POSITION
 extern const QString GAIN = "gain";
 
+//Tag included in NWB_DATASET_NAME - RHM
+extern const QString NWB_DATASET_NAME = "nwb_dataset_name";
+
+//Tag included in NWB_SAMPLING_NAME - RHM
+extern const QString NWB_SAMPLING_NAME = "nwb_sampling_name";
+
 }
 

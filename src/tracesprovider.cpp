@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QFileInfo>
 
+
 // include c/c++ headers
 #include <stdint.h>
 
@@ -41,8 +42,6 @@
 #define fseeko(stream, offset, whence) fseeko64(stream, offset, whence)
 #define ftello(stream) ftello64(stream)
 #endif
-
-
 
 TracesProvider::TracesProvider(const QString &fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset)
     : DataProvider(fileUrl),
@@ -145,9 +144,10 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
     if((resolution == 12) | (resolution == 14) | (resolution == 16)){
         Array<int16_t> retrieveData(nbSamples,nbChannels);
         qint64 nbValues = nbSamples * nbChannels;
+
         // Is this a Neuralynx file?
-        int p = fileName.lastIndexOf(".ncs");
-        if ( p != -1 )
+        int pNCS = fileName.lastIndexOf(".ncs");
+        if ( pNCS != -1 )
         {
             qDebug()<<"NCS";
             /// Modified by M.Zugaro to read Neuralynx ncs format
@@ -285,17 +285,19 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             }
             dataFile.close();
         }
+        qDebug() << "RHM Transfer to data " << nbValues << " " << offset;
         //Apply the offset if need it,convert to dataType and store the values in data.
         if(offset != 0){
             for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = round(static_cast<dataType>(retrieveData[i]) - offset * acquisitionGain);
             }
         } else {
-
             for(qint64 i = 0; i < nbValues; ++i){
                 data[i] = round(static_cast<dataType>(retrieveData[i]) * acquisitionGain);
             }
         }
+        qDebug() << "RHM End Transfer to data";
+        
     } else if(resolution == 32) {
 
         QFile dataFile(fileName);
@@ -333,11 +335,13 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         dataFile.close();
     }
 
+    qDebug() << "About to emit RHM";
     //Send the information to the receiver.
     emit dataReady(data,initiator);
 }
 
 void TracesProvider::computeRecordingLength(){
+    qDebug() << "Inside computeRecordingLength";
     //When the bug in gcc will be corrected for the 64 bits the c++ code will be use
     //[alex@slut]/home/alex/src/sizetest > ./sizetest-2.95.3
     //  sizeof(std::streamoff) = 8 bytes (64 bits)
@@ -372,8 +376,8 @@ void TracesProvider::computeRecordingLength(){
     else if(resolution == 32) dataSize = 4;
 
     // Is this a Neuralynx file?
-    int p = fileName.lastIndexOf(".ncs");
-    if ( p != -1 )
+    int pNCS = fileName.lastIndexOf(".ncs");
+    if ( pNCS != -1 )
     {
         /// Modified by M.Zugaro to read Neuralynx ncs format
 
@@ -404,6 +408,7 @@ void TracesProvider::computeRecordingLength(){
                         ) * 1000
                     );
     }
+    qDebug() << "Exiting computeRecordingLength";
 }
 
 long TracesProvider::getTotalNbSamples(){

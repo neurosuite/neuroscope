@@ -31,6 +31,7 @@ INCLUDEPATH += ../../libneurosuite/src/shared
 INCLUDEPATH += ../../libneurosuite/src
 INCLUDEPATH += ../../libneurosuite/src/gui/page
 
+INCLUDEPATH += ../../HDF5/include
 
 
 SOURCES += \
@@ -81,7 +82,20 @@ SOURCES += \
     ../src/tags.cpp \
     ../src/tracesprovider.cpp \
     ../src/traceview.cpp \
-    ../src/tracewidget.cpp
+    ../src/tracewidget.cpp \
+    ../src/ReadHDF5.cpp \
+    ../src/hdf5utilities.cpp \
+    ../src/nwblocations.cpp \
+    ../src/nwbreader.cpp \
+    ../src/nevclustersprovider.cpp \
+    ../src/neveventsprovider.cpp \
+    ../src/nsxtracesprovider.cpp \
+    ../src/nwbtracesprovider.cpp \
+    ../src/cerebustraceprovider.cpp \
+    ../src/cerebusclustersprovider.cpp \
+    ../src/cerebuseventsprovider.cpp \
+    ../src/nwbeventsprovider.cpp \
+    ../src/nwbclustersprovider.cpp
 
 HEADERS += \
     ../src/baseframe.h \
@@ -135,7 +149,27 @@ HEADERS += \
     ../src/tracesprovider.h \
     ../src/traceview.h \
     ../src/tracewidget.h \
-    ../src/config-neuroscope.h
+    ../src/config-neuroscope.h\
+    ../src/hdf5utilities.h \
+    ../src/nwblocations.h \
+    ../src/nwbreader.h \
+    ../src/blackrock.h \
+    ../src/cerebusclustersprovider.h \
+    ../src/cerebuseventsprovider.h \
+    ../src/cerebustraceprovider.h \
+    ../src/nevclustersprovider.h \
+    ../src/neveventsprovider.h \
+    ../src/nsxtracesprovider.h \
+    ../src/nwbtracesprovider.h \
+    ../src/alttracesprovider.h \
+    ../src/nwbeventsprovider.h \
+    ../src/nwbclustersprovider.h
+
+INCLUDEPATH += ../../libneuosuite/src
+INCLUDEPATH += ../../libneuosuite/src/shared
+INCLUDEPATH += ../../libneuosuite/src/gui
+INCLUDEPATH += ../../libneuosuite/src/page
+INCLUDEPATH += ../../libneuosuite/src/gui/page
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -179,6 +213,20 @@ DISTFILES += \
     ../src/CMakeLists.txt \
     ../src/neuroscope.rc
 
+
+win32:CONFIG(release, debug|release) {
+    INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
+    DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
+    LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
+}
+else:win32:CONFIG(debug, debug|release) {
+    INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
+    DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
+    LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
+}
+else:unix: LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
+
+
 win32:CONFIG(release, debug|release){
   LIBS += -L$$PWD/../../Cerebus/libcbsdk/build/src/release/ -lcbsdk
   INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src
@@ -192,32 +240,63 @@ else:win32:CONFIG(debug, debug|release){
   DEPENDPATH += $$PWD/../../Cerebus/libcbsdk/build/src/debug
 }
 
-#win32:CONFIG(release, debug|release){
-##D:\Gigs\Neurosuite\libneurosuite\build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug
-#LIBS += -LD:/Gigs/Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
-#}
-#else:win32:CONFIG(debug, debug|release){
-#LIBS += -LD:/Gigs/Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
-#}
+
+win32:CONFIG(debug, debug|release){
+    HDF5_PATH = $$PWD/../../HDF5/Debug/
+
+    LIBS += -L$${HDF5_PATH}/ -llibszip_D -llibzlib_D -llibhdf5_D -llibhdf5_hl_cpp_D -llibhdf5_cpp_D
+
+    INCLUDEPATH += $$PWD/../HDF5/include/
+    DEPENDPATH += $$PWD/../HDF5/include/
+}
+else:win32:CONFIG(release, debug|release){
+    HDF5_PATH = $$PWD/../../HDF5/release/
+
+    LIBS += -L$${HDF5_PATH}/ -llibszip -llibzlib -llibhdf5 -llibhdf5_hl_cpp -llibhdf5_cpp
+
+    INCLUDEPATH += $$PWD/../HDF5/include/
+    DEPENDPATH += $$PWD/../HDF5/include/
+}
 
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
-#else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
 
-INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
-DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
+unix:CONFIG(release, debug|release) {
+    message(Release1)
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/debug/ -llibneurosuite
-#else:unix: LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/ -llibneurosuite
+    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libszip.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libz.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5_hl_cpp.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5_cpp.a
 
-INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
-DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
+    LIBS += $$PWD/../HDF5/Release/libszip.a
+    LIBS += $$PWD/../HDF5/Release/libz.a
+    LIBS += $$PWD/../HDF5/Release/libhdf5.a
+    LIBS += $$PWD/../HDF5/Release/libhdf5_hl_cpp.a
+    LIBS += $$PWD/../HDF5/Release/libhdf5_cpp.a
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
-else:unix: LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
+    INCLUDEPATH += $$PWD/../HDF5/include
+    DEPENDPATH += $$PWD/../HDF5/Release
+}
+else:unix:CONFIG(debug, debug|release) {
+    message(debug1)
 
-INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
-DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
+    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libszip_debug.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libz_debug.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_debug.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_hl_cpp_debug.a
+    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_cpp_debug.a
+
+    LIBS += $$PWD/../HDF5/Debug/libszip_debug.a
+    LIBS += $$PWD/../HDF5/Debug/libz_debug.a
+    LIBS += $$PWD/../HDF5/Debug/libhdf5_debug.a
+    LIBS += $$PWD/../HDF5/Debug/libhdf5_hl_cpp_debug.a
+    LIBS += $$PWD/../HDF5/Debug/libhdf5_cpp_debug.a
+
+    INCLUDEPATH += $$PWD/../HDF5/include
+    DEPENDPATH += $$PWD/../HDF5/Debug
+}
+
+
+
+

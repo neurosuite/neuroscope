@@ -546,6 +546,12 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent* event);
 
 private:
+
+    void drawTracesMultiColumns(QPainter& painter, int limit, int nbSamples, int nbSamplesToDraw);
+    void drawTracesSingleColumn(QPainter& painter, int limit, int nbSamples, int nbSamplesToDraw);
+    void drawTracesDrawEvents(QPainter& painter, int X, bool bIsMulti);
+
+
     // Amplitude maximal of theta in microvolts, e.g. 400 uV
     static const float U_THETA;
 
@@ -586,13 +592,13 @@ private:
     QList<int>& channelOffsets;
 
     /**List of the factors use to calculate the ordinate value to been drawn.
-    * The factor equals 0.75 raised to the power of the gain (Yworld = alpha.factor.Ydata).
-    */
+  * The factor equals 0.75 raised to the power of the gain (Yworld = alpha.factor.Ydata).
+  */
     QList<float> channelFactors;
 
     /**List of the exponents used to compute the drawing gain for each channel.
-    * The actual gain is 0.75 raised to the power of gain.
-    */
+  * The actual gain is 0.75 raised to the power of gain.
+  */
     QList<int>& gains;
 
     /**Size in pixels corresponding to the vertical space allocated to a trace.*/
@@ -705,13 +711,13 @@ private:
     float screenGain;
 
     /**Factor, in pixels by uV, to convert the data in uV to data
-    * in pixels of the world (Yworld = alpha.factor.Ydata).
+  * in pixels of the world (Yworld = alpha.factor.Ydata).
     * This factor is computed using the amplitude maximal of theta U_THETA.
-    */
+  */
     float alpha;
 
     /**List of the gains display next to each drawn channel.
-    */
+  */
     QList<float> channelDisplayGains;
 
     int nbClusters;

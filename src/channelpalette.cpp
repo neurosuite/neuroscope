@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QLayout>
 #include <QToolTip>
+#include <QDebug>
 
 #include <QPixmap>
 #include <QBitmap>
@@ -199,6 +200,9 @@ void ChannelPalette::setChannelLists()
             drawItem(painter,&pixmap,color,false,false);
             QIcon icon(pixmap);
 
+            // RHM saw that it died here ->at(
+            // channelLabels had zero items
+
             new ChannelIconViewItem(icon,channelLabels->at(channelId),channelId,iconviewDict[groupId]);
         }
     }
@@ -363,6 +367,8 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
         int groupId = (*channelsGroups)[*channelIterator];
 
         iconView = iconviewDict[QString::number(groupId)];
+        //if (iconView) {
+    // !!! RHM This is null?
         QList<QListWidgetItem*>lstItem = iconView->findItems(*channelIterator);
         if(!lstItem.isEmpty()) {
             QListWidgetItem *item = lstItem.first();
@@ -381,6 +387,7 @@ void ChannelPalette::updateShowHideStatus(const QList<int>& channelIds,bool show
             if(selected)
                 selectedIds.append(*channelIterator);
         }
+       // }
     }
 
 
