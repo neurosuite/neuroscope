@@ -7,7 +7,14 @@
  *                                                                         *
  ***************************************************************************/
 
-
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #include <QtDebug>
 #include "nwbeventsprovider.h"
 #include "nwbreader.h"
@@ -49,7 +56,7 @@ int NWBEventsProvider::loadData(){
     for(eventIndex=0; eventIndex < this->nbEvents; ++eventIndex) {
 
         // Save time and label of event
-        tempTimestamps[eventIndex]  = nwbEvents->arrayData[eventIndex]/1000;// timestamp;
+        tempTimestamps[eventIndex]  = nwbEvents->arrayData[eventIndex];// 11 Feb 2020 RHM removed 1000 /1000;// timestamp;
         tempDescription[eventIndex] = label;
 
         // Update event category count
@@ -80,7 +87,8 @@ int NWBEventsProvider::loadData(){
     previousEndIndex = this->nbEvents;
     // RHM !!!! Added 1000 and then removed it
     previousEndTime = static_cast<long>(floor(0.5 + this->timeStamps(1, this->nbEvents)));
-    fileMaxTime = 1000* previousEndTime; //RHM remove the 1000!!!!!!!!
+    fileMaxTime = /*1000* */ previousEndTime; //RHM remove the 1000!!!!!!!!
+    // 11 Feb 2020 RHM removed 1000
 
     return OK;
 }

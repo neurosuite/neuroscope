@@ -217,7 +217,7 @@ DISTFILES += \
 win32:CONFIG(release, debug|release) {
     INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
     DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
-    LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/release/ -llibneurosuite
+    LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release/ -llibneurosuite
 }
 else:win32:CONFIG(debug, debug|release) {
     INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release

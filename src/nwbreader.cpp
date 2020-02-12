@@ -1,3 +1,12 @@
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #include "nwbreader.h"
 
 #include <QDebug>
@@ -107,25 +116,11 @@ long NWBReader::GetNWBLength( )
 // Read all channels for a given time range
 int NWBReader::ReadVoltageTraces(int *data_out, int iStart, long nLength, int nChannels)
 {
-    // !!! Put these offsets back
-    //if (iStart > 0)
-     //       iStart = 0;
-    hsize_t startOffsets[2]{static_cast<unsigned long>(iStart),0};   // Start offsets of hyperslab row, column
-    hsize_t count[2]{static_cast<unsigned long>(nLength), static_cast<unsigned long>(nChannels) };  // Block count
-
     std::string DSN = NWB_Locations.getVoltageDataSetName();
-// Exception here
-    try
-    {
-        HDF5_Utilities.ReadHyperSlab<int>(data_out, PredType::NATIVE_INT, startOffsets, count, hsFileName, DSN);
-    }
-    catch (int e)
-    {
-        cout << "An exception occurred. (ReadVoltageTraces) Exception Nr. " << e << '\n';
-    }
-
+    HDF5_Utilities.Read2DBlockDataNamed(data_out, PredType::NATIVE_INT, iStart, nLength, nChannels, hsFileName, DSN);
     return 0;
 }
+
 
 
 int NWBReader::ReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels)
@@ -163,7 +158,7 @@ void NWBReader::ReadBlockData2A(Array<short> &retrieveData, int iStart, long nLe
     // Modified by RHM to read Neurodata Without Borders format
     int *data_out = new int[static_cast<unsigned long long>(nbValues)];
 
-    HDF5_Utilities.ReadBlockDataNamed<int>(data_out, PredType::NATIVE_INT, iStart, nLength, nChannels, hsFileName, DSN);
+    HDF5_Utilities.Read2DBlockDataNamed<int>(data_out, PredType::NATIVE_INT, iStart, nLength, nChannels, hsFileName, DSN);
 
     long k = 0;
     for (int i = 0; i < nLength; ++i)
@@ -257,6 +252,12 @@ try {
         // Get the dimension size of each dimension in the dataspace
         hsize_t dims_out[2];
         int ndims = dataspace.getSimpleExtentDims(dims_out, nullptr);
+        //if (ndims <2)
+        //{
+        //    delete dataset;
+        //    delete file;
+        //    return nad;
+        //}
 
         int nbChannels = static_cast<int>(dims_out[1]);
         long length = static_cast<long>(dims_out[0]);       /*qlonglong*/
@@ -265,7 +266,7 @@ try {
         std::cout << "nbChannels " << nbChannels << " length " << length << " resolution " << resolution << std::endl;
 
         double *data_out = new double[static_cast<unsigned long long>(length)];
-        HDF5_Utilities.ReadBlockDataNamed<double>(data_out, PredType::NATIVE_DOUBLE, 0, length, 1, hsFileName, DSN);
+        HDF5_Utilities.Read2DBlockDataNamed<double>(data_out, PredType::NATIVE_DOUBLE, 0, length, 1, hsFileName, DSN);
         nad  = new NamedArray<double>();
         for (int i=0; i<length; ++i)
         {
@@ -345,17 +346,13 @@ QList<NamedArray<double>>  NWBReader::ReadSpikeShank(std::string nwb_spike_times
             OneNad.arrayData.append(spikeTimes[ndxLower + ii]);
         }
         OneNad.strName = spikeNames[idx];
-
-        // !!! RHM, check if the copy is deep enough
         nad.append(OneNad);
 
-
         // print debugging information
-        std::cout << nad[idx].strName << " ";
-        for (int jj=0; jj < 8; ++jj)
-                std::cout << nad[idx].arrayData[jj] << " ";
-        std::cout << std::endl;
-
+        //std::cout << nad[idx].strName << " ";
+        //for (int jj=0; jj < 8; ++jj)
+        //        std::cout << nad[idx].arrayData[jj] << " ";
+        //std::cout << std::endl;
     }
 
     if (spikeTimes)

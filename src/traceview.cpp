@@ -1189,6 +1189,16 @@ void TraceView::updateWindow(){
     drawContentsMode = REDRAW;
 }
 
+// !!!! Test function to be removed
+void setPaintItGray(QPainter& painter, int iLevel)
+{
+    QColor color;
+    int greyvalue = qGray(iLevel,iLevel,iLevel);//color.rgb());
+    color.setHsv(0,0,greyvalue);
+    QPen pen(color,2);
+    pen.setCosmetic(true);
+    painter.setPen(pen);
+}
 
 void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int channelId,int nbSamplesToDraw,bool mouseMoveEvent){
     bool areClustersToDraw = false;
@@ -1202,6 +1212,7 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
     }
 
     if (!waveforms || (waveforms && !areClustersToDraw) || (waveforms && areClustersToDraw && mouseMoveEvent) || (waveforms && areClustersToDraw && !selectedClusters.contains(clusterFileId))){
+        //setPaintItGray(painter, 200); // !!!! Remove this
         int start = 1;
         int stop = static_cast<int>(floor(downSampling + 0.5));//included
         long min = data(1,channelId + 1);
@@ -1255,6 +1266,7 @@ void TraceView::drawTrace(QPainter& painter,int limit,int basePosition,int X,int
         }
     }
     else{
+        //setPaintItGray(painter, 100); // !!!! Remove this
         //Array containing 4 lines: sample starting index, abscissa, ordinate min, ordinate max
         Array<dataType> traceInfo(4,nbSamplesToDraw);
 

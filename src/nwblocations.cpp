@@ -1,5 +1,15 @@
 #include "nwblocations.h"
 
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+// Here are some example locations that were used during development and testing.
 //<nwb_dataset_name>/processing/ecephys/LFP/lfp/data</nwb_dataset_name>
 //<nwb_sampling_name>/processing/ecephys/LFP/lfp/starting_time</nwb_sampling_name>
 //<nwb_voltage_electrodes>/processing/ecephys/LFP/lfp/electrodes</nwb_voltage_electrodes>
