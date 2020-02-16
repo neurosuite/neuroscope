@@ -390,7 +390,7 @@ int NeuroscopeDoc::openNWBDocument(const QString& url)
         // Extract important information from file
         this->channelNb = nwbTracesProvider->getNbChannels();
         this->samplingRate = nwbTracesProvider->getSamplingRate();
-        this->resolution = nwbTracesProvider->getResolution();;
+        this->resolution = nwbTracesProvider->getResolution();
         this->channelLabels = nwbTracesProvider->getLabels();
 
         //extensionSamplingRates.insert(extension,samplingRate);
@@ -431,6 +431,8 @@ int NeuroscopeDoc::openNWBDocument(const QString& url)
             false // show events in position view
         );
 
+        getAssociatedFileNames();
+
         return OK;
 }
 
@@ -451,7 +453,7 @@ int NeuroscopeDoc::openNSXDocument(const QString& url)
     // Extract important information from file
     this->channelNb = nsxTracesProvider->getNbChannels();
     this->samplingRate = nsxTracesProvider->getSamplingRate();
-    this->resolution = nsxTracesProvider->getResolution();;
+    this->resolution = nsxTracesProvider->getResolution();
     this->channelLabels = nsxTracesProvider->getLabels();
 
     //extensionSamplingRates.insert(extension,samplingRate);
