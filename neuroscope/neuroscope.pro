@@ -87,13 +87,13 @@ SOURCES += \
     ../src/hdf5utilities.cpp \
     ../src/nwblocations.cpp \
     ../src/nwbreader.cpp \
-    ../src/nevclustersprovider.cpp \
-    ../src/neveventsprovider.cpp \
-    ../src/nsxtracesprovider.cpp \
+ #   ../src/nevclustersprovider.cpp \
+ #   ../src/neveventsprovider.cpp \
+ #   ../src/nsxtracesprovider.cpp \
     ../src/nwbtracesprovider.cpp \
-    ../src/cerebustraceprovider.cpp \
-    ../src/cerebusclustersprovider.cpp \
-    ../src/cerebuseventsprovider.cpp \
+#    ../src/cerebustraceprovider.cpp \
+#    ../src/cerebusclustersprovider.cpp \
+#    ../src/cerebuseventsprovider.cpp \
     ../src/nwbeventsprovider.cpp \
     ../src/nwbclustersprovider.cpp
 
@@ -224,7 +224,14 @@ else:win32:CONFIG(debug, debug|release) {
     DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
     LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
 }
+else: macx: {
+    LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug/ -llibneurosuite.1.0.0
+    INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug
+    DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug
+}
 else:unix: LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
+
+
 
 
 win32:CONFIG(release, debug|release){
@@ -239,6 +246,20 @@ else:win32:CONFIG(debug, debug|release){
   INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src/cbhwlib
   DEPENDPATH += $$PWD/../../Cerebus/libcbsdk/build/src/debug
 }
+
+unix:CONFIG(release, debug|release){
+  LIBS += -L$$PWD/../../Cerebus/libcbsdk/build/src/release/ -lcbsdk
+  INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src
+  INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src/cbhwlib
+  DEPENDPATH += $$PWD/../../Cerebus/libcbsdk/build/src/Release
+}
+else:unix:CONFIG(debug, debug|release){
+  LIBS += -L$$PWD/../../Cerebus/libcbsdk/build/src/debug/ -lcbsdk
+  INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src
+  INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src/cbhwlib
+  DEPENDPATH += $$PWD/../../Cerebus/libcbsdk/build/src/debug
+}
+
 
 
 win32:CONFIG(debug, debug|release){
@@ -263,40 +284,50 @@ else:win32:CONFIG(release, debug|release){
 unix:CONFIG(release, debug|release) {
     message(Release1)
 
-    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libszip.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libz.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5_hl_cpp.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Release/libhdf5_cpp.a
+    HDF5_PATH = $$PWD/../../HDF5/MACFiles/Release/
 
-    LIBS += $$PWD/../HDF5/Release/libszip.a
-    LIBS += $$PWD/../HDF5/Release/libz.a
-    LIBS += $$PWD/../HDF5/Release/libhdf5.a
-    LIBS += $$PWD/../HDF5/Release/libhdf5_hl_cpp.a
-    LIBS += $$PWD/../HDF5/Release/libhdf5_cpp.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libszip.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libz.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5_hl_cpp.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5_cpp.a
 
-    INCLUDEPATH += $$PWD/../HDF5/include
-    DEPENDPATH += $$PWD/../HDF5/Release
+    LIBS += $${HDF5_PATH}/libszip.a
+    LIBS += $${HDF5_PATH}/libz.a
+    LIBS += $${HDF5_PATH}/libhdf5.a
+    LIBS += $${HDF5_PATH}/libhdf5_hl_cpp.a
+    LIBS += $${HDF5_PATH}/libhdf5_cpp.a
+
+    INCLUDEPATH += $$PWD/../../HDF5/MACFiles/include/
+    DEPENDPATH += $${HDF5_PATH}
 }
 else:unix:CONFIG(debug, debug|release) {
     message(debug1)
 
-    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libszip_debug.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libz_debug.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_debug.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_hl_cpp_debug.a
-    PRE_TARGETDEPS += $$PWD/../HDF5/Debug/libhdf5_cpp_debug.a
+    HDF5_PATH = $$PWD/../../HDF5/MACFiles/Debug/
 
-    LIBS += $$PWD/../HDF5/Debug/libszip_debug.a
-    LIBS += $$PWD/../HDF5/Debug/libz_debug.a
-    LIBS += $$PWD/../HDF5/Debug/libhdf5_debug.a
-    LIBS += $$PWD/../HDF5/Debug/libhdf5_hl_cpp_debug.a
-    LIBS += $$PWD/../HDF5/Debug/libhdf5_cpp_debug.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libszip_debug.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libz_debug.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5_debug.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5_hl_cpp_debug.a
+    PRE_TARGETDEPS += $${HDF5_PATH}/libhdf5_cpp_debug.a
 
-    INCLUDEPATH += $$PWD/../HDF5/include
-    DEPENDPATH += $$PWD/../HDF5/Debug
+    LIBS += $${HDF5_PATH}/libszip_debug.a
+    LIBS += $${HDF5_PATH}/libz_debug.a
+    LIBS += $${HDF5_PATH}/libhdf5_debug.a
+    LIBS += $${HDF5_PATH}/libhdf5_hl_cpp_debug.a
+    LIBS += $${HDF5_PATH}/libhdf5_cpp_debug.a
+
+    INCLUDEPATH += $${HDF5_PATH}/include
+    DEPENDPATH += $${HDF5_PATH}/Debug
 }
 
 
+osx:CONFIG(release, debug|release) {
+    CONFIG += app_bundle
+    mySetOfExtraFiles.files = $$DISTFILES
+    mySetOfExtraFiles.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += mySetOfExtraFiles
+}
 
 

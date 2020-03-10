@@ -35,13 +35,18 @@
 //include files for c/c++ libraries
 #include <math.h>
 
+
 #if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
-#define fseeko64(stream, offset, whence) _fseeki64(stream, offset, whence)
-#define ftello64(stream) _ftelli64(stream)
+    #define fseeko64(stream, offset, whence) _fseeki64(stream, offset, whence)
+    #define ftello64(stream) _ftelli64(stream)
+#elif defined(__APPLE__)
+    #define fseeko64(stream, offset, whence) fseeko(stream, offset, whence)
 #else
-#define fseeko(stream, offset, whence) fseeko64(stream, offset, whence)
-#define ftello(stream) ftello64(stream)
+    #define fseeko(stream, offset, whence) fseeko64(stream, offset, whence)
+    #define ftello(stream) ftello64(stream)
 #endif
+
+
 
 TracesProvider::TracesProvider(const QString &fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset)
     : DataProvider(fileUrl),
