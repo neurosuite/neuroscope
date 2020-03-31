@@ -2862,22 +2862,28 @@ void NeuroscopeDoc::setClusterPosition(int position){
     }
 }
 
-NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QString &eventUrl,NeuroscopeView*activeView){
+NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QString &eventUrl,NeuroscopeView*activeView, int iNWBIndex){
     //Check that the selected file is a event file
     QString fileName = eventUrl;
     EventsProvider* eventsProvider(nullptr /*NULL*/);
 
     if(fileName.indexOf(".nwb") != -1) {
-        eventsProvider = new NWBEventsProvider(eventUrl, eventPosition);
+        eventsProvider = new NWBEventsProvider(eventUrl, eventPosition, iNWBIndex);
     } else if(fileName.indexOf(".nev") != -1) {
         eventsProvider = new NEVEventsProvider(eventUrl, eventPosition);
     } else if(fileName.indexOf(".evt") != -1){
         eventsProvider = new EventsProvider(eventUrl, samplingRate, eventPosition);
     } else {
         return INCORRECT_FILE;
-
     }
+
     QString name = eventsProvider->getName();
+    // NWB hack to have separate event names for the dictionary
+    if (iNWBIndex > 0)
+    {
+        // 0..9 at best. More than 10 event "files" may truncate
+        name.replace(2, 1, QString::number(iNWBIndex));
+    }
 
     //The name should contains 3 characters with at least one none digit character.
     if(name.length() != 3 || name.contains(QRegExp("\\d{3}"))){
@@ -2907,7 +2913,12 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
     lastLoadedProvider = name;
     lastEventProviderGridX = eventsProvider->getDescriptionLength();
     providers.insert(name,eventsProvider);
-    providerUrls.insert(name,eventUrl);
+
+    QString NWB_Hack = eventUrl;
+    if (iNWBIndex >0)
+        NWB_Hack += QString::number(iNWBIndex);
+    providerUrls.insert(name, NWB_Hack /*eventUrl*/);
+
 
     ItemColors* eventColors = new ItemColors();
     QList<int> eventsToSkip;

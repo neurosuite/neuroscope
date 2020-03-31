@@ -81,3 +81,24 @@ std::string NWBLocations::getGenericText(std::string strLabel, std::string strDe
     }
     return "";
 }
+
+QList<std::string> NWBLocations::getListGenericTexts(std::string strLabel, std::string strDefault)
+{
+    NeuroscopeXmlReader reader = NeuroscopeXmlReader();
+    if(reader.parseFile(strLoc,NeuroscopeXmlReader::PARAMETER)){
+        QString qsLabel = QString::fromUtf8(strLabel.c_str());
+        QString qsDefault = QString::fromUtf8(strDefault.c_str());
+
+        QList<QString> DSNs = reader.getListGenericTexts(qsLabel, qsDefault);
+
+        QList<std::string> lstDSNs = QList<std::string>();
+        for(QString ss : DSNs)
+        {
+            std::string utf8_text = ss.toUtf8().constData();
+            lstDSNs.append(utf8_text);
+        }
+        return lstDSNs;
+    }
+    return QList<std::string>();
+}
+

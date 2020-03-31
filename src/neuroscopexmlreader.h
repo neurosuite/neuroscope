@@ -229,7 +229,7 @@ public:
     QString getNWBSamplingName() const;
     QString getNWBDataSetName() const;
     QString getGenericText(QString qsTag, QString defaultTextIn) const;
-
+    QList<QString> getListGenericTexts(QString qsTag, QString defaultTextIn)const;
 
 private:
     fileType type;

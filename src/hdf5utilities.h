@@ -57,6 +57,7 @@ public:
             //std::cout << "ReadHyperSlab " << std::endl;
 
             //Turn off the auto-printing when failure occurs so that we can handle the errors appropriately
+            // RHM believes that exceptions were caught within the HDF5 libraries, so this setting did not help much.
             H5::Exception::dontPrint();
 
 

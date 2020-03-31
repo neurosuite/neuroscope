@@ -54,7 +54,7 @@
 #include "itempalette.h"
 #include "eventsprovider.h"
 #include "qhelpviewer.h"
-
+#include "nwblocations.h"
 
 NeuroscopeApp::NeuroscopeApp()
     :QMainWindow(nullptr /*0*/)
@@ -540,17 +540,19 @@ void NeuroscopeApp::initActions()
 
     settingsMenu->addSeparator();
 
+
     calibrationBar = settingsMenu->addAction(tr("&Display Calibration"));
     calibrationBar->setCheckable(true);
     connect(calibrationBar,SIGNAL(triggered()), this,SLOT(slotShowCalibration()));
 
     calibrationBar->setChecked(false);
 
-
     settingsMenu->addSeparator();
-    mPreferenceAction = settingsMenu->addAction(tr("Preferences"));
+    // RHM thinks that the menu name "Preferences" was not allowed on the Mac. Windows was fine.
+    mPreferenceAction = settingsMenu->addAction(tr("...Preferences"));
     mPreferenceAction->setIcon(QIcon(":/shared-icons/configure"));
     connect(mPreferenceAction,SIGNAL(triggered()), this,SLOT(executePreferencesDlg()));
+
 
     //Help menu
     QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -2994,7 +2996,7 @@ void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& sel
             QString providerName = groupIterator.key();
             QList<int> clusterIds = groupIterator.value();
             NeuroscopeView* view = activeView();
-            qDebug()<<" void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& selection){"<<selection;
+            //qDebug()<<" void NeuroscopeApp::slotUpdateShownClusters(const QMap<QString,QList<int> >& selection){"<<selection;
             view->shownClustersUpdate(providerName,clusterIds);
         }
     }
@@ -3077,6 +3079,22 @@ void NeuroscopeApp::loadPositionFile(const QString& url){
 void NeuroscopeApp::loadEventFiles(const QStringList& urls){
 
     NeuroscopeView* view = activeView();
+
+    // if NWB, load it differently - multiple events in one file
+    if(urls[0].indexOf(".nwb") != -1) {
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        NWBLocations *NWB_Locations = new NWBLocations(urls[0].toStdString());
+        QList<std::string> lstDSNs = NWB_Locations->getListGenericTexts("nwb_event_times", "");
+        for (int jj=0; jj < lstDSNs.count(); ++jj)
+        {
+            //Create the provider
+            int returnStatus = doc->loadEventFile(urls[0],view, jj);
+        }
+        QApplication::restoreOverrideCursor();
+        return;
+    }
+    // end NWB block
+
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     //Loop on the files

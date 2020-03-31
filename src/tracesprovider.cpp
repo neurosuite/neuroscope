@@ -340,7 +340,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         dataFile.close();
     }
 
-    qDebug() << "About to emit RHM";
+    //qDebug() << "About to emit RHM";
     //Send the information to the receiver.
     emit dataReady(data,initiator);
 }

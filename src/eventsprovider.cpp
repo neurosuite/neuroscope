@@ -48,7 +48,7 @@ EventsProvider::EventsProvider(const QString &fileUrl, double currentSamplingRat
 }
 
 EventsProvider::~EventsProvider(){
-    qDebug()<<"in ~EventsProvider "<<endl;
+    //qDebug()<<"in ~EventsProvider "<<endl;
 }
 
 int EventsProvider::loadData(){

@@ -7,6 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
+// The HDF5Utilities class provides a few convenient functions to read data from an HDF5 file.
 #include "hdf5utilities.h"
 
 
@@ -29,14 +30,14 @@ bool HDF5Utilities::bTypesMatch(PredType pType, H5T_class_t type_class)
     }
     else if (pType == PredType::NATIVE_DOUBLE)
     {
-        return (type_class == H5T_FLOAT); // Is this correct? !!!! RHM
+        return (type_class == H5T_FLOAT); // ToDo: This set should be checked.
     }
     else if (pType == PredType::STD_REF_OBJ)
     {
         return (type_class == H5T_REFERENCE);
     }
     else {
-        return false; // Programmer has not yet mapped this case
+        return false; // Programmer has not yet mapped this case. Feel free to add more.
     }
 }
 
@@ -44,13 +45,13 @@ bool HDF5Utilities::bTypesMatch(PredType pType, H5T_class_t type_class)
 
 
 ///
-/// \brief HDF5Utilities::Read1DArrayStr read an array of string (character) data
+/// \brief HDF5Utilities::Read1DArrayStr read an array of string (character) data from references.
 /// \param data_out: the string array that is allocated, filled, and returned.
 /// \param lLength: length of the string array.
 /// \param hsFileName: name of the HDF5 NWB file
 /// \param DSN: location within the file to read the string array
 /// \return 0 on success and non-zero on error
-///
+/// We may not be able to use the template Read1DArray function, since here we jump locations for each string.
 int HDF5Utilities::Read1DArrayStr(std::string **data_out, long &lLength, std::string hsFileName, std::string DSN)
 {
     H5File file = H5File(hsFileName.c_str(), H5F_ACC_RDONLY);
@@ -78,7 +79,7 @@ int HDF5Utilities::Read1DArrayStr(std::string **data_out, long &lLength, std::st
         hobj_ref_t* rbuf = new hobj_ref_t[static_cast<unsigned long long>(lLength)];
 
         try {
-            // Read selection from disk
+            // Read the reference buffer selection from disk
             dataset.read(rbuf, PredType::STD_REF_OBJ);
         }
         catch (...) {
@@ -86,6 +87,7 @@ int HDF5Utilities::Read1DArrayStr(std::string **data_out, long &lLength, std::st
             return 3;
         }
 
+        // Now read the individual string from the reference locations
         char sz180[180];
         for (int ii=0; ii< lLength; ++ii)
         {
@@ -151,8 +153,6 @@ int HDF5Utilities::GetDataSet2DSizes(long &lDim0, long &lDim1, DataSet *dataset)
     DataSpace dataspace = dataset->getSpace();
 
     // Get the dimension size of each dimension in the dataspace
-    //int rank = dataspace.getSimpleExtentNdims();
-    //cout << "rank of dataspace: " << rank  << endl;
     hsize_t dims_out[2];
     int ndims = dataspace.getSimpleExtentDims(dims_out, nullptr);
     if (ndims < 2)
@@ -174,7 +174,7 @@ int HDF5Utilities::GetDataSet2DSizes(long &lDim0, long &lDim1, DataSet *dataset)
 /// \param resolution
 /// \param type_class
 /// \param dataset
-/// \return o on success and non-zero on failure
+/// \return 0 on success and non-zero on failure
 ///
 int HDF5Utilities::GetDataSetSizes(long &lDim0, long &lDim1, int &resolution, H5T_class_t &type_class, DataSet *dataset)
 {

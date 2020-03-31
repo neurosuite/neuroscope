@@ -3744,7 +3744,7 @@ void TraceView::removeClusterProvider(const QString &name, bool active){
 
 
 void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){
-    qDebug()<<" void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){"<<name;
+    //qDebug()<<" void TraceView::showClusters(const QString &name, const QList<int> &clustersToShow){"<<name;
     ClusterData* clusterData = clustersData[name];
 
     QList<int> clusters;

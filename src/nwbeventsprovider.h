@@ -15,7 +15,7 @@ class NWBEventsProvider : public EventsProvider  {
     Q_OBJECT
 
 public:
-    NWBEventsProvider(const QString &fileUrl, int position);
+    NWBEventsProvider(const QString &fileUrl, int position, int iNWBIndex=0);
     ~NWBEventsProvider();
 
     /**Loads the event ids and the corresponding spike time.
@@ -24,6 +24,8 @@ public:
     virtual int loadData();
 
 private:
+    int iNWBIndex;
+    QString realFileName;
 
 };
 

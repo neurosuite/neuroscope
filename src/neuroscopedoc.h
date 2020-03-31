@@ -525,7 +525,7 @@ public:
     * @param activeView the view in which the change has to be immediate.
     * @return an OpenSaveCreateReturnMessage enum giving the load status.
     */
-    OpenSaveCreateReturnMessage loadEventFile(const QString &eventUrl,NeuroscopeView* activeView);
+    OpenSaveCreateReturnMessage loadEventFile(const QString &eventUrl,NeuroscopeView* activeView, int iNWBIndex=0);
 
     /**Loads the event file store in the session file and identified by @p eventUrl.
     * @param eventUrl url of the event file to load.

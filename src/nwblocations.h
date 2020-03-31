@@ -22,6 +22,7 @@ public:
     std::string getSamplingName();
 
     std::string getGenericText(std::string strLabel, std::string strDefault = "");
+    QList<std::string> getListGenericTexts(std::string strLabel, std::string strDefault);
 
 private:
     NWBLocations(){} // defensive move

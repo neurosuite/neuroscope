@@ -140,7 +140,7 @@ void NWBTracesProvider::retrieveData(long start, long end, QObject* initiator, l
         }
     }
 
-    qDebug() << "About to emit RHM";
+    //qDebug() << "About to emit RHM";
     //Send the information to the receiver.
     emit dataReady(data,initiator);
 

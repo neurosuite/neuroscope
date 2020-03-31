@@ -43,7 +43,7 @@ public:
     QList<NamedArray<double>> ReadSpikeShank(std::string nwb_spike_times, std::string nwb_spike_times_index, std::string nwb_units_electrode_group);
     QList<NamedArray<double>> ReadSpikeShank();
 
-    NamedArray<double> *  ReadEvents();
+    NamedArray<double> *  ReadEvents(int iPos);
 
     void ReadBlockData2A(Array<short> &retrieveData, int iStart, long nLength, int nChannels, std::string DSN);
 
@@ -56,6 +56,7 @@ private:
     HDF5Utilities HDF5_Utilities;
 
     int ReadVoltageTraces(int *data_out, int iStart, long nLength, int nChannels);
+    NamedArray<double> *  ReadOneEvent(std::string DSN, H5::H5File* file);
 };
 
 

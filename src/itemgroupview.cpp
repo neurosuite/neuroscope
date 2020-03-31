@@ -53,7 +53,7 @@ ItemGroupView::ItemGroupView(const QColor& backgroundColor,QWidget* parent)
 
 ItemGroupView::~ItemGroupView()
 {
-    qDebug()<<"in ~ItemGroupView()";
+    //qDebug()<<"in ~ItemGroupView()";
 }
 
 void ItemGroupView::setIconView(ItemIconView *view){

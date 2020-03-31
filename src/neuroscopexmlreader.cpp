@@ -79,7 +79,7 @@ QString NeuroscopeXmlReader::getGenericText(QString qsTag, QString defaultTextIn
             QDomElement e = n.toElement(); // try to convert the node to an element.
             if (!e.isNull()) {
                 QString tag = e.tagName();
-                qDebug() << tag << " " << qsTag << "\n";
+                //qDebug() << tag << " " << qsTag << "\n";
                 if (tag == qsTag) {
                     defaultText = e.text();
                     return defaultText;
@@ -90,6 +90,29 @@ QString NeuroscopeXmlReader::getGenericText(QString qsTag, QString defaultTextIn
     }
 
     return defaultText;
+}
+
+// RHM
+QList<QString> NeuroscopeXmlReader::getListGenericTexts(QString qsTag, QString defaultTextIn)const {
+    qDebug() << "getListGenericTexts()" << " " << qsTag << "\n";
+    QList<QString> lstNames = QList< QString >();
+
+    QDomNode n = documentNode.firstChild();
+    if (!n.isNull()) {
+        while (!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if (!e.isNull()) {
+                QString tag = e.tagName();
+                //qDebug() << tag << " " << qsTag << "\n";
+                if (tag == qsTag) {
+                    lstNames.append(e.text());
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return lstNames;
 }
 
 

@@ -19,9 +19,10 @@
 #include "nwbeventsprovider.h"
 #include "nwbreader.h"
 
-NWBEventsProvider::NWBEventsProvider(const QString &fileUrl, int position)
-    : EventsProvider(".nwb.evt", 0, position){
-    this->fileName = fileUrl;
+NWBEventsProvider::NWBEventsProvider(const QString &fileUrl, int position, int iNWBIndex)
+    : EventsProvider(".nw"+ QString::number(iNWBIndex) +".evt", 0, position){
+    realFileName = fileUrl;
+    this->iNWBIndex = iNWBIndex;
 }
 
 NWBEventsProvider::~NWBEventsProvider() {
@@ -33,8 +34,8 @@ int NWBEventsProvider::loadData(){
     events.setSize(0,0);
     timeStamps.setSize(0,0);
 
-    NWBReader nwbr(this->fileName.toUtf8().constData());
-    NamedArray<double> *nwbEvents = nwbr.ReadEvents();
+    NWBReader nwbr(realFileName.toUtf8().constData());
+    NamedArray<double> *nwbEvents = nwbr.ReadEvents(iNWBIndex);
     if (!nwbEvents)
         return OPEN_ERROR; // INCORRECT_CONTENT;
 
@@ -76,8 +77,8 @@ int NWBEventsProvider::loadData(){
     // Update internal struture
     this->updateMappingAndDescriptionLength();
 
-    //for (int jj=1; jj <= this->nbEvents; ++jj)
-    //    qDebug() << "time stamps " << jj << " " << this->timeStamps(1, jj) << " ";
+    for (int jj=1; jj <= this->nbEvents; ++jj)
+        qDebug() << "time stamps " << jj << " " << this->timeStamps(1, jj) << " ";
 
 
 
