@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets printsupport xml
+QT       += core gui widgets xml printsupport
 
 
 TARGET = neuroscope
@@ -87,13 +87,7 @@ SOURCES += \
     ../src/hdf5utilities.cpp \
     ../src/nwblocations.cpp \
     ../src/nwbreader.cpp \
- #   ../src/nevclustersprovider.cpp \
- #   ../src/neveventsprovider.cpp \
- #   ../src/nsxtracesprovider.cpp \
     ../src/nwbtracesprovider.cpp \
-#    ../src/cerebustraceprovider.cpp \
-#    ../src/cerebusclustersprovider.cpp \
-#    ../src/cerebuseventsprovider.cpp \
     ../src/nwbeventsprovider.cpp \
     ../src/nwbclustersprovider.cpp
 
@@ -213,7 +207,7 @@ DISTFILES += \
     ../src/CMakeLists.txt \
     ../src/neuroscope.rc
 
-
+# Link the libneurosuite library
 win32:CONFIG(release, debug|release) {
     INCLUDEPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
     DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug
@@ -224,16 +218,23 @@ else:win32:CONFIG(debug, debug|release) {
     DEPENDPATH += $$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Release/release
     LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/debug/ -llibneurosuite
 }
-else: macx: {
-    LIBS += -L$$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug/ -llibneurosuite.1.0.0
-    INCLUDEPATH += $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug
-    DEPENDPATH += $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug
+else: macx:CONFIG(debug, debug|release) {
+    LIBNS_PATH = $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Debug/Debug
+    LIBS += -L$${LIBNS_PATH}/ -llibneurosuite.1.0.0
+    INCLUDEPATH += $${LIBNS_PATH}
+    DEPENDPATH += $${LIBNS_PATH}
+}
+else: macx:CONFIG(release, debug|release) {
+    LIBNS_PATH = $$PWD/../../libneurosuite/build-libneurosuite-Unnamed_cfaaec-Release/Release
+    LIBS += -L$${LIBNS_PATH}/ -llibneurosuite.1.0.0
+    INCLUDEPATH += $${LIBNS_PATH}
+    DEPENDPATH += $${LIBNS_PATH}
 }
 else:unix: LIBS += -L$$PWD/../../../Neurosuite/libneurosuite/build-libneurosuite-Desktop_Qt_5_12_2_MSVC2017_64bit-Debug/ -llibneurosuite
 
 
 
-
+# Link the Cerebus library
 win32:CONFIG(release, debug|release){
   LIBS += -L$$PWD/../../Cerebus/libcbsdk/build/src/release/ -lcbsdk
   INCLUDEPATH += $$PWD/../../Cerebus/libcbsdk/src
@@ -261,7 +262,7 @@ else:unix:CONFIG(debug, debug|release){
 }
 
 
-
+# Link the HDF5 library
 win32:CONFIG(debug, debug|release){
     HDF5_PATH = $$PWD/../../HDF5/Debug/
 
@@ -279,10 +280,8 @@ else:win32:CONFIG(release, debug|release){
     DEPENDPATH += $$PWD/../HDF5/include/
 }
 
-
-
 unix:CONFIG(release, debug|release) {
-    message(Release1)
+    message(Release unix hdf5)
 
     HDF5_PATH = $$PWD/../../HDF5/MACFiles/Release/
 
@@ -302,7 +301,7 @@ unix:CONFIG(release, debug|release) {
     DEPENDPATH += $${HDF5_PATH}
 }
 else:unix:CONFIG(debug, debug|release) {
-    message(debug1)
+    message(debug unix hdf5)
 
     HDF5_PATH = $$PWD/../../HDF5/MACFiles/Debug/
 
@@ -322,12 +321,13 @@ else:unix:CONFIG(debug, debug|release) {
     DEPENDPATH += $${HDF5_PATH}/Debug
 }
 
-
+# Make an attempt to bundle the app on the Mac
 osx:CONFIG(release, debug|release) {
     CONFIG += app_bundle
     mySetOfExtraFiles.files = $$DISTFILES
     mySetOfExtraFiles.path = Contents/Resources
     QMAKE_BUNDLE_DATA += mySetOfExtraFiles
 }
+
 
 
