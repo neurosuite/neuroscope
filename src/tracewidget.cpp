@@ -579,11 +579,6 @@ void TraceWidget::slotStartMilisecondTimeUpdated(){
 }
 
 void TraceWidget::slotScrollBarUpdated(){
-    //QObject* obj = sender(); // !!! RHM debugging
-    //QString name = QString(obj->metaObject()->className());
-    // QScrollBar
-
-
     if(!isInit && updateView){
         //Modify updateView to prevent the spinboxes to trigger a changeEvent while been updated.
         updateView = false;

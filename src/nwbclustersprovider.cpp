@@ -53,10 +53,8 @@ NWBClustersProvider::NWBClustersProvider(unsigned int channel,
     this->previousStartTime = 0;
     this->previousStartIndex = 1;
     this->previousEndIndex = this->nbSpikes;
-    // !!! check the factor of 1000 !!!
-    // !!! RHM remove the -1 below
-    //this->previousEndTime = (clusters(2, this->nbSpikes -1) * 1000.0 / samplingRate) + 0.5;
-    this->previousEndTime = (clusters(2, this->nbSpikes ) /* *1000 */ ) + 0.5;
+
+    this->previousEndTime = static_cast<long>((clusters(2, this->nbSpikes ) ) + 0.5);
 
     this->fileMaxTime = this->previousEndTime;
 }
@@ -89,7 +87,7 @@ QList<NWBClustersProvider*> NWBClustersProvider::fromFile(const QString& fileUrl
         Array<dataType> *data = new Array<dataType>(2, nLen);
         for (int idx=0; idx < nLen; ++idx)
         {
-            (*data)(1, idx+1) = i; // spikeData.unit_class; // RHM !!! We need the proper channel here?
+            (*data)(1, idx+1) = i; // spikeData.unit_class; // RHM !!! We may need the proper channel here?
 
             // The factor of 1000 below converts the HDF5 data from seconds to milliseconds.
             // NamedSpikes[] is ZERO based. (*data) is ONE based, hence idx+1.

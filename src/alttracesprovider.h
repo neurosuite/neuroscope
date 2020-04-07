@@ -1,5 +1,5 @@
 /***************************************************************************
-                          Alttracesprovider.h  -  description
+                          AltTracesProvider.h  -  description
                              -------------------
 
     Processes alternative to the standard Neuroscope TracesProvider.

@@ -290,7 +290,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
             }
             dataFile.close();
         }
-        qDebug() << "RHM Transfer to data " << nbValues << " " << offset;
+        qDebug() << "Transfer to data " << nbValues << " " << offset;
         //Apply the offset if need it,convert to dataType and store the values in data.
         if(offset != 0){
             for(qint64 i = 0; i < nbValues; ++i){
@@ -301,7 +301,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
                 data[i] = round(static_cast<dataType>(retrieveData[i]) * acquisitionGain);
             }
         }
-        qDebug() << "RHM End Transfer to data";
+        qDebug() << "End Transfer to data";
         
     } else if(resolution == 32) {
 
@@ -340,7 +340,7 @@ void TracesProvider::retrieveData(long startTime,long endTime,QObject* initiator
         dataFile.close();
     }
 
-    //qDebug() << "About to emit RHM";
+    //qDebug() << "About to emit";
     //Send the information to the receiver.
     emit dataReady(data,initiator);
 }

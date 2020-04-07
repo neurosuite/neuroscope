@@ -69,7 +69,7 @@ void NeuroscopeXmlReader::closeFile(){
     readVersion.clear();
 }
 
-// RHM
+
 QString NeuroscopeXmlReader::getGenericText(QString qsTag, QString defaultTextIn)const {
     qDebug() << "getGenericText()" << " " << qsTag << "\n";
     QString defaultText = defaultTextIn;
@@ -92,7 +92,7 @@ QString NeuroscopeXmlReader::getGenericText(QString qsTag, QString defaultTextIn
     return defaultText;
 }
 
-// RHM
+
 QList<QString> NeuroscopeXmlReader::getListGenericTexts(QString qsTag, QString defaultTextIn)const {
     qDebug() << "getListGenericTexts()" << " " << qsTag << "\n";
     QList<QString> lstNames = QList< QString >();
@@ -116,7 +116,7 @@ QList<QString> NeuroscopeXmlReader::getListGenericTexts(QString qsTag, QString d
 }
 
 
-// RHM
+
 QString NeuroscopeXmlReader::getNWBSamplingName()const {
     QString SamplingName = "/processing/ecephys/LFP/lfp/starting_time";
     QDomNode n = documentNode.firstChild();
@@ -137,7 +137,7 @@ QString NeuroscopeXmlReader::getNWBSamplingName()const {
     return SamplingName;
 }
 
-// RHM
+
 QString NeuroscopeXmlReader::getNWBDataSetName()const {
     QString DataSetName = "/processing/ecephys/LFP/lfp/data";
     QDomNode n = documentNode.firstChild();

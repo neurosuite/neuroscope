@@ -57,7 +57,7 @@ int NWBEventsProvider::loadData(){
     for(eventIndex=0; eventIndex < this->nbEvents; ++eventIndex) {
 
         // Save time and label of event
-        tempTimestamps[eventIndex]  = nwbEvents->arrayData[eventIndex];// 11 Feb 2020 RHM removed 1000 /1000;// timestamp;
+        tempTimestamps[eventIndex]  = nwbEvents->arrayData[eventIndex];
         tempDescription[eventIndex] = label;
 
         // Update event category count
@@ -77,19 +77,17 @@ int NWBEventsProvider::loadData(){
     // Update internal struture
     this->updateMappingAndDescriptionLength();
 
-    for (int jj=1; jj <= this->nbEvents; ++jj)
-        qDebug() << "time stamps " << jj << " " << this->timeStamps(1, jj) << " ";
-
+    //for (int jj=1; jj <= this->nbEvents; ++jj)
+    //    qDebug() << "time stamps " << jj << " " << this->timeStamps(1, jj) << " ";
 
 
     //Initialize the variables
     previousStartTime = 0;
     previousStartIndex = 1;
     previousEndIndex = this->nbEvents;
-    // RHM !!!! Added 1000 and then removed it
+
     previousEndTime = static_cast<long>(floor(0.5 + this->timeStamps(1, this->nbEvents)));
-    fileMaxTime = /*1000* */ previousEndTime; //RHM remove the 1000!!!!!!!!
-    // 11 Feb 2020 RHM removed 1000
+    fileMaxTime =  previousEndTime;
 
     return OK;
 }
