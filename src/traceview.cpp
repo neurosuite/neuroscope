@@ -130,7 +130,7 @@ TraceView::TraceView(TracesProvider& tracesProvider,bool greyScale,bool multiCol
 
     //Set the drawing variables
     nbChannels = tracesProvider.getNbChannels();
-    int samplingRate = tracesProvider.getSamplingRate();
+    int samplingRate = static_cast<int>(tracesProvider.getSamplingRate());
 
     updateShownGroupsChannels(shownChannels);
 
@@ -1932,6 +1932,9 @@ void TraceView::drawTracesSingleColumn(QPainter& painter, int limit, int nbSampl
                     QPolygon trace(nbSamples);
                     for(int i = 0; i < nbSamples;++i){
                         int y = positions[j] - static_cast<long>(data(i + 1,channelId + 1) * channelFactors[channelId]);
+                        long d = data(i + 1,channelId + 1);
+                        float cf = channelFactors[channelId];
+                        int pj = positions[j];
                         trace.setPoint(i,X,y);
                         X += Xstep;
                     }

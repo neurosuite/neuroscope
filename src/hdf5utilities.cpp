@@ -227,6 +227,23 @@ int HDF5Utilities::GetAttributeDouble(double &dAttr, H5::H5File* file, std::stri
     return 0;
 }
 
+///
+/// \brief HDF5Utilities::GetAttributeType Helper function to read an attribute type from an attribute label.
+/// \param dtype : the attribute type answer
+/// \param file: the name of the file to read
+/// \param DSN: the location within the file to for the dataset
+/// \param attrName: the attribite or label to read
+/// \return 0 on success.
+///
+int HDF5Utilities::GetAttributeType(DataType &dtype, H5::H5File* file, std::string DSN, std::string attrName)
+{
+    DataSet *startSet = new DataSet(file->openDataSet(DSN.c_str()));
+    Attribute attr = startSet->openAttribute(attrName);
+    dtype = attr.getDataType();
+    delete startSet;
+
+    return 0;
+}
 
 
 

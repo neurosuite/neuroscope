@@ -7,10 +7,70 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
+#include <stdio.h> /* fabs() */
 #include "nwbreader.h"
 
 #include <QDebug>
+
+// getGenericText(QString qsTag, QString defaultTextIn)
+// <nwb_dataset_name>       /acquisition/test_ephys_data/data       </nwb_dataset_name>
+// ***<nwb_voltage_timestamps> /acquisition/test_ephys_data/timestamps </nwb_voltage_timestamps>
+// <nwb_voltage_electrodes> /acquisition/test_ephys_data/electrodes </nwb_voltage_electrodes>
+
+// <nwb_dataset_name>/processing/ecephys/LFP/lfp/data</nwb_dataset_name>
+// ***<nwb_sampling_name>/processing/ecephys/LFP/lfp/starting_time</nwb_sampling_name>
+// <nwb_voltage_electrodes>/processing/ecephys/LFP/lfp/electrodes</nwb_voltage_electrodes>
+
+
+VoltageSpecs::VoltageSpecs(int voltageRange, int resolution, int amplification)
+{
+   this->voltageRange = voltageRange;
+   this->resolution = resolution;
+   this->amplification = amplification;
+}
+
+
+
+
+///
+/// \brief NWBReader::bTracesUseTimeStamps checks if timestamps are used.
+/// \return true if voltages use time stamps
+///
+bool NWBReader::bTracesUseTimeStamps()
+{
+    std::string strTimeStampLocation = NWB_Locations.getGenericText("nwb_voltage_timestamps", "");
+    return (strTimeStampLocation.length() > 0)? true: false;
+}
+
+///
+/// \brief NWBReader::dGetSamplingRateFromTimeStamps estimates sampling rate in Hz based on 1st 2 timestamps
+/// \return sampling rate in Hz based on first 2 time stamps
+///
+double NWBReader::dGetSamplingRateFromTimeStamps()
+{
+    double dSamplingRate = 0.0;
+
+    std::string strTimeStampLocation = NWB_Locations.getGenericText("nwb_voltage_timestamps", "");
+    if (strTimeStampLocation.length() > 0)
+    {
+        double *voltageTimes = nullptr;
+        long lLengthTS;
+        HDF5_Utilities.Read1DArray<double>(&voltageTimes, PredType::NATIVE_DOUBLE, lLengthTS, hsFileName, strTimeStampLocation);
+        if (lLengthTS > 1)
+        {
+            double dDiff =  voltageTimes[1] - voltageTimes[0];
+            if (dDiff > 0.00000001) {
+                dSamplingRate = 1.0 / dDiff;
+            }
+        }
+    }
+
+    return dSamplingRate;
+}
+
+
+
+
 
 NWBReader::NWBReader(std::string hsFileName)
     :NWB_Locations(hsFileName)
@@ -23,7 +83,6 @@ NWBReader::NWBReader()
     :NWB_Locations("")
 {
 }
-
 
 ///
 /// \brief NWBReader::ReadNWBAttribs returns some basic information about our trace data
@@ -50,14 +109,20 @@ void NWBReader::ReadNWBAttribs(int &nbChannels, int &resolution, double &samplin
         long lDim1 = 0;
         H5T_class_t type_class;
         HDF5_Utilities.GetDataSetSizes(length, lDim1, resolution, type_class, dataset);
+        // At this point, length is the number of readings
+        // !!! We may need to convert this to milliseconds, depending on the sampling rate
         nbChannels = static_cast<int>(lDim1);
         delete dataset;
 
         offset = 0; // Did not see this field in NWB, so we placed it here
 
-        // Get the sampling rate
-        std::string DS = NWB_Locations.getSamplingName();
-        HDF5_Utilities.GetAttributeDouble(samplingRate, file, DS, "rate");
+        // Get the sampling rate from either the time stamps or an attribute
+        samplingRate = getSamplingRate();
+        // !!! Possibly do this in all cases, and not just time stamps
+        if (bTracesUseTimeStamps())
+        {
+            length = static_cast<long>(length * 1000.0 / samplingRate); // Convert to milliseconds in length, assuming that sampling rate is in Hz
+        }
 
         std::cout << "Done ReadNWBAttribs " << std::endl;
 
@@ -97,11 +162,19 @@ void NWBReader::ReadNWBAttribs(int &nbChannels, int &resolution, double &samplin
 double NWBReader::getSamplingRate()
 {
     double samplingRate = 0.0;
-    // Get the sampling rate
-    std::string DS = NWB_Locations.getSamplingName();
-    H5::H5File* file = new H5::H5File(hsFileName.c_str(), H5F_ACC_RDONLY);
-    HDF5_Utilities.GetAttributeDouble(samplingRate, file, DS, "rate");
-    delete file;
+
+    if (bTracesUseTimeStamps())
+    {
+        samplingRate = dGetSamplingRateFromTimeStamps();
+    }
+    else {
+        // Get the sampling rate from an attribute
+        std::string DS = NWB_Locations.getSamplingName();
+        H5::H5File* file = new H5::H5File(hsFileName.c_str(), H5F_ACC_RDONLY);
+        HDF5_Utilities.GetAttributeDouble(samplingRate, file, DS, "rate");
+        delete file;
+    }
+
     return samplingRate;
 }
 
@@ -120,26 +193,19 @@ long NWBReader::GetNWBLength( )
 }
 
 
+
 // Read all channels for a given time range
-int NWBReader::ReadVoltageTraces(int *data_out, int iStart, long nLength, int nChannels)
+int NWBReader::iReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS )
 {
-    std::string DSN = NWB_Locations.getVoltageDataSetName();
-    HDF5_Utilities.Read2DBlockDataNamed(data_out, PredType::NATIVE_INT, iStart, nLength, nChannels, hsFileName, DSN);
-    return 0;
-}
+    *pVS = nullptr;
 
-
-
-int NWBReader::ReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels)
-{
     //std::cout << "Start ReadBlockData " << std::endl;
     long nbValues = nLength * nChannels;
     //std::cout << "nbValues  " << nbValues << std::endl;
 
-
+    std::string DSN = NWB_Locations.getVoltageDataSetName();
     int *data_out = new int[static_cast<unsigned long long>(nbValues)];
-
-    ReadVoltageTraces(data_out, iStart, nLength, nChannels);
+    HDF5_Utilities.Read2DBlockDataNamed(data_out, PredType::NATIVE_INT, iStart, nLength, nChannels, hsFileName, DSN);
 
     long k = 0;
     for (int i = 0; i < nLength; ++i) {
@@ -192,6 +258,17 @@ int NWBReader::getVoltageGroups(Array<short>& indexData, Array<short>& groupData
 
     ReadBlockData2A(indexData, 0, channelNb, 1, DSNIndex);
     ReadBlockData2A(groupData, 0, channelNb, 1, DSNGroup);
+
+    // Let's hack a possible bug fix to keep from future array overruns
+    for (int i=0; i < indexData.nbOfColumns(); ++i)
+        if (indexData[i] >= channelNb || indexData[i] < -1)
+            indexData[i] = static_cast<short>(channelNb-1);
+
+    for (int i=0; i < groupData.nbOfColumns(); ++i)
+        if (groupData[i] >= channelNb || groupData[i] < -1)
+            groupData[i] = static_cast<short>(channelNb-1);
+    // End of safety hack
+
 
     return 0;
 }
@@ -370,6 +447,102 @@ QList<NamedArray<double>> NWBReader::ReadSpikeShank()
     std::string DS_STS = NWB_Locations.getGenericText("nwb_spike_times_shanks", "");
 
     return ReadSpikeShank(DS_STV, DS_STI, DS_STS);
+}
+
+
+
+
+
+
+
+// Read all channels for a given time range
+int NWBReader::fReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS)
+{
+    long nbValues = nLength * nChannels;
+
+    double *data_out = new double[static_cast<unsigned long long>(nbValues)];
+    std::string DSN = NWB_Locations.getVoltageDataSetName();
+    HDF5_Utilities.Read2DBlockDataNamed(data_out, PredType::NATIVE_DOUBLE, iStart, nLength, nChannels, hsFileName, DSN);
+
+
+    // Find limits of this floating point data
+    double dMin = data_out[0];
+    double dMax = data_out[0];
+    for (long ll = 1; ll < nbValues; ++ll)
+    {
+        if (data_out[ll] > dMax)
+            dMax = data_out[ll];
+        if (data_out[ll] < dMin)
+            dMin = data_out[ll];
+    }
+    double dRange = dMax - dMin;
+    //double dFact = (fabs(dMax) > fabs(dMin))? fabs(dMax) : fabs(dMin);
+    //dFact *= 0.032;
+    //if (dFact < 1)
+    //    dFact = 1.0;
+
+    *pVS = new VoltageSpecs(10, 16, 1000);
+    //VoltageSpecs(int voltageRange, int resolution, int amplification);
+
+
+    // Convert the floating point data to short integers to make it compatible with Neuroscope
+    // !!! See what neuroscope attributes we must update to make clear that we converted. say scale.
+    // short integers range from -32,768 to 32,767, so their range is 65535.
+    double dFact = (fabs(dRange)< 0.00001) ? 1.0 : 65535.0/dRange;
+    double dTemp= 0.0;
+    long k = 0;
+    for (int i = 0; i < nLength; ++i) {
+        for (int j = 0; j < nChannels; ++j) {
+            dTemp = -32768.0 + dFact * (data_out[k]-dMin);
+            //dTemp = 0.0 + dFact * (data_out[k]-dMin)/2000.0;
+            retrieveData[k] = static_cast<short>(dTemp);
+            ++k;
+        }
+    }
+
+    delete[] data_out;
+
+    return 0;
+}
+
+
+
+
+
+
+int NWBReader::getDataSetDataTypeFromLabel(H5T_class_t &type_class, std::string DSN)
+{
+    try {
+        H5::H5File* file = new H5::H5File(hsFileName.c_str(), H5F_ACC_RDONLY);
+
+        DataSet *dataset = new DataSet(file->openDataSet(DSN.c_str()));
+        type_class = dataset->getTypeClass();
+        delete dataset;
+
+        delete file;
+        return 0;
+    }
+    catch(...) {
+        type_class = H5T_class_t::H5T_NO_CLASS;
+        std::cout << " Error determining data set type " << std::endl;
+        return 1;
+    }
+}
+
+int NWBReader::ReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS)
+{
+    H5T_class_t type_class;
+    std::string DSN = NWB_Locations.getVoltageDataSetName();
+    int iRet = getDataSetDataTypeFromLabel(type_class, DSN);
+    if (iRet == 0)
+    {
+        if (type_class == H5T_INTEGER)
+            return iReadVoltageTraces(retrieveData, iStart, nLength, nChannels, pVS);
+        else if (type_class == H5T_FLOAT)
+            return fReadVoltageTraces(retrieveData, iStart, nLength, nChannels, pVS);
+    }
+    std::cout << " Error determining data set type for reading voltage traces." << std::endl;
+    return 1;
 }
 
 

@@ -22,6 +22,13 @@ public:
     int length() {return arrayData.length();}
 };
 
+class VoltageSpecs {
+public:
+    int voltageRange;
+    int resolution;
+    int amplification;
+    VoltageSpecs(int voltageRange, int resolution, int amplification);
+};
 
 ///
 /// \brief The NWBReader class ties together other classes so that NWB data can be sent to Neuroscope.
@@ -37,7 +44,8 @@ public:
     void ReadNWBAttribs(int &nbChannels, int &resolution, double &samplingRate, int &offset, long &length);
     long GetNWBLength();
 
-    int ReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels);
+    int ReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS);
+
     int getVoltageGroups(Array<short>& indexData, Array<short>& groupData, int channelNb);
 
     QList<NamedArray<double>> ReadSpikeShank(std::string nwb_spike_times, std::string nwb_spike_times_index, std::string nwb_units_electrode_group);
@@ -48,6 +56,8 @@ public:
     void ReadBlockData2A(Array<short> &retrieveData, int iStart, long nLength, int nChannels, std::string DSN);
 
     double getSamplingRate();
+    bool bTracesUseTimeStamps();
+    double dGetSamplingRateFromTimeStamps();
 
 private:
     NWBReader(); // defensive move
@@ -55,8 +65,12 @@ private:
     NWBLocations NWB_Locations;
     HDF5Utilities HDF5_Utilities;
 
-    int ReadVoltageTraces(int *data_out, int iStart, long nLength, int nChannels);
+    //int ReadVoltageTraces(int *data_out, int iStart, long nLength, int nChannels);
     NamedArray<double> *  ReadOneEvent(std::string DSN, H5::H5File* file);
+
+    int getDataSetDataTypeFromLabel(H5T_class_t &type_class, std::string DSN);
+    int iReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS);
+    int fReadVoltageTraces(Array<short> &retrieveData, int iStart, long nLength, int nChannels, VoltageSpecs **pVS);
 };
 
 

@@ -122,9 +122,16 @@ void NWBTracesProvider::retrieveData(long start, long end, QObject* initiator, l
     NWBReader nwbr(this->fileName.toUtf8().constData());
 
 
+    VoltageSpecs *pVS;
     Array<int16_t> traceData(nbSamples,nbChannels);
-    nwbr.ReadVoltageTraces(traceData, startInRecordingUnits, nbSamples, this->nbChannels);
+    nwbr.ReadVoltageTraces(traceData, startInRecordingUnits, nbSamples, this->nbChannels, &pVS);
     qDebug() << "nbSamples " << nbSamples;
+    if (pVS)
+    {
+        this->voltageRange = pVS->voltageRange;
+        this->resolution = pVS->resolution;
+        this->amplification = pVS->amplification;
+    }
 
     // Compute acquisition gain
     double acquisitionGain = (voltageRange * 1000000) / (pow(2.0, resolution) * amplification);
@@ -137,6 +144,8 @@ void NWBTracesProvider::retrieveData(long start, long end, QObject* initiator, l
     else{
         for(qint64 i = 0; i < nbValues; ++i){
             data[i] = round(traceData[i] * acquisitionGain);
+            //if (i < 20)
+            //    qDebug() << "data A2D " << traceData[i] << "  " << data[i];
         }
     }
 
@@ -160,14 +169,18 @@ QStringList NWBTracesProvider::getLabels() {
     NWBReader nwbr(this->fileName.toUtf8().constData());
     nwbr.getVoltageGroups(indexData, groupData, this->nbChannels);
 
+    int nLabels = labels.length();
     for (int i=0; i<this->nbChannels; ++i)
     {
         //qDebug() << "index data " << i << " " << channelNb << indexData[i+1]  << "\n";
         int iIndex = indexData[i];
-        int iGroup = groupData[iIndex]+1;
+        //int iGroup = groupData[iIndex]+1;
 
         //labels[iIndex] = QString::number(iGroup);
 
+        if (iIndex >= nLabels) {
+            iIndex = indexData[i] = static_cast<short>(nLabels - 1);
+        }
         labels[iIndex] = QString::number(i);
     }
 

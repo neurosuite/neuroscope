@@ -863,8 +863,10 @@ void ChannelPalette::createGroup(int id){
         else if(iconviewDict.contains("0"))
             iconView->resize((iconviewDict["0"])->size().width(),labelSize);
         //In the spike palette at the begining only the spikeTrashGroup (gpId-1) exists.
-        else
-            iconView->resize((iconviewDict["-1"])->size().width(),labelSize);
+        else {
+            if(iconviewDict.contains("-1"))
+                iconView->resize((iconviewDict["-1"])->size().width(),labelSize);
+        }
     }
     else
         iconView->adjustSize();

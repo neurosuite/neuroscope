@@ -41,6 +41,7 @@ public:
     int GetDataSetSizes(long &lDim0, long &lDim1, int &resolution, H5T_class_t &type_class, H5::H5File* file, std::string DSN);
 
     int GetAttributeDouble(double &dAttr, H5::H5File* file, std::string DSN, std::string attrName);
+    int GetAttributeType(DataType &dtype, H5::H5File* file, std::string DSN, std::string attrName);
 
     // General HDF5 function to read a multi-dimensional hyperslab
     // data_out holds the read data.

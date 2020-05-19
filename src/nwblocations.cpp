@@ -19,7 +19,7 @@
 //<nwb_spike_times_shanks>units/electrode_group</nwb_spike_times_shanks>
 //<nwb_event_times>/stimulus/presentation/PulseStim_0V_10001ms_LD0/timestamps</nwb_event_times>
 
-
+// <nwb_voltage_timestamps>
 
 NWBLocations::NWBLocations(std::string hsFileName)
 {
