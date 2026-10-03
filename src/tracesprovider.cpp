@@ -34,8 +34,6 @@
 //include files for c/c++ libraries
 #include <math.h>
 
-using QRegExp = QRegularExpression;
-
 TracesProvider::TracesProvider(const QString& fileUrl, int nbChannels, int resolution, int voltageRange, int amplification, double samplingRate, int offset)
     : DataProvider(fileUrl),
       nbChannels(nbChannels),
@@ -171,7 +169,7 @@ void TracesProvider::retrieveData(long startTime, long endTime, QObject* initiat
             int p = fileName.lastIndexOf(".");
             QString baseName = fileName;
             baseName.truncate(p - 1);
-            p = baseName.lastIndexOf(QRegExp("[^0-9]"));
+            p = baseName.lastIndexOf(QRegularExpression("[^0-9]"));
             baseName.truncate(p + 1);
 
             for (int channel = 1; channel <= nbChannels; ++channel)

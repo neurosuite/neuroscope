@@ -94,13 +94,13 @@ void BaseFrame::mousePressEvent(QMouseEvent* e)
             //Assign firstClick
             QRect r((QRect)window);
 
-            firstClick = e->pos();
+            firstClick = e->position().toPoint();
 
             /*
             if(r.left() != 0)
-                firstClick = QPoint(e->x() + 4, e->y()+ 8 - Yborder);
+                firstClick = QPoint(e->position().toPoint().x() + 4, e->position().toPoint().y()+ 8 - Yborder);
             else
-                firstClick = QPoint(e->x() + 8 - Xborder,e->y()+4 - Yborder);
+                firstClick = QPoint(e->position().toPoint().x() + 8 - Xborder,e->position().toPoint().y()+4 - Yborder);
 */
             //qDebug()<<" firstClick"<<firstClick;
             //Construct the rubber starting on the selected point (width = 1 and not 0 because bottomRight = left+width-1, same trick for height ;0))
@@ -162,11 +162,11 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e)
 
             if (r.left() != 0)
             {
-                secondClick = QPoint(e->x(), e->y() - Yborder);
+                secondClick = QPoint(e->position().toPoint().x(), e->position().toPoint().y() - Yborder);
             }
             else
             {
-                secondClick = QPoint(e->x() - Xborder, e->y() - Yborder);
+                secondClick = QPoint(e->position().toPoint().x() - Xborder, e->position().toPoint().y() - Yborder);
             }
 
             qDebug() << " firstClick" << firstClick << " secondClick" << secondClick;
@@ -178,12 +178,12 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e)
                 //If the widget contains a left margin and draws in the negative abscisses this correction will not work.
                 if (r.left() != 0)
                 {
-                    secondClick = viewportToWorld(e->x(), e->y() - Yborder);
+                    secondClick = viewportToWorld(e->position().toPoint().x(), e->position().toPoint().y() - Yborder);
                     firstClick = viewportToWorld(firstClick.x(), firstClick.y() - Yborder);
                 }
                 else
                 {
-                    secondClick = viewportToWorld(e->x() - Xborder, e->y() - Yborder);
+                    secondClick = viewportToWorld(e->position().toPoint().x() - Xborder, e->position().toPoint().y() - Yborder);
                     firstClick = viewportToWorld(firstClick.x() - Xborder, firstClick.y() - Yborder);
                 }
 
@@ -207,11 +207,11 @@ void BaseFrame::mouseReleaseEvent(QMouseEvent* e)
                     factor = static_cast<float>(2);
                 if (r.left() != 0)
                 {
-                    secondClick = viewportToWorld(e->x(), e->y() - Yborder);
+                    secondClick = viewportToWorld(e->position().toPoint().x(), e->position().toPoint().y() - Yborder);
                 }
                 else
                 {
-                    secondClick = viewportToWorld(e->x() - Xborder, e->y() - Yborder);
+                    secondClick = viewportToWorld(e->position().toPoint().x() - Xborder, e->position().toPoint().y() - Yborder);
                 }
 
                 //modify the window rectangle
@@ -234,7 +234,7 @@ void BaseFrame::mouseMoveEvent(QMouseEvent* e)
         //Test if a selected rectangle exist, if so draw to erase the previous one,
         if (mRubberBand)
         {
-            const QRect r = QRect(firstClick, e->pos()).normalized();
+            const QRect r = QRect(firstClick, e->position().toPoint()).normalized();
             if (wholeHeightRectangle)
                 mRubberBand->setGeometry(QRect(r.left(), rect().top(), r.width(), rect().height()));
             else

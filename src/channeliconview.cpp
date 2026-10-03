@@ -114,7 +114,7 @@ QMimeData* ChannelIconView::mimeData(const QList<QListWidgetItem*> items) const
     QByteArray data;
     //For the moment just one item
     QDataStream stream(&data, QIODevice::WriteOnly);
-    Q_FOREACH (QListWidgetItem* item, items)
+    for (QListWidgetItem* item : items)
     {
         stream << *static_cast<ChannelIconViewItem*>(item);
     }
@@ -219,7 +219,7 @@ bool ChannelIconView::dropMimeData(int index, const QMimeData* mimeData, Qt::Dro
 void ChannelIconView::mousePressEvent(QMouseEvent* event)
 {
     //If the user did not clicked on an item, ignore the click
-    QListWidgetItem* item = itemAt(event->pos());
+    QListWidgetItem* item = itemAt(event->position().toPoint());
     if (item == 0L)
         return;
 

@@ -2543,7 +2543,7 @@ void GroupLabel::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton)
     {
-        QPoint firstClick = QWidget::mapToGlobal(e->pos());
+        QPoint firstClick = QWidget::mapToGlobal(e->position().toPoint());
 
         QDrag* drag = new QDrag(this);
         ChannelMimeData* mimeData = new ChannelMimeData;
