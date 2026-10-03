@@ -1,5 +1,0 @@
-base referer
-rect $classClustersProvider.html 6,93 113,117
-rect $classGlobalEventsProvider.html 260,93 398,117
-rect $classPositionsProvider.html 422,93 534,117
-rect $classTracesProvider.html 558,93 660,117

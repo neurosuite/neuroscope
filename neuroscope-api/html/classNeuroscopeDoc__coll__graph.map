@@ -1,6 +1,0 @@
-base referer
-rect $classChannelColors.html 15,18 108,42
-rect $classChannelPalette.html 151,109 249,133
-rect $classSpaceWidget.html 176,18 269,42
-rect $classTracesProvider.html 309,109 410,133
-rect $classDataProvider.html 316,18 404,42

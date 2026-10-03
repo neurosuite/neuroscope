@@ -1,7 +1,0 @@
-base referer
-rect $classpArray.html 6,109 86,133
-rect $classArray.html 110,109 217,133
-rect $classArray.html 241,109 321,133
-rect $classArray.html 345,109 510,133
-rect $classArray.html 534,109 657,133
-rect $classpArray.html 180,200 350,224

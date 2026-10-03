@@ -1,8 +1,0 @@
-base referer
-rect $classBaseFrame.html 12,290 89,314
-rect $classZoomWindow.html 7,200 95,223
-rect $classArray.html 330,200 453,223
-rect $classPositionsProvider.html 276,290 388,314
-rect $classArray.html 354,109 429,133
-rect $classGlobalEventsProvider.html 113,290 252,314
-rect $classDataProvider.html 161,200 249,223
