@@ -2,3 +2,5 @@
 *.moc*
 Makefile
 build
+result
+result-*
