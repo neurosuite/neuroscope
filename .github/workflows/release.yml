@@ -1,0 +1,129 @@
+name: Release
+
+# Builds packages for a version tag and attaches them to a DRAFT release.
+# A maintainer reviews the draft and publishes it by hand.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+env:
+  # libneurosuite revision bundled into the packages.
+  LIBNEUROSUITE_REF: m1-followup
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: neurosuite/libneurosuite
+          ref: ${{ env.LIBNEUROSUITE_REF }}
+          path: libneurosuite
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build qt6-base-dev qt6-webengine-dev \
+            libgl-dev libfuse2 file
+      - name: Build .deb (Ubuntu 24.04, QtWebEngine handbook)
+        run: |
+          cmake -S . -B build-deb -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+            -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON \
+            -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
+          cmake --build build-deb
+          (cd build-deb && cpack -G DEB)
+      - name: Build AppImage (QTextBrowser handbook, smaller)
+        run: |
+          cmake -S . -B build-appimage -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+            -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DWITH_WEBENGINE=OFF \
+            -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
+          cmake --build build-appimage
+          DESTDIR=$PWD/AppDir cmake --install build-appimage
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          export QMAKE=/usr/lib/qt6/bin/qmake LDAI_OUTPUT=NeuroScope-${GITHUB_REF_NAME#v}-x86_64.AppImage
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage \
+            --desktop-file AppDir/usr/share/applications/io.github.neurosuite.NeuroScope.desktop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: |
+            build-deb/*.deb
+            *.AppImage
+
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: neurosuite/libneurosuite
+          ref: ${{ env.LIBNEUROSUITE_REF }}
+          path: libneurosuite
+      - run: brew install qt ninja
+      - name: Build .dmg
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=$(brew --prefix qt) -DAPPBUNDLE=ON \
+            -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON \
+            -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
+          cmake --build build
+          (cd build && cpack -G DragNDrop)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: build/*.dmg
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: neurosuite/libneurosuite
+          ref: ${{ env.LIBNEUROSUITE_REF }}
+          path: libneurosuite
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          arch: win64_msvc2022_64
+          modules: qtwebengine qtwebchannel qtpositioning
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build installer and zip
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
+          cmake --build build
+          cd build
+          cpack -G "NSIS;ZIP"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            build/*.exe
+            build/*.zip
+
+  draft-release:
+    needs: [linux, macos, windows]
+    runs-on: ubuntu-24.04
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: find dist -type f -exec sha256sum {} \; | sed 's|dist/.*/||; s|dist/||' > dist/SHA256SUMS
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            dist/**/*.deb
+            dist/**/*.AppImage
+            dist/**/*.dmg
+            dist/**/*.exe
+            dist/**/*.zip
+            dist/SHA256SUMS

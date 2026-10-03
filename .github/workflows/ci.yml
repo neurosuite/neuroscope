@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  # libneurosuite revision NeuroScope is built against.
+  # Switch to the v3.0.0 tag once libneurosuite is released.
+  LIBNEUROSUITE_REF: m1-followup
+
+jobs:
+  build:
+    name: build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ubuntu-24.04
+            os: ubuntu-24.04
+            webengine: ON
+          - name: ubuntu-24.04 without WebEngine
+            os: ubuntu-24.04
+            webengine: OFF
+          - name: macos-14
+            os: macos-14
+            webengine: ON
+          - name: windows
+            os: windows-latest
+            webengine: ON
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: neurosuite/libneurosuite
+          ref: ${{ env.LIBNEUROSUITE_REF }}
+          path: libneurosuite
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build qt6-base-dev libgl-dev
+          if [ "${{ matrix.webengine }}" = ON ]; then sudo apt-get install -y --no-install-recommends qt6-webengine-dev; fi
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install qt ninja
+          echo "CMAKE_PREFIX_PATH=$(brew --prefix qt)" >> "$GITHUB_ENV"
+
+      - name: Install Qt (Windows)
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          arch: win64_msvc2022_64
+          modules: qtwebengine qtwebchannel qtpositioning
+          cache: true
+
+      - name: Set up MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
+          -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON
+          -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
+          -DWITH_WEBENGINE=${{ matrix.webengine }}
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Install
+        run: cmake --install build
+
+      - name: Smoke test
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          case "${{ runner.os }}" in
+            Linux)   LD_LIBRARY_PATH=install/lib:install/lib64 install/bin/neuroscope --version ;;
+            Windows) install/bin/neuroscope.exe --version ;;
+            macOS)   install/bin/neuroscope --version ;;
+          esac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neuroscope-${{ matrix.os }}-webengine-${{ matrix.webengine }}
+          path: install/
+
+  nix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - run: >
+          nix build -L .#neuroscope
+          --override-input libneurosuite "github:neurosuite/libneurosuite/${LIBNEUROSUITE_REF}"
