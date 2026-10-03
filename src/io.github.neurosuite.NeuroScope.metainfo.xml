@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.neurosuite.NeuroScope</id>
+  <name>NeuroScope</name>
+  <summary>Viewer for neurophysiological and behavioral data</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.neurosuite">
+    <name>Neurosuite contributors</name>
+  </developer>
+  <description>
+    <p>
+      NeuroScope is an advanced viewer for electrophysiological and behavioral data. It displays
+      local field potentials, neuronal spikes, behavioral events and the position of the animal
+      in the environment, and offers limited editing of events.
+    </p>
+    <p>
+      It is part of Neurosuite together with Klusters and NDManager. Please cite
+      Hazan, Zugaro and Buzsáki (2006), J Neurosci Methods 155:207-216.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.neurosuite.NeuroScope.desktop</launchable>
+  <url type="homepage">https://neurosuite.github.io</url>
+  <url type="bugtracker">https://github.com/neurosuite/neuroscope/issues</url>
+  <url type="vcs-browser">https://github.com/neurosuite/neuroscope</url>
+  <categories>
+    <category>Science</category>
+    <category>Biology</category>
+  </categories>
+  <provides>
+    <binary>neuroscope</binary>
+    <mediatype>application/nphys-nrs</mediatype>
+  </provides>
+  <content_rating type="oars-1.1"/>
+</component>

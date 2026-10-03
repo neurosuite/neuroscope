@@ -89,83 +89,58 @@ endif()
 ################################################################################
 # Linker config
 ################################################################################
-target_link_libraries(neuroscope neurosuite)
-target_link_libraries(neuroscope Qt6::Widgets Qt6::PrintSupport Qt6::WebEngineWidgets Qt6::Xml)
+target_link_libraries(neuroscope PRIVATE neurosuite::neurosuite Qt6::Widgets Qt6::PrintSupport Qt6::Xml)
 
 if(WITH_CEREBUS)
-    target_link_libraries(neuroscope cbsdk)
+    target_link_libraries(neuroscope PRIVATE cbsdk)
 endif()
 
 ################################################################################
 # Install config
 ################################################################################
-if(WIN32)
-    install(TARGETS neuroscope DESTINATION bin)
+if(APPBUNDLE)
+    install(TARGETS neuroscope BUNDLE DESTINATION ".")
 
-    include(DeployNeurosuite)
-    install_neurosuite_dependencies(
-        "bin/neuroscope.exe"
-    )
-elseif(APPBUNDLE)
-    install(TARGETS neuroscope DESTINATION ".")
-
-    # Set and create Resources directory and install icon
+    # Copy the icon into the bundle's Resources directory
     set(MACOSX_BUNDLE_RESOURCES
-        "${CMAKE_CURRENT_BINARY_DIR}/neuroscope.app/Contents/Resources"
-    )
-    set(MACOSX_BUNDLE_ICON
-        "${CMAKE_CURRENT_SOURCE_DIR}/neuroscope.icns"
-    )
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E make_directory  ${MACOSX_BUNDLE_RESOURCES}
-    )
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${MACOSX_BUNDLE_ICON} ${MACOSX_BUNDLE_RESOURCES}
-    )
-
-    include(DeployNeurosuite)
-    install_neurosuite_dependencies(
-        "neuroscope.app"
-    )
+        "${CMAKE_CURRENT_BINARY_DIR}/neuroscope.app/Contents/Resources")
+    file(MAKE_DIRECTORY ${MACOSX_BUNDLE_RESOURCES})
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/neuroscope.icns
+         DESTINATION ${MACOSX_BUNDLE_RESOURCES})
+    # Qt frameworks and libneurosuite are added by macdeployqt (see release workflow).
 else()
-    install(TARGETS neuroscope DESTINATION bin)
+    install(TARGETS neuroscope RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    # On Windows the Qt runtime is added by windeployqt (see release workflow).
+endif()
 
-    if(NOT APPLE)
-        install(FILES hi16-app-neuroscope.png
-                DESTINATION share/icons/hicolor/16x16/apps/
-                RENAME neuroscope.png)
-        install(FILES hi22-app-neuroscope.png
-                DESTINATION share/icons/hicolor/22x22/apps/
-                RENAME neuroscope.png)
-        install(FILES hi32-app-neuroscope.png
-                DESTINATION share/icons/hicolor/32x32/apps/
-                RENAME neuroscope.png)
-        install(FILES hi48-app-neuroscope.png
-                DESTINATION share/icons/hicolor/48x48/apps/
-                RENAME neuroscope.png)
-        install(FILES hi64-app-neuroscope.png
-                DESTINATION share/icons/hicolor/64x64/apps/
-                RENAME neuroscope.png)
+# Bundle the Qt runtime on Windows and macOS at install time, so that
+# "cmake --install" and CPack (NSIS, DragNDrop) produce self-contained packages.
+if(WIN32 OR APPBUNDLE)
+    qt_generate_deploy_app_script(
+        TARGET neuroscope
+        OUTPUT_SCRIPT NEUROSCOPE_DEPLOY_SCRIPT
+        NO_UNSUPPORTED_PLATFORM_ERROR
+    )
+    install(SCRIPT ${NEUROSCOPE_DEPLOY_SCRIPT})
+endif()
 
-        install(FILES hi16-nphys-nrs.png
-                DESTINATION share/icons/hicolor/16x16/mimetypes/
+if(UNIX AND NOT APPLE)
+    set(APP_ID io.github.neurosuite.NeuroScope)
+    set(ICON_DIR ${CMAKE_INSTALL_DATADIR}/icons/hicolor)
+    foreach(SIZE 16 22 32 48 64)
+        install(FILES hi${SIZE}-app-neuroscope.png
+                DESTINATION ${ICON_DIR}/${SIZE}x${SIZE}/apps
+                RENAME neuroscope.png)
+        install(FILES hi${SIZE}-nphys-nrs.png
+                DESTINATION ${ICON_DIR}/${SIZE}x${SIZE}/mimetypes
                 RENAME application-nphys-nrs.png)
-        install(FILES hi22-nphys-nrs.png
-                DESTINATION share/icons/hicolor/22x22/mimetypes/
-                RENAME application-nphys-nrs.png)
-        install(FILES hi32-nphys-nrs.png
-                DESTINATION share/icons/hicolor/32x32/mimetypes/
-                RENAME application-nphys-nrs.png)
-        install(FILES hi48-nphys-nrs.png
-                DESTINATION share/icons/hicolor/48x48/mimetypes/
-                RENAME application-nphys-nrs.png)
-        install(FILES hi64-nphys-nrs.png
-                DESTINATION share/icons/hicolor/64x64/mimetypes/
-                RENAME application-nphys-nrs.png)
+    endforeach()
 
-        install(FILES neuroscope.desktop
-                DESTINATION share/applications/)
-        install(FILES neuroscope.xml
-                DESTINATION share/mime/packages/)
-    endif()
+    install(FILES neuroscope.desktop
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
+            RENAME ${APP_ID}.desktop)
+    install(FILES ${APP_ID}.metainfo.xml
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+    install(FILES neuroscope.xml
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
 endif()

@@ -30,13 +30,10 @@
 #include "neuroscope.h"
 int main(int argc, char* argv[])
 {
-// QApplication::setGraphicsSystem() was removed from Qt5
-#if QT_VERSION < 0x050000
-    QApplication::setGraphicsSystem("raster");
-#endif
     QApplication::setOrganizationName("neurosuite");
     QApplication::setOrganizationDomain("neurosuite.github.io");
     QApplication::setApplicationName("neuroscope");
+    QGuiApplication::setDesktopFileName("io.github.neurosuite.NeuroScope");
 
     QApplication app(argc, argv);
     QString file;

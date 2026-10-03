@@ -14,118 +14,118 @@
 #                                                                          #
 # ************************************************************************ #
 cmake_minimum_required(VERSION 3.16)
-project(neuroscope CXX)
-
-set(PROJECT_VERSION_MAJOR "3")
-set(PROJECT_VERSION_MINOR "0")
-set(PROJECT_VERSION_PATCH "0")
-set(PROJECT_VERSION
-    "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-)
+project(neuroscope
+    VERSION 3.0.0
+    DESCRIPTION "Viewer for neurophysiological and behavioral data"
+    HOMEPAGE_URL "https://neurosuite.github.io"
+    LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# Supported config flags
-option(WITH_CEREBUS
-      "Enable if you want online Cerebus supports"
-      OFF)
 
-option(REGENERATE_DOC
-       "Enable if you want to regenerate doc need kde4"
+################################################################################
+# Options
+################################################################################
+option(WITH_CEREBUS
+       "Enable online streaming from Blackrock Cerebus systems (needs cbsdk)"
        OFF)
+option(NEUROSCOPE_BUNDLE_NEUROSUITE
+       "Build libneurosuite as part of this project instead of using an installed copy"
+       OFF)
+set(NEUROSUITE_GIT_TAG "v3.0.0" CACHE STRING
+    "libneurosuite tag to fetch when NEUROSCOPE_BUNDLE_NEUROSUITE is ON")
 
 if(APPLE)
     option(APPBUNDLE
            "Enable this if you want to produce an .app bundle."
            OFF)
-endif(APPLE)
+endif()
 
 ################################################################################
 # CMake build environment
 ################################################################################
+include(GNUInstallDirs)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Include our own module dir, so we can use package configs for cmake v3.0.0
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+if(UNIX AND NOT APPLE)
+    # Find a bundled libneurosuite next to the binary (AppImage, relocatable installs)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+endif()
 
-if (MSVC)
-    # Qt disables the native wchar_t type, do it too to avoid linking issues
-    #set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
+if(MSVC)
     add_definitions(-Dfseeko64=_fseeki64)
+    add_definitions(-Dftello64=_ftelli64)
     add_definitions(-DNOMINMAX)
 endif()
 
 if(APPLE)
-    # Adjust code on OS X since file operation are always 64bit there.
+    # File operations are always 64 bit on macOS.
     add_definitions(-Dfseeko64=fseeko)
     add_definitions(-Dftello64=ftello)
 endif()
 
 ################################################################################
-# QT Configurations
+# Qt configuration
 ################################################################################
-# Configure Qt functionality
 set(CMAKE_AUTOMOC ON)
 add_definitions(-DQT_USE_QSTRINGBUILDER)
 
-# Find correct Qt library
-find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport WebEngineWidgets Xml)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Widgets PrintSupport Xml)
 
 ################################################################################
-# Neurosuite library config
+# Neurosuite library
 ################################################################################
-find_package(neurosuite 3.0.0 REQUIRED)
+if(NEUROSCOPE_BUNDLE_NEUROSUITE)
+    include(FetchContent)
+    FetchContent_Declare(neurosuite
+        GIT_REPOSITORY https://github.com/neurosuite/libneurosuite.git
+        GIT_TAG ${NEUROSUITE_GIT_TAG}
+    )
+    FetchContent_MakeAvailable(neurosuite)
+else()
+    find_package(neurosuite 3.0 REQUIRED)
+endif()
 
 ################################################################################
-# Blackrock Cerebus SDK config
+# Blackrock Cerebus SDK (untested with Qt6; see CHANGELOG)
 ################################################################################
 if(WITH_CEREBUS)
     find_package(cbsdk REQUIRED)
     add_definitions(-DWITH_CEREBUS)
-endif(WITH_CEREBUS)
+endif()
 
 ################################################################################
 # .app bundle specific settings
 ################################################################################
 if(APPBUNDLE)
-    set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
-    set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_NAME} ${PROJECT_VERSION}")
-    set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_BUNDLE_NAME "NeuroScope")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_INFO_STRING "NeuroScope ${PROJECT_VERSION}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_ICON_FILE "neuroscope.icns")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.neurosuite.neuroscope")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.neurosuite.NeuroScope")
 endif()
 
 ################################################################################
-# Documentation build config
-################################################################################
-if(REGENERATE_DOC)
-    find_package(KDE4 REQUIRED)
-    find_program(DOCBOOK2HTML_EXECUTABLE NAMES docbook2html)
-    if(NOT DOCBOOK2HTML_EXECUTABLE)
-        message(FATAL_ERROR
-               "Could not find docbook2html for documentation generation.")
-    endif(DOCBOOK2HTML_EXECUTABLE)
-endif()
-
-################################################################################
-# Documentation configuration
+# Documentation location (looked up relative to the executable at runtime)
 ################################################################################
 if(APPBUNDLE)
-    set(KLUSTERS_DOC_INSTALL_PREFIX  "../../..")
-    set(KLUSTERS_DOC_PREFIX "neuroscope.app/Contents/Documentation")
+    set(NEUROSCOPE_DOC_INSTALL_DIR "neuroscope.app/Contents/Documentation")
+    set(NEUROSCOPE_DOC_RELATIVE_PATH "../Documentation")
 else()
-    set(KLUSTERS_DOC_INSTALL_PREFIX  "..")
-    set(KLUSTERS_DOC_PREFIX "share/doc/neuroscope/HTML/en")
+    set(NEUROSCOPE_DOC_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/doc/neuroscope/HTML/en")
+    file(RELATIVE_PATH NEUROSCOPE_DOC_RELATIVE_PATH
+         "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+         "${CMAKE_INSTALL_PREFIX}/${NEUROSCOPE_DOC_INSTALL_DIR}")
 endif()
 
 configure_file(config-neuroscope.h.cmake
-               src/config-neuroscope.h )
+               src/config-neuroscope.h)
 
 ################################################################################
-# Documentation configuration
+# Sources and documentation
 ################################################################################
 add_subdirectory(src)
 add_subdirectory(doc)
@@ -133,32 +133,4 @@ add_subdirectory(doc)
 ################################################################################
 # CPack configuration
 ################################################################################
-include(PackNeurosuite)
-# Init CPack variables
-neurosuite_cpack_init(${PROJECT_NAME}
-                      ${PROJECT_VERSION}
-                      "Florian Franzen <FlorianFranzen@gmail.com"
-                      "Viewer for neurophysiological and behavioral data"
-                       "${CMAKE_CURRENT_SOURCE_DIR}/cpack/description")
-
-# Use NSIS on Windows
-neurosuite_cpack_nsis("neuroscope"
-                      "Neuroscope"
-                      "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
-
-# Use DMG if bundled to .app
-if(APPBUNDLE)
-    neurosuite_cpack_dmg()
-endif()
-
-# Use deb and rpm on linux
-set(COMMON_DEPENDECIES "libneurosuite (>= 3.0.0)")
-if(WITH_CEREBUS)
-    set(COMMON_DEPENDECIES "${COMMON_DEPENDECIES}, libcbsdk")
-endif()
-neurosuite_cpack_ubuntu(
-    "${COMMON_DEPENDECIES}, libqt6widgets6, libqt6printsupport6, libqt6concurrent6, libqt6xml6, libqt6webenginewidgets6"
-    "${CMAKE_CURRENT_SOURCE_DIR}/cpack"
-)
-
-include(CPack)
+include(cmake/CPackConfig.cmake)
