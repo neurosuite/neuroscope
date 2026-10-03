@@ -914,6 +914,17 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay, bool autocenterCh
     isInit = true; //prevent the spine boxes or the lineedit and the editline to trigger during initialisation
     //Initialize the spinboxe and scrollbar
 
+    // The first view requests [startTime, startTime + duration] right away. If that range
+    // goes past the end of the recording (e.g. a file shorter than the default 1 s window),
+    // the read comes up short and the view reports an incorrect file size.
+    const long recordingLength = static_cast<long>(doc->recordingLength());
+    if (recordingLength > 0)
+    {
+        duration = qBound(1L, duration, recordingLength);
+        if (startTime + duration > recordingLength)
+            startTime = qMax(0L, recordingLength - duration);
+    }
+
     //Create the mainDock (first view)
     if (tabLabel.isEmpty())
         tabLabel = tr("Field Potentials Display");
@@ -2206,7 +2217,7 @@ void NeuroscopeApp::slotDefaultSetUp(QMap<int, int>& channelDefaultOffsets, QMap
     QList<int> channelGains;
     QList<int> selectedChannels;
     if (initialTimeWindow != 0)
-        initDisplay(channelsToDisplay, false, offsets, channelGains, selectedChannels, skipStatus, initialTimeWindow);
+        initDisplay(channelsToDisplay, false, offsets, channelGains, selectedChannels, skipStatus, -1, initialTimeWindow);
     else
         initDisplay(channelsToDisplay, false, offsets, channelGains, selectedChannels, skipStatus);
 }
