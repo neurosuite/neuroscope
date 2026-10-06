@@ -48,8 +48,10 @@ endif()
 include(GNUInstallDirs)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(UNIX AND NOT APPLE)
-    # Find a bundled libneurosuite next to the binary (AppImage, relocatable installs)
+# Find a bundled libneurosuite next to the binary (AppImage, relocatable installs)
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}")
+elseif(UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
 
