@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -14,6 +13,8 @@ env:
 jobs:
   build:
     name: build (${{ matrix.name }})
+    # Branches in this repository are covered by the push run; build PRs from forks only.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -98,6 +99,8 @@ jobs:
           path: install/
 
   nix:
+    # Branches in this repository are covered by the push run; build PRs from forks only.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
