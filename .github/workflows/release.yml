@@ -171,7 +171,11 @@ jobs:
         with:
           path: dist
           merge-multiple: true
-      - run: find dist -type f -exec sha256sum {} \; | sed 's|dist/.*/||; s|dist/||' > dist/SHA256SUMS
+      # GitHub changes "~" in asset names, so the file names use 3.0.0-rc1 instead of the
+      # package version 3.0.0~rc1. Rename before taking the checksums.
+      - run: |
+          find dist -type f -name '*~*' | while read -r f; do mv "$f" "${f//\~/-}"; done
+          find dist -type f -exec sha256sum {} \; | sed 's|dist/.*/||; s|dist/||' > dist/SHA256SUMS
       - uses: softprops/action-gh-release@v3
         with:
           draft: true
