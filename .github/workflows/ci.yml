@@ -34,6 +34,15 @@ jobs:
           name: neuroscope-ubuntu-24.04-webengine-${{ matrix.webengine }}
           path: dist/
 
+  sanitizers:
+    name: sanitizers (ubuntu-24.04, ASan and UBSan)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      # Runs the unit tests with AddressSanitizer and UBSan in the Ubuntu container.
+      - run: make docker-sanitize
+
   macos:
     name: build (macos-14)
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository

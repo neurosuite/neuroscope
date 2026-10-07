@@ -84,6 +84,8 @@ nix develop        # shell with the build dependencies
 | `check`       | `test`, `install` and `smoke`                                              |
 | `package`     | The platform's default packages (.deb, .dmg, NSIS installer) in `PACKAGE_DIR` |
 | `docker`      | `check` and `package` in the Ubuntu container, results in `DIST_DIR` (Makefile only) |
+| `sanitize`    | Debug build in `BUILD_DIR-sanitize` with AddressSanitizer and UBSan, then the tests (Makefile only) |
+| `docker-sanitize` | `sanitize` in the Ubuntu container, as in CI (Makefile only)            |
 | `reconfigure` | Rerun CMake, needed after changing the variables below                     |
 | `clean`       | Empty the build directory and remove the release build directories         |
 
@@ -136,6 +138,12 @@ build/tests/test_clustersprovider -help           # Qt Test options
 
 The tests are built by default; configure with `-DBUILD_TESTING=OFF` (or
 `CMAKE_ARGS=-DBUILD_TESTING=OFF`) to skip them.
+
+`make sanitize` builds the tests with AddressSanitizer and UBSan and runs them; memory errors and
+undefined behaviour fail the test. `make docker-sanitize` does the same in the Ubuntu container, as the
+CI job does, which also works where the sanitizer runtimes are not installed (on Fedora they are in
+`libasan` and `libubsan`). Leak detection is off for now, as some readers leak on error paths that
+the tests exercise.
 
 Known bugs in the readers are marked with `QEXPECT_FAIL` and a description, so that the tests pass
 and document the current behaviour. Fixing such a bug turns the expected failure into an unexpected

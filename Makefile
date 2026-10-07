@@ -11,6 +11,8 @@
 #   make package        the platform's default packages (.deb, .dmg, NSIS installer) in $(PACKAGE_DIR)
 #   make docker         check and package in the Ubuntu container (see Dockerfile); the installed files
 #                       and packages are copied to $(DIST_DIR)
+#   make sanitize       build in $(BUILD_DIR)-sanitize with AddressSanitizer and UBSan and run the tests
+#   make docker-sanitize  sanitize in the Ubuntu container
 #   make reconfigure    rerun CMake, e.g. after changing the variables below
 #   make clean          empty the build directory and remove the release build directories
 #
@@ -73,7 +75,7 @@ UBUNTU_PACKAGES = ca-certificates cmake dpkg-dev file g++ git make ninja-build q
 LINUXDEPLOY_URL = https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_QT_URL = https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 
-.PHONY: all configure reconfigure build test install smoke check package docker clean \
+.PHONY: all configure reconfigure build test install smoke check package docker sanitize docker-sanitize clean \
 	ubuntu-deps macos-deps libneurosuite deb appimage dmg dmg-check
 
 all: build
@@ -118,10 +120,31 @@ docker:
 		.
 
 # The build directory itself is kept, with its .gitkeep.
+# Memory errors and undefined behaviour stop the test. Leak detection is off: some readers leak on
+# error paths, which the tests exercise.
+SANITIZE_FLAGS = -fsanitize=address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer
+
+sanitize:
+	$(call configure-cmake,$(BUILD_DIR)-sanitize, \
+		-DCMAKE_BUILD_TYPE=Debug -DWITH_WEBENGINE=$(WITH_WEBENGINE) \
+		$(if $(filter ON,$(BUNDLE_NEUROSUITE)),$(BUNDLE_ARGS)) \
+		"-DCMAKE_CXX_FLAGS=$(SANITIZE_FLAGS)" \
+		"-DCMAKE_EXE_LINKER_FLAGS=$(SANITIZE_FLAGS)" "-DCMAKE_SHARED_LINKER_FLAGS=$(SANITIZE_FLAGS)")
+	cmake --build $(BUILD_DIR)-sanitize
+	ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=print_stacktrace=1 \
+		ctest --test-dir $(BUILD_DIR)-sanitize --output-on-failure
+
+docker-sanitize:
+	$(DOCKER) build \
+		--build-arg WITH_WEBENGINE=OFF \
+		--build-arg LIBNEUROSUITE_REF=$(LIBNEUROSUITE_REF) \
+		--target sanitize \
+		.
+
 clean:
 	[ ! -d $(BUILD_DIR) ] || find $(BUILD_DIR) -mindepth 1 -maxdepth 1 ! -name .gitkeep -exec rm -rf {} +
 	rm -rf $(BUILD_DIR)-deb $(BUILD_DIR)-libneurosuite $(BUILD_DIR)-appimage \
-		$(BUILD_DIR)-dmg
+		$(BUILD_DIR)-dmg $(BUILD_DIR)-sanitize
 
 ################################################################################
 # Dependencies
