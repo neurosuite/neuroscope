@@ -20,6 +20,13 @@ visualization. *J Neurosci Methods* 155:207-216.
 Download a package for Linux (.deb, AppImage), macOS (.dmg) or Windows (installer or .zip)
 from the [releases page](https://github.com/neurosuite/neuroscope/releases).
 
+On Ubuntu 24.04 or newer, install the .deb together with the `libneurosuite3` package from
+the same release:
+
+```bash
+sudo apt install ./libneurosuite3_*.deb ./neuroscope_*.deb
+```
+
 ## Building
 
 Requires CMake 3.16+, a C++17 compiler, Qt 6.4+ (Widgets, PrintSupport, Xml) and
