@@ -9,7 +9,7 @@ on:
 
 env:
   # libneurosuite revision packaged with (.deb) or bundled into (others) the application.
-  LIBNEUROSUITE_REF: m1-followup
+  LIBNEUROSUITE_REF: main
 
 permissions:
   contents: write
