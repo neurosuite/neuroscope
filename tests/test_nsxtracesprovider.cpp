@@ -25,9 +25,9 @@ using namespace testutils;
 namespace
 {
 
-int16_t raw(long sample, int channel)
+std::int16_t raw(std::int64_t sample, int channel)
 {
-    return static_cast<int16_t>(channel * 1000 + sample * 3 - 1500);
+    return static_cast<std::int16_t>(channel * 1000 + sample * 3 - 1500);
 }
 
 const QList<NsxChannel> CHANNELS = {
@@ -41,20 +41,21 @@ const QList<NsxChannel> CHANNELS = {
   * of µV in exact arithmetic can come out 1 µV lower, depending on how the compiler evaluates the
   * expression (e.g. with fused multiply-add on arm64). Converted values are compared with a tolerance of
   * 1 µV. */
-dataType toMicroVolts(int16_t value, const NsxChannel& channel)
+std::int64_t toMicroVolts(std::int16_t value, const NsxChannel& channel)
 {
     const double unit = channel.unit == "mV" ? 1000 : 1;
     const double digitalRange = channel.maxDigital - channel.minDigital;
     const double analogRange = channel.maxAnalog - channel.minAnalog;
-    return static_cast<dataType>(((value - channel.minDigital) / digitalRange * analogRange + channel.minAnalog) * unit);
+    return static_cast<std::int64_t>(((value - channel.minDigital) / digitalRange * analogRange + channel.minAnalog) * unit);
 }
 
-bool closeTo(dataType actual, dataType expected)
+bool closeTo(std::int64_t actual, std::int64_t expected)
 {
     return qAbs(actual - expected) <= 1;
 }
 
-Matrix request(NSXTracesProvider& provider, long startTime, long endTime, long startTimeInRecordingUnits = 0)
+Matrix request(NSXTracesProvider& provider, std::int64_t startTime, std::int64_t endTime,
+               std::int64_t startTimeInRecordingUnits = 0)
 {
     Matrix result;
     int emitted = 0;
@@ -65,7 +66,8 @@ Matrix request(NSXTracesProvider& provider, long startTime, long endTime, long s
                                            result = toMatrix(data);
                                            ++emitted;
                                        });
-    provider.requestData(startTime, endTime, nullptr, startTimeInRecordingUnits);
+    provider.requestData(static_cast<long>(startTime), static_cast<long>(endTime), nullptr,
+                         static_cast<long>(startTimeInRecordingUnits));
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("dataReady emitted %d times", emitted);
@@ -104,8 +106,8 @@ class TestNSXTracesProvider : public QObject
         QCOMPARE(provider.getSamplingRate(), 1000.0);
         QCOMPARE(provider.getResolution(), 16);
         QCOMPARE(provider.getOffset(), 0);
-        QCOMPARE(provider.recordingLength(), 1000LL);
-        QCOMPARE(provider.getTotalNbSamples(), 1000L);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 1000_i64);
+        QCOMPARE(std::int64_t(provider.getTotalNbSamples()), 1000_i64);
         QCOMPARE(provider.getLabels(), QStringList({"elec1", "elec2", "ainp1"}));
     }
 
@@ -115,40 +117,42 @@ class TestNSXTracesProvider : public QObject
         NSXTracesProvider provider(path("fast.ns5"));
         QVERIFY(provider.init());
         QCOMPARE(provider.getSamplingRate(), 30000.0);
-        QCOMPARE(provider.recordingLength(), 100LL);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 100_i64);
     }
 
     void readWindow_data()
     {
-        QTest::addColumn<long>("startTime");
-        QTest::addColumn<long>("endTime");
-        QTest::addColumn<long>("startTimeInRecordingUnits");
-        QTest::addColumn<long>("firstSample");
-        QTest::addColumn<long>("nbSamples");
+        QTest::addColumn<std::int64_t>("startTime");
+        QTest::addColumn<std::int64_t>("endTime");
+        QTest::addColumn<std::int64_t>("startTimeInRecordingUnits");
+        QTest::addColumn<std::int64_t>("firstSample");
+        QTest::addColumn<std::int64_t>("nbSamples");
 
         // Unlike .dat files, the sample at the end time is not included.
-        QTest::newRow("window") << 100L << 200L << 0L << 100L << 100L;
-        QTest::newRow("start of file") << 0L << 10L << 0L << 0L << 10L;
-        QTest::newRow("end of file") << 900L << 1000L << 0L << 900L << 100L;
-        QTest::newRow("start in recording units") << 100L << 200L << 50L << 50L << 150L;
+        QTest::newRow("window") << 100_i64 << 200_i64 << 0_i64 << 100_i64 << 100_i64;
+        QTest::newRow("start of file") << 0_i64 << 10_i64 << 0_i64 << 0_i64 << 10_i64;
+        QTest::newRow("end of file") << 900_i64 << 1000_i64 << 0_i64 << 900_i64 << 100_i64;
+        QTest::newRow("start in recording units") << 100_i64 << 200_i64 << 50_i64 << 50_i64 << 150_i64;
     }
 
     void readWindow()
     {
-        QFETCH(long, startTime);
-        QFETCH(long, endTime);
-        QFETCH(long, startTimeInRecordingUnits);
-        QFETCH(long, firstSample);
-        QFETCH(long, nbSamples);
+        QFETCH(std::int64_t, startTime);
+        QFETCH(std::int64_t, endTime);
+        QFETCH(std::int64_t, startTimeInRecordingUnits);
+        QFETCH(std::int64_t, firstSample);
+        QFETCH(std::int64_t, nbSamples);
 
         NSXTracesProvider provider(path("session.ns2"));
         QVERIFY(provider.init());
-        QCOMPARE(provider.getNbSamples(startTime, endTime, startTimeInRecordingUnits), nbSamples);
+        QCOMPARE(std::int64_t(provider.getNbSamples(static_cast<long>(startTime), static_cast<long>(endTime),
+                                                  static_cast<long>(startTimeInRecordingUnits))),
+                 nbSamples);
 
         const Matrix data = request(provider, startTime, endTime, startTimeInRecordingUnits);
         QCOMPARE(data.rows, nbSamples);
-        QCOMPARE(data.cols, 3L);
-        for (long s = 0; s < nbSamples; ++s)
+        QCOMPARE(data.cols, 3_i64);
+        for (std::int64_t s = 0; s < nbSamples; ++s)
             for (int c = 0; c < 3; ++c)
                 QVERIFY2(closeTo(data(s + 1, c + 1), toMicroVolts(raw(firstSample + s, c), CHANNELS[c])),
                          qPrintable(QString("sample %1, channel %2: %3").arg(firstSample + s).arg(c).arg(data(s + 1, c + 1))));
@@ -160,12 +164,12 @@ class TestNSXTracesProvider : public QObject
         NSXTracesProvider provider(path("session.ns2"));
         QVERIFY(provider.init());
         const Matrix data = request(provider, 500, 501);
-        QCOMPARE(data.rows, 1L);
-        QCOMPARE(raw(500, 0), int16_t(0));
-        QCOMPARE(data(1, 1), 0L);
-        QCOMPARE(raw(500, 1), int16_t(1000));
+        QCOMPARE(data.rows, 1_i64);
+        QCOMPARE(raw(500, 0), std::int16_t(0));
+        QCOMPARE(data(1, 1), 0_i64);
+        QCOMPARE(raw(500, 1), std::int16_t(1000));
         QVERIFY(closeTo(data(1, 2), 250));
-        QCOMPARE(raw(500, 2), int16_t(2000));
+        QCOMPARE(raw(500, 2), std::int16_t(2000));
         QVERIFY(closeTo(data(1, 3), 305213));
     }
 

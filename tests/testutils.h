@@ -29,22 +29,38 @@
 #include <QStringList>
 #include <QVector>
 
+#include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <functional>
 
+// The tests use fixed-width integers. The readers' API uses long (and dataType, which is long), which
+// has 64 bits on Linux and macOS but 32 bits on Windows; values are converted where they cross the API.
+
 namespace testutils
 {
+
+/** std::int64_t literal, e.g. 100_i64. */
+constexpr std::int64_t operator""_i64(unsigned long long value)
+{
+    return static_cast<std::int64_t>(value);
+}
+
+/** Rounds half away from zero, like the readers. */
+inline std::int64_t roundHalfAway(double value)
+{
+    return static_cast<std::int64_t>(std::llround(value));
+}
 
 /** Copy of an Array emitted by a provider. Array itself has no safe copy assignment. */
 struct Matrix
 {
-    long rows = 0;
-    long cols = 0;
-    QVector<dataType> values;
+    std::int64_t rows = 0;
+    std::int64_t cols = 0;
+    QVector<std::int64_t> values;
 
     /** Element access, rows and columns start at 1 like Array. */
-    dataType operator()(long row, long col) const { return values[(row - 1) * cols + (col - 1)]; }
+    std::int64_t operator()(std::int64_t row, std::int64_t col) const { return values[(row - 1) * cols + (col - 1)]; }
     bool isEmpty() const { return values.isEmpty(); }
 };
 
@@ -55,9 +71,9 @@ Matrix toMatrix(const Array<T>& array)
     m.rows = array.nbOfRows();
     m.cols = array.nbOfColumns();
     m.values.reserve(m.rows * m.cols);
-    for (long r = 1; r <= m.rows; ++r)
-        for (long c = 1; c <= m.cols; ++c)
-            m.values.append(static_cast<dataType>(array(r, c)));
+    for (std::int64_t r = 1; r <= m.rows; ++r)
+        for (std::int64_t c = 1; c <= m.cols; ++c)
+            m.values.append(static_cast<std::int64_t>(array(static_cast<long>(r), static_cast<long>(c))));
     return m;
 }
 
@@ -88,29 +104,30 @@ inline void copyString(char* destination, size_t size, const char* text)
 
 /** Interleaved samples (sample-major, as in .dat and .eeg files). */
 template<typename T>
-QByteArray interleaved(long nbSamples, int nbChannels, const std::function<T(long sample, int channel)>& value)
+QByteArray interleaved(std::int64_t nbSamples, int nbChannels,
+                       const std::function<T(std::int64_t sample, int channel)>& value)
 {
     QByteArray bytes;
     bytes.reserve(nbSamples * nbChannels * sizeof(T));
-    for (long s = 0; s < nbSamples; ++s)
+    for (std::int64_t s = 0; s < nbSamples; ++s)
         for (int c = 0; c < nbChannels; ++c)
             append<T>(bytes, value(s, c));
     return bytes;
 }
 
 /** Neuralynx .ncs: 16 kB text header, then records of a 20 byte header and 512 samples. */
-inline QByteArray ncsFile(long nbSamples, const std::function<int16_t(long sample)>& value)
+inline QByteArray ncsFile(std::int64_t nbSamples, const std::function<std::int16_t(std::int64_t sample)>& value)
 {
     const int samplesPerRecord = 512;
     QByteArray bytes(16 * 1024, '\0');
     const QByteArray header("######## Neuralynx Data File Header (synthetic test file)\r\n");
     bytes.replace(0, header.size(), header);
 
-    for (long first = 0; first < nbSamples; first += samplesPerRecord)
+    for (std::int64_t first = 0; first < nbSamples; first += samplesPerRecord)
     {
         bytes.append(QByteArray(20, '\0'));
-        for (long s = first; s < first + samplesPerRecord; ++s)
-            append<int16_t>(bytes, s < nbSamples ? value(s) : int16_t(0));
+        for (std::int64_t s = first; s < first + samplesPerRecord; ++s)
+            append<std::int16_t>(bytes, s < nbSamples ? value(s) : std::int16_t(0));
     }
     return bytes;
 }
@@ -119,16 +136,16 @@ inline QByteArray ncsFile(long nbSamples, const std::function<int16_t(long sampl
 struct NsxChannel
 {
     QString label;
-    int16_t minDigital;
-    int16_t maxDigital;
-    int16_t minAnalog;
-    int16_t maxAnalog;
+    std::int16_t minDigital;
+    std::int16_t maxDigital;
+    std::int16_t minAnalog;
+    std::int16_t maxAnalog;
     QString unit;
 };
 
 /** Blackrock NSX 2.2 file with one data block. */
-inline QByteArray nsxFile(uint32_t samplingPeriod, const QList<NsxChannel>& channels, long nbSamples,
-                          const std::function<int16_t(long sample, int channel)>& value)
+inline QByteArray nsxFile(std::uint32_t samplingPeriod, const QList<NsxChannel>& channels, std::int64_t nbSamples,
+                          const std::function<std::int16_t(std::int64_t sample, int channel)>& value)
 {
     NSXBasicHeader basic;
     std::memset(&basic, 0, sizeof(basic));
@@ -162,22 +179,22 @@ inline QByteArray nsxFile(uint32_t samplingPeriod, const QList<NsxChannel>& chan
     data.timestamp = 0;
     data.length = nbSamples;
     append(bytes, data);
-    bytes.append(interleaved<int16_t>(nbSamples, channels.size(), value));
+    bytes.append(interleaved<std::int16_t>(nbSamples, channels.size(), value));
     return bytes;
 }
 
 /** One data packet of a synthetic NEV file. */
 struct NevPacket
 {
-    uint32_t timestamp;
-    uint16_t id;           // 0 = digital, 1-2048 = spike on electrode id, 0xFFFC = button, ...
-    uint8_t unitOrReason;  // unit class for spikes, reason for digital packets
-    uint16_t value;        // digital input, button trigger or configuration type
+    std::uint32_t timestamp;
+    std::uint16_t id;           // 0 = digital, 1-2048 = spike on electrode id, 0xFFFC = button, ...
+    std::uint8_t unitOrReason;  // unit class for spikes, reason for digital packets
+    std::uint16_t value;        // digital input, button trigger or configuration type
 };
 
 /** Blackrock NEV 2.2 file with neural label extension headers for the given electrodes. */
-inline QByteArray nevFile(uint32_t timeResolution, const QList<QPair<uint16_t, QString>>& electrodeLabels,
-                          const QList<NevPacket>& packets, uint32_t packetSize = 104)
+inline QByteArray nevFile(std::uint32_t timeResolution, const QList<QPair<std::uint16_t, QString>>& electrodeLabels,
+                          const QList<NevPacket>& packets, std::uint32_t packetSize = 104)
 {
     NEVBasicHeader basic;
     std::memset(&basic, 0, sizeof(basic));

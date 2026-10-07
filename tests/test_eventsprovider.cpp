@@ -47,10 +47,10 @@ struct Result
     Matrix times;
     Matrix ids;
     QString name;
-    long startingTime = -1;
+    std::int64_t startingTime = -1;
 };
 
-Result request(EventsProvider& provider, long startTime, long endTime)
+Result request(EventsProvider& provider, std::int64_t startTime, std::int64_t endTime)
 {
     Result result;
     int emitted = 0;
@@ -62,14 +62,14 @@ Result request(EventsProvider& provider, long startTime, long endTime)
                                            result.name = name;
                                            ++emitted;
                                        });
-    provider.requestData(startTime, endTime, nullptr);
+    provider.requestData(static_cast<long>(startTime), static_cast<long>(endTime), nullptr);
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("dataReady emitted %d times", emitted);
     return result;
 }
 
-Result requestNext(EventsProvider& provider, long startTime, long timeFrame, const QList<int>& selectedIds)
+Result requestNext(EventsProvider& provider, std::int64_t startTime, std::int64_t timeFrame, const QList<int>& selectedIds)
 {
     Result result;
     int emitted = 0;
@@ -79,14 +79,15 @@ Result requestNext(EventsProvider& provider, long startTime, long timeFrame, con
                                            result = {toMatrix(times), toMatrix(ids), name, startingTime};
                                            ++emitted;
                                        });
-    provider.requestNextEventData(startTime, timeFrame, selectedIds, nullptr);
+    provider.requestNextEventData(static_cast<long>(startTime), static_cast<long>(timeFrame), selectedIds, nullptr);
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("nextEventDataReady emitted %d times", emitted);
     return result;
 }
 
-Result requestPrevious(EventsProvider& provider, long startTime, long timeFrame, const QList<int>& selectedIds)
+Result requestPrevious(EventsProvider& provider, std::int64_t startTime, std::int64_t timeFrame,
+                       const QList<int>& selectedIds)
 {
     Result result;
     int emitted = 0;
@@ -96,7 +97,7 @@ Result requestPrevious(EventsProvider& provider, long startTime, long timeFrame,
                                            result = {toMatrix(times), toMatrix(ids), name, startingTime};
                                            ++emitted;
                                        });
-    provider.requestPreviousEventData(startTime, timeFrame, selectedIds, nullptr);
+    provider.requestPreviousEventData(static_cast<long>(startTime), static_cast<long>(timeFrame), selectedIds, nullptr);
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("previousEventDataReady emitted %d times", emitted);
@@ -106,16 +107,17 @@ Result requestPrevious(EventsProvider& provider, long startTime, long timeFrame,
 QString describe(const Result& result)
 {
     QStringList events;
-    for (long c = 1; c <= result.times.cols; ++c)
+    for (std::int64_t c = 1; c <= result.times.cols; ++c)
         events << QString("(%1, %2)").arg(result.times(1, c)).arg(result.ids(1, c));
     return events.join(' ');
 }
 
 /** The events of a window computed directly from the event list, with times in samples from the start. */
-QString expectedWindow(const QList<Event>& events, const QMap<QString, int>& ids, long startTime, long endTime,
+QString expectedWindow(const QList<Event>& events, const QMap<QString, int>& ids, std::int64_t startTime,
+                       std::int64_t endTime,
                        double samplingRate)
 {
-    const long fileMaxTime = static_cast<long>(std::floor(0.5 + events.last().time));
+    const std::int64_t fileMaxTime = static_cast<std::int64_t>(std::floor(0.5 + events.last().time));
     if (startTime > fileMaxTime)
         return {};
     endTime = qMin(endTime, fileMaxTime);
@@ -124,10 +126,10 @@ QString expectedWindow(const QList<Event>& events, const QMap<QString, int>& ids
     QStringList result;
     for (const Event& event : events)
     {
-        const long rounded = static_cast<long>(std::floor(0.5 + event.time));
+        const std::int64_t rounded = static_cast<std::int64_t>(std::floor(0.5 + event.time));
         if (rounded < startTime || rounded > endTime)
             continue;
-        const dataType time = qMax(static_cast<dataType>(std::floor(static_cast<float>(0.5 + (event.time - startTime) * samplesPerMs))), 0L);
+        const std::int64_t time = qMax(static_cast<std::int64_t>(std::floor(static_cast<float>(0.5 + (event.time - startTime) * samplesPerMs))), 0_i64);
         result << QString("(%1, %2)").arg(time).arg(ids[event.description]);
     }
     return result.join(' ');
@@ -222,19 +224,19 @@ class TestEventsProvider : public QObject
 
     void readWindow_data()
     {
-        QTest::addColumn<long>("startTime");
-        QTest::addColumn<long>("endTime");
+        QTest::addColumn<std::int64_t>("startTime");
+        QTest::addColumn<std::int64_t>("endTime");
 
-        QTest::newRow("start of file") << 0L << 1000L;
-        QTest::newRow("middle") << 300000L << 301000L;
-        QTest::newRow("end of file") << 990000L << 2000000L;
-        QTest::newRow("past end of file") << 2000000L << 2001000L;
+        QTest::newRow("start of file") << 0_i64 << 1000_i64;
+        QTest::newRow("middle") << 300000_i64 << 301000_i64;
+        QTest::newRow("end of file") << 990000_i64 << 2000000_i64;
+        QTest::newRow("past end of file") << 2000000_i64 << 2001000_i64;
     }
 
     void readWindow()
     {
-        QFETCH(long, startTime);
-        QFETCH(long, endTime);
+        QFETCH(std::int64_t, startTime);
+        QFETCH(std::int64_t, endTime);
 
         EventsProvider provider(path("many.abc.evt"), 20000.0);
         QCOMPARE(provider.loadData(), int(EventsProvider::OK));
@@ -259,10 +261,10 @@ class TestEventsProvider : public QObject
         EventsProvider provider(path("many.abc.evt"), samplingRate);
         QCOMPARE(provider.loadData(), int(EventsProvider::OK));
 
-        const long fileMaxTime = static_cast<long>(std::floor(0.5 + manyEvents.last().time));
+        const std::int64_t fileMaxTime = static_cast<std::int64_t>(std::floor(0.5 + manyEvents.last().time));
         QRandomGenerator random(7);
-        long startTime = 0;
-        long duration = 1000;
+        std::int64_t startTime = 0;
+        std::int64_t duration = 1000;
         for (int i = 0; i < 500; ++i)
         {
             switch (random.bounded(4))
@@ -271,7 +273,7 @@ class TestEventsProvider : public QObject
                 startTime += duration;
                 break;
             case 1:
-                startTime = qMax(0L, startTime - duration);
+                startTime = qMax(0_i64, startTime - duration);
                 break;
             case 2:
                 startTime = random.bounded(static_cast<int>(fileMaxTime + 500));
@@ -280,7 +282,7 @@ class TestEventsProvider : public QObject
                 duration = 1 + random.bounded(5000);
                 break;
             }
-            const long endTime = startTime + duration;
+            const std::int64_t endTime = startTime + duration;
             const QString actual = describe(request(provider, startTime, endTime));
             const QString expected = expectedWindow(manyEvents, ids, startTime, endTime, samplingRate);
             if (actual != expected)
@@ -301,13 +303,13 @@ class TestEventsProvider : public QObject
         // The next reward after 250 ms is at 1500 ms: the window starts at 1250 ms.
         const Result next = requestNext(provider, 0, 1000, {reward});
         QCOMPARE(next.name, QString("xyz"));
-        QCOMPARE(next.startingTime, 1250L);
+        QCOMPARE(next.startingTime, 1250_i64);
         QCOMPARE(describe(next), QString("(250, %1)").arg(reward));
 
         // The previous reward is at 200 ms; the window cannot start before 0.
         const int lick = provider.eventDescriptionIdMap().value(EventDescription("lick"));
         const Result previous = requestPrevious(provider, next.startingTime, 1000, {reward});
-        QCOMPARE(previous.startingTime, 0L);
+        QCOMPARE(previous.startingTime, 0_i64);
         QCOMPARE(describe(previous), QString("(100, %1) (200, %2) (500, %1)").arg(lick).arg(reward));
     }
 

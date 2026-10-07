@@ -36,23 +36,24 @@ double gain(int resolution)
     return VOLTAGE_RANGE * 1e6 / (std::pow(2.0, resolution) * AMPLIFICATION);
 }
 
-int16_t raw16(long sample, int channel)
+std::int16_t raw16(std::int64_t sample, int channel)
 {
-    return static_cast<int16_t>(channel * 4000 + (sample % 3000) - 6000);
+    return static_cast<std::int16_t>(channel * 4000 + (sample % 3000) - 6000);
 }
 
-int32_t raw32(long sample, int channel)
+std::int32_t raw32(std::int64_t sample, int channel)
 {
-    return channel * 100000 + static_cast<int32_t>(sample) - 50000;
+    return static_cast<std::int32_t>(channel * 100000 + sample - 50000);
 }
 
-int16_t rawNcs(long sample, int channel)
+std::int16_t rawNcs(std::int64_t sample, int channel)
 {
-    return static_cast<int16_t>(channel * 2000 + sample - 1000);
+    return static_cast<std::int16_t>(channel * 2000 + sample - 1000);
 }
 
 /** Requests a window and returns the emitted data. */
-Matrix request(TracesProvider& provider, long startTime, long endTime, long startTimeInRecordingUnits = 0)
+Matrix request(TracesProvider& provider, std::int64_t startTime, std::int64_t endTime,
+               std::int64_t startTimeInRecordingUnits = 0)
 {
     Matrix result;
     int emitted = 0;
@@ -62,7 +63,8 @@ Matrix request(TracesProvider& provider, long startTime, long endTime, long star
                                            result = toMatrix(data);
                                            ++emitted;
                                        });
-    provider.requestData(startTime, endTime, nullptr, startTimeInRecordingUnits);
+    provider.requestData(static_cast<long>(startTime), static_cast<long>(endTime), nullptr,
+                         static_cast<long>(startTimeInRecordingUnits));
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("dataReady emitted %d times", emitted);
@@ -85,14 +87,14 @@ class TestTracesProvider : public QObject
     {
         QVERIFY(dir.isValid());
         // 4 channels, 2000 samples: 2 s at 1 kHz or 1.6 s at 1250 Hz.
-        writeFile(path("session.dat"), interleaved<int16_t>(2000, 4, raw16));
-        writeFile(path("session32.dat"), interleaved<int32_t>(2000, 4, raw32));
+        writeFile(path("session.dat"), interleaved<std::int16_t>(2000, 4, raw16));
+        writeFile(path("session32.dat"), interleaved<std::int32_t>(2000, 4, raw32));
         // Neuralynx: one file per channel, 1500 samples (two full records and a partial one).
-        writeFile(path("CSC1.ncs"), ncsFile(1500, [](long s) { return rawNcs(s, 0); }));
-        writeFile(path("CSC2.ncs"), ncsFile(1500, [](long s) { return rawNcs(s, 1); }));
+        writeFile(path("CSC1.ncs"), ncsFile(1500, [](std::int64_t s) { return rawNcs(s, 0); }));
+        writeFile(path("CSC2.ncs"), ncsFile(1500, [](std::int64_t s) { return rawNcs(s, 1); }));
         // Zero-padded channel numbers.
-        writeFile(path("TT01.ncs"), ncsFile(1500, [](long s) { return rawNcs(s, 0); }));
-        writeFile(path("TT02.ncs"), ncsFile(1500, [](long s) { return rawNcs(s, 1); }));
+        writeFile(path("TT01.ncs"), ncsFile(1500, [](std::int64_t s) { return rawNcs(s, 0); }));
+        writeFile(path("TT02.ncs"), ncsFile(1500, [](std::int64_t s) { return rawNcs(s, 1); }));
     }
 
     void recordingLength_data()
@@ -100,16 +102,16 @@ class TestTracesProvider : public QObject
         QTest::addColumn<QString>("file");
         QTest::addColumn<int>("resolution");
         QTest::addColumn<double>("samplingRate");
-        QTest::addColumn<qlonglong>("length");
-        QTest::addColumn<long>("totalNbSamples");
+        QTest::addColumn<std::int64_t>("length");
+        QTest::addColumn<std::int64_t>("totalNbSamples");
 
-        QTest::newRow("16 bit at 1 kHz") << "session.dat" << 16 << 1000.0 << 2000LL << 2000L;
-        QTest::newRow("16 bit at 1250 Hz") << "session.dat" << 16 << 1250.0 << 1600LL << 2000L;
-        QTest::newRow("12 bit is stored as 16 bit") << "session.dat" << 12 << 1000.0 << 2000LL << 2000L;
-        QTest::newRow("32 bit at 1 kHz") << "session32.dat" << 32 << 1000.0 << 2000LL << 2000L;
+        QTest::newRow("16 bit at 1 kHz") << "session.dat" << 16 << 1000.0 << 2000_i64 << 2000_i64;
+        QTest::newRow("16 bit at 1250 Hz") << "session.dat" << 16 << 1250.0 << 1600_i64 << 2000_i64;
+        QTest::newRow("12 bit is stored as 16 bit") << "session.dat" << 12 << 1000.0 << 2000_i64 << 2000_i64;
+        QTest::newRow("32 bit at 1 kHz") << "session32.dat" << 32 << 1000.0 << 2000_i64 << 2000_i64;
         // Lengths are truncated to whole milliseconds.
-        QTest::newRow("20 kHz") << "session.dat" << 16 << 20000.0 << 100LL << 2000L;
-        QTest::newRow("non-integer duration") << "session.dat" << 16 << 3000.0 << 666LL << 1998L;
+        QTest::newRow("20 kHz") << "session.dat" << 16 << 20000.0 << 100_i64 << 2000_i64;
+        QTest::newRow("non-integer duration") << "session.dat" << 16 << 3000.0 << 666_i64 << 1998_i64;
     }
 
     void recordingLength()
@@ -117,63 +119,63 @@ class TestTracesProvider : public QObject
         QFETCH(QString, file);
         QFETCH(int, resolution);
         QFETCH(double, samplingRate);
-        QFETCH(qlonglong, length);
-        QFETCH(long, totalNbSamples);
+        QFETCH(std::int64_t, length);
+        QFETCH(std::int64_t, totalNbSamples);
 
         TracesProvider provider(path(file), 4, resolution, VOLTAGE_RANGE, AMPLIFICATION, samplingRate, 0);
-        QCOMPARE(provider.recordingLength(), length);
-        QCOMPARE(provider.getTotalNbSamples(), totalNbSamples);
+        QCOMPARE(std::int64_t(provider.recordingLength()), length);
+        QCOMPARE(std::int64_t(provider.getTotalNbSamples()), totalNbSamples);
     }
 
     void recordingLengthFollowsParameterChanges()
     {
         TracesProvider provider(path("session.dat"), 4, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
         provider.setNbChannels(2);
-        QCOMPARE(provider.recordingLength(), 4000LL);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 4000_i64);
         provider.setSamplingRate(2000.0);
-        QCOMPARE(provider.recordingLength(), 2000LL);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 2000_i64);
         provider.setResolution(32);
-        QCOMPARE(provider.recordingLength(), 1000LL);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 1000_i64);
     }
 
     void readWindow_data()
     {
         QTest::addColumn<double>("samplingRate");
-        QTest::addColumn<long>("startTime");
-        QTest::addColumn<long>("endTime");
-        QTest::addColumn<long>("startTimeInRecordingUnits");
-        QTest::addColumn<long>("firstSample");
-        QTest::addColumn<long>("nbSamples");
+        QTest::addColumn<std::int64_t>("startTime");
+        QTest::addColumn<std::int64_t>("endTime");
+        QTest::addColumn<std::int64_t>("startTimeInRecordingUnits");
+        QTest::addColumn<std::int64_t>("firstSample");
+        QTest::addColumn<std::int64_t>("nbSamples");
 
         // Both ends are included.
-        QTest::newRow("1 kHz") << 1000.0 << 100L << 199L << 0L << 100L << 100L;
-        QTest::newRow("single sample") << 1000.0 << 0L << 0L << 0L << 0L << 1L;
-        QTest::newRow("start of file") << 1000.0 << 0L << 999L << 0L << 0L << 1000L;
+        QTest::newRow("1 kHz") << 1000.0 << 100_i64 << 199_i64 << 0_i64 << 100_i64 << 100_i64;
+        QTest::newRow("single sample") << 1000.0 << 0_i64 << 0_i64 << 0_i64 << 0_i64 << 1_i64;
+        QTest::newRow("start of file") << 1000.0 << 0_i64 << 999_i64 << 0_i64 << 0_i64 << 1000_i64;
         // Times are converted to samples by truncation: 10 ms -> 12.5 -> 12, 20 ms -> 25.
-        QTest::newRow("1250 Hz") << 1250.0 << 10L << 20L << 0L << 12L << 14L;
+        QTest::newRow("1250 Hz") << 1250.0 << 10_i64 << 20_i64 << 0_i64 << 12_i64 << 14_i64;
         // A window ending at the recording length excludes the sample at the end time.
-        QTest::newRow("end of file") << 1000.0 << 1900L << 2000L << 0L << 1900L << 100L;
+        QTest::newRow("end of file") << 1000.0 << 1900_i64 << 2000_i64 << 0_i64 << 1900_i64 << 100_i64;
         // A start in recording units, from a previous browsing request, replaces the start time.
-        QTest::newRow("start in recording units") << 1000.0 << 100L << 199L << 50L << 50L << 150L;
+        QTest::newRow("start in recording units") << 1000.0 << 100_i64 << 199_i64 << 50_i64 << 50_i64 << 150_i64;
     }
 
     void readWindow()
     {
         QFETCH(double, samplingRate);
-        QFETCH(long, startTime);
-        QFETCH(long, endTime);
-        QFETCH(long, startTimeInRecordingUnits);
-        QFETCH(long, firstSample);
-        QFETCH(long, nbSamples);
+        QFETCH(std::int64_t, startTime);
+        QFETCH(std::int64_t, endTime);
+        QFETCH(std::int64_t, startTimeInRecordingUnits);
+        QFETCH(std::int64_t, firstSample);
+        QFETCH(std::int64_t, nbSamples);
 
         TracesProvider provider(path("session.dat"), 4, 16, VOLTAGE_RANGE, AMPLIFICATION, samplingRate, 0);
         const Matrix data = request(provider, startTime, endTime, startTimeInRecordingUnits);
 
         QCOMPARE(data.rows, nbSamples);
-        QCOMPARE(data.cols, 4L);
-        for (long s = 0; s < nbSamples; ++s)
+        QCOMPARE(data.cols, 4_i64);
+        for (std::int64_t s = 0; s < nbSamples; ++s)
             for (int c = 0; c < 4; ++c)
-                QCOMPARE(data(s + 1, c + 1), std::lround(raw16(firstSample + s, c) * gain(16)));
+                QCOMPARE(data(s + 1, c + 1), roundHalfAway(raw16(firstSample + s, c) * gain(16)));
     }
 
     void gainUsesResolution()
@@ -181,9 +183,9 @@ class TestTracesProvider : public QObject
         // 12 and 14 bit data are stored as 16 bit values, but the gain uses the given resolution.
         TracesProvider provider(path("session.dat"), 4, 12, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
         const Matrix data = request(provider, 10, 10);
-        QCOMPARE(data.rows, 1L);
+        QCOMPARE(data.rows, 1_i64);
         for (int c = 0; c < 4; ++c)
-            QCOMPARE(data(1, c + 1), std::lround(raw16(10, c) * gain(12)));
+            QCOMPARE(data(1, c + 1), roundHalfAway(raw16(10, c) * gain(12)));
     }
 
     void offsetIsSubtracted()
@@ -193,22 +195,22 @@ class TestTracesProvider : public QObject
         const int offset = 100;
         TracesProvider provider(path("session.dat"), 4, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, offset);
         const Matrix data = request(provider, 10, 11);
-        QCOMPARE(data.rows, 2L);
-        for (long s = 0; s < 2; ++s)
+        QCOMPARE(data.rows, 2_i64);
+        for (std::int64_t s = 0; s < 2; ++s)
             for (int c = 0; c < 4; ++c)
-                QCOMPARE(data(s + 1, c + 1), std::lround(raw16(10 + s, c) - offset * gain(16)));
+                QCOMPARE(data(s + 1, c + 1), roundHalfAway(raw16(10 + s, c) - offset * gain(16)));
     }
 
     void read32Bit()
     {
         TracesProvider provider(path("session32.dat"), 4, 32, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
         const Matrix data = request(provider, 100, 109);
-        QCOMPARE(data.rows, 10L);
-        QVector<dataType> expected;
-        for (long s = 0; s < 10; ++s)
+        QCOMPARE(data.rows, 10_i64);
+        QVector<std::int64_t> expected;
+        for (std::int64_t s = 0; s < 10; ++s)
             for (int c = 0; c < 4; ++c)
-                expected.append(std::lround(raw32(100 + s, c) * gain(32)));
-        if (sizeof(dataType) != sizeof(int32_t))
+                expected.append(roundHalfAway(raw32(100 + s, c) * gain(32)));
+        if (sizeof(dataType) != sizeof(std::int32_t))
             QEXPECT_FAIL("", "32 bit samples are read into an array of long, which has 64 bits on Linux and macOS", Abort);
         QCOMPARE(data.values, expected);
     }
@@ -230,8 +232,8 @@ class TestTracesProvider : public QObject
     void missingFile()
     {
         TracesProvider provider(path("missing.dat"), 4, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
-        QCOMPARE(provider.recordingLength(), 0LL);
-        QCOMPARE(provider.getTotalNbSamples(), 0L);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 0_i64);
+        QCOMPARE(std::int64_t(provider.getTotalNbSamples()), 0_i64);
         QVERIFY(request(provider, 0, 9).isEmpty());
     }
 
@@ -246,40 +248,40 @@ class TestTracesProvider : public QObject
         // The length is computed from the first channel's file, with one channel per file.
         TracesProvider provider(path("CSC1.ncs"), 2, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
         // The partial last record is padded to 512 samples in the file.
-        QCOMPARE(provider.recordingLength(), 1536LL);
+        QCOMPARE(std::int64_t(provider.recordingLength()), 1536_i64);
     }
 
     void ncsReadWindow_data()
     {
         QTest::addColumn<QString>("file");
-        QTest::addColumn<long>("startTime");
-        QTest::addColumn<long>("endTime");
+        QTest::addColumn<std::int64_t>("startTime");
+        QTest::addColumn<std::int64_t>("endTime");
 
-        QTest::newRow("first record to second") << "CSC1.ncs" << 100L << 700L;
-        QTest::newRow("spanning three records") << "CSC1.ncs" << 500L << 1100L;
-        QTest::newRow("record boundary") << "CSC1.ncs" << 512L << 1100L;
-        QTest::newRow("zero-padded file names") << "TT01.ncs" << 100L << 700L;
+        QTest::newRow("first record to second") << "CSC1.ncs" << 100_i64 << 700_i64;
+        QTest::newRow("spanning three records") << "CSC1.ncs" << 500_i64 << 1100_i64;
+        QTest::newRow("record boundary") << "CSC1.ncs" << 512_i64 << 1100_i64;
+        QTest::newRow("zero-padded file names") << "TT01.ncs" << 100_i64 << 700_i64;
     }
 
     void ncsReadWindow()
     {
         QFETCH(QString, file);
-        QFETCH(long, startTime);
-        QFETCH(long, endTime);
+        QFETCH(std::int64_t, startTime);
+        QFETCH(std::int64_t, endTime);
 
         TracesProvider provider(path(file), 2, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, 0);
         const Matrix data = request(provider, startTime, endTime);
 
-        const long nbSamples = endTime - startTime + 1;
+        const std::int64_t nbSamples = endTime - startTime + 1;
         QCOMPARE(data.rows, nbSamples);
-        QCOMPARE(data.cols, 2L);
-        for (long s = 0; s < nbSamples - 1; ++s)
+        QCOMPARE(data.cols, 2_i64);
+        for (std::int64_t s = 0; s < nbSamples - 1; ++s)
             for (int c = 0; c < 2; ++c)
-                QCOMPARE(data(s + 1, c + 1), std::lround(rawNcs(startTime + s, c) * gain(16)));
+                QCOMPARE(data(s + 1, c + 1), roundHalfAway(rawNcs(startTime + s, c) * gain(16)));
 
-        const QVector<dataType> lastSample = {data(nbSamples, 1), data(nbSamples, 2)};
-        const QVector<dataType> expectedLastSample = {std::lround(rawNcs(endTime, 0) * gain(16)),
-                                                      std::lround(rawNcs(endTime, 1) * gain(16))};
+        const QVector<std::int64_t> lastSample = {data(nbSamples, 1), data(nbSamples, 2)};
+        const QVector<std::int64_t> expectedLastSample = {roundHalfAway(rawNcs(endTime, 0) * gain(16)),
+                                                          roundHalfAway(rawNcs(endTime, 1) * gain(16))};
         QEXPECT_FAIL("", "The last sample of the window is not read from .ncs files (off by one in inLastRecord)", Abort);
         QCOMPARE(lastSample, expectedLastSample);
     }

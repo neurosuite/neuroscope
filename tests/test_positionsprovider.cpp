@@ -30,10 +30,10 @@ const int WIDTH = 368;
 const int HEIGHT = 240;
 const int NB_POSITIONS = 100;
 
-long x(long line) { return 2 * line; }
-long y(long line) { return 100 + line; }
+std::int64_t x(std::int64_t line) { return 2 * line; }
+std::int64_t y(std::int64_t line) { return 100 + line; }
 
-Matrix request(PositionsProvider& provider, long startTime, long endTime)
+Matrix request(PositionsProvider& provider, std::int64_t startTime, std::int64_t endTime)
 {
     Matrix result;
     int emitted = 0;
@@ -43,7 +43,7 @@ Matrix request(PositionsProvider& provider, long startTime, long endTime)
                                            result = toMatrix(data);
                                            ++emitted;
                                        });
-    provider.requestData(startTime, endTime, nullptr);
+    provider.requestData(static_cast<long>(startTime), static_cast<long>(endTime), nullptr);
     QObject::disconnect(connection);
     if (emitted != 1)
         qFatal("dataReady emitted %d times", emitted);
@@ -66,7 +66,7 @@ class TestPositionsProvider : public QObject
     {
         QVERIFY(dir.isValid());
         QString content;
-        for (long line = 0; line < NB_POSITIONS; ++line)
+        for (std::int64_t line = 0; line < NB_POSITIONS; ++line)
             content += QString("%1 %2\n").arg(x(line)).arg(y(line));
         writeTextFile(path("session.pos"), content);
     }
@@ -85,8 +85,8 @@ class TestPositionsProvider : public QObject
         PositionsProvider provider(path("decimals.pos"), SAMPLING_RATE, WIDTH, HEIGHT, 0, 0);
         QCOMPARE(provider.loadData(), int(PositionsProvider::OK));
         const Matrix data = request(provider, 40, 60);
-        QCOMPARE(data.rows, 2L);
-        QCOMPARE(data.values, QVector<dataType>({1, 3, -4, 100}));
+        QCOMPARE(data.rows, 2_i64);
+        QCOMPARE(data.values, QVector<std::int64_t>({1, 3, -4, 100}));
     }
 
     void firstPosition()
@@ -94,7 +94,7 @@ class TestPositionsProvider : public QObject
         PositionsProvider provider(path("session.pos"), SAMPLING_RATE, WIDTH, HEIGHT, 0, 0);
         QCOMPARE(provider.loadData(), int(PositionsProvider::OK));
         const Matrix data = request(provider, 0, 10);
-        QCOMPARE(data.rows, 1L);
+        QCOMPARE(data.rows, 1_i64);
         QCOMPARE(data(1, 1), x(0));
         QEXPECT_FAIL("", "The first line is stored in the first column instead of the first row: its y is not set", Abort);
         QCOMPARE(data(1, 2), y(0));
@@ -109,34 +109,34 @@ class TestPositionsProvider : public QObject
 
     void readWindow_data()
     {
-        QTest::addColumn<long>("startTime");
-        QTest::addColumn<long>("endTime");
-        QTest::addColumn<long>("firstLine");
-        QTest::addColumn<long>("nbLines");
+        QTest::addColumn<std::int64_t>("startTime");
+        QTest::addColumn<std::int64_t>("endTime");
+        QTest::addColumn<std::int64_t>("firstLine");
+        QTest::addColumn<std::int64_t>("nbLines");
 
         // Current behaviour: the start is rounded up and the end rounded to the nearest position, and
         // position n (counting from 1) is used for the time n / samplingRate: the first two positions
         // in the file are both shown at 0 and 20 ms.
-        QTest::newRow("start of file") << 0L << 100L << 0L << 5L;
-        QTest::newRow("start at second position") << 20L << 100L << 0L << 5L;
-        QTest::newRow("start at third position") << 40L << 100L << 1L << 4L;
-        QTest::newRow("start rounded up") << 41L << 100L << 2L << 3L;
-        QTest::newRow("end past end of file") << 1900L << 3000L << 94L << 6L;
+        QTest::newRow("start of file") << 0_i64 << 100_i64 << 0_i64 << 5_i64;
+        QTest::newRow("start at second position") << 20_i64 << 100_i64 << 0_i64 << 5_i64;
+        QTest::newRow("start at third position") << 40_i64 << 100_i64 << 1_i64 << 4_i64;
+        QTest::newRow("start rounded up") << 41_i64 << 100_i64 << 2_i64 << 3_i64;
+        QTest::newRow("end past end of file") << 1900_i64 << 3000_i64 << 94_i64 << 6_i64;
     }
 
     void readWindow()
     {
-        QFETCH(long, startTime);
-        QFETCH(long, endTime);
-        QFETCH(long, firstLine);
-        QFETCH(long, nbLines);
+        QFETCH(std::int64_t, startTime);
+        QFETCH(std::int64_t, endTime);
+        QFETCH(std::int64_t, firstLine);
+        QFETCH(std::int64_t, nbLines);
 
         PositionsProvider provider(path("session.pos"), SAMPLING_RATE, WIDTH, HEIGHT, 0, 0);
         QCOMPARE(provider.loadData(), int(PositionsProvider::OK));
         const Matrix data = request(provider, startTime, endTime);
         QCOMPARE(data.rows, nbLines);
-        QCOMPARE(data.cols, 2L);
-        for (long i = 0; i < nbLines; ++i)
+        QCOMPARE(data.cols, 2_i64);
+        for (std::int64_t i = 0; i < nbLines; ++i)
         {
             QCOMPARE(data(i + 1, 1), x(firstLine + i));
             // The y of the first position is not set, see firstPosition().
@@ -155,25 +155,25 @@ class TestPositionsProvider : public QObject
     void flip_data()
     {
         QTest::addColumn<int>("flip");
-        QTest::addColumn<long>("expectedX");
-        QTest::addColumn<long>("expectedY");
+        QTest::addColumn<std::int64_t>("expectedX");
+        QTest::addColumn<std::int64_t>("expectedY");
 
         // Position 10: x = 18, y = 109.
-        QTest::newRow("none") << 0 << 18L << 109L;
-        QTest::newRow("vertical") << 1 << 18L << long(HEIGHT - 109);
-        QTest::newRow("horizontal") << 2 << long(WIDTH - 18) << 109L;
+        QTest::newRow("none") << 0 << 18_i64 << 109_i64;
+        QTest::newRow("vertical") << 1 << 18_i64 << std::int64_t(HEIGHT - 109);
+        QTest::newRow("horizontal") << 2 << std::int64_t(WIDTH - 18) << 109_i64;
     }
 
     void flip()
     {
         QFETCH(int, flip);
-        QFETCH(long, expectedX);
-        QFETCH(long, expectedY);
+        QFETCH(std::int64_t, expectedX);
+        QFETCH(std::int64_t, expectedY);
 
         PositionsProvider provider(path("session.pos"), SAMPLING_RATE, WIDTH, HEIGHT, 0, flip);
         QCOMPARE(provider.loadData(), int(PositionsProvider::OK));
         const Matrix data = request(provider, 200, 200);
-        QCOMPARE(data.rows, 1L);
+        QCOMPARE(data.rows, 1_i64);
         QCOMPARE(data(1, 1), expectedX);
         QCOMPARE(data(1, 2), expectedY);
     }
@@ -188,7 +188,7 @@ class TestPositionsProvider : public QObject
         provider.retrieveAllData(nullptr);
 
         // All positions, without the flip.
-        QCOMPARE(result.rows, long(NB_POSITIONS));
+        QCOMPARE(result.rows, std::int64_t(NB_POSITIONS));
         QCOMPARE(result(2, 2), y(1));
         QCOMPARE(result(NB_POSITIONS, 2), y(NB_POSITIONS - 1));
     }

@@ -28,10 +28,10 @@ using namespace testutils;
 namespace
 {
 
-const uint32_t TIME_RESOLUTION = 30000;
+const std::uint32_t TIME_RESOLUTION = 30000;
 
 // Electrode ids and labels. The labels are requested by NeuroScope from the NSX file.
-const QList<QPair<uint16_t, QString>> ELECTRODES = {{1, "elec1"}, {2, "elec2"}, {3, "elec3"}};
+const QList<QPair<std::uint16_t, QString>> ELECTRODES = {{1, "elec1"}, {2, "elec2"}, {3, "elec3"}};
 
 // Spikes (electrode id, unit) and events, with timestamps in 30 kHz ticks.
 const QList<NevPacket> PACKETS = {
@@ -52,12 +52,12 @@ struct ClusterResult
     QString name;
 };
 
-ClusterResult request(ClustersProvider& provider, long startTime, long endTime)
+ClusterResult request(ClustersProvider& provider, std::int64_t startTime, std::int64_t endTime)
 {
     ClusterResult result;
     auto connection = QObject::connect(&provider, &ClustersProvider::dataReady,
                                        [&](Array<dataType>& data, QObject*, QString name) { result = {toMatrix(data), name}; });
-    provider.requestData(startTime, endTime, nullptr, 0);
+    provider.requestData(static_cast<long>(startTime), static_cast<long>(endTime), nullptr, 0);
     QObject::disconnect(connection);
     return result;
 }
@@ -65,7 +65,7 @@ ClusterResult request(ClustersProvider& provider, long startTime, long endTime)
 QString describe(const Matrix& m)
 {
     QStringList columns;
-    for (long c = 1; c <= m.cols; ++c)
+    for (std::int64_t c = 1; c <= m.cols; ++c)
         columns << QString("(%1, %2)").arg(m(1, c)).arg(m(2, c));
     return columns.join(' ');
 }
@@ -164,8 +164,8 @@ class TestNEVProviders : public QObject
         // The digital event at 300 ms and the button press at 1000 ms, in ticks from the window start.
         provider.requestData(0, 1100, nullptr);
         QEXPECT_FAIL("", "NEV event timestamps are kept in ticks, but the window is given in ms", Abort);
-        QCOMPARE(ids.values, QVector<dataType>({digital, button}));
-        QCOMPARE(times.values, QVector<dataType>({9000, 30000}));
+        QCOMPARE(ids.values, QVector<std::int64_t>({digital, button}));
+        QCOMPARE(times.values, QVector<std::int64_t>({9000, 30000}));
     }
 
     void missingEventFile()
