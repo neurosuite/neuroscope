@@ -48,11 +48,20 @@ endif()
 include(GNUInstallDirs)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Find a bundled libneurosuite next to the binary (AppImage, relocatable installs)
-if(APPLE)
+# Find a bundled libneurosuite next to the binary (AppImage, macOS bundle, relocatable installs)
+if(APPBUNDLE)
+    set(NEUROSUITE_BUNDLED_LIBDIR "neuroscope.app/Contents/Frameworks")
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+elseif(APPLE)
     set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}")
 elseif(UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+endif()
+
+# Ship the MSVC runtime next to the executable on Windows.
+if(WIN32)
+    set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR})
+    include(InstallRequiredSystemLibraries)
 endif()
 
 if(MSVC)

@@ -56,11 +56,13 @@ jobs:
             -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
           cmake --build build-appimage
           DESTDIR=$PWD/AppDir cmake --install build-appimage
-          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-          chmod +x linuxdeploy*.AppImage
+          # The tools live outside the workspace so that only the result matches *.AppImage.
+          LD=$RUNNER_TEMP/linuxdeploy && mkdir -p $LD
+          wget -q -P $LD https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q -P $LD https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x $LD/*.AppImage && export PATH=$LD:$PATH
           export QMAKE=/usr/lib/qt6/bin/qmake LDAI_OUTPUT=NeuroScope-${GITHUB_REF_NAME#v}-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage \
+          $LD/linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage \
             --desktop-file AppDir/usr/share/applications/io.github.neurosuite.NeuroScope.desktop
       - uses: actions/upload-artifact@v7
         with:
@@ -88,11 +90,20 @@ jobs:
       - name: Build .dmg
         run: |
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCPACK_PACKAGE_VERSION="$PKG_VERSION" -DWITH_WEBENGINE=OFF \
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt) -DAPPBUNDLE=ON \
             -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON \
             -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
           cmake --build build
-          (cd build && cpack -G DragNDrop -R "$PKG_VERSION")
+          (cd build && cpack -G DragNDrop)
+      - name: Check the packaged application starts
+        run: |
+          hdiutil attach build/*.dmg -mountpoint "$RUNNER_TEMP/dmg" -nobrowse
+          app="$RUNNER_TEMP/dmg/neuroscope.app"
+          # Everything must come from the bundle, nothing from Homebrew.
+          if otool -L "$app"/Contents/MacOS/neuroscope "$app"/Contents/Frameworks/*.dylib | grep /opt/homebrew; then exit 1; fi
+          "$app"/Contents/MacOS/neuroscope --version
+          hdiutil detach "$RUNNER_TEMP/dmg"
       - uses: actions/upload-artifact@v7
         with:
           name: macos
@@ -111,7 +122,6 @@ jobs:
         with:
           version: '6.8.3'
           arch: win64_msvc2022_64
-          modules: qtwebengine qtwebchannel qtpositioning
       - name: Package version
         shell: bash
         run: |
@@ -124,10 +134,19 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Build installer and zip
         run: |
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DCPACK_PACKAGE_VERSION=${{ env.PKG_VERSION }} -DWITH_WEBENGINE=OFF -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
           cmake --build build
           cd build
-          cpack -G "NSIS;ZIP" -R "${{ env.PKG_VERSION }}"
+          cpack -G "NSIS;ZIP"
+      - name: Check the packaged application starts
+        run: |
+          Expand-Archive (Get-Item build/*.zip).FullName -DestinationPath "$env:RUNNER_TEMP/zip"
+          $exe = Get-ChildItem "$env:RUNNER_TEMP/zip" -Recurse -Filter neuroscope.exe | Select-Object -First 1
+          if (-not (Test-Path (Join-Path $exe.DirectoryName 'vcruntime140.dll'))) { throw 'MSVC runtime missing' }
+          # Hide the Qt installation of the runner so that missing DLLs show up.
+          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+          $p = Start-Process -FilePath $exe.FullName -ArgumentList '--version' -Wait -PassThru -NoNewWindow
+          if ($p.ExitCode -ne 0) { throw "neuroscope.exe exited with $($p.ExitCode)" }
       - uses: actions/upload-artifact@v7
         with:
           name: windows

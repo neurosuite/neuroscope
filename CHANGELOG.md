@@ -10,7 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Requires CMake 3.16, C++17 and libneurosuite 3. Sources reformatted with clang-format.
 - libneurosuite can be built as part of NeuroScope (`-DNEUROSCOPE_BUNDLE_NEUROSUITE=ON`).
 - Installs a desktop entry and AppStream metadata under the ID `io.github.neurosuite.NeuroScope`.
-- Windows and macOS packages bundle the Qt runtime at install time.
+- Windows and macOS packages bundle the Qt runtime (Windows also the MSVC runtime) and show the handbook with the
+  built-in viewer (QTextBrowser), as does the AppImage; the .deb uses QtWebEngine.
 - Licence file corrected to GPL-3.0-or-later, matching the source headers.
 
 ### Fixed
