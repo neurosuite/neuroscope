@@ -420,6 +420,8 @@ void ClustersProvider::retrieveData(long startTime, long endTime, QObject* initi
 
             count++;
             startIndex++;
+            if (startIndex > nbSpikes)
+                break;
             time = clusters(2, startIndex);
         }
     }

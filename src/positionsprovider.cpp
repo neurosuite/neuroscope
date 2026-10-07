@@ -111,6 +111,13 @@ int PositionsProvider::loadData()
         else if (l)
         {
             clusterID[l] = '\0';
+            //More values than expected from the first line: stop before writing past the end of positions.
+            if (k == nbPositions * nbCoordinates)
+            {
+                positionFile.close();
+                positions.setSize(0, 0);
+                return INCORRECT_CONTENT;
+            }
             double pos = atof(clusterID);
             //The precision is lost
             positions[k++] = static_cast<dataType>(floor(0.5 + pos)); //Warning if the typedef dataType changes, change will have to be make here.
