@@ -11,13 +11,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - libneurosuite can be built as part of NeuroScope (`-DNEUROSCOPE_BUNDLE_NEUROSUITE=ON`).
 - Installs a desktop entry and AppStream metadata under the ID `io.github.neurosuite.NeuroScope`.
 - Windows and macOS packages bundle the Qt runtime (Windows also the MSVC runtime) and show the handbook with the
-  built-in viewer (QTextBrowser), as does the AppImage; the .deb uses QtWebEngine.
+  built-in viewer (QTextBrowser), as does the AppImage. The .deb uses QtWebEngine.
 - Licence file corrected to GPL-3.0-or-later, matching the source headers.
 
 ### Fixed
 - Files shorter than the initial time window (1 s by default) open instead of failing
   with "the file size is incorrect" (#2).
-- The `-t`/`--timeWindow` command line option sets the time window; it was passed on as
+- The `-t`/`--timeWindow` command line option sets the time window. It was passed on as
   the raster height.
 - Looking up companion files next to a session file (fix by Joscha Schmiedt).
 - Toolbar and dialog icons are shown again (resources were missing from libneurosuite).
