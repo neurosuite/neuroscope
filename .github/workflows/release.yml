@@ -100,8 +100,16 @@ jobs:
         run: |
           hdiutil attach build/*.dmg -mountpoint "$RUNNER_TEMP/dmg" -nobrowse
           app="$RUNNER_TEMP/dmg/neuroscope.app"
-          # Everything must come from the bundle, nothing from Homebrew.
-          if otool -L "$app"/Contents/MacOS/neuroscope "$app"/Contents/Frameworks/*.dylib | grep /opt/homebrew; then exit 1; fi
+          # Every dependency must come from the bundle, none from Homebrew. A library's own
+          # install name (otool -D) may still point to Homebrew; dyld does not use it.
+          bad=0
+          for f in "$app"/Contents/MacOS/neuroscope "$app"/Contents/Frameworks/*.dylib \
+                   "$app"/Contents/Frameworks/*.framework/Versions/A/* "$app"/Contents/PlugIns/*/*.dylib; do
+            [ -f "$f" ] || continue
+            id=$(otool -D "$f" | tail -n +2)
+            if otool -L "$f" | tail -n +2 | grep /opt/homebrew | grep -vF "${id:-none}"; then echo "in $f"; bad=1; fi
+          done
+          [ $bad = 0 ]
           "$app"/Contents/MacOS/neuroscope --version
           hdiutil detach "$RUNNER_TEMP/dmg"
       - uses: actions/upload-artifact@v7
