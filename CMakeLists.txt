@@ -59,6 +59,12 @@ elseif(UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
 
+# Find an installed libneurosuite outside the system library directories, e.g. in /usr/local/lib64,
+# which is not in the loader path on Fedora. System directories such as /usr/lib are not added.
+if(NOT NEUROSCOPE_BUNDLE_NEUROSUITE AND NOT APPBUNDLE)
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+endif()
+
 # Ship the MSVC runtime next to the executable on Windows.
 if(WIN32)
     set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR})
