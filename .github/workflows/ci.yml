@@ -25,12 +25,14 @@ jobs:
         webengine: [ON, OFF]
     steps:
       - uses: actions/checkout@v7
-      - run: make ubuntu-deps WITH_WEBENGINE=${{ matrix.webengine }}
-      - run: make check WITH_WEBENGINE=${{ matrix.webengine }}
+
+      # Runs make check and make package in the Ubuntu container.
+      - run: make docker WITH_WEBENGINE=${{ matrix.webengine }}
+
       - uses: actions/upload-artifact@v7
         with:
           name: neuroscope-ubuntu-24.04-webengine-${{ matrix.webengine }}
-          path: install/
+          path: dist/
 
   macos:
     name: build (macos-14)

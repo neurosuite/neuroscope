@@ -8,6 +8,8 @@
 #   make smoke          start the installed neuroscope with --version on the offscreen platform
 #   make check          install and smoke
 #   make package        the platform's default packages (.deb, .dmg, NSIS installer) in $(PACKAGE_DIR)
+#   make docker         check and package in the Ubuntu container (see Dockerfile); the installed files
+#                       and packages are copied to $(DIST_DIR)
 #   make reconfigure    rerun CMake, e.g. after changing the variables below
 #   make clean          remove the build directories
 #
@@ -22,7 +24,7 @@
 #   make dmg-check      start the application from the disk image and check it uses no Homebrew libraries
 #
 # Variables (on the command line or in the environment), e.g. make test BUILD_TYPE=Debug:
-#   BUILD_DIR, BUILD_TYPE, PREFIX, PACKAGE_DIR, GENERATOR, CMAKE_ARGS
+#   BUILD_DIR, BUILD_TYPE, PREFIX, PACKAGE_DIR, DIST_DIR, GENERATOR, CMAKE_ARGS
 #   BUNDLE_NEUROSUITE=ON   build libneurosuite at LIBNEUROSUITE_REF as part of NeuroScope instead of
 #                          using an installed copy
 #   WITH_WEBENGINE=OFF     build the bundled libneurosuite without Qt WebEngine
@@ -33,6 +35,7 @@ BUILD_DIR ?= build
 BUILD_TYPE ?= Release
 PREFIX ?= $(CURDIR)/install
 PACKAGE_DIR ?= $(CURDIR)/packages
+DIST_DIR ?= $(CURDIR)/dist
 GENERATOR ?= $(if $(shell command -v ninja),Ninja,Unix Makefiles)
 BUNDLE_NEUROSUITE ?= OFF
 LIBNEUROSUITE_REF ?= main
@@ -40,6 +43,7 @@ LIBNEUROSUITE_DIR ?= $(CURDIR)/libneurosuite
 LIBNEUROSUITE_URL ?= https://github.com/neurosuite/libneurosuite.git
 WITH_WEBENGINE ?= ON
 CMAKE_ARGS ?=
+DOCKER ?= docker
 SUDO ?= sudo
 EXTRA_PACKAGES ?=
 
@@ -68,7 +72,7 @@ UBUNTU_PACKAGES = ca-certificates cmake dpkg-dev file g++ git make ninja-build q
 LINUXDEPLOY_URL = https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_QT_URL = https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 
-.PHONY: all configure reconfigure build install smoke check package clean \
+.PHONY: all configure reconfigure build install smoke check package docker clean \
 	ubuntu-deps macos-deps libneurosuite deb appimage dmg dmg-check
 
 all: build
@@ -101,6 +105,13 @@ check: install
 
 package: build
 	cpack --config $(BUILD_DIR)/CPackConfig.cmake -B $(PACKAGE_DIR)
+
+docker:
+	$(DOCKER) build \
+		--build-arg WITH_WEBENGINE=$(WITH_WEBENGINE) \
+		--build-arg LIBNEUROSUITE_REF=$(LIBNEUROSUITE_REF) \
+		--target artifact --output type=local,dest=$(DIST_DIR) \
+		.
 
 clean:
 	rm -rf $(BUILD_DIR) $(BUILD_DIR)-deb $(BUILD_DIR)-libneurosuite $(BUILD_DIR)-appimage \

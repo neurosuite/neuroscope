@@ -1,0 +1,10 @@
+build
+build-*
+Build
+dist
+.git
+install
+libneurosuite
+packages
+result
+result-*
