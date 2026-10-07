@@ -80,8 +80,8 @@ nix develop        # shell with the build dependencies
 | `build`       | Configure (on first use) and build; the default target                     |
 | `test`        | Build and run the unit tests                                               |
 | `install`     | Install to `PREFIX`                                                        |
-| `smoke`       | Start the installed `neuroscope --version` on the offscreen platform       |
-| `check`       | `test`, `install` and `smoke`                                              |
+| `smoke`       | `install`, then start `neuroscope --version` on the offscreen platform    |
+| `check`       | `test` and `smoke`                                                         |
 | `package`     | The platform's default packages (.deb, .dmg, NSIS installer) in `PACKAGE_DIR` |
 | `docker`      | `check` and `package` in the Ubuntu container, results in `DIST_DIR` (Makefile only) |
 | `sanitize`    | Debug build in `BUILD_DIR-sanitize` with AddressSanitizer and UBSan, then the tests (Makefile only) |

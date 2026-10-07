@@ -6,7 +6,7 @@
 #   make                build (configures on first use)
 #   make test           build and run the unit tests
 #   make install        install to $(PREFIX)
-#   make smoke          start the installed neuroscope with --version on the offscreen platform
+#   make smoke          install and start neuroscope --version on the offscreen platform
 #   make check          test, install and smoke
 #   make package        the platform's default packages (.deb, .dmg, NSIS installer) in $(PACKAGE_DIR)
 #   make docker         check and package in the Ubuntu container (see Dockerfile); the installed files
@@ -103,11 +103,10 @@ test: build
 install: build
 	cmake --install $(BUILD_DIR)
 
-smoke:
+smoke: install
 	QT_QPA_PLATFORM=offscreen LD_LIBRARY_PATH=$(PREFIX)/lib:$(PREFIX)/lib64 $(PREFIX)/bin/neuroscope --version
 
-check: test install
-	$(MAKE) smoke
+check: test smoke
 
 package: build
 	cpack --config $(BUILD_DIR)/CPackConfig.cmake -B $(PACKAGE_DIR)

@@ -7,7 +7,7 @@
 #   ./make.ps1                 build (configures on first use)
 #   ./make.ps1 test            build and run the unit tests
 #   ./make.ps1 install         install to PREFIX
-#   ./make.ps1 smoke           start the installed neuroscope.exe with --version on the offscreen platform
+#   ./make.ps1 smoke           install and start neuroscope.exe --version on the offscreen platform
 #   ./make.ps1 check           test, install and smoke
 #   ./make.ps1 package         NSIS installer and zip in PACKAGE_DIR
 #   ./make.ps1 reconfigure     rerun CMake, e.g. after changing the variables below
@@ -124,12 +124,12 @@ $Tasks = [ordered]@{
         Invoke-Native cmake @('--install', $Vars.BUILD_DIR)
     }
     smoke = {
+        Invoke-Target install
         $env:QT_QPA_PLATFORM = 'offscreen'
         Start-NeuroScope "$($Vars.PREFIX)/bin/neuroscope.exe"
     }
     check = {
         Invoke-Target test
-        Invoke-Target install
         Invoke-Target smoke
     }
     package = {
