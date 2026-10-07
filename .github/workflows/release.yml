@@ -2,6 +2,8 @@ name: Release
 
 # Builds packages for a version tag and attaches them to a DRAFT release.
 # A maintainer reviews the draft and publishes it by hand.
+# The jobs set up the runners and call the job runner targets: the Makefile on Linux and macOS,
+# make.ps1 on Windows. See those for what the targets do.
 on:
   push:
     tags: ['v*']
@@ -19,148 +21,53 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
-        with:
-          repository: neurosuite/libneurosuite
-          ref: ${{ env.LIBNEUROSUITE_REF }}
-          path: libneurosuite
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ninja-build qt6-base-dev qt6-webengine-dev \
-            libgl-dev libfuse2 file
-      - name: Package version
-        # v3.0.0-rc1 becomes 3.0.0~rc1 so that the final 3.0.0 sorts after it.
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          v=${GITHUB_REF_NAME#v}
-          echo "DEB_VERSION=${v/-/\~}" >> "$GITHUB_ENV"
-      - name: Build libneurosuite .debs (QtWebEngine handbook)
-        run: |
-          cmake -S libneurosuite -B libneurosuite/build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr ${DEB_VERSION:+-DCPACK_PACKAGE_VERSION=$DEB_VERSION}
-          cmake --build libneurosuite/build
-          (cd libneurosuite/build && cpack -G DEB)
-          sudo apt-get install -y ./libneurosuite/build/*.deb
-      - name: Build .deb (Ubuntu 24.04, depends on libneurosuite3)
-        run: |
-          cmake -S . -B build-deb -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
-            ${DEB_VERSION:+-DCPACK_PACKAGE_VERSION=$DEB_VERSION}
-          cmake --build build-deb
-          (cd build-deb && cpack -G DEB)
-          dpkg-deb -f build-deb/*.deb Depends | tr ',' '\n' | grep -q libneurosuite3
+      - run: make ubuntu-deps EXTRA_PACKAGES=libfuse2
+      - name: Build .debs (QtWebEngine handbook, depends on libneurosuite3)
+        run: make deb
       - name: Build AppImage (QTextBrowser handbook, smaller)
-        run: |
-          cmake -S . -B build-appimage -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
-            -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DWITH_WEBENGINE=OFF \
-            -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
-          cmake --build build-appimage
-          DESTDIR=$PWD/AppDir cmake --install build-appimage
-          # The tools live outside the workspace so that only the result matches *.AppImage.
-          LD=$RUNNER_TEMP/linuxdeploy && mkdir -p $LD
-          wget -q -P $LD https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          wget -q -P $LD https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-          chmod +x $LD/*.AppImage && export PATH=$LD:$PATH
-          export QMAKE=/usr/lib/qt6/bin/qmake LDAI_OUTPUT=NeuroScope-${GITHUB_REF_NAME#v}-x86_64.AppImage
-          $LD/linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage \
-            --desktop-file AppDir/usr/share/applications/io.github.neurosuite.NeuroScope.desktop
+        run: make appimage
       - uses: actions/upload-artifact@v7
         with:
           name: linux
           path: |
-            build-deb/*.deb
-            libneurosuite/build/libneurosuite3_*.deb
-            *.AppImage
+            packages/*.deb
+            packages/*.AppImage
 
   macos:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
-        with:
-          repository: neurosuite/libneurosuite
-          ref: ${{ env.LIBNEUROSUITE_REF }}
-          path: libneurosuite
-      - name: Package version
-        shell: bash
-        run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then v=${GITHUB_REF_NAME#v}; else v=dev-${GITHUB_SHA::7}; fi
-          echo "PKG_VERSION=$v" >> "$GITHUB_ENV"
-      - run: brew install qt ninja
-      - name: Build .dmg
-        run: |
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-            -DCPACK_PACKAGE_VERSION="$PKG_VERSION" -DWITH_WEBENGINE=OFF \
-            -DCMAKE_PREFIX_PATH=$(brew --prefix qt) -DAPPBUNDLE=ON \
-            -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON \
-            -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=$PWD/libneurosuite
-          cmake --build build
-          (cd build && cpack -G DragNDrop)
+      - run: make macos-deps
+      - run: make dmg
       - name: Check the packaged application starts
-        run: |
-          hdiutil attach build/*.dmg -mountpoint "$RUNNER_TEMP/dmg" -nobrowse
-          app="$RUNNER_TEMP/dmg/neuroscope.app"
-          # Every dependency must come from the bundle, none from Homebrew. A library's own
-          # install name (otool -D) may still point to Homebrew; dyld does not use it.
-          bad=0
-          for f in "$app"/Contents/MacOS/neuroscope "$app"/Contents/Frameworks/*.dylib \
-                   "$app"/Contents/Frameworks/*.framework/Versions/A/* "$app"/Contents/PlugIns/*/*.dylib; do
-            [ -f "$f" ] || continue
-            id=$(otool -D "$f" | tail -n +2)
-            if otool -L "$f" | tail -n +2 | grep /opt/homebrew | grep -vF "${id:-none}"; then echo "in $f"; bad=1; fi
-          done
-          [ $bad = 0 ]
-          "$app"/Contents/MacOS/neuroscope --version
-          hdiutil detach "$RUNNER_TEMP/dmg"
+        run: make dmg-check
       - uses: actions/upload-artifact@v7
         with:
           name: macos
-          path: build/*.dmg
+          path: packages/*.dmg
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
-        with:
-          repository: neurosuite/libneurosuite
-          ref: ${{ env.LIBNEUROSUITE_REF }}
-          path: libneurosuite
       - uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
           arch: win64_msvc2022_64
-      - name: Package version
-        shell: bash
-        run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then v=${GITHUB_REF_NAME#v}; else v=dev-${GITHUB_SHA::7}; fi
-          echo "PKG_VERSION=$v" >> "$GITHUB_ENV"
       - name: Install NSIS
         run: |
           choco install nsis -y --no-progress
           "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - uses: ilammy/msvc-dev-cmd@v1
-      - name: Build installer and zip
-        run: |
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DCPACK_PACKAGE_VERSION=${{ env.PKG_VERSION }} -DWITH_WEBENGINE=OFF -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
-          cmake --build build
-          cd build
-          cpack -G "NSIS;ZIP"
+      - run: ./make.ps1 windows-packages
       - name: Check the packaged application starts
-        run: |
-          Expand-Archive (Get-Item build/*.zip).FullName -DestinationPath "$env:RUNNER_TEMP/zip"
-          $exe = Get-ChildItem "$env:RUNNER_TEMP/zip" -Recurse -Filter neuroscope.exe | Select-Object -First 1
-          if (-not (Test-Path (Join-Path $exe.DirectoryName 'vcruntime140.dll'))) { throw 'MSVC runtime missing' }
-          # Hide the Qt installation of the runner so that missing DLLs show up.
-          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
-          $p = Start-Process -FilePath $exe.FullName -ArgumentList '--version' -Wait -PassThru -NoNewWindow
-          if ($p.ExitCode -ne 0) { throw "neuroscope.exe exited with $($p.ExitCode)" }
+        run: ./make.ps1 windows-packages-check
       - uses: actions/upload-artifact@v7
         with:
           name: windows
           path: |
-            build/*.exe
-            build/*.zip
+            packages/*.exe
+            packages/*.zip
 
   draft-release:
     needs: [linux, macos, windows]

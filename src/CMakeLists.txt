@@ -1,6 +1,31 @@
 ################################################################################
 # Build config
 ################################################################################
+# File readers and parameter/session files, without widgets.
+# Linked by the application and the tests.
+set(DATAIO_SOURCE_FILES
+    dataprovider.cpp
+    tracesprovider.cpp
+    nsxtracesprovider.cpp
+    clustersprovider.cpp
+    nevclustersprovider.cpp
+    eventsprovider.cpp
+    neveventsprovider.cpp
+    positionsprovider.cpp
+    eventdata.cpp
+    neuroscopexmlreader.cpp
+    sessionxmlwriter.cpp
+    parameterxmlcreator.cpp
+    parameterxmlmodifier.cpp
+    tags.cpp
+)
+
+add_library(neuroscope_dataio STATIC ${DATAIO_SOURCE_FILES})
+target_include_directories(neuroscope_dataio PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(neuroscope_dataio PUBLIC neurosuite::neurosuite Qt6::Core Qt6::Gui Qt6::Xml)
+
 # Normal C++ source files
 set(SOURCE_FILES
     main.cpp
@@ -13,36 +38,22 @@ set(SOURCE_FILES
     channelmimedata.cpp
     clustercolors.cpp
     clusterproperties.cpp
-    clustersprovider.cpp
-    nevclustersprovider.cpp
     configuration.cpp
-    dataprovider.cpp
-    eventsprovider.cpp
-    neveventsprovider.cpp
     itemgroupview.cpp
     itemiconview.cpp
     itempalette.cpp
     neuroscopedoc.cpp
-    neuroscopexmlreader.cpp
     positionproperties.cpp
-    positionsprovider.cpp
     positionview.cpp
     prefdefaults.cpp
     prefdialog.cpp
     prefgeneral.cpp
     properties.cpp
     propertiesdialog.cpp
-    tags.cpp
-    tracesprovider.cpp
-    nsxtracesprovider.cpp
     traceview.cpp
     tracewidget.cpp
-    sessionxmlwriter.cpp
-    parameterxmlcreator.cpp
-    parameterxmlmodifier.cpp
     imagecreator.cpp
     globaleventsprovider.cpp
-    eventdata.cpp
     clusterpropertieslayout.cpp
     positionpropertieslayout.cpp
     prefdefaultslayout.cpp
@@ -89,7 +100,7 @@ endif()
 ################################################################################
 # Linker config
 ################################################################################
-target_link_libraries(neuroscope PRIVATE neurosuite::neurosuite Qt6::Widgets Qt6::PrintSupport Qt6::Xml)
+target_link_libraries(neuroscope PRIVATE neuroscope_dataio neurosuite::neurosuite Qt6::Widgets Qt6::PrintSupport Qt6::Xml)
 
 if(WITH_CEREBUS)
     target_link_libraries(neuroscope PRIVATE cbsdk)

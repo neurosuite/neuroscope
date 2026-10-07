@@ -35,6 +35,7 @@ option(NEUROSCOPE_BUNDLE_NEUROSUITE
        OFF)
 set(NEUROSUITE_GIT_TAG "v3.0.0" CACHE STRING
     "libneurosuite tag to fetch when NEUROSCOPE_BUNDLE_NEUROSUITE is ON")
+option(BUILD_TESTING "Build the unit tests (run them with ctest)" ON)
 
 if(APPLE)
     option(APPBUNDLE
@@ -56,6 +57,12 @@ elseif(APPLE)
     set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}")
 elseif(UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+endif()
+
+# Find an installed libneurosuite outside the system library directories, e.g. in /usr/local/lib64,
+# which is not in the loader path on Fedora. System directories such as /usr/lib are not added.
+if(NOT NEUROSCOPE_BUNDLE_NEUROSUITE AND NOT APPBUNDLE)
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 endif()
 
 # Ship the MSVC runtime next to the executable on Windows.
@@ -140,6 +147,14 @@ configure_file(config-neuroscope.h.cmake
 ################################################################################
 add_subdirectory(src)
 add_subdirectory(doc)
+
+################################################################################
+# Tests
+################################################################################
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 ################################################################################
 # CPack configuration

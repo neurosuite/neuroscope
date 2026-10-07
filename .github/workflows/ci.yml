@@ -1,5 +1,7 @@
 name: CI
 
+# The jobs set up the runners and call the job runner targets: the Makefile on Linux and macOS,
+# make.ps1 on Windows. See those for what the targets do.
 on:
   push:
   pull_request:
@@ -9,93 +11,68 @@ env:
   # libneurosuite revision NeuroScope is built against.
   # Switch to the v3.0.0 tag once libneurosuite is released.
   LIBNEUROSUITE_REF: main
+  BUNDLE_NEUROSUITE: 'ON'
 
 jobs:
-  build:
-    name: build (${{ matrix.name }})
+  linux:
+    name: build (ubuntu-24.04, WebEngine ${{ matrix.webengine }})
     # Branches in this repository are covered by the push run; build PRs from forks only.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: ubuntu-24.04
-            os: ubuntu-24.04
-            webengine: ON
-          - name: ubuntu-24.04 without WebEngine
-            os: ubuntu-24.04
-            webengine: OFF
-          - name: macos-14
-            os: macos-14
-            webengine: ON
-          - name: windows
-            os: windows-latest
-            webengine: ON
+        webengine: [ON, OFF]
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/checkout@v7
+      # Runs make check (unit tests, install, smoke test) and make package in the Ubuntu container.
+      - run: make docker WITH_WEBENGINE=${{ matrix.webengine }}
+
+      - uses: actions/upload-artifact@v7
         with:
-          repository: neurosuite/libneurosuite
-          ref: ${{ env.LIBNEUROSUITE_REF }}
-          path: libneurosuite
+          name: neuroscope-ubuntu-24.04-webengine-${{ matrix.webengine }}
+          path: dist/
 
-      - name: Install dependencies (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ninja-build qt6-base-dev libgl-dev
-          if [ "${{ matrix.webengine }}" = ON ]; then sudo apt-get install -y --no-install-recommends qt6-webengine-dev; fi
+  sanitizers:
+    name: sanitizers (ubuntu-24.04, ASan and UBSan)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      # Runs the unit tests with AddressSanitizer and UBSan in the Ubuntu container.
+      - run: make docker-sanitize
 
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew install qt ninja
-          echo "CMAKE_PREFIX_PATH=$(brew --prefix qt)" >> "$GITHUB_ENV"
+  macos:
+    name: build (macos-14)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v7
+      - run: make macos-deps
+      - run: make check
+      - uses: actions/upload-artifact@v7
+        with:
+          name: neuroscope-macos-14-webengine-ON
+          path: install/
 
-      - name: Install Qt (Windows)
-        if: runner.os == 'Windows'
-        uses: jurplel/install-qt-action@v4
+  windows:
+    name: build (windows)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
           arch: win64_msvc2022_64
           modules: qtwebengine qtwebchannel qtpositioning
           cache: true
-
-      - name: Set up MSVC (Windows)
-        if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Configure
-        run: >
-          cmake -S . -B build -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
-          -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON
-          -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
-          -DWITH_WEBENGINE=${{ matrix.webengine }}
-
-      - name: Build
-        run: cmake --build build
-
-      - name: Install
-        run: cmake --install build
-
-      - name: Smoke test
-        shell: bash
-        env:
-          QT_QPA_PLATFORM: offscreen
-        run: |
-          case "${{ runner.os }}" in
-            Linux)   LD_LIBRARY_PATH=install/lib:install/lib64 install/bin/neuroscope --version ;;
-            Windows) install/bin/neuroscope.exe --version ;;
-            macOS)   install/bin/neuroscope --version ;;
-          esac
-
+      - uses: ilammy/msvc-dev-cmd@v1
+      - run: ./make.ps1 check
       - uses: actions/upload-artifact@v7
         with:
-          name: neuroscope-${{ matrix.os }}-webengine-${{ matrix.webengine }}
+          name: neuroscope-windows-latest-webengine-ON
           path: install/
 
   nix:
