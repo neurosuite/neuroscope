@@ -1,6 +1,10 @@
 *.o
 *.moc*
 Makefile
+!/Makefile
 build
 result
 result-*
+install
+packages
+libneurosuite
