@@ -316,8 +316,9 @@ class TestEventsProvider : public QObject
         EventsProvider provider(path("many.abc.evt"), 20000.0);
         QCOMPARE(provider.loadData(), int(EventsProvider::OK));
 
+        // Opened like NeuroscopeDoc does: without QIODevice::Text, so that the line endings stay \n on Windows.
         QFile file(path("saved.abc.evt"));
-        QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+        QVERIFY(file.open(QIODevice::WriteOnly));
         QVERIFY(provider.save(&file));
         file.close();
 

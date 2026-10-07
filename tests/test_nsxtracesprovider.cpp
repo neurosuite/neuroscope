@@ -36,13 +36,22 @@ const QList<NsxChannel> CHANNELS = {
     {"ainp1", -32764, 32764, -5000, 5000, "mV"},
 };
 
-/** Conversion to µV from the channel's digital and analog ranges. */
+/** Conversion to µV from the channel's digital and analog ranges.
+  * The provider truncates the converted value instead of rounding it, so a value that is a whole number
+  * of µV in exact arithmetic can come out 1 µV lower, depending on how the compiler evaluates the
+  * expression (e.g. with fused multiply-add on arm64). Converted values are compared with a tolerance of
+  * 1 µV. */
 dataType toMicroVolts(int16_t value, const NsxChannel& channel)
 {
     const double unit = channel.unit == "mV" ? 1000 : 1;
     const double digitalRange = channel.maxDigital - channel.minDigital;
     const double analogRange = channel.maxAnalog - channel.minAnalog;
     return static_cast<dataType>(((value - channel.minDigital) / digitalRange * analogRange + channel.minAnalog) * unit);
+}
+
+bool closeTo(dataType actual, dataType expected)
+{
+    return qAbs(actual - expected) <= 1;
 }
 
 Matrix request(NSXTracesProvider& provider, long startTime, long endTime, long startTimeInRecordingUnits = 0)
@@ -141,7 +150,8 @@ class TestNSXTracesProvider : public QObject
         QCOMPARE(data.cols, 3L);
         for (long s = 0; s < nbSamples; ++s)
             for (int c = 0; c < 3; ++c)
-                QCOMPARE(data(s + 1, c + 1), toMicroVolts(raw(firstSample + s, c), CHANNELS[c]));
+                QVERIFY2(closeTo(data(s + 1, c + 1), toMicroVolts(raw(firstSample + s, c), CHANNELS[c])),
+                         qPrintable(QString("sample %1, channel %2: %3").arg(firstSample + s).arg(c).arg(data(s + 1, c + 1))));
     }
 
     void conversionToMicroVolts()
@@ -154,10 +164,9 @@ class TestNSXTracesProvider : public QObject
         QCOMPARE(raw(500, 0), int16_t(0));
         QCOMPARE(data(1, 1), 0L);
         QCOMPARE(raw(500, 1), int16_t(1000));
-        QCOMPARE(data(1, 2), 250L);
+        QVERIFY(closeTo(data(1, 2), 250));
         QCOMPARE(raw(500, 2), int16_t(2000));
-        QCOMPARE(data(1, 3), toMicroVolts(2000, CHANNELS[2]));
-        QVERIFY(qAbs(data(1, 3) - 305213) <= 1);
+        QVERIFY(closeTo(data(1, 3), 305213));
     }
 
     void windowPastEndOfFileIsEmpty()
