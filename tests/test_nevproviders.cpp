@@ -30,7 +30,8 @@ namespace
 
 const std::uint32_t TIME_RESOLUTION = 30000;
 
-// Electrode ids and labels. The labels are requested by NeuroScope from the NSX file.
+// Electrode ids and labels. The labels are requested by NeuroScope from the NSX file. The tests never
+// request elec3, the last label, which would hit undefined behaviour in the duplicate check (#21).
 const QList<QPair<std::uint16_t, QString>> ELECTRODES = {{1, "elec1"}, {2, "elec2"}, {3, "elec3"}};
 
 // Spikes (electrode id, unit) and events, with timestamps in 30 kHz ticks.
@@ -163,7 +164,7 @@ class TestNEVProviders : public QObject
 
         // The digital event at 300 ms and the button press at 1000 ms, in ticks from the window start.
         provider.requestData(0, 1100, nullptr);
-        QEXPECT_FAIL("", "NEV event timestamps are kept in ticks, but the window is given in ms", Abort);
+        QEXPECT_FAIL("", "NEV event timestamps are kept in ticks, but the window is given in ms (#16)", Abort);
         QCOMPARE(ids.values, QVector<std::int64_t>({digital, button}));
         QCOMPARE(times.values, QVector<std::int64_t>({9000, 30000}));
     }

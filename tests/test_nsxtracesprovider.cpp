@@ -40,7 +40,7 @@ const QList<NsxChannel> CHANNELS = {
   * The provider truncates the converted value instead of rounding it, so a value that is a whole number
   * of µV in exact arithmetic can come out 1 µV lower, depending on how the compiler evaluates the
   * expression (e.g. with fused multiply-add on arm64). Converted values are compared with a tolerance of
-  * 1 µV. */
+  * 1 µV (#19). */
 std::int64_t toMicroVolts(std::int16_t value, const NsxChannel& channel)
 {
     const double unit = channel.unit == "mV" ? 1000 : 1;
@@ -59,7 +59,7 @@ Matrix request(NSXTracesProvider& provider, std::int64_t startTime, std::int64_t
 {
     Matrix result;
     int emitted = 0;
-    // NSXTracesProvider declares its own dataReady signal, which hides TracesProvider::dataReady.
+    // NSXTracesProvider declares its own dataReady signal, which hides TracesProvider::dataReady (#20).
     auto connection = QObject::connect(&provider, &NSXTracesProvider::dataReady,
                                        [&](Array<dataType>& data, QObject*)
                                        {

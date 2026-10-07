@@ -191,7 +191,7 @@ class TestTracesProvider : public QObject
     void offsetIsSubtracted()
     {
         // Current behaviour: with a non-zero offset, the raw value is not scaled, only the offset is:
-        // value = raw - offset * gain. Without an offset, value = raw * gain.
+        // value = raw - offset * gain. Without an offset, value = raw * gain (#17).
         const int offset = 100;
         TracesProvider provider(path("session.dat"), 4, 16, VOLTAGE_RANGE, AMPLIFICATION, 1000.0, offset);
         const Matrix data = request(provider, 10, 11);
@@ -211,7 +211,7 @@ class TestTracesProvider : public QObject
             for (int c = 0; c < 4; ++c)
                 expected.append(roundHalfAway(raw32(100 + s, c) * gain(32)));
         if (sizeof(dataType) != sizeof(std::int32_t))
-            QEXPECT_FAIL("", "32 bit samples are read into an array of long, which has 64 bits on Linux and macOS", Abort);
+            QEXPECT_FAIL("", "32 bit samples are read into an array of long, which has 64 bits on Linux and macOS (#13)", Abort);
         QCOMPARE(data.values, expected);
     }
 
@@ -282,7 +282,7 @@ class TestTracesProvider : public QObject
         const QVector<std::int64_t> lastSample = {data(nbSamples, 1), data(nbSamples, 2)};
         const QVector<std::int64_t> expectedLastSample = {roundHalfAway(rawNcs(endTime, 0) * gain(16)),
                                                           roundHalfAway(rawNcs(endTime, 1) * gain(16))};
-        QEXPECT_FAIL("", "The last sample of the window is not read from .ncs files (off by one in inLastRecord)", Abort);
+        QEXPECT_FAIL("", "The last sample of the window is not read from .ncs files (off by one in inLastRecord, #14)", Abort);
         QCOMPARE(lastSample, expectedLastSample);
     }
 

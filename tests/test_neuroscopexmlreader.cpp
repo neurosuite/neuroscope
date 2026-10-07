@@ -155,7 +155,7 @@ class TestNeuroscopeXmlReader : public QObject
         QCOMPARE(reader.getTraceBackgroundImage(), QString("background.png"));
         // Current behaviour: the video settings are only read from a top-level <video> element,
         // as in session files. The values NeuroScope writes to <neuroscope><video> in parameter files
-        // are not read, and the defaults are returned.
+        // are not read, and the defaults are returned (#18).
         QCOMPARE(reader.getRotation(), 0);
         QCOMPARE(reader.getFlip(), 0);
         QCOMPARE(reader.getBackgroundImage(), QString("-"));
