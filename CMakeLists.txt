@@ -33,7 +33,7 @@ option(WITH_CEREBUS
 option(NEUROSCOPE_BUNDLE_NEUROSUITE
        "Build libneurosuite as part of this project instead of using an installed copy"
        OFF)
-set(NEUROSUITE_GIT_TAG "v3.0.0" CACHE STRING
+set(NEUROSUITE_GIT_TAG "v3.0.0-rc1" CACHE STRING
     "libneurosuite tag to fetch when NEUROSCOPE_BUNDLE_NEUROSUITE is ON")
 
 if(APPLE)

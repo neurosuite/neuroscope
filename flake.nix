@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     libneurosuite = {
-      url = "github:neurosuite/libneurosuite";
+      url = "github:neurosuite/libneurosuite/v3.0.0-rc1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
