@@ -142,7 +142,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Build installer and zip
         run: |
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON -DCPACK_PACKAGE_VERSION=${{ env.PKG_VERSION }} -DWITH_WEBENGINE=OFF -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON "-DCPACK_PACKAGE_VERSION=${{ env.PKG_VERSION }}" -DWITH_WEBENGINE=OFF -DFETCHCONTENT_SOURCE_DIR_NEUROSUITE=${{ github.workspace }}/libneurosuite
           cmake --build build
           cd build
           cpack -G "NSIS;ZIP"
@@ -175,7 +175,8 @@ jobs:
       # package version 3.0.0~rc1. Rename before taking the checksums.
       - run: |
           find dist -type f -name '*~*' | while read -r f; do mv "$f" "${f//\~/-}"; done
-          find dist -type f -exec sha256sum {} \; | sed 's|dist/.*/||; s|dist/||' > dist/SHA256SUMS
+          find dist -type f -exec sha256sum {} \; | sed 's|dist/.*/||; s|dist/||' > "$RUNNER_TEMP/SHA256SUMS"
+          mv "$RUNNER_TEMP/SHA256SUMS" dist/
       - uses: softprops/action-gh-release@v3
         with:
           draft: true
