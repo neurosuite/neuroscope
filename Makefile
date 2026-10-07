@@ -12,7 +12,7 @@
 #   make docker         check and package in the Ubuntu container (see Dockerfile); the installed files
 #                       and packages are copied to $(DIST_DIR)
 #   make reconfigure    rerun CMake, e.g. after changing the variables below
-#   make clean          remove the build directories
+#   make clean          empty the build directory and remove the release build directories
 #
 # Dependencies
 #   make ubuntu-deps    install the Ubuntu build dependencies with apt (EXTRA_PACKAGES for more)
@@ -117,8 +117,10 @@ docker:
 		--target artifact --output type=local,dest=$(DIST_DIR) \
 		.
 
+# The build directory itself is kept, with its .gitkeep.
 clean:
-	rm -rf $(BUILD_DIR) $(BUILD_DIR)-deb $(BUILD_DIR)-libneurosuite $(BUILD_DIR)-appimage \
+	[ ! -d $(BUILD_DIR) ] || find $(BUILD_DIR) -mindepth 1 -maxdepth 1 ! -name .gitkeep -exec rm -rf {} +
+	rm -rf $(BUILD_DIR)-deb $(BUILD_DIR)-libneurosuite $(BUILD_DIR)-appimage \
 		$(BUILD_DIR)-dmg
 
 ################################################################################

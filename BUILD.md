@@ -85,7 +85,7 @@ nix develop        # shell with the build dependencies
 | `package`     | The platform's default packages (.deb, .dmg, NSIS installer) in `PACKAGE_DIR` |
 | `docker`      | `check` and `package` in the Ubuntu container, results in `DIST_DIR` (Makefile only) |
 | `reconfigure` | Rerun CMake, needed after changing the variables below                     |
-| `clean`       | Remove the build directories                                               |
+| `clean`       | Empty the build directory and remove the release build directories         |
 
 Variables are given on the command line (`make test BUILD_TYPE=Debug`,
 `./make.ps1 test BUILD_TYPE=Debug`) or as environment variables:

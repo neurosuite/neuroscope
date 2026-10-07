@@ -2,7 +2,9 @@
 *.moc*
 Makefile
 !/Makefile
-build
+/build/*
+!/build/.gitkeep
+/build-*/
 result
 result-*
 install

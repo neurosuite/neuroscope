@@ -11,7 +11,7 @@
 #   ./make.ps1 check           test, install and smoke
 #   ./make.ps1 package         NSIS installer and zip in PACKAGE_DIR
 #   ./make.ps1 reconfigure     rerun CMake, e.g. after changing the variables below
-#   ./make.ps1 clean           remove the build directories
+#   ./make.ps1 clean           empty the build directory and remove the release build directory
 #
 # Release packages, in PACKAGE_DIR, versioned after the checked-out v* tag
 #   ./make.ps1 windows-packages        NSIS installer and zip with a bundled libneurosuite, without Qt WebEngine
@@ -136,10 +136,12 @@ $Tasks = [ordered]@{
         Invoke-Target build
         Invoke-Native cpack @('--config', "$($Vars.BUILD_DIR)/CPackConfig.cmake", '-B', (ConvertTo-CMakePath $Vars.PACKAGE_DIR))
     }
+    # The build directory itself is kept, with its .gitkeep.
     clean = {
-        foreach ($dir in @($Vars.BUILD_DIR, "$($Vars.BUILD_DIR)-windows")) {
-            if (Test-Path $dir) { Remove-Item -Recurse -Force $dir }
+        if (Test-Path $Vars.BUILD_DIR) {
+            Get-ChildItem -Force $Vars.BUILD_DIR | Where-Object Name -ne '.gitkeep' | Remove-Item -Recurse -Force
         }
+        if (Test-Path "$($Vars.BUILD_DIR)-windows") { Remove-Item -Recurse -Force "$($Vars.BUILD_DIR)-windows" }
     }
     'windows-packages' = {
         $dir = "$($Vars.BUILD_DIR)-windows"
