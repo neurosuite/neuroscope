@@ -1,12 +1,13 @@
-# Job runner for building and packaging NeuroScope on Linux and macOS, locally and in CI; make.ps1
-# is the counterpart for Windows. CMake does the actual work; the GitHub workflows only set up the
-# runners and call these targets.
+# Job runner for building, testing and packaging NeuroScope on Linux and macOS, locally and in CI;
+# make.ps1 is the counterpart for Windows. CMake does the actual work; the GitHub workflows only set
+# up the runners and call these targets.
 #
 # Development
 #   make                build (configures on first use)
+#   make test           build and run the unit tests
 #   make install        install to $(PREFIX)
 #   make smoke          start the installed neuroscope with --version on the offscreen platform
-#   make check          install and smoke
+#   make check          test, install and smoke
 #   make package        the platform's default packages (.deb, .dmg, NSIS installer) in $(PACKAGE_DIR)
 #   make docker         check and package in the Ubuntu container (see Dockerfile); the installed files
 #                       and packages are copied to $(DIST_DIR)
@@ -72,7 +73,7 @@ UBUNTU_PACKAGES = ca-certificates cmake dpkg-dev file g++ git make ninja-build q
 LINUXDEPLOY_URL = https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_QT_URL = https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 
-.PHONY: all configure reconfigure build install smoke check package docker clean \
+.PHONY: all configure reconfigure build test install smoke check package docker clean \
 	ubuntu-deps macos-deps libneurosuite deb appimage dmg dmg-check
 
 all: build
@@ -94,13 +95,16 @@ reconfigure:
 build: configure
 	cmake --build $(BUILD_DIR)
 
+test: build
+	ctest --test-dir $(BUILD_DIR) --output-on-failure
+
 install: build
 	cmake --install $(BUILD_DIR)
 
 smoke:
 	QT_QPA_PLATFORM=offscreen LD_LIBRARY_PATH=$(PREFIX)/lib:$(PREFIX)/lib64 $(PREFIX)/bin/neuroscope --version
 
-check: install
+check: test install
 	$(MAKE) smoke
 
 package: build

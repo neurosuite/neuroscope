@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # Runs make check and make package in the Ubuntu container.
+      # Runs make check (unit tests, install, smoke test) and make package in the Ubuntu container.
       - run: make docker WITH_WEBENGINE=${{ matrix.webengine }}
 
       - uses: actions/upload-artifact@v7

@@ -35,6 +35,7 @@ option(NEUROSCOPE_BUNDLE_NEUROSUITE
        OFF)
 set(NEUROSUITE_GIT_TAG "v3.0.0" CACHE STRING
     "libneurosuite tag to fetch when NEUROSCOPE_BUNDLE_NEUROSUITE is ON")
+option(BUILD_TESTING "Build the unit tests (run them with ctest)" ON)
 
 if(APPLE)
     option(APPBUNDLE
@@ -140,6 +141,14 @@ configure_file(config-neuroscope.h.cmake
 ################################################################################
 add_subdirectory(src)
 add_subdirectory(doc)
+
+################################################################################
+# Tests
+################################################################################
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 ################################################################################
 # CPack configuration
