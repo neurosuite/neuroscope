@@ -21,6 +21,8 @@ if(WIN32)
     set(CPACK_SYSTEM_NAME "win64")
 elseif(APPLE)
     set(CPACK_GENERATOR "DragNDrop")
+    # The GPL needs no click-through agreement; it also blocks unattended mounting.
+    set(CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE OFF)
     set(CPACK_DMG_FORMAT "UDBZ")
     set(CPACK_SYSTEM_NAME "macos-${CMAKE_SYSTEM_PROCESSOR}")
 else()
