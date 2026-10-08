@@ -36,6 +36,7 @@ option(NEUROSCOPE_BUNDLE_NEUROSUITE
 set(NEUROSUITE_GIT_TAG "v3.0.0" CACHE STRING
     "libneurosuite tag to fetch when NEUROSCOPE_BUNDLE_NEUROSUITE is ON")
 option(BUILD_TESTING "Build the unit tests (run them with ctest)" ON)
+option(NEUROSCOPE_BUILD_EXAMPLE_PLUGIN "Build the example plugin with synthetic sinusoids (not installed)" ON)
 
 if(APPLE)
     option(APPBUNDLE
@@ -192,6 +193,12 @@ endif()
 ################################################################################
 add_subdirectory(src)
 add_subdirectory(doc)
+
+# Plugins built here go where the executable in the build tree looks for installed plugins.
+set(NEUROSCOPE_BUILD_PLUGIN_DIR "$<TARGET_FILE_DIR:neuroscope>/${NEUROSCOPE_PLUGIN_RELATIVE_PATH}")
+if(NEUROSCOPE_BUILD_EXAMPLE_PLUGIN)
+    add_subdirectory(plugins/sine)
+endif()
 
 ################################################################################
 # Tests

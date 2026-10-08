@@ -1,0 +1,9 @@
+# Settings of the synthetic recording of the example plugin (see sineplugin.c).
+# Times are in seconds on the file's clock.
+channels = 8
+rate = 20000
+lfp_rate = 1250
+start = 1
+duration = 60
+pause_start = 20
+pause_end = 25
