@@ -40,6 +40,8 @@
 
 #include <QDebug>
 
+#include <utility>
+
 
 const int TraceView::XMARGIN = 50;
 const int TraceView::YMARGIN = 0;
@@ -260,7 +262,9 @@ void TraceView::dataAvailable(Array<dataType>& data, QObject* initiator)
         return;
     }
 
-    this->data = data;
+    // Only the view that asked for the data uses it, so it takes the elements over instead of
+    // copying them (still a copy with a libneurosuite whose Array cannot be moved).
+    this->data = std::move(data);
     dataReady = true;
     updateWindow();
 
