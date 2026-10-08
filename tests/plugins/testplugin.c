@@ -29,6 +29,11 @@
 #define TEST_PLUGIN_API_VERSION NS_PLUGIN_API_VERSION
 #endif
 
+/* A smaller size makes the plugin look like one built before the later members existed. */
+#ifndef TEST_PLUGIN_SIZE
+#define TEST_PLUGIN_SIZE sizeof(ns_plugin)
+#endif
+
 struct ns_file
 {
     int open;
@@ -117,6 +122,13 @@ static const char* channel_label(ns_file* file, int stream, int channel)
     return stream == 0 && channel >= 0 && channel < 2 ? labels[channel] : NULL;
 }
 
+/* The channels of the fast stream are in the groups 1 and 0, the slow stream has group 0. */
+static int channel_group(ns_file* file, int stream, int channel)
+{
+    (void)file;
+    return stream == 0 && channel == 0 ? 1 : 0;
+}
+
 static int read_data(ns_file* file, int stream, int64_t first, int64_t count, double* microvolts, ns_error* error)
 {
     (void)file;
@@ -135,7 +147,7 @@ static const char* const extensions[] = {"nstest", NULL};
 
 static const ns_plugin plugin = {
     TEST_PLUGIN_API_VERSION,
-    sizeof(ns_plugin),
+    TEST_PLUGIN_SIZE,
     TEST_PLUGIN_NAME,
     extensions,
     probe,
@@ -150,6 +162,7 @@ static const ns_plugin plugin = {
     NULL,
     NULL,
     NULL,
+    channel_group,
 };
 
 #ifndef TEST_PLUGIN_NO_ENTRY

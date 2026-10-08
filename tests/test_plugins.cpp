@@ -170,6 +170,18 @@ class TestPlugins : public QObject
         QCOMPARE(file->channelLabels(0), QStringList({"A0", "A1"}));
         // Channels without a label are numbered.
         QCOMPARE(file->channelLabels(1), QStringList({"0"}));
+        QCOMPARE(file->channelGroups(0), QList<int>({1, 0}));
+        QCOMPARE(file->channelGroups(1), QList<int>({0}));
+    }
+
+    void noGroupsFromOlderPlugin()
+    {
+        PluginRegistry other;
+        other.loadDirectory(pluginDirectory("slowdefault"));
+        QString error;
+        const auto file = PluginFile::open(other.pluginFor(path("session.nstest")), path("session.nstest"), &error);
+        QVERIFY2(file, qPrintable(error));
+        QVERIFY(file->channelGroups(0).isEmpty());
     }
 
     void defaultStreamFromPlugin()

@@ -40,8 +40,10 @@ function(neuroscope_add_test_plugin target directory)
 endfunction()
 
 neuroscope_add_test_plugin(neuroscope_testplugin good)
+# Also built like a plugin from before channel groups.
 neuroscope_add_test_plugin(neuroscope_testplugin_slowdefault slowdefault
-    TEST_PLUGIN_NAME="Test format, slow default" TEST_DEFAULT_STREAM=1)
+    TEST_PLUGIN_NAME="Test format, slow default" TEST_DEFAULT_STREAM=1
+    "TEST_PLUGIN_SIZE=offsetof(ns_plugin, channel_group)")
 neuroscope_add_test_plugin(neuroscope_testplugin_duplicate duplicate)
 neuroscope_add_test_plugin(neuroscope_testplugin_newer bad TEST_PLUGIN_API_VERSION=99)
 neuroscope_add_test_plugin(neuroscope_testplugin_noentry bad TEST_PLUGIN_NO_ENTRY)

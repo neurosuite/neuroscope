@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 
 #include <algorithm>
+#include <cstddef>
 
 namespace
 {
@@ -250,6 +251,17 @@ QStringList PluginFile::channelLabels(int stream) const
         labels.append(label ? QString::fromUtf8(label) : QString::number(channel));
     }
     return labels;
+}
+
+QList<int> PluginFile::channelGroups(int stream) const
+{
+    const ns_plugin* api = format->functions();
+    QList<int> groups;
+    if (!format->provides(offsetof(ns_plugin, channel_group)) || !api->channel_group)
+        return groups;
+    for (int channel = 0; channel < streamList[stream].channelCount; ++channel)
+        groups.append(std::max(api->channel_group(file, stream, channel), 0));
+    return groups;
 }
 
 bool PluginFile::read(int stream, qint64 first, qint64 count, double* microvolts, QString* error) const

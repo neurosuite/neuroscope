@@ -881,10 +881,12 @@ class NeuroscopeDoc : public QObject
     */
     int openPluginDocument(const std::shared_ptr<FormatPlugin>& plugin);
 
-    /** Puts all channels in one display group and each channel in its own spike group, for files that have no
-    * parameter and session files, and signals that there is no session.
+    /** Sets up the groups of files that have no parameter and session files, and signals that there is no session.
+    * Without @p groups, all channels are in one display group and each channel in its own spike group.
+    * Otherwise @p groups holds the group of each channel, from 0, which becomes its display and spike group,
+    * and each group gets its own colour.
     */
-    void setDefaultChannelGroups();
+    void setDefaultChannelGroups(const QList<int>& groups = QList<int>());
 
     /**The url of the document .*/
     QString docUrl;

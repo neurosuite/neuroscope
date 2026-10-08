@@ -26,6 +26,9 @@
  * the file's time 0. Samples without recorded data (before the recording started, or in pauses)
  * read as 0.
  *
+ * Groups: the channels of a stream can form groups, e.g. the channels of one electrode; NeuroScope
+ * shows each group together and in its own colour.
+ *
  * Values are in microvolts (µV); the plugin applies the calibration of each channel.
  *
  * Strings returned by a plugin belong to it and remain valid until the file is closed (strings of
@@ -136,6 +139,12 @@ typedef struct ns_plugin
     /** Reads all events of a list in time order: their times in nanoseconds on the file's clock and
       * their label indices. Both arrays have ns_event_list_info.count elements. */
     int (*read_events)(ns_file* file, int list, int64_t* times_ns, int32_t* labels, ns_error* error);
+
+    /* Channel groups */
+
+    /** Group of a channel, from 0; channels of a group need not be adjacent. May be NULL, then all
+      * channels form one group. */
+    int (*channel_group)(ns_file* file, int stream, int channel);
 } ns_plugin;
 
 /** The function a plugin exports. It returns NULL if the plugin cannot work with a NeuroScope that

@@ -620,28 +620,27 @@ int NeuroscopeDoc::openDocument(const QString& url)
     return OK;
 }
 
-void NeuroscopeDoc::setDefaultChannelGroups()
+void NeuroscopeDoc::setDefaultChannelGroups(const QList<int>& groups)
 {
     // Set up display and spike groups
-    QList<int> displayGroup;
-    QColor color = QColor::fromHsv(210, 255, 255); // default blue
+    const bool grouped = groups.size() == channelNb;
+    const int nbGroups = grouped && channelNb > 0 ? *std::max_element(groups.begin(), groups.end()) + 1 : 1;
     for (int i = 0; i < channelNb; ++i)
     {
-        // All channels have the same color, no offset and no skip status.
+        // Groups are numbered from 1; the first is blue, the others spread over the colour wheel.
+        const int group = grouped ? groups[i] + 1 : 1;
+        const QColor color = QColor::fromHsv((210 + 360 * (group - 1) / nbGroups) % 360, 255, 255);
         this->channelColorList->append(i, color);
         this->channelDefaultOffsets.insert(i, 0);
 
-        // Put all channels in the same display group.
-        this->displayChannelsGroups.insert(i, 1);
-        displayGroup.append(i);
+        this->displayChannelsGroups.insert(i, group);
+        this->displayGroupsChannels[group].append(i);
 
-        // Put each channel in its own spiking group.
-        this->channelsSpikeGroups.insert(i, i + 1);
-        QList<int> group;
-        group.append(i);
-        this->spikeGroupsChannels.insert(i + 1, group);
+        // Without groups, each channel is in its own spike group.
+        const int spikeGroup = grouped ? group : i + 1;
+        this->channelsSpikeGroups.insert(i, spikeGroup);
+        this->spikeGroupsChannels[spikeGroup].append(i);
     }
-    this->displayGroupsChannels.insert(1, displayGroup);
 
 
     // If skipStatus is empty, set the default status to 0
@@ -713,7 +712,7 @@ int NeuroscopeDoc::openPluginDocument(const std::shared_ptr<FormatPlugin>& plugi
     resolution = pluginTracesProvider->getResolution();
     channelLabels = pluginTracesProvider->getLabels();
 
-    setDefaultChannelGroups();
+    setDefaultChannelGroups(file->channelGroups(stream));
     return OK;
 }
 

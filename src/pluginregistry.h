@@ -121,6 +121,9 @@ class PluginFile
     /** Labels of the channels of @p stream; channels without a label are numbered from 0. */
     QStringList channelLabels(int stream) const;
 
+    /** Group of each channel of @p stream, from 0; empty if the plugin has no groups. */
+    QList<int> channelGroups(int stream) const;
+
     /** Reads @p count samples of all channels of @p stream from sample @p first on into @p microvolts
       * (row-major, count x channels). Samples outside the stream read as 0. */
     bool read(int stream, qint64 first, qint64 count, double* microvolts, QString* error) const;
