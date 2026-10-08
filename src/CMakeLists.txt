@@ -61,6 +61,7 @@ set(SOURCE_FILES
     prefdefaultslayout.cpp
     prefgenerallayout.cpp
     propertieslayout.cpp
+    streamdialog.cpp
 )
 
 # windows resources

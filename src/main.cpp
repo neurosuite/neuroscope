@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
     QString amplification;
     QString screenGain;
     QString timeWindow;
+    QString streamId;
     bool streamMode = false;
     //TODO Qt5.2 use QCommandLineParser
     for (int i = 1, n = args.size(); i < n; ++i)
@@ -64,6 +65,8 @@ int main(int argc, char* argv[])
                       << "  -g, --screenGain        Screen gain.\n"
                       << "  -s, --samplingRate      Sampling rate.\n"
                       << "  -t, --timeWindow        Initial time window (in miliseconds).\n"
+                      << "      --stream-id         Stream to open from a file with several streams,\n"
+                      << "                          e.g. 30000Hz (files read by plugins).\n"
                       << "\n"
                       << "Optional flags:\n"
 #if WITH_CEREBUS
@@ -109,6 +112,10 @@ int main(int argc, char* argv[])
             else if (arg == "-s" || arg == "--samplingRate" || arg == "-samplingRate")
             {
                 SR = args.at(++i);
+            }
+            else if (arg == "--stream-id")
+            {
+                streamId = args.at(++i);
             }
             else if (arg == "-t" || arg == "--timeWindow" || arg == "-timeWindow")
             {
@@ -171,6 +178,8 @@ int main(int argc, char* argv[])
 #endif
         if (!file.isEmpty())
         {
+            if (!streamId.isEmpty())
+                neuroscope->setRequestedStream(streamId);
             QFileInfo fInfo(file);
             if (fInfo.isRelative())
             {

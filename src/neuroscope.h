@@ -70,6 +70,9 @@ class NeuroscopeApp : public QMainWindow
     */
     void openDocumentFile(const QString& url = QString());
 
+    /** Selects the stream to open from the next file read by a plugin, by its identifier. */
+    void setRequestedStream(const QString& id);
+
 #ifdef WITH_CEREBUS
     /** Open a stream, only one document (file or stream) at the time allowed.
     * Asking for a new one will open a new instance of the application with it.

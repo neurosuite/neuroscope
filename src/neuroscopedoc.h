@@ -28,6 +28,8 @@
 
 #include <QEvent>
 
+#include <memory>
+
 //include files for the application
 #include "channelpalette.h"
 #include "dataprovider.h"
@@ -45,6 +47,7 @@ class TracesProvider;
 class NeuroscopeXmlReader;
 class ItemColors;
 class ItemPalette;
+class FormatPlugin;
 
 /**
   * The NeuroscopeDoc class provides a document object that can be used in conjunction with the classes
@@ -124,6 +127,17 @@ class NeuroscopeDoc : public QObject
     * @return an OpenSaveCreateReturnMessage enum giving the open status.
     */
     int openDocument(const QString& url);
+
+    /** Selects the stream to open from the next file read by a plugin (see neuroscope_plugin.h), by its
+    * identifier. Without one, the user chooses if the file has several streams.
+    */
+    void setRequestedStream(const QString& id) { requestedStreamId = id; }
+
+    /** Identifier of the open stream of a file read by a plugin; empty for other files. */
+    QString streamId() const { return openStreamId; }
+
+    /** Why the last call of openDocument failed, if known. */
+    QString openErrorMessage() const { return openError; }
 
 #ifdef WITH_CEREBUS
     /** Open network stream.
@@ -862,8 +876,27 @@ class NeuroscopeDoc : public QObject
 
 
   private:
+    /** Opens a file with a plugin: the stream requested or chosen by the user, with default channel groups.
+    * @return an OpenSaveCreateReturnMessage enum giving the open status.
+    */
+    int openPluginDocument(const std::shared_ptr<FormatPlugin>& plugin);
+
+    /** Puts all channels in one display group and each channel in its own spike group, for files that have no
+    * parameter and session files, and signals that there is no session.
+    */
+    void setDefaultChannelGroups();
+
     /**The url of the document .*/
     QString docUrl;
+
+    /** Stream requested with setRequestedStream(). */
+    QString requestedStreamId;
+
+    /** Identifier of the open stream of a file read by a plugin. */
+    QString openStreamId;
+
+    /** Why the last call of openDocument failed. */
+    QString openError;
 
     /**The url of the session file.*/
     QString sessionUrl;

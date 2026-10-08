@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QMessageBox>
+#include <QProcess>
 #include <qregularexpression.h>
 
 // application specific includes
@@ -35,6 +36,9 @@
 #include "neuroscopeview.h"
 #include "tracesprovider.h"
 #include "nsxtracesprovider.h"
+#include "pluginregistry.h"
+#include "plugintracesprovider.h"
+#include "streamdialog.h"
 #include "traceview.h"
 #include "channelcolors.h"
 #include "neuroscopexmlreader.h"
@@ -264,6 +268,13 @@ int NeuroscopeDoc::openDocument(const QString& url)
     QFileInfo urlFileInfo(url);
     QString fileName = urlFileInfo.fileName();
 
+    openError.clear();
+    openStreamId.clear();
+
+    // Files read by a plugin
+    if (std::shared_ptr<FormatPlugin> plugin = PluginRegistry::instance().pluginFor(url))
+        return openPluginDocument(plugin);
+
     // First we check if this is a Blackrock NSX file
     if (fileName.contains(QRegularExpression("\\.ns\\d")))
     {
@@ -291,40 +302,7 @@ int NeuroscopeDoc::openDocument(const QString& url)
         ;
         this->channelLabels = nsxTracesProvider->getLabels();
 
-        //extensionSamplingRates.insert(extension,samplingRate);
-
-        // Set up display and spike groups
-        QList<int> displayGroup;
-        QColor color = QColor::fromHsv(210, 255, 255); // default blue
-        for (int i = 0; i < channelNb; ++i)
-        {
-            // All channels have the same color, no offset and no skip status.
-            this->channelColorList->append(i, color);
-            this->channelDefaultOffsets.insert(i, 0);
-
-            // Put all channels in the same display group.
-            this->displayChannelsGroups.insert(i, 1);
-            displayGroup.append(i);
-
-            // Put each channel in its own spiking group.
-            this->channelsSpikeGroups.insert(i, i + 1);
-            QList<int> group;
-            group.append(i);
-            this->spikeGroupsChannels.insert(i + 1, group);
-        }
-        this->displayGroupsChannels.insert(1, displayGroup);
-
-
-        // If skipStatus is empty, set the default status to 0
-        if (skipStatus.isEmpty())
-        {
-            for (int i = 0; i < channelNb; ++i)
-                skipStatus.insert(i, false);
-        }
-
-        //Use the channel default offsets
-        emit noSession(channelDefaultOffsets, skipStatus);
-
+        setDefaultChannelGroups();
         return OK;
     }
 
@@ -639,6 +617,103 @@ int NeuroscopeDoc::openDocument(const QString& url)
     if (!sessionFileExist)
         emit noSession(channelDefaultOffsets, skipStatus);
     qDebug() << " NeuroscopeDoc::openDocument END FINISH";
+    return OK;
+}
+
+void NeuroscopeDoc::setDefaultChannelGroups()
+{
+    // Set up display and spike groups
+    QList<int> displayGroup;
+    QColor color = QColor::fromHsv(210, 255, 255); // default blue
+    for (int i = 0; i < channelNb; ++i)
+    {
+        // All channels have the same color, no offset and no skip status.
+        this->channelColorList->append(i, color);
+        this->channelDefaultOffsets.insert(i, 0);
+
+        // Put all channels in the same display group.
+        this->displayChannelsGroups.insert(i, 1);
+        displayGroup.append(i);
+
+        // Put each channel in its own spiking group.
+        this->channelsSpikeGroups.insert(i, i + 1);
+        QList<int> group;
+        group.append(i);
+        this->spikeGroupsChannels.insert(i + 1, group);
+    }
+    this->displayGroupsChannels.insert(1, displayGroup);
+
+
+    // If skipStatus is empty, set the default status to 0
+    if (skipStatus.isEmpty())
+    {
+        for (int i = 0; i < channelNb; ++i)
+            skipStatus.insert(i, false);
+    }
+
+    //Use the channel default offsets
+    emit noSession(channelDefaultOffsets, skipStatus);
+}
+
+int NeuroscopeDoc::openPluginDocument(const std::shared_ptr<FormatPlugin>& plugin)
+{
+    std::shared_ptr<PluginFile> file = PluginFile::open(plugin, docUrl, &openError);
+    if (!file)
+        return OPEN_ERROR;
+
+    const QList<PluginFile::Stream> streams = file->streams();
+    int stream = file->defaultStream();
+    if (!requestedStreamId.isEmpty())
+    {
+        stream = file->streamIndex(requestedStreamId);
+        if (stream < 0)
+        {
+            QStringList ids;
+            for (const PluginFile::Stream& s : streams)
+                ids.append(s.id);
+            openError = tr("The file has no stream %1, its streams are: %2").arg(requestedStreamId, ids.join(QLatin1String(", ")));
+            requestedStreamId.clear();
+            return OPEN_ERROR;
+        }
+        requestedStreamId.clear();
+    }
+    else if (streams.size() > 1)
+    {
+        // Like for a parameter file shared by several data files: the user chooses, cancelling opens the default.
+        QApplication::restoreOverrideCursor();
+        StreamDialog dialog(streams, stream, parent);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            stream = dialog.selectedStream();
+            if (dialog.openOthers())
+            {
+                for (int i = 0; i < streams.size(); ++i)
+                {
+                    if (i != stream && !QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList() << QStringLiteral("--stream-id") << streams[i].id << docUrl))
+                        QMessageBox::warning(parent, tr("Warning!"), tr("NeuroScope could not be started for the stream %1.").arg(streams[i].label));
+                }
+            }
+        }
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    }
+
+    PluginTracesProvider* pluginTracesProvider = new PluginTracesProvider(file, stream);
+    tracesProvider = pluginTracesProvider;
+    openStreamId = streams[stream].id;
+
+    if (isCommandLineProperties)
+    {
+        QApplication::restoreOverrideCursor();
+        QMessageBox::information(0, tr("Warning!"), tr("The file describes itself, the command line information will be discarded."));
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    }
+
+    channelNb = pluginTracesProvider->getNbChannels();
+    samplingRate = pluginTracesProvider->getSamplingRate();
+    resolution = pluginTracesProvider->getResolution();
+    channelLabels = pluginTracesProvider->getLabels();
+
+    setDefaultChannelGroups();
     return OK;
 }
 

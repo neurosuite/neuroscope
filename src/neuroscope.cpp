@@ -47,6 +47,7 @@
 // application specific includes
 #include "neuroscope.h"
 #include "neuroscopedoc.h"
+#include "pluginregistry.h"
 #include "channelpalette.h"
 #include "prefdialog.h"
 #include "configuration.h" // class Configuration
@@ -1005,6 +1006,11 @@ void NeuroscopeApp::initDisplay(QList<int>* channelsToDisplay, bool autocenterCh
     mainSplitter->setSizes(size);
 }
 
+void NeuroscopeApp::setRequestedStream(const QString& id)
+{
+    doc->setRequestedStream(id);
+}
+
 void NeuroscopeApp::openDocumentFile(const QString& url)
 {
     slotStatusMsg(tr("Opening file..."));
@@ -1067,7 +1073,8 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
         else if (returnStatus == NeuroscopeDoc::OPEN_ERROR)
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical(this, tr("Error!"), tr("Could not open the files."));
+            const QString reason = doc->openErrorMessage();
+            QMessageBox::critical(this, tr("Error!"), reason.isEmpty() ? tr("Could not open the files.") : tr("Could not open the file: %1").arg(reason));
             //close the document
             doc->closeDocument();
             resetState();
@@ -1101,7 +1108,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             slotStateChanged("eventsInPositionViewEnableState");
         }
 
-        setWindowTitle(url);
+        setWindowTitle(doc->streamId().isEmpty() ? url : QStringLiteral("%1 [%2]").arg(url, doc->streamId()));
         QApplication::restoreOverrideCursor();
     }
     // check, if this document is already open. If yes, do not do anything
@@ -1416,7 +1423,9 @@ void NeuroscopeApp::slotFileOpen()
         this,
         tr("Open File..."),
         settings.value("CurrentDirectory").toString(),
-        tr("Data File (*.dat *.lfp *.eeg *.fil);;Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6);;All files (*.*)"));
+        (QStringList() << tr("Data File (*.dat *.lfp *.eeg *.fil)") << tr("Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6)")
+                       << PluginRegistry::instance().fileFilters() << tr("All files (*.*)"))
+            .join(QLatin1String(";;")));
     if (!url.isEmpty())
     {
         QDir CurrentDir;
