@@ -57,6 +57,24 @@
 #include "eventsprovider.h"
 #include "qhelpviewer.h"
 
+namespace
+{
+
+/** File dialog filters such as "Data File (*.dat *.eeg)", with the patterns also in the name: some native
+  * dialogs (e.g. KDE's) only show the name. Use with QFileDialog::HideNameFilterDetails, so that Qt's own
+  * dialog does not show the patterns twice. */
+QString filtersShowingPatterns(const QStringList& filters)
+{
+    QStringList result;
+    for (const QString& filter : filters)
+    {
+        const int patterns = filter.lastIndexOf(QLatin1Char('('));
+        result.append(patterns < 0 ? filter : filter + QLatin1Char(' ') + filter.mid(patterns));
+    }
+    return result.join(QLatin1String(";;"));
+}
+
+} // namespace
 
 NeuroscopeApp::NeuroscopeApp()
     : QMainWindow(0), prefDialog(0L), displayCount(0), mainDock(0), spikeChannelPalette(0), tabsParent(0L), paletteTabsParent(0L),
@@ -1423,9 +1441,9 @@ void NeuroscopeApp::slotFileOpen()
         this,
         tr("Open File..."),
         settings.value("CurrentDirectory").toString(),
-        (QStringList() << tr("Data File (*.dat *.lfp *.eeg *.fil)") << tr("Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6)")
-                       << PluginRegistry::instance().fileFilters() << tr("All files (*.*)"))
-            .join(QLatin1String(";;")));
+        filtersShowingPatterns(QStringList() << tr("Data File (*.dat *.lfp *.eeg *.fil)") << tr("Blackrock File (*.ns1 *.ns2 *.ns3 *.ns4 *.ns5 *.ns6)")
+                                             << PluginRegistry::instance().fileFilters() << tr("All files (*.*)")),
+        nullptr, QFileDialog::HideNameFilterDetails);
     if (!url.isEmpty())
     {
         QDir CurrentDir;
