@@ -139,8 +139,53 @@ else()
          "${CMAKE_INSTALL_PREFIX}/${NEUROSCOPE_DOC_INSTALL_DIR}")
 endif()
 
+################################################################################
+# File format plugins (looked up relative to the executable at runtime)
+################################################################################
+if(APPBUNDLE)
+    set(NEUROSCOPE_PLUGIN_INSTALL_DIR "neuroscope.app/Contents/PlugIns/neuroscope")
+    set(NEUROSCOPE_PLUGIN_RELATIVE_PATH "../PlugIns/neuroscope")
+else()
+    set(NEUROSCOPE_PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/neuroscope/plugins")
+    file(RELATIVE_PATH NEUROSCOPE_PLUGIN_RELATIVE_PATH
+         "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+         "${CMAKE_INSTALL_PREFIX}/${NEUROSCOPE_PLUGIN_INSTALL_DIR}")
+endif()
+
 configure_file(config-neuroscope.h.cmake
                src/config-neuroscope.h)
+
+################################################################################
+# Plugin interface (C header and a CMake package for building plugins)
+################################################################################
+add_library(neuroscope_plugin_api INTERFACE)
+add_library(NeuroScope::plugin ALIAS neuroscope_plugin_api)
+set_target_properties(neuroscope_plugin_api PROPERTIES EXPORT_NAME plugin)
+target_include_directories(neuroscope_plugin_api INTERFACE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+include(cmake/NeuroScopePluginHelpers.cmake)
+
+if(NOT APPBUNDLE)
+    set(NEUROSCOPE_PLUGIN_CMAKE_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/NeuroScopePlugin")
+    install(FILES include/neuroscope/neuroscope_plugin.h
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/neuroscope)
+    install(TARGETS neuroscope_plugin_api EXPORT NeuroScopePluginTargets)
+    install(EXPORT NeuroScopePluginTargets
+            NAMESPACE NeuroScope::
+            DESTINATION ${NEUROSCOPE_PLUGIN_CMAKE_DIR})
+    configure_file(cmake/NeuroScopePluginConfig.cmake.in
+                   NeuroScopePluginConfig.cmake @ONLY)
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(NeuroScopePluginConfigVersion.cmake
+                                     VERSION ${PROJECT_VERSION}
+                                     COMPATIBILITY SameMajorVersion)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/NeuroScopePluginConfig.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/NeuroScopePluginConfigVersion.cmake
+                  cmake/NeuroScopePluginHelpers.cmake
+            DESTINATION ${NEUROSCOPE_PLUGIN_CMAKE_DIR})
+endif()
 
 ################################################################################
 # Sources and documentation

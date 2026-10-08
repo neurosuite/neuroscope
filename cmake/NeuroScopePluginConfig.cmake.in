@@ -1,0 +1,13 @@
+# CMake package for building NeuroScope file format plugins:
+#
+#   find_package(NeuroScopePlugin REQUIRED)
+#   neuroscope_add_plugin(myformat myformat.cpp)
+#   install(TARGETS myformat LIBRARY DESTINATION ${NEUROSCOPE_PLUGIN_INSTALL_DIR}
+#                            RUNTIME DESTINATION ${NEUROSCOPE_PLUGIN_INSTALL_DIR})
+#
+# NEUROSCOPE_PLUGIN_INSTALL_DIR is relative to the installation prefix of NeuroScope.
+
+include("${CMAKE_CURRENT_LIST_DIR}/NeuroScopePluginTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/NeuroScopePluginHelpers.cmake")
+
+set(NEUROSCOPE_PLUGIN_INSTALL_DIR "@NEUROSCOPE_PLUGIN_INSTALL_DIR@")
