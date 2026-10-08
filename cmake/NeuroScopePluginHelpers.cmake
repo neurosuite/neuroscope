@@ -14,5 +14,22 @@ function(neuroscope_add_plugin target)
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         # Also hide the symbols of static libraries linked into the plugin.
         target_link_options(${target} PRIVATE "LINKER:--exclude-libs,ALL")
+        # Include the C++ runtime, so that the plugin also loads on systems with an older libstdc++
+        # than the one it was built with. Only C types cross the plugin interface, so the plugin's
+        # runtime never meets NeuroScope's.
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            include(CheckLinkerFlag)
+            check_linker_flag(CXX "-static-libstdc++" NEUROSCOPE_HAVE_STATIC_LIBSTDCXX)
+            if(NEUROSCOPE_HAVE_STATIC_LIBSTDCXX)
+                target_link_options(${target} PRIVATE -static-libstdc++ -static-libgcc)
+            else()
+                get_property(warned GLOBAL PROPERTY NEUROSCOPE_WARNED_STATIC_LIBSTDCXX)
+                if(NOT warned)
+                    message(WARNING "Plugins link the C++ runtime dynamically, because the static "
+                                    "libstdc++ is missing (e.g. the package libstdc++-static).")
+                    set_property(GLOBAL PROPERTY NEUROSCOPE_WARNED_STATIC_LIBSTDCXX ON)
+                endif()
+            endif()
+        endif()
     endif()
 endfunction()
