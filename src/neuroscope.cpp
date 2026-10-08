@@ -1147,9 +1147,10 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             mFileOpenRecent->addRecentFile(url);
             filePath = path;
 
-            if (!QProcess::startDetached("neuroscope", QStringList() << url))
+            // Start this executable, which need not be in the PATH (e.g. in the build tree or an AppImage).
+            if (!QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList() << url))
             {
-                QMessageBox::critical(this, tr("Neuroscope"), tr("neuroscope can be launch"));
+                QMessageBox::critical(this, tr("Neuroscope"), tr("NeuroScope could not be started for %1.").arg(url));
             }
             QApplication::restoreOverrideCursor();
         }
@@ -1191,11 +1192,11 @@ void NeuroscopeApp::openNetworkStream(CerebusTracesProvider::SamplingGroup group
     else
     {
         // ToDo: Check if we are already in streaming mode
-        if (!QProcess::startDetached("neuroscope", QStringList()
-                                                       << "-n"
-                                                       << QString::number(group)))
+        if (!QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList()
+                                                                                  << "-n"
+                                                                                  << QString::number(group)))
         {
-            QMessageBox::critical(this, tr("Neuroscope"), tr("neuroscope can not be launch"));
+            QMessageBox::critical(this, tr("Neuroscope"), tr("NeuroScope could not be started for the network stream."));
         }
         QApplication::restoreOverrideCursor();
     }
