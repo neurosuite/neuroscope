@@ -18,13 +18,15 @@ set(DATAIO_SOURCE_FILES
     parameterxmlcreator.cpp
     parameterxmlmodifier.cpp
     tags.cpp
+    pluginregistry.cpp
+    plugintracesprovider.cpp
 )
 
 add_library(neuroscope_dataio STATIC ${DATAIO_SOURCE_FILES})
 target_include_directories(neuroscope_dataio PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(neuroscope_dataio PUBLIC neurosuite::neurosuite Qt6::Core Qt6::Gui Qt6::Xml)
+target_link_libraries(neuroscope_dataio PUBLIC NeuroScope::plugin neurosuite::neurosuite Qt6::Core Qt6::Gui Qt6::Xml)
 
 # Normal C++ source files
 set(SOURCE_FILES
