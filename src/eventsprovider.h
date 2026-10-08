@@ -173,6 +173,11 @@ class EventsProvider : public DataProvider
   */
     bool isModified() const { return modified; }
 
+    /**Tells if the events come from a source that NeuroScope does not write to, e.g. a file read by a plugin.
+    * Changes to such events are not saved.
+    */
+    bool isReadOnly() const { return readOnly; }
+
     /**Initializes the provider as it is the provider of a new empty event file.*/
     void initializeEmptyProvider();
 
@@ -302,6 +307,9 @@ class EventsProvider : public DataProvider
 
     /**Flag to keep track of event modifications. */
     bool modified;
+
+    /**Whether the events are not saved, see isReadOnly(). */
+    bool readOnly = false;
 
     /**Counter for each type of event.*/
     QMap<EventDescription, int> eventDescriptionCounter;
