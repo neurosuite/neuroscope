@@ -218,6 +218,31 @@ std::shared_ptr<PluginFile> PluginFile::open(const std::shared_ptr<FormatPlugin>
         return nullptr;
     }
     file->defaultIndex = std::clamp(api->default_stream(handle), 0, static_cast<int>(file->streamList.size()) - 1);
+
+    // Event lists are optional; a list that is not described properly is left out.
+    if (api->event_list_count && api->event_list_info && api->read_events)
+    {
+        const int listCount = api->event_list_count(handle);
+        for (int i = 0; i < listCount; ++i)
+        {
+            ns_event_list_info info{};
+            if (api->event_list_info(handle, i, &info) != NS_OK || !info.name || info.count < 0 || info.label_count < 0)
+            {
+                qWarning() << path << ": invalid description of event list" << i;
+                continue;
+            }
+            EventList list;
+            list.name = QString::fromUtf8(info.name);
+            list.count = info.count;
+            list.pluginIndex = i;
+            for (int label = 0; label < info.label_count; ++label)
+            {
+                const char* text = api->event_label ? api->event_label(handle, i, label) : nullptr;
+                list.labels.append(text ? QString::fromUtf8(text) : QString::number(label));
+            }
+            file->eventListList.append(list);
+        }
+    }
     return file;
 }
 
@@ -282,6 +307,32 @@ bool PluginFile::read(int stream, qint64 first, qint64 count, double* microvolts
         if (error)
             *error = message(status, QStringLiteral("The %1 plugin cannot read the file").arg(format->name()));
         return false;
+    }
+    return true;
+}
+
+bool PluginFile::readEvents(int list, QVector<qint64>* timesNs, QVector<int>* labels, QString* error) const
+{
+    const EventList& info = eventListList[list];
+    timesNs->resize(info.count);
+    labels->resize(info.count);
+    ns_error status{};
+    static_assert(sizeof(qint64) == sizeof(int64_t) && sizeof(int) == sizeof(int32_t), "event arrays are passed to the plugin");
+    if (format->functions()->read_events(file, info.pluginIndex, reinterpret_cast<int64_t*>(timesNs->data()),
+                                         reinterpret_cast<int32_t*>(labels->data()), &status) != NS_OK)
+    {
+        if (error)
+            *error = message(status, QStringLiteral("The %1 plugin cannot read the events %2").arg(format->name(), info.name));
+        return false;
+    }
+    for (const int label : *labels)
+    {
+        if (label < 0 || label >= info.labels.size())
+        {
+            if (error)
+                *error = QStringLiteral("The events %1 have the unknown label %2").arg(info.name).arg(label);
+            return false;
+        }
     }
     return true;
 }

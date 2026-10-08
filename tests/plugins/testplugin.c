@@ -143,6 +143,51 @@ static int read_data(ns_file* file, int stream, int64_t first, int64_t count, do
     return NS_OK;
 }
 
+static int event_list_count(ns_file* file)
+{
+    (void)file;
+    return 2;
+}
+
+static int event_list_info(ns_file* file, int list, ns_event_list_info* info)
+{
+    (void)file;
+    if (list == 0)
+    {
+        info->name = "Trials";
+        info->count = TEST_EVENT_COUNT;
+        info->label_count = 2;
+        return NS_OK;
+    }
+    if (list == 1)
+    {
+        info->name = "Nothing";
+        info->count = 0;
+        info->label_count = 0;
+        return NS_OK;
+    }
+    return NS_ERROR;
+}
+
+static const char* event_label(ns_file* file, int list, int label)
+{
+    static const char* const labels[] = {"start", "stop"};
+    (void)file;
+    return list == 0 && label >= 0 && label < 2 ? labels[label] : NULL;
+}
+
+static int read_events(ns_file* file, int list, int64_t* times_ns, int32_t* labels, ns_error* error)
+{
+    (void)file;
+    if (list == 1)
+        return NS_OK;
+    if (list != 0)
+        return fail(error, "no such event list");
+    memcpy(times_ns, test_event_times_ns, sizeof(test_event_times_ns));
+    memcpy(labels, test_event_labels, sizeof(test_event_labels));
+    return NS_OK;
+}
+
 static const char* const extensions[] = {"nstest", NULL};
 
 static const ns_plugin plugin = {
@@ -158,10 +203,10 @@ static const ns_plugin plugin = {
     stream_info,
     channel_label,
     read_data,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    event_list_count,
+    event_list_info,
+    event_label,
+    read_events,
     channel_group,
 };
 

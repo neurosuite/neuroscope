@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "plugineventsprovider.h"
 #include "pluginregistry.h"
 #include "plugintracesprovider.h"
 #include "testplugin.h"
@@ -286,6 +287,60 @@ class TestPlugins : public QObject
         QCOMPARE(data.rows, 26_i64);
         QCOMPARE(data(1, 1), 50_i64);
         QCOMPARE(data(26, 1), 100_i64);
+    }
+
+    void eventLists()
+    {
+        const auto file = openTestFile();
+        const QList<PluginFile::EventList> lists = file->eventLists();
+        QCOMPARE(lists.size(), 2);
+        QCOMPARE(lists[0].name, QString("Trials"));
+        QCOMPARE(std::int64_t(lists[0].count), std::int64_t(TEST_EVENT_COUNT));
+        QCOMPARE(lists[0].labels, QStringList({"start", "stop"}));
+        QCOMPARE(lists[1].name, QString("Nothing"));
+        QCOMPARE(std::int64_t(lists[1].count), 0_i64);
+
+        QVector<qint64> times;
+        QVector<int> labels;
+        QString error;
+        QVERIFY2(file->readEvents(0, &times, &labels, &error), qPrintable(error));
+        QCOMPARE(times, QVector<qint64>({100000000, 900000000, 1600000000}));
+        QCOMPARE(labels, QVector<int>({0, 1, 0}));
+    }
+
+    void eventsProvider()
+    {
+        PluginEventsProvider provider(openTestFile(), 0, 1000.0, 25);
+        QCOMPARE(provider.loadData(), int(EventsProvider::OK));
+        QCOMPARE(provider.getName(), QString("Trials"));
+        QVERIFY(provider.isReadOnly());
+        QCOMPARE(provider.getNbEvents(), 3);
+        QCOMPARE(provider.eventIdDescriptionMap().value(1), EventDescription("start"));
+        QCOMPARE(provider.eventIdDescriptionMap().value(2), EventDescription("stop"));
+
+        // Times come in samples of the traces, here 1 kHz.
+        std::vector<std::int64_t> times;
+        std::vector<int> ids;
+        auto connection = QObject::connect(&provider, &EventsProvider::dataReady,
+                                           [&](Array<dataType>& t, Array<int>& i, QObject*, QString)
+                                           {
+                                               for (long k = 1; k <= t.nbOfColumns(); ++k)
+                                               {
+                                                   times.push_back(t(1, k));
+                                                   ids.push_back(i(1, k));
+                                               }
+                                           });
+        provider.requestData(0, 2000, nullptr);
+        QObject::disconnect(connection);
+        QCOMPARE(times, std::vector<std::int64_t>({100, 900, 1600}));
+        QCOMPARE(ids, std::vector<int>({1, 2, 1}));
+    }
+
+    void emptyEventListIsRejected()
+    {
+        PluginEventsProvider provider(openTestFile(), 1, 1000.0, 25);
+        QCOMPARE(provider.loadData(), int(EventsProvider::INCORRECT_CONTENT));
+        QVERIFY(!provider.errorMessage().isEmpty());
     }
 };
 

@@ -38,6 +38,7 @@
 #include "nsxtracesprovider.h"
 #include "pluginregistry.h"
 #include "plugintracesprovider.h"
+#include "plugineventsprovider.h"
 #include "streamdialog.h"
 #include "traceview.h"
 #include "channelcolors.h"
@@ -713,6 +714,7 @@ int NeuroscopeDoc::openPluginDocument(const std::shared_ptr<FormatPlugin>& plugi
     channelLabels = pluginTracesProvider->getLabels();
 
     setDefaultChannelGroups(file->channelGroups(stream));
+    loadPluginEvents(file);
     return OK;
 }
 
@@ -917,7 +919,7 @@ bool NeuroscopeDoc::saveEventFiles()
         if (qobject_cast<EventsProvider*>(provider))
         {
             EventsProvider* eventProvider = static_cast<EventsProvider*>(provider);
-            if (eventProvider->isModified())
+            if (eventProvider->isModified() && !eventProvider->isReadOnly())
             {
                 QFile eventFile(iterator.value());
                 const bool status = eventFile.open(QIODevice::WriteOnly);
@@ -2908,9 +2910,16 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
         return INCORRECT_CONTENT;
     }
 
+    addEventsProvider(eventsProvider, eventUrl, activeView);
+    return OK;
+}
+
+void NeuroscopeDoc::addEventsProvider(EventsProvider* eventsProvider, const QString& url, NeuroscopeView* activeView)
+{
+    const QString name = eventsProvider->getName();
     lastEventProviderGridX = eventsProvider->getDescriptionLength();
     providers.insert(name, eventsProvider);
-    providerUrls.insert(name, eventUrl);
+    providerUrls.insert(name, url);
 
     ItemColors* eventColors = new ItemColors();
     QList<int> eventsToSkip;
@@ -2945,8 +2954,31 @@ NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFile(const QS
     }
 
     emit eventFileLoaded(name);
+}
 
-    return OK;
+void NeuroscopeDoc::loadPluginEvents(const std::shared_ptr<PluginFile>& file)
+{
+    // The display was created when the channel groups were set up.
+    NeuroscopeView* activeView = viewList->isEmpty() ? nullptr : viewList->last();
+    const QList<PluginFile::EventList> lists = file->eventLists();
+    for (int i = 0; i < lists.size(); ++i)
+    {
+        if (lists[i].count == 0)
+            continue;
+        if (providers.contains(lists[i].name))
+        {
+            qWarning() << "Skipping the event list" << lists[i].name << "of" << file->path() << ", the name is taken";
+            continue;
+        }
+        PluginEventsProvider* eventsProvider = new PluginEventsProvider(file, i, samplingRate, eventPosition);
+        if (eventsProvider->loadData() != EventsProvider::OK)
+        {
+            qWarning() << "Skipping the event list" << lists[i].name << "of" << file->path() << ":" << eventsProvider->errorMessage();
+            delete eventsProvider;
+            continue;
+        }
+        addEventsProvider(eventsProvider, file->path(), activeView);
+    }
 }
 
 NeuroscopeDoc::OpenSaveCreateReturnMessage NeuroscopeDoc::loadEventFileForSession(const QString& eventUrl, QMap<EventDescription, QColor>& itemColors, const QDateTime& lastModified, bool firstFile)

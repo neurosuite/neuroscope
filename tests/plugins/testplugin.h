@@ -55,4 +55,10 @@ static inline double test_slow_value(int64_t sample)
     return (double)sample * 2.0;
 }
 
+/* Event list 0, "Trials": "start" at 100 ms and 1600 ms, "stop" at 900 ms. List 1, "Nothing", is
+ * empty. */
+#define TEST_EVENT_COUNT 3
+static const int64_t test_event_times_ns[TEST_EVENT_COUNT] = {100000000, 900000000, 1600000000};
+static const int32_t test_event_labels[TEST_EVENT_COUNT] = {0, 1, 0};
+
 #endif

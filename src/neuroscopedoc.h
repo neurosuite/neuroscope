@@ -48,6 +48,7 @@ class NeuroscopeXmlReader;
 class ItemColors;
 class ItemPalette;
 class FormatPlugin;
+class PluginFile;
 
 /**
   * The NeuroscopeDoc class provides a document object that can be used in conjunction with the classes
@@ -887,6 +888,12 @@ class NeuroscopeDoc : public QObject
     * and each group gets its own colour.
     */
     void setDefaultChannelGroups(const QList<int>& groups = QList<int>());
+
+    /** Adds a loaded @p eventsProvider read from @p url: gives it colours, shows it in the views and signals it. */
+    void addEventsProvider(EventsProvider* eventsProvider, const QString& url, NeuroscopeView* activeView);
+
+    /** Loads the event lists of @p file into the display; lists that cannot be read are skipped with a warning. */
+    void loadPluginEvents(const std::shared_ptr<PluginFile>& file);
 
     /**The url of the document .*/
     QString docUrl;

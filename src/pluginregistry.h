@@ -22,6 +22,7 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 
 #include <memory>
 
@@ -103,6 +104,16 @@ class PluginFile
         qint64 sampleCount = 0;
     };
 
+    struct EventList
+    {
+        QString name;
+        qint64 count = 0;
+        /** Descriptions of the label indices. */
+        QStringList labels;
+        /** Index of the list in the plugin. */
+        int pluginIndex = 0;
+    };
+
     /** Opens @p path with @p plugin. Returns null and sets @p error if it fails. */
     static std::shared_ptr<PluginFile> open(const std::shared_ptr<FormatPlugin>& plugin, const QString& path, QString* error);
 
@@ -128,6 +139,13 @@ class PluginFile
       * (row-major, count x channels). Samples outside the stream read as 0. */
     bool read(int stream, qint64 first, qint64 count, double* microvolts, QString* error) const;
 
+    /** The event lists of the file; empty if the plugin has none. */
+    QList<EventList> eventLists() const { return eventListList; }
+
+    /** Reads the events of list @p list (an index into eventLists()): their times in nanoseconds on the file's clock and their
+      * label indices, which are checked against the labels of the list. */
+    bool readEvents(int list, QVector<qint64>* timesNs, QVector<int>* labels, QString* error) const;
+
   private:
     PluginFile(const std::shared_ptr<FormatPlugin>& plugin, const QString& path, ns_file* file);
 
@@ -136,6 +154,7 @@ class PluginFile
     ns_file* file;
     QList<Stream> streamList;
     int defaultIndex = 0;
+    QList<EventList> eventListList;
 };
 
 #endif

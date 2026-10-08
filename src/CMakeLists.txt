@@ -20,6 +20,7 @@ set(DATAIO_SOURCE_FILES
     tags.cpp
     pluginregistry.cpp
     plugintracesprovider.cpp
+    plugineventsprovider.cpp
 )
 
 add_library(neuroscope_dataio STATIC ${DATAIO_SOURCE_FILES})
