@@ -1,0 +1,49 @@
+{
+  "nodes": {
+    "libneurosuite": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791375666,
+        "narHash": "sha256-cd4bf042mmKWKqidlqR2xAq4CTMKX3J9H1PRjE25UpY=",
+        "owner": "neurosuite",
+        "repo": "libneurosuite",
+        "rev": "b6403b7573bf5ca877e9b1254fab5364c1e60e19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "neurosuite",
+        "ref": "v3.0.0-rc1",
+        "repo": "libneurosuite",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1791260994,
+        "narHash": "sha256-Miqqk/ammqnTUxaoCyvtwoPeLbI1ksFyLxi/CazZpWY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "libneurosuite": "libneurosuite",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

@@ -9,8 +9,7 @@ on:
 
 env:
   # libneurosuite revision NeuroScope is built against.
-  # Switch to the v3.0.0 tag once libneurosuite is released.
-  LIBNEUROSUITE_REF: main
+  LIBNEUROSUITE_REF: v3.0.0-rc1
   BUNDLE_NEUROSUITE: 'ON'
 
 jobs:
