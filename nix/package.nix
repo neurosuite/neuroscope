@@ -16,6 +16,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ninja wrapQtAppsHook ];
   buildInputs = [ qtbase libneurosuite ];
 
+  doCheck = true;
+
   meta = {
     description = "Viewer for neurophysiological and behavioral data";
     homepage = "https://neurosuite.github.io";

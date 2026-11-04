@@ -30,20 +30,15 @@ sudo apt install ./libneurosuite3_*.deb ./neuroscope_*.deb
 ## Building
 
 Requires CMake 3.16+, a C++17 compiler, Qt 6.4+ (Widgets, PrintSupport, Xml) and
-[libneurosuite](https://github.com/neurosuite/libneurosuite) 3.x.
+[libneurosuite](https://github.com/neurosuite/libneurosuite) 3.x, which can also be built as part
+of NeuroScope. On Ubuntu 24.04:
 
 ```bash
-# with libneurosuite installed
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-cmake --install build
-
-# or let CMake fetch and build libneurosuite as part of NeuroScope
-cmake -B build -S . -DNEUROSCOPE_BUNDLE_NEUROSUITE=ON
+make ubuntu-deps
+make check BUNDLE_NEUROSUITE=ON   # build, run the unit tests, install to ./install
 ```
 
-On Ubuntu 24.04 the build dependencies are `cmake ninja-build qt6-base-dev`, plus
-`qt6-webengine-dev` if libneurosuite is built with its WebEngine handbook viewer.
-With Nix: `nix build` or `nix develop`.
+See [BUILD.md](BUILD.md) for macOS, Windows, Docker and Nix, the unit tests and the release
+packages.
 
 See [CHANGELOG.md](CHANGELOG.md) for changes.

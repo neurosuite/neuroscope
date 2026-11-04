@@ -1,6 +1,13 @@
 *.o
 *.moc*
 Makefile
-build
+!/Makefile
+/build/*
+!/build/.gitkeep
+/build-*/
 result
 result-*
+install
+packages
+dist
+libneurosuite
