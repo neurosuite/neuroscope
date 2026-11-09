@@ -26,9 +26,8 @@ target_include_directories(neuroscope_dataio PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(neuroscope_dataio PUBLIC neurosuite::neurosuite Qt6::Core Qt6::Gui Qt6::Xml)
 
-# Normal C++ source files
-set(SOURCE_FILES
-    main.cpp
+# The application without main(), so that the tests can link its windows and documents.
+set(APP_SOURCE_FILES
     neuroscope.cpp
     neuroscopeview.cpp
     baseframe.cpp
@@ -61,14 +60,8 @@ set(SOURCE_FILES
     propertieslayout.cpp
 )
 
-# windows resources
-if(WIN32)
-    list(APPEND SOURCE_FILES
-         neuroscope.rc)
-endif()
-
 # Qt resources
-qt_add_resources(SOURCE_FILES neuroscope-icons.qrc)
+qt_add_resources(APP_SOURCE_FILES neuroscope-icons.qrc)
 
 # Ui files
 set(UI_FILES
@@ -79,15 +72,31 @@ set(UI_FILES
     clusterpropertieslayout.ui
 )
 
-qt_wrap_ui(SOURCE_FILES ${UI_FILES})
+qt_wrap_ui(APP_SOURCE_FILES ${UI_FILES})
 
 # Optional C++ files
 if(WITH_CEREBUS)
     # Add network specific source files
-    list(APPEND SOURCE_FILES
+    list(APPEND APP_SOURCE_FILES
          cerebustraceprovider.cpp
          cerebusclustersprovider.cpp
          cerebuseventsprovider.cpp)
+endif()
+
+# An object library, so that the resources registered by static initialisers are always linked.
+add_library(neuroscope_app OBJECT ${APP_SOURCE_FILES})
+target_link_libraries(neuroscope_app PUBLIC neuroscope_dataio neurosuite::neurosuite Qt6::Widgets Qt6::PrintSupport Qt6::Xml)
+
+if(WITH_CEREBUS)
+    target_link_libraries(neuroscope_app PUBLIC cbsdk)
+endif()
+
+set(SOURCE_FILES main.cpp)
+
+# windows resources
+if(WIN32)
+    list(APPEND SOURCE_FILES
+         neuroscope.rc)
 endif()
 
 # Combine it all
@@ -100,11 +109,7 @@ endif()
 ################################################################################
 # Linker config
 ################################################################################
-target_link_libraries(neuroscope PRIVATE neuroscope_dataio neurosuite::neurosuite Qt6::Widgets Qt6::PrintSupport Qt6::Xml)
-
-if(WITH_CEREBUS)
-    target_link_libraries(neuroscope PRIVATE cbsdk)
-endif()
+target_link_libraries(neuroscope PRIVATE neuroscope_app)
 
 ################################################################################
 # Install config

@@ -4490,6 +4490,12 @@ void TraceView::addEventProvider(EventsProvider* eventsProvider, QString name, I
 
 void TraceView::removeEventProvider(const QString& name, bool active)
 {
+    if (selectedEvent.first == name)
+    {
+        selectedEvent.first.clear();
+        selectedEvent.second = 0;
+        selectedEventPosition.clear();
+    }
     selectedEvents.remove(name);
     eventsNotUsedForBrowsing.remove(name);
     eventProviders.remove(name);

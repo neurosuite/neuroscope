@@ -550,6 +550,9 @@ class NeuroscopeDoc : public QObject
     */
     void removeEventFile(const QString& providerName, NeuroscopeView* activeView, bool lastFile);
 
+    /**Returns true if an open event file holds the last action to undo or redo.*/
+    bool hasUndoRedoHistory() const { return !undoRedoProviderName.isEmpty(); }
+
     /**Sets the data providers to the newly created view.
     * @param activeView the view which gives its parameters to the new view.
     */

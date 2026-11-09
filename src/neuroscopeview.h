@@ -247,6 +247,9 @@ class NeuroscopeView : public DockArea
    */
     bool isSelectionTool() const { return selectMode; }
 
+    /** Tests if a click adds an event to the event provider identified by @p providerName. */
+    bool isAddingEventsTo(const QString& providerName) const { return traceWidget->isAddingEventsTo(providerName); }
+
     /**Changes the color of a channel.
    * @param channelId id of the channel to redraw.
    * @param active true if the view is the active one, false otherwise.

@@ -238,6 +238,7 @@ void NeuroscopeDoc::closeDocument()
     providerItemColors.clear();
     providerUrls.clear();
     displayGroupsClusterFile.clear();
+    undoRedoProviderName.clear();
 
     if (channelColorList)
     {
@@ -1496,6 +1497,8 @@ void NeuroscopeDoc::setChannelNb(int nb)
         displayGroupsChannels.insert(1, groupOne);
         spikeGroupsChannels.insert(-1, groupOne);
 
+        //The provider labels as many channels as it has been told to read
+        tracesProvider->setNbChannels(nb);
         channelLabels = tracesProvider->getLabels();
 
         //Update and show the channel Palettes.
@@ -1506,9 +1509,6 @@ void NeuroscopeDoc::setChannelNb(int nb)
 
         //Resize the panel
         dynamic_cast<NeuroscopeApp*>(parent)->resizePalettePanel();
-
-        //Inform the tracesProvider
-        tracesProvider->setNbChannels(nb);
 
         //Get the active view and make it the first to take the modification into account.
         NeuroscopeView* activeView = dynamic_cast<NeuroscopeApp*>(parent)->activeView();
@@ -3010,6 +3010,8 @@ void NeuroscopeDoc::removeEventFile(const QString& providerName, NeuroscopeView*
     delete providers.take(providerName);
     delete providerItemColors.take(providerName);
     providerUrls.remove(providerName);
+    if (providerName == undoRedoProviderName)
+        undoRedoProviderName.clear();
 }
 
 void NeuroscopeDoc::eventColorUpdate(const QColor& color, const QString& providerName, int eventId, NeuroscopeView* activeView)

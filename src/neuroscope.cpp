@@ -1051,7 +1051,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("Error!"), tr("The selected file is invalid, it has to be of the form baseName.nrs, baseName.xml or baseName.*"));
             //close the document
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1060,7 +1060,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("Error!"), tr("Could not get the data file."));
             //close the document
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1069,7 +1069,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("Error!"), tr("Could not open the files."));
             //close the document
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1078,7 +1078,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("IO Error!"), tr("Either the parameter file or the session file could not be parsed correctly."));
             //close the document
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1087,7 +1087,7 @@ void NeuroscopeApp::openDocumentFile(const QString& url)
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, tr("IO Error!"), tr("The parameter file is missing."));
             //close the document
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1149,7 +1149,7 @@ void NeuroscopeApp::openNetworkStream(CerebusTracesProvider::SamplingGroup group
         if (!doc->openStream(group))
         {
             QApplication::restoreOverrideCursor();
-            doc->closeDocument();
+            closeDocument();
             resetState();
             return;
         }
@@ -1391,7 +1391,7 @@ bool NeuroscopeApp::queryClose()
                 }
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-            doc->closeDocument();
+            closeDocument();
             QApplication::restoreOverrideCursor();
             return true;
         }
@@ -1694,34 +1694,40 @@ void NeuroscopeApp::slotFileClose()
                 }
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-            //Remove the display from the group of tabs
-            disconnect(tabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotTabChange(int)));
-            for (int i = tabsParent->count() - 1; i >= 0; --i)
-            {
-                QWidget* w = tabsParent->widget(i);
-                tabsParent->removeTab(tabsParent->indexOf(w));
-                delete w;
-            }
-
-            disconnect(paletteTabsParent, 0, 0, 0);
-            //remove the cluster and event palettes if any
-            for (int i = paletteTabsParent->count() - 1; i >= 2; --i)
-            {
-                QWidget* current = paletteTabsParent->widget(i);
-                paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
-                delete current;
-            }
-
-            //reset the channel palettes and hide the channel panels
-            spikeChannelPalette->reset();
-            displayChannelPalette->reset();
-
-            mainDock = 0L;
-            doc->closeDocument();
+            closeDocument();
             resetState();
             QApplication::restoreOverrideCursor();
         }
     }
+}
+
+void NeuroscopeApp::closeDocument()
+{
+    //Remove each display from the group of tabs before deleting it: removing the current one hides it, so it loses the
+    //keyboard focus while it is still whole.
+    disconnect(tabsParent, SIGNAL(currentChanged(int)), this, SLOT(slotTabChange(int)));
+    for (int i = tabsParent->count() - 1; i >= 0; --i)
+    {
+        QWidget* w = tabsParent->widget(i);
+        tabsParent->removeTab(i);
+        delete w;
+    }
+
+    disconnect(paletteTabsParent, 0, 0, 0);
+    //remove the cluster and event palettes if any
+    for (int i = paletteTabsParent->count() - 1; i >= 2; --i)
+    {
+        QWidget* current = paletteTabsParent->widget(i);
+        paletteTabsParent->removeTab(i);
+        delete current;
+    }
+
+    //reset the channel palettes
+    spikeChannelPalette->reset();
+    displayChannelPalette->reset();
+
+    mainDock = 0L;
+    doc->closeDocument();
 }
 
 void NeuroscopeApp::slotFilePrint()
@@ -2839,25 +2845,7 @@ void NeuroscopeApp::slotDisplayClose()
                 }
             }
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-            //remove the cluster and event palettes if any
-            disconnect(paletteTabsParent, 0, 0, 0);
-            for (int i = paletteTabsParent->count() - 1; i >= 2; --i)
-            {
-                QWidget* current = paletteTabsParent->widget(i);
-                paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
-                delete current;
-            }
-            disconnect(tabsParent, 0, 0, 0);
-            //reset the channel palettes and hide the channel panels
-            spikeChannelPalette->reset();
-            displayChannelPalette->reset();
-
-            paletteTabsParent->hide();
-            doc->closeDocument();
-            //Delete the view
-            delete tabsParent->currentWidget();
-            mainDock = 0L;
-
+            closeDocument();
             resetState();
             QApplication::restoreOverrideCursor();
         }
@@ -3152,7 +3140,7 @@ void NeuroscopeApp::customEvent(QEvent* event)
         //Try to close the document again
         if (doc->canCloseDocument(this, origin))
         {
-            doc->closeDocument();
+            closeDocument();
 
             //Execute what is need it after the close depending on the callingMethod
             if (origin == "queryClose")
@@ -3582,19 +3570,27 @@ void NeuroscopeApp::slotCloseEventFile()
         ItemPalette* eventPalette = static_cast<ItemPalette*>(current);
 
         NeuroscopeView* view = activeView();
+        // The active view leaves the add-event mode as if the Select tool were chosen, the others in
+        // NeuroscopeView::removeEventProvider().
+        if (view->isAddingEventsTo(eventProvider))
+            slotSelect();
         if (eventFileList.count() == 1)
             doc->removeEventFile(eventProvider, view, true);
         else
             doc->removeEventFile(eventProvider, view, false);
         eventFileList.removeAll(eventProvider);
         eventPalette->removeGroup(eventProvider);
+        if (!doc->hasUndoRedoHistory())
+        {
+            currentNbUndo = 0;
+            currentNbRedo = 0;
+            slotStateChanged("noUndoRedoState");
+        }
 
         if (eventFileList.isEmpty())
         {
             paletteTabsParent->removeTab(paletteTabsParent->indexOf(current));
             eventProvider.clear();
-            currentNbUndo = 0;
-            currentNbRedo = 0;
             delete current;
             slotStateChanged("noEventState");
             showEventsInPositionView->setChecked(false);
@@ -4159,6 +4155,11 @@ void NeuroscopeApp::slotStateChanged(const QString& state)
     }
     else if (state == QLatin1String("emptyRedoState"))
     {
+        mRedo->setEnabled(false);
+    }
+    else if (state == QLatin1String("noUndoRedoState"))
+    {
+        mUndo->setEnabled(false);
         mRedo->setEnabled(false);
     }
     else if (state == QLatin1String("emptyUndoState"))

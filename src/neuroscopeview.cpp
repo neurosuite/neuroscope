@@ -316,6 +316,8 @@ void NeuroscopeView::setEventProvider(EventsProvider* eventsProvider, const QStr
 
 void NeuroscopeView::removeEventProvider(const QString& name, bool active, bool lastFile)
 {
+    if (isAddingEventsTo(name))
+        setMode(TraceView::SELECT, active);
     selectedEvents.remove(name);
     eventsNotUsedForBrowsing.remove(name);
     if (lastFile)

@@ -978,6 +978,13 @@ class NeuroscopeApp : public QMainWindow
     /**Resets the state of the application to a none document open state.*/
     void resetState();
 
+    /**
+     * Closes the document after deleting the displays and the palettes that read its providers and colors. A display
+     * which had the keyboard focus applies its pending start time when it loses it, and deleting the displays first
+     * makes that happen while the providers still exist.
+     */
+    void closeDocument();
+
     /**Loads the cluster files and creates the corresponding groups in the cluster palette.
    * @param urls file list to be opened.
    */

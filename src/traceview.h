@@ -487,6 +487,9 @@ class TraceView : public BaseFrame
   */
     void previousEventDataAvailable(Array<dataType>& times, Array<int>& ids, QObject* initiator, QString providerName, long startingTime);
 
+    /** Tests if a click adds an event to the event provider identified by @p providerName. */
+    bool isAddingEventsTo(const QString& providerName) const { return mode == ADD_EVENT && eventProvider == providerName; }
+
     /**Stores the properties for the next event to be added.
   * @param providerName name use to identified the event provider which will contain the added event.
   * @param eventDescription description of the next event to be created.

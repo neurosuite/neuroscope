@@ -381,6 +381,9 @@ class TraceWidget : public QWidget
         view.removeEventProvider(name, active);
     }
 
+    /** Tests if a click adds an event to the event provider identified by @p providerName. */
+    bool isAddingEventsTo(const QString& providerName) const { return view.isAddingEventsTo(providerName); }
+
     /**Prints the current information drawn in the traceView.
   * @param printPainter painter on a printer.
   * @param metrics object providing information about the printer.
